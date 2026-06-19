@@ -9,7 +9,8 @@ import { BookOpen, Award, ExternalLink, Star } from 'lucide-react';
 // ─────────────────────────────────────────────────────────────────────────────
 
 const AMAZON_TAG = "learnmlacadem-21";
-const amazonUrl = `https://www.amazon.in/dp/1098125975?tag=${AMAZON_TAG}`;
+// ASIN B0BHCFNY9Q = Hands-On ML 3rd Ed (Kindle) — verified on amazon.in
+const amazonUrl = `https://www.amazon.in/dp/B0BHCFNY9Q?tag=${AMAZON_TAG}`;
 
 // Coursera affiliate application (Impact partner ID 8428221) is currently
 // "Sent Invite" — pending approval. Using the direct URL until approved.
