@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export function TermsOfServicePage() {
+  useEffect(() => {
+    document.title = 'Terms of Service | ML Academy';
+    let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
+    if (meta) meta.setAttribute('content', 'Read the ML Academy Terms of Service governing use of our free Machine Learning tutorials, content, and website.');
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
+    canonical.setAttribute('href', 'https://www.learnmlacademy.com/terms');
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
       <h1 className="text-4xl font-bold text-slate-900 mb-8 tracking-tight">Terms of Service</h1>
