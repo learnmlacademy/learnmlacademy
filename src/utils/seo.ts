@@ -14,16 +14,16 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn what Supervised Learning is, how labeled data works, and common algorithms used for classification and regression tasks."
     },
     "unsupervised-learning-intro": {
-      title: "Unsupervised Learning Guide | Clustering & Dimensionality",
-      description: "Understand Unsupervised Learning. Learn how algorithms find hidden patterns in unlabeled data using clustering and PCA."
+      title: "Unsupervised Learning Explained | Clustering & Dimensionality Reduction",
+      description: "Understand Unsupervised Learning with Python. Learn how K-Means, DBSCAN, and PCA find hidden patterns in unlabelled data — no labels required."
     },
     "reinforcement-learning-intro": {
       title: "Reinforcement Learning Basics | Agents, Environments & Rewards",
       description: "A beginner's guide to Reinforcement Learning. Discover how AI agents learn through trial and error using rewards and penalties."
     },
     "batch-vs-online": {
-      title: "Batch vs Online Learning | Machine Learning Paradigms",
-      description: "Compare Batch Learning and Online Learning. Understand when to train ML models incrementally versus all at once."
+      title: "Batch Learning vs Online Learning | Machine Learning Paradigms",
+      description: "Compare Batch and Online Learning in Machine Learning. Understand when to retrain from scratch vs update incrementally with streaming data in Python."
     },
     "ml-lifecycle": {
       title: "The Essential Machine Learning Life Cycle | End-to-End ML",
@@ -36,16 +36,16 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Understand why Python is the most popular language for Machine Learning and explore its rich ecosystem of data science libraries."
     },
     "numpy-essentials": {
-      title: "NumPy Essentials for ML (Linear Algebra & Arrays)",
-      description: "Master NumPy for Machine Learning. Understand vectorization, broadcasting, and matrix multiplications required for AI."
+      title: "NumPy Tutorial for Machine Learning | Arrays, Math & Linear Algebra",
+      description: "Master NumPy for Machine Learning with Python. Learn vectorisation, broadcasting, matrix operations and linear algebra with real code examples and output."
     },
     "pandas-essentials": {
       title: "Pandas Essentials for Machine Learning | ML Academy",
       description: "Learn the most important Pandas DataFrame operations, cleaning techniques, and feature engineering for Machine Learning data prep."
     },
     "scikit-learn-essentials": {
-      title: "Scikit-Learn Tutorial for Beginners | ML Full Workflow",
-      description: "Learn how to use Scikit-learn to split data, scale features, and train models using the universal ML Pipeline."
+      title: "Scikit-Learn Tutorial for Beginners | Complete ML Workflow in Python",
+      description: "Learn Scikit-Learn from scratch. Split data, scale features, train and evaluate models with cross-validation, and tune hyperparameters in Python with real output."
     },
 
     // 3. Data & Preprocessing
@@ -62,8 +62,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how to convert categorical text data into numerical formats using One-Hot Encoding and Label Encoding for ML models."
     },
     "bias-variance": {
-      title: "The Bias-Variance Tradeoff Explained | ML Core Concepts",
-      description: "Deep dive into the Bias-Variance Tradeoff, underfitting, overfitting, and how to find the optimal model complexity."
+      title: "Bias-Variance Tradeoff Explained with Python Examples | ML Academy",
+      description: "Deep dive into the Bias-Variance Tradeoff in Machine Learning. Understand underfitting, overfitting, and how to diagnose each with learning curves in Python."
     },
     "feature-scaling": {
       title: "Feature Scaling: Standardization vs Normalization",
@@ -84,28 +84,28 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 4. Supervised Learning
     "regression-intro": {
-      title: "Regression Algorithms Overview | Predicting Continuous Values",
-      description: "An introduction to regression in Machine Learning. Learn how regression algorithms predict continuous numerical values."
+      title: "Regression in Machine Learning | Predicting Continuous Values with Python",
+      description: "Introduction to regression in Machine Learning. Learn how regression algorithms predict continuous values and when to use each type, with Python code examples."
     },
     "linear-regression": {
       title: "Linear Regression in Machine Learning (with Python code)",
       description: "Understand Linear Regression, how it minimizes error using Ordinary Least Squares, and build your own model in Python and Scikit-learn."
     },
     "gradient-descent": {
-      title: "Gradient Descent Algorithm Explained | Optimizing ML Models",
-      description: "Learn how Gradient Descent works to minimize cost functions in Machine Learning and Deep Learning, with intuitive math."
+      title: "Gradient Descent Explained | Batch, SGD & Mini-Batch with Python Code",
+      description: "Learn how Gradient Descent minimises loss in Machine Learning. Covers Batch, Stochastic, and Mini-Batch variants with Python implementations and visual diagrams."
     },
     "polynomial-regression": {
-      title: "Polynomial Regression | Capturing Non-Linear Patterns",
-      description: "Learn when and how to use Polynomial Regression to model non-linear relationships in your datasets using Scikit-learn."
+      title: "Polynomial Regression in Python | Capturing Non-Linear Relationships",
+      description: "Learn when and how to use Polynomial Regression to model non-linear data. Covers degree selection, overfitting risks, and Python code with scikit-learn examples."
     },
     "ridge-regression": {
-      title: "Ridge Regression Explained (L2 Regularization)",
-      description: "Understand Ridge Regression and L2 Regularization to prevent overfitting in models with high multicollinearity."
+      title: "Ridge Regression (L2 Regularisation) Explained with Python Examples",
+      description: "Understand Ridge Regression and L2 Regularisation in Python. Shrinks weights to prevent overfitting in high-dimensional models with multicollinearity."
     },
     "lasso-regression": {
-      title: "Lasso Regression (L1 Regularization) & Feature Selection",
-      description: "Learn how Lasso Regression uses L1 Regularization to prevent overfitting and perform automatic feature selection."
+      title: "Lasso Regression (L1 Regularisation) & Feature Selection in Python",
+      description: "Learn how Lasso Regression uses L1 Regularisation to prevent overfitting and perform feature selection. Full Python scikit-learn examples with output included."
     },
     "classification-intro": {
       title: "Classification Algorithms Overview | ML Categorization",
@@ -124,8 +124,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Understand the Naive Bayes algorithm, Bayes' Theorem, and how it is effectively used in text classification and spam filtering."
     },
     "knn": {
-      title: "K-Nearest Neighbors (KNN) Algorithm | Distance-Based ML",
-      description: "Learn how the K-Nearest Neighbors (KNN) algorithm classifies data points based on proximity and distance metrics."
+      title: "K-Nearest Neighbors (KNN) Algorithm Explained with Python Code",
+      description: "Learn how the KNN algorithm classifies data based on distance metrics. Covers choosing K, Euclidean vs Manhattan distance, and Python implementation with visuals."
     },
     "svm": {
       title: "Support Vector Machines (SVM) & The Kernel Trick",
@@ -134,20 +134,20 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 5. Ensemble Learning
     "random-forest": {
-      title: "Random Forest Algorithm | Bagging & Ensemble Learning",
-      description: "Learn how Random Forests combine multiple decision trees to reduce variance, prevent overfitting, and boost accuracy."
+      title: "Random Forest Algorithm Explained | Bagging & Ensemble Learning in Python",
+      description: "Learn how Random Forests combine decision trees to cut variance and overfitting. Covers feature importance, hyperparameter tuning, and Python scikit-learn code."
     },
     "bagging": {
-      title: "Bagging (Bootstrap Aggregating) in Machine Learning",
-      description: "Understand the concept of Bagging in ensemble learning and how bootstrapping creates robust machine learning models."
+      title: "Bagging (Bootstrap Aggregating) in Machine Learning | Python Tutorial",
+      description: "Understand Bagging in ensemble learning. Bootstrap sampling reduces model variance, with a Python implementation and comparison to single decision trees."
     },
     "boosting": {
-      title: "Boosting Algorithms Overview | Ensemble ML",
-      description: "An introduction to Boosting techniques in Machine Learning, converting weak learners into strong foundational models."
+      title: "Boosting Algorithms in Machine Learning | AdaBoost, GBM & XGBoost",
+      description: "Introduction to Boosting in Machine Learning. Learn how sequential weak learners form a strong model, with Python code covering AdaBoost and Gradient Boosting."
     },
     "adaboost": {
-      title: "AdaBoost Algorithm Explained | Adaptive Boosting",
-      description: "Learn how AdaBoost sequentially corrects model errors by automatically adjusting sample weights during training."
+      title: "AdaBoost Algorithm Explained | Adaptive Boosting with Python Examples",
+      description: "Learn how AdaBoost corrects errors by adjusting sample weights each round. Covers the maths and Python scikit-learn implementation with code examples."
     },
     "gradient-boosting": {
       title: "Gradient Boosting Machines (GBM) Explained | ML Ensemble",
@@ -164,12 +164,12 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how K-Means clustering partitions data into K distinct groups and how to find the optimal number of clusters using the Elbow Method."
     },
     "hierarchical": {
-      title: "Hierarchical Clustering & Dendrograms in Machine Learning",
-      description: "Understand Agglomerative Hierarchical Clustering, linkage methods, and how to interpret dendrograms."
+      title: "Hierarchical Clustering & Dendrograms Explained with Python Code",
+      description: "Understand Hierarchical Clustering in Python. Learn linkage methods (Ward, Complete, Average), reading dendrograms, and when to choose it over K-Means."
     },
     "dbscan": {
-      title: "DBSCAN Clustering Algorithm | Density-Based Unsupervised ML",
-      description: "Learn how DBSCAN finds clusters of arbitrary shapes and isolates noise (outliers) based on spatial density."
+      title: "DBSCAN Clustering Algorithm | Density-Based ML with Python Tutorial",
+      description: "Learn how DBSCAN finds arbitrary-shaped clusters and isolates noise using density. Covers epsilon and min_samples tuning with a full Python implementation."
     },
     "pca": {
       title: "Principal Component Analysis (PCA) | Dimensionality Reduction",
@@ -180,8 +180,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Understand t-Distributed Stochastic Neighbor Embedding (t-SNE) for visualizing complex, high-dimensional datasets in 2D or 3D."
     },
     "association-rules": {
-      title: "Association Rule Mining in Machine Learning",
-      description: "Discover Association Rule Learning. Understand Support, Confidence, and Lift metrics for market basket analysis."
+      title: "Association Rule Mining | Market Basket Analysis with Python",
+      description: "Discover Association Rule Learning for market basket analysis in Python. Understand Support, Confidence, and Lift, and implement Apriori with mlxtend."
     },
     "apriori": {
       title: "Apriori Algorithm for Frequent Itemset Mining",
@@ -202,16 +202,16 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Master the diagnosis of Overfitting and Underfitting in predictive models and learn actionable techniques to mitigate both."
     },
     "cost-functions": {
-      title: "Cost Functions and Loss Functions in Machine Learning",
-      description: "Understand the mathematical differences between MSE, Log Loss, and Cross-Entropy and when to use them."
+      title: "Cost Functions & Loss Functions in Machine Learning | MSE, MAE & Cross-Entropy",
+      description: "Understand MSE, MAE, Log Loss, and Cross-Entropy cost functions in Machine Learning. Learn which loss function to use for regression vs classification in Python."
     },
     "hyperparameter-tuning": {
-      title: "Hyperparameter Tuning Guide | Optimizing ML Models",
-      description: "Learn how to optimize machine learning models by fine-tuning algorithm hyperparameters for maximum predictive accuracy."
+      title: "Hyperparameter Tuning in Machine Learning | Grid Search & Optuna Python Guide",
+      description: "Learn to tune ML hyperparameters with Grid Search, Random Search, and Bayesian Optimisation. Python scikit-learn and Optuna examples with real output."
     },
     "grid-random-search": {
-      title: "Grid Search vs. Random Search | Hyperparameter Optimization",
-      description: "Compare Grid Search and Random Search. Learn how to implement Scikit-Learn's GridSearchCV and RandomizedSearchCV."
+      title: "Grid Search vs Random Search in Python | Hyperparameter Optimisation",
+      description: "Compare Grid Search and Random Search for hyperparameter optimisation. Learn when to use each and how to implement GridSearchCV and RandomizedSearchCV in Python."
     },
     "confusion-matrix": {
       title: "Confusion Matrix, Precision, Recall & F1-Score Explained",
@@ -224,16 +224,16 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 8. Time Series
     "arima": {
-      title: "ARIMA Model for Time Series Forecasting",
-      description: "Learn the AutoRegressive Integrated Moving Average (ARIMA) model to forecast non-stationary time series data."
+      title: "ARIMA Model for Time Series Forecasting | Python statsmodels Tutorial",
+      description: "Learn the ARIMA model for time series forecasting in Python. Covers stationarity, ACF/PACF plots, parameter selection (p,d,q), and forecasting with statsmodels."
     },
     "moving-average": {
-      title: "Moving Average Models in Time Series",
-      description: "Understand Simple Moving Averages (SMA) and Exponential Moving Averages (EMA) for smoothing time series patterns."
+      title: "Moving Average Models for Time Series | SMA & EMA in Python",
+      description: "Understand Simple Moving Average (SMA) and Exponential Moving Average (EMA) for smoothing time series. Includes Python pandas implementation with visualisations."
     },
     "exponential-smoothing": {
-      title: "Exponential Smoothing (Holt-Winters) Forecasting",
-      description: "Learn Exponential Smoothing and Holt-Winters methods to model time series with trend and seasonality components."
+      title: "Exponential Smoothing & Holt-Winters Forecasting in Python",
+      description: "Learn Exponential Smoothing and Holt-Winters in Python. Model time series with trend and seasonality using statsmodels, with examples and forecast plots."
     },
     "forecasting-basics": {
       title: "Time Series Forecasting Basics | ML Academy",
@@ -250,12 +250,12 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how Online Machine Learning continuously updates models in real-time as new data streams arrive without retraining from scratch."
     },
     "reinforcement-learning-adv": {
-      title: "Advanced Reinforcement Learning | Deep Q-Networks (DQN)",
-      description: "Dive into advanced RL. Understand Markov Decision Processes, Q-Learning, and Deep Reinforcement Learning architectures."
+      title: "Advanced Reinforcement Learning | Q-Learning & Deep Q-Networks (DQN) in Python",
+      description: "Advanced RL: Markov Decision Processes, Q-Learning, and Deep Q-Networks (DQN) explained with Python and OpenAI Gym implementation examples."
     },
     "multi-armed-bandits": {
-      title: "Multi-Armed Bandits | Exploration vs Exploitation in RL",
-      description: "Understand the Multi-Armed Bandit problem, Epsilon-Greedy, UCB, Thompson Sampling, and A/B Testing applications."
+      title: "Multi-Armed Bandits | Epsilon-Greedy & UCB Algorithms in Python",
+      description: "Understand the Multi-Armed Bandit problem and Exploration vs Exploitation. Learn Epsilon-Greedy, UCB, and Thompson Sampling with Python code and results."
     },
 
     // 10. Deep Learning & Interviews
