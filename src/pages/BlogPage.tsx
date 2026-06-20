@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, Clock, Tag, ArrowRight, BookOpen, Rss } from 'lucide-react';
 import { blogPosts, blogCategories, type BlogPost } from '../data/blog';
@@ -51,6 +51,26 @@ export function BlogPage() {
   const filtered = activeCategory === 'All' ? blogPosts : blogPosts.filter(p => p.category === activeCategory);
   const featured = filtered.filter(p => p.featured);
   const rest = filtered.filter(p => !p.featured);
+
+  useEffect(() => {
+    document.title = 'ML Academy Blog | Machine Learning Tips, Guides & Career Advice';
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute(attr, value);
+    };
+    const desc = 'Read the ML Academy blog for practical Machine Learning guides, algorithm comparisons, interview prep tips, and career advice for aspiring data scientists.';
+    setMeta('meta[name="description"]', 'content', desc);
+    setMeta('meta[property="og:title"]', 'content', 'ML Academy Blog');
+    setMeta('meta[property="og:description"]', 'content', desc);
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', 'https://www.learnmlacademy.com/blog');
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

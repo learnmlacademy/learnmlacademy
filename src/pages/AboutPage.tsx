@@ -1,7 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Mail, Award, Target, BookOpen, Users, Shield, Code, Cloud, Database, Linkedin, ExternalLink } from 'lucide-react';
 
 export function AboutPage() {
+  useEffect(() => {
+    document.title = 'About ML Academy | Free Machine Learning Tutorials & Resources';
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute(attr, value);
+    };
+    const desc = 'Learn about ML Academy — a free platform teaching Machine Learning, Deep Learning, and Python to students and engineers worldwide with 63+ hands-on tutorials.';
+    setMeta('meta[name="description"]', 'content', desc);
+    setMeta('meta[property="og:title"]', 'content', 'About ML Academy');
+    setMeta('meta[property="og:description"]', 'content', desc);
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', 'https://www.learnmlacademy.com/about');
+  }, []);
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
 

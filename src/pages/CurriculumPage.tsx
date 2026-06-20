@@ -1,9 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum } from '../data/curriculum';
 import { BookOpen, CheckCircle2 } from 'lucide-react';
 
 export function CurriculumPage() {
+  useEffect(() => {
+    document.title = 'Machine Learning Curriculum | 63+ Free Tutorials | ML Academy';
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (el) el.setAttribute(attr, value);
+    };
+    const desc = 'Browse the complete ML Academy curriculum — 63+ free tutorials covering Python, regression, classification, ensemble learning, clustering, and time series with code.';
+    setMeta('meta[name="description"]', 'content', desc);
+    setMeta('meta[property="og:title"]', 'content', 'Machine Learning Curriculum | ML Academy');
+    setMeta('meta[property="og:description"]', 'content', desc);
+
+    let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', 'https://www.learnmlacademy.com/curriculum');
+  }, []);
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
       <div className="text-center mb-12">
