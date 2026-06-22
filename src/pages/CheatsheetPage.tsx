@@ -39,13 +39,13 @@ export function CheatsheetPage() {
             A comprehensive PDF covering everything you need for ML engineer interviews — from basic theory to FAANG system design questions. Written by practising ML engineers.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="/ML_Interview_Cheatsheet.pdf" download
+            <a href="#get-pdf"
               className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5">
-              <Download className="w-5 h-5"/> Download Free PDF
+              <Download className="w-5 h-5"/> Get Free PDF
             </a>
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <CheckCircle2 className="w-4 h-4 text-green-400"/>
-              <span>PDF • 100 questions • Instant download</span>
+              <span>PDF • 100 questions • Enter email to download</span>
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-6 mt-10">
@@ -113,7 +113,7 @@ export function CheatsheetPage() {
           </div>
           <div className="text-center mt-8">
             <p className="text-slate-500 mb-4">These are just 3 of 100 questions in the full PDF</p>
-            <a href="/ML_Interview_Cheatsheet.pdf" download
+            <a href="#get-pdf"
               className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-sm">
               <Download className="w-5 h-5"/> Get All 100 Questions Free
             </a>
@@ -121,8 +121,8 @@ export function CheatsheetPage() {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-16 px-4">
+      {/* Newsletter — email gate before download */}
+      <section id="get-pdf" className="py-16 px-4 scroll-mt-20">
         <div className="max-w-3xl mx-auto">
           <NewsletterSignup />
         </div>

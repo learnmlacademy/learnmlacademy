@@ -85,12 +85,12 @@ export function BlogPostPage() {
         <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 mb-8 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <p className="text-white font-bold text-lg">Free: ML Interview Cheatsheet PDF</p>
-            <p className="text-indigo-200 text-sm">100 questions with detailed answers — download instantly</p>
+            <p className="text-indigo-200 text-sm">100 questions with detailed answers — enter your email to download</p>
           </div>
-          <a href="/ML_Interview_Cheatsheet.pdf" download
+          <Link to="/cheatsheet"
             className="flex items-center gap-2 bg-white text-indigo-700 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-indigo-50 transition-colors flex-shrink-0">
-            <Download className="w-4 h-4"/> Download Free PDF
-          </a>
+            <Download className="w-4 h-4"/> Get Free PDF
+          </Link>
         </div>
       )}
 

@@ -253,10 +253,10 @@ export function HomePage() {
             </div>
           </div>
           <div className="flex flex-col items-center gap-3 flex-shrink-0">
-            <a href="/ML_Interview_Cheatsheet.pdf" download
+            <Link to="/cheatsheet"
               className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-indigo-500/30 whitespace-nowrap">
-              <Download className="w-5 h-5"/> Download Free PDF
-            </a>
+              <Download className="w-5 h-5"/> Get Free PDF
+            </Link>
             <Link to="/cheatsheet" className="text-slate-400 hover:text-white text-sm transition-colors">
               Preview what's inside →
             </Link>
