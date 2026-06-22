@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export function MLInterviewPrepContent() {
   return (
@@ -70,10 +71,10 @@ export function MLInterviewPrepContent() {
         <p className="text-slate-300 mb-4">
           Get our complete 100-question ML Interview Cheatsheet — covering all four phases above with detailed answers.
         </p>
-        <a href="/ML_Interview_Cheatsheet.pdf" download
+        <Link to="/cheatsheet"
           className="inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-6 py-3 rounded-xl transition-colors">
-          Download Free PDF →
-        </a>
+          Get Free PDF →
+        </Link>
       </div>
     </div>
   );
