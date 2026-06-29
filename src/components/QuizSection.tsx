@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { getQuizzesForTopic, QuizQuestion } from '../data/quizzes';
+import { getQuizzesForTopicId, QuizQuestion } from '../data/quizzes';
 import { Target, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
-export function QuizSection({ topicTitle }: { topicTitle: string }) {
-  const quizzes = getQuizzesForTopic(topicTitle);
+export function QuizSection({ topicTitle, topicId }: { topicTitle?: string; topicId?: string }) {
+  const id = topicId || topicTitle || '';
+  const quizzes = getQuizzesForTopicId(id);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number | null>>({});
   const [showResults, setShowResults] = useState<Record<number, boolean>>({});
 
+  if (!quizzes || quizzes.length === 0) return null;
+
   const handleSelect = (quizId: number, optionIndex: number) => {
-    // Only allow selecting if not yet revealed
     if (showResults[quizId]) return;
     setSelectedAnswers(prev => ({ ...prev, [quizId]: optionIndex }));
   };
@@ -23,10 +25,10 @@ export function QuizSection({ topicTitle }: { topicTitle: string }) {
       <div className="mb-8">
         <h2 className="text-3xl font-extrabold text-slate-900 flex items-center mb-4">
           <Target className="mr-3 text-indigo-600 h-8 w-8" />
-          Concept Check: {topicTitle}
+          Knowledge Check
         </h2>
         <p className="text-lg text-slate-600">
-          Test your understanding with these 10 comprehensive conceptual questions.
+          Test your understanding with these questions. Select an answer and click Check to see the explanation.
         </p>
       </div>
 
@@ -46,12 +48,12 @@ export function QuizSection({ topicTitle }: { topicTitle: string }) {
                   {quiz.question}
                 </h3>
               </div>
-              
+
               <div className="p-6">
                 <div className="space-y-3 mb-6">
                   {quiz.options.map((opt, optIdx) => {
                     let optionClass = "border-slate-200 hover:border-indigo-300 hover:bg-slate-50 cursor-pointer text-slate-700";
-                    
+
                     if (isRevealed) {
                       if (optIdx === quiz.correctAnswerIndex) {
                         optionClass = "border-emerald-500 bg-emerald-50 text-emerald-900";
@@ -65,7 +67,7 @@ export function QuizSection({ topicTitle }: { topicTitle: string }) {
                     }
 
                     return (
-                      <div 
+                      <div
                         key={optIdx}
                         onClick={() => handleSelect(quiz.id, optIdx)}
                         className={`p-4 rounded-lg border-2 transition-all ${optionClass}`}
@@ -88,7 +90,7 @@ export function QuizSection({ topicTitle }: { topicTitle: string }) {
                 </div>
 
                 {!isRevealed ? (
-                  <button 
+                  <button
                     onClick={() => handleCheck(quiz.id)}
                     disabled={selected === undefined || selected === null}
                     className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
@@ -100,7 +102,7 @@ export function QuizSection({ topicTitle }: { topicTitle: string }) {
                     <AlertCircle className={`h-6 w-6 mr-3 shrink-0 ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`} />
                     <div>
                       <p className={`font-bold text-sm mb-1 ${isCorrect ? 'text-emerald-900' : 'text-rose-900'}`}>
-                        {isCorrect ? 'Correct!' : 'Incorrect'}
+                        {isCorrect ? 'Correct!' : 'Not quite'}
                       </p>
                       <p className={`text-sm ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}`}>
                         {quiz.explanation}
