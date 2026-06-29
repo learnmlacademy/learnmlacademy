@@ -316,7 +316,7 @@ export function TopicPage() {
           </div>
 
           {subtopic.id !== 'ml-interview-questions' && (
-            <QuizSection topicTitle={subtopic.title} />
+            <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
           )}
 
           {/* Newsletter Signup */}
