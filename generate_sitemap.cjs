@@ -57,6 +57,7 @@ const blogSlugs = [
   'overfitting-underfitting-guide',
   'feature-engineering-tips',
   'xgboost-vs-random-forest',
+  'what-is-rag',
 ];
 
 const urls = [
