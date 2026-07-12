@@ -25,6 +25,7 @@ export function AppLayout() {
   React.useEffect(() => {
     setSidebarOpen(false);
     mainRef.current?.scrollTo(0, 0);
+    document.getElementById("main-scroll")?.scrollTo(0, 0);
   }, [location.pathname]);
 
   // Handle clicking outside of search
@@ -159,9 +160,9 @@ export function AppLayout() {
         )}
 
         {/* Main Content Area */}
-        <main ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 flex flex-col relative">
+        <main id="main-scroll" ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 flex flex-col relative">
           <div className="flex-1">
-            <Outlet />
+            <Outlet key={location.pathname} />
           </div>
           
           {/* Footer Component */}
