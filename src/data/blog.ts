@@ -72,6 +72,16 @@ export const blogPosts: BlogPost[] = [
     date: "2026-04-28",
     tags: ["xgboost", "random-forest", "ensemble", "comparison"],
   },
+  {
+    slug: "what-is-rag",
+    title: "What is RAG (Retrieval-Augmented Generation) and How Does It Work?",
+    excerpt: "RAG gives language models the ability to look things up before answering — combining LLM reasoning with a live, updatable knowledge base. Learn the architecture, build it in Python, and understand when to use it and when not to.",
+    category: "Generative AI",
+    readTime: 14,
+    date: "2026-07-03",
+    tags: ["rag", "llm", "generative-ai", "langchain", "vector-database"],
+    featured: true,
+  },
 ];
 
 export const blogCategories = [...new Set(blogPosts.map(p => p.category))];
