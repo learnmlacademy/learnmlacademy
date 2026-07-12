@@ -27,8 +27,6 @@ function CodeBlock({ code, output, title }: { code: string; output?: React.React
 export function EDAContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Exploratory Data Analysis (EDA)</h1>
-
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
         Before building machine learning models or creating dashboards, analysts first need to understand the data properly. Raw datasets often contain hidden problems such as missing values, duplicate records, unusual patterns, or incorrect formatting.
       </p>
@@ -49,7 +47,7 @@ export function EDAContent() {
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Why is EDA Important?
       </h2>
-      <div className="not-prose grid sm:grid-cols-2 gap-4 mb-8">
+      <div className="not-prose sm:-cols-2 mb-8 space-y-8">
         {[
           { icon: '🔍', title: 'Understand Data Structure', desc: 'EDA reveals the number of rows, columns, data types, and value ranges. You cannot model what you do not understand.' },
           { icon: '🚨', title: 'Detect Missing Values', desc: 'Real-world data always has gaps. EDA quantifies exactly how many NaNs exist per column and guides your imputation strategy.' },
@@ -58,7 +56,7 @@ export function EDAContent() {
           { icon: '⚖️', title: 'Spot Class Imbalance', desc: 'If 98% of your labels are "No" and 2% are "Yes", accuracy is a useless metric. EDA catches this before you train.' },
           { icon: '💡', title: 'Guide Feature Engineering', desc: 'EDA insights — like skewed distributions or interaction patterns — directly inspire which new features to create.' },
         ].map(f => (
-          <div key={f.title} className="bg-white border border-slate-200 rounded-xl p-4 flex gap-3 shadow-sm">
+          <div key={f.title} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
             <span className="text-2xl flex-shrink-0">{f.icon}</span>
             <div>
               <p className="font-bold text-slate-800 text-sm mb-1">{f.title}</p>
@@ -72,22 +70,31 @@ export function EDAContent() {
         Types of Exploratory Data Analysis
       </h2>
 
-      {/* EDA Hierarchical Tree */}
-      <div className="not-prose my-6 bg-slate-50 border border-slate-200 rounded-2xl p-6 overflow-x-auto">
+            {/* EDA Hierarchical Tree */}
+      <div className="bg-slate-50 border border-slate-200 py-8 px-4 rounded-xl shadow-sm my-8 overflow-x-auto">
         <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-6">Figure — EDA Types Hierarchy</p>
-        <div className="flex flex-col items-center min-w-[540px]">
+        <div className="flex flex-col items-center min-w-[700px] max-w-4xl mx-auto">
           <div className="bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold shadow text-sm">Exploratory Data Analysis (EDA)</div>
           <div className="w-0.5 bg-slate-300 h-6"/>
-          <div className="relative w-[80%] border-t-2 border-slate-300"/>
-          <div className="grid grid-cols-3 w-full gap-4 mt-6">
+          
+          <div className="relative w-full h-6">
+            <div className="absolute top-0 border-t-2 border-slate-300" style={{ left: '16.666%', right: '16.666%' }} />
+            {[0, 1, 2].map(idx => (
+              <div key={idx} className="absolute top-0 w-0.5 bg-slate-300 h-6" style={{ left: `${(idx + 0.5) * 100 / 3}%`, transform: 'translateX(-50%)' }} />
+            ))}
+          </div>
+          
+          <div className="flex w-full items-stretch">
             {[
               { name: 'Univariate Analysis', col: 'indigo', sub: ['One variable at a time','Distribution, shape, spread','Histogram, boxplot, bar chart'] },
               { name: 'Bivariate Analysis', col: 'emerald', sub: ['Two variables together','Relationships & correlation','Scatter plot, heatmap, crosstab'] },
               { name: 'Multivariate Analysis', col: 'amber', sub: ['3+ variables simultaneously','Interactions & clusters','Pair plot, PCA, parallel coords'] },
             ].map(t => (
-              <div key={t.name} className={"bg-"+t.col+"-50 border border-"+t.col+"-200 rounded-xl p-4 text-center"}>
-                <p className={"font-bold text-"+t.col+"-800 text-sm mb-2"}>{t.name}</p>
-                {t.sub.map(s => <p key={s} className="text-xs text-slate-500 mb-0.5">{s}</p>)}
+              <div key={t.name} className="flex-1 px-3">
+                <div className={`bg-${t.col}-50 border border-${t.col}-200 rounded-xl p-4 text-center h-full`}>
+                  <p className={`font-bold text-${t.col}-800 text-sm mb-2`}>{t.name}</p>
+                  {t.sub.map(s => <p key={s} className="text-xs text-slate-500 mb-0.5">{s}</p>)}
+                </div>
               </div>
             ))}
           </div>
@@ -359,7 +366,7 @@ df.drop_duplicates(inplace=True)`}
       </h2>
       <p>Visualization makes analysis easier and faster.</p>
 
-      <div className="grid md:grid-cols-2 gap-6 my-6">
+      <div className="md:grid-cols-2 grid my-6 gap-8">
         <div>
           <CodeBlock 
             code={`# Histogram Example
@@ -475,7 +482,7 @@ plt.show()`}
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Best Practices & Challenges
       </h2>
-      <div className="grid md:grid-cols-2 gap-8 my-6">
+      <div className="md:grid-cols-2 grid my-6 gap-8">
         <div>
           <h3 className="text-xl font-bold text-emerald-700">Best Practices for EDA</h3>
           <ul className="list-disc pl-6 text-slate-700">
