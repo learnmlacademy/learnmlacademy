@@ -108,66 +108,7 @@ function getTopicNavigation(currentId: string) {
   return { prev, next };
 }
 
-export function TopicPage() {
-  const { topicId } = useParams<{ topicId: string }>();
-  const navigate = useNavigate();
- 
-   // Scroll to top and set SEO on route change
-   useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (topicId) {
-      const topicInfo = getTopicById(topicId);
-      if (topicInfo) {
-        const seo = getSEOData(topicId, topicInfo.subtopic.title);
-        document.title = seo.title;
-
-        // Meta description
-        const setMeta = (sel: string, attr: string, val: string) => {
-          let el = document.querySelector(sel);
-          if (!el) { el = document.createElement('meta'); document.head.appendChild(el); }
-          el.setAttribute(attr, val);
-        };
-        setMeta('meta[name="description"]', 'content', seo.description);
-
-        // Canonical link
-        let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-        if (!canonical) {
-          canonical = document.createElement('link');
-          canonical.setAttribute('rel', 'canonical');
-          document.head.appendChild(canonical);
-        }
-        canonical.setAttribute('href', getCanonicalUrl(topicId));
-
-        // Open Graph tags (per-page)
-        setMeta('meta[property="og:title"]', 'content', seo.title);
-        setMeta('meta[property="og:description"]', 'content', seo.description);
-        setMeta('meta[property="og:url"]', 'content', getCanonicalUrl(topicId));
-
-        // JSON-LD: LearningResource + BreadcrumbList
-        let scriptSchema = document.querySelector('#schema-topic') as HTMLScriptElement;
-        if (!scriptSchema) {
-          scriptSchema = document.createElement('script');
-          scriptSchema.setAttribute('id', 'schema-topic');
-          scriptSchema.setAttribute('type', 'application/ld+json');
-          document.head.appendChild(scriptSchema);
-        }
-        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description);
-      }
-    }
-  }, [topicId]);
-
-  if (!topicId) return <Navigate to="/" />;
-
-  const topicData = getTopicById(topicId);
-
-  if (!topicData) return <Navigate to="/" />;
-
-  const { subtopic, category } = topicData;
-  const { prev, next } = getTopicNavigation(topicId);
-
-  // Content Registry - map IDs to their React components
-  const contentMap: Record<string, React.ReactNode> = {
+const contentMap: Record<string, React.ReactNode> = {
     "what-is-ml": <WhatIsMLContent />,
     "types-of-ml": <TypesOfMLContent />,
     "supervised-learning-intro": <SupervisedIntroContent />,
@@ -247,6 +188,67 @@ export function TopicPage() {
     "deep-learning-intro": <DeepLearningIntroContent />,
     "ml-interview-questions": <MLInterviewContent />,
   };
+
+export function TopicPage() {
+  const { topicId } = useParams<{ topicId: string }>();
+  const navigate = useNavigate();
+ 
+   // Scroll to top and set SEO on route change
+   useEffect(() => {
+    window.scrollTo(0, 0);
+
+    if (topicId) {
+      const topicInfo = getTopicById(topicId);
+      if (topicInfo) {
+        const seo = getSEOData(topicId, topicInfo.subtopic.title);
+        document.title = seo.title;
+
+        // Meta description
+        const setMeta = (sel: string, attr: string, val: string) => {
+          let el = document.querySelector(sel);
+          if (!el) { el = document.createElement('meta'); document.head.appendChild(el); }
+          el.setAttribute(attr, val);
+        };
+        setMeta('meta[name="description"]', 'content', seo.description);
+
+        // Canonical link
+        let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
+        if (!canonical) {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          document.head.appendChild(canonical);
+        }
+        canonical.setAttribute('href', getCanonicalUrl(topicId));
+
+        // Open Graph tags (per-page)
+        setMeta('meta[property="og:title"]', 'content', seo.title);
+        setMeta('meta[property="og:description"]', 'content', seo.description);
+        setMeta('meta[property="og:url"]', 'content', getCanonicalUrl(topicId));
+
+        // JSON-LD: LearningResource + BreadcrumbList
+        let scriptSchema = document.querySelector('#schema-topic') as HTMLScriptElement;
+        if (!scriptSchema) {
+          scriptSchema = document.createElement('script');
+          scriptSchema.setAttribute('id', 'schema-topic');
+          scriptSchema.setAttribute('type', 'application/ld+json');
+          document.head.appendChild(scriptSchema);
+        }
+        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description);
+      }
+    }
+  }, [topicId]);
+
+  if (!topicId) return <Navigate to="/" />;
+
+  const topicData = getTopicById(topicId);
+
+  if (!topicData) return <Navigate to="/" />;
+
+  const { subtopic, category } = topicData;
+  const { prev, next } = getTopicNavigation(topicId);
+
+  // Content Registry - map IDs to their React components
+  
 
   const ContentComponent = contentMap[topicId] || (
     <GenericContent title={subtopic.title} />
