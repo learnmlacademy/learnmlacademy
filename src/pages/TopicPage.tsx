@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
 import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
+
 import {
   ChevronRight,
   ExternalLink,
@@ -108,60 +109,60 @@ function getTopicNavigation(currentId: string) {
   return { prev, next };
 }
 
-const contentMap: Record<string, React.ReactNode> = {
-    "what-is-ml": <WhatIsMLContent />,
-    "types-of-ml": <TypesOfMLContent />,
-    "supervised-learning-intro": <SupervisedIntroContent />,
-    "unsupervised-learning-intro": <UnsupervisedIntroContent />,
-    "reinforcement-learning-intro": <ReinforcementIntroContent />,
-    "batch-vs-online": <BatchVsOnlineContent />,
-    "ml-lifecycle": <MLLifecycleContent />,
+const contentMap: Record<string, React.ElementType> = {
+    "what-is-ml": WhatIsMLContent,
+    "types-of-ml": TypesOfMLContent,
+    "supervised-learning-intro": SupervisedIntroContent,
+    "unsupervised-learning-intro": UnsupervisedIntroContent,
+    "reinforcement-learning-intro": ReinforcementIntroContent,
+    "batch-vs-online": BatchVsOnlineContent,
+    "ml-lifecycle": MLLifecycleContent,
 
-    "python-for-ml": <PythonForMLContent />,
-    "numpy-essentials": <NumpyContent />,
-    "pandas-essentials": <PandasContent />,
-    "scikit-learn-essentials": <ScikitLearnContent />,
+    "python-for-ml": PythonForMLContent,
+    "numpy-essentials": NumpyContent,
+    "pandas-essentials": PandasContent,
+    "scikit-learn-essentials": ScikitLearnContent,
 
     // Preprocessing
-    eda: <EDAContent />,
-    "handling-missing-data": <HandlingMissingDataContent />,
-    "encoding-categorical": <EncodingCategoricalContent />,
-    "feature-scaling": <FeatureScalingContent />,
-    "feature-engineering": <FeatureEngineeringContent />,
-    "feature-selection": <FeatureSelectionContent />,
-    "data-visualization": <DataVisualizationContent />,
+    eda: EDAContent,
+    "handling-missing-data": HandlingMissingDataContent,
+    "encoding-categorical": EncodingCategoricalContent,
+    "feature-scaling": FeatureScalingContent,
+    "feature-engineering": FeatureEngineeringContent,
+    "feature-selection": FeatureSelectionContent,
+    "data-visualization": DataVisualizationContent,
 
     // Supervised Learning
-    "regression-intro": <RegressionIntroContent />,
-    "linear-regression": <LinearRegressionContent />,
-    "gradient-descent": <GradientDescentContent />,
-    "polynomial-regression": <PolynomialRegressionContent />,
-    "ridge-regression": <RidgeRegressionContent />,
-    "lasso-regression": <LassoRegressionContent />,
-    "classification-intro": <ClassificationIntroContent />,
-    "logistic-regression": <LogisticRegressionContent />,
-    "decision-trees": <DecisionTreesContent />,
-    "naive-bayes": <NaiveBayesContent />,
+    "regression-intro": RegressionIntroContent,
+    "linear-regression": LinearRegressionContent,
+    "gradient-descent": GradientDescentContent,
+    "polynomial-regression": PolynomialRegressionContent,
+    "ridge-regression": RidgeRegressionContent,
+    "lasso-regression": LassoRegressionContent,
+    "classification-intro": ClassificationIntroContent,
+    "logistic-regression": LogisticRegressionContent,
+    "decision-trees": DecisionTreesContent,
+    "naive-bayes": NaiveBayesContent,
     knn: <KNNContent />,
     svm: <SVMContent />,
 
     // Model Evaluation
-    "train-test-split": <TrainTestSplitContent />,
-    "cross-validation": <CrossValidationContent />,
-    "bias-variance": <BiasVarianceContent />,
-    "overfitting-underfitting": <OverfittingUnderfittingContent />,
-    "cost-functions": <CostFunctionsContent />,
-    "hyperparameter-tuning": <HyperparameterTuningContent />,
-    "grid-random-search": <GridRandomSearchContent />,
-    "confusion-matrix": <ConfusionMatrixContent />,
-    "roc-auc": <RocAucContent />,
+    "train-test-split": TrainTestSplitContent,
+    "cross-validation": CrossValidationContent,
+    "bias-variance": BiasVarianceContent,
+    "overfitting-underfitting": OverfittingUnderfittingContent,
+    "cost-functions": CostFunctionsContent,
+    "hyperparameter-tuning": HyperparameterTuningContent,
+    "grid-random-search": GridRandomSearchContent,
+    "confusion-matrix": ConfusionMatrixContent,
+    "roc-auc": RocAucContent,
 
     // Ensemble Learning
-    "random-forest": <RandomForestContent />,
+    "random-forest": RandomForestContent,
     bagging: <BaggingContent />,
     boosting: <BoostingContent />,
     adaboost: <AdaBoostContent />,
-    "gradient-boosting": <GradientBoostingContent />,
+    "gradient-boosting": GradientBoostingContent,
     xgboost: <XGBoostContent />,
 
     // Unsupervised Learning
@@ -170,24 +171,47 @@ const contentMap: Record<string, React.ReactNode> = {
     dbscan: <DBSCANContent />,
     pca: <PCAContent />,
     tsne: <TSNEContent />,
-    "association-rules": <AssociationRulesContent />,
+    "association-rules": AssociationRulesContent,
     apriori: <AprioriContent />,
 
     // Time Series
     arima: <ArimaContent />,
-    "moving-average": <MovingAverageContent />,
-    "exponential-smoothing": <ExponentialSmoothingContent />,
-    "forecasting-basics": <ForecastingBasicsContent />,
+    "moving-average": MovingAverageContent,
+    "exponential-smoothing": ExponentialSmoothingContent,
+    "forecasting-basics": ForecastingBasicsContent,
 
-    "semi-supervised": <SemiSupervisedContent />,
-    "online-learning": <OnlineLearningContent />,
-    "reinforcement-learning-adv": <ReinforcementLearningAdvContent />,
-    "multi-armed-bandits": <MultiArmedBanditsContent />,
+    "semi-supervised": SemiSupervisedContent,
+    "online-learning": OnlineLearningContent,
+    "reinforcement-learning-adv": ReinforcementLearningAdvContent,
+    "multi-armed-bandits": MultiArmedBanditsContent,
 
-    "neural-networks": <NeuralNetworksContent />,
-    "deep-learning-intro": <DeepLearningIntroContent />,
-    "ml-interview-questions": <MLInterviewContent />,
+    "neural-networks": NeuralNetworksContent,
+    "deep-learning-intro": DeepLearningIntroContent,
+    "ml-interview-questions": MLInterviewContent,
   };
+
+
+import { BookOpen, Code2, Network, BarChart3, Binary, Layers, BrainCircuit, LineChart, FileTerminal } from 'lucide-react';
+
+function getCategoryIcon(categoryId: string) {
+  if (categoryId.includes('python')) return <Code2 className="w-12 h-12 text-white/90" />;
+  if (categoryId.includes('supervised')) return <LineChart className="w-12 h-12 text-white/90" />;
+  if (categoryId.includes('unsupervised')) return <Network className="w-12 h-12 text-white/90" />;
+  if (categoryId.includes('evaluation')) return <BarChart3 className="w-12 h-12 text-white/90" />;
+  if (categoryId.includes('ensemble')) return <Layers className="w-12 h-12 text-white/90" />;
+  if (categoryId.includes('deeplearning')) return <BrainCircuit className="w-12 h-12 text-white/90" />;
+  return <BookOpen className="w-12 h-12 text-white/90" />;
+}
+
+function getCategoryGradient(categoryId: string) {
+  if (categoryId.includes('python')) return 'from-emerald-600 to-teal-800';
+  if (categoryId.includes('supervised')) return 'from-blue-600 to-indigo-900';
+  if (categoryId.includes('unsupervised')) return 'from-purple-600 to-fuchsia-900';
+  if (categoryId.includes('evaluation')) return 'from-amber-500 to-orange-700';
+  if (categoryId.includes('ensemble')) return 'from-rose-600 to-red-900';
+  if (categoryId.includes('deeplearning')) return 'from-slate-800 to-black';
+  return 'from-indigo-600 to-blue-900';
+}
 
 export function TopicPage() {
   const { topicId } = useParams<{ topicId: string }>();
@@ -250,9 +274,7 @@ export function TopicPage() {
   // Content Registry - map IDs to their React components
   
 
-  const ContentComponent = contentMap[topicId] || (
-    <GenericContent title={subtopic.title} />
-  );
+  const ContentComponent = contentMap[topicId];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col">
@@ -268,9 +290,34 @@ export function TopicPage() {
             <span className="text-slate-900">{subtopic.title}</span>
           </nav>
 
+          
+          {/* Topic Hero */}
+          <div className={`relative overflow-hidden rounded-2xl p-8 md:p-10 mb-10 shadow-lg bg-gradient-to-br ${getCategoryGradient(category.id)}`}>
+            {/* Background decorative elements */}
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-10 w-40 h-40 bg-black/20 rounded-full blur-2xl"></div>
+            
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
+              <div className="shrink-0 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                {getCategoryIcon(category.id)}
+              </div>
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white/90 text-xs font-bold uppercase tracking-wider mb-4 border border-white/10">
+                  {category.title.replace(/^\d+\.\s*/, "")}
+                </div>
+                <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+                  {subtopic.title}
+                </h1>
+                <p className="text-lg text-white/80 max-w-2xl leading-relaxed">
+                  {getSEOData(topicId || '', subtopic.title).description}
+                </p>
+              </div>
+            </div>
+          </div>
+
           {/* Main Content Render */}
           <article
-            key={topicId}
+            key={`article-${topicId}`}
             className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
           >
             {/* Author Byline */}
@@ -292,7 +339,7 @@ export function TopicPage() {
                 <div className="h-4 bg-slate-200 rounded w-full"></div>
               </div>
             }>
-              {ContentComponent}
+              {ContentComponent ? <ContentComponent /> : <GenericContent title={subtopic.title} />}
             </Suspense>
           </article>
 
@@ -318,7 +365,7 @@ export function TopicPage() {
           </div>
 
           {subtopic.id !== 'ml-interview-questions' && (
-            <QuizSection key={subtopic.id} topicId={subtopic.id} topicTitle={subtopic.title} />
+            <QuizSection key={`quiz-${subtopic.id}`} topicId={subtopic.id} topicTitle={subtopic.title} />
           )}
 
           {/* Newsletter Signup */}
