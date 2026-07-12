@@ -1,40 +1,37 @@
 import React from "react";
-import { GraduationCap, ArrowRight, BookOpen, UserCheck, Search, Database } from "lucide-react";
+import { AnimatedSupervised } from "../../components/diagrams/AnimatedFoundationDiagrams";
+
+import { GraduationCap, ArrowRight, BookOpen, UserCheck, Search, Database, Stethoscope, Briefcase, ShoppingCart } from "lucide-react";
 
 export function SupervisedIntroContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6">
-        Supervised Learning
-      </h1>
-
-      <div className="text-xl text-slate-700 mb-8 leading-relaxed">
-        Supervised Learning is a training method where machines are trained using <strong className="text-slate-900">labeled data</strong>. The training data includes both the input features and the correct answers (the output).
-      </div>
-
-      <p className="text-lg leading-relaxed mb-4">
-        The primary goal of this branch of machine learning is for the machine to learn the relationship between the inputs and outputs so it can accurately predict outputs for new, unseen data in the future.
+            
+      <p className="text-lg leading-relaxed mb-8">
+        Supervised learning is the most common and practically used sub-branch of Machine Learning. In this paradigm, algorithms are trained using meticulously labeled datasets. The defining characteristic is the presence of a "Supervisor" or "Teacher" — the explicit target variables that guide the algorithm during its training process. The fundamental goal is to establish a mathematical mapping function between the inputs and outputs. Once this mapping is established with high accuracy on the training data, the model can generalize and confidently predict the outputs for entirely new, unseen data in the future.
       </p>
+      <AnimatedSupervised />
 
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-indigo-800 border-b pb-2">
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
         How Supervised Learning Works
       </h2>
 
-      <p className="text-lg text-slate-700 italic leading-relaxed mb-6">
-        Supervised learning acts like a student learning under a teacher's supervision. The "teacher" provides questions alongside the correct answers. The "student" studies these examples to learn patterns and later takes a blind exam with new questions.
+      <p className="text-lg text-slate-700 italic leading-relaxed mb-8">
+        Think of supervised learning as a student studying for an exam using flashcards. The front of the flashcard has the data (e.g., a picture of an animal), and the back has the label (e.g., "Giraffe"). By repeatedly reviewing these labeled examples and self-correcting when wrong, the student eventually learns the underlying characteristics that define a giraffe.
       </p>
 
-      <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-8">
-        <p className="text-slate-800 font-medium text-lg mb-2">The Training Process:</p>
-        <ol className="list-decimal pl-6 space-y-2 text-slate-700 text-lg">
-          <li><strong>Data Collection:</strong> We gather a large dataset where every item has a label. (e.g., 10,000 emails classified as "Spam" or "Not Spam").</li>
-          <li><strong>Training Phase:</strong> The algorithm studies the patterns. It learns that emails containing "Free Money" are usually Spam.</li>
-          <li><strong>Testing Phase:</strong> We give the model new, unlabeled data to check its accuracy against a hidden answer key.</li>
-          <li><strong>Deployment:</strong> Once verified, the model automatically labels real-world data in production.</li>
+      <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-12">
+        <p className="text-slate-900 font-bold text-xl mb-4">The Standard Training Pipeline:</p>
+        <ol className="list-decimal pl-6 space-y-4 text-slate-800 text-lg">
+          <li><strong>Data Collection & Labeling:</strong> Gathering a massive dataset where every item has a definitive label. For example, assembling 100,000 photos of skin lesions, each labeled by human dermatologists as either "Benign" or "Malignant."</li>
+          <li><strong>Feature Extraction:</strong> Identifying the most important variables in the data that the algorithm should pay attention to (e.g., the symmetry, border, and color of the lesion).</li>
+          <li><strong>Training Phase:</strong> The algorithm mathematically analyzes the patterns connecting the features to the labels. It iteratively makes guesses, checks its answer against the correct label, and updates its internal weights to reduce its error rate.</li>
+          <li><strong>Validation & Testing:</strong> We evaluate the model using a separate portion of the labeled data that the model was never allowed to train on. This ensures it hasn't just memorized the training set but has actually learned generalizable patterns.</li>
+          <li><strong>Deployment:</strong> Once the accuracy meets business requirements, the model is deployed to automatically label new, real-world data in a live application.</li>
         </ol>
       </div>
 
-      <div className="bg-white border rounded-xl overflow-hidden shadow-sm my-10 p-8">
+      <div className="bg-slate-50 border border-slate-200 py-6 px-4 rounded-xl shadow-sm my-8 overflow-x-auto">
         <h3 className="text-xl font-bold mb-6 text-center text-slate-800">
           Supervised Learning Flowchart
         </h3>
@@ -61,184 +58,174 @@ export function SupervisedIntroContent() {
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold mt-10 mb-4 text-indigo-800 border-b pb-2">
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
         Main Categories of Supervised Learning
       </h2>
+      <p className="text-lg leading-relaxed mb-6">
+        Supervised learning algorithms are strictly divided into two distinct categories based entirely on the type of output they are trying to predict.
+      </p>
 
-      {/* Hierarchical Tree */}
-      <div className="my-6 bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm overflow-x-auto">
-        <p className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wider mb-5">
+            {/* Hierarchical Tree */}
+      <div className="bg-slate-50 border border-slate-200 py-8 px-4 rounded-xl shadow-sm my-8 overflow-x-auto">
+        <p className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wider mb-6">
           Figure — Supervised Learning Hierarchy
         </p>
-        <div className="flex flex-col items-center min-w-[560px]">
+        <div className="flex flex-col items-center min-w-[600px] max-w-3xl mx-auto">
           <div className="bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold shadow text-sm">
             Supervised Learning
           </div>
           <div className="w-0.5 bg-slate-300 h-6" />
-          <div className="relative w-[75%] border-t-2 border-slate-300">
-            <div className="absolute left-0 top-0 w-0.5 bg-slate-300 h-6" />
-            <div className="absolute right-0 top-0 w-0.5 bg-slate-300 h-6" />
+          <div className="relative w-full h-6">
+            <div className="absolute top-0 border-t-2 border-slate-300" style={{ left: '25%', right: '25%' }} />
+            {[0, 1].map(idx => (
+              <div key={idx} className="absolute top-0 w-0.5 bg-slate-300 h-6" style={{ left: `${(idx + 0.5) * 100 / 2}%`, transform: 'translateX(-50%)' }} />
+            ))}
           </div>
-          <div className="flex justify-between w-[80%] mt-6 gap-8">
+          <div className="flex w-full">
             {/* Classification branch */}
-            <div className="flex flex-col items-center flex-1">
-              <div className="bg-indigo-100 border-2 border-indigo-400 text-indigo-900 px-4 py-2 rounded-lg font-bold text-sm mb-4 w-full text-center">
-                Classification
+            <div className="flex flex-col items-center flex-1 px-4">
+              <div className="bg-rose-50 border-2 border-rose-400 text-rose-900 px-4 py-2.5 rounded-lg font-bold text-sm mb-0 w-full text-center shadow-sm">
+                Classification (Categories)
               </div>
-              <div className="w-0.5 bg-slate-300 h-4" />
-              <div className="relative w-full border-t-2 border-slate-300">
-                {[0, 50, 100].map(p => <div key={p} className="absolute top-0 w-0.5 bg-slate-300 h-4" style={{ left: `${p}%`, transform: 'translateX(-50%)' }} />)}
+              <div className="w-0.5 bg-slate-300 h-5" />
+              <div className="relative w-full h-5">
+                 <div className="absolute top-0 border-t-2 border-slate-300" style={{ left: `${50 / 3}%`, right: `${50 / 3}%` }} />
+                 {[0, 1, 2].map(idx => (
+                    <div key={idx} className="absolute top-0 w-0.5 bg-slate-300 h-5" style={{ left: `${(idx + 0.5) * 100 / 3}%`, transform: 'translateX(-50%)' }} />
+                 ))}
               </div>
-              <div className="flex justify-between w-full mt-4 gap-1.5">
+              <div className="flex w-full">
                 {['Logistic Reg.', 'Decision Tree', 'SVM / KNN'].map(t => (
-                  <div key={t} className="text-xs bg-white border border-indigo-200 text-indigo-700 px-1.5 py-1 rounded text-center flex-1 shadow-sm font-medium leading-tight">{t}</div>
+                  <div key={t} className="flex-1 px-1">
+                    <div className="bg-white border border-slate-200 text-slate-700 text-[11px] font-semibold py-1.5 px-1 rounded w-full text-center shadow-sm">{t}</div>
+                  </div>
                 ))}
               </div>
             </div>
             {/* Regression branch */}
-            <div className="flex flex-col items-center flex-1">
-              <div className="bg-violet-100 border-2 border-violet-400 text-violet-900 px-4 py-2 rounded-lg font-bold text-sm mb-4 w-full text-center">
-                Regression
+            <div className="flex flex-col items-center flex-1 px-4">
+              <div className="bg-blue-50 border-2 border-blue-400 text-blue-900 px-4 py-2.5 rounded-lg font-bold text-sm mb-0 w-full text-center shadow-sm">
+                Regression (Numbers)
               </div>
-              <div className="w-0.5 bg-slate-300 h-4" />
-              <div className="relative w-full border-t-2 border-slate-300">
-                {[0, 50, 100].map(p => <div key={p} className="absolute top-0 w-0.5 bg-slate-300 h-4" style={{ left: `${p}%`, transform: 'translateX(-50%)' }} />)}
+              <div className="w-0.5 bg-slate-300 h-5" />
+              <div className="relative w-full h-5">
+                 <div className="absolute top-0 border-t-2 border-slate-300" style={{ left: `${50 / 3}%`, right: `${50 / 3}%` }} />
+                 {[0, 1, 2].map(idx => (
+                    <div key={idx} className="absolute top-0 w-0.5 bg-slate-300 h-5" style={{ left: `${(idx + 0.5) * 100 / 3}%`, transform: 'translateX(-50%)' }} />
+                 ))}
               </div>
-              <div className="flex justify-between w-full mt-4 gap-1.5">
+              <div className="flex w-full">
                 {['Linear Reg.', 'Polynomial', 'Ridge / Lasso'].map(t => (
-                  <div key={t} className="text-xs bg-white border border-violet-200 text-violet-700 px-1.5 py-1 rounded text-center flex-1 shadow-sm font-medium leading-tight">{t}</div>
+                  <div key={t} className="flex-1 px-1">
+                    <div className="bg-white border border-slate-200 text-slate-700 text-[11px] font-semibold py-1.5 px-1 rounded w-full text-center shadow-sm">{t}</div>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
-          <p className="text-xs text-slate-400 italic mt-5 text-center">
-            Classification → predicts discrete labels · Regression → predicts continuous values
+          <p className="text-xs text-slate-400 italic mt-8 text-center">
+            Classification predicts discrete labels. Regression predicts continuous values.
           </p>
         </div>
       </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
+        Modern Trends & Techniques in Supervised Learning
+      </h2>
       <p className="text-lg leading-relaxed mb-6">
-        Supervised learning algorithms are divided into two main categories depending on the type of output they produce:
+        As the demand for labeled data has skyrocketed, the industry has developed new ways to make supervised learning more efficient:
       </p>
 
-      <div className="my-10 bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm overflow-x-auto flex flex-col items-center justify-center w-full">
-        <div className="flex flex-col items-center min-w-[400px]">
-          <div className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold shadow-md z-10 text-lg">
-            Supervised Learning
-          </div>
-          <div className="w-1 bg-slate-300 h-8"></div>
-          <div className="w-[60%] border-t-[3px] border-slate-300 relative">
-            <div className="absolute left-0 top-0 w-1 bg-slate-300 h-8"></div>
-            <div className="absolute right-0 top-0 w-1 bg-slate-300 h-8"></div>
-          </div>
-          <div className="flex justify-between w-[70%] mt-8 gap-8">
-            <div className="flex flex-col items-center flex-1">
-              <div className="bg-rose-100 border-2 border-rose-400 text-rose-900 px-4 py-2 rounded-lg font-bold shadow-sm mb-2 w-full text-center">
-                Classification
-              </div>
-              <div className="text-xs text-slate-600 font-medium bg-white border border-slate-200 p-2 rounded text-center w-full shadow-sm">Discrete Labels</div>
-            </div>
-             <div className="flex flex-col items-center flex-1">
-              <div className="bg-blue-100 border-2 border-blue-400 text-blue-900 px-4 py-2 rounded-lg font-bold shadow-sm mb-2 w-full text-center">
-                Regression
-              </div>
-              <div className="text-xs text-slate-600 font-medium bg-white border border-slate-200 p-2 rounded text-center w-full shadow-sm">Continuous Numbers</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ul className="space-y-6 text-lg text-slate-700 leading-relaxed mb-12">
+        <li>
+          <strong className="text-slate-900">Transfer Learning:</strong> Instead of training a model from absolute scratch (which requires massive datasets), developers take a pre-trained model (like Google's image recognition models) that already understands general features (shapes, edges, colors) and simply fine-tune it on a much smaller, highly specific supervised dataset. This drastically reduces the time and data needed.
+        </li>
+        <li>
+          <strong className="text-slate-900">Active Learning:</strong> When labeling data is incredibly expensive (like paying specialized doctors to label MRI scans), active learning algorithms review a massive pool of unlabeled data and intelligently select only the most confusing or borderline examples to send to human experts for labeling. This ensures humans only spend time labeling data that actually helps the model improve.
+        </li>
+      </ul>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-        <div className="bg-rose-50 border border-rose-100 rounded-xl p-6">
-          <h4 className="font-bold text-rose-900 text-xl mb-2">1. Classification (Categorical)</h4>
-          <p className="text-rose-800 text-sm mb-4 leading-relaxed">
-            Used when the output needs to be a specific category or label. The model predicts a discrete value from a finite list of options.
-          </p>
-          <ul className="list-disc pl-5 mb-4 text-sm text-rose-900 space-y-1">
-            <li><strong>Spam Detection:</strong> "Spam" or "Inbox"</li>
-            <li><strong>Image Recognition:</strong> "Cat" or "Dog"</li>
-            <li><strong>Medical:</strong> "Malignant" or "Benign"</li>
-          </ul>
-          <p className="text-xs font-mono text-rose-700 bg-rose-100 p-2 rounded">Algorithms: Logistic Regression, Decision Trees, Random Forest, SVM, Naive Bayes</p>
-        </div>
-
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-6">
-          <h4 className="font-bold text-blue-900 text-xl mb-2">2. Regression (Continuous)</h4>
-          <p className="text-blue-800 text-sm mb-4 leading-relaxed">
-            Used when the output needs to be a real number or a continuous value. The model predicts a numerical quantity.
-          </p>
-          <ul className="list-disc pl-5 mb-4 text-sm text-blue-900 space-y-1">
-            <li><strong>Real Estate:</strong> Predicting house prices ($)</li>
-            <li><strong>Stock Market:</strong> Forecasting stock values</li>
-            <li><strong>Weather:</strong> Predicting temperature (Degrees)</li>
-          </ul>
-          <p className="text-xs font-mono text-blue-700 bg-blue-100 p-2 rounded">Algorithms: Linear Regression, Polynomial Regression, Ridge, Lasso</p>
-        </div>
-      </div>
-
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-indigo-800 border-b pb-2">
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
         Advantages & Limitations
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-        <div>
-          <h4 className="text-lg font-bold text-emerald-700 mb-3 flex items-center"><UserCheck className="w-5 h-5 mr-2" /> Advantages</h4>
-          <ul className="list-disc pl-5 space-y-2 text-slate-700">
-            <li><strong>High Accuracy:</strong> By learning from correct historical examples, prediction accuracy is very high.</li>
-            <li><strong>Clear Evaluation:</strong> You can easily measure performance by comparing predictions to the actual test labels.</li>
-            <li><strong>Specific Targeting:</strong> Allows developers to optimize models for exact, well-defined tasks.</li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="text-lg font-bold text-rose-700 mb-3 flex items-center"><Search className="w-5 h-5 mr-2" /> Limitations</h4>
-          <ul className="list-disc pl-5 space-y-2 text-slate-700">
-            <li><strong>Expensive Data Preparation:</strong> Creating labeled datasets requires massive human effort and time.</li>
-            <li><strong>Inflexible:</strong> A model trained to classify cats and dogs cannot classify birds without complete retraining.</li>
-            <li><strong>Overfitting:</strong> The model might memorize training data instead of learning general patterns.</li>
-          </ul>
-        </div>
+      <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-6">
+        <h4 className="text-xl font-bold text-emerald-900 mb-3 flex items-center"><UserCheck className="w-6 h-6 mr-3 text-emerald-600" /> Advantages</h4>
+        <ul className="list-disc pl-6 space-y-3 text-emerald-800 text-lg">
+          <li><strong>High Accuracy and Reliability:</strong> Because the algorithm learns from verifiable ground-truth examples, the resulting predictions are highly accurate and trustworthy.</li>
+          <li><strong>Clear Evaluation Metrics:</strong> It is mathematically simple to evaluate exactly how well the model is performing by comparing its predictions to the hidden test labels.</li>
+          <li><strong>Highly Specific Targeting:</strong> Allows businesses to optimize models for exact, well-defined commercial tasks (e.g., predicting customer churn).</li>
+        </ul>
+      </div>
+
+      <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-12">
+        <h4 className="text-xl font-bold text-slate-900 mb-3 flex items-center"><Search className="w-6 h-6 mr-3 text-slate-600" /> Limitations</h4>
+        <ul className="list-disc pl-6 space-y-3 text-slate-800 text-lg">
+          <li><strong>Data Labeling Bottleneck:</strong> Creating massive, perfectly labeled datasets requires extraordinary human effort, time, and money. It is often the single most expensive part of an ML project.</li>
+          <li><strong>Inflexibility:</strong> A supervised model is highly specialized. A model trained exclusively to classify cats and dogs is utterly useless if you ask it to identify a bird. It requires complete retraining.</li>
+          <li><strong>Overfitting Risks:</strong> If the model is too complex or the dataset is too small, the model might simply memorize the training data rather than learning general patterns, causing it to fail completely on new real-world data.</li>
+        </ul>
       </div>
 
       <hr className="border-slate-200 mt-12 mb-10" />
 
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
       
-      <div className="overflow-x-auto my-6 rounded-xl border border-slate-200 shadow-sm mb-6">
+      <div className="overflow-x-auto my-8 rounded-xl border border-slate-200 shadow-sm mb-10">
         <table className="min-w-full text-left bg-white">
-          <thead className="bg-slate-50 border-b border-slate-200">
+          <thead className="bg-slate-100 border-b border-slate-200">
             <tr>
-              <th className="p-4 font-bold text-slate-700">Industry</th>
-              <th className="p-4 font-bold text-slate-700">Real-World Application Example</th>
+              <th className="p-4 font-bold text-slate-800 text-lg">Industry</th>
+              <th className="p-4 font-bold text-slate-800 text-lg">Real-World Application Examples</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             <tr className="hover:bg-slate-50">
-              <td className="p-4 font-bold text-slate-800 border-r border-slate-100">Banking & Finance</td>
-              <td className="p-4 text-slate-600">Credit scoring, Fraud detection, Loan approval probability</td>
+              <td className="p-4 font-bold text-slate-900 border-r border-slate-100 flex items-center"><Briefcase className="w-5 h-5 mr-3 text-indigo-600" /> Finance</td>
+              <td className="p-4 text-slate-700 text-lg">Credit scoring, Fraud detection in transactions, Loan approval probability prediction</td>
             </tr>
             <tr className="hover:bg-slate-50">
-              <td className="p-4 font-bold text-slate-800 border-r border-slate-100">Healthcare</td>
-              <td className="p-4 text-slate-600">Predicting diseases, Analyzing X-rays, Drug discovery</td>
+              <td className="p-4 font-bold text-slate-900 border-r border-slate-100 flex items-center"><Stethoscope className="w-5 h-5 mr-3 text-rose-600" /> Healthcare</td>
+              <td className="p-4 text-slate-700 text-lg">Predicting patient risk levels, Automated X-ray analysis, Tumor malignancy classification</td>
             </tr>
             <tr className="hover:bg-slate-50">
-              <td className="p-4 font-bold text-slate-800 border-r border-slate-100">E-Commerce</td>
-              <td className="p-4 text-slate-600">Predicting inventory demand, Customer sentiment analysis</td>
-            </tr>
-            <tr className="hover:bg-slate-50">
-              <td className="p-4 font-bold text-slate-800 border-r border-slate-100">Technology</td>
-              <td className="p-4 text-slate-600">Speech recognition (Siri/Alexa), Translation logic</td>
+              <td className="p-4 font-bold text-slate-900 border-r border-slate-100 flex items-center"><ShoppingCart className="w-5 h-5 mr-3 text-amber-600" /> E-Commerce</td>
+              <td className="p-4 text-slate-700 text-lg">Predicting quarterly inventory demand, Customer sentiment analysis, Churn prediction</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <p className="text-lg leading-relaxed mb-6">
-        Supervised Learning uses historical, labeled data to train a model to make accurate predictions about the future. Whether you are categorizing emails (Classification) or forecasting future sales (Regression), Supervised Learning provides the foundation for most predictive commercial ML software today.
+            
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">Glossary of Key Terms</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl shadow-sm">
+          <p className="font-bold text-indigo-900 text-lg mb-1">Label (Target)</p>
+          <p className="text-slate-700 text-base leading-relaxed">The correct answer or ground truth we want our machine learning model to predict.</p>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl shadow-sm">
+          <p className="font-bold text-indigo-900 text-lg mb-1">Features (Inputs)</p>
+          <p className="text-slate-700 text-base leading-relaxed">The individual measurable properties, variables, or characteristics used to make a prediction.</p>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl shadow-sm">
+          <p className="font-bold text-indigo-900 text-lg mb-1">Classification</p>
+          <p className="text-slate-700 text-base leading-relaxed">A supervised learning task where the goal is to predict a discrete category or class (e.g., Spam vs. Not Spam).</p>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 p-5 rounded-xl shadow-sm">
+          <p className="font-bold text-indigo-900 text-lg mb-1">Regression</p>
+          <p className="text-slate-700 text-base leading-relaxed">A supervised learning task where the goal is to predict a continuous numerical value (e.g., House Price).</p>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
+<p className="text-lg leading-relaxed mb-8">
+        Supervised Learning remains the absolute backbone of commercial AI development. It relies on historical, explicitly labeled data to train models capable of making high-accuracy predictions about the future. Whether classifying objects (Classification) or forecasting continuous numerical values (Regression), supervised algorithms power the vast majority of AI systems you interact with daily.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
         <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
         <p className="text-slate-800 italic text-lg leading-relaxed">
-          The defining feature of Supervised Learning is the presence of an "Answer Key" during training. The algorithm learns by making a guess, checking the answer key, calculating its error, and adjusting its math to be less wrong the next time. 
+          The defining feature and major bottleneck of Supervised Learning is the strict requirement for an "Answer Key" (labeled data) during training. The algorithm learns exclusively by making a prediction, comparing it against the true label, mathematically calculating its error, and adjusting itself to be less wrong on the next iteration. 
         </p>
       </div>
     </>
