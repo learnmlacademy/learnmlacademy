@@ -8,6 +8,7 @@ import { MLInterviewPrepContent } from '../content/blog/ml-interview-prep-guide'
 import { BlogContent_overfitting_underfitting_guide } from '../content/blog/overfitting-underfitting-guide';
 import { BlogContent_feature_engineering_tips } from '../content/blog/feature-engineering-tips';
 import { BlogContent_xgboost_vs_random_forest } from '../content/blog/xgboost-vs-random-forest';
+import { BlogContent_what_is_rag } from '../content/blog/what-is-rag';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // BLOG CONTENT MAP
@@ -22,6 +23,7 @@ const contentMap: Record<string, React.ReactNode> = {
   'overfitting-underfitting-guide': <BlogContent_overfitting_underfitting_guide />,
   'feature-engineering-tips': <BlogContent_feature_engineering_tips />,
   'xgboost-vs-random-forest': <BlogContent_xgboost_vs_random_forest />,
+  'what-is-rag': <BlogContent_what_is_rag />,
 };
 
 export function BlogPostPage() {
