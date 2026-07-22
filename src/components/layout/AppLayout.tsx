@@ -162,7 +162,7 @@ export function AppLayout() {
         {/* Main Content Area */}
         <main id="main-scroll" ref={mainRef} className="flex-1 overflow-y-auto bg-slate-50 flex flex-col relative">
           <div className="flex-1">
-            <Outlet key={location.pathname} />
+            <Outlet />
           </div>
           
           {/* Footer Component */}
