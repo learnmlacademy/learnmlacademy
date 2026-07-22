@@ -1,5 +1,5 @@
 import React from 'react';
-import { Network, Database, Image as ImageIcon, BriefcaseMedical, Brain, TrendingUp, AlertTriangle, MessageSquare, BarChart2, Hash, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, Scatter, ZAxis, ResponsiveContainer, BarChart, Bar, ReferenceLine, ScatterChart } from 'lucide-react';
+import { Network, Database, Image as ImageIcon, BriefcaseMedical, Brain, TrendingUp, AlertTriangle, MessageSquare, BarChart2, Hash } from 'lucide-react';
 import { ScatterChart as RScatterChart, XAxis as RXAxis, YAxis as RYAxis, ZAxis as RZAxis, CartesianGrid as RCartesianGrid, Tooltip as RTooltip, Legend as RLegend, Scatter as RScatter, ResponsiveContainer as RResponsiveContainer, BarChart as RBarChart, Bar as RBar } from 'recharts';
 
 const dataPoints = [
