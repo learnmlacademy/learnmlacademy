@@ -143,8 +143,8 @@ const contentMap: Record<string, React.ElementType> = {
     "logistic-regression": LogisticRegressionContent,
     "decision-trees": DecisionTreesContent,
     "naive-bayes": NaiveBayesContent,
-    knn: <KNNContent />,
-    svm: <SVMContent />,
+    knn: KNNContent,
+    svm: SVMContent,
 
     // Model Evaluation
     "train-test-split": TrainTestSplitContent,
@@ -159,23 +159,23 @@ const contentMap: Record<string, React.ElementType> = {
 
     // Ensemble Learning
     "random-forest": RandomForestContent,
-    bagging: <BaggingContent />,
-    boosting: <BoostingContent />,
-    adaboost: <AdaBoostContent />,
+    bagging: BaggingContent,
+    boosting: BoostingContent,
+    adaboost: AdaBoostContent,
     "gradient-boosting": GradientBoostingContent,
-    xgboost: <XGBoostContent />,
+    xgboost: XGBoostContent,
 
     // Unsupervised Learning
-    kmeans: <KMeansContent />,
-    hierarchical: <HierarchicalContent />,
-    dbscan: <DBSCANContent />,
-    pca: <PCAContent />,
-    tsne: <TSNEContent />,
+    kmeans: KMeansContent,
+    hierarchical: HierarchicalContent,
+    dbscan: DBSCANContent,
+    pca: PCAContent,
+    tsne: TSNEContent,
     "association-rules": AssociationRulesContent,
-    apriori: <AprioriContent />,
+    apriori: AprioriContent,
 
     // Time Series
-    arima: <ArimaContent />,
+    arima: ArimaContent,
     "moving-average": MovingAverageContent,
     "exponential-smoothing": ExponentialSmoothingContent,
     "forecasting-basics": ForecastingBasicsContent,
@@ -365,7 +365,7 @@ export function TopicPage() {
           </div>
 
           {subtopic.id !== 'ml-interview-questions' && (
-            <QuizSection key={`quiz-${subtopic.id}`} topicId={subtopic.id} topicTitle={subtopic.title} />
+            <div key={`quiz-${subtopic.id}`}><QuizSection topicId={subtopic.id} topicTitle={subtopic.title} /></div>
           )}
 
           {/* Newsletter Signup */}
