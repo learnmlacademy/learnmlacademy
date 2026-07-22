@@ -107,7 +107,7 @@ export function BlogPage() {
         <div className="mb-10">
           <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Featured</h2>
           <div className="grid md:grid-cols-2 gap-5">
-            {featured.map(post => <PostCard key={post.slug} post={post} featured />)}
+            {featured.map(post => <div key={post.slug}><PostCard post={post} featured /></div>)}
           </div>
         </div>
       )}
@@ -117,7 +117,7 @@ export function BlogPage() {
         <div className="mb-16">
           <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">All Articles</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {rest.map(post => <PostCard key={post.slug} post={post} />)}
+            {rest.map(post => <div key={post.slug}><PostCard post={post} /></div>)}
           </div>
         </div>
       )}
