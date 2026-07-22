@@ -122,6 +122,15 @@ export function AppLayout() {
           )}
         >
           <div className="flex-1 p-3 overflow-y-auto">
+             {/* Mobile Navigation Links */}
+             <div className="md:hidden mb-6 pb-6 border-b border-slate-100 flex flex-col gap-1">
+                 <Link to="/curriculum" onClick={() => setSidebarOpen(false)} className="px-3 py-2 rounded-md text-sm font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+                   Curriculum
+                 </Link>
+                 <Link to="/blog" onClick={() => setSidebarOpen(false)} className="px-3 py-2 rounded-md text-sm font-bold text-slate-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+                   Blog
+                 </Link>
+             </div>
              {curriculum.map((category) => (
                <div key={category.id} className="mb-6">
                  <h4 className="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2 px-3">
