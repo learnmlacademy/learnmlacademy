@@ -1,12 +1,7 @@
 import React from "react";
 import {
-  PieChart,
-  Pie,
-  Cell,
   Tooltip as RechartsTooltip,
   ResponsiveContainer,
-  BarChart,
-  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -15,7 +10,6 @@ import {
   Scatter,
   LineChart,
   Line,
-  ComposedChart,
 } from "recharts";
 import {
   Target,
@@ -111,11 +105,50 @@ export function ClassificationIntroContent() {
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
         Classification is used when the goal is to predict discrete categories or labels instead of continuous numeric values.</p>
 
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8 shadow-sm">
+        <h2 className="text-2xl font-bold text-indigo-900 mb-3">
+          Classification in Simple Words
+        </h2>
+        <p className="text-lg text-slate-700 leading-relaxed mb-5">
+          Classification means teaching a model to choose a <strong>category</strong>. Think of it like sorting new items into labeled boxes after seeing solved examples.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center mb-6">
+          {["Examples + Labels", "Learn Pattern", "New Example", "Predict a Class"].map((step, index) => (
+            <div key={step} className="bg-white border border-indigo-200 rounded-lg p-3 font-bold text-slate-800">
+              <span className="block text-indigo-600 text-sm mb-1">Step {index + 1}</span>
+              {step}
+            </div>
+          ))}
+        </div>
+
+        <h3 className="text-xl font-bold text-slate-800 mb-3">Tiny Student Example</h3>
+        <div className="overflow-x-auto mb-4">
+          <table className="min-w-full bg-white border border-slate-200 rounded-lg overflow-hidden text-base">
+            <thead className="bg-slate-100">
+              <tr>
+                <th className="px-4 py-3 text-left">Study Hours</th>
+                <th className="px-4 py-3 text-left">Attendance</th>
+                <th className="px-4 py-3 text-left">Known Result</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr><td className="px-4 py-3">1</td><td className="px-4 py-3">55%</td><td className="px-4 py-3 font-bold text-rose-700">Fail</td></tr>
+              <tr><td className="px-4 py-3">2</td><td className="px-4 py-3">65%</td><td className="px-4 py-3 font-bold text-rose-700">Fail</td></tr>
+              <tr><td className="px-4 py-3">4</td><td className="px-4 py-3">82%</td><td className="px-4 py-3 font-bold text-emerald-700">Pass</td></tr>
+              <tr><td className="px-4 py-3">5</td><td className="px-4 py-3">90%</td><td className="px-4 py-3 font-bold text-emerald-700">Pass</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-lg text-slate-700 leading-relaxed">
+          After learning from these labeled examples, the model can examine a new student's features and predict a class such as <strong>Pass</strong> or <strong>Fail</strong>. Real models use more data; this tiny table is only for understanding the idea.
+        </p>
+      </div>
+
       <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl p-6 mb-8 text-white shadow-sm">
-        <h3 className="text-xl font-bold mb-4 flex items-center">
+        <p className="text-xl font-bold mb-4 flex items-center">
           <Filter className="mr-3 text-indigo-200" /> Classification algorithms
           are used in:
-        </h3>
+        </p>
         <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-lg text-indigo-50 font-medium">
           <li className="flex items-center">
             <CheckCircle className="w-5 h-5 mr-2 text-indigo-300" /> Email spam
@@ -321,7 +354,7 @@ export function ClassificationIntroContent() {
             </li>
           </ul>
           <div className="bg-slate-50 border border-slate-200 rounded p-4 text-center font-bold text-slate-600 font-mono text-sm">
-            CLASS 0 ¬ DATA → CLASS 1
+            One input → One of 2 classes
           </div>
         </div>
 
@@ -349,7 +382,7 @@ export function ClassificationIntroContent() {
             </li>
           </ul>
           <div className="bg-slate-50 border border-slate-200 rounded p-4 text-center font-bold text-slate-600 font-mono text-sm">
-            CAT ¬ IMAGE → DOG [OR HORSE]
+            One image → Cat OR Dog OR Horse
           </div>
         </div>
 
@@ -383,6 +416,53 @@ export function ClassificationIntroContent() {
 
       <hr className="border-slate-200 mt-8 mb-10" />
 
+      <h2 className="text-3xl font-bold text-slate-800 mb-6">
+        From a Score to a Final Class
+      </h2>
+      <p className="text-lg leading-relaxed text-slate-700 mb-6">
+        Many classifiers can produce a probability or decision score. A threshold can then turn that score into a class label.
+      </p>
+      <div className="bg-white border border-slate-200 rounded-xl p-6 mb-8 shadow-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center mb-5">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <span className="block text-sm font-bold text-slate-500 uppercase mb-1">Model score</span>
+            <span className="text-2xl font-bold text-indigo-700">0.82</span>
+          </div>
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <span className="block text-sm font-bold text-slate-500 uppercase mb-1">Example threshold</span>
+            <span className="text-2xl font-bold text-slate-800">0.50</span>
+          </div>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+            <span className="block text-sm font-bold text-emerald-700 uppercase mb-1">Decision</span>
+            <span className="text-2xl font-bold text-emerald-800">Class 1</span>
+          </div>
+        </div>
+        <p className="text-lg text-slate-700">
+          Because <strong>0.82 ≥ 0.50</strong>, this example predicts Class 1. The best threshold is <strong>not always 0.50</strong>; it depends on the cost of false positives and false negatives.
+        </p>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-10">
+        <h3 className="text-xl font-bold text-slate-800 mb-3 flex items-center"><Code className="mr-2 text-indigo-600" />Tiny Python Example</h3>
+        <p className="text-lg text-slate-700 mb-4">Here we teach a Logistic Regression classifier from a few study-hour examples.</p>
+        <pre className="bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto text-sm mb-4"><code>{`from sklearn.linear_model import LogisticRegression
+
+X = [[1], [2], [3], [4], [5], [6]]
+y = [0, 0, 0, 1, 1, 1]  # 0 = Fail, 1 = Pass
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X, y)
+
+prediction = model.predict([[4]])[0]
+print("Predicted class:", "Pass" if prediction == 1 else "Fail")`}</code></pre>
+        <div className="bg-white border border-slate-200 rounded-lg p-4 font-mono text-slate-800">
+          Predicted class: Pass
+        </div>
+        <p className="text-sm text-slate-600 mt-3">This tiny dataset is only for learning the workflow, not for judging real student performance.</p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-10" />
+
       {/* Machine Learning Classification Workflow */}
       <h2 className="text-3xl font-bold text-slate-800 mb-6">
         Machine Learning Classification Workflow
@@ -410,7 +490,7 @@ export function ClassificationIntroContent() {
           <span className="hidden md:block text-slate-500">→</span>
           <span className="block md:hidden text-slate-500">↓</span>
           <div className="bg-slate-800 border border-slate-700 px-4 py-3 rounded-lg w-full md:w-auto">
-            Evaluate Accuracy
+            Evaluate Model
           </div>
         </div>
       </div>
@@ -419,121 +499,26 @@ export function ClassificationIntroContent() {
 
       {/* Hierarchy of Classification Algorithms */}
       <h2 className="text-3xl font-bold text-slate-800 mb-6 flex items-center">
-        <GitBranch className="mr-3 text-indigo-600" /> Hierarchy of
-        Classification Algorithms
+        <GitBranch className="mr-3 text-indigo-600" /> Families of Classification Algorithms
       </h2>
-
-      <div className="bg-slate-50 border border-slate-200 p-6 sm:p-10 rounded-xl shadow-sm mb-12 overflow-x-auto">
-        <div className="min-w-[900px] flex flex-col items-center relative">
-          {/* Root */}
-          <div className="bg-indigo-900 text-white font-bold text-xl px-10 py-4 rounded-xl shadow-md z-10 mb-8 border-2 border-indigo-200 relative">
-            CLASSIFICATION ALGORITHMS
+      <p className="text-lg text-slate-700 mb-6">
+        You do not need to memorize every algorithm at once. Start by remembering the main idea behind each family.
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+        {[
+          ["Linear Models", "Logistic Regression, SGD Classifier", "Learn a separating rule from weighted features."],
+          ["Distance-Based", "K-Nearest Neighbors", "Look at nearby examples and vote."],
+          ["Probabilistic", "Naive Bayes", "Compare class probabilities from the evidence."],
+          ["Margin-Based", "Support Vector Machine", "Find a boundary with a useful margin."],
+          ["Tree & Ensemble", "Decision Tree, Random Forest", "Ask feature-based questions; combine trees when needed."],
+          ["Neural Networks", "Deep Learning Models", "Learn layered nonlinear representations from data."],
+        ].map(([family, examples, idea]) => (
+          <div key={family} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <h3 className="font-bold text-indigo-900 text-lg mb-2">{family}</h3>
+            <p className="font-semibold text-slate-800 mb-2">{examples}</p>
+            <p className="text-slate-600">{idea}</p>
           </div>
-
-          {/* Vertical line from root */}
-          <div className="absolute w-px h-8 bg-slate-400 top-[60px] left-1/2"></div>
-          {/* Horizontal line connecting all children */}
-          <div className="absolute h-px bg-slate-400 top-[92px] left-[8.33%] right-[8.33%]"></div>
-
-          <div className="grid grid-cols-6 gap-4 w-full pt-4 mt-2 relative">
-            {/* 1. Linear Models */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-blue-100 border border-blue-300 text-blue-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm">
-                Linear Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Logistic Regression
-                </div>
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  SGD Classifier
-                </div>
-              </div>
-            </div>
-
-            {/* 2. Distance-Based */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm leading-tight">
-                Distance-Based
-                <br />
-                Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  K-Nearest Neighbors
-                </div>
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Radius Neighbors
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Probabilistic Models */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-sky-100 border border-sky-300 text-sky-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm leading-tight">
-                Probabilistic
-                <br />
-                Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Naive Bayes
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Margin-Based Models */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-fuchsia-100 border border-fuchsia-300 text-fuchsia-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm leading-tight">
-                Margin-Based
-                <br />
-                Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Support Vector Machine
-                </div>
-              </div>
-            </div>
-
-            {/* 5. Tree-Based Models */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-amber-100 border border-amber-300 text-amber-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm leading-tight">
-                Tree-Based
-                <br />
-                Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Decision Tree
-                </div>
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Random Forest
-                </div>
-              </div>
-            </div>
-
-            {/* 6. Deep Learning Models */}
-            <div className="flex flex-col items-center relative">
-              <div className="absolute w-px h-6 bg-slate-400 -top-6"></div>
-              <div className="bg-teal-100 border border-teal-300 text-teal-900 font-bold px-3 py-3 rounded-lg mb-4 text-center w-full shadow-sm text-sm leading-tight">
-                Deep Learning
-                <br />
-                Models
-              </div>
-              <div className="flex flex-col w-full space-y-2">
-                <div className="bg-white border border-slate-200 text-slate-700 px-2 py-2 rounded text-xs text-center shadow-sm">
-                  Neural Networks
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Major Algorithms */}
@@ -663,17 +648,16 @@ export function ClassificationIntroContent() {
             <h4 className="font-bold text-xl mb-3 text-slate-800">
               Worked Example
             </h4>
-            <p className="text-lg text-slate-700 mb-2">
-              Suppose <strong className="font-mono">z = 2</strong>
+            <p className="text-lg text-slate-700 mb-3">
+              Suppose <strong className="font-mono">z = 2</strong>.
             </p>
-            <p className="text-lg text-slate-700 mb-2 font-mono">
-              P = 1 / (1 + e⁻²)
-            </p>
-            <p className="text-lg text-slate-700 mb-2 font-mono font-bold text-indigo-600">
-              P ≈ 0.88
-            </p>
-            <p className="text-lg text-slate-700 font-medium bg-white p-2 rounded inline-block shadow-sm text-indigo-900">
-              Meaning: 88% probability of class 1
+            <div className="space-y-2 text-lg text-slate-700">
+              <p><strong>Step 1:</strong> e⁻² ≈ 0.1353</p>
+              <p><strong>Step 2:</strong> 1 + 0.1353 = 1.1353</p>
+              <p><strong>Step 3:</strong> P = 1 ÷ 1.1353 ≈ <strong className="text-indigo-700">0.881</strong></p>
+            </div>
+            <p className="text-lg text-slate-700 font-medium bg-white p-2 rounded inline-block shadow-sm text-indigo-900 mt-3">
+              Meaning: about 88.1% probability for class 1 in this example.
             </p>
           </div>
           <div className="flex-1 w-full h-48 bg-white border border-slate-200 rounded p-2">
@@ -705,8 +689,8 @@ export function ClassificationIntroContent() {
           <div className="bg-rose-50 border border-rose-200 p-4 rounded text-rose-900 border-l-4 border-l-rose-500">
             <strong className="block mb-2">Disadvantages</strong>
             <ul className="list-disc pl-5">
-              <li>Linear boundary</li>
-              <li>Sensitive to outliers</li>
+              <li>Basic form learns a linear decision boundary in the supplied feature space</li>
+              <li>Can be influenced by extreme feature values, especially without careful preprocessing</li>
             </ul>
           </div>
         </div>
@@ -723,7 +707,7 @@ export function ClassificationIntroContent() {
 
         <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl shadow-sm mb-8 text-center text-emerald-900">
           <p className="text-2xl font-bold text-emerald-800 italic">
-            "Similar data points usually belong to same category"
+            "Nearby examples may have similar labels"
           </p>
         </div>
 
@@ -789,8 +773,8 @@ export function ClassificationIntroContent() {
             <strong className="block mb-2">Advantages</strong>
             <ul className="list-disc pl-5">
               <li>Easy implementation</li>
-              <li>No training phase (Lazy learner)</li>
-              <li>Works well for small datasets</li>
+              <li>Simple fit stage: mainly stores the training examples</li>
+              <li>Can work well on smaller datasets with meaningful distance measures</li>
             </ul>
           </div>
           <div className="bg-rose-50 border border-rose-200 p-4 rounded text-rose-900 border-l-4 border-l-rose-500">
@@ -873,8 +857,8 @@ export function ClassificationIntroContent() {
           4. Random Forest
         </h3>
         <p className="text-lg leading-relaxed text-slate-700 mb-6">
-          Random Forest combines multiple decision trees (Ensemble Learning) to
-          produce a more robust and accurate classification.
+          Random Forest combines many decision trees (Ensemble Learning) and
+          aggregates their predictions. This often reduces variance compared with relying on one tree.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -938,16 +922,16 @@ export function ClassificationIntroContent() {
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded text-emerald-900 border-l-4 border-l-emerald-500">
             <strong className="block mb-2">Advantages</strong>
             <ul className="list-disc pl-5">
-              <li>High accuracy</li>
-              <li>Reduces overfitting</li>
-              <li>Robust to noise</li>
+              <li>Often a strong baseline for tabular data</li>
+              <li>Can reduce variance compared with a single deep tree</li>
+              <li>Handles nonlinear relationships and feature interactions</li>
             </ul>
           </div>
           <div className="bg-rose-50 border border-rose-200 p-4 rounded text-rose-900 border-l-4 border-l-rose-500">
             <strong className="block mb-2">Disadvantages</strong>
             <ul className="list-disc pl-5">
               <li>Slower to compute predictions</li>
-              <li>Less interpretable (complex block box)</li>
+              <li>Less interpretable than a single small decision tree</li>
             </ul>
           </div>
         </div>
@@ -976,14 +960,16 @@ export function ClassificationIntroContent() {
             <h5 className="font-bold text-lg mb-2 text-sky-900">
               Worked Example:
             </h5>
-            <ul className="text-sky-800 font-mono space-y-1 ml-4 list-disc">
+            <ul className="text-sky-800 font-mono space-y-1 ml-4 list-disc mb-3">
               <li>P(A) = 0.5</li>
               <li>P(B|A) = 0.8</li>
-              <li>P(B) = 0.4</li>
+              <li>P(B) = 0.5</li>
             </ul>
-            <p className="mt-2 text-sky-900 font-bold">
-              Then P(A|B) = (0.8 * 0.5) / 0.4 = 1.0
-            </p>
+            <div className="space-y-2 text-sky-900">
+              <p><strong>Step 1:</strong> Likelihood × Prior = 0.8 × 0.5 = 0.4</p>
+              <p><strong>Step 2:</strong> 0.4 ÷ Evidence 0.5 = 0.8</p>
+              <p className="font-bold">So P(A|B) = 0.8, or 80%.</p>
+            </div>
           </div>
         </div>
 
@@ -1010,8 +996,7 @@ export function ClassificationIntroContent() {
           6. Support Vector Machine (SVM)
         </h3>
         <p className="text-lg leading-relaxed text-slate-700 mb-4">
-          SVM tries to find the best boundary (hyperplane) separating classes by
-          maximizing the margin between them.
+          SVM looks for a separating boundary (hyperplane) with a large margin between classes. With soft margins and kernels, it can also handle overlap and nonlinear boundaries.
         </p>
 
         <div className="bg-slate-900 text-slate-100 p-8 rounded-xl font-mono text-center mb-8 shadow-sm text-lg tracking-wider border border-slate-700">
@@ -1043,8 +1028,8 @@ export function ClassificationIntroContent() {
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded text-emerald-900 border-l-4 border-l-emerald-500">
             <strong className="block mb-2">Advantages</strong>
             <ul className="list-disc pl-5">
-              <li>Powerful for complex, high-dimensional data</li>
-              <li>Effective margins</li>
+              <li>Can work well in high-dimensional feature spaces</li>
+              <li>Margin-based objective can generalize well with suitable settings</li>
             </ul>
           </div>
           <div className="bg-rose-50 border border-rose-200 p-4 rounded text-rose-900 border-l-4 border-l-rose-500">
@@ -1063,8 +1048,7 @@ export function ClassificationIntroContent() {
           7. Neural Networks
         </h3>
         <p className="text-lg leading-relaxed text-slate-700 mb-6">
-          Neural Networks mimic the human brain to learn deep layers of hidden
-          representations and complex non-linear relationships.
+          Neural Networks use layers of weighted calculations and nonlinear activation functions to learn useful representations and complex relationships from data.
         </p>
 
         <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-8 rounded-xl mb-8 shadow-sm flex flex-col items-center text-center font-bold tracking-widest font-mono">
@@ -1115,15 +1099,15 @@ export function ClassificationIntroContent() {
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded text-emerald-900 border-l-4 border-l-emerald-500">
             <strong className="block mb-2">Advantages</strong>
             <ul className="list-disc pl-5">
-              <li>Extremely powerful</li>
-              <li>State-of-the-art accuracy for images/text</li>
+              <li>Can model very complex nonlinear patterns</li>
+              <li>Especially useful in many image, audio and language tasks</li>
             </ul>
           </div>
           <div className="bg-rose-50 border border-rose-200 p-4 rounded text-rose-900 border-l-4 border-l-rose-500">
             <strong className="block mb-2">Disadvantages</strong>
             <ul className="list-disc pl-5">
-              <li>Requires huge data ("data hungry")</li>
-              <li>Expensive training computation</li>
+              <li>Often benefits from substantial data or pretrained models</li>
+              <li>Can require significant training computation and tuning</li>
             </ul>
           </div>
         </div>
@@ -1141,6 +1125,43 @@ export function ClassificationIntroContent() {
         breaks down predicted vs actual into True Positive (TP), True Negative
         (TN), False Positive (FP), False Negative (FN).
       </p>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+          <h3 className="text-xl font-bold text-slate-800 mb-4">A Tiny Confusion Matrix</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-center border border-slate-200">
+              <thead className="bg-slate-100">
+                <tr><th className="p-3">Actual ↓ / Predicted →</th><th className="p-3">Positive</th><th className="p-3">Negative</th></tr>
+              </thead>
+              <tbody>
+                <tr className="border-t"><th className="p-3 bg-slate-50">Positive</th><td className="p-3 bg-emerald-50 font-bold">TP = 8</td><td className="p-3 bg-rose-50 font-bold">FN = 2</td></tr>
+                <tr className="border-t"><th className="p-3 bg-slate-50">Negative</th><td className="p-3 bg-amber-50 font-bold">FP = 1</td><td className="p-3 bg-sky-50 font-bold">TN = 7</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+          <h3 className="text-xl font-bold text-indigo-900 mb-3">Read the Four Boxes</h3>
+          <ul className="space-y-2 text-lg text-slate-700">
+            <li><strong>TP:</strong> positive case predicted positive</li>
+            <li><strong>TN:</strong> negative case predicted negative</li>
+            <li><strong>FP:</strong> false alarm</li>
+            <li><strong>FN:</strong> missed positive case</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
+        <h3 className="text-xl font-bold text-slate-800 mb-4">Worked Metric Example</h3>
+        <div className="space-y-4 text-lg text-slate-700">
+          <div><strong>Accuracy:</strong> (8 + 7) ÷ 18 = 15 ÷ 18 ≈ <strong>83.3%</strong></div>
+          <div><strong>Precision:</strong> 8 ÷ (8 + 1) = 8 ÷ 9 ≈ <strong>88.9%</strong></div>
+          <div><strong>Recall:</strong> 8 ÷ (8 + 2) = 8 ÷ 10 = <strong>80%</strong></div>
+          <div><strong>F1:</strong> 2 × (0.889 × 0.80) ÷ (0.889 + 0.80) ≈ <strong>84.2%</strong></div>
+        </div>
+        <p className="text-sm text-slate-600 mt-4">Different applications care about different mistakes. For example, a medical screening system may care strongly about missed positive cases (false negatives).</p>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
@@ -1176,7 +1197,7 @@ export function ClassificationIntroContent() {
         <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
           <h4 className="font-bold text-slate-800 text-xl mb-2">F1 Score</h4>
           <p className="text-slate-600 mb-3 text-lg">
-            Harmonic balance of precision and recall.
+            Harmonic mean of precision and recall.
           </p>
           <p className="font-mono bg-slate-50 text-slate-800 p-3 text-center rounded text-xs lg:text-sm font-bold border border-slate-200">
             F1 = 2 * (Prec * Rec) / (Prec + Rec)
@@ -1195,12 +1216,12 @@ export function ClassificationIntroContent() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
           <h4 className="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">
-            When to use what?
+            Useful Starting Points (Not Fixed Rules)
           </h4>
           <ul className="space-y-4 text-lg">
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Simple linear data
+                Need a simple interpretable baseline
               </span>
               <span className="text-indigo-800 font-bold font-mono bg-indigo-50 px-3 py-1 rounded w-max mt-1 border border-indigo-100">
                 Logistic Regression
@@ -1208,7 +1229,7 @@ export function ClassificationIntroContent() {
             </li>
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Small dataset
+                Distance is meaningful and prediction set is manageable
               </span>
               <span className="text-emerald-800 font-bold font-mono bg-emerald-50 px-3 py-1 rounded w-max mt-1 border border-emerald-100">
                 KNN
@@ -1216,7 +1237,7 @@ export function ClassificationIntroContent() {
             </li>
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Interpretability needed
+                Need easy-to-follow rules
               </span>
               <span className="text-amber-800 font-bold font-mono bg-amber-50 px-3 py-1 rounded w-max mt-1 border border-amber-100">
                 Decision Tree
@@ -1224,7 +1245,7 @@ export function ClassificationIntroContent() {
             </li>
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Text classification
+                Text / count-like features as a fast baseline
               </span>
               <span className="text-sky-800 font-bold font-mono bg-sky-50 px-3 py-1 rounded w-max mt-1 border border-sky-100">
                 Naive Bayes
@@ -1232,7 +1253,7 @@ export function ClassificationIntroContent() {
             </li>
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Complex boundaries
+                Margin-based model may suit the feature space
               </span>
               <span className="text-fuchsia-800 font-bold font-mono bg-fuchsia-50 px-3 py-1 rounded w-max mt-1 border border-fuchsia-100">
                 SVM
@@ -1240,7 +1261,7 @@ export function ClassificationIntroContent() {
             </li>
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">
-                Very large complex data
+                Complex image, audio or language representations
               </span>
               <span className="text-teal-800 font-bold font-mono bg-teal-50 px-3 py-1 rounded w-max mt-1 border border-teal-100">
                 Neural Networks
@@ -1260,7 +1281,7 @@ export function ClassificationIntroContent() {
                   Ignoring feature scaling:
                 </strong>{" "}
                 <span className="text-base text-rose-700">
-                  Leads to poor KNN/SVM performance.
+                  KNN and SVM are especially sensitive to feature scale.
                 </span>
               </li>
               <li className="bg-white px-4 py-2 rounded shadow-sm border border-rose-100">
@@ -1276,7 +1297,7 @@ export function ClassificationIntroContent() {
                   Overfitting trees:
                 </strong>{" "}
                 <span className="text-base text-rose-700">
-                  Failing to prune deep trees.
+                  Very deep trees can fit noise; control tree complexity and validate it.
                 </span>
               </li>
             </ul>
@@ -1288,12 +1309,22 @@ export function ClassificationIntroContent() {
               Practices
             </h4>
             <ul className="list-disc pl-6 space-y-2 text-emerald-800 text-lg font-medium">
-              <li>Perform feature scaling.</li>
-              <li>Use cross-validation.</li>
-              <li>Balance datasets carefully.</li>
-              <li>Evaluate multiple metrics (F1, Precision, Recall).</li>
+              <li>Scale features when the chosen algorithm is scale-sensitive.</li>
+              <li>Use validation or cross-validation for model selection.</li>
+              <li>Handle class imbalance when it affects the problem; do not rebalance blindly.</li>
+              <li>Evaluate metrics that match the real cost of mistakes.</li>
             </ul>
           </div>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-6 mb-10 shadow-sm">
+        <h2 className="text-2xl font-bold text-slate-800 mb-4">Common Classification Questions</h2>
+        <div className="space-y-4 text-lg text-slate-700">
+          <div><strong>Is classification only Yes/No?</strong><br />No. Binary classification has two classes, multiclass has more than two, and multilabel classification can assign several labels to one example.</div>
+          <div><strong>Is 0.50 always the correct threshold?</strong><br />No. Threshold choice depends on the problem and the relative cost of false positives and false negatives.</div>
+          <div><strong>Is accuracy always the best metric?</strong><br />No. Precision, recall, F1, ROC-AUC and other metrics may be more useful depending on class balance and business goals.</div>
+          <div><strong>What should I learn next?</strong><br />Start with <a href="/learn/logistic-regression" className="text-indigo-700 font-semibold hover:underline">Logistic Regression</a>, then explore <a href="/learn/decision-trees" className="text-indigo-700 font-semibold hover:underline">Decision Trees</a>, <a href="/learn/knn" className="text-indigo-700 font-semibold hover:underline">KNN</a>, <a href="/learn/naive-bayes" className="text-indigo-700 font-semibold hover:underline">Naive Bayes</a>, and <a href="/learn/svm" className="text-indigo-700 font-semibold hover:underline">SVM</a>. For evaluation, continue to the <a href="/learn/confusion-matrix" className="text-indigo-700 font-semibold hover:underline">Confusion Matrix</a> lesson.</div>
         </div>
       </div>
 
@@ -1302,16 +1333,16 @@ export function ClassificationIntroContent() {
         <BookOpen className="mr-3 text-indigo-400" /> Final Summary
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Classification algorithms represent the fundamental framework that enables machine learning models to identify, categorize, and categorize discrete labels. They are the analytical engines driving critical systems everywhere, from medical diagnostics to autonomous vehicles and intelligent cybersecurity.
+        Classification algorithms enable machine learning systems to assign discrete labels such as spam/not spam, disease/no disease, or one category among many. Different algorithms make those decisions in different ways, so the best choice depends on the data, the constraints, and the cost of mistakes.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Because no single algorithm performs perfectly across every type of dataset, building robust classification systems requires evaluating the data dimensionality, the need for transparency, and testing metrics far beyond simple accuracy.
+        Because no single classifier is best for every dataset, robust classification requires comparing suitable models, validating them properly, and using evaluation metrics that match the real goal—not accuracy alone.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Classification models do not output absolute certainties; they output mathematical probabilities. The true engineering challenge lies in determining the precise threshold at which a mathematical probability becomes a real-world decision."
+           Many classifiers produce probabilities or decision scores rather than certainties. The practical challenge is choosing a model, metric, and decision rule that fit the real-world cost of mistakes.
          </p>
       </div>
 
