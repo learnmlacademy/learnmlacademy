@@ -25,14 +25,15 @@ export function SVMContent() {
     { x: 6, y: 3 }, { x: 6, y: 5 } // Support vectors
   ];
 
-  const innerCircle = Array.from({length: 40}, (_, i) => {
-    const angle = (i / 40) * Math.PI * 2;
-    return { x: 5 + 1.5 * Math.cos(angle) + (Math.random()-0.5)*0.5, y: 5 + 1.5 * Math.sin(angle) + (Math.random()-0.5)*0.5 };
+  // Fixed points keep the teaching visual identical on every page load.
+  const innerCircle = Array.from({ length: 24 }, (_, i) => {
+    const angle = (i / 24) * Math.PI * 2;
+    return { x: 5 + 1.5 * Math.cos(angle), y: 5 + 1.5 * Math.sin(angle) };
   });
 
-  const outerCircle = Array.from({length: 60}, (_, i) => {
-    const angle = (i / 60) * Math.PI * 2;
-    return { x: 5 + 4 * Math.cos(angle) + (Math.random()-0.5)*0.5, y: 5 + 4 * Math.sin(angle) + (Math.random()-0.5)*0.5 };
+  const outerCircle = Array.from({ length: 32 }, (_, i) => {
+    const angle = (i / 32) * Math.PI * 2;
+    return { x: 5 + 4 * Math.cos(angle), y: 5 + 4 * Math.sin(angle) };
   });
 
   return (
@@ -46,8 +47,61 @@ export function SVMContent() {
       </p>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Unlike simpler algorithms that only try to separate classes, SVM tries to find the <em>best possible separation boundary</em> between classes. This idea of finding the “best boundary” is what makes SVM powerful.
+        For classification, SVM looks for a separating boundary with a <strong>wide margin</strong> between classes. With soft-margin SVM, it can also allow some margin violations so the model can handle overlapping or noisy data.
       </p>
+
+      {/* SIMPLE FIRST-PASS EXPLANATION */}
+      <section className="bg-white border border-indigo-100 rounded-xl p-5 sm:p-6 mb-10 shadow-sm">
+        <h2 className="text-2xl font-bold text-slate-800 mb-3">SVM in Simple Words</h2>
+        <p className="text-lg text-slate-700 leading-relaxed mb-6">
+          Imagine two groups of students standing on opposite sides of a playground. You want to draw a line between them. SVM prefers a line that leaves a <strong>comfortable gap</strong> on both sides instead of placing the divider very close to one group.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-center">
+          <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
+            <p className="font-bold text-slate-800 mb-3">1. See Two Classes</p>
+            <div className="font-mono text-lg tracking-wider">
+              <span className="text-rose-600">● ● ●</span>
+              <span className="mx-3 text-slate-400">&nbsp;</span>
+              <span className="text-blue-600">▲ ▲ ▲</span>
+            </div>
+          </div>
+          <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
+            <p className="font-bold text-slate-800 mb-3">2. Draw a Separator</p>
+            <div className="font-mono text-lg tracking-wider">
+              <span className="text-rose-600">● ●</span>
+              <span className="mx-3 text-slate-700 font-bold">|</span>
+              <span className="text-blue-600">▲ ▲</span>
+            </div>
+          </div>
+          <div className="rounded-lg border border-slate-200 p-4 bg-slate-50">
+            <p className="font-bold text-slate-800 mb-3">3. Keep a Wide Gap</p>
+            <div className="font-mono text-sm sm:text-base">
+              <span className="text-rose-600">● ●</span>
+              <span className="mx-2 text-slate-500">← gap →</span>
+              <span className="text-slate-700 font-bold">|</span>
+              <span className="mx-2 text-slate-500">← gap →</span>
+              <span className="text-blue-600">▲ ▲</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-lg border border-slate-200">
+          <table className="min-w-full divide-y divide-slate-200 text-left">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="px-4 py-3 text-sm font-bold text-slate-700">Word</th>
+                <th className="px-4 py-3 text-sm font-bold text-slate-700">Simple Meaning</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 text-slate-700">
+              <tr><td className="px-4 py-3 font-semibold">Hyperplane</td><td className="px-4 py-3">The separating boundary</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Margin</td><td className="px-4 py-3">The gap around that boundary</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Support vectors</td><td className="px-4 py-3">Training points closest to the boundary that help determine it</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <hr className="border-slate-200 mt-10 mb-10" />
 
@@ -64,7 +118,7 @@ export function SVMContent() {
           "Among all possible separating lines, which line is the safest and most reliable?"
         </p>
         <p className="text-lg text-indigo-800">
-          Instead of simply separating classes, SVM searches for a boundary that leaves the <strong>maximum possible distance</strong> between the classes. This makes the model more confident and improves prediction accuracy on unseen data.
+          For linearly separable data, the maximum-margin idea chooses the separating boundary that leaves the widest possible margin. With noisy or overlapping data, soft-margin SVM balances a wide margin against classification violations.
         </p>
       </div>
 
@@ -90,7 +144,7 @@ export function SVMContent() {
         <Goal className="mr-2 text-emerald-600" /> Main Objective of SVM
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The primary objective of Support Vector Machine is to find the optimal decision boundary that maximizes separation between classes. This optimal boundary is called the <strong>Hyperplane</strong>.
+        For classification, SVM learns a decision boundary called a <strong>hyperplane</strong>. In the hard-margin case it maximizes the margin between separable classes; in the more practical soft-margin case it balances margin width with violations controlled by the parameter <strong>C</strong>.
       </p>
 
       <div className="bg-white border text-left border-slate-200 shadow-sm rounded-xl overflow-hidden mb-10">
@@ -101,9 +155,9 @@ export function SVMContent() {
             <ol className="list-decimal pl-6 space-y-4 text-lg text-slate-700 marker:text-emerald-600 marker:font-bold">
               <li><strong>Input Dataset:</strong> Collect training data.</li>
               <li><strong>Identify Classes:</strong> Determine the categories to be separated.</li>
-              <li><strong>Generate Possible Boundaries:</strong> Explore various dividing lines.</li>
-              <li><strong>Measure Distance:</strong> Calculate the gap between classes for each line.</li>
-              <li><strong>Select Maximum Margin:</strong> Pick the boundary with the largest gap.</li>
+              <li><strong>Consider Candidate Boundaries:</strong> Search for a boundary that separates the classes well.</li>
+              <li><strong>Measure the Margin:</strong> Look at how close the nearest training points are to the boundary.</li>
+              <li><strong>Optimize the Trade-off:</strong> Prefer a wide margin while controlling violations when soft-margin SVM is used.</li>
               <li><strong>Classify New Data Points:</strong> Make predictions using this optimal boundary.</li>
             </ol>
          </div>
@@ -136,7 +190,7 @@ export function SVMContent() {
           <tbody className="divide-y divide-slate-200 text-base">
             <tr><td className="px-6 py-3 font-mono">2D</td><td className="px-6 py-3 text-slate-700 font-bold">Line</td></tr>
             <tr><td className="px-6 py-3 font-mono bg-slate-50">3D</td><td className="px-6 py-3 bg-slate-50 text-slate-700 font-bold">Plane</td></tr>
-            <tr><td className="px-6 py-3 font-mono">Higher Dimensions</td><td className="px-6 py-3 text-slate-700 font-bold">Hyper-surface</td></tr>
+            <tr><td className="px-6 py-3 font-mono">Higher Dimensions</td><td className="px-6 py-3 text-slate-700 font-bold">Hyperplane</td></tr>
           </tbody>
         </table>
       </div>
@@ -151,27 +205,45 @@ export function SVMContent() {
           <li><strong>x:</strong> feature vector (the data point)</li>
           <li><strong>b:</strong> bias/intercept (controls where the boundary is placed)</li>
         </ul>
-        <p className="font-bold text-slate-900 border-t border-slate-200 pt-4 mb-2">Example of Hyperplane Calculation:</p>
-        <div className="font-mono text-slate-800 space-y-1">
+        <p className="font-bold text-slate-900 border-t border-slate-200 pt-4 mb-2">Example: Which Side of the Boundary?</p>
+        <div className="font-mono text-slate-800 space-y-2">
           <p>Suppose: w = (2, 3), x = (1, 2), b = -4</p>
-          <p>Substitute values: (2)(1) + (3)(2) - 4 = 0</p>
-          <p>Calculate: 2 + 6 - 4 = 4</p>
-          <p className="text-indigo-700 font-bold mt-2">Since result {'>'} 0: Point belongs to the positive class.</p>
+          <p><strong>Step 1 — Dot product:</strong> (2 × 1) + (3 × 2) = 2 + 6 = 8</p>
+          <p><strong>Step 2 — Add bias:</strong> 8 + (-4) = 4</p>
+          <p><strong>Step 3 — Read the sign:</strong> 4 is greater than 0.</p>
+          <p className="text-indigo-700 font-bold mt-2">So this point lies on the positive side of this decision boundary.</p>
         </div>
+        <p className="text-sm text-slate-600 mt-4">
+          Important: the equation <code>wᵀx + b = 0</code> describes points <em>on</em> the boundary. A positive or negative value tells us which side of the boundary a point lies on.
+        </p>
       </div>
 
       <h3 className="text-2xl font-bold text-indigo-800 mt-12 mb-4">
         2. What Are Support Vectors?
       </h3>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Support vectors are the most important data points in SVM. These are the points closest to the hyperplane. They are called support vectors because they <em>support or define the position of the hyperplane</em>. Without them, the decision boundary would change.
+        Support vectors are training points that lie on or inside the margin and are especially important in determining the fitted SVM boundary. They are the points closest to the decision boundary in the simple separable picture.
       </p>
       
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
         <p className="font-bold text-emerald-900 mb-2">Extremely Important Insight About Support Vectors</p>
         <p className="text-emerald-800 font-medium">
-          One fascinating property of SVM is: <strong>Only support vectors influence the final boundary.</strong> Many other data points do not directly affect the final model. This makes SVM incredibly memory efficient!
+          In the fitted SVM decision function, the support vectors are the training examples with non-zero influence on the boundary. Prediction can therefore depend on a subset of the training data, although training an SVC can still be expensive and the number of support vectors can be large.
         </p>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-lg p-5 mb-8 text-center">
+        <p className="font-bold text-slate-800 mb-3">Simple Picture of Support Vectors</p>
+        <div className="font-mono text-sm sm:text-base leading-8">
+          <span className="text-rose-600">● ● </span>
+          <span className="px-2 py-1 rounded bg-rose-100 text-rose-700 font-bold">● SV</span>
+          <span className="mx-3 text-slate-400">margin</span>
+          <span className="font-bold text-slate-900">| boundary |</span>
+          <span className="mx-3 text-slate-400">margin</span>
+          <span className="px-2 py-1 rounded bg-blue-100 text-blue-700 font-bold">SV ▲</span>
+          <span className="text-blue-600"> ▲ ▲</span>
+        </div>
+        <p className="text-sm text-slate-600 mt-3">SV = support vector. These nearby points help pin down the margin and boundary.</p>
       </div>
 
       <h3 className="text-2xl font-bold text-indigo-800 mt-12 mb-4">
@@ -181,7 +253,7 @@ export function SVMContent() {
         Margin is the <strong>distance between the hyperplane and the nearest data points</strong> (which are the support vectors). 
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        A large margin provides several advantages: classes are well separated, noise affects the model less, generalization improves, and overfitting decreases. This is why SVM is often called a <strong>Maximum Margin Classifier</strong>.
+        The maximum-margin principle prefers a boundary that stays far from the closest training points. A wider margin can support better generalization, but real performance still depends on the data, kernel, regularization and other hyperparameters.
       </p>
 
       <div className="bg-white border border-slate-200 rounded-xl p-6 mb-10 w-full max-w-4xl mx-auto shadow-sm">
@@ -229,8 +301,24 @@ export function SVMContent() {
         <Maximize className="mr-2 text-rose-600" /> Hard Margin vs Soft Margin SVM
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Hard Margin SVM</strong> assumes that the dataset is perfectly separable. That means there is absolutely no overlap, no noise, and no misclassification allowed. 
+        <strong>Hard Margin SVM</strong> assumes that the dataset is perfectly separable. That means there is no margin violation allowed in the idealized hard-margin formulation.
       </p>
+
+      <div className="overflow-x-auto rounded-lg border border-slate-200 mb-8">
+        <table className="min-w-full divide-y divide-slate-200 text-left">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">Type</th>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">Simple Idea</th>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">Best Picture to Remember</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 text-slate-700">
+            <tr><td className="px-4 py-3 font-semibold">Hard Margin</td><td className="px-4 py-3">No violations allowed</td><td className="px-4 py-3">Cleanly separated classes</td></tr>
+            <tr><td className="px-4 py-3 font-semibold">Soft Margin</td><td className="px-4 py-3">Some violations can be accepted</td><td className="px-4 py-3">Noisy or overlapping classes</td></tr>
+          </tbody>
+        </table>
+      </div>
       
       <div className="pl-4 border-l-4 border-rose-400 bg-rose-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
         <p className="font-bold text-rose-900 mb-2">Optimization Objective (Hard Margin)</p>
@@ -239,12 +327,19 @@ export function SVMContent() {
           Subject to: <code>yᵢ(wᵀxᵢ + b) ≥ 1</code>
         </p>
         <p className="text-rose-900 font-medium italic mt-2">
-          Intuition: Smaller <code>||w||</code> mathematically equates to a larger margin!
+          Intuition: in the canonical SVM scaling, a smaller <code>||w||</code> corresponds to a wider geometric margin.
         </p>
+        <div className="border-t border-rose-200 mt-4 pt-4 font-mono text-slate-800 space-y-2">
+          <p className="font-bold text-rose-900 font-sans">Tiny numerical example</p>
+          <p>Suppose w = (1, 2)</p>
+          <p><strong>Step 1:</strong> ||w||² = 1² + 2² = 5</p>
+          <p><strong>Step 2:</strong> 1/2 ||w||² = 1/2 × 5 = 2.5</p>
+          <p className="font-sans text-sm text-slate-600">The optimizer searches for parameters that keep this objective small while satisfying the hard-margin constraints.</p>
+        </div>
       </div>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Problem with Hard Margin:</strong> Real-world datasets are rarely perfectly separable. Real data contains noise, outliers, overlapping classes, and measurement errors. Hard Margin SVM becomes too strict and completely fails if just one outlier crosses the median.
+        <strong>Problem with Hard Margin:</strong> Real-world datasets are often not perfectly separable. Noise, outliers or overlapping classes can make the hard-margin constraints infeasible or make the fitted boundary overly sensitive to unusual points.
       </p>
       
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
@@ -257,16 +352,23 @@ export function SVMContent() {
           min 1/2 ||w||² + C ∑ ζᵢ
         </code>
         <ul className="list-disc pl-5 mt-2 space-y-3 text-emerald-900">
-          <li><strong>Small C Value:</strong> More classification errors allowed, wider margin created, better generalization possible.</li>
-          <li><strong>Large C Value:</strong> Errors heavily penalized, narrow margin created, overfitting risk increases.</li>
+          <li><strong>Smaller C:</strong> Margin violations are penalized less strongly, so the model can accept more violations in exchange for stronger regularization and often a wider margin.</li>
+          <li><strong>Larger C:</strong> Margin violations are penalized more strongly, so the model tries harder to fit the training examples and may use a tighter boundary.</li>
         </ul>
+        <div className="border-t border-emerald-200 mt-4 pt-4 font-mono text-slate-800 space-y-2">
+          <p className="font-bold text-emerald-900 font-sans">Tiny numerical example</p>
+          <p>Suppose 1/2 ||w||² = 2.5, C = 2, and total slack = 0.5</p>
+          <p><strong>Step 1:</strong> C × total slack = 2 × 0.5 = 1</p>
+          <p><strong>Step 2:</strong> Objective = 2.5 + 1 = 3.5</p>
+          <p className="font-sans text-sm text-slate-600">This shows how C determines how strongly margin violations contribute to the objective.</p>
+        </div>
       </div>
 
       <h3 className="text-2xl font-bold text-indigo-800 mt-12 mb-4">
         Understanding Hinge Loss
       </h3>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        SVM uses a specific loss function called <strong>Hinge Loss</strong>. It is formulated to penalize points purely based on how far past the margin boundary they have trespassed. The optimization process tries to strictly minimize this loss.
+        A common linear SVM formulation uses <strong>hinge loss</strong>. Points that are correctly classified with enough margin have zero hinge loss; points inside the margin or on the wrong side receive a positive loss.
       </p>
 
       <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
@@ -278,11 +380,14 @@ export function SVMContent() {
           If classification is correct with sufficient margin, Loss = 0. If classification is incorrect or too close to the boundary, Loss becomes positive.
         </p>
         <p className="font-bold text-amber-900 border-t border-amber-200 pt-4 mb-2">Worked Example:</p>
-        <div className="font-mono text-slate-800 space-y-1">
-          <p>Suppose: Target (y) = 1, Predicted raw output (wᵀx + b) = 0.4</p>
-          <p>Substitute: Loss = max(0, 1 - (1)(0.4))</p>
-          <p className="text-indigo-700 font-bold mt-2">Loss = 0.6</p>
+        <div className="font-mono text-slate-800 space-y-2">
+          <p>Suppose: y = 1 and decision score = 0.4</p>
+          <p><strong>Step 1:</strong> y × score = 1 × 0.4 = 0.4</p>
+          <p><strong>Step 2:</strong> 1 − 0.4 = 0.6</p>
+          <p><strong>Step 3:</strong> max(0, 0.6) = 0.6</p>
+          <p className="text-indigo-700 font-bold mt-2">Hinge loss = 0.6</p>
         </div>
+        <p className="text-sm text-slate-600 mt-3">The point is on the correct side, but it does not yet have the desired margin of 1, so it still receives positive hinge loss.</p>
       </div>
 
       <hr className="border-slate-200 mt-10 mb-10" />
@@ -293,17 +398,17 @@ export function SVMContent() {
       </h2>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Linear SVM</strong> is fast, efficient, simple, and extremely suitable for high-dimensional sparse data (like text classification). It assumes classes can be separated using a straight line.
+        <strong>Linear SVM</strong> uses a linear decision boundary in the chosen feature space. It can be a strong option for high-dimensional sparse data such as text, especially when a linear boundary is adequate.
       </p>
       
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Problem With Nonlinear Data:</strong> Real-world datasets are often structured non-linearly (e.g., clusters arranged in rings or intricate messy blobs). No single straight line can possibly separate these classes directly.
+        <strong>Problem With Nonlinear Data:</strong> Some datasets contain patterns such as rings or curved groups that cannot be separated well by one straight line in the original feature space.
       </p>
 
       <div className="pl-4 border-l-4 border-purple-400 bg-purple-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
         <p className="font-bold text-purple-900 mb-2">The Solution: The Kernel Trick</p>
         <p className="text-purple-800">
-          The Kernel Trick is a revolutionary idea in Machine Learning. Suppose data cannot be separated in 2D. The Kernel mathematically <strong>transforms the data into higher dimensions</strong> implicitly, without doing the cripplingly computationally expensive transformation explicitly. Once warped into higher dimensions, linear separation suddenly becomes possible!
+          A kernel lets SVM measure similarity as if the data had been represented in a richer feature space, without explicitly constructing every transformed feature. This can produce nonlinear decision boundaries in the original input space.
         </p>
       </div>
 
@@ -332,30 +437,44 @@ export function SVMContent() {
           <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-xs sm:text-sm leading-relaxed p-4 overflow-x-auto flex-1">
             <pre className="!m-0">
 <code>{`from sklearn.datasets import make_circles
+from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
-# 1. Circular data (like the plot)
-X, y = make_circles(n_samples=500, noise=0.1, factor=0.3)
+# 1. Create reproducible circular data
+X, y = make_circles(
+    n_samples=500,
+    noise=0.1,
+    factor=0.3,
+    random_state=42
+)
 
-# 2. Linear SVM
-lin_svm = SVC(kernel='linear')
-lin_svm.fit(X, y)
-lin_acc = accuracy_score(y, lin_svm.predict(X))
+# 2. Keep a separate test set
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.25,
+    random_state=42,
+    stratify=y
+)
 
-# 3. RBF Kernel SVM
-rbf_svm = SVC(kernel='rbf')
-rbf_svm.fit(X, y)
-rbf_acc = accuracy_score(y, rbf_svm.predict(X))
+# 3. Linear SVM
+lin_svm = SVC(kernel='linear', C=1)
+lin_svm.fit(X_train, y_train)
+lin_acc = accuracy_score(y_test, lin_svm.predict(X_test))
 
-print(f"Linear Accuracy: {lin_acc * 100}%")
-print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
+# 4. RBF-kernel SVM
+rbf_svm = SVC(kernel='rbf', C=1, gamma='scale')
+rbf_svm.fit(X_train, y_train)
+rbf_acc = accuracy_score(y_test, rbf_svm.predict(X_test))
+
+print(f"Linear test accuracy: {lin_acc * 100:.1f}%")
+print(f"RBF test accuracy:    {rbf_acc * 100:.1f}%")`}</code>
             </pre>
           </div>
           <div className="bg-slate-900 text-emerald-400 font-mono text-xs sm:text-sm leading-relaxed p-3 border-t border-slate-700">
             <p className="mb-1 text-slate-300">$ python kernel_test.py</p>
-            <p className="text-rose-400">Linear Accuracy: 50.0%  <span className="text-slate-500"># Fails completely</span></p>
-            <p className="text-emerald-400">RBF Accuracy:    100.0% <span className="text-slate-500"># Perfect via Kernel</span></p>
+            <p className="text-rose-400">Linear test accuracy: 60.8% <span className="text-slate-500"># Straight boundary struggles here</span></p>
+            <p className="text-emerald-400">RBF test accuracy:    100.0% <span className="text-slate-500"># Fits this toy ring pattern well</span></p>
           </div>
         </div>
       </div>
@@ -365,19 +484,47 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
       </h3>
       <ul className="space-y-6 text-lg text-slate-700 leading-relaxed mb-8">
         <li>
-          <strong className="text-slate-900">1. Linear Kernel:</strong> The simplest kernel. Formula: <code>K(xᵢ, xⱼ) = xᵢᵀxⱼ</code>. It is suitable for linearly separable datasets.
+          <strong className="text-slate-900">1. Linear Kernel:</strong> Formula: <code>K(xᵢ, xⱼ) = xᵢᵀxⱼ</code>. It creates a linear boundary in the original feature space and is often useful when a linear separator is sufficient.
         </li>
         <li>
-          <strong className="text-slate-900">2. Polynomial Kernel:</strong> Creates curved boundaries. Formula: <code>K(xᵢ, xⱼ) = (xᵢᵀxⱼ + c)ᵈ</code>. It can model complex structural relationships.
+          <strong className="text-slate-900">2. Polynomial Kernel:</strong> Can create curved boundaries. A common form is <code>K(xᵢ, xⱼ) = (γxᵢᵀxⱼ + c)ᵈ</code>. Degree and other parameters control the shape.
         </li>
         <li>
-          <strong className="text-slate-900">3. RBF Kernel (Gaussian):</strong> The most popular nonlinear kernel. Formula: <code>K(xᵢ, xⱼ) = e^(-γ ||xᵢ - xⱼ||²)</code>.
+          <strong className="text-slate-900">3. RBF Kernel (Gaussian):</strong> A commonly used nonlinear kernel. Formula: <code>K(xᵢ, xⱼ) = e^(-γ ||xᵢ - xⱼ||²)</code>.
         </li>
       </ul>
 
+      <div className="bg-purple-50 border border-purple-200 rounded-lg p-5 mb-8">
+        <p className="font-bold text-purple-900 mb-3">Tiny RBF Kernel Example</p>
+        <div className="font-mono text-slate-800 space-y-2">
+          <p>xᵢ = (1, 1), xⱼ = (2, 1), γ = 0.5</p>
+          <p><strong>Step 1 — Squared distance:</strong> (1−2)² + (1−1)² = 1</p>
+          <p><strong>Step 2 — Multiply by −γ:</strong> −0.5 × 1 = −0.5</p>
+          <p><strong>Step 3 — Exponent:</strong> e<sup>−0.5</sup> ≈ 0.607</p>
+          <p className="font-sans text-sm text-slate-600">A larger RBF similarity means the two points are more similar under this kernel.</p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto rounded-lg border border-slate-200 mb-8">
+        <table className="min-w-full divide-y divide-slate-200 text-left">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">Kernel</th>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">Simple Picture</th>
+              <th className="px-4 py-3 text-sm font-bold text-slate-700">When to Consider It</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 text-slate-700">
+            <tr><td className="px-4 py-3 font-semibold">Linear</td><td className="px-4 py-3">Straight boundary</td><td className="px-4 py-3">A linear separator may be enough</td></tr>
+            <tr><td className="px-4 py-3 font-semibold">Polynomial</td><td className="px-4 py-3">Curved polynomial boundary</td><td className="px-4 py-3">Interactions of a chosen polynomial degree may help</td></tr>
+            <tr><td className="px-4 py-3 font-semibold">RBF</td><td className="px-4 py-3">Flexible nonlinear boundary</td><td className="px-4 py-3">The relationship is nonlinear and local similarity matters</td></tr>
+          </tbody>
+        </table>
+      </div>
+
       <div className="bg-slate-50 border border-slate-200 p-6 rounded-md flex flex-col mb-10">
         <h4 className="font-bold text-slate-800 mb-3">Understanding Gamma in the RBF Kernel</h4>
-        <p className="text-lg text-slate-700 mb-4">Gamma fundamentally controls the sphere of influence of a single nearby point.</p>
+        <p className="text-lg text-slate-700 mb-4">Gamma controls how far the influence of an individual training example reaches in the RBF kernel.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white border text-left border-emerald-200 shadow-sm rounded-lg overflow-hidden p-4">
              <strong className="text-emerald-800">Small Gamma</strong><br/>
@@ -398,8 +545,8 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
       </h2>
       
       <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        <strong>Curse of Dimensionality:</strong> SVM handles high-dimensional data better than almost all other algorithms. This is why it performs flawlessly in scenarios containing thousands of text or image feature dimensions.<br/><br/>
-        <strong>Feature Scaling:</strong> Feature scaling is MANDATORY for SVM because the algorithm relies strictly on geometric distance calculation. Without transforming scale (using Standardization or Min-Max scaling), large-valued features will dominate, completely distorting the margin and corrupting predictions.
+        <strong>High-dimensional data:</strong> Linear SVMs can work well with high-dimensional sparse representations such as text, but performance still depends on sample size, signal, regularization and the chosen representation.<br/><br/>
+        <strong>Feature Scaling:</strong> Scaling is usually very important for SVMs when numeric features have very different units, because the geometry of the feature space affects margins and kernels. A common workflow is to fit the scaler on the training data and apply the same transformation to validation/test data.
       </p>
 
       <h3 className="text-xl font-bold text-slate-800 mt-12 mb-4">
@@ -412,10 +559,10 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
             <Check className="mr-2 w-6 h-6" /> Advantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li><strong>High Dimensions:</strong> Works extremely well in highly dimensional spaces.</li>
-             <li><strong>Nonlinear Data:</strong> Capable of resolving extreme nonlinear problems gracefully via the Kernel Trick.</li>
-             <li><strong>Robust:</strong> Maximizes the margin which intrinsically shields the model from severe overfitting.</li>
-             <li><strong>Memory Efficient:</strong> Uses a small dedicated subset of training samples (Support Vectors) sequentially.</li>
+             <li><strong>High Dimensions:</strong> Linear SVMs can be effective with many features, including sparse text representations.</li>
+             <li><strong>Nonlinear Boundaries:</strong> Kernels such as RBF can model nonlinear decision boundaries.</li>
+             <li><strong>Regularized Margin:</strong> The C parameter lets us control the trade-off between margin size and training violations.</li>
+             <li><strong>Support-Vector Prediction:</strong> The fitted kernel decision function depends on the support vectors rather than every training point.</li>
           </ul>
         </div>
         <div>
@@ -423,9 +570,9 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
             <CloseIcon className="mr-2 w-6 h-6" /> Disadvantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li><strong>Slow Scaling:</strong> Optimization complexity scales terribly. Training is highly computationally expensive for datasets scaling beyond tens of thousands.</li>
-             <li><strong>Parameter Tuning:</strong> Requires careful hyperparameter tuning for C, Gamma, and Kernel configuration.</li>
-             <li><strong>Black Box Nature:</strong> Not highly interpretable relative to plain regressors or Decision Trees.</li>
+             <li><strong>Training Cost:</strong> Kernel SVC training can become expensive as the number of samples grows.</li>
+             <li><strong>Parameter Tuning:</strong> C, gamma and the kernel can materially change performance and usually need validation.</li>
+             <li><strong>Interpretability:</strong> Nonlinear kernel models are harder to explain directly than a small Decision Tree or a simple linear model.</li>
           </ul>
         </div>
       </div>
@@ -472,7 +619,7 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
              <ul className="space-y-3 text-slate-700 text-sm">
                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>Fraud Detection</li>
                 <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>Credit Risk Analysis</li>
-                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>Stock Prediction</li>
+                <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>Credit / Risk Classification</li>
              </ul>
           </div>
         </div>
@@ -485,7 +632,7 @@ print(f"RBF Accuracy:    {rbf_acc * 100}%")`}</code>
         <Code className="mr-2 text-indigo-600" /> Python Implementation
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Here is a complete practical pipeline utilizing Scikit-Learn utilizing a breast cancer dataset, deploying an RBF Kernel instance.
+        Here is a simple Scikit-learn pipeline using the built-in Breast Cancer Wisconsin dataset and an RBF-kernel Support Vector Classifier. This is an educational dataset, not a clinical deployment example.
       </p>
 
       <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
@@ -508,23 +655,26 @@ y = data.target
 
 # Step 3: Split Dataset
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+    X, y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y
 )
 
-# Step 4: Feature Scaling (Crucial for SVM)
+# Step 4: Learn scaling from the training data only
 scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
 
-# Step 5: Train SVM Model (RBF kernel, Soft Margin C=1)
-model = SVC(kernel='rbf', C=1)
-model.fit(X_train, y_train)
+# Step 5: Train an RBF-kernel SVM
+model = SVC(kernel='rbf', C=1, gamma='scale')
+model.fit(X_train_scaled, y_train)
 
 # Step 6: Predictions & Accuracy
-predictions = model.predict(X_test)
+predictions = model.predict(X_test_scaled)
 accuracy = accuracy_score(y_test, predictions)
 
-print(f"Model Accuracy Evaluated at: {accuracy * 100}%")`}</code>
+print(f"Test accuracy: {accuracy * 100:.2f}%")`}</code>
           </pre>
         </div>
         <div className="bg-slate-900 text-emerald-400 font-mono text-sm sm:text-base leading-relaxed p-4 border-t border-slate-700">
@@ -535,7 +685,36 @@ print(f"Model Accuracy Evaluated at: {accuracy * 100}%")`}</code>
             <span className="text-slate-400 text-xs ml-2 font-sans uppercase tracking-wider">Terminal Output</span>
           </div>
           <p className="mb-1">$ python svm_classifier.py</p>
-          <p className="text-slate-300">Model Accuracy Evaluated at: 98.24561403508771%</p>
+          <p className="text-slate-300">Test accuracy: 98.25%</p>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mb-10">
+        <p className="font-bold text-amber-900 mb-2">Remember</p>
+        <p className="text-amber-900 leading-relaxed">
+          A high score on this built-in teaching dataset does not mean an SVM is automatically the best model for medical diagnosis. Real applications require careful validation, appropriate metrics, domain review and external testing.
+        </p>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-5 text-slate-800 border-b pb-2">Common Questions About SVM</h2>
+      <div className="space-y-4 mb-10">
+        <div className="border border-slate-200 rounded-lg p-5 bg-white">
+          <p className="font-bold text-slate-900 mb-2">What are support vectors?</p>
+          <p className="text-slate-700">They are the training points with non-zero influence on the fitted SVM decision function. In the simple linear picture, they are the points nearest to the margin/boundary.</p>
+        </div>
+        <div className="border border-slate-200 rounded-lg p-5 bg-white">
+          <p className="font-bold text-slate-900 mb-2">Is a larger C always better?</p>
+          <p className="text-slate-700">No. Larger C penalizes violations more strongly, while smaller C regularizes more strongly. Choose C using validation or cross-validation.</p>
+        </div>
+        <div className="border border-slate-200 rounded-lg p-5 bg-white">
+          <p className="font-bold text-slate-900 mb-2">Does SVM need feature scaling?</p>
+          <p className="text-slate-700">Usually yes when numeric features use very different scales, especially for RBF and other geometry-sensitive kernels. Fit the scaler on training data only.</p>
+        </div>
+        <div className="border border-slate-200 rounded-lg p-5 bg-white">
+          <p className="font-bold text-slate-900 mb-2">What should I learn next?</p>
+          <p className="text-slate-700">
+            Review <a href="/learn/feature-scaling" className="text-indigo-700 font-semibold hover:underline">Feature Scaling</a>, then use <a href="/learn/cross-validation" className="text-indigo-700 font-semibold hover:underline">Cross-Validation</a> and <a href="/learn/grid-random-search" className="text-indigo-700 font-semibold hover:underline">Grid & Random Search</a> to compare C, gamma and kernels. For classification evaluation, continue to the <a href="/learn/confusion-matrix" className="text-indigo-700 font-semibold hover:underline">Confusion Matrix</a> lesson.
+          </p>
         </div>
       </div>
 
@@ -546,15 +725,15 @@ print(f"Model Accuracy Evaluated at: {accuracy * 100}%")`}</code>
         Final Summary
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Support Vector Machine is a powerful classification algorithm in Machine Learning. Its entire philosophy revolves around one central idea: <strong>Find the safest and most confident decision boundary possible.</strong>
+        Support Vector Machine is a supervised learning method that can be used for classification and regression. For classification, its central geometric idea is to learn a decision boundary with a useful margin while controlling training violations through regularization.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Instead of merely separating classes, SVM tries to maximize the margin between classes, producing robust and accurate predictions. The algorithm becomes even more powerful through the kernel trick, which enables it to solve highly nonlinear problems efficiently.
+        Linear SVM uses a linear boundary in the chosen feature space, while kernel methods such as RBF can create nonlinear boundaries. The quality of the result depends on the data, feature scaling, kernel choice and hyperparameters such as C and gamma.
       </p>
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "The best boundary is not merely a separating boundary, but the boundary with completely maximized confidence and separation."
+           "Think of SVM as: find a separating boundary, keep a useful margin, and let the closest training points guide where that boundary should be."
          </p>
       </div>
 
