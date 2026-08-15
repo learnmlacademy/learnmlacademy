@@ -20,7 +20,7 @@ const SectionHeader = ({ icon, title, subtitle }: { icon: string; title: string;
   <div className="not-prose flex items-start gap-4 my-8 p-5 bg-indigo-50 border border-indigo-100 rounded-2xl">
     <span className="text-3xl">{icon}</span>
     <div>
-      <h3 className="font-extrabold text-indigo-900 text-xl">{title}</h3>
+      <h2 className="font-extrabold text-indigo-900 text-xl">{title}</h2>
       <p className="text-indigo-700 text-sm mt-0.5">{subtitle}</p>
     </div>
   </div>
@@ -31,12 +31,70 @@ export function NumpyContent() {
     <div className="prose prose-slate max-w-none">
       <h1 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">NumPy for Machine Learning</h1>
       <p className="text-xl text-slate-600 leading-relaxed mb-2">
-        NumPy (<strong>Num</strong>erical <strong>Py</strong>thon) is the backbone of every ML library. pandas, scikit-learn, TensorFlow and PyTorch all convert data to NumPy arrays internally. Mastering NumPy means understanding how data actually flows through ML pipelines.
+        NumPy (<strong>Num</strong>erical <strong>Py</strong>thon) is one of the most important numerical libraries in the Python ML ecosystem. pandas and scikit-learn work closely with NumPy arrays, while frameworks such as TensorFlow and PyTorch use their own tensor objects with similar array-based ideas. Learning NumPy gives you a strong foundation for understanding how numerical data is represented and processed in ML.
       </p>
+
+      <div className="not-prose my-6 rounded-2xl border border-sky-200 bg-sky-50 p-5">
+        <h2 className="text-xl font-extrabold text-sky-950 mb-2">NumPy in Simple Words</h2>
+        <p className="text-sm text-sky-900 leading-relaxed mb-4">
+          Think of NumPy as a fast way to store and calculate with many numbers together. In Machine Learning, one row often represents one example and one column represents one feature.
+        </p>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm border-collapse bg-white rounded-xl overflow-hidden">
+            <thead>
+              <tr className="bg-sky-100 text-sky-950">
+                <th className="border border-sky-200 px-3 py-2 text-left">Student</th>
+                <th className="border border-sky-200 px-3 py-2 text-center">Study Hours</th>
+                <th className="border border-sky-200 px-3 py-2 text-center">Attendance %</th>
+                <th className="border border-sky-200 px-3 py-2 text-center">Previous Marks</th>
+              </tr>
+            </thead>
+            <tbody className="text-slate-700">
+              <tr><td className="border border-sky-100 px-3 py-2 font-semibold">A</td><td className="border border-sky-100 px-3 py-2 text-center">2</td><td className="border border-sky-100 px-3 py-2 text-center">70</td><td className="border border-sky-100 px-3 py-2 text-center">55</td></tr>
+              <tr><td className="border border-sky-100 px-3 py-2 font-semibold">B</td><td className="border border-sky-100 px-3 py-2 text-center">4</td><td className="border border-sky-100 px-3 py-2 text-center">85</td><td className="border border-sky-100 px-3 py-2 text-center">72</td></tr>
+              <tr><td className="border border-sky-100 px-3 py-2 font-semibold">C</td><td className="border border-sky-100 px-3 py-2 text-center">5</td><td className="border border-sky-100 px-3 py-2 text-center">90</td><td className="border border-sky-100 px-3 py-2 text-center">80</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-3 mt-4 text-sm">
+          <div className="rounded-xl bg-white border border-sky-100 p-3">
+            <p className="font-bold text-slate-900">Rows</p>
+            <p className="text-slate-600 mt-1">Each row is one student (one sample).</p>
+          </div>
+          <div className="rounded-xl bg-white border border-sky-100 p-3">
+            <p className="font-bold text-slate-900">Columns</p>
+            <p className="text-slate-600 mt-1">Each numeric column is a feature.</p>
+          </div>
+          <div className="rounded-xl bg-white border border-sky-100 p-3">
+            <p className="font-bold text-slate-900">NumPy Array</p>
+            <p className="text-slate-600 mt-1">NumPy can store the numeric part as one 2D array.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5">
+        <h2 className="text-lg font-extrabold text-slate-900 mb-3">Python List vs NumPy Array</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px] text-sm border-collapse">
+            <thead><tr className="bg-slate-100">
+              <th className="border border-slate-200 px-3 py-2 text-left">Question</th>
+              <th className="border border-slate-200 px-3 py-2 text-left">Python List</th>
+              <th className="border border-slate-200 px-3 py-2 text-left">NumPy Array</th>
+            </tr></thead>
+            <tbody>
+              <tr><td className="border border-slate-200 px-3 py-2 font-semibold">Main use</td><td className="border border-slate-200 px-3 py-2">General Python data</td><td className="border border-slate-200 px-3 py-2">Numerical calculations</td></tr>
+              <tr><td className="border border-slate-200 px-3 py-2 font-semibold">Element types</td><td className="border border-slate-200 px-3 py-2">Can mix types</td><td className="border border-slate-200 px-3 py-2">Usually one data type</td></tr>
+              <tr><td className="border border-slate-200 px-3 py-2 font-semibold">Math on all values</td><td className="border border-slate-200 px-3 py-2">Usually needs a loop/comprehension</td><td className="border border-slate-200 px-3 py-2">Vectorised operations</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <div className="not-prose grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
         {[
-          { icon: '⚡', label: 'Fast vectorised ops', sub: '100× faster than Python loops' },
+          { icon: '⚡', label: 'Fast vectorised ops', sub: 'Often much faster than Python loops' },
           { icon: '🔢', label: 'N-dimensional arrays', sub: 'Scalars, vectors, matrices, tensors' },
           { icon: '🧮', label: 'Linear algebra', sub: 'dot, matmul, inv, eig' },
           { icon: '📊', label: 'Statistical functions', sub: 'mean, std, percentile, corrcoef' },
@@ -54,7 +112,7 @@ pip install numpy
 
 # Import convention — always use 'np' alias
 import numpy as np
-print(np.__version__)   # e.g. 1.26.4`} output={`1.26.4`} />
+print(np.__version__)   # prints the NumPy version installed on your system`} output={`Example: 2.x (your version may differ)`} />
 
       {/* ── 1. Arrays ── */}
       <SectionHeader icon="🔢" title="1. Creating Arrays" subtitle="The ndarray is NumPy's core data structure — think of it as a turbo-charged Python list" />
@@ -71,6 +129,23 @@ output={`[10 20 30 40 50]
 int64
 (5,)
 1`} />
+
+      <div className="not-prose my-5 rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
+        <h3 className="text-base font-extrabold text-indigo-950 mb-2">See a 2D Array Before Coding It</h3>
+        <p className="text-sm text-indigo-900 mb-3">
+          Here the array has <strong>3 rows</strong> and <strong>3 columns</strong>, so its shape is <code>(3, 3)</code>.
+        </p>
+        <div className="flex justify-center">
+          <div className="inline-grid grid-cols-3 gap-1 bg-white border border-indigo-100 rounded-xl p-3 text-center font-mono text-sm text-slate-800">
+            {[1,2,3,4,5,6,7,8,9].map(n => <span key={n} className="w-10 h-9 flex items-center justify-center rounded bg-indigo-50 border border-indigo-100">{n}</span>)}
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-3 gap-2 mt-4 text-xs text-slate-700">
+          <div className="bg-white border border-indigo-100 rounded-lg p-2"><strong>shape = (3, 3)</strong><br/>3 rows × 3 columns</div>
+          <div className="bg-white border border-indigo-100 rounded-lg p-2"><strong>ndim = 2</strong><br/>It has two axes</div>
+          <div className="bg-white border border-indigo-100 rounded-lg p-2"><strong>size = 9</strong><br/>9 values in total</div>
+        </div>
+      </div>
 
       <CodeBlock code={`# 2D array (matrix) — common in ML for feature matrices
 X = np.array([
@@ -112,6 +187,22 @@ output={`10
 [20 30 40]
 [10 30 50]`} />
 
+      <div className="not-prose my-5 rounded-2xl border border-violet-200 bg-violet-50 p-5">
+        <h3 className="text-base font-extrabold text-violet-950 mb-2">How 2D Indexing Looks</h3>
+        <p className="text-sm text-violet-900 mb-3">For <code>X[row, column]</code>, choose the row first and then the column.</p>
+        <div className="overflow-x-auto">
+          <table className="mx-auto text-center text-sm border-collapse bg-white">
+            <thead><tr><th className="px-3 py-2 text-slate-500"></th><th className="border border-violet-200 px-4 py-2 text-violet-800">Col 0</th><th className="border border-violet-200 px-4 py-2 bg-violet-100 text-violet-950">Col 1</th><th className="border border-violet-200 px-4 py-2 text-violet-800">Col 2</th></tr></thead>
+            <tbody>
+              <tr><th className="border border-violet-200 px-3 py-2 text-violet-800">Row 0</th><td className="border border-violet-200 px-4 py-2">1</td><td className="border border-violet-200 px-4 py-2 bg-violet-100 font-bold">2</td><td className="border border-violet-200 px-4 py-2">3</td></tr>
+              <tr><th className="border border-violet-200 px-3 py-2 text-violet-800">Row 1</th><td className="border border-violet-200 px-4 py-2">4</td><td className="border border-violet-200 px-4 py-2 bg-violet-100 font-bold">5</td><td className="border border-violet-200 px-4 py-2">6</td></tr>
+              <tr><th className="border border-violet-200 px-3 py-2 text-violet-800">Row 2</th><td className="border border-violet-200 px-4 py-2">7</td><td className="border border-violet-200 px-4 py-2 bg-violet-100 font-bold">8</td><td className="border border-violet-200 px-4 py-2">9</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-violet-900 mt-3"><code>X[:, 1]</code> means: <strong>all rows</strong>, but only <strong>column 1</strong> → <code>[2, 5, 8]</code>.</p>
+      </div>
+
       <CodeBlock code={`# 2D indexing — very common in ML
 X = np.array([[1,2,3],[4,5,6],[7,8,9]])
 
@@ -140,7 +231,17 @@ output={`[False  True  True False  True False]
 [72 88 91]`} />
 
       {/* ── 3. Math operations ── */}
-      <SectionHeader icon="➕" title="3. Vectorised Math Operations" subtitle="NumPy applies operations to every element simultaneously — no loops needed, orders of magnitude faster" />
+      <SectionHeader icon="➕" title="3. Vectorised Math Operations" subtitle="Apply numerical operations across arrays without writing a Python loop for each element" />
+
+      <div className="not-prose my-5 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+        <h3 className="text-base font-extrabold text-emerald-950 mb-2">Vectorisation: One Instruction, Many Numbers</h3>
+        <div className="grid sm:grid-cols-3 gap-3 items-center text-center text-sm">
+          <div className="bg-white border border-emerald-100 rounded-xl p-3 font-mono">[1, 2, 3, 4]</div>
+          <div className="font-bold text-emerald-800">× 3 →</div>
+          <div className="bg-white border border-emerald-100 rounded-xl p-3 font-mono">[3, 6, 9, 12]</div>
+        </div>
+        <p className="text-sm text-emerald-900 mt-3">You write one NumPy operation; NumPy applies it across the array without you writing a Python loop for each value.</p>
+      </div>
 
       <CodeBlock code={`a = np.array([1, 2, 3, 4])
 
@@ -161,8 +262,22 @@ output={`[11 12 13 14]
 [11 22 33 44]
 [ 10  40  90 160]`} />
 
-      <CodeBlock code={`# Broadcasting — NumPy auto-expands smaller arrays to match shape
-# This is how feature scaling works under the hood in scikit-learn!
+      <div className="not-prose my-5 rounded-2xl border border-cyan-200 bg-cyan-50 p-5">
+        <h3 className="text-base font-extrabold text-cyan-950 mb-2">Broadcasting — See the Idea First</h3>
+        <p className="text-sm text-cyan-900 mb-3">NumPy can apply a shorter compatible row of values across several rows automatically.</p>
+        <div className="overflow-x-auto">
+          <table className="mx-auto text-center text-sm border-collapse bg-white">
+            <tbody>
+              <tr><td className="border border-cyan-200 px-3 py-2 font-mono">1</td><td className="border border-cyan-200 px-3 py-2 font-mono">2</td><td className="border border-cyan-200 px-3 py-2 font-mono">3</td><td className="px-3 py-2 font-bold text-cyan-800">−</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">2.5</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">3.5</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">4.5</td><td className="px-3 py-2 font-bold">=</td><td className="border border-cyan-200 px-3 py-2 font-mono">-1.5</td><td className="border border-cyan-200 px-3 py-2 font-mono">-1.5</td><td className="border border-cyan-200 px-3 py-2 font-mono">-1.5</td></tr>
+              <tr><td className="border border-cyan-200 px-3 py-2 font-mono">4</td><td className="border border-cyan-200 px-3 py-2 font-mono">5</td><td className="border border-cyan-200 px-3 py-2 font-mono">6</td><td className="px-3 py-2 font-bold text-cyan-800">−</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">2.5</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">3.5</td><td className="border border-cyan-200 px-3 py-2 bg-cyan-100 font-mono">4.5</td><td className="px-3 py-2 font-bold">=</td><td className="border border-cyan-200 px-3 py-2 font-mono">1.5</td><td className="border border-cyan-200 px-3 py-2 font-mono">1.5</td><td className="border border-cyan-200 px-3 py-2 font-mono">1.5</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-cyan-800 mt-3">The row <code>[2.5, 3.5, 4.5]</code> is not literally copied first; NumPy follows broadcasting rules so the operation behaves as if it were aligned with each compatible row.</p>
+      </div>
+
+      <CodeBlock code={`# Broadcasting — NumPy aligns compatible shapes for arithmetic
+# This subtraction pattern is one idea used in feature scaling.
 X = np.array([[1, 2, 3],
               [4, 5, 6]])          # shape (2, 3)
 mean = np.array([2.5, 3.5, 4.5])  # shape (3,) → broadcast across rows
@@ -186,12 +301,31 @@ print(f"75th pct: {np.percentile(data, 75)}")
 print(f"Sum:      {np.sum(data)}")`}
 output={`Mean:     45.70
 Median:   43.50
-Std dev:  25.73
-Variance: 661.61
+Std dev:  25.46
+Variance: 648.41
 Min:      11, Max: 89
-25th pct: 25.25
+25th pct: 25.75
 75th pct: 64.25
 Sum:      457`} />
+
+      <div className="not-prose my-5 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+        <h3 className="text-base font-extrabold text-amber-950 mb-2">Understanding <code>axis</code> with Student Marks</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm border-collapse bg-white">
+            <thead><tr className="bg-amber-100"><th className="border border-amber-200 px-3 py-2">Student</th><th className="border border-amber-200 px-3 py-2">Maths</th><th className="border border-amber-200 px-3 py-2">English</th><th className="border border-amber-200 px-3 py-2">Science</th><th className="border border-amber-200 px-3 py-2">Row mean<br/><span className="font-normal">axis=1</span></th></tr></thead>
+            <tbody>
+              <tr><td className="border border-amber-200 px-3 py-2 font-semibold">1</td><td className="border border-amber-200 px-3 py-2 text-center">80</td><td className="border border-amber-200 px-3 py-2 text-center">75</td><td className="border border-amber-200 px-3 py-2 text-center">90</td><td className="border border-amber-200 px-3 py-2 text-center font-bold">81.67</td></tr>
+              <tr><td className="border border-amber-200 px-3 py-2 font-semibold">2</td><td className="border border-amber-200 px-3 py-2 text-center">65</td><td className="border border-amber-200 px-3 py-2 text-center">88</td><td className="border border-amber-200 px-3 py-2 text-center">72</td><td className="border border-amber-200 px-3 py-2 text-center font-bold">75.00</td></tr>
+              <tr><td className="border border-amber-200 px-3 py-2 font-semibold">3</td><td className="border border-amber-200 px-3 py-2 text-center">92</td><td className="border border-amber-200 px-3 py-2 text-center">60</td><td className="border border-amber-200 px-3 py-2 text-center">85</td><td className="border border-amber-200 px-3 py-2 text-center font-bold">79.00</td></tr>
+              <tr className="bg-amber-50"><td className="border border-amber-200 px-3 py-2 font-bold">Column mean<br/><span className="font-normal">axis=0</span></td><td className="border border-amber-200 px-3 py-2 text-center font-bold">79.00</td><td className="border border-amber-200 px-3 py-2 text-center font-bold">74.33</td><td className="border border-amber-200 px-3 py-2 text-center font-bold">82.33</td><td className="border border-amber-200 px-3 py-2"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-3 mt-3 text-sm">
+          <div className="bg-white border border-amber-100 rounded-xl p-3"><strong>axis=0</strong> → combine values down the rows, giving one result per <strong>column/subject</strong>.</div>
+          <div className="bg-white border border-amber-100 rounded-xl p-3"><strong>axis=1</strong> → combine values across the columns, giving one result per <strong>row/student</strong>.</div>
+        </div>
+      </div>
 
       <CodeBlock code={`# Axis-wise stats — critical for working with feature matrices
 X = np.array([[80, 75, 90],   # Student 1: Maths, English, Science
@@ -207,6 +341,24 @@ Overall max: 92`} />
 
       {/* ── 5. Reshape ── */}
       <SectionHeader icon="🔄" title="5. Reshaping & Stacking" subtitle="Reshape arrays to fit model input requirements — one of the most-used operations in ML pipelines" />
+
+      <div className="not-prose my-5 rounded-2xl border border-fuchsia-200 bg-fuchsia-50 p-5">
+        <h3 className="text-base font-extrabold text-fuchsia-950 mb-2">Reshape Changes the Arrangement, Not the Number of Values</h3>
+        <div className="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center text-center">
+          <div className="bg-white border border-fuchsia-100 rounded-xl p-3">
+            <p className="text-xs font-bold text-slate-500 mb-2">Shape (12,)</p>
+            <p className="font-mono text-sm break-words">[1 2 3 4 5 6 7 8 9 10 11 12]</p>
+          </div>
+          <div className="font-bold text-fuchsia-800">reshape(3, 4) →</div>
+          <div className="bg-white border border-fuchsia-100 rounded-xl p-3">
+            <p className="text-xs font-bold text-slate-500 mb-2">Shape (3, 4)</p>
+            <div className="inline-grid grid-cols-4 gap-1 font-mono text-sm">
+              {[1,2,3,4,5,6,7,8,9,10,11,12].map(n => <span key={n} className="w-9 h-8 flex items-center justify-center bg-fuchsia-50 rounded">{n}</span>)}
+            </div>
+          </div>
+        </div>
+        <p className="text-sm text-fuchsia-900 mt-3"><strong>12 values before, 12 values after.</strong> A reshape is valid only when the total number of elements is compatible with the requested shape.</p>
+      </div>
 
       <CodeBlock code={`a = np.arange(1, 13)   # [1 2 3 4 5 6 7 8 9 10 11 12]
 print(a.shape)         # (12,)
@@ -251,7 +403,18 @@ output={`[1 2 3 4 5 6]
  [5. 6. 1.]]`} />
 
       {/* ── 6. Linear algebra ── */}
-      <SectionHeader icon="🧮" title="6. Linear Algebra (Essential for ML)" subtitle="Dot products, matrix multiplication, and decompositions are the maths behind every algorithm" />
+      <SectionHeader icon="🧮" title="6. Linear Algebra (Essential for ML)" subtitle="Dot products and matrix operations appear in many important ML algorithms" />
+
+      <div className="not-prose my-5 rounded-2xl border border-blue-200 bg-blue-50 p-5">
+        <h3 className="text-base font-extrabold text-blue-950 mb-2">Dot Product — A Tiny Numerical Example</h3>
+        <p className="text-sm text-blue-900 mb-3">Suppose a model has two features <code>[2, 3]</code> and two weights <code>[0.5, 1.0]</code>.</p>
+        <div className="space-y-2 text-sm">
+          <div className="bg-white border border-blue-100 rounded-xl p-3"><strong>Step 1 — Multiply matching positions:</strong><br/><code>(2 × 0.5) + (3 × 1.0)</code></div>
+          <div className="bg-white border border-blue-100 rounded-xl p-3"><strong>Step 2 — Calculate each product:</strong><br/><code>1 + 3</code></div>
+          <div className="bg-white border border-blue-100 rounded-xl p-3"><strong>Step 3 — Add them:</strong><br/><code>4</code></div>
+        </div>
+        <p className="text-sm text-blue-900 mt-3">So the dot product is <strong>4</strong>. ML models repeatedly perform calculations like this when combining feature values with learned weights.</p>
+      </div>
 
       <CodeBlock code={`# Dot product — at the heart of linear regression and neural networks
 # y = X·w  (prediction = features dot weights)
@@ -288,10 +451,10 @@ Determinant: 1.0
 Inverse:
  [[ 3. -1.]
   [-5.  2.]]
-Eigenvalues: [0.17 4.83]`} />
+Eigenvalues: [0.20871215 4.79128785]`} />
 
       {/* ── 7. ML Example ── */}
-      <SectionHeader icon="🤖" title="7. Complete ML Example: Linear Regression with NumPy" subtitle="Build a linear regression model from scratch using only NumPy — this is what scikit-learn does internally" />
+      <SectionHeader icon="🤖" title="7. Complete ML Example: Linear Regression with NumPy" subtitle="Build a small linear regression model from scratch using NumPy to understand the matrix idea behind least squares" />
 
       <CodeBlock code={`import numpy as np
 
@@ -300,7 +463,8 @@ hours  = np.array([1, 2, 3, 4, 5, 6, 7, 8])
 scores = np.array([52, 58, 64, 70, 75, 82, 88, 95])
 
 # Linear Regression: score = w * hours + b
-# Normal equation: w = (XᵀX)⁻¹ Xᵀy
+# Normal-equation form for learning: w = (XᵀX)⁻¹ Xᵀy
+# (Production libraries generally use more numerically stable solvers.)
 X = np.column_stack([np.ones(len(hours)), hours])  # add bias column
 y = scores
 
@@ -316,11 +480,62 @@ print(f"Equation:  score = {w:.2f} × hours + {b:.2f}")
 new_hours = 9
 prediction = w * new_hours + b
 print(f"\\nPrediction for {new_hours} hours: {prediction:.1f}")`}
-output={`Intercept (b): 44.83
-Slope (w):     6.21
-Equation:  score = 6.21 × hours + 44.83
+output={`Intercept (b): 45.68
+Slope (w):     6.07
+Equation:  score = 6.07 × hours + 45.68
 
-Prediction for 9 hours: 100.7`} />
+Prediction for 9 hours: 100.3`} />
+
+      <div className="not-prose bg-rose-50 border border-rose-200 rounded-2xl p-5 my-5">
+        <h3 className="font-extrabold text-rose-950 text-base mb-2">Why did the model predict about 100.3 marks?</h3>
+        <p className="text-sm text-rose-900 leading-relaxed">
+          The model learned approximately <code>score = 6.07 × hours + 45.68</code>. For 9 hours: <code>(6.07 × 9) + 45.68 ≈ 100.3</code>. The model simply extends the straight-line pattern beyond the training range of 1–8 hours; it does not automatically know that an exam may have a maximum of 100 marks. This is called <strong>extrapolation</strong>. It is a reminder to combine model output with real-world constraints and domain knowledge.
+        </p>
+      </div>
+
+      <div className="not-prose my-8 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+        <h2 className="text-xl font-extrabold text-slate-900 mb-4">Common NumPy Questions</h2>
+        <div className="space-y-4 text-sm text-slate-700">
+          <div>
+            <p className="font-bold text-slate-900">What is the difference between <code>shape</code>, <code>ndim</code>, and <code>size</code>?</p>
+            <p className="mt-1"><code>shape</code> tells you the length of each dimension, <code>ndim</code> tells you how many dimensions there are, and <code>size</code> tells you the total number of values.</p>
+          </div>
+          <div>
+            <p className="font-bold text-slate-900">Why is broadcasting useful in Machine Learning?</p>
+            <p className="mt-1">It lets NumPy combine compatible arrays without writing explicit loops. A common example is subtracting one mean value per feature from every row during feature scaling.</p>
+          </div>
+          <div>
+            <p className="font-bold text-slate-900">Does <code>reshape()</code> always copy the data?</p>
+            <p className="mt-1">Not necessarily. NumPy returns a view when possible, but a copy can be required in some memory layouts. For beginners, the key idea is that reshaping changes how the same values are organised as long as the element count is compatible.</p>
+          </div>
+          <div>
+            <p className="font-bold text-slate-900">Should I learn all NumPy linear algebra before Machine Learning?</p>
+            <p className="mt-1">No. Start with arrays, indexing, vectorised operations, statistics, reshaping, and dot products. Learn deeper linear algebra gradually as algorithms such as PCA and Linear Regression require it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="not-prose my-6 rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
+        <h2 className="text-lg font-extrabold text-indigo-950 mb-3">Where to Go Next</h2>
+        <div className="grid sm:grid-cols-2 gap-3 text-sm">
+          <a href="/learn/pandas-essentials" className="bg-white border border-indigo-100 rounded-xl p-3 hover:border-indigo-300 transition-colors">
+            <span className="font-bold text-indigo-800">Pandas Essentials →</span>
+            <p className="text-slate-600 mt-1">Use labelled rows and columns for real datasets.</p>
+          </a>
+          <a href="/learn/scikit-learn-essentials" className="bg-white border border-indigo-100 rounded-xl p-3 hover:border-indigo-300 transition-colors">
+            <span className="font-bold text-indigo-800">Scikit-learn Essentials →</span>
+            <p className="text-slate-600 mt-1">Train ML models using arrays and DataFrames.</p>
+          </a>
+          <a href="/learn/feature-scaling" className="bg-white border border-indigo-100 rounded-xl p-3 hover:border-indigo-300 transition-colors">
+            <span className="font-bold text-indigo-800">Feature Scaling →</span>
+            <p className="text-slate-600 mt-1">See a practical use of column means and broadcasting ideas.</p>
+          </a>
+          <a href="/learn/linear-regression" className="bg-white border border-indigo-100 rounded-xl p-3 hover:border-indigo-300 transition-colors">
+            <span className="font-bold text-indigo-800">Linear Regression →</span>
+            <p className="text-slate-600 mt-1">See where dot products and matrix ideas are used in a model.</p>
+          </a>
+        </div>
+      </div>
 
       <div className="not-prose bg-amber-50 border border-amber-200 rounded-2xl p-5 my-6">
         <p className="font-bold text-amber-900 text-base mb-3">🎯 NumPy Cheat Sheet — Essential ML Operations</p>
