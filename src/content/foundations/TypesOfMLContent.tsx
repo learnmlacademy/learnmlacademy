@@ -1,12 +1,114 @@
 import React from "react";
-import { AnimatedTypesOfML } from "../../components/diagrams/AnimatedFoundationDiagrams";
-
-import { BrainCircuit, BookOpen, Layers, Dna, Hexagon, CircleDashed } from "lucide-react";
+import { BookOpen, Layers, Hexagon, CircleDashed } from "lucide-react";
 
 export function TypesOfMLContent() {
   return (
     <>
-      <AnimatedTypesOfML />
+      {/* ── SIMPLE FIRST LOOK ── */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 md:p-6 my-8 shadow-sm">
+        <p className="text-center font-bold text-slate-900 text-xl mb-2">Three Main Ways a Machine Can Learn</p>
+        <p className="text-center text-slate-600 mb-6">
+          Start with one simple question: <strong>what kind of help does the machine receive while learning?</strong>
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="rounded-lg border-2 border-indigo-200 bg-indigo-50 p-4">
+            <p className="font-bold text-indigo-900 text-lg mb-3 text-center">Supervised Learning</p>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-semibold text-slate-700 mb-3">
+              <span className="bg-white border border-indigo-200 rounded px-2 py-1">Examples + Answers</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-indigo-200 rounded px-2 py-1">Learn</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-indigo-200 rounded px-2 py-1">Predict</span>
+            </div>
+            <p className="text-slate-700 text-sm leading-relaxed">
+              <strong>School example:</strong> We show past students' study hours together with whether they passed or failed. The model learns from the known answers.
+            </p>
+          </div>
+
+          <div className="rounded-lg border-2 border-emerald-200 bg-emerald-50 p-4">
+            <p className="font-bold text-emerald-900 text-lg mb-3 text-center">Unsupervised Learning</p>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-semibold text-slate-700 mb-3">
+              <span className="bg-white border border-emerald-200 rounded px-2 py-1">Examples Only</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-emerald-200 rounded px-2 py-1">Find Patterns</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-emerald-200 rounded px-2 py-1">Groups</span>
+            </div>
+            <p className="text-slate-700 text-sm leading-relaxed">
+              <strong>School example:</strong> We give students' study and activity data but no group names. The model tries to discover similar groups by itself.
+            </p>
+          </div>
+
+          <div className="rounded-lg border-2 border-rose-200 bg-rose-50 p-4">
+            <p className="font-bold text-rose-900 text-lg mb-3 text-center">Reinforcement Learning</p>
+            <div className="flex flex-wrap items-center justify-center gap-2 text-sm font-semibold text-slate-700 mb-3">
+              <span className="bg-white border border-rose-200 rounded px-2 py-1">Try</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-rose-200 rounded px-2 py-1">Reward / Penalty</span>
+              <span aria-hidden="true">→</span>
+              <span className="bg-white border border-rose-200 rounded px-2 py-1">Improve</span>
+            </div>
+            <p className="text-slate-700 text-sm leading-relaxed">
+              <strong>Game example:</strong> A player earns +10 points for reaching the goal and loses points for a wrong move. It learns which actions give better rewards.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── QUICK COMPARISON ── */}
+      <div className="overflow-x-auto my-8 rounded-xl border border-slate-200 shadow-sm">
+        <table className="min-w-full text-left bg-white">
+          <thead className="bg-slate-100 border-b border-slate-200">
+            <tr>
+              <th className="p-3 font-bold text-slate-800">Type</th>
+              <th className="p-3 font-bold text-slate-800 border-l border-slate-200">What does the machine receive?</th>
+              <th className="p-3 font-bold text-slate-800 border-l border-slate-200">Simple example</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tr>
+              <td className="p-3 font-bold text-indigo-700">Supervised</td>
+              <td className="p-3 border-l border-slate-100">Data + correct answers</td>
+              <td className="p-3 border-l border-slate-100">Study hours → Pass / Fail</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-bold text-emerald-700">Unsupervised</td>
+              <td className="p-3 border-l border-slate-100">Data, but no answers</td>
+              <td className="p-3 border-l border-slate-100">Group similar students</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-bold text-rose-700">Reinforcement</td>
+              <td className="p-3 border-l border-slate-100">Actions + rewards / penalties</td>
+              <td className="p-3 border-l border-slate-100">Learn the best move in a game</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* ── HOW TO CHOOSE ── */}
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 md:p-6 my-8">
+        <p className="font-bold text-slate-900 text-lg mb-4">A Simple Way to Choose the Learning Type</p>
+        <div className="space-y-3 text-slate-700">
+          <div className="flex gap-3 items-start">
+            <span className="shrink-0 w-7 h-7 rounded-full bg-indigo-100 text-indigo-800 font-bold flex items-center justify-center">1</span>
+            <p><strong>Do you already know the correct answer for your past examples?</strong> If yes, start with <strong>Supervised Learning</strong>.</p>
+          </div>
+          <div className="flex gap-3 items-start">
+            <span className="shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 font-bold flex items-center justify-center">2</span>
+            <p><strong>Do you have data but no correct answers, and want to discover groups or patterns?</strong> Think <strong>Unsupervised Learning</strong>.</p>
+          </div>
+          <div className="flex gap-3 items-start">
+            <span className="shrink-0 w-7 h-7 rounded-full bg-rose-100 text-rose-800 font-bold flex items-center justify-center">3</span>
+            <p><strong>Must a system learn by taking actions and receiving feedback?</strong> Think <strong>Reinforcement Learning</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <p className="text-sm text-slate-600 text-center mt-8 mb-2">
+        The simple comparison above is enough for a first understanding. The diagram below is a more detailed map for reference — you do not need to memorize it now.
+      </p>
+
             {/* ── HIERARCHICAL TREE ── */}
       <div className="bg-slate-50 border border-slate-200 py-8 px-4 rounded-xl shadow-sm my-8 overflow-x-auto">
         <p className="text-center text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6">
@@ -119,6 +221,29 @@ export function TypesOfMLContent() {
         </p>
       </div>
 
+      <div className="bg-white border border-indigo-200 rounded-xl p-5 mb-8">
+        <p className="font-bold text-slate-900 mb-3">A Tiny Labeled Dataset</p>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-indigo-50">
+              <tr>
+                <th className="p-2">Study Hours</th>
+                <th className="p-2">Attendance</th>
+                <th className="p-2">Known Answer (Label)</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              <tr><td className="p-2">1</td><td className="p-2">60%</td><td className="p-2 font-semibold">Fail</td></tr>
+              <tr><td className="p-2">3</td><td className="p-2">75%</td><td className="p-2 font-semibold">Pass</td></tr>
+              <tr><td className="p-2">5</td><td className="p-2">90%</td><td className="p-2 font-semibold">Pass</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-slate-700 mt-3 text-sm leading-relaxed">
+          The last column is the key: the model is given the correct past answer while learning. That is why this is called <strong>supervised</strong> learning.
+        </p>
+      </div>
+
       <h3 className="font-bold text-xl text-slate-900 mt-8 mb-4">Core Sub-Categories:</h3>
       
       <div className="pl-4 border-l-4 border-slate-300 bg-white py-2 mb-6">
@@ -139,6 +264,22 @@ export function TypesOfMLContent() {
         <p className="text-sm font-mono text-slate-600 bg-slate-100 p-2 rounded inline-block">Popular Algorithms: Linear Regression, Ridge, Lasso, XGBoost Regressor</p>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+        <div className="border border-indigo-200 rounded-lg p-4 bg-indigo-50/60">
+          <p className="font-bold text-indigo-900 mb-2">Classification asks: Which category?</p>
+          <p className="text-slate-700 text-sm mb-2">Example: Will the student <strong>Pass</strong> or <strong>Fail</strong>?</p>
+          <div className="flex gap-2">
+            <span className="px-3 py-1 rounded bg-white border border-indigo-200 font-semibold text-sm">Pass</span>
+            <span className="px-3 py-1 rounded bg-white border border-indigo-200 font-semibold text-sm">Fail</span>
+          </div>
+        </div>
+        <div className="border border-emerald-200 rounded-lg p-4 bg-emerald-50/60">
+          <p className="font-bold text-emerald-900 mb-2">Regression asks: What number?</p>
+          <p className="text-slate-700 text-sm mb-2">Example: What marks will the student score?</p>
+          <div className="inline-block px-3 py-1 rounded bg-white border border-emerald-200 font-semibold text-sm">Predicted marks: 78</div>
+        </div>
+      </div>
+
 
       {/* 2. Unsupervised */}
       <h2 className="text-2xl font-bold mt-12 mb-6 text-emerald-800 border-b pb-2">
@@ -152,6 +293,38 @@ export function TypesOfMLContent() {
         <p className="text-slate-800 font-bold text-xl flex items-center mb-3"><Layers className="w-6 h-6 mr-3 text-emerald-600" /> The Cocktail Party Analogy</p>
         <p className="text-lg text-slate-700 leading-relaxed">
           Imagine standing in the center of a crowded, noisy cocktail party. Even without knowing anyone's name or who they are, your brain naturally groups people based on the cadence of their voices or the physical circles they are standing in. You are autonomously finding patterns in the noise.
+        </p>
+      </div>
+
+      <div className="bg-white border border-emerald-200 rounded-xl p-5 mb-8">
+        <p className="font-bold text-slate-900 mb-2">Simple Picture: Finding Groups Without Answers</p>
+        <p className="text-slate-600 text-sm mb-4">Imagine these are students represented only by two habits: study time and sports time. We do not provide group names.</p>
+        <div className="grid grid-cols-2 gap-6 max-w-md mx-auto text-center">
+          <div className="border border-slate-200 rounded-lg p-4">
+            <p className="text-xs font-semibold text-slate-500 mb-3">Nearby points form a group</p>
+            <div className="grid grid-cols-3 gap-2 place-items-center">
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+              <span className="w-4 h-4 rounded-full bg-emerald-500" />
+            </div>
+          </div>
+          <div className="border border-slate-200 rounded-lg p-4">
+            <p className="text-xs font-semibold text-slate-500 mb-3">Another similar group</p>
+            <div className="grid grid-cols-3 gap-2 place-items-center">
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+              <span className="w-4 h-4 rounded-full bg-amber-500" />
+            </div>
+          </div>
+        </div>
+        <p className="text-slate-700 text-sm mt-4 leading-relaxed">
+          The machine was never told “Group A” or “Group B”. It created groups because some data points were more similar to each other.
         </p>
       </div>
 
@@ -180,6 +353,20 @@ export function TypesOfMLContent() {
       <p className="text-lg leading-relaxed mb-6">
         Reinforcement Learning abandons the idea of static datasets entirely. Instead, an <strong className="text-slate-900">Agent</strong> interacts with a dynamic <strong className="text-slate-900">Environment</strong> and learns through a system of <strong className="text-rose-700">rewards and penalties</strong>.
       </p>
+
+      <div className="bg-white border border-rose-200 rounded-xl p-5 mb-6">
+        <p className="font-bold text-slate-900 mb-4">A Simple Trial-and-Error Loop</p>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-2 text-sm font-semibold text-slate-700 text-center">
+          <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">1. Agent chooses an action</span>
+          <span aria-hidden="true">→</span>
+          <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">2. Environment responds</span>
+          <span aria-hidden="true">→</span>
+          <span className="bg-rose-50 border border-rose-200 rounded-lg px-3 py-2">3. Reward or penalty</span>
+          <span aria-hidden="true">→</span>
+          <span className="bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">4. Agent improves</span>
+        </div>
+        <p className="text-slate-700 text-sm mt-4"><strong>Example:</strong> In a maze, reaching the exit may give +10 points, while hitting a dead end may give -2. Over repeated attempts, the agent learns a better route.</p>
+      </div>
 
       <div className="pl-4 border-l-4 border-rose-400 bg-rose-50 py-4 pr-4 rounded-r-md mb-8">
         <p className="text-lg text-slate-800 leading-relaxed mb-2">
@@ -221,6 +408,30 @@ export function TypesOfMLContent() {
 
 
       
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        <div className="border border-amber-200 bg-amber-50 rounded-xl p-5">
+          <p className="font-bold text-amber-900 mb-3">Semi-Supervised: A Few Answers + Many Unanswered Examples</p>
+          <div className="flex flex-wrap gap-2 mb-3">
+            {['Labeled', 'Labeled', 'Labeled'].map((item, index) => (
+              <span key={`labeled-${index}`} className="px-2 py-1 bg-white border border-amber-300 rounded text-xs font-semibold">{item}</span>
+            ))}
+            {['?', '?', '?', '?', '?', '?'].map((item, index) => (
+              <span key={`unlabeled-${index}`} className="px-2 py-1 bg-white border border-slate-300 rounded text-xs font-semibold text-slate-500">{item}</span>
+            ))}
+          </div>
+          <p className="text-slate-700 text-sm">A small labeled set helps the model learn while a much larger unlabeled set provides extra information.</p>
+        </div>
+
+        <div className="border border-purple-200 bg-purple-50 rounded-xl p-5">
+          <p className="font-bold text-purple-900 mb-3">Self-Supervised: Create the Practice Question from the Data</p>
+          <div className="bg-white border border-purple-200 rounded-lg p-3 text-center text-slate-800 font-medium mb-3">
+            The cat sat on the <span className="inline-block px-2 py-0.5 rounded bg-purple-100 border border-purple-200">[ hidden ]</span>
+            <div className="mt-2 text-sm text-purple-800">Model tries to predict: <strong>mat</strong></div>
+          </div>
+          <p className="text-slate-700 text-sm">The original sentence provides the answer, so humans do not have to label every example manually.</p>
+        </div>
+      </div>
+
       <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">Glossary of Key Terms</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
         
