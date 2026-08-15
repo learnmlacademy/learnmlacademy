@@ -6,19 +6,11 @@ import {
   YAxis,
   CartesianGrid,
   ResponsiveContainer,
-  ScatterChart,
-  Scatter,
-  Legend,
-  Tooltip as RechartsTooltip,
-  AreaChart,
-  Area,
 } from "recharts";
 import {
   Target,
-  AlertTriangle,
   Calculator,
   Layers,
-  Code,
   CheckCircle,
   Briefcase,
   Activity,
@@ -30,22 +22,7 @@ import {
 } from "lucide-react";
 import { SigmoidDiagram } from "../../components/diagrams/MLDiagrams";
 
-const sigmoidData = Array.from({ length: 41 }, (_, i) => {
-  const z = -10 + i * 0.5;
-  const p = 1 / (1 + Math.exp(-z));
-  return { z, p: Number(p.toFixed(3)) };
-});
 
-const scatterData = [
-  { x: 1, y: 1, class: "Class A" },
-  { x: 2, y: 2, class: "Class A" },
-  { x: 2, y: 1, class: "Class A" },
-  { x: 3, y: 3, class: "Class A" },
-  { x: 7, y: 7, class: "Class B" },
-  { x: 8, y: 8, class: "Class B" },
-  { x: 8, y: 7, class: "Class B" },
-  { x: 9, y: 9, class: "Class B" },
-];
 
 const rocData = [
   { fpr: 0, tpr: 0 },
@@ -86,10 +63,10 @@ export function LogisticRegressionContent() {
         Logistic Regression is a classification algorithm used to predict categorical outcomes.</p>
 
       <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl p-6 mb-8 text-white shadow-sm">
-        <h3 className="text-xl font-bold mb-4 flex items-center">
+        <p className="text-xl font-bold mb-4 flex items-center">
           <Target className="mr-3 text-indigo-200" /> It is used to predict
           categories such as:
-        </h3>
+        </p>
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-lg text-indigo-50 font-medium">
           <li className="flex items-center">
             <CheckCircle className="w-5 h-5 mr-2 text-indigo-300" /> Spam or Not
@@ -114,11 +91,65 @@ export function LogisticRegressionContent() {
         </ul>
       </div>
 
-      <p className="text-lg leading-relaxed text-slate-700 mb-10 italic">
-        Logistic Regression is simple, powerful, interpretable, and highly
-        efficient. Applications span across Healthcare, Finance, Marketing,
-        Cybersecurity, and more.
+      <p className="text-lg leading-relaxed text-slate-700 mb-6 italic">
+        Logistic Regression is a widely used baseline because it is relatively
+        simple, fast to train, and often interpretable. It is used in areas such
+        as healthcare, finance, marketing, and cybersecurity.
       </p>
+
+      <div className="bg-sky-50 border border-sky-200 rounded-xl p-6 mb-10 shadow-sm">
+        <h2 className="text-2xl font-bold text-sky-900 mb-4">
+          Logistic Regression in Simple Words
+        </h2>
+        <p className="text-lg text-slate-700 mb-5">
+          Think of Logistic Regression as a model that first gives a new example
+          a <strong>score</strong>, converts that score into an
+          <strong> estimated probability</strong>, and then compares that
+          probability with a threshold to choose a class.
+        </p>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2 text-center mb-6">
+          {['Student Data', 'Score', 'Sigmoid', 'Probability', 'Pass / Fail'].map((step, index) => (
+            <React.Fragment key={step}>
+              <div className="bg-white border border-sky-200 rounded-lg px-3 py-3 font-bold text-slate-800 flex-1">
+                {step}
+              </div>
+              {index < 4 && (
+                <div className="text-sky-500 font-bold" aria-hidden="true">
+                  <span className="hidden sm:inline">→</span>
+                  <span className="sm:hidden">↓</span>
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+        <div className="overflow-x-auto mb-5">
+          <table className="min-w-full bg-white border border-sky-200 text-center">
+            <thead className="bg-sky-100 text-sky-900">
+              <tr>
+                <th className="p-3 border">Study Hours</th>
+                <th className="p-3 border">Attendance</th>
+                <th className="p-3 border">Known Result</th>
+              </tr>
+            </thead>
+            <tbody className="text-slate-700">
+              <tr><td className="p-3 border">1</td><td className="p-3 border">55%</td><td className="p-3 border">Fail</td></tr>
+              <tr><td className="p-3 border">2</td><td className="p-3 border">65%</td><td className="p-3 border">Fail</td></tr>
+              <tr><td className="p-3 border">4</td><td className="p-3 border">82%</td><td className="p-3 border">Pass</td></tr>
+              <tr><td className="p-3 border">5</td><td className="p-3 border">90%</td><td className="p-3 border">Pass</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-white border border-sky-200 rounded-lg p-4">
+          <p className="font-bold text-slate-800 mb-2">A new student arrives.</p>
+          <p className="text-slate-700 mb-2">Suppose the trained model estimates:</p>
+          <p className="font-mono text-lg text-indigo-700 font-bold mb-2">Probability of Pass = 0.82</p>
+          <p className="text-slate-700">
+            If our chosen threshold is <strong>0.50</strong>, then 0.82 ≥ 0.50,
+            so the model predicts <strong>Pass</strong>. Later in this lesson you
+            will see where that probability comes from.
+          </p>
+        </div>
+      </div>
 
       <hr className="border-slate-200 mt-8 mb-10" />
 
@@ -203,52 +234,21 @@ export function LogisticRegressionContent() {
       {/* ML Hierarchy */}
       <div className="mb-12">
         <h3 className="text-2xl font-bold text-slate-800 mb-6">
-          Logistic Regression in ML Hierarchy
+          Where Logistic Regression Fits
         </h3>
-        <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm text-center font-bold text-sm lg:text-base text-slate-800 overflow-x-auto">
-          <div className="min-w-[600px] flex flex-col items-center space-y-4">
-            <div className="bg-slate-100 px-6 py-3 rounded border border-slate-300 w-64 shadow-sm">
-              MACHINE LEARNING
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-center">
+          {[
+            ['Machine Learning', 'Broad field'],
+            ['Supervised Learning', 'Learns from labelled examples'],
+            ['Classification', 'Predicts a class'],
+            ['Logistic Regression', 'Linear probabilistic classifier'],
+          ].map(([title, note], index) => (
+            <div key={title} className="relative bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
+              <div className="font-bold text-slate-900 mb-1">{title}</div>
+              <div className="text-sm text-slate-600">{note}</div>
+              {index < 3 && <div className="hidden sm:block absolute -right-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">→</div>}
             </div>
-
-            <div className="w-px h-6 bg-slate-300"></div>
-
-            <div className="flex justify-center gap-16 w-full max-w-md relative">
-              <div className="absolute top-0 left-1/4 right-1/4 h-px bg-slate-300"></div>
-
-              <div className="flex flex-col items-center flex-1">
-                <div className="w-px h-6 bg-slate-300"></div>
-                <div className="bg-blue-50 text-blue-900 border border-blue-200 px-4 py-3 rounded shadow-sm w-full">
-                  Supervised Learning
-                </div>
-
-                <div className="w-px h-6 bg-blue-200"></div>
-                <div className="bg-indigo-50 text-indigo-900 border border-indigo-200 px-4 py-3 rounded shadow-sm w-full">
-                  Classification
-                </div>
-
-                <div className="w-px h-6 bg-indigo-200"></div>
-                <div className="flex flex-col gap-2 w-full">
-                  <div className="bg-emerald-50 border-2 border-emerald-400 text-emerald-900 px-4 py-2 rounded shadow-sm">
-                    Logistic Regression
-                  </div>
-                  <div className="bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded shadow-sm">
-                    SVM
-                  </div>
-                  <div className="bg-slate-50 border border-slate-300 text-slate-700 px-4 py-2 rounded shadow-sm">
-                    Decision Trees
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-center flex-1">
-                <div className="w-px h-6 bg-slate-300"></div>
-                <div className="bg-slate-100 text-slate-600 border border-slate-200 px-4 py-3 rounded shadow-sm w-full">
-                  Unsupervised Learning
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -291,7 +291,8 @@ export function LogisticRegressionContent() {
             0 and 1
           </p>
           <p className="text-emerald-900 font-medium">
-            Predicts true probabilities effectively.
+            Produces model-estimated probabilities that can be converted into
+            class decisions.
           </p>
         </div>
       </div>
@@ -399,10 +400,11 @@ export function LogisticRegressionContent() {
         {/* Ordinal */}
         <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
           <h3 className="text-xl font-bold text-fuchsia-900 mb-3 border-b border-fuchsia-100 pb-2">
-            3. Ordinal
+            3. Ordinal Logistic Regression
           </h3>
           <p className="text-lg text-slate-700 mb-4">
-            Used when categories have a natural order.
+            A related specialized extension for ordered outcomes. Standard
+            logistic-regression APIs do not automatically use the order.
           </p>
           <ul className="text-slate-700 font-medium space-y-2 mb-4">
             <li>Low</li>
@@ -447,20 +449,20 @@ export function LogisticRegressionContent() {
           <p className="text-lg text-indigo-800 mb-2">
             Suppose{" "}
             <strong className="font-mono bg-indigo-100 px-2 rounded">
-              b₀ = 2, b₁ = 3, x = 4
+              b₀ = -3, b₁ = 1, x = 4
             </strong>
           </p>
           <p className="text-lg text-indigo-800 mb-2 font-mono ml-4">
-            z = 2 + 3(4)
+            z = -3 + 1(4)
           </p>
           <p className="text-lg text-indigo-800 mb-2 font-mono ml-4">
-            z = 2 + 12
+            z = -3 + 4
           </p>
           <p className="text-lg font-bold text-indigo-900 mb-4 font-mono ml-4 text-2xl">
-            z = 14
+            z = 1
           </p>
           <p className="text-lg text-rose-800 font-bold bg-rose-100 p-2 rounded inline-block shadow-sm">
-            But 14 is not a probability!
+            But 1 is still a score, not yet a probability.
           </p>
           <p className="text-lg text-indigo-900 font-medium mt-2">
             So Logistic Regression applies the Sigmoid Function.
@@ -523,55 +525,39 @@ export function LogisticRegressionContent() {
                 outputs are strictly between 0 and 1.
               </li>
               <li>
-                <strong>Differentiable:</strong> Creates a smooth curve with
-                stable gradients, which is required for Gradient Descent
-                optimization.
+                <strong>Smooth and differentiable:</strong> This makes the model
+                convenient to optimize with gradient- or Newton-style numerical
+                methods.
               </li>
               <li>
-                <strong>Non-linear separation:</strong> Allows the network to
-                learn thresholds effectively for classification without sudden
-                "jumps".
+                <strong>Monotonic:</strong> A larger linear score always maps to
+                a larger estimated probability. The decision boundary remains
+                linear in the features unless we first create nonlinear features.
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col items-center justify-center">
+        <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
           <h4 className="text-lg font-bold text-slate-800 mb-4">
-            Sigmoid Curve Visualization
+            Three Easy Sigmoid Values to Remember
           </h4>
-          <div className="w-full h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sigmoidData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis
-                  dataKey="z"
-                  label={{
-                    value: "z (Linear Output)",
-                    position: "insideBottom",
-                    offset: -5,
-                  }}
-                />
-                <YAxis
-                  domain={[-0.1, 1.1]}
-                  label={{
-                    value: "σ(z) (Probability)",
-                    angle: -90,
-                    position: "insideLeft",
-                  }}
-                />
-                <RechartsTooltip />
-                <Line
-                  type="monotone"
-                  dataKey="p"
-                  name="Probability"
-                  stroke="#10b981"
-                  strokeWidth={3}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-center border border-slate-200">
+              <thead className="bg-slate-100 text-slate-800">
+                <tr><th className="p-3 border">z</th><th className="p-3 border">σ(z)</th><th className="p-3 border">Meaning</th></tr>
+              </thead>
+              <tbody className="text-slate-700">
+                <tr><td className="p-3 border">-2</td><td className="p-3 border">≈ 0.119</td><td className="p-3 border">Closer to Class 0</td></tr>
+                <tr className="bg-slate-50"><td className="p-3 border">0</td><td className="p-3 border">0.500</td><td className="p-3 border">Middle point</td></tr>
+                <tr><td className="p-3 border">2</td><td className="p-3 border">≈ 0.881</td><td className="p-3 border">Closer to Class 1</td></tr>
+              </tbody>
+            </table>
           </div>
+          <p className="text-sm text-slate-600 mt-4">
+            As z increases, the sigmoid probability increases smoothly. You do
+            not need to memorize the whole curve; understand the direction.
+          </p>
         </div>
       </div>
 
@@ -594,15 +580,21 @@ export function LogisticRegressionContent() {
               (Approx: e⁻² ≈ 0.135)
             </p>
             <p className="text-lg text-emerald-800 mb-2 font-mono">
-              σ(2) = 1 / (1 + 0.135)
+              Step 1: e⁻² ≈ 0.1353
+            </p>
+            <p className="text-lg text-emerald-800 mb-2 font-mono">
+              Step 2: 1 + 0.1353 = 1.1353
+            </p>
+            <p className="text-lg text-emerald-800 mb-2 font-mono">
+              Step 3: 1 / 1.1353 ≈ 0.881
             </p>
           </div>
           <div className="flex-1 flex flex-col justify-center items-start">
             <p className="text-2xl font-bold text-emerald-900 mb-2 font-mono bg-white px-4 py-2 rounded shadow-sm border border-emerald-200">
-              σ(2) ≈ 0.88
+              σ(2) ≈ 0.881
             </p>
             <p className="text-lg text-emerald-900 font-medium bg-emerald-200 p-2 rounded inline-block">
-              Meaning: 88% probability of Class 1
+              Meaning: about 88.1% model-estimated probability of Class 1
             </p>
           </div>
         </div>
@@ -615,9 +607,11 @@ export function LogisticRegressionContent() {
         Probability Threshold & Decision Boundary
       </h2>
       <p className="text-lg leading-relaxed text-slate-700 mb-6">
-        The predicted probability is converted into a class label based on a
-        threshold (usually 0.5). The Decision Boundary formally separates the
-        classes.
+        A predicted probability can be converted into a class label using a
+        chosen threshold. A threshold of 0.5 is a common starting point for
+        binary classification, but it is not automatically the best threshold.
+        The decision boundary is where the model switches from one class decision
+        to the other.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
@@ -647,57 +641,37 @@ export function LogisticRegressionContent() {
               0.5
             </div>
           </div>
+          <div className="mt-14 bg-white border border-sky-200 rounded-lg p-4 text-left">
+            <p className="font-bold text-slate-800 mb-2">Same probability, different threshold</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+              <div className="bg-emerald-50 border border-emerald-200 rounded p-3">
+                Probability = <strong>0.72</strong><br />Threshold = 0.50 → <strong>Class 1</strong>
+              </div>
+              <div className="bg-rose-50 border border-rose-200 rounded p-3">
+                Probability = <strong>0.72</strong><br />Threshold = 0.80 → <strong>Class 0</strong>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col justify-center items-center">
+        <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm flex flex-col justify-center items-center">
           <h4 className="text-xl font-bold text-slate-800 mb-4">
-            Decision Boundary Visualization
+            Simple Decision Boundary
           </h4>
-          <div className="w-full h-56">
-            <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart
-                margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis type="number" dataKey="x" name="X" domain={[0, 10]} />
-                <YAxis type="number" dataKey="y" name="Y" domain={[0, 10]} />
-                <RechartsTooltip cursor={{ strokeDasharray: "3 3" }} />
-                <Legend />
-                <Scatter
-                  name="Class A"
-                  data={scatterData.filter((d) => d.class === "Class A")}
-                  fill="#10b981"
-                />
-                <Scatter
-                  name="Class B"
-                  data={scatterData.filter((d) => d.class === "Class B")}
-                  fill="#6366f1"
-                />
-                {/* Decision Boundary Line */}
-                <Area
-                  type="monotone"
-                  dataKey="y"
-                  fill="#000"
-                  stroke="#000"
-                  fillOpacity={0.1}
-                  data={[]}
-                />
-                <Line
-                  type="linear"
-                  dataKey="y"
-                  stroke="#ef4444"
-                  strokeWidth={3}
-                  strokeDasharray="5 5"
-                  name="Decision Boundary"
-                  dot={false}
-                  data={[
-                    { x: 0, y: 10 },
-                    { x: 10, y: 0 },
-                  ]}
-                />
-              </ScatterChart>
-            </ResponsiveContainer>
-          </div>
+          <svg viewBox="0 0 320 210" className="w-full max-w-sm" aria-label="Two classes of points separated by a dashed decision boundary">
+            <rect x="0" y="0" width="320" height="210" rx="12" fill="#f8fafc" />
+            {[ [55,150], [80,135], [100,165], [115,125] ].map(([cx,cy],i)=>(<circle key={`a${i}`} cx={cx} cy={cy} r="7" fill="#10b981" />))}
+            {[ [210,75], [235,55], [250,95], [275,65] ].map(([cx,cy],i)=>(<circle key={`b${i}`} cx={cx} cy={cy} r="7" fill="#6366f1" />))}
+            <line x1="145" y1="190" x2="185" y2="20" stroke="#ef4444" strokeWidth="3" strokeDasharray="7 6" />
+            <text x="65" y="190" fontSize="12" fill="#047857" fontWeight="700">Class 0</text>
+            <text x="245" y="30" fontSize="12" fill="#4338ca" fontWeight="700">Class 1</text>
+            <text x="193" y="118" fontSize="11" fill="#b91c1c" fontWeight="700" transform="rotate(-76 193 118)">Decision boundary</text>
+          </svg>
+          <p className="text-sm text-slate-600 text-center mt-3">
+            In the original feature space, standard Logistic Regression creates a
+            linear boundary. Nonlinear feature engineering can make the resulting
+            boundary more flexible.
+          </p>
         </div>
       </div>
 
@@ -720,33 +694,37 @@ export function LogisticRegressionContent() {
           <div className="bg-white p-4 rounded text-center border border-indigo-100 shadow-sm mb-4 font-mono text-indigo-800 overflow-x-auto text-sm sm:text-base">
             J(θ) = -1/m ∑ [y*log(ŷ) + (1-y)*log(1-ŷ)]
           </div>
-          <ul className="text-slate-600 text-sm space-y-1">
-            <li>
-              <strong>y</strong>: Actual value
-            </li>
-            <li>
-              <strong>ŷ</strong>: Predicted probability
-            </li>
-            <li>
-              <strong>m</strong>: Number of samples
-            </li>
+          <ul className="text-slate-600 text-sm space-y-1 mb-4">
+            <li><strong>y</strong>: Actual label (0 or 1)</li>
+            <li><strong>ŷ</strong>: Predicted probability of Class 1</li>
+            <li><strong>m</strong>: Number of samples</li>
           </ul>
+          <div className="bg-white border border-indigo-100 rounded-lg p-4">
+            <p className="font-bold text-indigo-900 mb-2">One-sample example</p>
+            <p className="text-sm text-slate-700 mb-1">Actual label: y = 1</p>
+            <p className="text-sm text-slate-700 mb-1">Predicted probability: ŷ = 0.8</p>
+            <p className="font-mono text-sm text-slate-800 mb-1">Loss = -log(0.8)</p>
+            <p className="font-mono text-sm font-bold text-indigo-800">Loss ≈ 0.223</p>
+            <p className="text-xs text-slate-600 mt-2">A confident correct prediction gets a small loss. If the model predicted 0.1 for this positive example, the loss would be about 2.303.</p>
+          </div>
         </div>
 
         <div className="bg-rose-50 border border-rose-200 p-6 rounded-xl shadow-sm">
           <h4 className="text-xl font-bold text-rose-900 mb-4">
-            Why MSE is Not Used
+            Why Log Loss Fits Logistic Regression
           </h4>
           <p className="text-lg text-slate-700 mb-4">
-            Using Mean Squared Error creates:
+            Log Loss matches the probabilistic model used by binary Logistic
+            Regression. It strongly penalizes confident wrong predictions.
           </p>
           <ul className="list-disc pl-6 space-y-2 text-rose-800 font-medium">
-            <li>Non-convex optimization shape</li>
-            <li>Multiple local minima</li>
-            <li>Difficult optimization & slow learning</li>
+            <li>Uses the predicted probability directly</li>
+            <li>Rewards confident correct predictions</li>
+            <li>Penalizes confident wrong predictions heavily</li>
           </ul>
-          <p className="mt-4 font-bold text-rose-900 bg-rose-100 p-2 rounded text-center shadow-sm">
-            Log Loss solves this problem dynamically.
+          <p className="mt-4 text-sm text-rose-900 bg-rose-100 p-3 rounded shadow-sm">
+            MSE can be computed for probabilities, but it is not the standard
+            training objective for ordinary Logistic Regression.
           </p>
         </div>
       </div>
@@ -755,11 +733,13 @@ export function LogisticRegressionContent() {
         <div className="flex flex-col md:flex-row gap-8 items-center">
           <div className="flex-1">
             <h4 className="text-xl font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">
-              Gradient Descent Formula
+              Gradient Descent Intuition
             </h4>
             <p className="text-lg text-slate-700 mb-4">
-              Gradient Descent heavily optimizes coefficients to minimize Log
-              Loss.
+              One way to understand optimization is to repeatedly move the
+              coefficients in a direction that reduces Log Loss. Practical
+              libraries may use gradient-based, Newton-style, or coordinate-based
+              solvers depending on the settings.
             </p>
             <div className="font-mono text-xl text-indigo-700 bg-slate-50 p-4 rounded text-center border border-slate-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.05)]">
               θ = θ - α(∂J / ∂θ)
@@ -825,7 +805,7 @@ export function LogisticRegressionContent() {
               Odds = 4
             </p>
             <p className="text-sm bg-sky-100 p-2 rounded text-sky-900 italic">
-              Meaning: Positive outcome is 4 times more likely.
+              Meaning: the positive outcome has odds of 4 to 1 against the negative outcome.
             </p>
           </div>
         </div>
@@ -835,15 +815,15 @@ export function LogisticRegressionContent() {
             Logit Function
           </h4>
           <p className="text-lg text-slate-700 mb-4">
-            The logit function converts probability into linear form.
+            The logit converts a probability into log-odds. Logistic Regression models these log-odds as a linear combination of the features.
           </p>
           <div className="bg-white p-3 rounded border border-fuchsia-200 text-fuchsia-800 text-center font-bold font-mono text-lg mb-6">
             Logit = log( P / (1 - P) )
           </div>
           <div className="bg-fuchsia-100 border-l-4 border-fuchsia-500 p-3 rounded-r text-fuchsia-900 font-medium font-sans">
-            <strong>Why Logistic Regression is Linear:</strong> It creates a
-            linear decision boundary even though it predicts probabilities using
-            the sigmoid curve.
+            <strong>Why Logistic Regression is called a linear model:</strong>
+            the log-odds are linear in the input features, so the standard
+            decision boundary is linear in that feature space.
           </div>
         </div>
       </div>
@@ -854,8 +834,9 @@ export function LogisticRegressionContent() {
             <RefreshCw className="mr-2 text-indigo-600" /> Feature Scaling
           </h4>
           <p className="text-lg text-slate-700 mb-4">
-            Feature scaling improves optimization speed immensely during
-            Gradient Descent.
+            Feature scaling is often helpful when numerical features have very
+            different units. It can make optimization more stable for some
+            solvers and makes regularization treat coefficient scales more fairly.
           </p>
           <div className="bg-white p-3 rounded border border-slate-200 text-slate-800 text-center font-bold font-mono text-base mb-4 inline-block shadow-sm">
             X_scaled = (X - μ) / σ
@@ -868,8 +849,11 @@ export function LogisticRegressionContent() {
           <p className="text-slate-700 font-mono text-sm mb-1">
             X = 100, Mean(μ) = 80, StdDev(σ) = 10
           </p>
+          <p className="text-slate-700 font-mono text-sm mb-1">
+            Step 1: 100 - 80 = 20
+          </p>
           <p className="text-slate-700 font-mono text-sm mb-2">
-            X_scaled = (100 - 80) / 10
+            Step 2: 20 / 10 = 2
           </p>
           <p className="text-indigo-800 font-mono font-bold text-lg bg-indigo-50 p-2 rounded text-center border border-indigo-100">
             X_scaled = 2
@@ -967,6 +951,17 @@ export function LogisticRegressionContent() {
               </span>
             </li>
           </ul>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+        <h3 className="text-xl font-bold text-amber-900 mb-4">Metric Example with Small Numbers</h3>
+        <p className="text-slate-700 mb-4">Suppose TP = 8, TN = 7, FP = 1, FN = 2.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div className="bg-white border border-amber-200 rounded p-3"><strong>Accuracy:</strong> (8+7)/(8+7+1+2) = 15/18 ≈ <strong>83.3%</strong></div>
+          <div className="bg-white border border-amber-200 rounded p-3"><strong>Precision:</strong> 8/(8+1) = 8/9 ≈ <strong>88.9%</strong></div>
+          <div className="bg-white border border-amber-200 rounded p-3"><strong>Recall:</strong> 8/(8+2) = 8/10 = <strong>80%</strong></div>
+          <div className="bg-white border border-amber-200 rounded p-3"><strong>F1:</strong> 2×(0.889×0.80)/(0.889+0.80) ≈ <strong>84.2%</strong></div>
         </div>
       </div>
 
@@ -1069,22 +1064,22 @@ export function LogisticRegressionContent() {
               <tbody className="divide-y divide-slate-100">
                 <tr>
                   <th className="py-2 text-slate-500 font-medium">Boundary</th>
-                  <td className="py-2 font-bold text-slate-800">Linear</td>
-                  <td className="py-2 text-slate-600">Nonlinear</td>
+                  <td className="py-2 font-bold text-slate-800">Linear in chosen feature space</td>
+                  <td className="py-2 text-slate-600">Piecewise, axis-aligned splits</td>
                 </tr>
                 <tr>
                   <th className="py-2 text-slate-500 font-medium">
                     Complexity
                   </th>
-                  <td className="py-2 font-bold text-emerald-600">Lower</td>
-                  <td className="py-2 text-rose-600">Higher</td>
+                  <td className="py-2 font-bold text-slate-800">Usually lower</td>
+                  <td className="py-2 text-slate-600">Depends on tree depth</td>
                 </tr>
                 <tr>
                   <th className="py-2 text-slate-500 font-medium">
                     Overfit Risk
                   </th>
-                  <td className="py-2 font-bold text-emerald-600">Lower</td>
-                  <td className="py-2 text-rose-600">Higher</td>
+                  <td className="py-2 font-bold text-slate-800">Depends on regularization</td>
+                  <td className="py-2 text-slate-600">Can be high for deep trees</td>
                 </tr>
               </tbody>
             </table>
@@ -1137,8 +1132,9 @@ export function LogisticRegressionContent() {
       </h2>
       <p className="text-lg leading-relaxed text-slate-700 mb-6">
         Here is a complete, beginner-friendly step-by-step implementation of
-        Logistic Regression using Python, Scikit-Learn, and the Diabetes
-        dataset.
+        Logistic Regression using Python and Scikit-Learn's Breast Cancer
+        Wisconsin dataset. It is a naturally binary classification dataset, so
+        we do not need to manufacture labels from a regression target.
       </p>
 
       {/* End to End Workflow */}
@@ -1221,224 +1217,79 @@ export function LogisticRegressionContent() {
 
         <div className="p-5 bg-white border border-slate-200 rounded-xl shadow-sm">
           <h4 className="font-bold text-slate-800 mb-3 flex items-center border-b border-slate-100 pb-2">
-            <RefreshCw className="w-5 h-5 mr-2 text-emerald-500" /> Binary
-            Conversion
+            <RefreshCw className="w-5 h-5 mr-2 text-emerald-500" /> Natural Binary Labels
           </h4>
           <p className="text-sm text-slate-600 mb-3">
-            Logistic regression requires binary labels. We convert continuous
-            variables to discrete categories.
+            This dataset already contains two target classes, so the example stays
+            a genuine classification problem.
           </p>
-          <div className="flex justify-center items-center gap-4 font-mono text-sm">
-            <div className="flex flex-col gap-2">
-              <div className="bg-slate-100 border border-slate-200 p-2 rounded text-center">
-                Original <br />
-                Values
-              </div>
-              <div className="text-center text-slate-400">↓</div>
-              <div className="bg-slate-100 border border-slate-200 p-2 rounded text-center">
-                Continuous <br />
-                Numbers
-              </div>
+          <div className="grid grid-cols-2 gap-3 font-mono text-sm text-center">
+            <div className="bg-rose-50 text-rose-800 border border-rose-200 p-3 rounded font-bold">
+              0 → Malignant
             </div>
-            <div className="text-slate-400 text-xl font-bold">→</div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-emerald-50 text-emerald-800 border border-emerald-200 p-2 rounded font-bold">
-                Above Median → 1
-              </div>
-              <div className="bg-rose-50 text-rose-800 border border-rose-200 p-2 rounded font-bold">
-                Below Median → 0
-              </div>
+            <div className="bg-emerald-50 text-emerald-800 border border-emerald-200 p-3 rounded font-bold">
+              1 → Benign
             </div>
           </div>
+          <p className="text-xs text-slate-500 mt-3">
+            Educational dataset only; this tutorial is not a clinical diagnostic tool.
+          </p>
         </div>
       </div>
 
       <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 sm:p-8 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 1: Import Required Libraries
-        </span>
-        <span className="text-rose-400">import</span>{" "}
-        <span className="text-sky-300">numpy</span>{" "}
-        <span className="text-rose-400">as</span> np
-        <br />
-        <span className="text-rose-400">import</span>{" "}
-        <span className="text-sky-300">pandas</span>{" "}
-        <span className="text-rose-400">as</span> pd
-        <br />
-        <span className="text-rose-400">import</span>{" "}
-        <span className="text-sky-300">matplotlib.pyplot</span>{" "}
-        <span className="text-rose-400">as</span> plt
-        <br />
-        <br />
-        <span className="text-rose-400">from</span> sklearn.datasets{" "}
-        <span className="text-rose-400">import</span> load_diabetes
-        <br />
-        <span className="text-rose-400">from</span> sklearn.model_selection{" "}
-        <span className="text-rose-400">import</span> train_test_split
-        <br />
-        <span className="text-rose-400">from</span> sklearn.preprocessing{" "}
-        <span className="text-rose-400">import</span> StandardScaler
-        <br />
-        <span className="text-rose-400">from</span> sklearn.linear_model{" "}
-        <span className="text-rose-400">import</span> LogisticRegression
-        <br />
-        <span className="text-rose-400">from</span> sklearn.metrics{" "}
-        <span className="text-rose-400">import</span> accuracy_score,
-        confusion_matrix, classification_report, roc_curve, auc
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 2: Load Dataset and Convert to Binary Target
-        </span>
-        <span className="text-slate-400">
-          # Logistic regression requires binary labels. We convert continuous
-          target to 0 or 1.
-        </span>
-        <br />
-        diabetes = load_diabetes()
-        <br />
-        X = diabetes.data
-        <br />
-        y = diabetes.target
-        <br />
-        y_binary = (y &gt; np.median(y)).astype(
-        <span className="text-sky-300">int</span>)
-        <br />
-        <br />
-        <div className="flex flex-col md:flex-row gap-4 mb-4 mt-6">
-          <div className="bg-[#2d2d2d] border border-slate-600 p-4 rounded-lg flex-1 text-center">
-            <span className="text-slate-300 font-bold mb-2 block font-sans">
-              Train-Test Split
-            </span>
-            <div className="flex justify-center items-center gap-2">
-              <div className="bg-indigo-900/50 text-indigo-300 border border-indigo-700/50 p-2 rounded flex-1">
-                <div className="font-bold">TRAIN</div>
-                <div className="text-xs">80%</div>
-              </div>
-              <div className="bg-emerald-900/50 text-emerald-300 border border-emerald-700/50 p-2 rounded w-24">
-                <div className="font-bold">TEST</div>
-                <div className="text-xs">20%</div>
-              </div>
-            </div>
-            <p className="text-slate-400 mt-2 text-xs font-sans">
-              Training teaches the model; testing evaluates generalization.
-            </p>
-          </div>
-          <div className="bg-[#2d2d2d] border border-slate-600 p-4 rounded-lg flex-1 text-left relative">
-            <span className="text-slate-300 font-bold mb-2 block font-sans">
-              Feature Scaling Example
-            </span>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div>
-                <span className="text-rose-400 mb-1 block">Before Scaling</span>
-                <span className="text-slate-300">
-                  Age = 60
-                  <br />
-                  Income = 500k
-                </span>
-              </div>
-              <div>
-                <span className="text-emerald-400 mb-1 block">
-                  After Scaling
-                </span>
-                <span className="text-slate-300">
-                  Age = 0.8
-                  <br />
-                  Income = 1.1
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 3: Split Dataset (80% Train, 20% Test)
-        </span>
-        X_train, X_test, y_train, y_test = train_test_split(X, y_binary,{" "}
-        <span className="text-sky-300">test_size</span>=
-        <span className="text-amber-300">0.2</span>,{" "}
-        <span className="text-sky-300">random_state</span>=
-        <span className="text-amber-300">42</span>)<br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 4: Feature Scaling (Standardization)
-        </span>
-        scaler = StandardScaler()
-        <br />
-        X_train = scaler.fit_transform(X_train)
-        <br />
-        X_test = scaler.transform(X_test)
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 5: Train Logistic Regression Model
-        </span>
-        model = LogisticRegression()
-        <br />
-        model.fit(X_train, y_train)
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2">
-          # Step 6: Make Predictions & Evaluate
-        </span>
-        y_pred = model.predict(X_test)
-        <br />
-        accuracy = accuracy_score(y_test, y_pred)
-        <br />
-        <span className="text-sky-300">print</span>(
-        <span className="text-amber-300">"Accuracy:"</span>, accuracy)
-        <br />
-        <br />
-        <span className="text-slate-400">
-          # Detailed reports and confusion matrix
-        </span>
-        <br />
-        <span className="text-sky-300">print</span>(confusion_matrix(y_test,
-        y_pred))
-        <br />
-        <span className="text-sky-300">print</span>
-        (classification_report(y_test, y_pred))
-        <br />
-        <br />
-        <span className="text-slate-400"># ROC Curve Calculation</span>
-        <br />
-        y_prob = model.predict_proba(X_test)[:,{" "}
-        <span className="text-amber-300">1</span>]
-        <br />
-        fpr, tpr, thresholds = roc_curve(y_test, y_prob)
-        <br />
-        roc_auc = auc(fpr, tpr)
-        <br />
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 1: Import Libraries</span>
+        <span className="text-rose-400">from</span> sklearn.datasets <span className="text-rose-400">import</span> load_breast_cancer<br />
+        <span className="text-rose-400">from</span> sklearn.model_selection <span className="text-rose-400">import</span> train_test_split<br />
+        <span className="text-rose-400">from</span> sklearn.preprocessing <span className="text-rose-400">import</span> StandardScaler<br />
+        <span className="text-rose-400">from</span> sklearn.linear_model <span className="text-rose-400">import</span> LogisticRegression<br />
+        <span className="text-rose-400">from</span> sklearn.metrics <span className="text-rose-400">import</span> accuracy_score, confusion_matrix, classification_report, roc_auc_score<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 2: Load a Binary Classification Dataset</span>
+        data = load_breast_cancer()<br />
+        X = data.data<br />
+        y = data.target<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 3: Split Before Preprocessing</span>
+        X_train, X_test, y_train, y_test = train_test_split(<br />
+        &nbsp;&nbsp;&nbsp;&nbsp;X, y, test_size=<span className="text-amber-300">0.2</span>, random_state=<span className="text-amber-300">42</span>, stratify=y<br />
+        )<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 4: Fit Scaling on Training Data Only</span>
+        scaler = StandardScaler()<br />
+        X_train_scaled = scaler.fit_transform(X_train)<br />
+        X_test_scaled = scaler.transform(X_test)<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 5: Train Logistic Regression</span>
+        model = LogisticRegression(max_iter=<span className="text-amber-300">1000</span>)<br />
+        model.fit(X_train_scaled, y_train)<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 6: Predict and Evaluate</span>
+        y_pred = model.predict(X_test_scaled)<br />
+        y_prob = model.predict_proba(X_test_scaled)[:, <span className="text-amber-300">1</span>]<br /><br />
+        <span className="text-sky-300">print</span>(<span className="text-amber-300">"Accuracy:"</span>, accuracy_score(y_test, y_pred))<br />
+        <span className="text-sky-300">print</span>(confusion_matrix(y_test, y_pred))<br />
+        <span className="text-sky-300">print</span>(classification_report(y_test, y_pred, target_names=data.target_names))<br />
+        <span className="text-sky-300">print</span>(<span className="text-amber-300">"ROC AUC:"</span>, roc_auc_score(y_test, y_prob))<br />
       </div>
 
       {/* Code Expected Output */}
       <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
         Expected Output
       </h3>
-      <div className="bg-black text-emerald-400 p-6 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        Accuracy: 0.7303370786516854
-        <br />
-        <br />
-        [[32 17]
-        <br />
-        [ 7 33]]
-        <br />
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;precision&nbsp;&nbsp;&nbsp;&nbsp;recall&nbsp;&nbsp;f1-score&nbsp;&nbsp;&nbsp;support
-        <br />
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.65&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;49
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.66&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.82&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;40
-        <br />
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;accuracy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;89
-        <br />
-        &nbsp;&nbsp;&nbsp;macro
-        avg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.74&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.74&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;89
-        <br />
-        weighted
-        avg&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.75&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.73&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;89
+      <div className="bg-black text-emerald-400 p-6 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-4">
+        Accuracy: 0.9824561403508771<br /><br />
+        [[41&nbsp;&nbsp;1]<br />
+        [&nbsp;1&nbsp;71]]<br /><br />
+        malignant&nbsp;&nbsp;precision 0.98&nbsp;&nbsp;recall 0.98&nbsp;&nbsp;f1-score 0.98<br />
+        benign&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;precision 0.99&nbsp;&nbsp;recall 0.99&nbsp;&nbsp;f1-score 0.99<br /><br />
+        ROC AUC: 0.9953703703703703
       </div>
+      <p className="text-sm text-slate-600 mb-12">
+        Example output from the fixed split shown above. Small numerical differences
+        can occur across library versions. A strong score on this teaching dataset
+        should not be interpreted as proof of clinical readiness.
+      </p>
 
       <hr className="border-slate-200 mt-8 mb-10" />
 
@@ -1460,7 +1311,7 @@ export function LogisticRegressionContent() {
                   Ignoring feature scaling:
                 </strong>{" "}
                 <span className="text-sm text-rose-700">
-                  Leads to slow convergence.
+                  Can slow or destabilize optimization when feature scales differ greatly.
                 </span>
               </li>
               <li className="bg-white px-4 py-2 rounded shadow-sm border border-rose-100 flex flex-col">
@@ -1468,7 +1319,7 @@ export function LogisticRegressionContent() {
                   Using wrong threshold:
                 </strong>{" "}
                 <span className="text-sm text-rose-700">
-                  Causes poor classification accuracy.
+                  Can create the wrong trade-off between false positives and false negatives.
                 </span>
               </li>
               <li className="bg-white px-4 py-2 rounded shadow-sm border border-rose-100 flex flex-col">
@@ -1487,13 +1338,40 @@ export function LogisticRegressionContent() {
             Practices
           </h4>
           <ul className="list-disc pl-6 space-y-3 text-emerald-800 text-lg font-medium">
-            <li>Perform feature scaling.</li>
+            <li>Scale numerical features when feature scales differ substantially or the chosen solver/regularization benefits from it.</li>
             <li>Use cross-validation.</li>
             <li>Tune threshold carefully based on business context.</li>
-            <li>Handle class imbalance (e.g. SMOTE).</li>
+            <li>Handle class imbalance thoughtfully; consider class weights, resampling, and suitable metrics rather than applying one technique automatically.</li>
             <li>Evaluate multiple metrics (F1, Precision, Recall).</li>
             <li>Use Regularization (L1/L2) if needed.</li>
           </ul>
+        </div>
+      </div>
+
+      <div className="bg-violet-50 border border-violet-200 rounded-xl p-6 mb-10">
+        <h2 className="text-2xl font-bold text-violet-900 mb-4">Regularization in Scikit-Learn Logistic Regression</h2>
+        <p className="text-slate-700 mb-4">
+          Scikit-Learn's LogisticRegression applies regularization by default. The
+          parameter <code className="bg-white px-1.5 py-0.5 rounded border">C</code>
+          controls its strength inversely.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div className="bg-white border border-violet-200 rounded p-3"><strong>Smaller C</strong> → stronger regularization</div>
+          <div className="bg-white border border-violet-200 rounded p-3"><strong>Larger C</strong> → weaker regularization</div>
+        </div>
+        <p className="text-sm text-slate-600 mt-3">
+          The available L1, L2, or Elastic-Net choices depend on the solver. Choose
+          settings with validation rather than assuming one value is always best.
+        </p>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-10">
+        <h2 className="text-2xl font-bold text-slate-800 mb-4">Common Questions</h2>
+        <div className="space-y-4 text-slate-700">
+          <div><strong>Why is it called regression if it performs classification?</strong><br />Because it models the log-odds as a regression-like linear equation, then converts the result to a probability and class decision.</div>
+          <div><strong>Is 0.5 always the best threshold?</strong><br />No. The threshold should reflect validation results and the real cost of false positives versus false negatives.</div>
+          <div><strong>Can Logistic Regression handle more than two classes?</strong><br />Yes. Multinomial logistic regression can handle multiple unordered classes. Ordered outcomes require specialized ordinal models.</div>
+          <div><strong>What should I learn next?</strong><br />Continue with <a className="text-indigo-700 font-semibold hover:underline" href="/learn/decision-trees">Decision Trees</a>, or revisit <a className="text-indigo-700 font-semibold hover:underline" href="/learn/confusion-matrix">Confusion Matrix</a> and <a className="text-indigo-700 font-semibold hover:underline" href="/learn/roc-auc">ROC-AUC</a> for evaluation.</div>
         </div>
       </div>
 
@@ -1505,13 +1383,13 @@ export function LogisticRegressionContent() {
         Logistic Regression is a classification algorithm in Machine Learning. It works by taking a linear combination of inputs, passing them through a Sigmoid Function, outputting a probability, and assigning a class based on a threshold.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Its major strengths include simplicity, computational speed, interpretability, and providing exact probabilistic predictions. It is best used for clear binary classification problems like Spam Detection, Medical Diagnosis, and Credit Risk Analysis.
+        Its major strengths include simplicity, computational efficiency, and coefficient-based interpretability. It can provide useful estimated probabilities, but those probabilities should still be evaluated for calibration and used with a threshold that fits the problem. It is a strong baseline for many binary and multiclass classification tasks.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Logistic Regression is not just an endpoint; it forms the core foundational building block for understanding neural networks, deep learning activation functions, and advanced probabilistic modeling."
+           "The key idea is simple: Logistic Regression turns a linear score into an estimated probability, then uses a decision rule to choose a class."
          </p>
       </div>
 
