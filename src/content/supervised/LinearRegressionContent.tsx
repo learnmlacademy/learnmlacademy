@@ -46,8 +46,48 @@ export function LinearRegressionContent() {
 
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">What is Linear Regression?</h2>
         <p className="text-lg leading-relaxed mb-4">
-          Linear Regression is a supervised machine learning algorithm used to predict continuous values by modeling a linear relationship between variables.
+          Linear Regression is a supervised machine learning algorithm used to predict continuous values by modeling an approximately straight-line relationship between input variables and a numerical target.
         </p>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm">
+          <p className="font-bold text-slate-900 mb-3">Linear Regression in Simple Words</p>
+          <p className="text-slate-700 mb-4">
+            We show the model some examples where the answer is already known. It looks for a straight-line trend and then uses that trend to predict a new number.
+          </p>
+          <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+            {[
+              ["1", "Past Examples", "Hours + marks"],
+              ["2", "Find a Trend", "Draw a best-fit line"],
+              ["3", "New Input", "A student studies 5 hours"],
+              ["4", "Prediction", "Predict the marks"],
+            ].map(([step, title, note]) => (
+              <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50">
+                <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">{step}</div>
+                <p className="font-bold text-slate-800">{title}</p>
+                <p className="text-slate-600 mt-1">{note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-lg border border-slate-200 mb-6">
+          <table className="min-w-full bg-white text-sm">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="px-4 py-3 text-left font-bold text-slate-800">Study Hours</th>
+                <th className="px-4 py-3 text-left font-bold text-slate-800">Exam Score</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {[[1,40],[2,50],[3,60],[4,70]].map(([h,score]) => (
+                <tr key={h}>
+                  <td className="px-4 py-3">{h}</td>
+                  <td className="px-4 py-3">{score}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <p className="text-lg text-slate-700 italic leading-relaxed mb-6">
           "Imagine observing a pattern: As study hours increase, exam scores increase approximately in a straight-line manner. Linear regression learns this relationship and predicts future values."
@@ -128,7 +168,7 @@ export function LinearRegressionContent() {
               </tr>
               <tr className="hover:bg-slate-50">
                 <td className="px-6 py-4 font-semibold text-slate-900">Slope</td>
-                <td className="px-6 py-4">Change in Y with respects to X. Controls line steepness.</td>
+                <td className="px-6 py-4">Change in Y with respect to X. It controls how steeply the line rises or falls.</td>
               </tr>
               <tr className="hover:bg-slate-50">
                 <td className="px-6 py-4 font-semibold text-slate-900">Intercept</td>
@@ -136,7 +176,7 @@ export function LinearRegressionContent() {
               </tr>
               <tr className="hover:bg-slate-50">
                 <td className="px-6 py-4 font-semibold text-slate-900">Residual/Error</td>
-                <td className="px-6 py-4">Difference between actual actual data point and predicted value.</td>
+                <td className="px-6 py-4">Difference between the actual value and the predicted value.</td>
               </tr>
             </tbody>
           </table>
@@ -149,7 +189,7 @@ export function LinearRegressionContent() {
       <div className="mb-10">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Best-Fit Line in Linear Regression</h2>
         <p className="text-lg leading-relaxed mb-4">
-          In linear regression, the best-fit line is a straight line that describes the relationship between an input variable and an output variable in the most accurate way possible. This line is used to estimate or predict values based on existing data.
+          In simple linear regression, the best-fit line is the straight line that minimizes a chosen error measure—commonly the sum of squared residuals—between the observed values and the line. This line is used to estimate or predict values based on existing data.
         </p>
         <p className="text-lg leading-relaxed mb-6">
           The purpose of the best-fit line is to create a mathematical relationship between variables so that future outcomes can be predicted more easily.
@@ -161,10 +201,10 @@ export function LinearRegressionContent() {
           <li><strong>X</strong> represents the independent variable (input or predictor).</li>
           <li><strong>Y</strong> represents the dependent variable (output or target).</li>
         </ul>
-        <p className="text-lg leading-relaxed mb-4">The regression model studies how changes in X influence the value of Y.</p>
+        <p className="text-lg leading-relaxed mb-4">The regression model estimates how Y tends to change as X changes. A fitted relationship does not by itself prove that X causes Y.</p>
         <ul className="list-disc pl-5 space-y-2 text-lg text-slate-800 mb-6">
-          <li><strong>θ₁ (Intercept):</strong> Represents the value of Y when X is equal to 0.</li>
-          <li><strong>θ₂ (Slope):</strong> Indicates how much Y changes when X increases by one unit.</li>
+          <li><strong>b (Intercept):</strong> Represents the predicted value of Y when X is equal to 0.</li>
+          <li><strong>m (Slope):</strong> Indicates how much predicted Y changes when X increases by one unit.</li>
         </ul>
         
         <p className="text-lg leading-relaxed mb-4">Linear regression can work with:</p>
@@ -206,6 +246,16 @@ export function LinearRegressionContent() {
             <li><strong>yᵢ</strong> = actual observed value</li>
             <li><strong>ŷᵢ</strong> = predicted value from the regression line</li>
           </ul>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6">
+          <p className="font-bold text-slate-800 mb-3">Residual in One Tiny Example</p>
+          <div className="grid sm:grid-cols-3 gap-3 text-center text-sm">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3"><p className="text-slate-500">Actual score</p><p className="font-bold text-slate-900 text-lg">70</p></div>
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3"><p className="text-slate-500">Predicted score</p><p className="font-bold text-slate-900 text-lg">66</p></div>
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3"><p className="text-indigo-700">Residual</p><p className="font-bold text-indigo-900 text-lg">70 - 66 = 4</p></div>
+          </div>
+          <p className="text-sm text-slate-600 mt-3">A positive residual means the actual value is above the prediction; a negative residual means it is below the prediction.</p>
         </div>
 
         <p className="text-lg leading-relaxed mb-4">
@@ -326,8 +376,8 @@ export function LinearRegressionContent() {
               const y = 270 - v*3;
               return <g key={v}><line x1="54" y1={y} x2="60" y2={y} stroke="#94a3b8" strokeWidth="1.5"/><text x="50" y={y+4} textAnchor="end" fill="#64748b" fontSize="10">{v}</text></g>
             })}
-            {/* Best-fit line: y = 0.038x + 1.6 (approximate) */}
-            <line x1="64" y1={270-((800*0.038)+2)*3} x2="515" y2={270-((1800*0.038)+2)*3} stroke="#4f46e5" strokeWidth="2.5"/>
+            {/* Best-fit line for this sample: y ≈ 0.04019x - 0.639 */}
+            <line x1="64" y1={270-((800*0.04019)-0.639)*3} x2="515" y2={270-((1800*0.04019)-0.639)*3} stroke="#4f46e5" strokeWidth="2.5"/>
             <text x="480" y="78" fill="#4f46e5" fontSize="11" fontWeight="bold">Best-fit</text>
             <text x="480" y="91" fill="#4f46e5" fontSize="11" fontWeight="bold">line</text>
             {/* Data points */}
@@ -345,10 +395,10 @@ export function LinearRegressionContent() {
           <h4 className="font-bold text-indigo-900 text-lg mb-4">Step-by-Step: Finding the Best-Fit Line</h4>
           <div className="space-y-3">
             {[
-              ["Step 1 — Calculate means", "Mean of X (sizes): (800+1000+1200+1500+1800)/5 = 1260 sq ft", "Mean of Y (prices): (32+40+46+60+72)/5 = 50 lakhs"],
-              ["Step 2 — Calculate slope (m)", "m = Σ(xᵢ - x̄)(yᵢ - ȳ) / Σ(xᵢ - x̄)²", "m ≈ 0.038  (for every 1 sq ft increase, price rises by ₹0.038L)"],
-              ["Step 3 — Calculate intercept (b)", "b = ȳ - m × x̄", "b = 50 - 0.038 × 1260 ≈ 2.12"],
-              ["Step 4 — Final equation", "y = 0.038x + 2.12", "This is your trained linear regression model!"],
+              ["Step 1 — Calculate means", "Mean of X: (800+1000+1200+1500+1800)/5 = 1260 sq ft", "Mean of Y: (32+40+46+60+72)/5 = 50 lakhs"],
+              ["Step 2 — Calculate slope (m)", "m = Σ(xᵢ - x̄)(yᵢ - ȳ) / Σ(xᵢ - x̄)² = 25400 / 632000", "m ≈ 0.04019 lakh per sq ft"],
+              ["Step 3 — Calculate intercept (b)", "b = ȳ - m × x̄", "b = 50 - (0.04019 × 1260) ≈ -0.64"],
+              ["Step 4 — Final equation", "ŷ = 0.04019x - 0.64", "This line gives the least-squares prediction for this five-house sample."],
             ].map(([title, line1, line2], i) => (
               <div key={i} className="flex gap-3">
                 <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center flex-shrink-0 mt-1">{i+1}</span>
@@ -367,9 +417,9 @@ export function LinearRegressionContent() {
           <h4 className="font-bold text-emerald-900 text-lg mb-3">Making a Prediction</h4>
           <p className="text-emerald-800 mb-3">A new house has <strong>1400 sq ft</strong>. What is the predicted price?</p>
           <div className="font-mono bg-white border border-emerald-200 rounded-lg p-4 space-y-1 text-sm">
-            <p>y = 0.038 × 1400 + 2.12</p>
-            <p>y = 53.2 + 2.12</p>
-            <p className="font-bold text-emerald-700 text-base">y = ₹55.32 Lakhs ← Predicted Price</p>
+            <p>ŷ = 0.04019 × 1400 − 0.64</p>
+            <p>ŷ ≈ 56.27 − 0.64</p>
+            <p className="font-bold text-emerald-700 text-base">ŷ ≈ ₹55.63 Lakhs ← Predicted Price</p>
           </div>
         </div>
       </div>
@@ -478,7 +528,7 @@ export function LinearRegressionContent() {
                   {["Area (sq ft)","Bedrooms","Bathrooms","Age (yrs)","Price (₹L)"].map(h=><th key={h} className="p-2 text-left text-slate-600 text-xs">{h}</th>)}
                 </tr></thead>
                 <tbody className="divide-y divide-slate-100">
-                  {[["1000","2","1","5","52.5"],["1500","3","2","3","82.5"],["2000","4","3","1","114.5"],["800","2","1","10","40.5"]].map((row,i)=>(
+                  {[["1000","2","1","5","61.0"],["1500","3","2","3","95.0"],["2000","4","3","1","129.0"],["800","2","1","10","50.5"]].map((row,i)=>(
                     <tr key={i} className="hover:bg-slate-50">{row.map((v,j)=><td key={j} className={`p-2 font-mono text-xs ${j===4?"text-emerald-700 font-bold":"text-slate-700"}`}>{v}</td>)}</tr>
                   ))}
                 </tbody>
@@ -492,7 +542,7 @@ export function LinearRegressionContent() {
               <p>Price = 2.5 + 48 + 24 + 10 − 2</p>
               <p className="font-bold text-emerald-700 text-base">Price = ₹82.5 Lakhs ← Predicted Price</p>
             </div>
-            <p className="text-emerald-700 text-xs mt-2">Each feature contributes independently — area adds ₹0.04L per sq ft, each bedroom adds ₹8L, etc.</p>
+            <p className="text-emerald-700 text-xs mt-2">In this illustrative equation, each coefficient shows the model's predicted change in price when that feature changes by one unit while the other listed features are held constant.</p>
           </div>
         </div>
       </div>
@@ -503,17 +553,25 @@ export function LinearRegressionContent() {
       <div className="mb-10">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Assumptions of Linear Regression</h2>
         <p className="text-lg leading-relaxed mb-4">
-          Linear Regression works properly only when certain statistical assumptions are satisfied:
+          Linear Regression can still produce predictions when these conditions are imperfect, but checking them helps us decide whether the fitted line and its coefficients are trustworthy.
         </p>
 
-        <div className="mb-6 pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md text-lg text-slate-800">
-          <ul className="list-disc pl-5 space-y-3">
-            <li><strong>Linearity:</strong> The relationship between X and Y should genuinely be linear. (Not a U-shape).</li>
-            <li><strong>Independence of Errors:</strong> Prediction errors should not form a predictable pattern over time.</li>
-            <li><strong>Homoscedasticity:</strong> The spread of errors should remain roughly constant across all predictions, rather than fanning out.</li>
-            <li><strong>Normal Distribution of Errors:</strong> The residuals should follow a bell curve distribution.</li>
-            <li><strong>No Multicollinearity:</strong> Independent variables should not be highly correlated with each other (e.g., area in sq ft and area in sq meters).</li>
-          </ul>
+        <div className="overflow-x-auto rounded-lg border border-slate-200 mb-6">
+          <table className="min-w-full bg-white text-sm">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="px-4 py-3 text-left font-bold text-slate-800">Check</th>
+                <th className="px-4 py-3 text-left font-bold text-slate-800">Simple Meaning</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-slate-700">
+              <tr><td className="px-4 py-3 font-semibold">Linearity</td><td className="px-4 py-3">A straight-line relationship is a reasonable approximation.</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Independent errors</td><td className="px-4 py-3">One residual should not systematically tell us the next residual.</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Roughly constant error spread</td><td className="px-4 py-3">Residuals should not strongly fan out as predictions increase.</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Residual normality</td><td className="px-4 py-3">Most important for classical confidence intervals and significance tests; it is not required just to draw a least-squares line.</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Low severe multicollinearity</td><td className="px-4 py-3">In multiple regression, nearly duplicate predictors can make individual coefficient estimates unstable.</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
@@ -535,19 +593,26 @@ export function LinearRegressionContent() {
           
           <div className="mt-4 border-t border-blue-200 pt-4">
             <p className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-2">Worked-Out Example</p>
-            <ul className="list-disc list-inside text-slate-800 mb-2 font-mono">
-              <li>Actual: 10, Predicted: 12 ➔ (10 - 12)² = 4</li>
-              <li>Actual: 20, Predicted: 18 ➔ (20 - 18)² = 4</li>
-              <li>Actual: 30, Predicted: 33 ➔ (30 - 33)² = 9</li>
-            </ul>
-            <code className="text-slate-900 font-mono block font-bold">MSE = (4 + 4 + 9) / 3 = 17 / 3 = 5.67</code>
+            <div className="space-y-2 text-slate-800 font-mono text-sm">
+              <p><strong>Step 1:</strong> Errors are -2, 2, and -3.</p>
+              <p><strong>Step 2:</strong> Square them: 4, 4, and 9.</p>
+              <p><strong>Step 3:</strong> Add squared errors: 4 + 4 + 9 = 17.</p>
+              <p><strong>Step 4:</strong> Divide by 3 observations: 17 / 3 = 5.67.</p>
+            </div>
+            <code className="text-slate-900 font-mono block font-bold mt-3">MSE = 5.67</code>
           </div>
         </div>
 
         <h3 className="text-2xl font-bold text-indigo-800 mb-4 mt-8">Gradient Descent Optimization</h3>
         <p className="text-lg leading-relaxed mb-4">
-          Gradient Descent minimizes the cost function by iteratively adjusting the intercept and slope parameters. It calculates the error, computes the gradient (steepness), and updates parameters downwards until reaching the minimum error.
+          Gradient Descent is one way to minimize a cost function: it repeatedly adjusts parameters in the direction that reduces error. It is very useful for understanding optimization and for many large-scale models.
         </p>
+        <div className="mb-6 pl-4 border-l-4 border-sky-400 bg-sky-50 py-4 pr-4 rounded-r-md">
+          <p className="font-bold text-sky-900 mb-1">Important implementation note</p>
+          <p className="text-slate-700">
+            Scikit-learn's standard <code className="bg-white px-1 rounded">LinearRegression</code> fits ordinary least squares by minimizing residual sum of squares; it is not a gradient-descent estimator. We keep Gradient Descent here because it explains the general idea of minimizing regression error.
+          </p>
+        </div>
 
         <div className="h-[300px] w-full max-w-2xl mb-6 bg-slate-50 border border-slate-200 rounded-lg p-4">
           <p className="text-center font-bold text-slate-700 mb-2 uppercase text-xs tracking-widest">Error Minimization Curve</p>
@@ -566,7 +631,7 @@ export function LinearRegressionContent() {
           <ul className="list-disc list-inside text-slate-800 space-y-1">
             <li><strong>Small Learning Rate:</strong> Slow learning, takes a long time to reach minimum.</li>
             <li><strong>Large Learning Rate:</strong> Might overshoot the minimum completely and fail to converge.</li>
-            <li><strong>Optimal Learning Rate:</strong> Fast, steady convergence to the mathematical minimum.</li>
+            <li><strong>Suitable Learning Rate:</strong> Makes useful progress without repeatedly overshooting the minimum.</li>
           </ul>
         </div>
       </div>
@@ -595,7 +660,15 @@ export function LinearRegressionContent() {
         <h3 className="text-2xl font-bold text-indigo-800 mb-4 mt-6">3. R-Squared Score (R²)</h3>
         <div className="mb-6 pl-4 border-l-4 border-teal-400 bg-teal-50 py-4 pr-4 rounded-r-md">
           <code className="text-slate-900 font-mono text-xl block mb-2">R² = 1 - (SS_res / SS_tot)</code>
-          <p className="text-slate-800">Measures how well the model explains variance. 1 is perfectly accurate, 0 is terribly poor.</p>
+          <p className="text-slate-800 mb-3">
+            R² compares the model with a simple baseline that always predicts the mean target. A score of 1 is perfect, around 0 is similar to that mean baseline, and R² can be negative when the model performs worse than the baseline.
+          </p>
+          <div className="font-mono text-sm bg-white border border-teal-200 rounded-lg p-3 space-y-1">
+            <p>Suppose SS_res = 2 and SS_tot = 10</p>
+            <p>R² = 1 - (2 / 10)</p>
+            <p>R² = 1 - 0.2</p>
+            <p className="font-bold text-teal-700">R² = 0.8</p>
+          </div>
         </div>
       </div>
 
@@ -624,9 +697,15 @@ model.fit(X, Y)
 # Step 4 — Prediction
 Y_pred = model.predict(X)
 
-# Step 5 — Visualization
+# Step 5 — Inspect the learned line
+print("Slope:", round(float(model.coef_[0, 0]), 2))
+print("Intercept:", round(float(model.intercept_[0]), 2))
+
+# Step 6 — Visualization
 plt.scatter(X, Y)
-plt.plot(X, Y_pred)
+plt.plot(X, Y_pred, color="red")
+plt.xlabel("X")
+plt.ylabel("Y")
 plt.show()`}</code></pre>
         </div>
         
@@ -636,14 +715,23 @@ plt.show()`}</code></pre>
             <li><code className="text-sm bg-slate-200 px-1 rounded">import ...</code>: We import <code className="text-sm bg-slate-200 px-1 rounded">numpy</code> for mathematical arrays, <code className="text-sm bg-slate-200 px-1 rounded">matplotlib.pyplot</code> for plotting charts, and <code className="text-sm bg-slate-200 px-1 rounded">LinearRegression</code> from Scikit-Learn to build the model.</li>
             <li><code className="text-sm bg-slate-200 px-1 rounded">np.random.seed(42)</code>: Ensures our random dataset is exactly the same every time we run the code.</li>
             <li><code className="text-sm bg-slate-200 px-1 rounded">X = ...</code> and <code className="text-sm bg-slate-200 px-1 rounded">Y = ...</code>: We generate 50 random samples. X is between 0 and 100. Y is created using a linear relationship (3.5 * X) with some added random noise.</li>
-            <li><code className="text-sm bg-slate-200 px-1 rounded">model.fit(X, Y)</code>: This is the actual <strong>training</strong> step. The algorithm calculates the best slope and intercept using Gradient Descent (or ordinary least squares).</li>
+            <li><code className="text-sm bg-slate-200 px-1 rounded">model.fit(X, Y)</code>: This is the <strong>training</strong> step. Scikit-learn fits the ordinary least-squares line that minimizes residual sum of squares.</li>
             <li><code className="text-sm bg-slate-200 px-1 rounded">Y_pred = ...</code>: Once trained, we feed X back into the model to predict what it thinks Y should be, creating our best-fit line.</li>
             <li><code className="text-sm bg-slate-200 px-1 rounded">plt.scatter... plt.plot...</code>: Projects the original noisy data points (scatter) and overlays the predicted line (plot) visually.</li>
           </ul>
         </div>
 
+        <div className="bg-white border-x border-slate-200 p-5">
+          <p className="font-bold text-slate-800 mb-2 text-sm">Expected numeric output for the fixed random seed</p>
+          <pre className="bg-slate-900 text-slate-100 rounded-lg p-4 text-sm overflow-x-auto"><code>{`Slope: 3.46
+Intercept: 1.93`}</code></pre>
+          <p className="text-sm text-slate-600 mt-2">
+            The underlying data was generated with a slope near 3.5, so the fitted slope being close to 3.5 is a useful sanity check.
+          </p>
+        </div>
+
         <div className="bg-[#0cf277]/10 border border-[#0cf277]/30 p-5 rounded-b-lg mb-8">
-          <p className="font-bold text-[#09994c] mb-4 uppercase text-xs tracking-wider">Visual Output (Matplotlib Simulation):</p>
+          <p className="font-bold text-[#09994c] mb-4 uppercase text-xs tracking-wider">Illustrative Visual Output:</p>
           <div className="h-[350px] w-full max-w-2xl bg-white border border-slate-200 rounded p-4 shadow-sm">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={pythonVizData} margin={{ top: 10, right: 20, bottom: 20, left: 0 }}>
@@ -686,17 +774,17 @@ plt.show()`}</code></pre>
              <h3 className="text-xl font-bold text-green-700 mb-4">Advantages</h3>
              <ul className="list-disc list-inside text-slate-700 space-y-2">
                <li><strong>Simple:</strong> Very easy to understand mathematically.</li>
-               <li><strong>Fast:</strong> Computationally lightweight and extremely efficient to train.</li>
+               <li><strong>Fast:</strong> Often computationally lightweight compared with many more complex models.</li>
                <li><strong>Interpretable:</strong> Coefficients directly explain relationships.</li>
-               <li><strong>Scalable:</strong> Can handle exceptionally large datasets effortlessly.</li>
+               <li><strong>Useful Baseline:</strong> Provides a strong, interpretable starting point for many regression problems.</li>
              </ul>
           </div>
           <div className="flex-1 bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
              <h3 className="text-xl font-bold text-rose-700 mb-4">Limitations</h3>
              <ul className="list-disc list-inside text-slate-700 space-y-2">
-               <li><strong>Assumes Linearity:</strong> Very poor for complex curved nonlinear data.</li>
-               <li><strong>Sensitive:</strong> Outliers heavily distort and warp the regression line.</li>
-               <li><strong>Multicollinearity:</strong> Correlated input features trigger massive instability.</li>
+               <li><strong>Linear Form:</strong> A straight-line model may underfit strongly curved relationships unless useful transformations or features are added.</li>
+               <li><strong>Outlier Sensitivity:</strong> Squared-error fitting can be strongly influenced by extreme observations.</li>
+               <li><strong>Multicollinearity:</strong> Highly correlated predictors can make individual coefficients unstable and harder to interpret.</li>
                <li><strong>Underfitting:</strong> Can be too naive for highly complex phenomena.</li>
              </ul>
           </div>
@@ -709,7 +797,7 @@ plt.show()`}</code></pre>
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-6">
           <ul className="space-y-4 text-slate-800">
             <li><span className="font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded text-sm mr-2">UNDERFIT</span> Model is too simple. The line ignores distinct complex patterns.</li>
-            <li><span className="font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-sm mr-2">GOOD FIT</span> Model balances the trend and noise perfectly.</li>
+            <li><span className="font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-sm mr-2">GOOD FIT</span> Model captures the main trend without chasing every fluctuation.</li>
             <li><span className="font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2 py-1 rounded text-sm mr-2">OVERFIT</span> Model is too complex, attempting to hit every single point (jagged line).</li>
           </ul>
         </div>
@@ -763,6 +851,37 @@ plt.show()`}</code></pre>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
+      <div className="mb-10">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Common Questions About Linear Regression</h2>
+        <div className="space-y-4">
+          <div className="border border-slate-200 rounded-lg p-4 bg-white">
+            <p className="font-bold text-slate-900">Does the best-fit line have to pass through every point?</p>
+            <p className="text-slate-700 mt-1">No. Real data contains noise. The goal is to minimize overall error, not to touch every observation.</p>
+          </div>
+          <div className="border border-slate-200 rounded-lg p-4 bg-white">
+            <p className="font-bold text-slate-900">Can Linear Regression predict categories such as Pass or Fail?</p>
+            <p className="text-slate-700 mt-1">It is designed for numerical targets. For a category such as Pass/Fail, a classification method such as Logistic Regression is usually more appropriate.</p>
+          </div>
+          <div className="border border-slate-200 rounded-lg p-4 bg-white">
+            <p className="font-bold text-slate-900">Does a large positive slope prove that X causes Y?</p>
+            <p className="text-slate-700 mt-1">No. Regression describes an association in the fitted data. Causal conclusions require additional study design and assumptions.</p>
+          </div>
+        </div>
+
+        <div className="mt-6 bg-indigo-50 border border-indigo-100 rounded-xl p-5">
+          <p className="font-bold text-indigo-900 mb-2">Continue Learning</p>
+          <p className="text-slate-700 mb-3">Now that the line, residuals, and error are clear, continue with the topics that explain optimization and regularization.</p>
+          <div className="flex flex-wrap gap-3 text-sm">
+            <a href="/learn/gradient-descent" className="font-semibold text-indigo-700 hover:underline">Gradient Descent →</a>
+            <a href="/learn/polynomial-regression" className="font-semibold text-indigo-700 hover:underline">Polynomial Regression →</a>
+            <a href="/learn/ridge-regression" className="font-semibold text-indigo-700 hover:underline">Ridge Regression →</a>
+            <a href="/learn/lasso-regression" className="font-semibold text-indigo-700 hover:underline">Lasso Regression →</a>
+          </div>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
       {/* 12. Final Summary Pipeline & Conclusion */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
         Final Summary
@@ -772,13 +891,13 @@ plt.show()`}</code></pre>
       </p>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        You should use Linear Regression when the relationship is approximately linear, interpretability matters heavily for stakeholders, the dataset is not extremely complex, and fast training is required for rapid iterations.
+        Linear Regression is a strong starting choice when an approximately linear relationship is plausible, interpretability matters, and you want a simple baseline before trying more complex models.
       </p>
       
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Although modern AI systems use advanced techniques like neural networks and ensemble models, Linear Regression remains the most essential mathematical foundation for understanding how machines actually learn from data."
+           "Linear Regression is valuable because one simple line connects data, prediction, error, optimization, coefficients, and model evaluation in a form that is easy to inspect."
          </p>
       </div>
 
