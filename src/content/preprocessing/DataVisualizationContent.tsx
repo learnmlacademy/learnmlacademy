@@ -1,13 +1,10 @@
 import React from "react";
 import {
   Code,
-  Eye,
-  PieChart,
   BarChart2,
   Activity,
   Layers,
   BrainCircuit,
-  MapPin,
   Clock,
   Type,
 } from "lucide-react";
@@ -54,7 +51,7 @@ function CodeBlock({
 export function DataVisualizationContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Data Visualization</h1>
+      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Data Visualization for Machine Learning</h1>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
         Data visualization is the graphic representation of information and
@@ -65,22 +62,90 @@ export function DataVisualizationContent() {
 
       <p>
         In 1973, statistician Francis Anscombe created "Anscombe's Quartet,"
-        presenting four distinct datasets that had the exact same mathematical
-        properties (Mean, Variance, Correlation). Yet, when plotted visually,
-        all four datasets looked widely different. Mathematical statistics can
-        lie to you; your eyes will not. Visualization bridges the gap between
-        abstract numbers and human intuition.
+        showing that datasets can have very similar summary statistics while
+        looking very different when plotted. The lesson is not that statistics
+        are wrong, but that <strong>numbers and visuals should be used together</strong>.
+        A chart can reveal shape, unusual points, and relationships that a single
+        summary number may hide. Charts can also mislead when they are designed
+        poorly, so we must learn how to read them carefully.
       </p>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Data Visualization in Simple Words
+      </h2>
+      <p>
+        Data visualization means <strong>turning numbers into a picture that answers a question</strong>.
+        You do not choose a chart because it looks attractive. You choose it because
+        it makes one idea easier to see.
+      </p>
+
+      <div className="my-6 not-prose overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <table className="w-full min-w-[620px] text-sm text-left border-collapse">
+          <thead className="bg-slate-100 text-slate-800">
+            <tr>
+              <th className="p-3 border-b">Question</th>
+              <th className="p-3 border-b">Simple Example</th>
+              <th className="p-3 border-b">Useful Chart</th>
+            </tr>
+          </thead>
+          <tbody className="text-slate-700">
+            <tr className="border-b">
+              <td className="p-3">Which class scored highest?</td>
+              <td className="p-3">Class A, B, C marks</td>
+              <td className="p-3 font-semibold">Bar chart</td>
+            </tr>
+            <tr className="border-b">
+              <td className="p-3">Are marks improving each month?</td>
+              <td className="p-3">Monthly test marks</td>
+              <td className="p-3 font-semibold">Line chart</td>
+            </tr>
+            <tr className="border-b">
+              <td className="p-3">Do more study hours relate to higher marks?</td>
+              <td className="p-3">Study hours vs marks</td>
+              <td className="p-3 font-semibold">Scatter plot</td>
+            </tr>
+            <tr className="border-b">
+              <td className="p-3">How are exam scores distributed?</td>
+              <td className="p-3">Scores of 100 students</td>
+              <td className="p-3 font-semibold">Histogram</td>
+            </tr>
+            <tr>
+              <td className="p-3">Are there unusual values?</td>
+              <td className="p-3">Typical salaries plus a few extreme salaries</td>
+              <td className="p-3 font-semibold">Box plot</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-4 my-6 not-prose">
+        {[
+          ["1", "Ask a question", "What exactly do I want to understand?"],
+          ["2", "Choose a chart", "Pick the simplest chart that answers that question."],
+          ["3", "Read the message", "Look for trend, comparison, relationship, spread, or unusual values."],
+        ].map(([step, title, text]) => (
+          <div key={step} className="rounded-xl border border-indigo-100 bg-indigo-50 p-4">
+            <div className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-1">Step {step}</div>
+            <div className="font-bold text-slate-900 mb-1">{title}</div>
+            <div className="text-sm text-slate-700">{text}</div>
+          </div>
+        ))}
+      </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Analytical Approaches: Univariate, Bivariate, and Multivariate
       </h2>
 
       <p>
-        Before plotting data randomly, it is essential to define the strategy
-        for Data Analysis. Visualizations typically fall into one of three
-        distinct categories.
+        Before plotting data randomly, first ask how many variables you are
+        trying to understand. Visualizations commonly fall into three simple
+        categories.
       </p>
+
+      <div className="my-5 not-prose rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+        <strong>Easy memory trick:</strong> One variable = <strong>Uni</strong>variate,
+        two variables = <strong>Bi</strong>variate, and more than two = <strong>Multi</strong>variate.
+      </div>
 
       <div className="grid md:grid-cols-3 gap-4 my-6 not-prose">
         <div className="border border-slate-200 p-5 rounded-xl bg-white shadow-sm border-t-4 border-t-blue-500">
@@ -138,10 +203,10 @@ export function DataVisualizationContent() {
         Taxonomy of Data Visualizations
       </h2>
       <p>
-        Different data requires different chart types. By mapping variables
-        correctly to visual channels (length, position, color), we create
-        interpretable insights. Here is a hierarchy of widely-used visualization
-        charts.
+        Different questions need different chart types. The diagram below is a
+        reference map of common visualization families; you do not need to
+        memorize every chart at once. Start with bar, line, scatter, histogram,
+        box plot, and heatmap, then learn specialized charts when a problem needs them.
       </p>
 
       {/* SVG Hierarchical Tree for Types of Charts */}
@@ -367,19 +432,17 @@ export function DataVisualizationContent() {
       </h3>
       <ul>
         <li>
-          <strong>Histogram:</strong> Best for observing the continuous
-          distribution of a single numerical variable. Identifies skewness and
-          normality.
+          <strong>Histogram:</strong> Useful for seeing the distribution of a
+          numerical variable. It can reveal shape, skewness, gaps, and multiple peaks.
         </li>
         <li>
-          <strong>Scatter Plot:</strong> Uses Cartesian coordinates to display
-          values for two connected variables, immediately revealing correlations
-          or dense clusters.
+          <strong>Scatter Plot:</strong> Places two numerical variables on the X
+          and Y axes. It helps you look for relationships, clusters, and unusual points.
         </li>
         <li>
-          <strong>Line / Bar / Pie Charts:</strong> Perfect for time series
-          (Line), categorical comparisons (Bar), and proportion of a whole
-          (Pie).
+          <strong>Line / Bar / Pie Charts:</strong> Line charts are useful for
+          ordered trends such as time, bar charts for category comparisons, and
+          pie charts for a small number of simple part-to-whole categories.
         </li>
       </ul>
 
@@ -389,19 +452,18 @@ export function DataVisualizationContent() {
       </h3>
       <ul>
         <li>
-          <strong>Heatmap:</strong> A two-dimensional graphical representation
-          of data where numerical values are contained in a matrix and
-          represented as colors. Essential for <em>correlation matrices</em>.
+          <strong>Heatmap:</strong> Represents numbers in a matrix using color.
+          A common ML use is displaying a correlation matrix so many pairwise
+          relationships can be scanned quickly.
         </li>
         <li>
-          <strong>Box-and-Whisker Plot:</strong> Explicitly shows the median,
-          quartiles, and massive outliers in a numerical dataset through the
-          concept of the Interquartile Range (IQR).
+          <strong>Box-and-Whisker Plot:</strong> Summarizes the median, quartiles,
+          and spread of a numerical variable. Points beyond the whiskers are often
+          treated as <em>potential</em> outliers that should be investigated.
         </li>
         <li>
-          <strong>Violin Plot:</strong> A combination of a Box Plot and a Kernel
-          Density Estimate (KDE) plot. It shows both summary statistics and the
-          deep distributional shape explicitly.
+          <strong>Violin Plot:</strong> Combines distribution shape with summary
+          information. It is useful when you want more detail than a simple box plot.
         </li>
       </ul>
 
@@ -411,9 +473,9 @@ export function DataVisualizationContent() {
       </h3>
       <ul>
         <li>
-          <strong>Word Cloud:</strong> A visual representation of text data,
-          where the importance or frequency of a word is shown by its size.
-          Great for analyzing open field reviews.
+          <strong>Word Cloud:</strong> A quick visual summary in which frequently
+          occurring (or otherwise weighted) words appear larger. It can be useful
+          for exploration, but frequency alone does not automatically mean importance.
         </li>
       </ul>
 
@@ -423,9 +485,9 @@ export function DataVisualizationContent() {
       </h3>
       <ul>
         <li>
-          <strong>Gantt Chart & Waterfall:</strong> Excellent for analyzing
-          sequences over time, commonly used for project stages or incremental
-          financial changes over a period.
+          <strong>Gantt Chart:</strong> Useful for project tasks and time spans.
+          <strong> Waterfall Chart:</strong> Useful for showing how positive and
+          negative changes build from a starting value to an ending value.
         </li>
       </ul>
 
@@ -443,9 +505,8 @@ export function DataVisualizationContent() {
             1. Matplotlib
           </strong>
           <span className="text-sm text-slate-600">
-            The foundational grandfather library. Extremely customizable, but
-            requires writing lots of boilerplate code. Often acts as the base
-            for others.
+            A foundational plotting library with fine control over axes, labels,
+            and chart details. Many other Python visualization tools build on it.
           </span>
         </div>
         <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
@@ -453,8 +514,8 @@ export function DataVisualizationContent() {
             2. Seaborn
           </strong>
           <span className="text-sm text-slate-600">
-            Built on top of Matplotlib, it offers beautiful out-of-the-box color
-            palettes and handles complex ML statistical aggregations seamlessly.
+            Built on Matplotlib and convenient for statistical plots such as
+            distributions, category comparisons, and relationships.
           </span>
         </div>
         <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
@@ -462,8 +523,8 @@ export function DataVisualizationContent() {
             3. Plotly
           </strong>
           <span className="text-sm text-slate-600">
-            Specializes in heavily interactive, web-based charts. Allows users
-            to hover, zoom, and pan around the data in the browser.
+            Useful for interactive web-based charts where users may hover, zoom,
+            or pan to inspect data.
           </span>
         </div>
         <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl">
@@ -471,8 +532,8 @@ export function DataVisualizationContent() {
             4. Bokeh
           </strong>
           <span className="text-sm text-slate-600">
-            Powerful for creating interactive, scalable charts, often serving
-            dashboards with streaming high-density data.
+            Another option for interactive browser visualizations and dashboards,
+            including applications that update over time.
           </span>
         </div>
       </div>
@@ -941,7 +1002,8 @@ plt.show()`}
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Generate normally distributed random age data
+# Generate reproducible example age data
+np.random.seed(42)
 ages = np.random.normal(loc=35, scale=5, size=1000)
 
 plt.figure(figsize=(6, 4))
@@ -1111,6 +1173,48 @@ plt.show()`}
       </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
+        How to Read a Chart Step by Step
+      </h2>
+      <p>
+        A chart is useful only if you can explain what it says. Use this simple
+        three-question routine before drawing a conclusion.
+      </p>
+
+      <div className="my-6 not-prose overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
+        <table className="w-full min-w-[620px] text-sm border-collapse">
+          <thead className="bg-slate-100 text-slate-800">
+            <tr>
+              <th className="p-3 text-left border-b">Step</th>
+              <th className="p-3 text-left border-b">Ask</th>
+              <th className="p-3 text-left border-b">Example</th>
+            </tr>
+          </thead>
+          <tbody className="text-slate-700">
+            <tr className="border-b">
+              <td className="p-3 font-semibold">1</td>
+              <td className="p-3">What do the axes or categories represent?</td>
+              <td className="p-3">X = study hours, Y = marks</td>
+            </tr>
+            <tr className="border-b">
+              <td className="p-3 font-semibold">2</td>
+              <td className="p-3">What pattern do I see?</td>
+              <td className="p-3">Marks generally rise as study hours rise</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-semibold">3</td>
+              <td className="p-3">What should I <em>not</em> claim?</td>
+              <td className="p-3">The chart alone does not prove that study hours caused the higher marks</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="my-6 rounded-xl border border-amber-200 bg-amber-50 p-4">
+        <strong>Important:</strong> Correlation or a visible relationship does not
+        automatically prove causation. A third factor may influence both variables.
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
         Best Practices & Pitfalls
       </h2>
 
@@ -1132,8 +1236,8 @@ plt.show()`}
               you have 15 categories. Use a horizontal bar chart.
             </li>
             <li>
-              <strong>Color blindly:</strong> Ensure sufficient contrast and
-              avoid reliance purely on red/green to convey opposing meaning.
+              <strong>Use color carefully:</strong> Ensure sufficient contrast and
+              avoid relying only on red/green to communicate opposing meaning.
             </li>
           </ul>
         </div>
@@ -1143,9 +1247,9 @@ plt.show()`}
           </strong>
           <ul className="text-sm text-red-900 space-y-1 text-left list-disc pl-5">
             <li>
-              <strong>Distorting axes:</strong> Do not start the Y-axis at a
-              very high number just to visually exaggerate a tiny 1% difference
-              in data.
+              <strong>Distorting axes:</strong> Avoid axis choices that exaggerate
+              small differences. Bar charts usually need a zero baseline; line charts
+              may use a narrower range when it is clearly labelled and appropriate.
             </li>
             <li>
               <strong>Cluttering:</strong> Cramming 20 lines onto a single line
@@ -1156,6 +1260,36 @@ plt.show()`}
               pie/bar charts visually obscures actual proportions.
             </li>
           </ul>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
+        Common Questions
+      </h2>
+      <div className="space-y-4 my-6">
+        <div className="rounded-xl border border-slate-200 p-4">
+          <strong>Which chart should a beginner learn first?</strong>
+          <p className="mt-2 mb-0">Start with bar, line, scatter, histogram, and box plots. These cover many everyday ML exploration questions.</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 p-4">
+          <strong>Does a beautiful chart make an analysis correct?</strong>
+          <p className="mt-2 mb-0">No. Labels, scale, data quality, and the conclusion drawn from the chart matter more than decoration.</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 p-4">
+          <strong>Should every ML project use every chart?</strong>
+          <p className="mt-2 mb-0">No. Choose only the charts that answer useful questions about your particular dataset.</p>
+        </div>
+      </div>
+
+      <div className="my-8 not-prose rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+        <div className="font-bold text-indigo-900 mb-2">Continue Learning</div>
+        <p className="text-sm text-slate-700 mb-3">
+          Data visualization is closely connected to exploring and preparing data.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <a href="/learn/eda" className="rounded-lg bg-white border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100">Exploratory Data Analysis</a>
+          <a href="/learn/pandas-essentials" className="rounded-lg bg-white border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100">Pandas Essentials</a>
+          <a href="/learn/feature-engineering" className="rounded-lg bg-white border border-indigo-200 px-3 py-2 text-sm font-semibold text-indigo-700 hover:bg-indigo-100">Feature Engineering</a>
         </div>
       </div>
 
@@ -1174,10 +1308,10 @@ plt.show()`}
               Machine Learning preprocessing?
             </p>
             <p className="text-sm text-slate-400 mt-1">
-              Heatmaps are almost universally used to visualize the Correlation
-              Matrix of a dataset. They quickly expose highly correlated
-              features (which duplicate information) or highlight features
-              having strong correlations with the target variable.
+              A common ML use of a heatmap is to display a correlation matrix.
+              It helps you quickly spot strong positive or negative relationships
+              that may deserve investigation. High correlation does not always mean
+              two features are exact duplicates, and correlation alone does not prove causation.
             </p>
           </div>
           <div>
@@ -1185,11 +1319,10 @@ plt.show()`}
               Q: When would you choose a Box Plot over a Histogram?
             </p>
             <p className="text-sm text-slate-400 mt-1">
-              While a histogram shows the continuous buckets/shape of data, a
-              Box Plot provides exact statistical boundaries. You use a Box Plot
-              specifically because it visually isolates extreme outliers (dots
-              sitting outside the whiskers) utilizing the mathematical
-              Interquartile Range, making outlier removal easier.
+              A histogram shows the detailed shape of a distribution, while a
+              box plot gives a compact summary of the median, quartiles, spread,
+              and potential outliers. Points beyond the whiskers should be
+              investigated rather than automatically removed.
             </p>
           </div>
         </div>
