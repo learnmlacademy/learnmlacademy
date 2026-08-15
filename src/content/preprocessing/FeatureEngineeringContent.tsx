@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Code,
-  Hammer,
-  AlertTriangle,
-  Blocks,
-  Sparkles,
-  BookOpen,
-  BrainCircuit,
-} from "lucide-react";
+import { Code, BrainCircuit } from "lucide-react";
 
 function CodeBlock({
   code,
@@ -55,6 +47,61 @@ export function FeatureEngineeringContent() {
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
         Feature Engineering is the process of using domain knowledge to extract features from raw data to improve the performance of machine learning algorithms.</p>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Feature Engineering in Simple Words
+      </h2>
+      <p>
+        In many structured-data Machine Learning projects, the model learns from the columns we give it. Feature Engineering means
+        <strong> turning raw columns into more useful clues</strong> that make the pattern easier to learn.
+      </p>
+
+      <div className="grid sm:grid-cols-3 gap-4 my-6 not-prose">
+        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
+          <div className="text-xs font-bold uppercase tracking-wide text-slate-500">Step 1</div>
+          <div className="mt-2 font-bold text-slate-800">Raw Data</div>
+          <div className="mt-1 text-sm text-slate-600">Date, area, bedrooms</div>
+        </div>
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
+          <div className="text-xs font-bold uppercase tracking-wide text-indigo-500">Step 2</div>
+          <div className="mt-2 font-bold text-indigo-900">Create Useful Clues</div>
+          <div className="mt-1 text-sm text-indigo-700">House age, area per bedroom</div>
+        </div>
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">
+          <div className="text-xs font-bold uppercase tracking-wide text-emerald-600">Step 3</div>
+          <div className="mt-2 font-bold text-emerald-900">Give Them to the Model</div>
+          <div className="mt-1 text-sm text-emerald-700">Model learns from better inputs</div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto my-6 not-prose">
+        <table className="min-w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-slate-100 border-b border-slate-200">
+              <th className="p-3 text-left">Raw Value</th>
+              <th className="p-3 text-left">Engineered Feature</th>
+              <th className="p-3 text-left">Why It May Help</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b border-slate-100">
+              <td className="p-3">Built year = 2016</td>
+              <td className="p-3">House age = 10 years</td>
+              <td className="p-3">Age may affect price and maintenance</td>
+            </tr>
+            <tr className="border-b border-slate-100">
+              <td className="p-3">1200 sq ft, 3 bedrooms</td>
+              <td className="p-3">400 sq ft per bedroom</td>
+              <td className="p-3">Shows how spacious the house is</td>
+            </tr>
+            <tr>
+              <td className="p-3">2026-05-01</td>
+              <td className="p-3">Month = 5</td>
+              <td className="p-3">Can help capture seasonal patterns</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         What is Feature Engineering?
@@ -190,7 +237,7 @@ export function FeatureEngineeringContent() {
             textAnchor="middle"
             fontSize="12"
           >
-            High Accuracy
+            Learns Patterns
           </text>
 
           <defs>
@@ -208,22 +255,28 @@ export function FeatureEngineeringContent() {
         </svg>
       </div>
 
-      <h3 className="text-xl font-bold mt-8 mb-2">Real-Life Analogy</h3>
-      <p>Imagine predicting house prices. Raw data looks like:</p>
+      <h3 className="text-xl font-bold mt-8 mb-2">Real-Life Example: Predicting House Prices</h3>
+      <p>
+        Imagine we want to predict the selling price of a house. A raw row might look like this:
+      </p>
 
       <div className="overflow-x-auto my-4 not-prose">
-        <table className="w-auto border-collapse text-sm">
+        <table className="min-w-full border-collapse text-sm">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="p-3 text-left">House ID</th>
-              <th className="p-3 text-left">Date</th>
-              <th className="p-3 text-left">Address</th>
+              <th className="p-3 text-left">Sale Date</th>
+              <th className="p-3 text-left">Built Year</th>
+              <th className="p-3 text-left">Area</th>
+              <th className="p-3 text-left">Bedrooms</th>
+              <th className="p-3 text-left">City</th>
             </tr>
           </thead>
           <tbody>
             <tr className="border-b border-slate-100">
-              <td className="p-3">101</td>
               <td className="p-3">2026-05-01</td>
+              <td className="p-3">2016</td>
+              <td className="p-3">1200 sq ft</td>
+              <td className="p-3">3</td>
               <td className="p-3">Bangalore</td>
             </tr>
           </tbody>
@@ -231,34 +284,59 @@ export function FeatureEngineeringContent() {
       </div>
 
       <p>
-        This data alone is not very useful. Feature Engineering creates
-        meaningful features such as:
+        We can turn these raw values into features that are often easier for a model to use.
       </p>
 
-      <ul className="grid sm:grid-cols-2 gap-4 mt-4 not-prose mb-8">
-        <li className="p-4 border border-slate-200 rounded shadow-sm">
+      <div className="grid sm:grid-cols-2 gap-4 mt-4 not-prose mb-6">
+        <div className="p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
           <strong className="block text-indigo-700">House Age</strong>
-          <span className="text-sm text-slate-600">
-            (Current year - built year)
-          </span>
-        </li>
-        <li className="p-4 border border-slate-200 rounded shadow-sm">
-          <strong className="block text-emerald-700">Distance to Center</strong>
-          <span className="text-sm text-slate-600">Location importance</span>
-        </li>
-        <li className="p-4 border border-slate-200 rounded shadow-sm">
-          <strong className="block text-amber-700">Nearby Schools</strong>
-          <span className="text-sm text-slate-600">Family convenience</span>
-        </li>
-        <li className="p-4 border border-slate-200 rounded shadow-sm">
-          <strong className="block text-purple-700">Price per SqFt</strong>
-          <span className="text-sm text-slate-600">Value density</span>
-        </li>
-      </ul>
+          <span className="text-sm text-slate-600">2026 - 2016 = 10 years</span>
+        </div>
+        <div className="p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+          <strong className="block text-emerald-700">Area per Bedroom</strong>
+          <span className="text-sm text-slate-600">1200 ÷ 3 = 400 sq ft per bedroom</span>
+        </div>
+        <div className="p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+          <strong className="block text-amber-700">Sale Month</strong>
+          <span className="text-sm text-slate-600">May → Month = 5</span>
+        </div>
+        <div className="p-4 border border-slate-200 rounded-xl bg-white shadow-sm">
+          <strong className="block text-purple-700">Location Features</strong>
+          <span className="text-sm text-slate-600">Distance to center or nearby schools, if reliable location data is available</span>
+        </div>
+      </div>
+
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 my-6 not-prose">
+        <div className="font-bold text-indigo-900 mb-3">Two tiny calculations</div>
+        <div className="grid md:grid-cols-2 gap-4 text-sm">
+          <div className="bg-white rounded-lg border border-indigo-100 p-4">
+            <div className="font-semibold text-slate-800">House age</div>
+            <div className="mt-2 font-mono text-slate-700">Sale year - Built year</div>
+            <div className="font-mono text-slate-700">2026 - 2016 = 10</div>
+            <p className="m-0 mt-2 text-slate-600">The model now sees the age directly instead of having to interpret two years.</p>
+          </div>
+          <div className="bg-white rounded-lg border border-indigo-100 p-4">
+            <div className="font-semibold text-slate-800">Area per bedroom</div>
+            <div className="mt-2 font-mono text-slate-700">1200 ÷ 3 = 400</div>
+            <p className="m-0 mt-2 text-slate-600">This creates a simple measure of spaciousness.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 border-l-4 border-amber-500 p-5 rounded my-6">
+        <strong className="text-amber-900">Important: do not create a feature from the answer you are trying to predict.</strong>
+        <p className="text-sm text-amber-900 mt-2 mb-0">
+          If the target is <strong>house price</strong>, a feature such as <strong>price per sq ft = house price ÷ area</strong> uses the target itself.
+          That would leak the answer into the inputs. This is called <strong>data leakage</strong>.
+        </p>
+      </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
-        Types of Features
+        Common Input Types We Engineer
       </h2>
+      <p>
+        Feature engineering depends on the kind of raw data we have. The same idea is applied differently to numbers, categories, text, and dates.
+      </p>
 
       <div className="flex justify-center my-8 bg-slate-50 py-8 rounded border not-prose">
         <svg
@@ -445,6 +523,15 @@ export function FeatureEngineeringContent() {
         Feature Engineering Workflow
       </h2>
 
+      <div className="grid sm:grid-cols-5 gap-3 my-6 not-prose text-center text-sm">
+        {['Understand', 'Clean', 'Create', 'Select', 'Validate'].map((step, index) => (
+          <div key={step} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+            <div className="text-xs text-slate-500">Step {index + 1}</div>
+            <div className="font-bold text-slate-800 mt-1">{step}</div>
+          </div>
+        ))}
+      </div>
+
       <ol className="space-y-4 text-slate-700">
         <li>
           <strong>Step 1: Understand the Data.</strong> Before engineering
@@ -462,7 +549,10 @@ export function FeatureEngineeringContent() {
         </li>
         <li>
           <strong>Step 4: Select Important Features.</strong> Keep useful
-          features and remove irrelevant ones.
+          features and remove irrelevant or redundant ones.
+        </li>
+        <li>
+          <strong>Step 5: Validate the New Features.</strong> Compare model performance on validation data. A feature that sounds clever is useful only if it helps the real prediction task without causing leakage.
         </li>
       </ol>
 
@@ -470,7 +560,7 @@ export function FeatureEngineeringContent() {
         Common Feature Engineering Techniques
       </h2>
       <p>
-        There are several widely used techniques in feature engineering to handle different types of data imperfections.
+        There are several widely used techniques for creating, transforming, and preparing features for different data and modeling needs.
       </p>
 
       <h3 className="text-xl font-bold mt-8 mb-2">
@@ -482,20 +572,23 @@ export function FeatureEngineeringContent() {
       </p>
       <ul>
         <li>
-          <strong>Remove Missing Rows:</strong> Useful when missing values are
-          very small.
+          <strong>Remove Missing Rows:</strong> May be reasonable when missingness is limited and deleting those rows is unlikely to bias the dataset.
         </li>
         <li>
           <strong>Mean Imputation:</strong> Replace missing values with the
           average.
         </li>
         <li>
-          <strong>Median Imputation:</strong> Better for skewed data.
+          <strong>Median Imputation:</strong> Often a useful simple choice for skewed numerical data or data with extreme values.
         </li>
         <li>
           <strong>Mode Imputation:</strong> Useful for categorical variables.
         </li>
       </ul>
+
+      <p className="text-sm">
+        For a fuller treatment, see <a href="/learn/handling-missing-data" className="text-indigo-600 font-semibold hover:underline">Handling Missing Data</a>.
+      </p>
 
       <CodeBlock
         title="missing_values.py"
@@ -527,10 +620,12 @@ After Imputation:
         2. Encoding Categorical Variables
       </h3>
       <p>
-        Machine Learning models cannot directly understand text labels (e.g.
-        Red, Blue, Green must be converted into numbers). Common methods: Label
-        Encoding (ordinal), One-Hot Encoding (nominal), and Target Encoding
-        (high-cardinality).
+        Many common Machine Learning estimators expect numerical input, so categories such as
+        Red, Blue, and Green need an appropriate representation. Common approaches include
+        <strong> Ordinal Encoding</strong> for ordered categories, <strong>One-Hot Encoding</strong> for nominal categories, and carefully designed target-based encoding for some high-cardinality problems.
+      </p>
+      <p className="text-sm">
+        See <a href="/learn/encoding-categorical" className="text-indigo-600 font-semibold hover:underline">Encoding Categorical Data</a> for the full comparison and leakage precautions.
       </p>
 
       <CodeBlock
@@ -548,20 +643,23 @@ print(encoded)`}
 
       <h3 className="text-xl font-bold mt-8 mb-2">3. Feature Scaling</h3>
       <p>
-        Different features may have different ranges (e.g., Age 18–60 vs Salary
-        2L–50L). Large values dominate smaller ones.
+        Different features may have very different ranges (for example, Age 18–60 vs Salary in lakhs). In distance-based and gradient-based methods, these scale differences can strongly affect the calculation even when the larger-number feature is not more important.
       </p>
       <ul>
         <li>
-          <strong>Normalization:</strong> Range [0,1]
+          <strong>Min-Max Scaling:</strong> Often maps values to a range such as [0,1]
         </li>
         <li>
           <strong>Standardization:</strong> Mean=0, Std=1
         </li>
         <li>
-          <strong>Robust Scaling:</strong> Handles outliers
+          <strong>Robust Scaling:</strong> Uses median and quantiles, making it less sensitive to extreme values
         </li>
       </ul>
+
+      <p className="text-sm">
+        See <a href="/learn/feature-scaling" className="text-indigo-600 font-semibold hover:underline">Feature Scaling</a> for worked StandardScaler, Min-Max, and RobustScaler examples.
+      </p>
 
       <CodeBlock
         title="scaling.py"
@@ -579,11 +677,46 @@ print(scaled)`}
       />
 
       <h3 className="text-xl font-bold mt-8 mb-2">
-        4. Binning (Discretization)
+        4. Creating Ratio and Interaction Features
       </h3>
       <p>
-        Binning groups continuous values into ranges. This reduces noise,
-        improves interpretability, and handles outliers better.
+        Sometimes two existing columns become more useful when they are combined. This is one of the clearest examples of creating a new feature from raw data.
+      </p>
+      <div className="overflow-x-auto my-4 not-prose">
+        <table className="min-w-full border-collapse text-sm">
+          <thead><tr className="bg-slate-100 border-b"><th className="p-3 text-left">Area</th><th className="p-3 text-left">Bedrooms</th><th className="p-3 text-left">New Feature</th></tr></thead>
+          <tbody><tr><td className="p-3">1200 sq ft</td><td className="p-3">3</td><td className="p-3"><strong>Area per bedroom = 400</strong></td></tr></tbody>
+        </table>
+      </div>
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 my-4 not-prose text-sm">
+        <div><strong>Step 1:</strong> Start with <span className="font-mono">Area = 1200</span> and <span className="font-mono">Bedrooms = 3</span>.</div>
+        <div className="mt-2"><strong>Step 2:</strong> Divide → <span className="font-mono">1200 ÷ 3 = 400</span>.</div>
+        <div className="mt-2"><strong>Step 3:</strong> Add <span className="font-mono">Area_per_Bedroom = 400</span> as a new model input.</div>
+      </div>
+      <CodeBlock
+        title="create_features.py"
+        code={`import pandas as pd
+
+df = pd.DataFrame({
+    'Area': [1200, 1500],
+    'Bedrooms': [3, 5]
+})
+
+df['Area_per_Bedroom'] = df['Area'] / df['Bedrooms']
+print(df)`}
+        output={`   Area  Bedrooms  Area_per_Bedroom
+0  1200         3             400.0
+1  1500         5             300.0`}
+      />
+      <p className="text-sm">
+        Interaction features can also combine variables by multiplication or other domain-based rules. Create them only when the relationship makes sense and validate whether they help.
+      </p>
+
+      <h3 className="text-xl font-bold mt-8 mb-2">
+        5. Binning (Discretization)
+      </h3>
+      <p>
+        Binning groups continuous values into ranges such as Young, Adult, and Senior. It can make a feature easier to interpret and can reduce sensitivity to small numeric differences, but it also loses some information, so it should be used only when the grouping makes sense for the problem.
       </p>
 
       <CodeBlock
@@ -605,15 +738,24 @@ print(df)`}
 4   22   Young`}
       />
 
-      <h3 className="text-xl font-bold mt-8 mb-2">5. Log Transformation</h3>
+      <h3 className="text-xl font-bold mt-8 mb-2">6. Log Transformation</h3>
       <p>
-        Used when data is heavily skewed (e.g., Income, Website traffic, Sales
-        volume). It reduces skewness, stabilizes variance, and improves linear
-        relationships.
+        A log transformation is often explored for strongly right-skewed positive values such as income, website traffic, or sales. It compresses large values more than small values, which can make some relationships easier for a model to learn. It is not automatically helpful for every dataset.
       </p>
 
       <div className="bg-slate-50 border border-slate-200 p-4 rounded-xl font-mono text-center my-6">
-        x' = log(x + 1)
+        x&apos; = ln(x + 1)
+      </div>
+
+      <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 my-6 not-prose">
+        <div className="font-bold text-sky-900 mb-3">Small numerical example</div>
+        <p className="text-sm text-sky-900 m-0">Suppose <strong>x = 9</strong>.</p>
+        <div className="mt-3 space-y-2 text-sm">
+          <div><strong>Step 1:</strong> Add 1 → <span className="font-mono">9 + 1 = 10</span></div>
+          <div><strong>Step 2:</strong> Take the natural log → <span className="font-mono">ln(10) ≈ 2.30</span></div>
+          <div><strong>Result:</strong> 9 is represented as approximately <strong>2.30</strong> after the transform.</div>
+        </div>
+        <p className="text-xs text-sky-800 mt-3 mb-0">The purpose is not to “improve” the number itself; it is to change the scale and shape of the feature distribution.</p>
       </div>
 
       <CodeBlock
@@ -632,17 +774,22 @@ print(df)`}
       />
 
       <h3 className="text-xl font-bold mt-8 mb-2">
-        6. Date-Time Feature Engineering
+        7. Date-Time Feature Engineering
       </h3>
       <p>
-        Dates contain hidden information. From a single date string we can
-        extract: Day, Month, Year, Weekday, Quarter, Weekend indicator.
+        Dates contain several pieces of information. From one timestamp we can extract features such as day, month, year, weekday, quarter, or whether it falls on a weekend.
       </p>
+      <div className="overflow-x-auto my-4 not-prose">
+        <table className="min-w-full border-collapse text-sm">
+          <thead><tr className="bg-slate-100 border-b"><th className="p-3 text-left">Raw Date</th><th className="p-3 text-left">Month</th><th className="p-3 text-left">Weekday</th><th className="p-3 text-left">Weekend?</th></tr></thead>
+          <tbody><tr><td className="p-3">2026-05-16</td><td className="p-3">5</td><td className="p-3">Saturday</td><td className="p-3">Yes</td></tr></tbody>
+        </table>
+      </div>
       <CodeBlock
         title="datetime_features.py"
         code={`import pandas as pd
 
-df = pd.DataFrame({'Date': pd.to_datetime(['2026-05-13', '2026-12-25'])})
+df = pd.DataFrame({'Date': pd.to_datetime(['2026-05-16', '2026-12-25'])})
 
 df['Month'] = df['Date'].dt.month
 df['Weekday'] = df['Date'].dt.weekday
@@ -650,12 +797,12 @@ df['Is_Weekend'] = df['Weekday'] >= 5
 
 print(df)`}
         output={`        Date  Month  Weekday  Is_Weekend
-0 2026-05-13      5        2       False
+0 2026-05-16      5        5        True
 1 2026-12-25     12        4       False`}
       />
 
       <h3 className="text-xl font-bold mt-8 mb-2">
-        7. Text Feature Engineering
+        8. Text Feature Engineering
       </h3>
       <p>
         Text data must be converted into numerical representation. Common
@@ -677,15 +824,32 @@ print(X.toarray())`}
  [0.53404633 0.37997836 0.         0.37997836 0.53404633]]`}
       />
 
-      <h3 className="text-xl font-bold mt-8 mb-2">8. Feature Extraction</h3>
+      <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
+        Feature Engineering vs Feature Extraction vs Feature Selection
+      </h2>
+      <div className="overflow-x-auto my-6 not-prose">
+        <table className="min-w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-slate-100 border-b border-slate-200">
+              <th className="p-3 text-left">Concept</th>
+              <th className="p-3 text-left">Simple Meaning</th>
+              <th className="p-3 text-left">Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b"><td className="p-3 font-semibold">Feature Engineering</td><td className="p-3">Create or transform useful inputs</td><td className="p-3">Date → Month, House age</td></tr>
+            <tr className="border-b"><td className="p-3 font-semibold">Feature Extraction</td><td className="p-3">Transform raw data into a new representation</td><td className="p-3">TF-IDF vectors, PCA components</td></tr>
+            <tr><td className="p-3 font-semibold">Feature Selection</td><td className="p-3">Keep a useful subset of available features</td><td className="p-3">Choose 10 useful columns from 100</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-2">9. Feature Extraction</h3>
       <p>
-        Feature Extraction creates new informative features, usually
-        algorithmically. While Feature Engineering is often manual creation
-        based on domain knowledge, Feature Extraction is algorithmic
-        transformation (e.g. image edges, audio frequency, text sentiment).
+        Feature Extraction creates a new representation from existing data, often through an algorithmic transformation. Feature Engineering is the broader process and can include domain-based creation, transformation, extraction, encoding, and other preprocessing choices. Examples of extraction include TF-IDF vectors, image descriptors, or PCA components.
       </p>
 
-      <h3 className="text-xl font-bold mt-8 mb-2">9. Feature Selection</h3>
+      <h3 className="text-xl font-bold mt-8 mb-2">10. Feature Selection</h3>
       <p>
         Not all features help prediction. Some features add noise, increase
         overfitting, or slow training. Selection methods include:
@@ -704,6 +868,9 @@ print(X.toarray())`}
           Regression)
         </li>
       </ul>
+      <p className="text-sm">
+        Continue with <a href="/learn/feature-selection" className="text-indigo-600 font-semibold hover:underline">Feature Selection &amp; Extraction</a> for dedicated examples and selection methods.
+      </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
         Common Beginner Mistakes & Best Practices
@@ -718,7 +885,7 @@ print(X.toarray())`}
             <li>Creating too many irrelevant features.</li>
             <li>Using future information during training (Data Leakage).</li>
             <li>Ignoring domain knowledge.</li>
-            <li>Not handling outliers before scaling.</li>
+            <li>Ignoring extreme values when they can distort a chosen transformation.</li>
             <li>Over-engineering small datasets.</li>
           </ul>
         </div>
@@ -731,7 +898,7 @@ print(X.toarray())`}
             <li>Visualize data first.</li>
             <li>Handle missing values carefully & Prevent data leakage.</li>
             <li>Use pipelines for preprocessing.</li>
-            <li>Keep features interpretable.</li>
+            <li>Keep features interpretable where practical.</li>
           </ul>
         </div>
       </div>
@@ -741,16 +908,14 @@ print(X.toarray())`}
       </h2>
       <div className="bg-slate-800 text-white p-6 rounded-xl relative overflow-hidden not-prose mb-10">
         <BrainCircuit className="absolute right-4 top-4 h-16 w-16 text-slate-700 opacity-50" />
-        <h4 className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
+        <div className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
           Check Your Understanding
-        </h4>
+        </div>
         <div className="space-y-4">
           <div>
             <p className="font-bold text-slate-200">Q: What is data leakage?</p>
             <p className="text-sm text-slate-400 mt-1">
-              Using information during training that would not be available
-              during prediction (e.g. predicting if someone defaults on a loan
-              using a feature named 'Collections Department ID').
+              Using information during training that would not be available at the real prediction time. For example, predicting a house sale price using 'price per sq ft' calculated from that same sale price would leak the answer into the input features.
             </p>
           </div>
           <div>
@@ -758,11 +923,41 @@ print(X.toarray())`}
               Q: Difference between Feature Selection and Feature Extraction?
             </p>
             <p className="text-sm text-slate-400 mt-1">
-              Selection merely filters and keeps the best original/engineered
-              features, while extraction mathematically transforms variables to
-              create entirely new components (like PCA).
+              Selection keeps a subset of available features, while extraction transforms data into a new representation or set of features (for example, PCA components or TF-IDF vectors).
             </p>
           </div>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
+        Common Questions About Feature Engineering
+      </h2>
+      <div className="space-y-4 not-prose">
+        <div className="rounded-xl border border-slate-200 p-4">
+          <div className="font-bold text-slate-900">Is feature engineering always necessary?</div>
+          <p className="text-sm text-slate-600 mt-1 mb-0">Not always. Some models can learn useful representations directly, but thoughtful features are often valuable for structured/tabular data and when domain knowledge is strong.</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 p-4">
+          <div className="font-bold text-slate-900">Can feature engineering make a model worse?</div>
+          <p className="text-sm text-slate-600 mt-1 mb-0">Yes. A noisy, redundant, unstable, or leaked feature can hurt generalization. New features should be validated, not assumed to help.</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 p-4">
+          <div className="font-bold text-slate-900">Is scaling part of feature engineering?</div>
+          <p className="text-sm text-slate-600 mt-1 mb-0">It is commonly treated as preprocessing, but it is part of the broader work of preparing model inputs. The exact terminology varies across teams and textbooks.</p>
+        </div>
+        <div className="rounded-xl border border-slate-200 p-4">
+          <div className="font-bold text-slate-900">How do I know whether a new feature is useful?</div>
+          <p className="text-sm text-slate-600 mt-1 mb-0">Use domain reasoning first, then compare validation or cross-validation performance with and without the feature while checking for leakage.</p>
+        </div>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 my-8 not-prose">
+        <div className="font-bold text-slate-900 mb-2">Continue the preprocessing path</div>
+        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          <a href="/learn/handling-missing-data" className="text-indigo-600 font-semibold hover:underline">Handling Missing Data</a>
+          <a href="/learn/encoding-categorical" className="text-indigo-600 font-semibold hover:underline">Encoding Categorical Data</a>
+          <a href="/learn/feature-scaling" className="text-indigo-600 font-semibold hover:underline">Feature Scaling</a>
+          <a href="/learn/feature-selection" className="text-indigo-600 font-semibold hover:underline">Feature Selection &amp; Extraction</a>
         </div>
       </div>
 
@@ -771,11 +966,7 @@ print(X.toarray())`}
           Industry Insight
         </h3>
         <p className="text-sm text-indigo-800 m-0">
-          In many Kaggle competitions and production ML systems, better feature
-          engineering often improves performance more than changing algorithms.
-          Deep Learning automatically learns representations, but feature
-          engineering still remains extremely important for structured tabluar
-          datasets!
+          In structured/tabular problems, thoughtful feature engineering can sometimes improve a model more than simply switching algorithms. Deep Learning can learn many representations automatically, but domain-aware input design can still be valuable when working with structured data.
         </p>
       </div>
     </div>
