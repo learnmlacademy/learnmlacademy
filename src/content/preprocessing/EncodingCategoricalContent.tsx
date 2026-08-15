@@ -1,9 +1,6 @@
 import React from "react";
 import {
-  Tag,
-  Binary,
   LayoutGrid,
-  CheckCircle2,
   AlertTriangle,
   ArrowRight,
   Code,
@@ -54,25 +51,87 @@ export function EncodingCategoricalContent() {
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Encoding Categorical Data</h1>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-emerald-500 pl-4 py-1 bg-slate-50">
-        Machine Learning algorithms only understand numbers. They do not
-        understand English. "Categorical Encoding" is the process of translating
-        text columns (like "Red", "Blue", "Green") into numerical columns so the
-        math equations can process them.
+        Many Machine Learning algorithms expect numerical input. If a dataset
+        contains categories such as <strong>Red</strong>, <strong>Blue</strong>,
+        <strong>Delhi</strong>, or <strong>High</strong>, we often need to
+        represent those categories numerically before training the model. This
+        process is called <strong>categorical encoding</strong>.
       </p>
 
       <p>
-        Categorical data encoding is an important preprocessing
-        techniques in Machine Learning. Most ML algorithms work only with
-        numerical values, so categorical variables such as city names, colors,
-        brands, and education levels must be converted into machine-readable
-        numerical representations before training models.
+        Categorical encoding is an important preprocessing technique in Machine
+        Learning. The correct method depends on what the category means. For
+        example, <strong>Red / Blue / Green</strong> have no natural order, while
+        <strong>Low / Medium / High</strong> do have a meaningful order.
       </p>
 
       <p>
         This guide explains categorical encoding from beginner to advanced level
-        using original explanations, examples, real-world applications,
-        Scikit-learn implementations, visual learning, and best practices.
+        using simple examples, tables, Scikit-learn implementations, and practical
+        best practices.
       </p>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Encoding in Simple Words
+      </h2>
+      <p>
+        Imagine a school dataset with a column called <strong>T-shirt Size</strong>.
+        A model may not be able to use the words <code>S</code>, <code>M</code>, and
+        <code>L</code> directly. Encoding changes those categories into a numerical
+        form while trying to preserve their meaning.
+      </p>
+
+      <div className="grid sm:grid-cols-4 gap-3 my-6 not-prose">
+        {[
+          ["1", "Read the category", 'Example: "Medium"'],
+          ["2", "Ask if order matters", "Small < Medium < Large"],
+          ["3", "Choose an encoder", "Ordinal encoding"],
+          ["4", "Create numbers", "Small=0, Medium=1, Large=2"],
+        ].map(([step, title, text]) => (
+          <div key={step} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 font-bold text-emerald-700">
+              {step}
+            </div>
+            <p className="m-0 font-bold text-slate-800">{title}</p>
+            <p className="mt-1 mb-0 text-sm text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="overflow-x-auto my-6 not-prose">
+        <table className="min-w-full border-collapse overflow-hidden rounded-xl border border-slate-200 bg-white text-sm">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="border-b p-3 text-left">Column</th>
+              <th className="border-b p-3 text-left">Values</th>
+              <th className="border-b p-3 text-left">Does order matter?</th>
+              <th className="border-b p-3 text-left">Simple starting choice</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border-b p-3 font-semibold">City</td>
+              <td className="border-b p-3">Delhi, Mumbai, Chennai</td>
+              <td className="border-b p-3">No</td>
+              <td className="border-b p-3 text-emerald-700 font-semibold">One-hot encoding</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-semibold">T-shirt Size</td>
+              <td className="p-3">Small, Medium, Large</td>
+              <td className="p-3">Yes</td>
+              <td className="p-3 text-indigo-700 font-semibold">Ordinal encoding</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 my-6 not-prose">
+        <p className="m-0 font-bold text-amber-900">The key question</p>
+        <p className="mt-1 mb-0 text-sm text-amber-800">
+          Before encoding a category, ask: <strong>Does this category have a real,
+          meaningful order?</strong> That one question prevents many beginner mistakes.
+        </p>
+      </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         What is Categorical Data?
@@ -134,34 +193,36 @@ export function EncodingCategoricalContent() {
         Why Machine Learning Models Need Encoding
       </h3>
       <p className="text-lg leading-relaxed mb-4">
-        Machine learning algorithms perform mathematical calculations internally — they work
-        with numbers, not words. Algorithms like Logistic Regression, SVM and Neural
-        Networks fundamentally cannot process text labels like{" "}
+        Many commonly used ML estimators expect numerical feature arrays. Text
+        categories such as{" "}
         <code className="bg-slate-100 px-1 rounded text-sm">Red</code>,{" "}
         <code className="bg-slate-100 px-1 rounded text-sm">Blue</code>, or{" "}
-        <code className="bg-slate-100 px-1 rounded text-sm">Green</code>. Here is what they actually compute:
+        <code className="bg-slate-100 px-1 rounded text-sm">Green</code> therefore
+        need a suitable numerical representation before those estimators can use
+        them. The representation matters because different algorithms use the
+        numbers in different ways.
       </p>
       <div className="grid sm:grid-cols-2 gap-4 mb-6 not-prose">
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
           <p className="font-bold text-blue-800 text-sm mb-1">📐 Distance calculations</p>
-          <p className="text-blue-700 text-sm leading-relaxed">KNN and clustering algorithms measure distances between data points — impossible with text labels.</p>
+          <p className="text-blue-700 text-sm leading-relaxed">KNN and many clustering methods measure numerical distances, so arbitrary category codes can create misleading distances.</p>
         </div>
         <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
           <p className="font-bold text-indigo-800 text-sm mb-1">📉 Gradient descent</p>
-          <p className="text-indigo-700 text-sm leading-relaxed">Optimisation algorithms adjust numerical weights iteratively to minimise a cost function.</p>
+          <p className="text-indigo-700 text-sm leading-relaxed">Linear models and neural networks optimise numerical parameters, so categorical inputs need a numerical representation.</p>
         </div>
         <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
           <p className="font-bold text-emerald-800 text-sm mb-1">📊 Statistical optimisation</p>
-          <p className="text-emerald-700 text-sm leading-relaxed">Linear and logistic regression solve equations involving matrix operations on real numbers.</p>
+          <p className="text-emerald-700 text-sm leading-relaxed">Linear and logistic regression operate on numerical feature matrices and can be sensitive to fake order introduced by poor encoding.</p>
         </div>
         <div className="bg-violet-50 border border-violet-100 rounded-xl p-4">
           <p className="font-bold text-violet-800 text-sm mb-1">🔢 Matrix operations</p>
-          <p className="text-violet-700 text-sm leading-relaxed">Neural networks perform matrix multiplications — every single input must be a real number.</p>
+          <p className="text-violet-700 text-sm leading-relaxed">Neural networks eventually work with numerical tensors; categories may be one-hot encoded or represented through learned embeddings.</p>
         </div>
       </div>
       <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4 mb-6 not-prose">
         <p className="font-bold text-amber-800 mb-1">💡 The core problem</p>
-        <p className="text-amber-700 text-sm">When a column contains the text <code className="bg-white px-1 rounded">Red</code>, the model sees <em>nothing it can use</em>. Encoding is the bridge that converts your text categories into the numerical form every ML algorithm understands.</p>
+        <p className="text-amber-700 text-sm">When a model expects numeric features, a text category such as <code className="bg-white px-1 rounded">Red</code> needs to be represented in a usable numerical form. Encoding builds that bridge while trying not to invent relationships that do not exist.</p>
       </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
@@ -350,7 +411,7 @@ export function EncodingCategoricalContent() {
             <tr>
               <td className="px-4 py-3 font-medium">Label Encoding</td>
               <td className="px-4 py-3 text-slate-600">
-                Ordinal data (target variables)
+                Classification target labels (y)
               </td>
               <td className="px-4 py-3 text-slate-600 bg-green-50">Low</td>
             </tr>
@@ -375,7 +436,7 @@ export function EncodingCategoricalContent() {
             </tr>
             <tr>
               <td className="px-4 py-3 font-medium">Frequency Encoding</td>
-              <td className="px-4 py-3 text-slate-600">Large datasets</td>
+              <td className="px-4 py-3 text-slate-600">High-cardinality categories when frequency is informative</td>
               <td className="px-4 py-3 text-slate-600 bg-green-50">Low</td>
             </tr>
             <tr>
@@ -391,78 +452,76 @@ export function EncodingCategoricalContent() {
 
       <h3 className="text-xl font-bold mt-10 mb-2">1. Label Encoding</h3>
       <p>
-        Label Encoding converts every category into a unique integer. Because
-        Ordinal Data has a ranking, we can simply map the text directly to
-        ascending integers.
+        In Scikit-learn, <strong>LabelEncoder</strong> is designed for the
+        <strong> target variable</strong> <code>y</code>. For example, a
+        classification target containing <code>Fail</code> and <code>Pass</code>
+        can be converted to 0 and 1. The model still treats these as class labels,
+        not as measurements where one class is "twice" another.
       </p>
 
-      <div className="grid md:grid-cols-2 gap-4 my-6 items-center not-prose">
-        <div>
-          <ul className="space-y-2 text-slate-700 ml-4 font-mono">
-            <li>
-              "Low" &rarr; <strong className="text-indigo-600">1</strong>
-            </li>
-            <li>
-              "Medium" &rarr; <strong className="text-indigo-600">2</strong>
-            </li>
-            <li>
-              "High" &rarr; <strong className="text-indigo-600">3</strong>
-            </li>
-          </ul>
-        </div>
-        <div className="bg-blue-50 p-4 rounded text-sm text-blue-900 border border-blue-200">
-          The algorithm will look at this and mathematically understand that a
-          "High" (3) is 3x greater than a "Low" (1). This maintains the logical
-          order of the data.
-        </div>
+      <div className="overflow-x-auto my-6 not-prose">
+        <table className="w-full max-w-xl border-collapse rounded-xl border border-slate-200 bg-white text-sm">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="border-b p-3 text-left">Original target</th>
+              <th className="border-b p-3 text-center">Encoded target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td className="border-b p-3">Pass</td><td className="border-b p-3 text-center font-mono">1</td></tr>
+            <tr><td className="border-b p-3">Fail</td><td className="border-b p-3 text-center font-mono">0</td></tr>
+            <tr><td className="p-3">Pass</td><td className="p-3 text-center font-mono">1</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <CodeBlock
         title="label_encoding.py"
         code={`from sklearn.preprocessing import LabelEncoder
 
-colors = ['Red', 'Blue', 'Green', 'Red']
+y = ['Pass', 'Fail', 'Pass', 'Pass']
 
 encoder = LabelEncoder()
-encoded = encoder.fit_transform(colors)
+encoded_y = encoder.fit_transform(y)
 
-print("Original:", colors)
-print("Encoded: ", encoded)
+print("Original:", y)
+print("Encoded: ", encoded_y)
 print("Classes: ", encoder.classes_)`}
-        output={`Original: ['Red', 'Blue', 'Green', 'Red']
-Encoded:  [2 0 1 2]
-Classes:  ['Blue' 'Green' 'Red']`}
+        output={`Original: ['Pass', 'Fail', 'Pass', 'Pass']
+Encoded:  [1 0 1 1]
+Classes:  ['Fail' 'Pass']`}
       />
-      <div className="grid md:grid-cols-2 gap-4 text-sm mt-4">
-        <div>
-          <strong className="text-emerald-700">Advantages:</strong>
-          <ul className="list-disc pl-5">
-            <li>Simple implementation</li>
-            <li>Memory efficient & Fast</li>
-            <li>Works well for tree-based models (Random Forest, XGBoost)</li>
-          </ul>
-        </div>
-        <div>
-          <strong className="text-red-700">Disadvantages:</strong>
-          <ul className="list-disc pl-5">
-            <li>Introduces artificial order</li>
-            <li>Bad for nominal variables</li>
-            <li>May confuse linear models (Logistic Regression, SVM)</li>
-          </ul>
-        </div>
-      </div>
 
-      <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mb-8 mt-8 not-prose">
+      <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mb-8 mt-6 not-prose">
         <div className="flex items-center gap-2 text-yellow-800 font-bold mb-2">
-          <AlertTriangle className="h-5 w-5" /> The Danger of Label Encoding on
-          Nominal Data
+          <AlertTriangle className="h-5 w-5" /> Do not confuse target labels with input features
         </div>
         <p className="text-sm text-yellow-900 m-0">
-          Never use Label Encoding on Nominal data (like "New York", "Paris",
-          "London"). If you encode them as 1, 2, and 3, a linear math equation
-          will literally assume that <code>London = New York + Paris</code>.
-          That is mathematical nonsense and will destroy your model's accuracy.
+          Scikit-learn's <code>LabelEncoder</code> is for <code>y</code>, not for ordinary
+          input columns <code>X</code>. For an input feature such as City, use an
+          encoder chosen for the feature meaning—for example One-Hot Encoding for
+          unordered cities or Ordinal Encoding for truly ordered categories.
         </p>
+      </div>
+
+      <h3 className="text-xl font-bold mt-10 mb-2">
+        Why not simply write Red = 1, Blue = 2, Green = 3?
+      </h3>
+      <p>
+        Those numbers accidentally create an order and distance that the colors do
+        not have. A distance-based or linear model may treat Green (3) as farther
+        from Red (1) than Blue (2), even though that relationship was invented by
+        us.
+      </p>
+      <div className="overflow-x-auto my-5 not-prose">
+        <table className="w-full max-w-2xl border-collapse rounded-xl border border-slate-200 bg-white text-sm">
+          <thead className="bg-slate-50"><tr><th className="border-b p-3 text-left">Color</th><th className="border-b p-3 text-center">Arbitrary code</th><th className="border-b p-3 text-left">Problem</th></tr></thead>
+          <tbody>
+            <tr><td className="border-b p-3">Red</td><td className="border-b p-3 text-center">1</td><td className="border-b p-3">No real reason Red should be "lowest"</td></tr>
+            <tr><td className="border-b p-3">Blue</td><td className="border-b p-3 text-center">2</td><td className="border-b p-3">The code creates a fake middle position</td></tr>
+            <tr><td className="p-3">Green</td><td className="p-3 text-center">3</td><td className="p-3">The code creates a fake highest position</td></tr>
+          </tbody>
+        </table>
       </div>
 
       <h3 className="text-xl font-bold mt-10 mb-2">
@@ -560,7 +619,7 @@ encoded_pd = pd.get_dummies(df['Color'], dtype=int)
 print("Pandas get_dummies:\\n", encoded_pd, "\\n")
 
 # Scikit-Learn Method
-encoder = OneHotEncoder(sparse_output=False)
+encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 result = encoder.fit_transform(df[['Color']])
 print("Scikit-Learn OneHotEncoder:\\n", result)`}
         output={`Pandas get_dummies:
@@ -577,38 +636,57 @@ Scikit-Learn OneHotEncoder:
 
       <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg my-6">
         <h4 className="font-bold text-slate-800 mt-0">
-          The Dummy Variable Trap
+          Do we always need to drop one dummy column?
         </h4>
         <p className="text-sm mt-2 mb-2">
-          One-Hot Encoding may create multicollinearity. For example, if{" "}
-          <code>Red = 0</code> and <code>Blue = 0</code>, then{" "}
-          <code>Green</code> must automatically be <code>1</code>. This creates
-          a linear dependency which can confuse Linear Regression models.
+          With an intercept, a full set of one-hot columns is perfectly linearly
+          dependent: if Red = 0 and Blue = 0, Green must be 1. For unregularized
+          linear models, dropping one category is a common way to make the design
+          matrix full rank and make coefficients easier to interpret.
         </p>
         <p className="text-sm m-0">
-          <strong>Solution:</strong> Drop one dummy column.
+          <strong>Important:</strong> dropping a category is not a universal rule.
+          Tree models do not need it, and regularized linear models can often work
+          with all one-hot columns. Choose based on the model and your goal.
         </p>
         <pre className="text-xs bg-white p-2 rounded border mt-2">
-          <code>
-            pd.get_dummies(df, drop_first=True) # or in Scikit-learn
-            OneHotEncoder(drop='first')
-          </code>
+          <code>{`pd.get_dummies(df, drop_first=True)
+# or
+OneHotEncoder(drop='first')`}</code>
         </pre>
       </div>
 
       <h3 className="text-xl font-bold mt-10 mb-2">3. Ordinal Encoding</h3>
       <p>
-        Similar to Label Encoding, but specifically designed for handling
-        ordered categorical features directly in Scikit-Learn pipelines.
+        Ordinal Encoding is for <strong>input features that truly have an order</strong>.
+        A familiar example is T-shirt size: Small comes before Medium, and Medium
+        comes before Large.
       </p>
+
+      <div className="flex flex-wrap items-center justify-center gap-2 my-6 not-prose">
+        <div className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-center"><div className="font-bold text-indigo-800">Small</div><div className="text-sm">0</div></div>
+        <ArrowRight className="h-5 w-5 text-slate-400" />
+        <div className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-center"><div className="font-bold text-indigo-800">Medium</div><div className="text-sm">1</div></div>
+        <ArrowRight className="h-5 w-5 text-slate-400" />
+        <div className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3 text-center"><div className="font-bold text-indigo-800">Large</div><div className="text-sm">2</div></div>
+      </div>
+
+      <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 my-5 not-prose">
+        <p className="m-0 text-sm text-indigo-900">
+          <strong>Important:</strong> the codes preserve the order, but they do not
+          automatically prove equal distance. Code 2 does not mean Large is
+          "twice as large" as Medium.
+        </p>
+      </div>
+
       <CodeBlock
         title="ordinal_encoding.py"
         code={`from sklearn.preprocessing import OrdinalEncoder
 
-data = [['Low'], ['Medium'], ['High']]
+data = [['Small'], ['Medium'], ['Large']]
 
-# We specify the exact order constraint
-encoder = OrdinalEncoder(categories=[['Low', 'Medium', 'High']])
+# Tell the encoder the real order
+encoder = OrdinalEncoder(categories=[['Small', 'Medium', 'Large']])
 
 encoded = encoder.fit_transform(data)
 print(encoded)`}
@@ -656,6 +734,11 @@ print(encoded)`}
         </table>
       </div>
 
+      <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700 my-4 not-prose">
+        <strong>Note:</strong> this example uses the separate <code>category_encoders</code>
+        Python package. The exact bit columns are determined by the encoder's learned mapping.
+      </div>
+
       <CodeBlock
         title="binary_encoding.py"
         code={`import category_encoders as ce
@@ -678,6 +761,21 @@ print(result)`}
         Categories are replaced with their occurrence frequency. It is efficient
         for large datasets but causes information loss if categories share the
         same frequency.
+      </p>
+      <div className="overflow-x-auto my-5 not-prose">
+        <table className="w-full max-w-xl border-collapse rounded-xl border border-slate-200 bg-white text-sm">
+          <thead className="bg-slate-50"><tr><th className="border-b p-3 text-left">Category</th><th className="border-b p-3 text-center">Count</th><th className="border-b p-3 text-left">Encoding</th></tr></thead>
+          <tbody>
+            <tr><td className="border-b p-3">Red</td><td className="border-b p-3 text-center">3</td><td className="border-b p-3">Red becomes 3</td></tr>
+            <tr><td className="border-b p-3">Blue</td><td className="border-b p-3 text-center">2</td><td className="border-b p-3">Blue becomes 2</td></tr>
+            <tr><td className="p-3">Green</td><td className="p-3 text-center">1</td><td className="p-3">Green becomes 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="text-sm text-slate-600">
+        Frequency encoding is compact, but two different categories with the same
+        count receive the same number. It also makes sense only when category
+        frequency carries useful information for the problem.
       </p>
       <CodeBlock
         title="frequency_encoding.py"
@@ -703,38 +801,56 @@ Encoded Data:
 
       <h3 className="text-xl font-bold mt-10 mb-2">6. Target Encoding</h3>
       <p>
-        Each category is replaced with the average target value. It captures the
-        relationship between the category and the target variable, widely used
-        in recommendation systems, fraud detection, and Kaggle competitions.
+        Target Encoding replaces a category with a number learned from the target.
+        For a binary target such as <strong>Purchased = 1</strong> and
+        <strong>Not Purchased = 0</strong>, the basic intuition is the average target
+        value for each category.
       </p>
+
+      <div className="overflow-x-auto my-5 not-prose">
+        <table className="w-full max-w-2xl border-collapse rounded-xl border border-slate-200 bg-white text-sm">
+          <thead className="bg-slate-50"><tr><th className="border-b p-3 text-left">City</th><th className="border-b p-3 text-left">Training targets</th><th className="border-b p-3 text-left">Simple raw mean</th></tr></thead>
+          <tbody>
+            <tr><td className="border-b p-3">Delhi</td><td className="border-b p-3 font-mono">1, 1</td><td className="border-b p-3">(1 + 1) ÷ 2 = <strong>1.0</strong></td></tr>
+            <tr><td className="border-b p-3">Mumbai</td><td className="border-b p-3 font-mono">0, 0</td><td className="border-b p-3">(0 + 0) ÷ 2 = <strong>0.0</strong></td></tr>
+            <tr><td className="p-3">Chennai</td><td className="p-3 font-mono">1</td><td className="p-3">1 ÷ 1 = <strong>1.0</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="bg-rose-50 border border-rose-200 p-4 rounded text-sm text-rose-900 my-4 not-prose">
+        <strong>Major risk: target leakage and overfitting.</strong> The raw table
+        above is only for understanding the idea. In a real training workflow, do
+        not calculate a row's encoding using its own target information. Use a
+        leakage-safe method such as cross-fitting, together with appropriate
+        smoothing or regularisation.
+      </div>
+
       <CodeBlock
         title="target_encoding.py"
-        code={`import category_encoders as ce
-import pandas as pd
+        code={`import pandas as pd
+from sklearn.preprocessing import TargetEncoder
 
 df = pd.DataFrame({
     'City': ['Delhi', 'Mumbai', 'Delhi', 'Chennai', 'Mumbai'],
-    'Target': [1, 0, 1, 1, 0] # E.g., Did they purchase?
+    'Purchased': [1, 0, 1, 1, 0]
 })
 
-encoder = ce.TargetEncoder(cols=['City'])
-encoded = encoder.fit_transform(df['City'], df['Target'])
+encoder = TargetEncoder(cv=2)
 
-print(encoded)`}
-        output={`       City
-0  0.865610
-1  0.134390
-2  0.865610
-3  0.648216
-4  0.134390
-# Note: Output probabilities are smoothed by the encoder`}
+# fit_transform uses cross-fitting on the training data
+encoded_city = encoder.fit_transform(df[['City']], df['Purchased'])
+
+print(encoded_city.shape)`}
+        output={`(5, 1)
+# The encoded values are learned using cross-fitting and smoothing.`}
       />
-      <div className="bg-rose-50 border border-rose-200 p-4 rounded text-sm text-rose-900 my-4">
-        <strong>Major Risk: Overfitting!</strong> Target Encoding can leak
-        information from the training data into the test data. Cross-validation,
-        smoothing, and regularization are highly necessary when using this
-        technique.
-      </div>
+
+      <p className="text-sm text-slate-600">
+        Target Encoding is an advanced choice. It can be useful for high-cardinality
+        features, but it should normally be evaluated inside a proper validation
+        or cross-validation workflow.
+      </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
         Pipelines & ColumnTransformer
@@ -756,7 +872,7 @@ categorical_cols = ['Gender', 'City']
 # Define the preprocessing steps
 preprocessor = ColumnTransformer(
     transformers=[
-        ('cat', OneHotEncoder(drop='first'), categorical_cols)
+        ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_cols)
     ]
 )
 
@@ -773,14 +889,17 @@ pipeline = Pipeline([
         The High Cardinality Problem
       </h2>
       <p>
-        <strong>High Cardinality</strong> refers to categorical features with
-        too many unique categories (e.g., User IDs, ZIP Codes, Product IDs).
-        Using One-Hot Encoding here becomes incredibly inefficient, creating
-        thousands of sparse columns ("Curse of Dimensionality").
+        <strong>High Cardinality</strong> means that a feature has many unique
+        categories—for example thousands of product codes or locations. One-hot
+        encoding can then create a very wide sparse feature matrix, which may
+        increase memory use, computation time, and overfitting risk.
       </p>
       <p>
-        <strong>Better Alternatives:</strong> Binary Encoding, Target Encoding,
-        Frequency Encoding, or Embedding layers (in Deep Learning).
+        <strong>Possible alternatives:</strong> group rare categories, use
+        frequency/count encoding, binary or hashing-style encoders, carefully
+        cross-fitted target encoding, native categorical support in an appropriate
+        model, or learned embeddings in deep learning. The best choice depends on
+        the data and model.
       </p>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
@@ -790,43 +909,25 @@ pipeline = Pipeline([
         <div className="p-4 border rounded shadow-sm bg-white">
           <strong className="block text-indigo-700 mb-2">E-Commerce</strong>
           <ul className="text-sm space-y-1">
-            <li>
-              <strong>Product Category:</strong> One-Hot
-            </li>
-            <li>
-              <strong>User ID:</strong> Target Encoding
-            </li>
-            <li>
-              <strong>Brand Popularity:</strong> Frequency
-            </li>
+            <li><strong>Product category:</strong> One-hot when the number of categories is manageable</li>
+            <li><strong>Size:</strong> Ordinal when Small &lt; Medium &lt; Large is meaningful</li>
+            <li><strong>Large brand list:</strong> Consider grouping rare brands or a high-cardinality method</li>
           </ul>
         </div>
         <div className="p-4 border rounded shadow-sm bg-white">
           <strong className="block text-emerald-700 mb-2">Banking</strong>
           <ul className="text-sm space-y-1">
-            <li>
-              <strong>Credit Rating:</strong> Ordinal
-            </li>
-            <li>
-              <strong>Occupation:</strong> One-Hot
-            </li>
-            <li>
-              <strong>ZIP Code:</strong> Binary
-            </li>
+            <li><strong>Risk band:</strong> Ordinal if Low &lt; Medium &lt; High is the intended meaning</li>
+            <li><strong>Occupation:</strong> One-hot when cardinality is manageable</li>
+            <li><strong>Location:</strong> Choose an approach based on cardinality and whether location meaning is useful</li>
           </ul>
         </div>
         <div className="p-4 border rounded shadow-sm bg-white">
           <strong className="block text-rose-700 mb-2">Healthcare</strong>
           <ul className="text-sm space-y-1">
-            <li>
-              <strong>Disease Severity:</strong> Ordinal
-            </li>
-            <li>
-              <strong>Blood Group:</strong> One-Hot
-            </li>
-            <li>
-              <strong>Hospital ID:</strong> Frequency
-            </li>
+            <li><strong>Severity:</strong> Ordinal if the clinical levels have a true order</li>
+            <li><strong>Blood group:</strong> One-hot because A, B, AB and O have no numeric order</li>
+            <li><strong>Hospital:</strong> High-cardinality methods may be considered if many hospitals are present</li>
           </ul>
         </div>
       </div>
@@ -835,18 +936,19 @@ pipeline = Pipeline([
         Common Beginner Mistakes
       </h2>
       <ul className="space-y-2">
-        <li>❌ Using Label Encoding for nominal variables.</li>
+        <li>❌ Using <code>LabelEncoder</code> on ordinary nominal input features.</li>
         <li>
-          ❌ Applying One-Hot Encoding on thousands of categories (High
-          Cardinality).
+          ❌ Automatically one-hot encoding extremely high-cardinality columns
+          without checking the resulting feature width and model requirements.
         </li>
         <li>
           ❌ Using different encoders for training and testing data (Always use{" "}
           <code>fit_transform</code> on train, and ONLY <code>transform</code>{" "}
           on test).
         </li>
-        <li>❌ Ignoring unseen categories during prediction.</li>
-        <li>❌ Allowing Data leakage when using Target Encoding.</li>
+        <li>❌ Ignoring unseen categories during prediction instead of deciding how the encoder should handle them.</li>
+        <li>❌ Allowing data leakage when using Target Encoding.</li>
+        <li>❌ Treating identifier columns such as customer IDs as ordinary categories without asking whether they should be used at all.</li>
       </ul>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
@@ -860,14 +962,13 @@ pipeline = Pipeline([
         <p className="font-medium text-slate-200">Scenario:</p>
         <p className="text-sm bg-slate-700/50 p-3 rounded mb-4">
           You are building an ML model to predict University admissions. The
-          dataset has a column called "Application Status" filled with the text
-          values:{" "}
-          <code>['Submitted', 'Under Review', 'Interviewing', 'Accepted']</code>
-          . <br />
-          <br />
-          Should you use Ordinal Encoding (1, 2, 3, 4) or One-Hot Encoding
-          (binary columns) for this specific feature? What about a column for
-          "Student Home State" containing all 50 states?
+          dataset contains <strong>Education Level</strong> with values
+          <code>['High School', 'Bachelor', 'Master', 'PhD']</code> and
+          <strong>Student Home State</strong> with values from different states.
+          <br /><br />
+          Which feature is naturally ordinal and which is nominal? Also, what
+          would you do if the dataset contained an <strong>Application Status</strong>
+          column whose values included <code>Accepted</code>?
         </p>
         <details className="group cursor-pointer">
           <summary className="font-bold text-emerald-400 outline-none select-none">
@@ -875,22 +976,65 @@ pipeline = Pipeline([
           </summary>
           <div className="mt-3 p-4 bg-emerald-900/40 border border-emerald-800/50 text-emerald-100 rounded text-sm space-y-2">
             <p>
-              <strong>Status Answer: Ordinal Encoding.</strong> <br /> Because
-              there is a clear, escalating logistical order to those statuses
-              (you cannot be Accepted without being Submitted), they represent{" "}
-              <strong>Ordinal Data</strong>. Mapping them preserves that logical
-              order perfectly.
+              <strong>Education Level: Ordinal Encoding may be reasonable.</strong>
+              There is a meaningful educational progression, so you can explicitly
+              define the intended order. Whether this feature should be treated as
+              equally spaced still depends on the model and problem.
             </p>
-            <p className="mt-3">
-              <strong>
-                State Answer: One-Hot Encoding or Binary Encoding.
-              </strong>{" "}
-              <br /> States are completely nominal (California is not "greater"
-              than Texas). With 50 states, One-Hot encoding would add 50
-              columns. Binary Encoding might be even better to save space!
+            <p>
+              <strong>Home State: Nominal.</strong> Karnataka is not mathematically
+              "greater" than Kerala. One-hot encoding is a straightforward choice
+              when the number of categories is manageable; other approaches can be
+              evaluated when cardinality is high.
+            </p>
+            <p>
+              <strong>Application Status containing Accepted: check for leakage first.</strong>
+              If the target is whether a student will be admitted, a status that
+              already says <em>Accepted</em> may reveal the answer. The correct action
+              may be to remove or time-restrict that feature rather than encode it.
             </p>
           </div>
         </details>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
+        Common Questions About Categorical Encoding
+      </h2>
+      <div className="space-y-4 not-prose">
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="m-0 font-bold text-slate-800">Label Encoding vs One-Hot Encoding — what is the difference?</p>
+          <p className="mt-1 mb-0 text-sm text-slate-600">
+            In Scikit-learn, LabelEncoder is for target labels <code>y</code>.
+            OneHotEncoder is for categorical input features where categories do
+            not have a natural order.
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="m-0 font-bold text-slate-800">When should I use Ordinal Encoding?</p>
+          <p className="mt-1 mb-0 text-sm text-slate-600">
+            Use it when the input categories have a genuine order, such as
+            Low &lt; Medium &lt; High. Do not invent an order simply because an
+            encoder can assign integers.
+          </p>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4">
+          <p className="m-0 font-bold text-slate-800">What if a new category appears after training?</p>
+          <p className="mt-1 mb-0 text-sm text-slate-600">
+            Decide this during preprocessing. For example, OneHotEncoder can be
+            configured with <code>handle_unknown='ignore'</code>, while other
+            encoders provide their own unknown-category strategies.
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-8 rounded-xl border border-emerald-200 bg-emerald-50 p-5 not-prose">
+        <p className="m-0 font-bold text-emerald-900">Where this fits in the learning path</p>
+        <p className="mt-2 mb-0 text-sm text-emerald-800">
+          First clean missing values in <a href="/learn/handling-missing-data" className="font-semibold underline">Handling Missing Data</a>,
+          then encode categories here. Continue with <a href="/learn/feature-scaling" className="font-semibold underline">Feature Scaling</a> and
+          <a href="/learn/feature-engineering" className="font-semibold underline">Feature Engineering</a>. For reusable preprocessing pipelines, revisit
+          <a href="/learn/scikit-learn-essentials" className="font-semibold underline">Scikit-learn Essentials</a>.
+        </p>
       </div>
     </div>
   );
