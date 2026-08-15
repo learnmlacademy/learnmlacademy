@@ -29,17 +29,19 @@ import {
   CheckCircle,
 } from "lucide-react";
 
-// Sample data for visualizations
+// Fixed teaching data keeps the visuals reproducible on every page load.
+const linearOffsets = [-3, 2, -1, 3, -2, 1, 0, -2, 3, -1, 2, -2, 1, 0, -1];
 const linearData = Array.from({ length: 15 }, (_, i) => {
   const x = i + 1;
   const y = 2.5 * x + 10;
-  return { x, y, actual: y + Math.random() * 15 - 7.5 };
+  return { x, y, actual: y + linearOffsets[i] };
 });
 
+const polynomialOffsets = [-2, 1, -1, 2, -1, 0, 1, -2, 2, -1, 0, 1, -1, 2, -2];
 const polyData = Array.from({ length: 15 }, (_, i) => {
   const x = i + 1;
   const y = 0.5 * Math.pow(x - 7, 2) + 10;
-  return { x, y, actual: y + Math.random() * 8 - 4 };
+  return { x, y, actual: y + polynomialOffsets[i] };
 });
 
 const quadData = Array.from({ length: 20 }, (_, i) => {
@@ -53,16 +55,16 @@ const cubicData = Array.from({ length: 20 }, (_, i) => {
 });
 
 const studyData = [
-  { hours: 1, score: 45, linearScore: 44.5, polyScore: 45.2 },
-  { hours: 2, score: 50, linearScore: 50.8, polyScore: 49.3 },
-  { hours: 3, score: 54, linearScore: 57.1, polyScore: 54.4 },
-  { hours: 4, score: 60, linearScore: 63.4, polyScore: 60.1 },
-  { hours: 5, score: 68, linearScore: 69.7, polyScore: 66.8 },
-  { hours: 6, score: 78, linearScore: 76.0, polyScore: 74.7 },
-  { hours: 7, score: 85, linearScore: 82.3, polyScore: 83.6 },
-  { hours: 8, score: 91, linearScore: 88.6, polyScore: 92.2 },
-  { hours: 9, score: 96, linearScore: 94.9, polyScore: 98.7 },
-  { hours: 10, score: 98, linearScore: 101.2, polyScore: 98.5 },
+  { hours: 1, score: 45, linearScore: 43.35, polyScore: 45.69 },
+  { hours: 2, score: 50, linearScore: 49.82, polyScore: 48.62 },
+  { hours: 3, score: 54, linearScore: 56.30, polyScore: 53.93 },
+  { hours: 4, score: 60, linearScore: 62.78, polyScore: 60.90 },
+  { hours: 5, score: 68, linearScore: 69.26, polyScore: 68.83 },
+  { hours: 6, score: 78, linearScore: 75.74, polyScore: 77.01 },
+  { hours: 7, score: 85, linearScore: 82.22, polyScore: 84.73 },
+  { hours: 8, score: 91, linearScore: 88.70, polyScore: 91.28 },
+  { hours: 9, score: 96, linearScore: 95.18, polyScore: 95.96 },
+  { hours: 10, score: 98, linearScore: 101.65, polyScore: 98.04 },
 ];
 
 export function PolynomialRegressionContent() {
@@ -72,6 +74,54 @@ export function PolynomialRegressionContent() {
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-lg shadow-sm">
         Polynomial Regression is a form of Regression used when the relationship between variables is nonlinear. Instead of fitting a straight line, it bends the line to fit the curves of the dataset.</p>
+
+      {/* Beginner-first intuition */}
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Polynomial Regression in Simple Words
+      </h2>
+      <p className="text-lg text-slate-700 mb-5">
+        Linear Regression tries to describe a pattern with a <strong>straight line</strong>.
+        Polynomial Regression is useful when the pattern clearly <strong>bends or curves</strong>.
+        It gives the model extra features such as <code>x²</code> and <code>x³</code> so a linear model can follow that curve.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {[
+          ["1. Look at the data", "Do the points roughly follow a straight line or a curve?"],
+          ["2. Add polynomial terms", "For degree 2, x becomes x and x²."],
+          ["3. Fit the model", "Linear Regression learns coefficients for the new columns."],
+        ].map(([title, text]) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+            <p className="font-bold text-indigo-800 mb-1">{title}</p>
+            <p className="text-sm text-slate-600">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-8">
+        <p className="font-bold text-blue-900 mb-3">A tiny example: the rate of change is not constant</p>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border border-blue-200 text-sm">
+            <thead className="bg-blue-100">
+              <tr>
+                <th className="px-3 py-2 text-left">x</th>
+                <th className="px-3 py-2 text-left">y</th>
+                <th className="px-3 py-2 text-left">Increase in y</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-blue-100">
+              <tr><td className="px-3 py-2">1</td><td className="px-3 py-2">2</td><td className="px-3 py-2">—</td></tr>
+              <tr><td className="px-3 py-2">2</td><td className="px-3 py-2">5</td><td className="px-3 py-2">+3</td></tr>
+              <tr><td className="px-3 py-2">3</td><td className="px-3 py-2">10</td><td className="px-3 py-2">+5</td></tr>
+              <tr><td className="px-3 py-2">4</td><td className="px-3 py-2">17</td><td className="px-3 py-2">+7</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-blue-900 mt-3">
+          The increase changes from <strong>+3 → +5 → +7</strong>. That is a clue that a straight line may be too simple.
+          In fact, these values follow the easy curve <code>y = x² + 1</code>.
+        </p>
+      </div>
 
       {/* What is Polynomial Regression? */}
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2 flex items-center">
@@ -103,9 +153,9 @@ export function PolynomialRegressionContent() {
           <li>Speed and fuel efficiency</li>
         </ul>
         <p className="text-slate-700">
-          These relationships are often{" "}
+          These relationships can be {" "}
           <strong>curved rather than perfectly straight</strong>. A straight
-          line cannot properly model such patterns, but a polynomial curve can.
+          line may underfit such a pattern, while polynomial terms can sometimes capture the curvature more effectively.
         </p>
       </div>
 
@@ -142,7 +192,7 @@ export function PolynomialRegressionContent() {
             </ResponsiveContainer>
           </div>
           <p className="text-center text-sm text-slate-500 mt-2">
-            Straight line cannot capture bounds
+            Straight line follows a constant-rate trend
           </p>
         </div>
         <div className="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
@@ -172,7 +222,7 @@ export function PolynomialRegressionContent() {
             </ResponsiveContainer>
           </div>
           <p className="text-center text-sm text-slate-500 mt-2">
-            Curved pattern fits data perfectly
+            A curve can follow a changing-rate pattern
           </p>
         </div>
       </div>
@@ -186,8 +236,8 @@ export function PolynomialRegressionContent() {
             Linear Regression Assumes:
           </h4>
           <ul className="list-disc pl-5 text-red-900">
-            <li>Straight-line relationship</li>
-            <li>Constant rate of change</li>
+            <li>A straight-line form between the created features and target</li>
+            <li>A constant slope when only the original x feature is used</li>
           </ul>
         </div>
         <div className="bg-emerald-50 p-5 rounded-lg border border-emerald-100">
@@ -195,15 +245,15 @@ export function PolynomialRegressionContent() {
             But Real-World Data Contains:
           </h4>
           <ul className="list-disc pl-5 text-emerald-900">
-            <li>Curves</li>
-            <li>Nonlinear growth</li>
-            <li>Complex trends</li>
+            <li>Curved relationships</li>
+            <li>Changing rates of increase or decrease</li>
+            <li>Patterns a straight line may underfit</li>
           </ul>
         </div>
       </div>
       <p className="text-slate-700 mb-8 italic">
-        Polynomial Regression helps model these nonlinear patterns more
-        accurately.
+        Polynomial Regression can model some smooth nonlinear patterns by adding powers of the original features.
+        Whether it predicts better must be checked on validation or unseen data.
       </p>
 
       {/* Core Idea */}
@@ -232,62 +282,24 @@ export function PolynomialRegressionContent() {
         </code>
       </div>
 
-      {/* Hierarchical Structure */}
+      {/* Simple regression family map */}
       <h3 className="text-xl font-bold text-indigo-800 mb-4">
-        Hierarchical Structure of Regression Types
+        Where Polynomial Regression Fits
       </h3>
-      <div className="bg-slate-50 border border-slate-200 p-8 rounded-lg mb-10 shadow-sm flex flex-col items-center">
-        <div className="bg-indigo-600 text-white font-bold py-2 px-6 rounded-lg shadow-md z-10 w-64 text-center">
-          Regression Algorithms
-        </div>
-        <div className="border-l-2 border-indigo-300 h-6"></div>
-        <div className="w-[60%] border-t-2 border-indigo-300 h-0 flex justify-between relative">
-          <div className="border-l-2 border-indigo-300 h-6 absolute left-0"></div>
-          <div className="border-l-2 border-indigo-300 h-6 absolute right-0"></div>
-        </div>
-        <div className="w-full flex justify-center gap-4 relative z-10">
-          <div className="w-1/2 flex flex-col items-center">
-            <div className="bg-white border-2 border-indigo-400 text-indigo-900 font-bold py-2 px-4 rounded shadow text-center w-48">
-              Linear Regression
-            </div>
-            <div className="border-l-2 border-indigo-300 h-6"></div>
-            <div className="bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded text-center w-48 text-sm">
-              Simple Linear Regression
-            </div>
+      <div className="bg-slate-50 border border-slate-200 p-5 rounded-lg mb-10 shadow-sm">
+        <div className="text-center font-bold text-slate-800 mb-4">Regression</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+          <div className="bg-white border border-blue-200 rounded-lg p-4 text-center">
+            <p className="font-bold text-blue-800">Linear Regression</p>
+            <p className="text-sm text-slate-600 mt-1">Uses the original features to fit a straight-line relationship.</p>
           </div>
-          <div className="w-1/2 flex flex-col items-center">
-            <div className="bg-white border-2 border-emerald-400 text-emerald-900 font-bold py-2 px-4 rounded shadow text-center w-48">
-              Nonlinear Regression
-            </div>
-            <div className="border-l-2 border-emerald-300 h-6"></div>
-            <div className="bg-emerald-100 border border-emerald-300 text-emerald-900 font-bold py-2 px-4 rounded text-center w-48">
-              Polynomial Regression
-            </div>
-            <div className="border-l-2 border-emerald-300 h-6"></div>
-
-            {/* Third level */}
-            <div className="w-full relative mt-[-2px]">
-              <div className="w-[80%] mx-auto border-t-2 border-emerald-300 absolute left-[10%] top-0"></div>
-              <div className="flex justify-between mt-4">
-                <div className="flex flex-col items-center w-1/3">
-                  <div className="absolute top-0 border-l-2 border-emerald-300 h-4 left-[10%]"></div>
-                  <div className="bg-white py-1 px-2 border border-slate-300 rounded text-xs font-semibold text-center mt-2 shadow-sm whitespace-nowrap">
-                    Quadratic
-                  </div>
-                </div>
-                <div className="flex flex-col items-center w-1/3">
-                  <div className="absolute top-0 border-l-2 border-emerald-300 h-4 left-1/2"></div>
-                  <div className="bg-white py-1 px-2 border border-slate-300 rounded text-xs font-semibold text-center mt-2 shadow-sm whitespace-nowrap">
-                    Cubic
-                  </div>
-                </div>
-                <div className="flex flex-col items-center w-1/3">
-                  <div className="absolute top-0 border-l-2 border-emerald-300 h-4 right-[10%]"></div>
-                  <div className="bg-white py-1 px-2 border border-slate-300 rounded text-xs font-semibold text-center mt-2 shadow-sm whitespace-nowrap">
-                    Higher Degree
-                  </div>
-                </div>
-              </div>
+          <div className="bg-white border border-emerald-300 rounded-lg p-4 text-center">
+            <p className="font-bold text-emerald-800">Polynomial Regression</p>
+            <p className="text-sm text-slate-600 mt-1">Adds powers such as x² and x³, then fits a linear model to those features.</p>
+            <div className="flex flex-wrap justify-center gap-2 mt-3 text-xs">
+              <span className="bg-emerald-50 border border-emerald-200 rounded px-2 py-1">Degree 2: Quadratic</span>
+              <span className="bg-emerald-50 border border-emerald-200 rounded px-2 py-1">Degree 3: Cubic</span>
+              <span className="bg-emerald-50 border border-emerald-200 rounded px-2 py-1">Higher Degree</span>
             </div>
           </div>
         </div>
@@ -329,12 +341,10 @@ export function PolynomialRegressionContent() {
               <li>b₂ = 1</li>
               <li>x = 2</li>
             </ul>
-            <div className="bg-white p-3 rounded border border-amber-200 font-mono text-sm text-slate-800 space-y-1">
-              <p>y = 2 + 3(2) + 1(2²)</p>
-              <p>y = 2 + 6 + 4</p>
-              <p className="font-bold text-lg text-amber-900 pt-2 border-t border-amber-100">
-                y = 12
-              </p>
+            <div className="bg-white p-3 rounded border border-amber-200 text-sm text-slate-800 space-y-3">
+              <div><p className="font-bold text-amber-900">Step 1 — Substitute x = 2</p><p className="font-mono">y = 2 + 3(2) + 1(2²)</p><p className="text-xs text-slate-500">Put the given value of x into every x term.</p></div>
+              <div><p className="font-bold text-amber-900">Step 2 — Calculate powers and multiplication</p><p className="font-mono">y = 2 + 6 + 4</p><p className="text-xs text-slate-500">2² = 4, so the curved x² term contributes 4.</p></div>
+              <div className="pt-2 border-t border-amber-100"><p className="font-bold text-amber-900">Step 3 — Add the terms</p><p className="font-mono text-lg font-bold">y = 12</p></div>
             </div>
           </div>
         </div>
@@ -397,12 +407,10 @@ export function PolynomialRegressionContent() {
               <li>b₃ = 1</li>
               <li>x = 2</li>
             </ul>
-            <div className="bg-white p-3 rounded border border-amber-200 font-mono text-sm text-slate-800 space-y-1">
-              <p>y = 1 + 2(2) + 1(2²) + 1(2³)</p>
-              <p>y = 1 + 4 + 4 + 8</p>
-              <p className="font-bold text-lg text-amber-900 pt-2 border-t border-amber-100">
-                y = 17
-              </p>
+            <div className="bg-white p-3 rounded border border-amber-200 text-sm text-slate-800 space-y-3">
+              <div><p className="font-bold text-amber-900">Step 1 — Substitute x = 2</p><p className="font-mono">y = 1 + 2(2) + 1(2²) + 1(2³)</p></div>
+              <div><p className="font-bold text-amber-900">Step 2 — Calculate each term</p><p className="font-mono">y = 1 + 4 + 4 + 8</p><p className="text-xs text-slate-500">Here 2² = 4 and 2³ = 8.</p></div>
+              <div className="pt-2 border-t border-amber-100"><p className="font-bold text-amber-900">Step 3 — Add the terms</p><p className="font-mono text-lg font-bold">y = 17</p></div>
             </div>
           </div>
         </div>
@@ -456,8 +464,8 @@ export function PolynomialRegressionContent() {
             </div>
           </div>
           <p className="text-sm text-slate-600 block mt-4 bg-indigo-100 p-3 rounded">
-            The dataset width grows. If a row had just <code>[3]</code> as its
-            feature, it becomes <code>[3, 9, 27, 81]</code>.
+            The dataset width grows. If a row had just <code>[3]</code> as its feature, the useful degree-4 terms are
+            <code> [3, 9, 27, 81]</code>. Scikit-learn can also add a constant bias column unless <code>include_bias=False</code>.
           </p>
         </div>
 
@@ -512,12 +520,12 @@ export function PolynomialRegressionContent() {
             {[
               { f: "Relationship", lr: "Straight line", pr: "Curved" },
               { f: "Complexity", lr: "Simple", pr: "More complex" },
-              { f: "Accuracy on nonlinear data", lr: "Poor", pr: "Better" },
-              { f: "Risk of overfitting", lr: "Low", pr: "Higher" },
+              { f: "Curved pattern", lr: "May underfit", pr: "Can capture curvature" },
+              { f: "Risk of overfitting", lr: "Usually lower complexity", pr: "Can rise with degree" },
               {
                 f: "Feature engineering",
-                lr: "Minimal",
-                pr: "Required (Polynomial expansion)",
+                lr: "Original features",
+                pr: "Adds polynomial terms",
               },
             ].map((row, i) => (
               <tr key={i} className={i % 2 === 0 ? "bg-white" : "bg-slate-50"}>
@@ -540,9 +548,8 @@ export function PolynomialRegressionContent() {
         Regression
       </h2>
       <p className="text-lg text-slate-700 mb-6">
-        Polynomial Regression commonly uses Mean Squared Error (MSE), identical
-        to standard Linear Regression, because it is still an optimization over
-        a linear set of parameters globally.
+        Polynomial Regression for a continuous target can use the same regression losses as Linear Regression.
+        A common choice is Mean Squared Error (MSE), which measures the average squared prediction error.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
@@ -596,12 +603,11 @@ export function PolynomialRegressionContent() {
             </table>
           </div>
           <div className="bg-white p-3 rounded border border-amber-200 font-mono text-sm text-slate-800">
-            <p className="mb-1 text-slate-500">// Step 2 — Average errors</p>
-            <p>MSE = (1 + 4 + 1) / 3</p>
+            <p className="mb-1 text-slate-500">Step 2 — Add the squared errors</p>
+            <p>1 + 4 + 1 = 6</p>
+            <p className="mt-2 text-slate-500">Step 3 — Divide by the 3 observations</p>
             <p>MSE = 6 / 3</p>
-            <p className="font-bold text-amber-900 mt-2 border-t border-amber-100 pt-1">
-              MSE = 2
-            </p>
+            <p className="font-bold text-amber-900 mt-2 border-t border-amber-100 pt-1">MSE = 2</p>
           </div>
         </div>
       </div>
@@ -612,9 +618,8 @@ export function PolynomialRegressionContent() {
         the Degree
       </h2>
       <p className="text-lg text-slate-700 mb-6">
-        Choosing the correct polynomial degree is critical. A higher-degree
-        polynomial possesses more flexibility, but it risks memorizing the
-        training data perfectly while failing on unseen data (overfitting).
+        The polynomial degree controls how flexible the curve can become. Too low a degree may miss the pattern,
+        while an unnecessarily high degree can start fitting noise and perform poorly on unseen data. Choose the degree using validation data or cross-validation rather than a fixed rule.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -638,7 +643,7 @@ export function PolynomialRegressionContent() {
             Good Fit
           </h4>
           <div className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded mb-4 font-mono">
-            Degree 2 or 3
+            Example: Degree 2 or 3
           </div>
           <div className="w-full h-32 relative border border-emerald-100 rounded bg-emerald-50 overflow-hidden flex items-center justify-center">
             <svg
@@ -666,7 +671,7 @@ export function PolynomialRegressionContent() {
             Overfitting
           </h4>
           <div className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded mb-4 font-mono">
-            Degree 10+
+            Very High Degree
           </div>
           <div className="w-full h-32 relative border border-red-100 rounded bg-red-50 overflow-hidden flex items-center justify-center">
             <svg
@@ -686,9 +691,13 @@ export function PolynomialRegressionContent() {
             </span>
           </div>
           <p className="text-sm mt-3 text-red-600 text-center">
-            Wildly oscillates to touch every point.
+            May bend around noise instead of learning the general trend.
           </p>
         </div>
+      </div>
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 text-sm text-amber-900">
+        <strong>Important:</strong> degree 2 or 3 is not automatically the best choice. Try reasonable degrees and compare validation or cross-validation performance.
+        See <a className="underline font-semibold" href="/learn/cross-validation">Cross-Validation</a> for the idea of checking performance on unseen folds.
       </div>
 
       {/* Pros Cons Assumptions */}
@@ -711,19 +720,19 @@ export function PolynomialRegressionContent() {
                     Captures nonlinear data
                   </td>
                   <td className="px-4 py-2 text-slate-600">
-                    Better curve fitting
+                    Can represent smooth curvature
                   </td>
                 </tr>
                 <tr>
                   <td className="px-4 py-2 font-medium">Flexible</td>
                   <td className="px-4 py-2 text-slate-600">
-                    Models complex relationships
+                    Degree controls model flexibility
                   </td>
                 </tr>
                 <tr>
                   <td className="px-4 py-2 font-medium">Better accuracy</td>
                   <td className="px-4 py-2 text-slate-600">
-                    Improved prediction capability
+                    Can outperform a straight line on suitable data
                   </td>
                 </tr>
                 <tr>
@@ -752,15 +761,15 @@ export function PolynomialRegressionContent() {
                 <tr>
                   <td className="px-4 py-2 font-medium">Overfitting risk</td>
                   <td className="px-4 py-2 text-slate-600">
-                    High-degree curves memorize data
+                    Higher degrees can fit noise
                   </td>
                 </tr>
                 <tr>
                   <td className="px-4 py-2 font-medium">
-                    Computationally expensive
+                    Feature count can grow
                   </td>
                   <td className="px-4 py-2 text-slate-600">
-                    More features created
+                    More polynomial and interaction terms may be created
                   </td>
                 </tr>
                 <tr>
@@ -768,7 +777,7 @@ export function PolynomialRegressionContent() {
                     Sensitive to outliers
                   </td>
                   <td className="px-4 py-2 text-slate-600">
-                    Extreme values affect curve deeply
+                    Squared-error fitting can be influenced by extreme observations
                   </td>
                 </tr>
                 <tr>
@@ -787,12 +796,11 @@ export function PolynomialRegressionContent() {
 
       {/* Assumptions */}
       <h2 className="text-3xl font-bold mt-12 mb-6 text-slate-800 border-b pb-2 flex items-center">
-        <CheckCircle className="mr-3 text-indigo-600" /> Assumptions of
-        Polynomial Regression
+        <CheckCircle className="mr-3 text-indigo-600" /> Assumptions & Practical Checks
       </h2>
       <p className="text-lg text-slate-700 mb-6">
-        Although it accurately models non-linear relations, it fundamentally
-        shares the core assumptions of linear regression:
+        Polynomial Regression is linear in its learned coefficients, so many Linear Regression assumptions still matter.
+        Some checks are especially important when you want statistical inference, while others are practical modeling choices.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
@@ -817,11 +825,10 @@ export function PolynomialRegressionContent() {
           </div>
           <div>
             <h4 className="font-bold text-emerald-900 mb-1">
-              Minimal Multicollinearity
+              Correlated Polynomial Terms
             </h4>
             <p className="text-sm text-emerald-700">
-              Features should not be highly correlated. Polynomial expansions
-              naturally induce some correlation, requiring caution.
+              Polynomial terms such as x, x² and x³ can be strongly correlated. This can make individual coefficients unstable or harder to interpret, especially at high degrees.
             </p>
           </div>
         </div>
@@ -833,8 +840,7 @@ export function PolynomialRegressionContent() {
           <div>
             <h4 className="font-bold text-blue-900 mb-1">Continuous Target</h4>
             <p className="text-sm text-blue-700">
-              The dependent variable must be continuous (predicting continuous
-              values, not distinct classes).
+              Polynomial regression is normally used to predict a numeric continuous target, such as price, temperature or score.
             </p>
           </div>
         </div>
@@ -845,11 +851,10 @@ export function PolynomialRegressionContent() {
           </div>
           <div>
             <h4 className="font-bold text-amber-900 mb-1">
-              Correct Polynomial Degree
+              Choose Degree with Validation
             </h4>
             <p className="text-sm text-amber-700">
-              The chosen degree of the polynomial adequately captures the true
-              data pattern without overfitting.
+              Degree is a model-choice decision, not a statistical assumption. Compare candidate degrees on validation data or with cross-validation.
             </p>
           </div>
         </div>
@@ -861,9 +866,7 @@ export function PolynomialRegressionContent() {
           <div>
             <h4 className="font-bold text-rose-900 mb-1">Random Errors</h4>
             <p className="text-sm text-rose-700">
-              The model residuals (errors) should be approximately random,
-              maintaining both constant variance (Homoscedasticity) and a normal
-              distribution.
+              Residuals should not show a strong systematic pattern. Roughly constant error variance matters for classical inference, and residual normality is mainly relevant when constructing traditional significance tests or confidence intervals.
             </p>
           </div>
         </div>
@@ -994,6 +997,10 @@ export function PolynomialRegressionContent() {
         polynomial regression model using Python and compare it with a simple
         linear regression model.
       </p>
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-sm text-amber-900">
+        <strong>Teaching note:</strong> this tiny example fits all 10 rows so you can see the mechanics clearly.
+        In a real project, compare candidate degrees using a validation set or cross-validation before judging which model generalizes better.
+      </div>
 
       {/* Step 1 & 2 */}
       <div className="bg-white border text-left border-slate-200 shadow-sm rounded-xl overflow-hidden mb-8">
@@ -1158,7 +1165,7 @@ linear_model.fit(X, y)`}</code>
           </p>
           <div className="bg-[#1e1e1e] text-[#d4d4d4] p-4 rounded text-sm font-mono overflow-x-auto border border-slate-800 mb-4">
             <pre className="!m-0 leading-relaxed">
-              <code>{`poly_features = PolynomialFeatures(degree=3)
+              <code>{`poly_features = PolynomialFeatures(degree=3, include_bias=False)
 
 X_poly = poly_features.fit_transform(X)
 
@@ -1182,8 +1189,8 @@ poly_model.fit(X_poly, y)`}</code>
                 in the data.
               </li>
               <li>
-                In this example, <code>degree=3</code> means the model will
-                learn cubic relationships.
+                In this example, <code>degree=3</code> creates <code>x</code>, <code>x²</code>, and <code>x³</code>.
+                We use <code>include_bias=False</code> because <code>LinearRegression</code> already learns an intercept by default.
               </li>
             </ul>
           </div>
@@ -1258,7 +1265,7 @@ plt.show()`}</code>
               <pre className="!m-0 leading-relaxed">
                 <code>{`plt.scatter(X, y, color='blue')
 plt.plot(X,
-    poly_model.predict(poly_features.fit_transform(X)),
+    poly_model.predict(poly_features.transform(X)),
     color='red')
 plt.title('Polynomial Regression Model')
 plt.xlabel('Study Hours')
@@ -1332,7 +1339,7 @@ print(linear_prediction)`}</code>
                 </pre>
               </div>
               <div className="bg-slate-100 border-l-4 border-slate-400 p-2 rounded text-xs font-mono text-slate-700">
-                [83.4]
+                [85.46]
               </div>
             </div>
             <div className="border border-emerald-200 rounded-lg p-4 bg-white">
@@ -1342,21 +1349,21 @@ print(linear_prediction)`}</code>
               <div className="bg-[#1e1e1e] text-[#d4d4d4] p-3 rounded text-xs font-mono overflow-x-auto border border-slate-800 mb-3">
                 <pre className="!m-0">
                   <code>{`poly_prediction = poly_model.predict(
-    poly_features.fit_transform(new_value)
+    poly_features.transform(new_value)
 )
 print(poly_prediction)`}</code>
                 </pre>
               </div>
               <div className="bg-slate-100 border-l-4 border-slate-400 p-2 rounded text-xs font-mono text-slate-700">
-                [87.2]
+                [88.20]
               </div>
             </div>
           </div>
 
           <p className="text-slate-700 bg-amber-50 p-3 rounded border border-amber-200 italic shadow-sm mb-8">
             The polynomial regression model may provide a more realistic
-            prediction (87.2) if the relationship between variables is curved
-            rather than perfectly straight (83.4).
+            prediction (88.20) than the straight-line prediction (85.46) for this input.
+            Which model is actually better should be decided using validation or test data, not by preferring the curved answer automatically.
           </p>
 
           <h3 className="font-bold text-xl text-indigo-800 mb-4 border-t pt-6 text-center">
@@ -1388,7 +1395,7 @@ linear_model = LinearRegression()
 linear_model.fit(X, y)
 
 # 4. Polynomial Feature Expansion & Model Training
-poly_features = PolynomialFeatures(degree=3)
+poly_features = PolynomialFeatures(degree=3, include_bias=False)
 X_poly = poly_features.fit_transform(X)
 
 poly_model = LinearRegression()
@@ -1404,7 +1411,7 @@ plt.show()
 
 # 6. Polynomial Regression Plot
 plt.scatter(X, y, color='blue')
-plt.plot(X, poly_model.predict(poly_features.fit_transform(X)), color='red')
+plt.plot(X, poly_model.predict(poly_features.transform(X)), color='red')
 plt.title('Polynomial Regression Model')
 plt.xlabel('Study Hours')
 plt.ylabel('Exam Score')
@@ -1413,7 +1420,7 @@ plt.show()
 # 7. Make Predictions
 new_value = np.array([[7.5]])
 linear_prediction = linear_model.predict(new_value)
-poly_prediction = poly_model.predict(poly_features.fit_transform(new_value))
+poly_prediction = poly_model.predict(poly_features.transform(new_value))
 
 print("Linear Regression Prediction:", linear_prediction)
 print("Polynomial Regression Prediction:", poly_prediction)`}</code>
@@ -1451,7 +1458,7 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
             RMSE = √[1/n * Σ (y_i - ŷ_i)²]
           </div>
           <p className="text-xs text-slate-600 mt-2">
-            Heavily penalizes very large errors (outliers).
+            Gives larger errors more influence because errors are squared before taking the square root.
           </p>
         </div>
         <div className="bg-amber-50 border border-amber-100 p-5 rounded-lg shadow-sm">
@@ -1460,7 +1467,7 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
             R² = 1 - (SS_res / SS_tot)
           </div>
           <p className="text-xs text-slate-600 mt-2">
-            Variance explained. 1.0 is perfect fit. 0.0 is predicting the mean.
+            1.0 is perfect. Around 0 means performance similar to predicting the target mean; R² can also be negative.
           </p>
         </div>
       </div>
@@ -1530,6 +1537,17 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
         </table>
       </div>
 
+      {/* Common questions and learning path */}
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Common Questions About Polynomial Regression
+      </h2>
+      <div className="space-y-4 mb-10">
+        <div className="bg-white border border-slate-200 rounded-lg p-4"><p className="font-bold text-slate-800">Is Polynomial Regression really nonlinear?</p><p className="text-slate-600 mt-1">Its prediction can curve with x, but the model is still linear in the coefficients it learns after polynomial features are created.</p></div>
+        <div className="bg-white border border-slate-200 rounded-lg p-4"><p className="font-bold text-slate-800">How do I choose degree 2, 3, 4, or higher?</p><p className="text-slate-600 mt-1">Start with small degrees and compare validation or cross-validation performance. Do not choose a high degree only because it fits training data more closely.</p></div>
+        <div className="bg-white border border-slate-200 rounded-lg p-4"><p className="font-bold text-slate-800">Does Polynomial Regression always beat Linear Regression?</p><p className="text-slate-600 mt-1">No. If the real relationship is approximately straight, the simpler linear model may generalize just as well or better.</p></div>
+        <div className="bg-white border border-slate-200 rounded-lg p-4"><p className="font-bold text-slate-800">What should I learn next?</p><p className="text-slate-600 mt-1">See <a className="underline text-indigo-700 font-semibold" href="/learn/ridge-regression">Ridge Regression</a> and <a className="underline text-indigo-700 font-semibold" href="/learn/lasso-regression">Lasso Regression</a> to learn how regularization can control overly flexible models. You can also review <a className="underline text-indigo-700 font-semibold" href="/learn/linear-regression">Linear Regression</a> first.</p></div>
+      </div>
+
       {/* Final Summary */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
         Final Summary
@@ -1538,13 +1556,13 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
         Polynomial Regression is a powerful extension of Linear Regression designed to model nonlinear relationships. It expands features and fits a curve rather than a straight line.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        By increasing the polynomial degree, the model becomes more flexible. However, this flexibility comes with a trade-off: models that are too complex will overfit the data and fail to generalize well. Best practices suggest normalizing features, monitoring validation error, and selecting the optimal degree using cross-validation.
+        Increasing the polynomial degree makes the model more flexible, but too much flexibility can fit noise and hurt generalization. A good workflow is to try modest degrees, monitor validation error, use cross-validation, and consider scaling or regularization when polynomial features become large or highly correlated.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Polynomial Regression doesn't change the underlying linear regression algorithm; it intelligently transforms the input features to let a linear model fit deeply nonlinear curves."
+           "Polynomial Regression keeps a linear model in the coefficients, but changes the input representation with terms such as x² and x³ so the prediction can follow a smooth curve."
          </p>
       </div>
     </>
