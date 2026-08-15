@@ -1,7 +1,8 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
-  Brain, Calculator, Code, Layers, Briefcase, AlertTriangle, 
-  CheckCircle, Activity, TextSelect, Binary, X as CloseIcon, Check, ArrowDown
+  Brain, Calculator, Code, Briefcase, AlertTriangle,
+  Activity, TextSelect, Binary, X as CloseIcon, Check
 } from "lucide-react";
 
 export function NaiveBayesContent() {
@@ -10,7 +11,52 @@ export function NaiveBayesContent() {
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Naive Bayes Classifier</h1>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-md shadow-sm">
-        Naive Bayes is a probabilistic classifier based on applying Bayes’ Theorem with strong (naive) independence assumptions between the features.</p>
+        Naive Bayes is a probabilistic classifier based on applying Bayes’ Theorem with a strong (naive) conditional-independence assumption between features given the class.</p>
+
+      {/* Simple first layer */}
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2 flex items-center">
+        <Brain className="mr-2 text-indigo-600" /> Naive Bayes in Simple Words
+      </h2>
+      <p className="text-lg text-slate-700 leading-relaxed mb-6">
+        Naive Bayes looks at <strong>clues</strong>, checks how often those clues appeared with each class in the past,
+        and chooses the class with the strongest probability score. A simple example is email spam detection.
+      </p>
+
+      <div className="not-prose grid grid-cols-1 sm:grid-cols-4 gap-3 mb-8">
+        {[
+          { step: "1", title: "Past Emails", text: "Learn from examples labelled Spam or Not Spam." },
+          { step: "2", title: "Look at Clues", text: "Words such as free, prize, meeting or report." },
+          { step: "3", title: "Compare Scores", text: "How strongly do the clues support each class?" },
+          { step: "4", title: "Choose a Class", text: "Predict the class with the larger score." },
+        ].map((item) => (
+          <div key={item.step} className="border border-slate-200 bg-white rounded-xl p-4 text-center shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center mx-auto mb-2">{item.step}</div>
+            <p className="font-bold text-slate-800 mb-1">{item.title}</p>
+            <p className="text-sm text-slate-600">{item.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-8">
+        <p className="font-bold text-indigo-900 mb-3">Tiny Example — One New Email</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+          <div className="bg-white rounded-lg border border-indigo-100 p-3">
+            <p className="text-slate-500 mb-1">New email contains</p>
+            <p className="font-mono font-bold text-slate-800">free · prize · click</p>
+          </div>
+          <div className="bg-white rounded-lg border border-indigo-100 p-3">
+            <p className="text-slate-500 mb-1">Past data suggests</p>
+            <p className="font-semibold text-slate-800">These words occur more often in spam.</p>
+          </div>
+          <div className="bg-white rounded-lg border border-indigo-100 p-3">
+            <p className="text-slate-500 mb-1">Prediction</p>
+            <p className="font-bold text-rose-700">Spam</p>
+          </div>
+        </div>
+        <p className="text-sm text-indigo-900 mt-3">
+          The model does not understand the meaning of “free” like a human does. It uses probabilities learned from labelled examples.
+        </p>
+      </div>
 
       {/* What is Naive Bayes? */}
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2 flex items-center">
@@ -22,13 +68,13 @@ export function NaiveBayesContent() {
       </p>
 
       <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4">
-        Highly Effective For:
+        Common Uses:
       </h3>
       <ul className="list-disc pl-5 mb-8 text-slate-700 space-y-3 text-lg leading-relaxed">
         <li><strong>Spam Detection:</strong> Filtering out junk emails.</li>
         <li><strong>Sentiment Analysis:</strong> Understanding positive/negative product reviews.</li>
         <li><strong>Document Classification:</strong> Organizing news articles into categories.</li>
-        <li><strong>Medical Diagnosis:</strong> Predicting disease presence.</li>
+        <li><strong>Medical Data Classification:</strong> Supporting carefully validated research or decision-support tasks.</li>
       </ul>
       <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-3 pr-4 mb-8">
         <p className="text-slate-600 italic">
@@ -59,20 +105,21 @@ export function NaiveBayesContent() {
         Why is it Called "Naive"?
       </h3>
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The word <strong>Naive</strong> comes from the assumption that <em>all input features are independent of each other</em>.
+        The “naive” assumption is more specific than saying that features are always unrelated.
+        Naive Bayes treats the features as <strong>conditionally independent once the class is known</strong>.
       </p>
 
       <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
-        <p className="text-amber-900 mb-2">
-          <strong>Example:</strong> Predicting whether a person buys a car based on their <strong>Income, Age, and Occupation</strong>.
+        <p className="text-amber-900 mb-3">
+          <strong>Spam example:</strong> suppose an email contains both <code className="bg-white px-1 rounded">FREE</code> and <code className="bg-white px-1 rounded">MONEY</code>.
         </p>
-        <p className="text-amber-900 mb-2">Naive Bayes strictly assumes:</p>
-        <ul className="list-disc pl-5 text-amber-800 space-y-2 mb-4 font-mono text-base">
-          <li>Income does not affect Age</li>
-          <li>Occupation does not affect Income</li>
-        </ul>
-        <p className="text-slate-600 italic">
-          In real life this assumption is almost always false. However, surprisingly, the algorithm still works incredibly well.
+        <p className="text-amber-900 mb-3">When scoring the class <strong>Spam</strong>, the simple Naive Bayes idea is:</p>
+        <div className="bg-white border border-amber-200 rounded-lg p-3 font-mono text-sm text-slate-800 mb-3 overflow-x-auto">
+          P(FREE and MONEY | Spam) ≈ P(FREE | Spam) × P(MONEY | Spam)
+        </div>
+        <p className="text-slate-700">
+          In real language, words can clearly be related. The assumption is therefore a simplification, not a statement that the real world is independent.
+          Even so, this approximation can work well for many classification tasks, especially text.
         </p>
       </div>
 
@@ -95,15 +142,47 @@ export function NaiveBayesContent() {
         </p>
         <h4 className="font-bold text-blue-900 mb-3">Terminology</h4>
         <ul className="space-y-4 text-lg text-blue-800">
-          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(A|B) Posterior:</strong> Final updated probability of class A given feature B.</li>
-          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(B|A) Likelihood:</strong> Probability of feature B existing given class A is true.</li>
-          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(A) Prior:</strong> Initial probability of class A.</li>
-          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(B) Evidence:</strong> Total mathematical probability of feature B across all.</li>
+          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(A|B) Posterior:</strong> Updated probability of class A after observing evidence B.</li>
+          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(B|A) Likelihood:</strong> Probability of observing evidence B when class A is true.</li>
+          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(A) Prior:</strong> Probability of class A before observing the new evidence.</li>
+          <li><strong className="font-mono bg-white px-2 py-1 rounded">P(B) Evidence:</strong> Overall probability of observing evidence B.</li>
         </ul>
       </div>
 
+      <h3 className="text-xl font-bold text-indigo-800 mb-4">A Tiny Bayes Calculation</h3>
+      <p className="text-lg text-slate-700 mb-4">
+        Suppose past email data tells us:
+      </p>
+      <div className="not-prose overflow-x-auto mb-5">
+        <table className="w-full text-sm border border-slate-200 rounded-lg overflow-hidden">
+          <thead className="bg-slate-50"><tr><th className="p-3 text-left">Given value</th><th className="p-3 text-left">Meaning</th></tr></thead>
+          <tbody className="divide-y divide-slate-100">
+            <tr><td className="p-3 font-mono">P(Spam) = 0.40</td><td className="p-3">40% of emails are spam.</td></tr>
+            <tr><td className="p-3 font-mono">P(Free | Spam) = 0.75</td><td className="p-3">75% of spam emails contain “free”.</td></tr>
+            <tr><td className="p-3 font-mono">P(Free) = 0.36</td><td className="p-3">36% of all emails contain “free”.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="not-prose grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="font-bold text-blue-900 mb-2">Step 1 — Multiply</p>
+          <p className="font-mono text-sm">0.75 × 0.40 = 0.30</p>
+          <p className="text-xs text-blue-800 mt-2">Likelihood × prior</p>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <p className="font-bold text-blue-900 mb-2">Step 2 — Divide</p>
+          <p className="font-mono text-sm">0.30 ÷ 0.36 ≈ 0.833</p>
+          <p className="text-xs text-blue-800 mt-2">Divide by the evidence</p>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <p className="font-bold text-emerald-900 mb-2">Result</p>
+          <p className="font-mono text-sm">P(Spam | Free) ≈ 83.3%</p>
+          <p className="text-xs text-emerald-800 mt-2">For these made-up teaching numbers.</p>
+        </div>
+      </div>
+
       <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        <strong>Real-Life Analogy:</strong> Suppose a disease is rare, but a medical test is positive for a patient. Bayes’ theorem helps calculate the true <em>Probability that the patient actually has the disease</em>, after observing the positive test result (the evidence).
+        <strong>Real-Life Analogy:</strong> A common probability example is medical testing: if a condition is rare but a test is positive, Bayes’ theorem updates the probability after observing that result. In real healthcare, diagnosis requires validated clinical evidence and cannot be reduced to one toy calculation.
       </p>
 
       <hr className="border-slate-200 mt-10 mb-10" />
@@ -156,10 +235,18 @@ export function NaiveBayesContent() {
                 </div>
               </li>
               <li>
-                <strong>Step 3: Posterior Calculation</strong>
+                <strong>Step 3: Calculate the Evidence</strong>
                 <div className="mt-2 font-mono bg-slate-50 p-3 rounded border text-base">
-                  <p>P(Yes | Sunny) ∝ P(Sunny|Yes) × P(Yes)</p>
-                  <p>∝ 0.666 × 0.6 ≈ 0.40</p>
+                  <p>Sunny appears 2 times out of 5 rows.</p>
+                  <p>P(Sunny) = 2/5 = 0.4</p>
+                </div>
+              </li>
+              <li>
+                <strong>Step 4: Calculate the Posterior</strong>
+                <div className="mt-2 font-mono bg-slate-50 p-3 rounded border text-base">
+                  <p>P(Yes | Sunny) = [(2/3) × (3/5)] ÷ (2/5)</p>
+                  <p>= 0.4 ÷ 0.4 = 1.0</p>
+                  <p className="mt-2 text-slate-600 font-sans">In this tiny dataset, every Sunny example is labelled Yes, so the posterior becomes 100%. Real datasets are larger and less perfect.</p>
                 </div>
               </li>
             </ol>
@@ -173,33 +260,27 @@ export function NaiveBayesContent() {
         Types of Naive Bayes
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Naive Bayes is not a single algorithm — it is a family of classifiers, each designed for a different statistical distribution of features. Choosing the right variant is critical and depends entirely on the type of data you are working with.
+        Naive Bayes is not a single algorithm — it is a family of classifiers, each designed for a different statistical distribution of features. The appropriate variant depends mainly on how the input features are represented and what probability distribution the model assumes for them.
       </p>
 
-      {/* NB Types Tree */}
-      <div className="not-prose my-8 bg-slate-50 border border-slate-200 rounded-2xl p-6 overflow-x-auto">
-        <p className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wider mb-6">Figure — Naive Bayes Family Tree</p>
-        <div className="flex flex-col items-center min-w-[560px]">
-          <div className="bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold shadow text-sm">Naive Bayes Classifier</div>
-          <div className="w-0.5 bg-slate-300 h-6" />
-          <div className="relative w-[85%] border-t-2 border-slate-300">
-            {[0, 33, 66, 100].map(p => (
-              <div key={p} className="absolute top-0 w-0.5 bg-slate-300 h-6" style={{left:`${p}%`, transform:'translateX(-50%)'}} />
-            ))}
+      {/* Simple NB family guide */}
+      <div className="not-prose my-8 bg-slate-50 border border-slate-200 rounded-2xl p-5">
+        <p className="text-center text-xs font-semibold text-slate-500 uppercase tracking-wider mb-5">Choose the variant from the feature type</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            <p className="font-bold text-blue-800 mb-1">Gaussian NB</p><p className="text-sm text-slate-700">Continuous numbers</p><p className="text-xs text-slate-500 mt-1">Height, temperature</p>
           </div>
-          <div className="grid grid-cols-4 w-[90%] gap-3 mt-6">
-            {[
-              {name:'Gaussian NB', color:'blue', feature:'Continuous features', dist:'Normal distribution', eg:'Height, Salary, Temp'},
-              {name:'Multinomial NB', color:'emerald', feature:'Count / frequency data', dist:'Multinomial distribution', eg:'Word counts in NLP'},
-              {name:'Bernoulli NB', color:'amber', feature:'Binary features', dist:'Bernoulli distribution', eg:'Word present? (0/1)'},
-              {name:'Complement NB', color:'rose', feature:'Imbalanced text data', dist:'Complement of classes', eg:'Spam detection'},
-            ].map(t => (
-              <div key={t.name} className={`bg-${t.color}-50 border border-${t.color}-200 rounded-xl p-3 text-center`}>
-                <p className={`font-bold text-${t.color}-800 text-xs mb-1`}>{t.name}</p>
-                <p className={`text-${t.color}-600 text-xs mb-1`}>{t.feature}</p>
-                <p className="text-slate-400 text-xs italic">{t.eg}</p>
-              </div>
-            ))}
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+            <p className="font-bold text-emerald-800 mb-1">Multinomial NB</p><p className="text-sm text-slate-700">Counts / frequencies</p><p className="text-xs text-slate-500 mt-1">Word counts</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="font-bold text-amber-800 mb-1">Bernoulli NB</p><p className="text-sm text-slate-700">Binary 0/1 features</p><p className="text-xs text-slate-500 mt-1">Word present?</p>
+          </div>
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-4">
+            <p className="font-bold text-rose-800 mb-1">Complement NB</p><p className="text-sm text-slate-700">Count-like text features</p><p className="text-xs text-slate-500 mt-1">Often useful with imbalance</p>
+          </div>
+          <div className="bg-violet-50 border border-violet-200 rounded-xl p-4">
+            <p className="font-bold text-violet-800 mb-1">Categorical NB</p><p className="text-sm text-slate-700">Categorical features</p><p className="text-xs text-slate-500 mt-1">Weather type, colour</p>
           </div>
         </div>
       </div>
@@ -282,7 +363,7 @@ print(model.var_)     # shape: [n_classes, n_features] → variance per class
 
 predictions = model.predict(X_test)
 print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
-# Output: Accuracy: 97.37%`}</pre>
+# Output with this split: Accuracy: 100.00%`}</pre>
             </div>
           </div>
         </div>
@@ -306,7 +387,7 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
                 <ol className="text-sm text-slate-600 space-y-1 list-decimal pl-4">
                   <li>Convert text into a word frequency matrix (Bag of Words / TF-IDF)</li>
                   <li>For each class, estimate the probability of each word appearing</li>
-                  <li>For new text, multiply the word probabilities and classify via Bayes theorem</li>
+                  <li>For new text, combine the word evidence with the class prior and choose the class with the larger score</li>
                 </ol>
               </div>
               <div>
@@ -329,16 +410,16 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
                       <th className="px-3 py-2 text-left font-bold text-emerald-900">Word</th>
                       <th className="px-3 py-2 text-center font-bold text-red-700">Spam freq</th>
                       <th className="px-3 py-2 text-center font-bold text-blue-700">Ham freq</th>
-                      <th className="px-3 py-2 text-center font-bold text-emerald-900">P(word|Spam)</th>
+                      <th className="px-3 py-2 text-center font-bold text-emerald-900">More common in</th>
                     </tr>
                   </thead>
                   <tbody>
                     {[
-                      {word:'free', spam:142, ham:8, p:'0.74'},
-                      {word:'money', spam:98, ham:12, p:'0.65'},
-                      {word:'click', spam:87, ham:5, p:'0.70'},
-                      {word:'meeting', spam:4, ham:156, p:'0.02'},
-                      {word:'report', spam:6, ham:134, p:'0.04'},
+                      {word:'free', spam:142, ham:8, p:'Spam'},
+                      {word:'money', spam:98, ham:12, p:'Spam'},
+                      {word:'click', spam:87, ham:5, p:'Spam'},
+                      {word:'meeting', spam:4, ham:156, p:'Ham'},
+                      {word:'report', spam:6, ham:134, p:'Ham'},
                     ].map(r=>(
                       <tr key={r.word} className="border-t border-emerald-100 hover:bg-emerald-50">
                         <td className="px-3 py-2 font-mono font-bold text-slate-800">"{r.word}"</td>
@@ -365,7 +446,7 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
           </div>
           <div className="p-6">
             <p className="text-slate-700 leading-relaxed mb-4">
-              Bernoulli NB is designed for <strong>binary feature vectors</strong> — each feature is either 0 (absent) or 1 (present). The key distinction from Multinomial NB is that Bernoulli NB cares only about <em>whether</em> a word appeared, not <em>how many times</em> it did. It also explicitly penalises the absence of words that are important to a class, making it particularly useful for short documents.
+              Bernoulli NB is designed for <strong>binary feature vectors</strong> — each feature is either 0 (absent) or 1 (present). The key distinction from Multinomial NB is that Bernoulli NB cares only about <em>whether</em> a word appeared, not <em>how many times</em> it did. It also explicitly penalises the absence of words that are important to a class, which can make it useful for presence/absence data and some short-text tasks.
             </p>
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div>
@@ -378,7 +459,7 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
                         {aspect:'Feature value', mult:'Word count (0,1,2,...)', bern:'Word present? (0 or 1)'},
                         {aspect:'Email "free free free"', mult:'free = 3', bern:'free = 1'},
                         {aspect:'Absent word impact', mult:'No penalty', bern:'Explicitly penalised'},
-                        {aspect:'Best for', mult:'Long documents', bern:'Short texts / docs'},
+                        {aspect:'Typical representation', mult:'Counts / frequencies', bern:'Presence / absence'},
                       ].map(r=>(
                         <tr key={r.aspect} className="border-t border-slate-100">
                           <td className="px-3 py-2 font-semibold text-slate-700">{r.aspect}</td>
@@ -404,6 +485,7 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2%}")
               <div className="bg-slate-800 px-4 py-2 text-slate-400 text-xs font-mono">Python — Bernoulli Naive Bayes</div>
               <pre className="p-4 text-sm font-mono text-slate-200 overflow-x-auto">{`from sklearn.naive_bayes import BernoulliNB
 from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
 
 emails = [
     "win free money now",      # spam
@@ -423,7 +505,8 @@ model.fit(X, labels)
 
 new_email = vectorizer.transform(["free prize click"])
 print(model.predict(new_email))         # [1] → classified as SPAM
-print(model.predict_proba(new_email))   # [[0.04, 0.96]] → 96% spam`}</pre>
+print(np.round(model.predict_proba(new_email), 3))
+# [[0.053 0.947]] → about 94.7% spam in this tiny example`}</pre>
             </div>
           </div>
         </div>
@@ -439,12 +522,12 @@ print(model.predict_proba(new_email))   # [[0.04, 0.96]] → 96% spam`}</pre>
           </div>
           <div className="p-6">
             <p className="text-slate-700 leading-relaxed mb-4">
-              Complement NB was developed to address a known weakness of Multinomial NB on <strong>imbalanced datasets</strong> — where one class has far more examples than another. Instead of modelling the probability of a document belonging to class C, it models the probability of it belonging to the <em>complement</em> (everything that is NOT class C) and uses that as evidence. Complement NB often outperforms Multinomial NB on real-world text classification benchmarks.
+              Complement NB is an adaptation of Multinomial NB that is particularly suited to <strong>imbalanced datasets</strong>. It builds its weights using statistics from the <em>complement</em> of each class — the samples that are not in that class. It is especially associated with text classification and can be worth comparing with Multinomial NB when classes are uneven.
             </p>
             <div className="bg-rose-50 border border-rose-200 rounded-xl p-4 mb-4">
               <p className="font-bold text-rose-900 text-sm mb-2">Why Complement? The imbalance problem:</p>
               <p className="text-rose-800 text-sm leading-relaxed">
-                If 90% of your training data is "Not Spam" and only 10% is "Spam", Multinomial NB becomes biased toward predicting "Not Spam" simply because it has seen far more examples. Complement NB corrects this by estimating class probabilities from the <em>other</em> classes, making it more robust when class sizes are very unequal.
+                If 90% of the training documents are "Not Spam" and 10% are "Spam", the class counts are strongly imbalanced. Complement NB uses statistics from the <em>other</em> classes when building its weights, which can make its estimates more stable for this kind of text problem. You should still compare models using suitable validation metrics.
               </p>
             </div>
             <div className="bg-slate-900 rounded-xl overflow-hidden">
@@ -465,6 +548,26 @@ print(f"Accuracy: {model.score(X_test_tfidf, y_test):.2%}")`}</pre>
           </div>
         </div>
 
+        {/* Categorical NB */}
+        <div className="bg-white border border-violet-200 rounded-2xl overflow-hidden shadow-sm">
+          <div className="bg-violet-600 px-6 py-4">
+            <h3 className="font-bold text-white text-lg">5. Categorical Naive Bayes</h3>
+            <p className="text-violet-200 text-xs">For features that are categories</p>
+          </div>
+          <div className="p-6">
+            <p className="text-slate-700 leading-relaxed mb-4">
+              Categorical NB is designed for features such as <strong>Weather = Sunny/Rainy</strong> or <strong>Colour = Red/Blue/Green</strong>.
+              Each feature is treated as having its own categorical distribution within each class. In scikit-learn, the categories are represented with integer codes such as 0, 1, 2.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+              <div className="bg-violet-50 border border-violet-100 rounded-lg p-3"><strong>Sunny</strong><br/><span className="text-slate-500">→ 0</span></div>
+              <div className="bg-violet-50 border border-violet-100 rounded-lg p-3"><strong>Rainy</strong><br/><span className="text-slate-500">→ 1</span></div>
+              <div className="bg-violet-50 border border-violet-100 rounded-lg p-3"><strong>Overcast</strong><br/><span className="text-slate-500">→ 2</span></div>
+            </div>
+            <p className="text-sm text-slate-600 mt-3">These numbers are category codes, not measurements — “2” is not twice “1”.</p>
+          </div>
+        </div>
+
         {/* Comparison table */}
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
           <div className="bg-slate-800 px-6 py-4">
@@ -480,13 +583,14 @@ print(f"Accuracy: {model.score(X_test_tfidf, y_test):.2%}")`}</pre>
               </tr></thead>
               <tbody className="divide-y divide-slate-100">
                 {[
-                  {v:'Gaussian NB', f:'Continuous (real numbers)', b:'Iris, medical, sensor data', s:'GaussianNB()', c:'blue'},
-                  {v:'Multinomial NB', f:'Integer counts', b:'Long text, bag of words', s:'MultinomialNB()', c:'emerald'},
-                  {v:'Bernoulli NB', f:'Binary (0/1)', b:'Short text, presence/absence', s:'BernoulliNB()', c:'amber'},
-                  {v:'Complement NB', f:'Integer counts', b:'Imbalanced text datasets', s:'ComplementNB()', c:'rose'},
+                  {v:'Gaussian NB', f:'Continuous (real numbers)', b:'Continuous numeric features', s:'GaussianNB()', row:'hover:bg-blue-50', text:'text-blue-700'},
+                  {v:'Multinomial NB', f:'Counts / non-negative frequencies', b:'Text counts; TF-IDF can also work', s:'MultinomialNB()', row:'hover:bg-emerald-50', text:'text-emerald-700'},
+                  {v:'Bernoulli NB', f:'Binary (0/1)', b:'Presence / absence features', s:'BernoulliNB()', row:'hover:bg-amber-50', text:'text-amber-700'},
+                  {v:'Complement NB', f:'Count / TF-IDF-like non-negative features', b:'Text data, especially with imbalance', s:'ComplementNB()', row:'hover:bg-rose-50', text:'text-rose-700'},
+                  {v:'Categorical NB', f:'Encoded categorical values', b:'Discrete categories per feature', s:'CategoricalNB()', row:'hover:bg-violet-50', text:'text-violet-700'},
                 ].map(r=>(
-                  <tr key={r.v} className={`hover:bg-${r.c}-50 transition-colors`}>
-                    <td className={`px-4 py-3 font-bold text-${r.c}-700`}>{r.v}</td>
+                  <tr key={r.v} className={`${r.row} transition-colors`}>
+                    <td className={`px-4 py-3 font-bold ${r.text}`}>{r.v}</td>
                     <td className="px-4 py-3 text-slate-600">{r.f}</td>
                     <td className="px-4 py-3 text-slate-600">{r.b}</td>
                     <td className="px-4 py-3 font-mono text-xs text-slate-800 bg-slate-50 rounded">{r.s}</td>
@@ -502,14 +606,25 @@ print(f"Accuracy: {model.score(X_test_tfidf, y_test):.2%}")`}</pre>
         <AlertTriangle className="mr-2 text-rose-600" /> The Zero Probability Problem
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Suppose a word never appeared during training. Then its Probability becomes <strong>0</strong>. Because Naive Bayes multiplies all feature probabilities together, a single zero will make the entire prediction zero, ruining the algorithm.
+        In count-based variants such as Multinomial Naive Bayes, a word that never appeared in a class can receive an estimated probability of <strong>0</strong>.
+        Multiplying by zero can wipe out that class score. Additive smoothing prevents this problem.
       </p>
       
-      <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-10 text-lg">
-        <p className="font-bold text-emerald-900 mb-2">Solution: Laplace Smoothing</p>
+      <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-6 text-lg">
+        <p className="font-bold text-emerald-900 mb-2">Solution: Additive Smoothing</p>
         <p className="text-emerald-800">
-          Adds a small value (usually 1) to all counts, ensuring that no probability is ever strictly zero.
+          Add a small value α to the counts. When α = 1, this is commonly called <strong>Laplace smoothing</strong>.
         </p>
+      </div>
+
+      <div className="not-prose bg-white border border-slate-200 rounded-xl p-5 mb-10">
+        <p className="font-bold text-slate-800 mb-3">Tiny smoothing example</p>
+        <p className="text-sm text-slate-600 mb-3">Suppose “offer” appeared 0 times in a class, there are 10 total word counts, and our vocabulary has 5 words.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+          <div className="bg-slate-50 rounded-lg p-3"><strong>Step 1</strong><br/><span className="font-mono">0 + 1 = 1</span><br/><span className="text-slate-500">add α = 1</span></div>
+          <div className="bg-slate-50 rounded-lg p-3"><strong>Step 2</strong><br/><span className="font-mono">10 + (1 × 5) = 15</span><br/><span className="text-slate-500">adjust denominator</span></div>
+          <div className="bg-emerald-50 rounded-lg p-3"><strong>Result</strong><br/><span className="font-mono">1 ÷ 15 ≈ 0.067</span><br/><span className="text-slate-500">small, but not zero</span></div>
+        </div>
       </div>
 
       <hr className="border-slate-200 mt-10 mb-10" />
@@ -573,10 +688,10 @@ print(f"Prediction for '{test_email[0]}': {prediction[0]}")`}</code>
             <Check className="mr-2 w-6 h-6" /> Advantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-            <li><strong>Very Fast:</strong> Calculates probabilities instantaneously.</li>
-            <li><strong>NLP Standard:</strong> Excellent handling of text/words and documents.</li>
-            <li><strong>Data Efficient:</strong> Works surprisingly well even with small datasets.</li>
-            <li><strong>Multi-Class Prediction:</strong> Evaluates multiple category chances.</li>
+            <li><strong>Fast:</strong> Training and prediction can be very efficient compared with many more complex models.</li>
+            <li><strong>Useful for Text:</strong> Count-based variants are classic baselines for document and spam classification.</li>
+            <li><strong>Parameter Efficient:</strong> It can estimate the needed class-conditional statistics from relatively modest amounts of data.</li>
+            <li><strong>Multi-Class:</strong> Naturally compares scores across multiple classes.</li>
           </ul>
         </div>
         <div>
@@ -584,29 +699,56 @@ print(f"Prediction for '{test_email[0]}': {prediction[0]}")`}</code>
             <CloseIcon className="mr-2 w-6 h-6" /> Disadvantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-            <li><strong>Naive Assumption:</strong> Ignores obvious correlations between features.</li>
-            <li><strong>Zero Probabilities:</strong> Requires strict Laplace smoothing patches.</li>
-            <li><strong>Poor Estimator:</strong> Raw probability output numbers are often inaccurate (though class wins are right).</li>
+            <li><strong>Strong Assumption:</strong> Conditional independence can be unrealistic when features strongly depend on one another.</li>
+            <li><strong>Unseen Counts:</strong> Count-based variants need additive smoothing to avoid zero-probability problems.</li>
+            <li><strong>Probability Calibration:</strong> Predicted probabilities may be poorly calibrated even when class predictions are useful.</li>
           </ul>
         </div>
       </div>
 
       <hr className="border-slate-200 mt-10 mb-10" />
 
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
+        Common Questions
+      </h2>
+      <div className="space-y-4 mb-10">
+        <div className="border border-slate-200 rounded-xl p-5 bg-white">
+          <h3 className="font-bold text-slate-800 mb-2">Is Naive Bayes only for text?</h3>
+          <p className="text-slate-700">No. Text is a famous use case, but Gaussian NB can handle continuous numerical features and Categorical NB can model categorical features.</p>
+        </div>
+        <div className="border border-slate-200 rounded-xl p-5 bg-white">
+          <h3 className="font-bold text-slate-800 mb-2">Does Naive Bayes require the features to be truly independent?</h3>
+          <p className="text-slate-700">No real dataset has to be perfectly independent. Conditional independence is the model's simplifying assumption; validation tells you whether that approximation works well enough for your task.</p>
+        </div>
+        <div className="border border-slate-200 rounded-xl p-5 bg-white">
+          <h3 className="font-bold text-slate-800 mb-2">Naive Bayes or Logistic Regression?</h3>
+          <p className="text-slate-700">Both can be strong classification baselines. Compare them using validation data and a metric that matches the problem instead of assuming one is always better.</p>
+        </div>
+      </div>
+
+      <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-10">
+        <p className="font-bold text-indigo-900 mb-3">Continue Learning</p>
+        <div className="flex flex-wrap gap-2">
+          <Link to="/learn/classification-intro" className="px-3 py-2 rounded-lg bg-white border border-indigo-200 text-indigo-700 font-semibold text-sm hover:bg-indigo-100">Classification Overview</Link>
+          <Link to="/learn/logistic-regression" className="px-3 py-2 rounded-lg bg-white border border-indigo-200 text-indigo-700 font-semibold text-sm hover:bg-indigo-100">Logistic Regression</Link>
+          <Link to="/learn/confusion-matrix" className="px-3 py-2 rounded-lg bg-white border border-indigo-200 text-indigo-700 font-semibold text-sm hover:bg-indigo-100">Confusion Matrix</Link>
+        </div>
+      </div>
+
       {/* FINAL SUMMARY */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
         Final Summary
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Naive Bayes is a cornerstone algorithm of statistical machine learning. Its foundation relies entirely on Bayes' Theorem and calculating conditional probabilities of historical events to accurately predict the future.
+        Naive Bayes is a classic probabilistic classification method built on Bayes' theorem. It combines a class prior with feature likelihoods to score possible classes for a new observation.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Despite the "naive" assumption—pretending that all input features are strictly independent—this algorithm often vastly outperforms highly complex models in high-dimensional datasets, particularly involving text classification (NLP).
+        Its conditional-independence assumption is deliberately simple, yet Naive Bayes can still be a strong and very fast baseline in suitable problems, especially text classification.
       </p>
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Naive Bayes relies on the fundamentally flawed assumption of total feature independence, yet paradoxically, it remains an effective algorithm in the real world for document classification."
+           "Naive Bayes makes a strong conditional-independence assumption. The assumption is simple, so always validate the model — but the method can still work very well for suitable classification tasks."
          </p>
       </div>
 
