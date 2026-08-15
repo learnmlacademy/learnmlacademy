@@ -32,13 +32,64 @@ export function EDAContent() {
       </p>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        EDA in Simple Words
+      </h2>
+      <p className="text-lg leading-relaxed text-slate-700 mb-5">
+        Exploratory Data Analysis means <strong>looking at the data carefully before asking a machine learning model to learn from it</strong>. Think of it like checking a question paper before you start solving: first understand what is given, look for missing or unusual values, and notice important patterns.
+      </p>
+
+      <div className="not-prose my-6 grid gap-3 sm:grid-cols-3">
+        {[
+          { step: '1', title: 'Look', text: 'What rows, columns and values do we have?' },
+          { step: '2', title: 'Check', text: 'Are values missing, duplicated or unusual?' },
+          { step: '3', title: 'Discover', text: 'What patterns and relationships can we see?' },
+        ].map(item => (
+          <div key={item.step} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-700">{item.step}</div>
+            <p className="m-0 font-bold text-slate-800">{item.title}</p>
+            <p className="mt-1 mb-0 text-sm leading-relaxed text-slate-600">{item.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <h3 className="text-xl font-bold mt-8 mb-3 text-slate-800">A Tiny Student Example</h3>
+      <p className="text-slate-700">Suppose we receive this small dataset before building a model to predict exam scores:</p>
+      <div className="not-prose my-5 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="w-full min-w-[520px] text-sm">
+          <thead className="bg-slate-50 text-slate-700">
+            <tr>
+              <th className="px-4 py-3 text-left">Student</th>
+              <th className="px-4 py-3 text-left">Study Hours</th>
+              <th className="px-4 py-3 text-left">Attendance</th>
+              <th className="px-4 py-3 text-left">Score</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tr><td className="px-4 py-3">A</td><td className="px-4 py-3">2</td><td className="px-4 py-3">70%</td><td className="px-4 py-3">48</td></tr>
+            <tr><td className="px-4 py-3">B</td><td className="px-4 py-3">4</td><td className="px-4 py-3">82%</td><td className="px-4 py-3">65</td></tr>
+            <tr><td className="px-4 py-3">C</td><td className="px-4 py-3">6</td><td className="px-4 py-3">91%</td><td className="px-4 py-3">?</td></tr>
+            <tr><td className="px-4 py-3">D</td><td className="px-4 py-3">8</td><td className="px-4 py-3">95%</td><td className="px-4 py-3">88</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div className="not-prose my-5 rounded-xl border border-indigo-100 bg-indigo-50 p-5">
+        <p className="m-0 font-bold text-indigo-900">Before modelling, EDA would ask:</p>
+        <ol className="mt-3 mb-0 space-y-2 pl-5 text-sm text-indigo-950">
+          <li>Why is Student C's score missing?</li>
+          <li>Do higher study hours generally come with higher scores?</li>
+          <li>Is any value unusually high or low?</li>
+          <li>Are all columns stored in the correct data type?</li>
+        </ol>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         What is Exploratory Data Analysis?
       </h2>
       <p className="text-lg leading-relaxed text-slate-700 mb-4">
         Exploratory Data Analysis (EDA) is the practice of examining a dataset before applying any machine learning algorithm — using statistics and visualisations to understand its structure, quality, and patterns. Think of EDA as the detective phase: you are not yet building a model, you are investigating the data to form hypotheses and catch problems early.
       </p>
       <p className="text-lg leading-relaxed text-slate-700 mb-4">
-        In real ML projects, EDA is what separates high-performing models from poor ones. A model trained on poorly understood data with hidden missing values, wrong data types, or undetected outliers will perform unreliably — no matter how advanced the algorithm. EDA is the foundation everything else is built upon.
+        In real ML projects, careful EDA can make the difference between a reliable model and a misleading one. A model trained on poorly understood data with hidden missing values, wrong data types, or undetected outliers will perform unreliably — no matter how advanced the algorithm. EDA is the foundation everything else is built upon.
       </p>
       <p className="text-lg leading-relaxed text-slate-700 mb-6">
         The main objectives of EDA are to understand the dataset structure and shape, detect missing or erroneous values before they corrupt training, find relationships and correlations between features, identify outliers that may skew model learning, discover hidden trends or class imbalances, and ultimately prepare the data for reliable machine learning.
@@ -47,13 +98,13 @@ export function EDAContent() {
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Why is EDA Important?
       </h2>
-      <div className="not-prose sm:-cols-2 mb-8 space-y-8">
+      <div className="not-prose mb-8 grid gap-4 sm:grid-cols-2">
         {[
           { icon: '🔍', title: 'Understand Data Structure', desc: 'EDA reveals the number of rows, columns, data types, and value ranges. You cannot model what you do not understand.' },
-          { icon: '🚨', title: 'Detect Missing Values', desc: 'Real-world data always has gaps. EDA quantifies exactly how many NaNs exist per column and guides your imputation strategy.' },
+          { icon: '🚨', title: 'Detect Missing Values', desc: 'Real-world data often has gaps. EDA helps quantify how many missing values exist per column and guides your next cleaning decision.' },
           { icon: '📉', title: 'Find Outliers', desc: 'Extreme values can distort model training. EDA exposes them through boxplots, histograms, and z-score analysis.' },
           { icon: '🔗', title: 'Identify Relationships', desc: 'Correlation matrices and scatter plots reveal which features are predictive and which are redundant or collinear.' },
-          { icon: '⚖️', title: 'Spot Class Imbalance', desc: 'If 98% of your labels are "No" and 2% are "Yes", accuracy is a useless metric. EDA catches this before you train.' },
+          { icon: '⚖️', title: 'Spot Class Imbalance', desc: 'If 98% of your labels are "No" and 2% are "Yes", accuracy alone can be misleading. EDA catches this before you train.' },
           { icon: '💡', title: 'Guide Feature Engineering', desc: 'EDA insights — like skewed distributions or interaction patterns — directly inspire which new features to create.' },
         ].map(f => (
           <div key={f.title} className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
@@ -67,37 +118,49 @@ export function EDAContent() {
       </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        A Simple Numerical Summary
+      </h2>
+      <p className="text-slate-700">One of the first things EDA does is summarize a numeric column. Suppose five students scored:</p>
+      <div className="not-prose my-5 rounded-xl border border-slate-200 bg-white p-5">
+        <p className="m-0 text-center font-mono text-lg font-bold text-slate-800">40, 50, 60, 70, 80</p>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <div className="rounded-lg bg-indigo-50 p-4">
+            <p className="m-0 font-bold text-indigo-900">Mean (average)</p>
+            <p className="mt-2 mb-1 font-mono text-sm text-indigo-950">(40 + 50 + 60 + 70 + 80) ÷ 5</p>
+            <p className="m-0 font-mono text-sm text-indigo-950">300 ÷ 5 = <strong>60</strong></p>
+          </div>
+          <div className="rounded-lg bg-emerald-50 p-4">
+            <p className="m-0 font-bold text-emerald-900">Range</p>
+            <p className="mt-2 mb-1 font-mono text-sm text-emerald-950">Highest − Lowest</p>
+            <p className="m-0 font-mono text-sm text-emerald-950">80 − 40 = <strong>40</strong></p>
+          </div>
+        </div>
+        <p className="mt-4 mb-0 text-sm text-slate-600">The mean tells us the center of these scores. The range tells us how far the lowest and highest scores are apart. EDA usually combines several summaries and plots because no single number tells the whole story.</p>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Types of Exploratory Data Analysis
       </h2>
 
-            {/* EDA Hierarchical Tree */}
-      <div className="bg-slate-50 border border-slate-200 py-8 px-4 rounded-xl shadow-sm my-8 overflow-x-auto">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider text-center mb-6">Figure — EDA Types Hierarchy</p>
-        <div className="flex flex-col items-center min-w-[700px] max-w-4xl mx-auto">
-          <div className="bg-indigo-700 text-white px-8 py-3 rounded-xl font-bold shadow text-sm">Exploratory Data Analysis (EDA)</div>
-          <div className="w-0.5 bg-slate-300 h-6"/>
-          
-          <div className="relative w-full h-6">
-            <div className="absolute top-0 border-t-2 border-slate-300" style={{ left: '16.666%', right: '16.666%' }} />
-            {[0, 1, 2].map(idx => (
-              <div key={idx} className="absolute top-0 w-0.5 bg-slate-300 h-6" style={{ left: `${(idx + 0.5) * 100 / 3}%`, transform: 'translateX(-50%)' }} />
-            ))}
-          </div>
-          
-          <div className="flex w-full items-stretch">
-            {[
-              { name: 'Univariate Analysis', col: 'indigo', sub: ['One variable at a time','Distribution, shape, spread','Histogram, boxplot, bar chart'] },
-              { name: 'Bivariate Analysis', col: 'emerald', sub: ['Two variables together','Relationships & correlation','Scatter plot, heatmap, crosstab'] },
-              { name: 'Multivariate Analysis', col: 'amber', sub: ['3+ variables simultaneously','Interactions & clusters','Pair plot, PCA, parallel coords'] },
-            ].map(t => (
-              <div key={t.name} className="flex-1 px-3">
-                <div className={`bg-${t.col}-50 border border-${t.col}-200 rounded-xl p-4 text-center h-full`}>
-                  <p className={`font-bold text-${t.col}-800 text-sm mb-2`}>{t.name}</p>
-                  {t.sub.map(s => <p key={s} className="text-xs text-slate-500 mb-0.5">{s}</p>)}
-                </div>
-              </div>
-            ))}
-          </div>
+            {/* Simple EDA types overview */}
+      <div className="not-prose my-8 grid gap-4 md:grid-cols-3">
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+          <p className="m-0 font-bold text-indigo-800">Univariate</p>
+          <p className="mt-2 mb-1 text-sm text-slate-700"><strong>Look at:</strong> 1 variable</p>
+          <p className="m-0 text-sm text-slate-600">Example: What does the distribution of exam scores look like?</p>
+          <p className="mt-2 mb-0 text-xs text-slate-500">Useful visuals: histogram, box plot, bar chart</p>
+        </div>
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+          <p className="m-0 font-bold text-emerald-800">Bivariate</p>
+          <p className="mt-2 mb-1 text-sm text-slate-700"><strong>Look at:</strong> 2 variables</p>
+          <p className="m-0 text-sm text-slate-600">Example: Do study hours and exam scores move together?</p>
+          <p className="mt-2 mb-0 text-xs text-slate-500">Useful visuals: scatter plot, grouped box plot, crosstab</p>
+        </div>
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <p className="m-0 font-bold text-amber-800">Multivariate</p>
+          <p className="mt-2 mb-1 text-sm text-slate-700"><strong>Look at:</strong> 3+ variables</p>
+          <p className="m-0 text-sm text-slate-600">Example: How do several features work together to separate classes?</p>
+          <p className="mt-2 mb-0 text-xs text-slate-500">Useful visuals: heatmap, pair plot, PCA plot</p>
         </div>
       </div>
 
@@ -201,12 +264,12 @@ plt.show()`}
       <CodeBlock
         title=""
         code={``}
-        output={`Pearson correlation: 0.9981   ← very strong positive relationship
+        output={`Pearson correlation: 0.9924   ← very strong positive relationship
 
 Cross-tabulation City vs Passed:
 Passed  False  True
 City
-Delhi       0     4
+Delhi       1     3
 Mumbai      1     2
 Pune        0     3`}
       />
@@ -264,7 +327,7 @@ Insight: petal length and petal width are highly correlated (0.96)
         Common Steps in Exploratory Data Analysis
       </h2>
       <p>
-        An effective EDA process generally follows a standardized set of steps using Python libraries. Let's walk through them.
+        An effective EDA process usually follows a repeatable set of checks. The exact order can vary by dataset, but this beginner-friendly sequence is a good starting point.
       </p>
 
       <h3 className="text-xl font-bold mt-8 mb-2">Step 1 – Import Required Libraries</h3>
@@ -301,7 +364,7 @@ print(df.head())`}
 print(df.shape)
 
 # Check Data Types
-print(df.info())
+df.info()
 
 # Statistical Summary
 print(df.describe())`}
@@ -318,7 +381,6 @@ Data columns (total 4 columns):
  3   Experience  100 non-null    int64  
 dtypes: float64(1), int64(2), object(1)
 memory usage: 3.2+ KB
-None
 
               Age         Salary  Experience
 count   92.000000     100.000000  100.000000
@@ -348,6 +410,9 @@ Salary        0
 Experience    0
 dtype: int64`}
       />
+      <div className="not-prose my-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+        <strong>Important:</strong> filling every missing numeric value with the mean is only a simple demonstration. In a real project, first investigate <em>why</em> values are missing and whether mean, median, mode, model-based imputation, or leaving the value missing is more appropriate.
+      </div>
 
       <h3 className="text-xl font-bold mt-8 mb-2">Step 5 – Detecting Duplicate Records</h3>
       <p>Duplicate data can create misleading analysis.</p>
@@ -364,7 +429,25 @@ df.drop_duplicates(inplace=True)`}
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Data Visualization in EDA
       </h2>
-      <p>Visualization makes analysis easier and faster.</p>
+      <p>Visualization makes analysis easier and faster. The best chart depends on the question you want to answer.</p>
+
+      <div className="not-prose my-6 overflow-x-auto rounded-xl border border-slate-200 bg-white">
+        <table className="w-full min-w-[620px] text-sm">
+          <thead className="bg-slate-50 text-slate-700">
+            <tr>
+              <th className="px-4 py-3 text-left">Question</th>
+              <th className="px-4 py-3 text-left">Simple Visual</th>
+              <th className="px-4 py-3 text-left">Example</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 text-slate-700">
+            <tr><td className="px-4 py-3">How is one numeric variable distributed?</td><td className="px-4 py-3 font-medium">Histogram</td><td className="px-4 py-3">Age distribution</td></tr>
+            <tr><td className="px-4 py-3">Are there unusual extreme values?</td><td className="px-4 py-3 font-medium">Box plot</td><td className="px-4 py-3">Very high salary</td></tr>
+            <tr><td className="px-4 py-3">Do two numeric variables move together?</td><td className="px-4 py-3 font-medium">Scatter plot</td><td className="px-4 py-3">Experience vs salary</td></tr>
+            <tr><td className="px-4 py-3">Which numeric features are related?</td><td className="px-4 py-3 font-medium">Correlation heatmap</td><td className="px-4 py-3">Age, salary, experience</td></tr>
+          </tbody>
+        </table>
+      </div>
 
       <div className="md:grid-cols-2 grid my-6 gap-8">
         <div>
@@ -447,7 +530,7 @@ plt.show()`}
           <CodeBlock 
             code={`# Correlation Heatmap Example
 plt.figure(figsize=(10,6))
-sns.heatmap(df.corr(), annot=True)
+sns.heatmap(df.corr(numeric_only=True), annot=True)
 plt.show()`}
             output={
               <div className="w-full flex items-center justify-center p-4 bg-white rounded">
@@ -510,12 +593,32 @@ plt.show()`}
           <AlertTriangle className="h-5 w-5" /> The Garbage In, Garbage Out Warning
         </div>
         <p className="text-sm text-yellow-900 m-0">
-          Machine Learning models are fundamentally dumb mathematical equations.
-          If you skip EDA and feed a model data where missing ages are recorded
-          as <code>-999</code>, the model might incorrectly assume age actually negatively
-          affects pricing in bizarre mathematical ways.{" "}
-          <strong>You cannot skip EDA.</strong>
+          Machine learning models learn patterns from the values they are given. If a missing age is stored as <code>-999</code> and the model is not told that this value means "missing", it may treat <code>-999</code> as a real age and learn a misleading pattern.{" "}
+          <strong>EDA helps catch problems like this before training.</strong>
         </p>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
+        Common EDA Questions
+      </h2>
+      <div className="not-prose my-6 space-y-3">
+        <details className="rounded-xl border border-slate-200 bg-white p-4">
+          <summary className="cursor-pointer font-semibold text-slate-800">Do we clean the data before or during EDA?</summary>
+          <p className="mt-3 mb-0 text-sm leading-relaxed text-slate-600">Usually both. Initial EDA first reveals missing values, duplicates and suspicious values. You then clean carefully and explore again to confirm that the dataset now makes sense.</p>
+        </details>
+        <details className="rounded-xl border border-slate-200 bg-white p-4">
+          <summary className="cursor-pointer font-semibold text-slate-800">Does correlation prove that one feature causes another?</summary>
+          <p className="mt-3 mb-0 text-sm leading-relaxed text-slate-600">No. Correlation means two variables move together in the observed data. It does not by itself prove that one causes the other.</p>
+        </details>
+        <details className="rounded-xl border border-slate-200 bg-white p-4">
+          <summary className="cursor-pointer font-semibold text-slate-800">Should every outlier be removed?</summary>
+          <p className="mt-3 mb-0 text-sm leading-relaxed text-slate-600">No. First investigate it. A value may be a typing error, a measurement problem, or a genuine rare case that is important to keep.</p>
+        </details>
+      </div>
+
+      <div className="not-prose my-8 rounded-xl border border-indigo-100 bg-indigo-50 p-5 text-sm text-indigo-950">
+        <p className="m-0 font-bold">Continue learning</p>
+        <p className="mt-2 mb-0">After EDA, the next common tasks are <a href="/learn/handling-missing-data" className="font-semibold underline">handling missing data</a>, <a href="/learn/feature-engineering" className="font-semibold underline">feature engineering</a>, and choosing clear <a href="/learn/data-visualization" className="font-semibold underline">data visualizations for ML</a>.</p>
       </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
@@ -533,8 +636,7 @@ plt.show()`}
           someone's salary, creating an extreme anomaly that could break your
           linear regression model. <br />
           <br />
-          Which visualization plot from EDA is specifically known as the
-          "absolute best tool" for spotting these extreme anomalies?
+          Which simple EDA visualization is especially useful for quickly spotting potential extreme values?
         </p>
         <details className="group cursor-pointer">
           <summary className="font-bold text-indigo-400 outline-none select-none">
@@ -545,10 +647,7 @@ plt.show()`}
               <strong>Answer: A Box Plot.</strong>
             </p>
             <p className="text-slate-300">
-              Box plots calculate summary statistics (like percentiles) and draw
-              specific "whiskers" for normal ranges. Any data point (like the
-              typo salary) falling outside those whiskers is plotted as an
-              isolated dot, immediately highlighting it as an outlier.
+              A box plot summarizes the center and spread of a numeric variable using quartiles and whiskers. Values beyond the whiskers are often shown as separate points, making them easy to investigate as <em>potential</em> outliers. A flagged point is not automatically an error—it may be a genuine extreme value.
             </p>
           </div>
         </details>
