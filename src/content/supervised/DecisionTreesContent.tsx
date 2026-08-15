@@ -39,7 +39,62 @@ export function DecisionTreesContent() {
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Decision Tree</h1>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
-        Decision Trees are algorithms that work by repeatedly asking questions about the data and splitting it into smaller groups until a final prediction is made.</p>
+        Decision Trees are algorithms that work by repeatedly asking questions about the data and splitting it into smaller groups until a final prediction is made.
+      </p>
+
+      <h2 className="text-3xl font-bold text-slate-800 mt-8 mb-4">
+        Decision Tree in Simple Words
+      </h2>
+      <p className="text-lg leading-relaxed text-slate-700 mb-6">
+        Think of a Decision Tree as a sequence of simple questions. Each answer
+        sends us to the next question until we reach a final decision.
+      </p>
+
+      <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 sm:p-6 mb-8">
+        <p className="font-bold text-sky-900 text-lg mb-5 text-center">
+          Simple Example: Should We Play Cricket?
+        </p>
+        <div className="flex flex-col items-center text-sm sm:text-base font-semibold text-slate-700">
+          <div className="bg-white border border-sky-300 rounded-lg px-5 py-3 text-center shadow-sm">
+            Is it raining?
+          </div>
+          <div className="grid grid-cols-2 gap-8 sm:gap-20 mt-3 w-full max-w-md">
+            <div className="text-center">
+              <p className="text-emerald-700 text-sm mb-2">No ↓</p>
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-3 py-3">
+                Play outside
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-rose-700 text-sm mb-2">Yes ↓</p>
+              <div className="bg-white border border-sky-300 rounded-lg px-3 py-3">
+                Indoor ground available?
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-3 text-xs sm:text-sm">
+                <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-2">
+                  Yes → Play inside
+                </div>
+                <div className="bg-rose-50 border border-rose-200 rounded-lg p-2">
+                  No → Do not play
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        {[
+          ["1. Ask", "Ask one useful question about a feature."],
+          ["2. Split", "Send different answers into different groups."],
+          ["3. Predict", "Keep asking until the tree reaches a final prediction."],
+        ].map(([title, text]) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+            <p className="font-bold text-indigo-700 mb-1">{title}</p>
+            <p className="text-slate-600 text-sm leading-relaxed">{text}</p>
+          </div>
+        ))}
+      </div>
 
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-xl p-6 mb-8 text-white shadow-sm flex flex-col md:flex-row items-center md:items-start gap-6">
         <div className="flex-1">
@@ -65,9 +120,9 @@ export function DecisionTreesContent() {
       </div>
 
       <p className="text-lg leading-relaxed text-slate-700 mb-10 italic">
-        They are highly popular because they are easy to visualize,
-        interpretable, fast to train, capable of handling nonlinear data, and
-        useful for both classification and regression.
+        Decision Trees are widely used because their rules are easy to inspect,
+        they can model nonlinear relationships, and the same tree idea can be
+        used for both classification and regression.
       </p>
 
       <hr className="border-slate-200 mt-8 mb-10" />
@@ -194,8 +249,9 @@ export function DecisionTreesContent() {
             1. Root Node
           </h3>
           <p className="text-slate-700 mb-4 whitespace-pre-wrap leading-relaxed">
-            Topmost node containing the complete dataset before any splitting
-            occurs. The algorithm selects the best feature mathematically.
+            Topmost node containing the training samples before the first split.
+            The algorithm searches possible feature-and-threshold splits and
+            chooses one according to its splitting criterion.
           </p>
           <div className="bg-white p-3 rounded border border-blue-100 text-sm font-mono text-center text-blue-800 shadow-sm leading-tight">
             Example: <br />
@@ -222,8 +278,9 @@ export function DecisionTreesContent() {
             3. Leaf Node
           </h3>
           <p className="text-slate-700 mb-4 whitespace-pre-wrap leading-relaxed">
-            Represents the final prediction. No further splitting occurs after
-            reaching a leaf node. Data is highly organized.
+            Represents the final prediction for samples that reach that node.
+            A leaf does not have to be perfectly pure; tree-stopping rules may
+            end splitting earlier.
           </p>
           <div className="bg-white p-3 rounded border border-emerald-100 text-sm font-mono text-center text-emerald-800 shadow-sm leading-tight">
             Example: <br />
@@ -312,9 +369,33 @@ export function DecisionTreesContent() {
       </h2>
       <p className="text-lg leading-relaxed text-slate-700 mb-6">
         The main objective is to repeatedly divide the dataset into smaller and
-        purer groups. The algorithm searches for the best feature that creates
-        the most organized split.
+        purer groups. At each node, the algorithm compares possible questions
+        and chooses a split that improves the chosen impurity or prediction-loss
+        criterion the most.
       </p>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 sm:p-6 mb-8 shadow-sm">
+        <p className="font-bold text-slate-800 mb-4 text-center">
+          See the Goal Before the Formula
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center text-center">
+          <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+            <p className="font-semibold text-rose-800 mb-2">Before a useful split</p>
+            <p className="font-mono text-sm">YES · NO · YES · NO · YES · NO</p>
+            <p className="text-xs text-slate-600 mt-2">Classes are mixed together.</p>
+          </div>
+          <div className="text-slate-400 font-bold text-2xl">→</div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+              <p className="font-mono text-sm">YES · YES · YES</p>
+            </div>
+            <div className="bg-sky-50 border border-sky-200 rounded-lg p-4">
+              <p className="font-mono text-sm">NO · NO · NO</p>
+            </div>
+            <p className="col-span-2 text-xs text-slate-600">Better split → purer child groups</p>
+          </div>
+        </div>
+      </div>
 
       <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm mb-12">
         <h4 className="text-xl font-bold text-slate-800 mb-6 text-center">
@@ -377,10 +458,15 @@ export function DecisionTreesContent() {
         (Math)
       </h2>
       <p className="text-lg leading-relaxed text-slate-700 mb-6">
-        A Decision Tree needs a mathematical method to determine which feature
-        creates the best split. The two most important criteria are the{" "}
-        <strong>Gini Index</strong> and <strong>Entropy</strong>.
+        A classification tree needs a mathematical method to compare possible
+        splits. Two common classification criteria are <strong>Gini impurity</strong>{" "}
+        and <strong>Entropy / Information Gain</strong>.
       </p>
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-slate-700">
+        <strong>Regression tree note:</strong> when the target is a number, the
+        tree usually compares splits using a regression loss such as squared
+        error rather than class impurity.
+      </div>
 
       {/* Gini Index */}
       <div className="mb-12">
@@ -388,9 +474,9 @@ export function DecisionTreesContent() {
           1. Gini Index
         </h3>
         <p className="text-lg text-slate-700 mb-4">
-          Measures how mixed the classes are inside a node. Lower values
-          indicate better purity. It is used primarily in the CART
-          (Classification and Regression Trees) algorithm. The formula is:
+          Measures how mixed the classes are inside a classification node.
+          Lower values mean greater purity. Scikit-learn uses Gini impurity as
+          the default classification criterion. The formula is:
         </p>
 
         <div className="flex flex-col md:flex-row gap-8 mb-6">
@@ -423,12 +509,16 @@ export function DecisionTreesContent() {
                 </tr>
                 <tr>
                   <td className="py-3 font-mono font-bold text-rose-500 text-lg">
-                    Near 1
+                    0.5
                   </td>
-                  <td className="py-3 text-slate-700">Highly impure node</td>
+                  <td className="py-3 text-slate-700">Most mixed binary node (50/50)</td>
                 </tr>
               </tbody>
             </table>
+            <p className="text-xs text-slate-500 mt-3">
+              For more than two classes, the maximum possible Gini impurity is
+              higher than 0.5 and depends on the number of classes.
+            </p>
           </div>
         </div>
 
@@ -465,7 +555,8 @@ export function DecisionTreesContent() {
             </div>
           </div>
           <p className="text-center mt-3 text-indigo-800 font-medium">
-            Moderate impurity. Algorithm will try to split further.
+            For a binary node, 0.48 is close to the maximum of 0.5, so the
+            classes are still highly mixed.
           </p>
         </div>
       </div>
@@ -558,8 +649,26 @@ export function DecisionTreesContent() {
             </div>
           </div>
           <p className="text-center mt-3 text-cyan-800 font-medium">
-            Entropy close to 1 indicates high disorder. Needs more splitting.
+            For two classes, entropy 0.971 is close to the maximum of 1, so the
+            node is highly mixed.
           </p>
+
+          <div className="mt-6 bg-white border border-cyan-200 rounded-lg p-5">
+            <p className="font-bold text-cyan-900 mb-3">Tiny Information Gain Example</p>
+            <p className="text-slate-700 mb-3">
+              Suppose a question splits the 10 samples into a pure child with 4
+              YES samples and another child with 2 YES + 4 NO samples.
+            </p>
+            <div className="space-y-2 font-mono text-sm text-slate-700">
+              <p><strong>Step 1:</strong> Parent entropy = 0.971</p>
+              <p><strong>Step 2:</strong> Child entropies ≈ 0 and 0.918</p>
+              <p><strong>Step 3:</strong> Weighted child entropy = (4/10 × 0) + (6/10 × 0.918) ≈ 0.551</p>
+              <p><strong>Step 4:</strong> Information Gain = 0.971 − 0.551 ≈ <strong>0.420</strong></p>
+            </div>
+            <p className="text-sm text-slate-600 mt-3">
+              The question reduced uncertainty by about 0.420 in this small example.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -577,9 +686,9 @@ export function DecisionTreesContent() {
             <AlertTriangle className="mr-2 text-rose-600 w-5 h-5" /> Overfitting
           </h3>
           <p className="text-lg text-slate-700 mb-4">
-            Decision Trees can easily become overly complex. This is called{" "}
-            <strong>overfitting</strong>. An overfitted tree maps the training
-            data too closely instead of learning general patterns.
+            Decision Trees can grow very deep and fit details that do not
+            generalize well. This is <strong>overfitting</strong>: training
+            performance may look strong while performance on new data gets worse.
           </p>
           <ul className="list-disc pl-5 text-rose-800 space-y-2 font-medium">
             <li>Creates very deep, complex branches</li>
@@ -592,19 +701,21 @@ export function DecisionTreesContent() {
           <div>
             <h3 className="text-xl font-bold text-emerald-900 mb-4 flex items-center">
               <CheckCircle className="mr-2 text-emerald-600 w-5 h-5" /> Pruning
-              (The Solution)
+              (One Control Strategy)
             </h3>
             <p className="text-lg text-slate-700 mb-4">
-              Pruning reduces unnecessary branches from the tree, stripping away
-              sections that provide little predictive power.
+              Tree complexity can be controlled while growing the tree or by
+              pruning branches afterward. The goal is to keep useful structure
+              without fitting unnecessary detail.
             </p>
             <ul className="list-disc pl-5 text-emerald-800 space-y-2 font-medium">
               <li>
-                <strong>Pre-pruning:</strong> Stop growing early (max_depth).
+                <strong>Control growth:</strong> use settings such as max_depth,
+                min_samples_split, or min_samples_leaf.
               </li>
               <li>
-                <strong>Post-pruning:</strong> Grow full tree, then cut back
-                weak branches.
+                <strong>Post-pruning:</strong> cost-complexity pruning can remove
+                branches using a parameter such as ccp_alpha.
               </li>
             </ul>
           </div>
@@ -629,16 +740,16 @@ export function DecisionTreesContent() {
                 <strong>Interpretable:</strong> Human-readable rules
               </td>
               <td className="px-6 py-4 text-rose-800 bg-rose-50/50">
-                <strong>Overfitting:</strong> Deep trees memorize data easily
+                <strong>Overfitting:</strong> Deep trees can fit noise and overly specific patterns
               </td>
             </tr>
             <tr>
               <td className="px-6 py-4 text-emerald-800 bg-emerald-50/50">
-                <strong>No Feature Scaling required:</strong> Works on raw data
+                <strong>Scaling usually unnecessary:</strong> splits rely on feature thresholds rather than distances
               </td>
               <td className="px-6 py-4 text-rose-800 bg-rose-50/50">
-                <strong>Instability:</strong> Small change in data completely
-                alters tree structure
+                <strong>Instability:</strong> Small data changes can sometimes
+                produce a noticeably different tree
               </td>
             </tr>
             <tr>
@@ -646,8 +757,8 @@ export function DecisionTreesContent() {
                 <strong>Handles nonlinear relationships</strong> natively
               </td>
               <td className="px-6 py-4 text-rose-800 bg-rose-50/50">
-                <strong>Greedy optimization:</strong> Makes local optimum
-                decisions, not always global
+                <strong>Greedy splitting:</strong> Each split is chosen locally,
+                so the final tree is not guaranteed to be globally optimal
               </td>
             </tr>
           </tbody>
@@ -665,105 +776,118 @@ export function DecisionTreesContent() {
       </p>
 
       <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 sm:p-8 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 1: Import Libraries
-        </span>
-        <span className="text-rose-400">import</span> pandas{" "}
-        <span className="text-rose-400">as</span> pd
-        <br />
-        <span className="text-rose-400">import</span> numpy{" "}
-        <span className="text-rose-400">as</span> np
-        <br />
-        <br />
-        <span className="text-rose-400">from</span> sklearn.model_selection{" "}
-        <span className="text-rose-400">import</span> train_test_split
-        <br />
-        <span className="text-rose-400">from</span> sklearn.tree{" "}
-        <span className="text-rose-400">import</span> DecisionTreeClassifier
-        <br />
-        <span className="text-rose-400">from</span> sklearn.metrics{" "}
-        <span className="text-rose-400">import</span> accuracy_score
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 2: Create Mock Dataset
-        </span>
-        data = {"{"} <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-amber-300">'Age'</span>:
-        [25, 35, 45, 20, 50],
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-amber-300">'Income'</span>
-        : [20000, 50000, 80000, 15000, 90000],
-        <br />
-        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-amber-300">'Buy'</span>:
-        [0, 1, 1, 0, 1]
-        <br />
-        {"}"}
-        <br />
-        df = pd.DataFrame(data)
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 3: Split Features and Target
-        </span>
-        X = df[[<span className="text-amber-300">'Age'</span>,{" "}
-        <span className="text-amber-300">'Income'</span>]]
-        <br />y = df[<span className="text-amber-300">'Buy'</span>]<br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 4: Train-Test Split
-        </span>
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=
-        <span className="text-sky-300">0.2</span>, random_state=
-        <span className="text-sky-300">42</span>)<br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 5: Train Model
-        </span>
-        model = DecisionTreeClassifier()
-        <br />
-        model.fit(X_train, y_train)
-        <br />
-        <br />
-        <span className="text-emerald-400 block mb-2 font-bold font-sans">
-          # Step 6: Make Predictions & Evaluate
-        </span>
-        predictions = model.predict(X_test)
-        <br />
-        accuracy = accuracy_score(y_test, predictions)
-        <br />
-        <br />
-        <span className="text-sky-300">print</span>(
-        <span className="text-amber-300">"Accuracy:"</span>, accuracy)
-        <br />
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 1: Import Libraries</span>
+        <span className="text-rose-400">import</span> pandas <span className="text-rose-400">as</span> pd<br />
+        <span className="text-rose-400">from</span> sklearn.model_selection <span className="text-rose-400">import</span> train_test_split<br />
+        <span className="text-rose-400">from</span> sklearn.tree <span className="text-rose-400">import</span> DecisionTreeClassifier, export_text<br />
+        <span className="text-rose-400">from</span> sklearn.metrics <span className="text-rose-400">import</span> accuracy_score<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 2: Create a Small Teaching Dataset</span>
+        data = {"{"}<br />
+        &nbsp;&nbsp;<span className="text-amber-300">"Age"</span>: [22, 25, 28, 31, 35, 38, 42, 45, 48, 52, 55, 60],<br />
+        &nbsp;&nbsp;<span className="text-amber-300">"Income"</span>: [18000, 22000, 30000, 35000, 42000, 50000, 58000, 65000, 72000, 80000, 90000, 100000],<br />
+        &nbsp;&nbsp;<span className="text-amber-300">"Buy"</span>: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1]<br />
+        {"}"}<br />
+        df = pd.DataFrame(data)<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 3: Features and Target</span>
+        X = df[[<span className="text-amber-300">"Age"</span>, <span className="text-amber-300">"Income"</span>]]<br />
+        y = df[<span className="text-amber-300">"Buy"</span>]<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 4: Split the Data</span>
+        X_train, X_test, y_train, y_test = train_test_split(<br />
+        &nbsp;&nbsp;X, y, test_size=<span className="text-sky-300">0.33</span>, random_state=<span className="text-sky-300">42</span>, stratify=y<br />
+        )<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 5: Train a Small Tree</span>
+        model = DecisionTreeClassifier(max_depth=<span className="text-sky-300">3</span>, random_state=<span className="text-sky-300">42</span>)<br />
+        model.fit(X_train, y_train)<br /><br />
+
+        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 6: Predict and Read the Learned Rule</span>
+        predictions = model.predict(X_test)<br />
+        <span className="text-sky-300">print</span>(<span className="text-amber-300">"Accuracy:"</span>, accuracy_score(y_test, predictions))<br />
+        <span className="text-sky-300">print</span>(export_text(model, feature_names=list(X.columns)))<br />
       </div>
 
       {/* Code Expected Output */}
       <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">
         Expected Output
       </h3>
-      <div className="bg-black text-emerald-400 p-6 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        Accuracy: 1.0
-        <br />
+      <div className="bg-black text-emerald-400 p-6 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-4">
+        Accuracy: 1.0<br /><br />
+        |--- Age &lt;= 36.50<br />
+        |   |--- class: 0<br />
+        |--- Age &gt;&nbsp; 36.50<br />
+        |   |--- class: 1<br />
       </div>
+      <p className="text-sm text-slate-600 mb-12">
+        This is a deliberately simple teaching dataset, so the test split is
+        easy. A perfect score here does <strong>not</strong> mean Decision Trees
+        will achieve 100% accuracy on real-world data.
+      </p>
 
       <hr className="border-slate-200 mt-10 mb-10" />
+
+      <h2 className="text-3xl font-bold text-slate-800 mb-6">
+        Common Questions About Decision Trees
+      </h2>
+      <div className="space-y-4 mb-10">
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <p className="font-bold text-slate-800 mb-2">Do Decision Trees need feature scaling?</p>
+          <p className="text-slate-700">
+            Usually no. A tree compares feature values with thresholds, so ordinary
+            rescaling does not change the ordering of values. Categorical data may
+            still need suitable preprocessing depending on the implementation.
+          </p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <p className="font-bold text-slate-800 mb-2">What does max_depth do?</p>
+          <p className="text-slate-700">
+            It limits how many levels the tree can grow. A smaller depth can make
+            the model easier to interpret and can help control overfitting.
+          </p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <p className="font-bold text-slate-800 mb-2">Decision Tree or Random Forest?</p>
+          <p className="text-slate-700">
+            A single tree is easier to inspect. A Random Forest combines many trees
+            and often gives more stable predictions, at the cost of some simplicity.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-10">
+        <p className="font-bold text-indigo-900 mb-3">Continue Learning</p>
+        <div className="flex flex-wrap gap-3 text-sm font-semibold">
+          <a href="/learn/classification-intro" className="text-indigo-700 underline underline-offset-2">Classification Overview</a>
+          <a href="/learn/overfitting-underfitting" className="text-indigo-700 underline underline-offset-2">Overfitting & Underfitting</a>
+          <a href="/learn/random-forest" className="text-indigo-700 underline underline-offset-2">Random Forest</a>
+          <a href="/learn/confusion-matrix" className="text-indigo-700 underline underline-offset-2">Confusion Matrix</a>
+        </div>
+      </div>
 
       {/* FINAL SUMMARY */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
         Final Summary
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Decision Trees represent an intuitive way a machine can learn. By mimicking human decision-making—splitting information into simple yes/no questions based on feature boundaries—it provides incredible transparency.
+        Decision Trees are an intuitive supervised-learning model because their
+        predictions can be followed as a sequence of feature-based questions and
+        branches.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        While highly interpretable and capable of handling complex non-linear data without scaling, building a solitary deep tree is extremely prone to memorizing training data (overfitting). Because of this, it is most commonly used as the foundational building block for advanced ensemble methods like Random Forest and Gradient Boosting.
+        A single tree can model nonlinear relationships and usually does not need
+        ordinary feature scaling, but an unconstrained tree can overfit. Decision
+        Trees are also important building blocks for ensemble methods such as
+        Random Forest and Gradient Boosting.
       </p>
       
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "A standalone Decision Tree is incredibly interpretable but dangerously unstable; its true power is unlocked when thousands of simple trees are combined to form powerful ensemble models."
+           A Decision Tree is easy to inspect, but controlling its depth and
+           validating it on unseen data are important because a single tree can be
+           sensitive to the training sample.
          </p>
       </div>
 
