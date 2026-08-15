@@ -81,7 +81,76 @@ export function BiasVarianceContent() {
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Bias-Variance Tradeoff</h1>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
-        The Bias-Variance Tradeoff is a core concept that affects almost every machine learning algorithm — from Linear Regression to Deep Learning.</p>
+        The Bias-Variance Tradeoff is a core idea in machine learning. It helps us understand why a model can be too simple, too sensitive to its training data, or balanced enough to work well on new data.
+      </p>
+
+      {/* Beginner-first explanation */}
+      <section className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
+        <h2 className="text-3xl font-bold text-slate-800 mb-4">
+          Bias-Variance in Simple Words
+        </h2>
+        <p className="text-lg text-slate-700 mb-5">
+          Imagine three students preparing for the same exam. One studies too little, one memorizes only the exact practice questions, and one understands the concepts. Machine-learning models can behave in a similar way.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white border border-rose-200 rounded-lg p-5">
+            <p className="font-bold text-rose-800 text-lg mb-2">Too Simple</p>
+            <p className="text-slate-700 mb-3">Misses important patterns.</p>
+            <div className="text-center bg-rose-50 rounded-md py-3 font-semibold text-rose-900">
+              High Bias → Underfitting
+            </div>
+          </div>
+          <div className="bg-white border border-emerald-200 rounded-lg p-5">
+            <p className="font-bold text-emerald-800 text-lg mb-2">Balanced</p>
+            <p className="text-slate-700 mb-3">Learns the useful pattern without chasing every detail.</p>
+            <div className="text-center bg-emerald-50 rounded-md py-3 font-semibold text-emerald-900">
+              Good Generalization
+            </div>
+          </div>
+          <div className="bg-white border border-amber-200 rounded-lg p-5">
+            <p className="font-bold text-amber-800 text-lg mb-2">Too Sensitive</p>
+            <p className="text-slate-700 mb-3">Fits small details and noise in the training data.</p>
+            <div className="text-center bg-amber-50 rounded-md py-3 font-semibold text-amber-900">
+              High Variance → Overfitting
+            </div>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full border border-slate-200 bg-white text-base">
+            <thead className="bg-slate-100">
+              <tr>
+                <th className="border border-slate-200 px-4 py-3 text-left">Model</th>
+                <th className="border border-slate-200 px-4 py-3 text-left">Training Data</th>
+                <th className="border border-slate-200 px-4 py-3 text-left">New Data</th>
+                <th className="border border-slate-200 px-4 py-3 text-left">Likely Problem</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-slate-200 px-4 py-3 font-medium">Too simple</td>
+                <td className="border border-slate-200 px-4 py-3">Poor</td>
+                <td className="border border-slate-200 px-4 py-3">Poor</td>
+                <td className="border border-slate-200 px-4 py-3">High bias / underfitting</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-200 px-4 py-3 font-medium">Balanced</td>
+                <td className="border border-slate-200 px-4 py-3">Good</td>
+                <td className="border border-slate-200 px-4 py-3">Good</td>
+                <td className="border border-slate-200 px-4 py-3">Good generalization</td>
+              </tr>
+              <tr>
+                <td className="border border-slate-200 px-4 py-3 font-medium">Too complex</td>
+                <td className="border border-slate-200 px-4 py-3">Very good</td>
+                <td className="border border-slate-200 px-4 py-3">Can be much worse</td>
+                <td className="border border-slate-200 px-4 py-3">High variance / overfitting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <BiasVarianceDiagram />
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
@@ -182,7 +251,7 @@ export function BiasVarianceContent() {
       </div>
 
       <p className="text-xl font-medium text-slate-800 mb-10 text-center bg-slate-50 border border-slate-200 py-4 rounded shadow-sm">
-        Machine learning models behave exactly the same way.
+        This student analogy is not a mathematical definition, but it gives a useful first picture of underfitting, overfitting, and generalization.
       </p>
 
       <hr className="border-slate-200 mt-8 mb-10" />
@@ -191,7 +260,7 @@ export function BiasVarianceContent() {
       <h2 className="text-3xl font-bold text-slate-800 mb-6">What is Bias?</h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Bias measures how much a model oversimplifies the problem.
+        In simple terms, high bias means the model makes assumptions that are too simple to capture an important pattern in the data.
       </p>
 
       <p className="text-lg font-medium text-slate-800 mb-2">
@@ -297,15 +366,15 @@ export function BiasVarianceContent() {
       </h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Variance measures how sensitive a model is to training data.
+        Variance describes how much a model's predictions can change when the training data changes. High variance often means the model is too sensitive to the particular examples it saw.
       </p>
 
       <p className="text-lg font-medium text-slate-800 mb-2">
         A high-variance model:
       </p>
       <ul className="list-disc pl-8 space-y-2 text-lg text-slate-700 mb-6">
-        <li>Learns noise</li>
-        <li>Memorizes data</li>
+        <li>May learn noise</li>
+        <li>May fit noise or unimportant details</li>
         <li>Changes drastically with small dataset changes</li>
         <li>Performs poorly on unseen data</li>
       </ul>
@@ -403,8 +472,7 @@ export function BiasVarianceContent() {
       </h2>
 
       <p className="text-lg leading-relaxed mb-6 text-slate-700">
-        The Bias-Variance Tradeoff is the balance between{" "}
-        <strong>Simple Models vs Complex Models</strong>.
+        The Bias-Variance Tradeoff describes how changing model flexibility can change two kinds of error. Very simple models can miss the real pattern, while very flexible models can become too sensitive to the particular training sample.
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
@@ -430,7 +498,7 @@ export function BiasVarianceContent() {
       </div>
 
       <p className="text-xl font-bold text-slate-800 text-center mb-10">
-        Machine learning aims to find the optimal balance.
+        The practical goal is to choose a model that performs well on unseen data — not simply the model with the lowest training error.
       </p>
 
       {/* Bias-Variance Curve */}
@@ -487,7 +555,7 @@ export function BiasVarianceContent() {
           </ResponsiveContainer>
         </div>
         <p className="text-center text-slate-600 mt-4 font-medium italic">
-          Optimal model complexity occurs where Total Error reaches its minimum.
+          In this teaching illustration, the best region is where the total expected error is lowest.
         </p>
       </div>
 
@@ -508,17 +576,21 @@ export function BiasVarianceContent() {
         Mathematical Understanding
       </h2>
 
-      <p className="text-lg leading-relaxed mb-6 text-slate-700">
-        The total prediction error can be represented as:
+      <p className="text-lg leading-relaxed mb-4 text-slate-700">
+        For squared-error regression, the expected prediction error is commonly explained using this decomposition:
       </p>
 
-      <div className="flex justify-center mb-8">
-        <div className="bg-white border border-slate-300 shadow-sm p-4 rounded-xl text-center">
-          <p className="font-mono text-2xl text-slate-800 font-bold">
-            Total Error = Bias² + Variance + Irreducible Error
+      <div className="flex justify-center mb-4">
+        <div className="bg-white border border-slate-300 shadow-sm p-4 rounded-xl text-center overflow-x-auto">
+          <p className="font-mono text-xl md:text-2xl text-slate-800 font-bold whitespace-nowrap">
+            Expected Squared Error ≈ Bias² + Variance + Irreducible Noise
           </p>
         </div>
       </div>
+
+      <p className="text-base md:text-lg text-slate-600 mb-8">
+        This is a useful way to understand the tradeoff. It is not a universal formula for every possible loss function or machine-learning problem.
+      </p>
 
       <h3 className="text-xl font-bold text-slate-800 mb-4">
         Formula Explanation
@@ -546,17 +618,53 @@ export function BiasVarianceContent() {
         </div>
       </div>
 
-      <div className="pl-4 border-l-4 border-sky-400 bg-sky-50 py-4 pr-4 rounded-r-md mb-12">
-        <h4 className="font-bold text-xl mb-3 flex items-center text-sky-900">
+      <div className="pl-4 border-l-4 border-sky-400 bg-sky-50 py-5 pr-5 rounded-r-md mb-12">
+        <h3 className="font-bold text-xl mb-3 flex items-center text-sky-900">
           <Calculator className="mr-2" /> Worked Numerical Example
-        </h4>
-        <p className="text-lg text-sky-800 mb-2">
-          Suppose: Bias² = 4, Variance = 3, Irreducible Error = 2
+        </h3>
+        <p className="text-lg text-sky-800 mb-4">
+          Suppose a simple squared-error decomposition gives:
         </p>
-        <p className="text-lg text-sky-800 mb-2">Then:</p>
-        <p className="font-mono text-lg text-sky-900 bg-white p-2 rounded inline-block">
-          Total Error = 4 + 3 + 2 = 9
-        </p>
+
+        <div className="overflow-x-auto mb-5">
+          <table className="min-w-full bg-white border border-sky-200 text-base">
+            <tbody>
+              <tr>
+                <td className="border border-sky-200 px-4 py-2 font-medium">Bias²</td>
+                <td className="border border-sky-200 px-4 py-2">4</td>
+                <td className="border border-sky-200 px-4 py-2">Systematic error from the model's simplifying assumptions</td>
+              </tr>
+              <tr>
+                <td className="border border-sky-200 px-4 py-2 font-medium">Variance</td>
+                <td className="border border-sky-200 px-4 py-2">3</td>
+                <td className="border border-sky-200 px-4 py-2">Sensitivity to changes in the training sample</td>
+              </tr>
+              <tr>
+                <td className="border border-sky-200 px-4 py-2 font-medium">Irreducible noise</td>
+                <td className="border border-sky-200 px-4 py-2">2</td>
+                <td className="border border-sky-200 px-4 py-2">Random variation the model cannot fully remove</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="space-y-4 text-lg text-sky-900">
+          <div className="bg-white border border-sky-200 rounded-lg p-4">
+            <p className="font-bold mb-1">Step 1 — Write the three parts</p>
+            <p className="font-mono">Error ≈ 4 + 3 + 2</p>
+            <p className="text-sky-800 mt-1">We substitute the given Bias², Variance and noise values.</p>
+          </div>
+          <div className="bg-white border border-sky-200 rounded-lg p-4">
+            <p className="font-bold mb-1">Step 2 — Add Bias² and Variance</p>
+            <p className="font-mono">4 + 3 = 7</p>
+            <p className="text-sky-800 mt-1">These are the two parts we try to balance when choosing model complexity.</p>
+          </div>
+          <div className="bg-white border border-sky-200 rounded-lg p-4">
+            <p className="font-bold mb-1">Step 3 — Add irreducible noise</p>
+            <p className="font-mono">7 + 2 = 9</p>
+            <p className="text-sky-800 mt-1">So the expected squared error in this simplified example is about <strong>9</strong>.</p>
+          </div>
+        </div>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-10" />
@@ -628,9 +736,12 @@ export function BiasVarianceContent() {
       <hr className="border-slate-200 mt-8 mb-10" />
 
       {/* Bias and Variance in Different Algorithms */}
-      <h2 className="text-3xl font-bold text-slate-800 mb-6">
+      <h2 className="text-3xl font-bold text-slate-800 mb-4">
         Bias and Variance in Different Algorithms
       </h2>
+      <p className="text-lg text-slate-700 mb-6">
+        The table below shows <strong>common tendencies</strong>, not permanent labels. Bias and variance depend on model settings, data size, regularization, feature quality, and the problem itself.
+      </p>
       <table className="min-w-full divide-y divide-slate-200 bg-white shadow-sm border border-slate-200 rounded-lg overflow-hidden mb-12">
         <thead className="bg-slate-800">
           <tr>
@@ -650,8 +761,8 @@ export function BiasVarianceContent() {
             <td className="px-6 py-4 font-medium text-slate-800">
               Linear Regression
             </td>
-            <td className="px-6 py-4 text-rose-600 font-bold">High</td>
-            <td className="px-6 py-4 text-emerald-600 font-bold">Low</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Can be higher if the true pattern is strongly non-linear</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Often relatively low</td>
           </tr>
           <tr className="bg-slate-50">
             <td className="px-6 py-4 font-medium text-slate-800">
@@ -664,22 +775,22 @@ export function BiasVarianceContent() {
             <td className="px-6 py-4 font-medium text-slate-800">
               Decision Trees
             </td>
-            <td className="px-6 py-4 text-emerald-600 font-bold">Low</td>
-            <td className="px-6 py-4 text-rose-600 font-bold">High</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Often lower when trees are deep</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Can be high for deep, unpruned trees</td>
           </tr>
           <tr className="bg-slate-50">
             <td className="px-6 py-4 font-medium text-slate-800">
               Random Forest
             </td>
-            <td className="px-6 py-4 text-amber-600 font-bold">Medium</td>
-            <td className="px-6 py-4 text-amber-600 font-bold">Medium</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Depends on tree settings</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Usually lower than a single deep tree</td>
           </tr>
           <tr>
             <td className="px-6 py-4 font-medium text-slate-800">
               Neural Networks
             </td>
-            <td className="px-6 py-4 text-emerald-600 font-bold">Low</td>
-            <td className="px-6 py-4 text-rose-600 font-bold">High</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Can fit very complex patterns</td>
+            <td className="px-6 py-4 text-slate-700 font-medium">Can overfit without enough data or regularization</td>
           </tr>
           <tr className="bg-slate-50">
             <td className="px-6 py-4 font-medium text-slate-800">
@@ -698,7 +809,7 @@ export function BiasVarianceContent() {
         Understanding Underfitting
       </h2>
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Underfitting occurs when the model is <strong>too simple</strong>.
+        Underfitting occurs when a model is not flexible enough, not trained enough, or does not have enough useful information to capture the important pattern.
       </p>
 
       <ul className="list-disc pl-8 space-y-2 text-lg text-slate-700 mb-8">
@@ -735,7 +846,7 @@ export function BiasVarianceContent() {
             <li>Increase model complexity</li>
             <li>Add features</li>
             <li>Reduce regularization</li>
-            <li>Train longer</li>
+            <li>Train longer if optimization has not yet converged</li>
           </ul>
         </div>
       </div>
@@ -747,14 +858,13 @@ export function BiasVarianceContent() {
         Understanding Overfitting
       </h2>
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Overfitting occurs when the model{" "}
-        <strong>memorizes training data</strong>.
+        Overfitting occurs when a model fits the training data so closely that some of what it learns does not generalize well to new data.
       </p>
 
       <ul className="list-disc pl-8 space-y-2 text-lg text-slate-700 mb-8">
         <li>Excellent training accuracy</li>
         <li>Poor testing accuracy</li>
-        <li>Memorizes noise</li>
+        <li>May fit noise or accidental details</li>
         <li>Weak generalization</li>
       </ul>
 
@@ -783,12 +893,58 @@ export function BiasVarianceContent() {
           <h4 className="font-bold text-emerald-800 mb-3 text-lg">Solutions</h4>
           <ul className="list-disc pl-6 space-y-2 text-slate-700">
             <li>Use regularization</li>
-            <li>Reduce features</li>
-            <li>Increase training data</li>
+            <li>Remove unhelpful features when appropriate</li>
+            <li>Use more representative training data when available</li>
             <li>Use cross-validation</li>
             <li>Simplify the model</li>
           </ul>
         </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-10" />
+
+      {/* Diagnose from training and validation performance */}
+      <h2 className="text-3xl font-bold text-slate-800 mb-5">
+        How Can You Recognize High Bias or High Variance?
+      </h2>
+      <p className="text-lg text-slate-700 mb-5">
+        A practical first check is to compare performance on the training set with performance on validation data.
+      </p>
+
+      <div className="overflow-x-auto mb-5">
+        <table className="min-w-full divide-y divide-slate-200 bg-white shadow-sm border border-slate-200 rounded-lg overflow-hidden">
+          <thead className="bg-slate-50">
+            <tr>
+              <th className="px-5 py-3 text-left font-bold text-slate-700">Training Error</th>
+              <th className="px-5 py-3 text-left font-bold text-slate-700">Validation Error</th>
+              <th className="px-5 py-3 text-left font-bold text-slate-700">What It May Suggest</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-200 text-base md:text-lg">
+            <tr>
+              <td className="px-5 py-4">High</td>
+              <td className="px-5 py-4">High</td>
+              <td className="px-5 py-4">Possible underfitting / high bias</td>
+            </tr>
+            <tr className="bg-slate-50">
+              <td className="px-5 py-4">Low</td>
+              <td className="px-5 py-4">Much higher</td>
+              <td className="px-5 py-4">Possible overfitting / high variance</td>
+            </tr>
+            <tr>
+              <td className="px-5 py-4">Low</td>
+              <td className="px-5 py-4">Low and close to training error</td>
+              <td className="px-5 py-4">Better sign of generalization</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mb-10">
+        <p className="font-bold text-amber-900 mb-2">Important:</p>
+        <p className="text-amber-900">
+          These are clues, not automatic diagnoses. Always consider the metric, dataset size, noise, class balance, and whether the validation data truly represents the problem.
+        </p>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-10" />
@@ -799,8 +955,7 @@ export function BiasVarianceContent() {
       </h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Cross-validation helps estimate model generalization. It helps identify
-        overfitting, underfitting, and the best hyperparameters.
+        Cross-validation helps estimate how a model may perform on unseen data and compare model or hyperparameter choices more reliably. Comparing training performance with validation performance can also provide clues about underfitting or overfitting.
       </p>
 
       <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl mb-10 text-center shadow-sm">
@@ -823,8 +978,7 @@ export function BiasVarianceContent() {
       </div>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
-        Deep Neural Networks usually have: Low Bias, High Variance. Because they
-        are extremely powerful models.
+        Deep neural networks are highly flexible models. They can achieve very low training error, but they can still overfit when the dataset, regularization, or training setup is not appropriate.
       </p>
 
       <ul className="list-none pl-0 space-y-3 text-lg text-slate-700 mb-12">
@@ -870,9 +1024,60 @@ poly1 = PolynomialFeatures(degree=1)
 # Step 4 - Medium Degree Polynomial -> Balanced fitting
 poly2 = PolynomialFeatures(degree=2)
 
-# Step 5 - High Degree Polynomial -> Overfitting
+# Step 5 - A very high degree can overfit a small dataset
 poly10 = PolynomialFeatures(degree=10)`}</code>
         </pre>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-10" />
+
+      <h2 className="text-3xl font-bold text-slate-800 mb-6">
+        Common Questions About Bias and Variance
+      </h2>
+
+      <div className="space-y-5 mb-10">
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <h3 className="font-bold text-xl text-slate-800 mb-2">
+            Is high bias the same as underfitting?
+          </h3>
+          <p className="text-lg text-slate-700">
+            They are closely related, but not identical definitions. High bias often leads to underfitting because the model cannot capture enough of the true pattern.
+          </p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <h3 className="font-bold text-xl text-slate-800 mb-2">
+            Is high variance the same as overfitting?
+          </h3>
+          <p className="text-lg text-slate-700">
+            High variance is commonly associated with overfitting: the model changes too much with the training sample and may perform much worse on new data.
+          </p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-lg p-5">
+          <h3 className="font-bold text-xl text-slate-800 mb-2">
+            Does a more complex model always have lower bias and higher variance?
+          </h3>
+          <p className="text-lg text-slate-700">
+            It is a useful general tendency, not a guaranteed rule. Regularization, data size, model architecture, and training procedure can change the behavior.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-12">
+        <p className="font-bold text-indigo-900 mb-3">Continue Learning</p>
+        <div className="flex flex-wrap gap-3">
+          <a href="/learn/overfitting-underfitting" className="text-indigo-700 underline font-medium">
+            Overfitting &amp; Underfitting
+          </a>
+          <a href="/learn/cross-validation" className="text-indigo-700 underline font-medium">
+            Cross-Validation
+          </a>
+          <a href="/learn/ridge-regression" className="text-indigo-700 underline font-medium">
+            Ridge Regression
+          </a>
+          <a href="/learn/lasso-regression" className="text-indigo-700 underline font-medium">
+            Lasso Regression
+          </a>
+        </div>
       </div>
 
       {/* FINAL SUMMARY */}
@@ -880,16 +1085,16 @@ poly10 = PolynomialFeatures(degree=10)`}</code>
         <BookOpen className="mr-3 text-indigo-400" /> Final Summary
       </h2>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        The Bias-Variance Tradeoff is the fundamental philosophical challenge at the heart of all Machine Learning. It represents the delicate balancing act between building a model that is too simple (High Bias / Underfitting) and building a model that is too complex (High Variance / Overfitting).
+        The Bias-Variance Tradeoff helps explain why both overly simple and overly flexible models can perform poorly on unseen data. High bias is commonly associated with underfitting, while high variance is commonly associated with overfitting.
       </p>
       <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Mastering this tradeoff is essential. The ultimate goal is to find the exact point of model complexity where the total prediction error reaches its absolute minimum, resulting in a model that perfectly captures the underlying trend without memorizing the noise.
+        In practice, we compare training and validation performance, use cross-validation where appropriate, and tune model complexity or regularization to find a model that generalizes well.
       </p>
       
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "A flawless error rate on training data usually means your model has memorized the answers rather than learning the concepts; true model success is measured entirely by how well it performs on data it has never seen before."
+           "Very low training error is not enough. A useful model must also perform well on representative data it did not train on."
          </p>
       </div>
 
