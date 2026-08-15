@@ -1,6 +1,4 @@
 import React from "react";
-import { AnimatedUnsupervised } from "../../components/diagrams/AnimatedFoundationDiagrams";
-
 import { Eye, Layers, Network, Fingerprint, Database, Sparkles, Binary, PieChart } from "lucide-react";
 
 export function UnsupervisedIntroContent() {
@@ -8,10 +6,83 @@ export function UnsupervisedIntroContent() {
     <>
             
       
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8">
+        <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700 mb-2">Understand First</p>
+        <h2 className="text-2xl font-bold text-indigo-900 mb-3">Unsupervised Learning = Learning Without an Answer Key</h2>
+        <p className="text-lg leading-relaxed text-slate-800 mb-4">
+          In supervised learning, we give the machine examples <strong>with correct answers</strong>. In unsupervised learning, we give it data <strong>without answer labels</strong> and ask it to discover useful patterns on its own.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center">
+          <div className="bg-white border border-slate-200 rounded-lg p-4">
+            <p className="font-bold text-slate-900 mb-1">1. Give Data</p>
+            <p className="text-slate-600">No Pass/Fail, Spam/Not Spam, or other answer labels</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-lg p-4">
+            <p className="font-bold text-slate-900 mb-1">2. Find Similarities</p>
+            <p className="text-slate-600">The algorithm compares patterns and relationships</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-lg p-4">
+            <p className="font-bold text-slate-900 mb-1">3. Discover Structure</p>
+            <p className="text-slate-600">It may create groups, reduce features, or find associations</p>
+          </div>
+        </div>
+      </div>
+
       <p className="text-lg leading-relaxed mb-8">
         Unsupervised learning is a type of machine learning that looks for previously undetected patterns in a dataset with no pre-existing labels and with a minimum of human supervision. The goal is not to predict a specific, known outcome, but rather to explore the data to understand its underlying structure, find similarities, compress information, or detect unusual anomalies.
       </p>
-      <AnimatedUnsupervised />
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 md:p-6 mb-10 shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Tiny Example</p>
+        <h3 className="text-xl font-bold text-slate-900 mb-3">Can the Machine Group Fruits Without Being Told Their Names?</h3>
+        <p className="text-lg text-slate-700 mb-5">
+          Suppose we only give the machine two properties of four fruits. Notice that there is <strong>no label column</strong> telling it which fruit belongs to which group.
+        </p>
+        <div className="overflow-x-auto mb-5">
+          <table className="min-w-full text-left border border-slate-200 rounded-lg overflow-hidden">
+            <thead className="bg-slate-100">
+              <tr>
+                <th className="p-3 border-b border-slate-200">Fruit</th>
+                <th className="p-3 border-b border-slate-200">Colour</th>
+                <th className="p-3 border-b border-slate-200">Weight</th>
+                <th className="p-3 border-b border-slate-200">Given Group?</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              <tr><td className="p-3">A</td><td className="p-3">Red</td><td className="p-3">120 g</td><td className="p-3 font-semibold text-rose-700">No</td></tr>
+              <tr><td className="p-3">B</td><td className="p-3">Red</td><td className="p-3">130 g</td><td className="p-3 font-semibold text-rose-700">No</td></tr>
+              <tr><td className="p-3">C</td><td className="p-3">Yellow</td><td className="p-3">170 g</td><td className="p-3 font-semibold text-rose-700">No</td></tr>
+              <tr><td className="p-3">D</td><td className="p-3">Yellow</td><td className="p-3">180 g</td><td className="p-3 font-semibold text-rose-700">No</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 text-center">
+          <div className="w-full md:w-52 bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <p className="font-bold text-slate-900">Mixed Data</p>
+            <div className="flex items-center justify-center gap-2 mt-3" aria-label="Mixed red and yellow items">
+              <span className="w-5 h-5 rounded-full bg-rose-500 inline-block" />
+              <span className="w-5 h-5 rounded-full bg-amber-400 inline-block" />
+              <span className="w-5 h-5 rounded-full bg-rose-500 inline-block" />
+              <span className="w-5 h-5 rounded-full bg-amber-400 inline-block" />
+            </div>
+          </div>
+          <div className="text-slate-400 text-2xl">→</div>
+          <div className="w-full md:w-52 bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+            <p className="font-bold text-indigo-900">Compare Similarities</p>
+            <p className="text-sm text-indigo-800 mt-2">Colour + weight</p>
+          </div>
+          <div className="text-slate-400 text-2xl">→</div>
+          <div className="w-full md:w-64 bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+            <p className="font-bold text-emerald-900">Possible Groups</p>
+            <p className="mt-2"><span className="font-semibold">Group 1:</span> A, B</p>
+            <p><span className="font-semibold">Group 2:</span> C, D</p>
+          </div>
+        </div>
+        <p className="text-base text-slate-600 mt-4">
+          The machine discovers the groups from similarities. A human may later inspect the groups and give them meaningful names.
+        </p>
+      </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
         How Unsupervised Learning Works
@@ -122,6 +193,19 @@ export function UnsupervisedIntroContent() {
           <li><strong>Customer Segmentation:</strong> A telecom company automatically grouping millions of customers based on call duration and data usage to create specialized, targeted recharge plans.</li>
           <li><strong>Document Categorization:</strong> Automatically grouping thousands of news articles into topical clusters (e.g., Sports, Politics, Tech) without manually tagging them.</li>
         </ul>
+        <div className="bg-white border border-emerald-200 rounded-lg p-4 mb-4">
+          <p className="font-bold text-slate-900 mb-3">Simple picture:</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center">
+            <div className="px-4 py-3 rounded-lg bg-slate-50 border border-slate-200">● ▲ ● ■ ▲ ■</div>
+            <div className="text-slate-400 text-xl">→</div>
+            <div className="grid grid-cols-3 gap-2">
+              <div className="px-3 py-2 rounded bg-emerald-50 border border-emerald-200">● ●</div>
+              <div className="px-3 py-2 rounded bg-teal-50 border border-teal-200">▲ ▲</div>
+              <div className="px-3 py-2 rounded bg-cyan-50 border border-cyan-200">■ ■</div>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600 text-center mt-3">Similar items are placed in the same group.</p>
+        </div>
         <p className="text-sm font-mono text-emerald-700 bg-emerald-100 p-2 inline-block rounded">Algorithms: K-Means, DBSCAN, Hierarchical Clustering</p>
       </div>
 
@@ -135,6 +219,21 @@ export function UnsupervisedIntroContent() {
           <li><strong>Data Visualization:</strong> Taking a dataset with 500 columns of patient health data and reducing it to 2 or 3 principal components so it can be plotted and visualized on a graph.</li>
           <li><strong>Feature Engineering:</strong> Compressing high-resolution image data before feeding it into a supervised learning model to radically speed up training times.</li>
         </ul>
+        <div className="bg-white border border-teal-200 rounded-lg p-4 mb-4">
+          <p className="font-bold text-slate-900 mb-3">Simple picture:</p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-center text-sm">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
+              <p className="font-semibold mb-1">Many Features</p>
+              <p>Height · Weight · Age · Score · Income · Steps</p>
+            </div>
+            <div className="text-slate-400 text-xl">→</div>
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-3">
+              <p className="font-semibold text-teal-900 mb-1">Fewer Summary Features</p>
+              <p className="text-teal-800">Feature 1 · Feature 2</p>
+            </div>
+          </div>
+          <p className="text-sm text-slate-600 text-center mt-3">Keep the most useful information while using fewer dimensions.</p>
+        </div>
         <p className="text-sm font-mono text-teal-700 bg-teal-100 p-2 inline-block rounded">Algorithms: Principal Component Analysis (PCA), t-SNE, Autoencoders</p>
       </div>
 
@@ -147,6 +246,17 @@ export function UnsupervisedIntroContent() {
         <ul className="list-disc pl-6 mb-4 text-lg text-slate-800 space-y-2">
           <li><strong>Market Basket Analysis:</strong> Retail giants like Amazon or Walmart analyzing billions of transactions to discover that "If a customer buys a flashlight and batteries, they are 80% likely to also buy a tent." This drives product placement and recommendations.</li>
         </ul>
+        <div className="bg-white border border-cyan-200 rounded-lg p-4 mb-4">
+          <p className="font-bold text-slate-900 mb-3">Simple picture:</p>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-center">
+            <span className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg">Bread</span>
+            <span className="font-bold text-slate-400">+</span>
+            <span className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg">Butter</span>
+            <span className="font-bold text-slate-400">→ often bought with →</span>
+            <span className="px-3 py-2 bg-cyan-50 border border-cyan-200 rounded-lg font-semibold text-cyan-900">Jam</span>
+          </div>
+          <p className="text-sm text-slate-600 text-center mt-3">Association rules look for items or events that frequently occur together.</p>
+        </div>
         <p className="text-sm font-mono text-cyan-700 bg-cyan-100 p-2 inline-block rounded">Algorithms: Apriori, FP-Growth</p>
       </div>
 
