@@ -7,9 +7,46 @@ export function MultiArmedBanditsContent() {
       <p className="text-lg text-slate-500 mb-6">The exploration vs exploitation dilemma — with real Python code, visual diagrams, and line-by-line explanations</p>
 
       {/* ── INTRO ── */}
+      <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6 md:p-8 not-prose">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">Start with a decision</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">You have 3 choices. You do not know which one is best.</h2>
+        <p className="text-slate-700 leading-relaxed mb-6">
+          Imagine a website has three headlines: <strong>A</strong>, <strong>B</strong>, and <strong>C</strong>. Every visitor sees only one headline, and you observe whether that visitor clicks. You want clicks now — but you also need to learn whether an under-tested headline might actually be better.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+          {[
+            ['Headline A', '8 clicks / 20 views', 'Current estimate: 40%'],
+            ['Headline B', '3 clicks / 5 views', 'Current estimate: 60%'],
+            ['Headline C', '1 click / 2 views', 'Current estimate: 50%'],
+          ].map(([title, result, estimate]) => (
+            <div key={title} className="bg-white border border-indigo-100 rounded-xl p-4 text-center">
+              <div className="font-bold text-slate-900">{title}</div>
+              <div className="text-sm text-indigo-700 mt-1">{result}</div>
+              <div className="text-xs text-slate-500 mt-1">{estimate}</div>
+            </div>
+          ))}
+        </div>
+        <p className="text-center font-bold text-indigo-800 m-0">Choose → Observe reward → Update what you know → Choose again</p>
+      </div>
+
       <p className="text-lg leading-relaxed">
-        The <strong>Multi-Armed Bandit (MAB)</strong> problem is one of the most important frameworks in reinforcement learning and decision-making under uncertainty. It models situations where you must repeatedly choose between multiple options (arms), each with an unknown reward distribution, and your goal is to <strong>maximise total reward over time</strong>. The core tension: do you keep exploiting what already works, or do you explore potentially better options you haven't tried enough?
+        The <strong>Multi-Armed Bandit (MAB)</strong> problem formalises exactly this situation. You repeatedly choose among several options, called <strong>arms</strong>. Each arm has an unknown reward process, and you learn only from the arms you actually select. The goal is to earn high cumulative reward while learning enough to identify good choices.
       </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Four Words You Need First</h2>
+      <div className="not-prose grid grid-cols-1 md:grid-cols-4 gap-4 my-6">
+        {[
+          ['Arm', 'One available choice, such as headline A.'],
+          ['Round', 'One decision opportunity, such as one visitor.'],
+          ['Reward', 'Feedback from the chosen arm, such as click = 1 and no click = 0.'],
+          ['Regret', 'Reward you miss because you did not choose the best arm.'],
+        ].map(([term, meaning]) => (
+          <div key={term} className="bg-white border border-slate-200 rounded-xl p-4">
+            <div className="font-bold text-indigo-800 mb-1">{term}</div>
+            <p className="text-sm text-slate-700 m-0">{meaning}</p>
+          </div>
+        ))}
+      </div>
 
       {/* ── ANALOGY ── */}
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">The Slot Machine Analogy</h2>
@@ -61,20 +98,20 @@ export function MultiArmedBanditsContent() {
       </div>
 
       {/* ── REAL WORLD ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Real-World Applications</h2>
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Where Bandits Can Be Useful</h2>
+      <p className="text-lg leading-relaxed mb-4">Bandit methods are useful when decisions repeat, feedback arrives after each choice, and learning while acting matters.</p>
       <div className="not-prose grid md:grid-cols-2 lg:grid-cols-3 gap-5 my-6">
         {[
-          {icon:'🎯', title:'A/B Testing', color:'indigo', desc:'Instead of splitting traffic 50/50 for weeks, bandit algorithms adaptively route more users to better-performing variants in real time, reducing regret.'},
-          {icon:'📰', title:'News Feed Ranking', color:'emerald', desc:'Google, Twitter, and Netflix use bandits to decide which articles, videos, or thumbnails to show each user — balancing exploration of new content with exploitation of proven performers.'},
-          {icon:'💊', title:'Clinical Trials', color:'rose', desc:'Adaptive clinical trials use bandits to allocate more patients to the treatment showing better outcomes, reducing harm from ineffective treatments during the trial itself.'},
-          {icon:'🛒', title:'Recommendation Systems', color:'amber', desc:'E-commerce sites use bandits to balance recommending popular products (exploitation) vs exploring new products for a user they have little data on.'},
-          {icon:'📡', title:'Network Routing', color:'violet', desc:'Routers choose between multiple paths to minimize latency. Bandit algorithms adapt dynamically as network conditions change — exploiting fast paths, exploring potentially faster ones.'},
-          {icon:'🎮', title:'Game AI', color:'cyan', desc:'Monte Carlo Tree Search (used in AlphaGo) applies UCB (Upper Confidence Bound) — a bandit algorithm — to balance exploring new game moves vs exploiting known-good lines.'},
-        ].map(f => (
-          <div key={f.title} className={`bg-${f.color}-50 border border-${f.color}-200 rounded-xl p-5`}>
-            <div className="text-3xl mb-2">{f.icon}</div>
-            <h3 className={`font-bold text-${f.color}-900 text-base mb-2`}>{f.title}</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">{f.desc}</p>
+          ['A/B-style optimization', 'Adaptively allocate more traffic to variants that currently look promising while continuing some exploration.'],
+          ['Content recommendation', 'Choose among articles, messages, or items while learning from clicks or other feedback.'],
+          ['Adaptive experiments', 'Allocate observations sequentially when the objective is to learn while also limiting opportunity cost.'],
+          ['Product recommendations', 'Balance familiar products with less-tested alternatives.'],
+          ['Network or system choices', 'Select among repeated operational choices when outcomes such as latency can be observed.'],
+          ['Search inside planning', 'Bandit-style confidence rules such as UCB can also appear inside larger search procedures.'],
+        ].map(([title, desc]) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="font-bold text-slate-900 text-base mb-2">{title}</h3>
+            <p className="text-sm text-slate-700 leading-relaxed m-0">{desc}</p>
           </div>
         ))}
       </div>
@@ -100,12 +137,18 @@ export function MultiArmedBanditsContent() {
           </div>
         </div>
       </div>
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 my-4">
-        <p className="text-sm text-blue-800"><strong>Regret</strong> — the formal measure of how much reward you missed by not always pulling the true best arm — is what bandit algorithms minimise. Optimal algorithms achieve <strong>sub-linear regret</strong>: as time goes on, they explore less and exploit more, so the cumulative gap from the optimal strategy grows slower and slower.</p>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 my-6">
+        <p className="text-sm text-blue-900 mb-3"><strong>Regret</strong> compares the reward collected by your strategy with a benchmark that always chooses the best arm in the model being studied.</p>
+        <div className="bg-white border border-blue-100 rounded-lg p-4">
+          <p className="font-bold text-slate-900 mb-2">Tiny regret example</p>
+          <p className="text-sm text-slate-700 mb-1">Best arm expected reward = 0.60 per round</p>
+          <p className="text-sm text-slate-700 mb-1">Arm chosen this round expected reward = 0.40</p>
+          <p className="font-mono text-sm text-indigo-800 mb-0">Expected regret for this round = 0.60 − 0.40 = 0.20</p>
+        </div>
       </div>
 
       {/* ── ALGORITHMS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">The 4 Core Bandit Algorithms</h2>
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Bandit Strategies</h2>
       <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
         <table className="w-full text-sm">
           <thead className="bg-slate-800 text-white">
@@ -119,8 +162,8 @@ export function MultiArmedBanditsContent() {
           <tbody className="divide-y divide-slate-100 bg-white">
             {[
               ['ε-Greedy', 'Exploit best arm (1-ε)% of time; explore randomly ε% of time', 'ε hyperparameter (e.g. 0.1 = 10% explore)', 'Simple baseline; good starting point'],
-              ['UCB (Upper Confidence Bound)', 'Choose arm with highest (mean reward + uncertainty bonus)', 'Confidence interval width — automatic', 'Stationary reward distributions; no hyperparameter'],
-              ['Thompson Sampling', 'Sample from Bayesian posterior of each arm; pull highest sample', 'Posterior uncertainty — fully automatic', 'Best empirical performance; natural Bayesian update'],
+              ['UCB (Upper Confidence Bound)', 'Choose arm with highest estimate plus an uncertainty bonus', 'Uncertainty shrinks as an arm is sampled more', 'Stochastic stationary bandits; principled optimism'],
+              ['Thompson Sampling', 'Sample a plausible reward parameter for each arm from its posterior; choose the highest', 'Posterior uncertainty drives exploration', 'Bayesian stochastic bandits when a suitable reward model is available'],
               ['Softmax / Boltzmann', 'Choose arm with probability proportional to exp(Q/τ)', 'Temperature τ (high=explore, low=exploit)', 'Smooth exploration; controllable temperature'],
             ].map(([alg, strat, ctrl, best]) => (
               <tr key={String(alg)} className="hover:bg-slate-50">
@@ -135,6 +178,11 @@ export function MultiArmedBanditsContent() {
       </div>
 
       {/* ── EPSILON GREEDY CODE ── */}
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 my-8">
+        <p className="font-bold text-indigo-900 mb-2">One question, four different answers</p>
+        <p className="text-sm text-indigo-900 m-0"><strong>ε-Greedy:</strong> explore randomly sometimes. <strong>UCB:</strong> prefer choices that are either good or still uncertain. <strong>Thompson Sampling:</strong> sample what might plausibly be true and act on that sample. <strong>Softmax:</strong> convert estimated values into probabilities rather than making a hard best-vs-random choice.</p>
+      </div>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Algorithm 1 — ε-Greedy (Epsilon Greedy)</h2>
       <p className="text-lg leading-relaxed mb-4">
         The simplest bandit algorithm. With probability ε, pick a random arm (explore). With probability 1−ε, pick the arm with the highest average reward so far (exploit). Simple, interpretable, and surprisingly effective:
@@ -436,7 +484,7 @@ for i in range(5):
         <figure>
           <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 2 — Cumulative Regret Over Time (lower is better)</figcaption>
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 overflow-x-auto">
-            <svg viewBox="0 0 640 280" className="w-full max-w-2xl mx-auto block" aria-label="Line chart showing cumulative regret over 1000 rounds for epsilon greedy UCB and Thompson Sampling where Thompson Sampling achieves lowest regret">
+            <svg viewBox="0 0 640 280" className="w-full max-w-2xl mx-auto block" aria-label="Illustrative cumulative regret curves over 1000 rounds for epsilon greedy, UCB, and Thompson Sampling">
               {/* Grid */}
               {[0,1,2,3,4].map(i => (
                 <g key={i}>
@@ -457,7 +505,7 @@ for i in range(5):
               <path d="M 60,224 Q 200,170 340,130 Q 480,108 620,98" fill="none" stroke="#f59e0b" strokeWidth="2.5"/>
               {/* UCB line */}
               <path d="M 60,224 Q 200,185 340,155 Q 480,138 620,128" fill="none" stroke="#6366f1" strokeWidth="2.5"/>
-              {/* Thompson Sampling (lowest regret) */}
+              {/* Thompson Sampling curve in this illustrative example */}
               <path d="M 60,224 Q 200,200 340,178 Q 480,165 620,158" fill="none" stroke="#10b981" strokeWidth="2.5"/>
 
               {/* Legend */}
@@ -485,9 +533,9 @@ for i in range(5):
           </thead>
           <tbody className="divide-y divide-slate-100 bg-white text-center">
             {[
-              ['Regret (1000 rounds)', '~66', '~37', '~28 ✅'],
-              ['Hyperparameters', 'ε (must tune)', 'c (somewhat robust)', 'None ✅'],
-              ['Handles non-stationary rewards', 'Yes (decay ε)', 'Partial', 'Yes (sliding window)'],
+              ['Illustrative simulation shown above', 'Higher in this example', 'Lower in this example', 'Lowest in this example'],
+              ['Main tuning/model choices', 'ε / schedule', 'Confidence rule / assumptions', 'Prior + likelihood model'],
+              ['Non-stationarity', 'Needs explicit adaptation', 'Needs an adapted UCB variant', 'Needs forgetting/windowing or a changing model'],
               ['Computational cost', '⚡ Very low', '⚡ Very low', '⚡ Low'],
               ['Interpretability', '⭐⭐⭐', '⭐⭐⭐', '⭐⭐'],
               ['Implementation complexity', 'Very simple ✅', 'Simple ✅', 'Simple ✅'],
@@ -506,7 +554,7 @@ for i in range(5):
       {/* ── CONTEXTUAL BANDITS ── */}
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Contextual Bandits — The Powerful Extension</h2>
       <p className="text-lg leading-relaxed mb-4">
-        In a standard bandit, every user/round sees the same arms with the same reward probabilities. In a <strong>Contextual Bandit</strong>, you have additional information (context) about the current situation — user demographics, time of day, page type — and use it to choose the best arm <em>for that specific context</em>. This is how Netflix personalises thumbnails and how Google ranks ads per user:
+        In a standard bandit, every user/round sees the same arms with the same reward probabilities. In a <strong>Contextual Bandit</strong>, you have additional information (context) about the current situation — user demographics, time of day, page type — and use it to choose the best arm <em>for that specific context</em>. A contextual bandit uses these features to choose an action for the current situation:
       </p>
       <div className="not-prose grid md:grid-cols-2 gap-5 my-6">
         <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
@@ -543,8 +591,8 @@ for i in range(5):
           <tbody className="divide-y divide-slate-100 bg-white">
             {[
               ['A/B Test (Fixed)', 'You have time to wait; business decision is one-off; need statistical guarantees', 'Wastes traffic on bad variants during the test; fixed sample size'],
-              ['Multi-Armed Bandit', 'You want to minimise regret online; decisions are repeated; arms are stable', 'Assumes rewards are stationary; no delayed feedback handling'],
-              ['Contextual Bandit', 'Each decision has context (user features); best arm varies by user', 'Needs ML model per arm; more complexity; needs feature pipeline'],
+              ['Multi-Armed Bandit', 'Decisions repeat and you want to learn while allocating choices adaptively', 'Basic formulations often assume stable reward distributions and prompt feedback'],
+              ['Contextual Bandit', 'Each decision includes context and the preferred action may depend on that context', 'More modeling and logging complexity; counterfactual evaluation is harder'],
               ['Full Reinforcement Learning', 'Actions affect future state; long-horizon planning needed; sequential decisions', 'Much harder to train; needs simulator or careful online deployment'],
             ].map(([app, when, weak]) => (
               <tr key={String(app)} className="hover:bg-slate-50">
@@ -560,13 +608,49 @@ for i in range(5):
       {/* ── SUMMARY ── */}
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">Summary</h2>
       <p className="text-lg leading-relaxed mb-4">
-        Multi-Armed Bandits formalise the exploration vs exploitation dilemma that arises whenever we must learn from experience while simultaneously making decisions. ε-Greedy is the simplest algorithm — explore randomly, exploit greedily. UCB adds a principled uncertainty bonus that directs exploration to under-sampled arms. Thompson Sampling takes a Bayesian approach, maintaining a probability distribution over each arm's reward probability and sampling from it — this typically achieves the lowest regret with no hyperparameters to tune.
+        Multi-Armed Bandits formalise the exploration-versus-exploitation problem. <strong>ε-Greedy</strong> is a transparent baseline. <strong>UCB</strong> explores through optimism: an uncertain arm receives an exploration bonus. <strong>Thompson Sampling</strong> explores by sampling from uncertainty in a probabilistic model. No single method is universally best; the right choice depends on reward assumptions, non-stationarity, feedback delay, available context, and operational constraints.
       </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Mistakes</h2>
+      <div className="not-prose space-y-3 mb-8">
+        {[
+          ['“The arm with the highest observed average must be the best.”', 'Not necessarily. An arm with only a few trials can have a misleadingly high average.'],
+          ['“Exploration means choosing randomly forever.”', 'No. Different algorithms explore in different ways, and the amount of exploration should reflect remaining uncertainty.'],
+          ['“Bandits and full reinforcement learning are the same.”', 'A basic bandit has no evolving state caused by actions; full RL explicitly models sequential state transitions and delayed consequences.'],
+          ['“Thompson Sampling has no modeling choices.”', 'It requires a prior and likelihood/reward model, even if some simple cases have convenient standard choices.'],
+          ['“A bandit automatically handles changing rewards.”', 'Basic stochastic bandit algorithms usually need explicit modifications for non-stationary environments.'],
+        ].map(([mistake, correction]) => (
+          <div key={mistake} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p className="font-semibold text-slate-900 mb-1">{mistake}</p>
+            <p className="text-sm text-slate-700 m-0">{correction}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Quick Knowledge Check</h2>
+      <div className="space-y-4 mb-10">
+        <details className="bg-white border border-slate-200 rounded-xl p-5"><summary className="font-bold text-slate-900 cursor-pointer">Why not always exploit the current best arm?</summary><p className="mt-3 mb-0 text-slate-700">Because uncertainty remains. An under-tested arm might actually have a higher true expected reward.</p></details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5"><summary className="font-bold text-slate-900 cursor-pointer">What makes UCB explore?</summary><p className="mt-3 mb-0 text-slate-700">Its uncertainty or confidence bonus: arms with fewer observations receive a larger bonus.</p></details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5"><summary className="font-bold text-slate-900 cursor-pointer">What makes Thompson Sampling explore?</summary><p className="mt-3 mb-0 text-slate-700">Sampling from uncertain posteriors sometimes makes an under-tested arm look best, so it gets selected and produces more information.</p></details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5"><summary className="font-bold text-slate-900 cursor-pointer">When do we move from a standard bandit to a contextual bandit?</summary><p className="mt-3 mb-0 text-slate-700">When information about the current user or situation helps determine which arm is best.</p></details>
+      </div>
+
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 mt-4 mb-10">
         <p className="text-slate-900 font-bold mb-2 text-lg">Key Takeaway</p>
-        <p className="text-slate-800 italic text-base leading-relaxed">
-          For most real-world applications — A/B testing, ad selection, recommendation systems — <strong>Thompson Sampling is the recommended default</strong>: it requires no hyperparameter tuning, achieves near-optimal regret, and naturally balances exploration and exploitation through Bayesian uncertainty. Start with Thompson Sampling and only switch to Contextual Bandits when you have rich per-decision context features available.
+        <p className="text-slate-800 text-base leading-relaxed m-0">
+          A bandit learner must do two jobs at once: <strong>earn reward with what it already knows</strong> and <strong>spend some decisions learning what it still does not know</strong>. That trade-off — exploration versus exploitation — is the heart of the entire page.
         </p>
+      </div>
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10 border-b pb-2">Continue Learning</h2>
+      <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
+        <a href="/learn/reinforcement-learning-adv" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous</p>
+          <p className="font-bold text-slate-900 m-0">Reinforcement Learning (Advanced)</p>
+        </a>
+        <a href="/learn/neural-networks" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Next module</p>
+          <p className="font-bold text-slate-900 m-0">Neural Networks Explained</p>
+        </a>
       </div>
     </div>
   );
