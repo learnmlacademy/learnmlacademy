@@ -1,6 +1,6 @@
 import React from 'react';
-import { Car, Bot, Gamepad2, Brain, Activity, Target, Zap, ShieldAlert, PlaySquare, RefreshCw, Layers } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, AreaChart, Area } from 'recharts';
+import { Car, Bot, Gamepad2, Activity, Target, Zap, PlaySquare, ArrowRight, Compass, Trophy } from 'lucide-react';
+import { XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip, AreaChart, Area } from 'recharts';
 
 const learningCurveData = [
   { episode: 0, reward: -50 },
@@ -23,8 +23,33 @@ export function ReinforcementLearningAdvContent() {
         Reinforcement Learning
       </h1>
 
+      <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6 md:p-8 mb-8 not-prose">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">Start with a question</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">What if nobody can tell the model the correct answer?</h2>
+        <p className="text-slate-700 leading-relaxed mb-5">
+          Imagine a robot inside a maze. We do not give it a labelled dataset saying <strong>“at this square, move right”</strong>. Instead, the robot tries an action, sees what happens, receives feedback, and gradually learns which decisions lead to the goal.
+        </p>
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
+          {[
+            ['Observe', 'Where am I?'],
+            ['Act', 'Which move should I try?'],
+            ['Receive reward', 'Was that useful?'],
+            ['Learn', 'What should I do next time?'],
+          ].map(([title, caption], index) => (
+            <React.Fragment key={title}>
+              <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4">
+                <div className="font-bold text-indigo-900">{title}</div>
+                <div className="text-xs text-slate-600 mt-1">{caption}</div>
+              </div>
+              {index < 3 && <ArrowRight className="w-5 h-5 text-indigo-400 mx-auto rotate-90 md:rotate-0" />}
+            </React.Fragment>
+          ))}
+        </div>
+        <p className="text-center font-bold text-indigo-800 mt-5 mb-0">State → Action → Reward → New State → Repeat</p>
+      </div>
+
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        Machine Learning systems are designed to learn patterns from data and make intelligent decisions. Traditional Machine Learning approaches usually learn from <strong>Historical examples</strong>, <strong>Pre-labeled datasets</strong>, and <strong>Static training information</strong>.
+        Machine Learning systems are designed to learn patterns from data and make intelligent decisions. Traditional supervised learning usually learns from <strong>historical labelled examples</strong>. Reinforcement Learning is different: the learner improves by <strong>interacting</strong> with an environment and experiencing the consequences of its actions.
       </p>
 
       <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8 shadow-sm">
@@ -112,6 +137,29 @@ export function ReinforcementLearningAdvContent() {
          </div>
       </div>
 
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">The RL Loop — One Decision at a Time</h2>
+      <p className="text-lg leading-relaxed mb-6 text-slate-800">
+        The easiest way to understand RL is to follow one interaction. Suppose our maze robot is standing at square <strong>A</strong>. It can move left or right. Moving right brings it closer to the exit.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-3 mb-6 not-prose">
+        {[
+          ['1', 'State', 'Robot is at A'],
+          ['2', 'Action', 'Move right'],
+          ['3', 'Reward', '+2'],
+          ['4', 'Next state', 'Robot reaches B'],
+          ['5', 'Learning', 'Right becomes more attractive at A'],
+        ].map(([n, title, body]) => (
+          <div key={n} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <div className="w-7 h-7 mx-auto rounded-full bg-indigo-100 text-indigo-700 font-bold text-sm flex items-center justify-center mb-2">{n}</div>
+            <div className="font-bold text-slate-900">{title}</div>
+            <div className="text-xs text-slate-600 mt-1">{body}</div>
+          </div>
+        ))}
+      </div>
+      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-12">
+        <p className="text-emerald-900 m-0 leading-relaxed"><strong>The key difference:</strong> supervised learning asks “what is the correct answer for this example?” RL asks “which action should I take now so that my total future reward becomes as large as possible?”</p>
+      </div>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Components of Reinforcement Learning</h2>
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
         Every Reinforcement Learning system contains several important components orchestrating the simulation:
@@ -148,6 +196,30 @@ export function ReinforcementLearningAdvContent() {
          </div>
       </div>
 
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Policy, Return and the Exploration Problem</h2>
+      <div className="grid md:grid-cols-3 gap-5 mb-8 not-prose">
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <Target className="w-6 h-6 text-indigo-600 mb-2" />
+          <h3 className="font-bold text-slate-900 mb-2">Policy (π)</h3>
+          <p className="text-sm text-slate-700 m-0">The agent's strategy: given the current state, which action should it choose?</p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <Trophy className="w-6 h-6 text-indigo-600 mb-2" />
+          <h3 className="font-bold text-slate-900 mb-2">Return</h3>
+          <p className="text-sm text-slate-700 m-0">The accumulated reward over time. RL usually cares about long-term reward, not only the next reward.</p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <Compass className="w-6 h-6 text-indigo-600 mb-2" />
+          <h3 className="font-bold text-slate-900 mb-2">Explore vs Exploit</h3>
+          <p className="text-sm text-slate-700 m-0">Try unfamiliar actions to learn more, or choose the action that currently looks best.</p>
+        </div>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-10 not-prose">
+        <p className="font-bold text-amber-900 mb-2">Why immediate reward can be misleading</p>
+        <p className="text-sm text-amber-900 m-0">A move giving +5 now may lead to a dead end, while a move giving 0 now may lead to +100 later. RL therefore needs a way to value future rewards. This is why the <strong>discount factor γ</strong> appears in Q-learning.</p>
+      </div>
+
       <hr className="border-slate-200 mt-8 mb-10" />
 
       <h2 className="text-2xl font-bold text-indigo-800 mb-6 border-b pb-2">Mathematical Understanding: Q-Learning</h2>
@@ -169,6 +241,22 @@ export function ReinforcementLearningAdvContent() {
             <li><strong>max Q(s',a')</strong> = The maximum predicted Q-value for the next state</li>
          </ul>
       </div>
+
+      <h3 className="text-xl font-bold text-slate-900 mb-4">Solved Q-Learning Update — Step by Step</h3>
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Suppose the agent just moved from state <strong>s</strong> using action <strong>a</strong>. Its current Q-value is 10. It receives reward 5, and the best Q-value available in the next state is 20. Let α = 0.1 and γ = 0.9.
+      </p>
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-5 not-prose">
+        <div className="space-y-2 font-mono text-sm md:text-base text-slate-800">
+          <p>Qnew = 10 + 0.1 × [5 + 0.9 × 20 − 10]</p>
+          <p>Qnew = 10 + 0.1 × [5 + 18 − 10]</p>
+          <p>Qnew = 10 + 0.1 × 13</p>
+          <p className="font-bold text-indigo-800 text-lg">Qnew = 11.3</p>
+        </div>
+      </div>
+      <p className="text-lg leading-relaxed mb-10 text-slate-800">
+        The value rises from <strong>10 to 11.3</strong>. In plain English, the experience made this state-action pair look better because it produced a useful immediate reward and also led to a promising next state.
+      </p>
 
       <h2 className="text-2xl font-bold text-indigo-800 mb-6 border-b pb-2">Python Implementation (Q-Learning)</h2>
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
@@ -242,9 +330,9 @@ episodes = <span className="text-amber-300">1000</span>
            <div className="p-6">
              <ul className="space-y-3 text-emerald-900 m-0 pl-0 list-none text-[15px]">
                <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Learns autonomously without needing a labeled dataset.</li>
-               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Can discover entirely novel strategies surpassing human capabilities (e.g., AlphaGo).</li>
-               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Handles sequential and continuous decisions optimally.</li>
-               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Works remarkably well in uncertain or constantly changing physical environments.</li>
+               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Can discover effective strategies through experience, including strategies that may be difficult to hand-code.</li>
+               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Is designed for sequential decision problems where actions influence future outcomes.</li>
+               <li className="flex items-start"><span className="text-emerald-600 font-bold mr-2 text-lg leading-none">✓</span> Can be useful in uncertain environments when safe exploration, feedback, and training resources are available.</li>
              </ul>
            </div>
         </div>
@@ -257,13 +345,49 @@ episodes = <span className="text-amber-300">1000</span>
            </div>
            <div className="p-6">
              <ul className="space-y-3 text-rose-900 m-0 pl-0 list-none text-[15px]">
-               <li className="flex items-start"><span className="text-rose-600 font-bold mr-2 text-lg leading-none">×</span> Computationally extremely expensive and requires massive training time frames.</li>
+               <li className="flex items-start"><span className="text-rose-600 font-bold mr-2 text-lg leading-none">×</span> Can be computationally expensive and sample-inefficient, especially in large or complex environments.</li>
                <li className="flex items-start"><span className="text-rose-600 font-bold mr-2 text-lg leading-none">×</span> Difficult "Reward Design": poorly designed rewards cause disastrous edge-case exploits.</li>
                <li className="flex items-start"><span className="text-rose-600 font-bold mr-2 text-lg leading-none">×</span> Navigates early "Exploration Risks" which can be hazardous in physical robotics.</li>
                <li className="flex items-start"><span className="text-rose-600 font-bold mr-2 text-lg leading-none">×</span> Training instability is notoriously difficult to debug compared to supervised learning.</li>
              </ul>
            </div>
         </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Common Mistakes</h2>
+      <div className="space-y-3 mb-10 not-prose">
+        {[
+          ['“Reward means the same thing as the final goal.”', 'Not always. Reward is the feedback signal; the agent aims to maximize cumulative return over time.'],
+          ['“The agent should always choose the action with the highest known Q-value.”', 'Doing only that can stop exploration too early and miss better actions.'],
+          ['“A high immediate reward is always the best choice.”', 'Future consequences matter. The discount factor helps balance immediate and future reward.'],
+          ['“Q-learning needs a labelled training dataset.”', 'No. It learns Q-values from state, action, reward and next-state experiences.'],
+          ['“Reinforcement learning and online learning are the same.”', 'No. Online learning incrementally updates a predictive model; RL learns sequential decisions from rewards.'],
+        ].map(([mistake, correction]) => (
+          <div key={mistake} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p className="font-semibold text-slate-900 mb-1">{mistake}</p>
+            <p className="text-sm text-slate-700 m-0">{correction}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Quick Knowledge Check</h2>
+      <div className="space-y-4 mb-12">
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">1. What does a policy tell an RL agent?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Which action to choose in a given state.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">2. Why do we need exploration?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Because the action that currently looks best may not actually be optimal; trying alternatives can reveal better choices.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">3. What does γ control?</summary>
+          <p className="mt-3 mb-0 text-slate-700">How strongly future rewards influence the current Q-value update.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">4. In Q-learning, what does Q(s,a) represent?</summary>
+          <p className="mt-3 mb-0 text-slate-700">The estimated long-term value of taking action a in state s and then behaving well afterward.</p>
+        </details>
       </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
@@ -273,13 +397,13 @@ episodes = <span className="text-amber-300">1000</span>
       </p>
 
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        It powers the most advanced AI frontiers we see today, from physical robotics and autonomous drones to competitive game-playing AI and multi-step complex optimization systems. Modern breakthroughs deeply connect it to Deep Learning (Deep RL) to process visual fields natively.
+        RL is used in research and selected production systems for areas such as robotics, games, recommendation, control, and sequential optimization. Deep Reinforcement Learning combines RL with neural networks so agents can work with large or high-dimensional state spaces.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
         <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
         <p className="text-slate-800 italic text-lg leading-relaxed m-0">
-          Reinforcement Learning does not operate natively on a dataset of answers; it optimizes over outcomes. You give the system a clear win/loss condition, and it recursively tests the bounds of the environment until it constructs a highly efficient pathway to persistent victory.
+          Reinforcement Learning learns from consequences rather than a fixed table of correct answers. The agent repeatedly observes, acts, receives feedback, and updates its strategy so that long-term cumulative reward improves.
         </p>
       </div>
     </div>
