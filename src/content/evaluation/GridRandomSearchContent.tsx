@@ -1,41 +1,100 @@
 import React from 'react';
-import { Target, Layers, Settings, Workflow, Table2, Lightbulb, Search, Dices, Grid, Cpu, ArrowRight, Code } from 'lucide-react';
-import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ZAxis } from 'recharts';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Code,
+  Dices,
+  Grid,
+  Layers,
+  Lightbulb,
+  Search,
+  Settings,
+  ShieldCheck,
+} from 'lucide-react';
 
-const gridSearchData = [
-  { n_estimators: 10, learning_rate: 0.1, z: 1 }, { n_estimators: 10, learning_rate: 0.01, z: 1 }, { n_estimators: 10, learning_rate: 0.001, z: 1 },
-  { n_estimators: 50, learning_rate: 0.1, z: 1 }, { n_estimators: 50, learning_rate: 0.01, z: 1 }, { n_estimators: 50, learning_rate: 0.001, z: 1 },
-  { n_estimators: 100, learning_rate: 0.1, z: 1 }, { n_estimators: 100, learning_rate: 0.01, z: 1 }, { n_estimators: 100, learning_rate: 0.001, z: 1 },
-];
-
-const randomSearchData = [
-  { n_estimators: 15, learning_rate: 0.08, z: 1 }, { n_estimators: 80, learning_rate: 0.004, z: 1 }, { n_estimators: 45, learning_rate: 0.02, z: 1 },
-  { n_estimators: 95, learning_rate: 0.09, z: 1 }, { n_estimators: 20, learning_rate: 0.0015, z: 1 }, { n_estimators: 60, learning_rate: 0.05, z: 1 },
-  { n_estimators: 35, learning_rate: 0.012, z: 1 }, { n_estimators: 75, learning_rate: 0.008, z: 1 }, { n_estimators: 85, learning_rate: 0.06, z: 1 },
-];
+const StepArrow = () => (
+  <ArrowRight className="hidden md:block h-5 w-5 text-slate-400 shrink-0" aria-hidden="true" />
+);
 
 export function GridRandomSearchContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Grid Search and Random Search</h1>
-        
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+          Grid Search and Random Search
+        </h1>
+
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Machine Learning algorithms do not automatically become intelligent after receiving data. Every Machine Learning model contains several internal configuration settings that determine how the model behaves during training. These settings influence how fast the model learns, its complexity, its flexibility, how much it overfits, and how well it generalizes.
+          A Machine Learning model can behave very differently when we change settings such as tree depth,
+          number of neighbors, regularization strength, or learning rate. These configurable settings are called
+          <strong> hyperparameters</strong>.
         </p>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          These settings are called <strong>Hyperparameters</strong>.
-        </p>
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-8">
+          <p className="font-bold text-indigo-900 text-lg mb-4">Grid &amp; Random Search in Simple Words</p>
+          <div className="grid grid-cols-1 md:grid-cols-7 gap-3 items-center text-center">
+            <div className="bg-white border border-indigo-200 rounded-lg p-4">
+              <p className="font-bold text-slate-800">Choose settings</p>
+              <p className="text-sm text-slate-600 mt-1">C, depth, K, etc.</p>
+            </div>
+            <StepArrow />
+            <div className="bg-white border border-indigo-200 rounded-lg p-4">
+              <p className="font-bold text-slate-800">Try candidates</p>
+              <p className="text-sm text-slate-600 mt-1">Grid or random</p>
+            </div>
+            <StepArrow />
+            <div className="bg-white border border-indigo-200 rounded-lg p-4">
+              <p className="font-bold text-slate-800">Validate</p>
+              <p className="text-sm text-slate-600 mt-1">Cross-validation</p>
+            </div>
+            <StepArrow />
+            <div className="bg-white border-2 border-emerald-400 rounded-lg p-4">
+              <p className="font-bold text-emerald-800">Keep the best candidate</p>
+              <p className="text-sm text-slate-600 mt-1">Then test once</p>
+            </div>
+          </div>
+        </div>
 
-        <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="text-indigo-900 text-lg leading-relaxed mb-4">
-            Hyperparameters are extremely important because they directly control the learning process of the algorithm. Even if the dataset is excellent, the features are meaningful, and the algorithm is powerful, the model can still perform poorly if the hyperparameters are badly chosen.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <Grid className="h-5 w-5 text-indigo-600" />
+              <h2 className="text-xl font-bold text-slate-800">Grid Search</h2>
+            </div>
+            <p className="text-slate-700 leading-relaxed">
+              Try <strong>every combination in a finite list of candidate values</strong>.
+            </p>
+            <div className="mt-4 font-mono text-sm bg-slate-50 rounded-lg p-4">
+              C = [0.1, 1, 10]<br />
+              gamma = [0.01, 0.1, 1]<br />
+              <strong>3 × 3 = 9 candidates</strong>
+            </div>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <Dices className="h-5 w-5 text-emerald-600" />
+              <h2 className="text-xl font-bold text-slate-800">Random Search</h2>
+            </div>
+            <p className="text-slate-700 leading-relaxed">
+              Sample only a <strong>fixed number of candidate settings</strong> from lists or distributions.
+            </p>
+            <div className="mt-4 font-mono text-sm bg-slate-50 rounded-lg p-4">
+              Search space = many possibilities<br />
+              n_iter = 4<br />
+              <strong>Only 4 candidates are evaluated</strong>
+            </div>
+          </div>
+        </div>
+
+        <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8">
+          <p className="font-bold text-amber-900 mb-1">Key idea</p>
+          <p className="text-slate-800 leading-relaxed">
+            Grid Search is exhaustive <strong>only inside the grid you defined</strong>. Random Search is not
+            automatically better or worse—it simply gives you a direct search budget and can explore a broader
+            space when exhaustive search would be expensive.
           </p>
-          <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-indigo-900">
-            <li><strong>Random Forest:</strong> Too few trees → may not learn enough patterns. Too many deep trees → overfits and becomes computationally expensive.</li>
-            <li><strong>Deep Learning:</strong> Learning rate too high → unstable training. Learning rate too low → extremely slow training.</li>
-          </ul>
         </div>
       </div>
 
@@ -43,60 +102,47 @@ export function GridRandomSearchContent() {
 
       <div id="understanding-hyperparameters">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Settings className="mr-3 text-indigo-600" /> Understanding Hyperparameters First
+          <Settings className="mr-3 text-indigo-600" /> Parameters vs Hyperparameters
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Before understanding Grid Search and Random Search, it is necessary to clearly understand what hyperparameters actually are. Hyperparameters are external settings chosen <em>before</em> the training process begins. They are NOT learned automatically from the dataset.
-        </p>
-
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-8 overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-200 text-left">
+        <div className="overflow-x-auto mb-8">
+          <table className="min-w-full bg-white border border-slate-200 rounded-lg overflow-hidden text-left">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Algorithm</th>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Crucial Hyperparameter</th>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">Type</th>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">How it is obtained</th>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">Examples</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white text-sm text-slate-800">
-              <tr><td className="px-6 py-4 font-bold">KNN</td><td className="px-6 py-4">Number of neighbors (k)</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">Decision Tree</td><td className="px-6 py-4">Maximum depth</td></tr>
-              <tr><td className="px-6 py-4 font-bold">Random Forest</td><td className="px-6 py-4">Number of trees</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">Neural Network</td><td className="px-6 py-4">Learning rate</td></tr>
-              <tr><td className="px-6 py-4 font-bold">SVM</td><td className="px-6 py-4">Kernel type</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">XGBoost</td><td className="px-6 py-4">Learning rate and max depth</td></tr>
+            <tbody className="divide-y divide-slate-200 text-sm text-slate-800">
+              <tr>
+                <td className="px-5 py-4 font-bold">Model parameter</td>
+                <td className="px-5 py-4">Learned during fitting</td>
+                <td className="px-5 py-4">Regression coefficients, tree split thresholds</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="px-5 py-4 font-bold">Hyperparameter</td>
+                <td className="px-5 py-4">Configured outside the learned model parameters</td>
+                <td className="px-5 py-4">K in KNN, max_depth, C, learning rate</td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-emerald-900 text-lg mb-2">Real-Life Analogy (Cooking Food)</p>
-          <p className="text-slate-800 italic leading-relaxed">
-            Imagine preparing food: The ingredients represent the Training Data. The cooking method represents the Machine Learning Algorithm. But settings such as cooking temperature, amount of salt, cooking duration, and flame intensity behave like Hyperparameters. Even if the ingredients are excellent: too much heat burns the food, too little cooking leaves it raw, and excess salt ruins taste.
-          </p>
-        </div>
-
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Why Hyperparameter Tuning Is Necessary</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Different hyperparameter values produce entirely different models. Some combinations may lead to Underfitting, Overfitting, slow learning, or poor generalization.
+        <p className="text-lg leading-relaxed mb-6 text-slate-800">
+          Hyperparameters influence model capacity, regularization, optimization, or computational cost. A useful
+          value depends on the dataset, metric, model, and validation procedure—there is rarely one universal best
+          setting.
         </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-            <h4 className="font-bold text-rose-800 border-b pb-2 mb-3">Case 1: Underfitting</h4>
-            <p className="text-sm font-mono text-slate-600 mb-2">max_depth = 1</p>
-            <p className="text-sm text-slate-800 leading-relaxed">The tree is extremely simple and fails to capture important patterns. High errors on both training and testing data.</p>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-            <h4 className="font-bold text-rose-800 border-b pb-2 mb-3">Case 2: Overfitting</h4>
-            <p className="text-sm font-mono text-slate-600 mb-2">max_depth = 100</p>
-            <p className="text-sm text-slate-800 leading-relaxed">The tree becomes highly complex, memorizing training samples and noise instead of finding generalized patterns.</p>
-          </div>
-          <div className="bg-white border-2 border-emerald-400 rounded-xl p-5 shadow-sm">
-            <h4 className="font-bold text-emerald-800 border-b pb-2 mb-3">Case 3: Balanced Generalization</h4>
-            <p className="text-sm font-mono text-slate-600 mb-2">max_depth = 5</p>
-            <p className="text-sm text-slate-800 leading-relaxed">The tree captures critical structural patterns without memorizing noise, yielding high performance on unseen test data.</p>
-          </div>
+
+        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-5 mb-8">
+          <p className="font-bold text-emerald-900 text-lg mb-2">Cooking analogy</p>
+          <p className="text-slate-800 leading-relaxed">
+            The ingredients are the data, the recipe is the algorithm, and settings such as oven temperature or
+            cooking time are like hyperparameters. You do not learn the correct oven temperature by tasting the
+            final exam meal repeatedly—you experiment on development batches, choose a useful setting, and then
+            evaluate the final result separately.
+          </p>
         </div>
       </div>
 
@@ -107,146 +153,83 @@ export function GridRandomSearchContent() {
           <Grid className="mr-3 text-indigo-600" /> What Is Grid Search?
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Grid Search is an exhaustive hyperparameter tuning technique that systematically tests <strong>every possible combination</strong> of hyperparameter values from a predefined set of candidate values.
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Grid Search evaluates the Cartesian product of the candidate values you explicitly provide. If the grid
+          contains 3 values for one hyperparameter and 2 for another, there are:
         </p>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          The name "Grid Search" comes from the fact that all parameter combinations form a structured grid. It is highly systematic and reliable because no possible combination inside the geometric search space is ignored.
-        </p>
-
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-10 overflow-x-auto">
-          <div className="font-mono text-indigo-900 bg-indigo-50 p-6 rounded-xl border border-indigo-100 whitespace-pre w-fit text-sm">
-{`                    n_estimators
-                 50           100
-             ------------------------
-depth = 2   |   Model1    |  Model2 |
-depth = 4   |   Model3    |  Model4 |
-depth = 6   |   Model5    |  Model6 |`}
-          </div>
-          <p className="text-slate-600 text-sm mt-3 italic">Each cell represents a completely different trained model. Grid Search evaluates every single cell.</p>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="text-center font-mono text-xl text-slate-900">
+            3 × 2 = <strong>6 configurations</strong>
+          </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Step-by-Step Working of Grid Search</h3>
-        <div className="space-y-4 mb-8">
-          <div className="flex items-start">
-            <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-4 mt-1">1</div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-lg">Define Search Space</h4>
-              <p className="text-slate-700">Select candidate values (e.g., <code>max_depth: 2, 4, 6</code> and <code>n_estimators: 50, 100</code>). This collection is called the Parameter Grid.</p>
-            </div>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-4 mt-1">2</div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-lg">Generate All Combinations</h4>
-              <p className="text-slate-700">Grid Search formulates the Cartesian product for every possible combination (Total: 3 × 2 = 6 models to train).</p>
-            </div>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-4 mt-1">3</div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-lg">Train Models</h4>
-              <p className="text-slate-700">For each combination: a model is initialized, trained, and its cross-validation score is strictly computed.</p>
-            </div>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-4 mt-1">4</div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-lg">Evaluate Performance Metrics</h4>
-              <p className="text-slate-700">Scores are measured using standard metrics (Accuracy, Precision, Recall for Classification — RMSE, MAE for Regression).</p>
-            </div>
-          </div>
-          <div className="flex items-start">
-            <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0 mr-4 mt-1">5</div>
-            <div>
-              <h4 className="font-bold text-slate-800 text-lg">Select Best Hyperparameters</h4>
-              <p className="text-slate-700">Validation scores are compared globally, and the combination yielding the highest score becomes the final choice.</p>
-            </div>
-          </div>
+        <div className="bg-white p-5 border border-slate-200 rounded-xl shadow-sm mb-8 overflow-x-auto">
+          <p className="font-bold text-slate-800 mb-4">Simple grid</p>
+          <table className="border-collapse text-center text-sm min-w-[520px]">
+            <thead>
+              <tr>
+                <th className="border border-slate-200 px-4 py-3 bg-slate-50">max_depth ↓ / trees →</th>
+                <th className="border border-slate-200 px-4 py-3 bg-slate-50">50</th>
+                <th className="border border-slate-200 px-4 py-3 bg-slate-50">100</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['2', 'Model 1', 'Model 2'],
+                ['4', 'Model 3', 'Model 4'],
+                ['6', 'Model 5', 'Model 6'],
+              ].map((row) => (
+                <tr key={row[0]}>
+                  <td className="border border-slate-200 px-4 py-3 font-bold bg-slate-50">{row[0]}</td>
+                  <td className="border border-slate-200 px-4 py-3">{row[1]}</td>
+                  <td className="border border-slate-200 px-4 py-3">{row[2]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="text-sm text-slate-600 mt-3">
+            Grid Search evaluates every cell in this <em>defined</em> grid. It does not search values that are not
+            listed.
+          </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Mathematical Reality of Grid Search</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          If you have 5 learning rates, 4 max depths, and 3 batch sizes, Grid Search must check every combination: <code>5 × 4 × 3 = 60 models</code>. 
-        </p>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          If each model takes 10 minutes to compile and train, the total physical time required is <code>60 × 10 = 600 minutes (10 Hours)</code>. This geometric scaling issue makes Grid Search computationally disastrous for very complex architectures like Deep Learning with many parameters.
-        </p>
-
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Python Implementation (Scikit-Learn)</h3>
-        
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-10">
-          <div className="bg-slate-50 p-4 border-b border-slate-200">
-            <h4 className="font-bold text-slate-800 flex items-center"><Code className="h-5 w-5 mr-2 text-indigo-600" /> Random Forest Hyperparameter Tuning</h4>
-          </div>
-          <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 text-sm font-mono overflow-x-auto">
-            <pre className="!m-0">
-<code className="language-python">{`from sklearn.datasets import load_iris
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import GridSearchCV
-
-# 1. Load dataset
-X, y = load_iris(return_X_y=True)
-
-# 2. Create model
-model = RandomForestClassifier(random_state=42)
-
-# 3. Define parameter grid (Total combinatorial explosion: 3 * 3 = 9 configurations)
-param_grid = {
-    'n_estimators': [10, 50, 100],
-    'max_depth': [2, 4, 6]
-}
-
-# 4. Create Grid Search object (cv=5 means 5-fold cross validation)
-grid_search = GridSearchCV(
-    estimator=model,
-    param_grid=param_grid,
-    cv=5, 
-    scoring='accuracy'
-)
-
-# 5. Train Grid Search
-grid_search.fit(X, y)
-
-# 6. Retrieve optimal settings
-print("Best Parameters:", grid_search.best_params_)
-print("Best Accuracy:", round(grid_search.best_score_, 4))`}</code>
-            </pre>
-          </div>
-          <div className="bg-slate-900 text-emerald-400 p-4 font-mono text-sm border-t border-slate-700">
-            <p>Output:</p>
-            <p>Best Parameters: {'{'} 'max_depth': 4, 'n_estimators': 50 {'}'}</p>
-            <p>Best Accuracy: 0.9600</p>
-          </div>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">How Grid Search Works</h3>
+        <div className="space-y-3 mb-8">
+          {[
+            ['1', 'Define candidate values', 'Choose a small, meaningful grid of hyperparameter values.'],
+            ['2', 'Generate combinations', 'Create every combination in that grid.'],
+            ['3', 'Cross-validate each candidate', 'Train and validate the model across the selected folds.'],
+            ['4', 'Compare the chosen metric', 'For example accuracy, F1, ROC AUC, MAE, or RMSE.'],
+            ['5', 'Refit the selected candidate', 'With refit=True, scikit-learn fits the selected settings again on all data given to the search object.'],
+          ].map(([n, title, body]) => (
+            <div key={n} className="flex items-start gap-4 bg-white border border-slate-200 rounded-lg p-4">
+              <div className="bg-indigo-100 text-indigo-800 font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+                {n}
+              </div>
+              <div>
+                <p className="font-bold text-slate-800">{title}</p>
+                <p className="text-slate-700 mt-1">{body}</p>
+              </div>
+            </div>
+          ))}
         </div>
+
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Search-Cost Example</h3>
+        <p className="text-lg leading-relaxed mb-3 text-slate-800">
+          Suppose we search 3 values of <code>C</code> and 3 values of <code>gamma</code>:
+        </p>
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-6 font-mono text-slate-900">
+          <p>3 × 3 = 9 candidate configurations</p>
+          <p className="mt-2">9 candidates × 5 CV folds = 45 candidate-validation fits</p>
+          <p className="mt-2">With refit=True: + 1 final refit of the selected candidate</p>
+        </div>
+        <p className="text-slate-700 mb-8">
+          This multiplication is why an exhaustive grid can become expensive when we add many hyperparameters or
+          many candidate values.
+        </p>
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
-
-      <div id="cross-validation">
-        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Layers className="mr-3 text-indigo-600" /> Why Cross-Validation is Required
-        </h2>
-
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Using only one single train-test split to tune parameters can produce wildly unreliable results because the performance essentially depends purely on the random shuffle of that split. The model might just get "lucky." Cross-validation entirely stops this vulnerability by actively rotating different folds of data to validate over multiple cycles, averaging out variance anomalies.
-        </p>
-
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm mb-8 w-fit">
-          <p className="font-bold text-slate-800 text-center mb-4">5-Fold Cross Validation Structure</p>
-          
-          <div className="space-y-2 font-mono text-sm">
-            <div className="flex"><div className="w-16 text-slate-500 py-1">Split 1</div><div className="flex-1 flex gap-1"><div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded">Test</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div></div></div>
-            <div className="flex"><div className="w-16 text-slate-500 py-1">Split 2</div><div className="flex-1 flex gap-1"><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded">Test</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div></div></div>
-            <div className="flex"><div className="w-16 text-slate-500 py-1">Split 3</div><div className="flex-1 flex gap-1"><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded">Test</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div></div></div>
-            <div className="flex"><div className="w-16 text-slate-500 py-1">Split 4</div><div className="flex-1 flex gap-1"><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded">Test</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div></div></div>
-            <div className="flex"><div className="w-16 text-slate-500 py-1">Split 5</div><div className="flex-1 flex gap-1"><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-sky-100 text-sky-800 px-3 py-1 rounded flex-1">Train</div><div className="bg-emerald-100 text-emerald-800 px-3 py-1 rounded">Test</div></div></div>
-          </div>
-        </div>
-
-      </div>
-      
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="what-is-random-search">
@@ -254,82 +237,398 @@ print("Best Accuracy:", round(grid_search.best_score_, 4))`}</code>
           <Dices className="mr-3 text-indigo-600" /> What Is Random Search?
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Random Search is another hyperparameter tuning method where random combinations of hyperparameters are selected instead of sequentially testing every possible combination. Unlike Grid Search, <strong>Random Search does NOT perform exhaustive mapping</strong>.
-        </p>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Instead, it samples coordinates randomly from the search space, allowing engineers to directly dictate a firm computational budget via <code>n_iter</code> (e.g., "try exactly 50 total configurations and give me the best one").
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Random Search samples a fixed number of candidate settings from the search space rather than evaluating
+          every combination. In Scikit-learn, <code>n_iter</code> controls how many parameter settings are tried.
         </p>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Why Random Search Became Highly Popular</h3>
-        
-        <div className="pl-4 border-l-4 border-sky-400 bg-sky-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-sky-900 text-lg leading-relaxed mb-2">Not all hyperparameters are equally important.</p>
-          <p className="text-slate-800 italic leading-relaxed">
-            Researchers discovered that models are often highly sensitive to a single parameter (like Learning Rate) but remarkably indifferent to another (like batch size). Grid Search wastes enormous computing time extensively mapping variations of absolutely meaningless secondary parameters. Random Search naturally explores a broader array of values for the critical parameters much faster.
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-slate-800 mb-4">Same 3 × 3 search space</p>
+          <div className="grid grid-cols-3 gap-2 max-w-sm">
+            {['✓', '', '✓', '', '✓', '', '', '✓', ''].map((mark, index) => (
+              <div
+                key={index}
+                className={`h-16 rounded-lg border flex items-center justify-center font-bold text-lg ${
+                  mark ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-300'
+                }`}
+              >
+                {mark || '·'}
+              </div>
+            ))}
+          </div>
+          <p className="text-sm text-slate-600 mt-4">
+            If <code>n_iter=4</code>, only four sampled settings are evaluated. Which four depends on the sampling
+            process and, when applicable, <code>random_state</code>.
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 mt-8">Visual Contrast: Grid vs. Random Space Exploration</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-          <div className="border border-slate-200 bg-white rounded-xl shadow-sm p-4">
-            <h4 className="text-center font-bold text-indigo-800 mb-2">Grid Search Space</h4>
-            <p className="text-center text-xs text-slate-500 mb-4">Highly regimented; Only tests 3 unique learning rates.</p>
-            <div className="h-[250px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-                  <XAxis dataKey="n_estimators" type="number" label={{ value: 'n_estimators', position: 'insideBottom', offset: -10 }} />
-                  <YAxis dataKey="learning_rate" type="number" scale="log" domain={[0.001, 0.1]} label={{ value: 'Learning Rate (log)', angle: -90, position: 'insideLeft', offset: -10 }} />
-                  <ZAxis dataKey="z" range={[50, 50]} />
-                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                  <Scatter name="Tests" data={gridSearchData} fill="#4f46e5" shape="circle" />
-                </ScatterChart>
-              </ResponsiveContainer>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Why Can Random Search Be Useful?</h3>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          Not every hyperparameter influences performance equally. If one dimension matters a lot and another
+          matters little, a rigid grid can spend many evaluations repeating the same few important values. Random
+          sampling can explore more distinct values of important dimensions for the same evaluation budget.
+        </p>
+
+        <div className="pl-4 border-l-4 border-sky-400 bg-sky-50 py-4 pr-4 rounded-r-md mb-8">
+          <p className="font-bold text-sky-900 mb-1">But Random Search is not magic</p>
+          <p className="text-slate-800 leading-relaxed">
+            A small random budget can simply miss a strong region. Results can vary with the sampled candidates.
+            Use a sensible search space, enough iterations, cross-validation, and a fixed <code>random_state</code>
+            when reproducibility matters.
+          </p>
+        </div>
+
+        <details className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+          <summary className="font-bold text-slate-800 cursor-pointer">Going Deeper — Lists vs distributions</summary>
+          <div className="mt-4 text-slate-700 leading-relaxed space-y-3">
+            <p>
+              <code>RandomizedSearchCV</code> can sample from lists or from probability distributions. Continuous
+              distributions are often useful for continuous hyperparameters because the search is not restricted
+              to only a few manually chosen points.
+            </p>
+            <pre className="bg-slate-900 text-slate-100 rounded-lg p-4 overflow-x-auto text-sm"><code>{`from scipy.stats import loguniform
+
+param_distributions = {
+    "svc__C": loguniform(1e-2, 1e2),
+    "svc__gamma": loguniform(1e-4, 1e0)
+}`}</code></pre>
+          </div>
+        </details>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="grid-vs-random">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <Search className="mr-3 text-indigo-600" /> Grid Search vs Random Search
+        </h2>
+
+        <div className="overflow-x-auto mb-8">
+          <table className="min-w-full bg-white border border-slate-200 text-left">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">Question</th>
+                <th className="px-5 py-3 text-sm font-bold text-indigo-800">Grid Search</th>
+                <th className="px-5 py-3 text-sm font-bold text-emerald-800">Random Search</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 text-sm text-slate-800">
+              <tr>
+                <td className="px-5 py-4 font-bold">What gets tested?</td>
+                <td className="px-5 py-4">Every combination in the defined grid</td>
+                <td className="px-5 py-4">A fixed number of sampled settings</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="px-5 py-4 font-bold">Budget control</td>
+                <td className="px-5 py-4">Indirect—depends on grid size</td>
+                <td className="px-5 py-4">Direct through n_iter</td>
+              </tr>
+              <tr>
+                <td className="px-5 py-4 font-bold">Good starting case</td>
+                <td className="px-5 py-4">Small, carefully chosen search space</td>
+                <td className="px-5 py-4">Larger space or limited compute budget</td>
+              </tr>
+              <tr className="bg-slate-50">
+                <td className="px-5 py-4 font-bold">Guaranteed best?</td>
+                <td className="px-5 py-4">Only best among candidates in the grid</td>
+                <td className="px-5 py-4">No—sampled search may miss strong settings</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-amber-900 mb-2">Do not memorize “Random Search is always better.”</p>
+          <p className="text-slate-800 leading-relaxed">
+            Grid Search can be perfectly reasonable for a small focused grid. Random Search is attractive when
+            exhaustive evaluation becomes expensive. The right choice depends on the search space, computation
+            budget, and how sensitive the model is to different hyperparameters.
+          </p>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="cross-validation">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <Layers className="mr-3 text-indigo-600" /> Why Cross-Validation Is Used During Search
+        </h2>
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Choosing hyperparameters from one validation split can make the result depend heavily on that particular
+          split. Cross-validation rotates the validation fold and averages the scores, reducing dependence on one
+          partition of the data.
+        </p>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8 overflow-x-auto">
+          <p className="font-bold text-slate-800 mb-4">5-fold example</p>
+          <div className="space-y-2 min-w-[620px]">
+            {[0, 1, 2, 3, 4].map((validationIndex) => (
+              <div key={validationIndex} className="flex items-center gap-2">
+                <span className="w-16 text-sm text-slate-500">Round {validationIndex + 1}</span>
+                {[0, 1, 2, 3, 4].map((foldIndex) => (
+                  <div
+                    key={foldIndex}
+                    className={`flex-1 text-center py-2 rounded text-xs font-bold ${
+                      foldIndex === validationIndex
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : 'bg-sky-100 text-sky-800'
+                    }`}
+                  >
+                    {foldIndex === validationIndex ? 'VALIDATE' : 'TRAIN'}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-slate-700 mb-8">
+          These are <strong>validation folds</strong>, not the final test set. Keep the final test set outside the
+          tuning loop whenever you want an independent estimate after model selection.
+        </p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="data-leakage">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <ShieldCheck className="mr-3 text-indigo-600" /> Avoid Preprocessing Leakage
+        </h2>
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          If preprocessing learns from the full dataset before cross-validation, validation folds can influence
+          quantities such as means, standard deviations, imputations, feature selection, or PCA components.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle className="h-5 w-5 text-rose-700" />
+              <p className="font-bold text-rose-900">Risky</p>
             </div>
+            <pre className="text-xs bg-white border border-rose-100 rounded-lg p-4 overflow-x-auto"><code>{`X_scaled = scaler.fit_transform(X)
+GridSearchCV(model, ...).fit(X_scaled, y)`}</code></pre>
           </div>
 
-          <div className="border border-slate-200 bg-white rounded-xl shadow-sm p-4">
-            <h4 className="text-center font-bold text-emerald-800 mb-2">Random Search Space</h4>
-            <p className="text-center text-xs text-slate-500 mb-4">High variance; Tests 9 totally unique learning rates.</p>
-            <div className="h-[250px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 10, right: 20, bottom: 20, left: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-                  <XAxis dataKey="n_estimators" type="number" label={{ value: 'n_estimators', position: 'insideBottom', offset: -10 }} />
-                  <YAxis dataKey="learning_rate" type="number" scale="log" domain={[0.001, 0.1]} label={{ value: 'Learning Rate (log)', angle: -90, position: 'insideLeft', offset: -10 }} />
-                  <ZAxis dataKey="z" range={[50, 50]} />
-                  <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                  <Scatter name="Tests" data={randomSearchData} fill="#10b981" shape="circle" />
-                </ScatterChart>
-              </ResponsiveContainer>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <CheckCircle2 className="h-5 w-5 text-emerald-700" />
+              <p className="font-bold text-emerald-900">Better</p>
+            </div>
+            <pre className="text-xs bg-white border border-emerald-100 rounded-lg p-4 overflow-x-auto"><code>{`Pipeline([
+    ("scale", StandardScaler()),
+    ("svc", SVC())
+])`}</code></pre>
+          </div>
+        </div>
+
+        <p className="text-slate-700 mb-8">
+          The Pipeline ensures that preprocessing is fitted again inside each training fold. Pipeline parameters
+          are addressed using names such as <code>svc__C</code> and <code>svc__gamma</code>.
+        </p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="python-example">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <Code className="mr-3 text-indigo-600" /> Python: Grid and Random Search on the Same Model
+        </h2>
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          This example uses Iris only as a small teaching dataset. We first hold out a final test set, then run both
+          searches only on the training portion.
+        </p>
+
+        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
+          <div className="bg-slate-50 p-4 border-b border-slate-200">
+            <h3 className="font-bold text-slate-800">Leakage-safe SVM tuning</h3>
+          </div>
+          <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 text-sm font-mono overflow-x-auto">
+            <pre className="!m-0"><code className="language-python">{`from sklearn.datasets import load_iris
+from sklearn.model_selection import (
+    train_test_split,
+    GridSearchCV,
+    RandomizedSearchCV,
+    StratifiedKFold,
+)
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+
+X, y = load_iris(return_X_y=True)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y,
+)
+
+pipeline = Pipeline([
+    ("scale", StandardScaler()),
+    ("svc", SVC()),
+])
+
+cv = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42,
+)
+
+search_space = {
+    "svc__C": [0.1, 1, 10],
+    "svc__gamma": ["scale", 0.1, 0.01],
+}
+
+# Grid Search: all 3 x 3 = 9 combinations
+grid = GridSearchCV(
+    estimator=pipeline,
+    param_grid=search_space,
+    cv=cv,
+    scoring="accuracy",
+    refit=True,
+    n_jobs=-1,
+)
+grid.fit(X_train, y_train)
+
+# Random Search: sample only 4 combinations
+random_search = RandomizedSearchCV(
+    estimator=pipeline,
+    param_distributions=search_space,
+    n_iter=4,
+    cv=cv,
+    scoring="accuracy",
+    random_state=42,
+    refit=True,
+    n_jobs=-1,
+)
+random_search.fit(X_train, y_train)
+
+print("Grid candidates:", len(grid.cv_results_["params"]))
+print("Grid best:", grid.best_params_)
+print("Grid CV accuracy:", round(grid.best_score_, 3))
+print("Grid test accuracy:", round(
+    accuracy_score(y_test, grid.predict(X_test)), 3
+))
+
+print()
+print("Random candidates:", len(random_search.cv_results_["params"]))
+print("Random best:", random_search.best_params_)
+print("Random CV accuracy:", round(random_search.best_score_, 3))
+print("Random test accuracy:", round(
+    accuracy_score(y_test, random_search.predict(X_test)), 3
+))`}</code></pre>
+          </div>
+          <div className="bg-slate-900 text-emerald-400 p-4 font-mono text-sm border-t border-slate-700 overflow-x-auto">
+            <pre className="!m-0">{`Grid candidates: 9
+Grid best: {'svc__C': 1, 'svc__gamma': 0.1}
+Grid CV accuracy: 0.975
+Grid test accuracy: 0.967
+
+Random candidates: 4
+Random best: {'svc__gamma': 0.1, 'svc__C': 10}
+Random CV accuracy: 0.967
+Random test accuracy: 0.967`}</pre>
+          </div>
+        </div>
+
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-sky-900 mb-2">How to read this result</p>
+          <ul className="list-disc pl-5 text-slate-800 space-y-2">
+            <li>Grid Search evaluated 9 candidates; Random Search evaluated only 4.</li>
+            <li>The best CV settings were different in this run.</li>
+            <li>Both happened to score 0.967 on this tiny held-out test set.</li>
+            <li>This does <strong>not</strong> prove the methods are equivalent or that Random Search always needs fewer trials.</li>
+          </ul>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="common-mistakes">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <AlertTriangle className="mr-3 text-indigo-600" /> Common Mistakes
+        </h2>
+
+        <div className="space-y-3 mb-8">
+          {[
+            'Calling the best grid value “the optimal hyperparameter” without saying “among the values tested.”',
+            'Building an enormous grid just because many hyperparameters exist.',
+            'Assuming Random Search is always faster or always better.',
+            'Fitting scaling, imputation, feature selection, or PCA before cross-validation.',
+            'Using the final test set repeatedly to decide which search result to keep.',
+            'Using accuracy as the only tuning metric when the real problem cares more about recall, precision, cost, or another measure.',
+          ].map((item) => (
+            <div key={item} className="bg-white border border-slate-200 rounded-lg p-4 flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-slate-800">{item}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div id="quick-recap">
+        <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Quick Recap</h2>
+
+        <div className="space-y-3 mb-8">
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-800 cursor-pointer">If a grid has 4 values for A and 3 for B, how many configurations?</summary>
+            <p className="mt-3 text-slate-700">4 × 3 = <strong>12 configurations</strong>.</p>
+          </details>
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-800 cursor-pointer">What does n_iter=20 mean in RandomizedSearchCV?</summary>
+            <p className="mt-3 text-slate-700">The search evaluates 20 sampled parameter settings.</p>
+          </details>
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-800 cursor-pointer">Why keep a final test set outside the search?</summary>
+            <p className="mt-3 text-slate-700">So the final evaluation is not repeatedly used to choose hyperparameters.</p>
+          </details>
+        </div>
+      </div>
+
+      <div id="final-summary">
+        <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
+
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          <strong>Grid Search</strong> exhaustively checks every combination in a defined finite grid.
+          <strong> Random Search</strong> samples a fixed number of candidate settings, giving direct control over
+          the search budget.
+        </p>
+
+        <p className="text-lg leading-relaxed mb-6 text-slate-800">
+          Neither method guarantees the universally best model. Good hyperparameter search also depends on a sensible
+          search space, the right validation strategy, the right metric, leakage-safe preprocessing, and an untouched
+          final evaluation when needed.
+        </p>
+
+        <div className="bg-slate-50 p-6 rounded-lg border-l-4 border-indigo-400 mb-8">
+          <div className="flex items-start gap-3">
+            <Lightbulb className="h-6 w-6 text-indigo-700 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-slate-900 mb-2">One sentence to remember</p>
+              <p className="text-slate-800 text-lg">
+                <strong>Grid = try all listed combinations; Random = try a fixed sample of combinations.</strong>
+              </p>
             </div>
           </div>
         </div>
 
+        <div className="flex flex-wrap gap-3 text-sm">
+          <a href="/learn/hyperparameter-tuning" className="px-4 py-2 rounded-lg bg-indigo-50 text-indigo-800 font-semibold hover:bg-indigo-100">
+            ← Hyperparameter Tuning
+          </a>
+          <a href="/learn/cross-validation" className="px-4 py-2 rounded-lg bg-indigo-50 text-indigo-800 font-semibold hover:bg-indigo-100">
+            Review Cross-Validation
+          </a>
+          <a href="/learn/confusion-matrix" className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-800 font-semibold hover:bg-emerald-100">
+            Next: Confusion Matrix →
+          </a>
+        </div>
       </div>
-
-      {/* FINAL SUMMARY */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        Hyperparameter Tuning is fundamentally essential for turning basic algorithmic mechanics into highly performant and intelligent customized models. It involves adjusting configurations that dictate tree depths, learning velocities, and structure shapes purely prior to the model training cycle.
-      </p>
-      
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Grid Search tests absolutely every combinatorial intersection available logically on a defined plane. Random Search disrupts this massive structural lag by testing randomized coordinate clusters across that exact same space, theoretically skipping useless coordinate overlaps and arriving at high-performing combinations using drastically less raw computation.
-      </p>
-
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-        <p className="text-slate-800 italic text-lg leading-relaxed">
-          The Curse of Dimensionality will violently collapse Grid Search pipelines as more hyperparameters are integrated. As complexity scales from basic trees to massive Deep Learning nets, Random Search (and its Bayesian successors) completely outclasses Grid mapping due to asymmetrical sensitivity—not all hyperparameters physically matter to the engine, and Random Search efficiently tests far more variations of the ones that do.
-        </p>
-      </div>
-
     </>
   );
 }
-
