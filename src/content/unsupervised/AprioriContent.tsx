@@ -6,51 +6,66 @@ export function AprioriContent() {
     <>
       <div id="introduction">
         <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Apriori Algorithm</h1>
-        
+
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          The Apriori Algorithm is one of the most important and widely used algorithms in Data Mining and Association Rule Learning. It is specifically designed to discover frequent itemsets, hidden relationships, association rules, and co-occurrence patterns from large transactional datasets.
+          Apriori is a classic algorithm for <strong>frequent itemset mining</strong>. It looks through transaction-style data and finds groups of items that occur together often enough to pass a minimum-support threshold.
         </p>
 
         <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-indigo-900 text-lg mb-2">Main Objective:</p>
+          <p className="font-bold text-indigo-900 text-lg mb-2">Apriori in one sentence</p>
           <p className="text-slate-800 italic leading-relaxed">
-            Identify items that frequently occur together inside a database.
+            Keep frequent combinations, discard infrequent combinations, and use that pruning to avoid checking many impossible larger combinations.
+          </p>
+        </div>
+
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <Lightbulb className="mr-3 text-indigo-600" /> Apriori in Simple Words
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-8">
+          {[
+            ['1', 'Read Baskets', 'See which items appear in each transaction.'],
+            ['2', 'Count', 'Measure support for candidate itemsets.'],
+            ['3', 'Prune', 'Remove itemsets below minimum support.'],
+            ['4', 'Grow', 'Use surviving itemsets to build larger candidates.'],
+          ].map(([step, title, text]) => (
+            <div key={step} className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm text-center">
+              <div className="w-9 h-9 mx-auto mb-3 rounded-full bg-indigo-100 text-indigo-800 font-extrabold flex items-center justify-center">{step}</div>
+              <p className="font-bold text-slate-900 mb-1">{title}</p>
+              <p className="text-sm text-slate-700">{text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm mb-8">
+          <div className="flex items-center mb-4">
+            <ShoppingCart className="mr-3 text-indigo-600" />
+            <h3 className="text-xl font-bold text-slate-900">Tiny supermarket example</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">Transaction</th>
+                  <th className="px-4 py-3 text-left text-sm font-bold text-slate-700">Items</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 font-mono text-sm">
+                <tr><td className="px-4 py-3 font-bold">T1</td><td className="px-4 py-3">Bread, Milk</td></tr>
+                <tr><td className="px-4 py-3 font-bold">T2</td><td className="px-4 py-3">Bread, Butter</td></tr>
+                <tr><td className="px-4 py-3 font-bold">T3</td><td className="px-4 py-3">Milk, Butter</td></tr>
+                <tr><td className="px-4 py-3 font-bold">T4</td><td className="px-4 py-3">Bread, Milk, Butter</td></tr>
+                <tr><td className="px-4 py-3 font-bold">T5</td><td className="px-4 py-3">Bread, Milk</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-slate-700 mt-4">
+            Suppose minimum support is <strong>50%</strong>. Apriori asks: which single items are frequent, which pairs are frequent, and can any larger combination still be frequent?
           </p>
         </div>
 
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Apriori is primarily used in Market Basket Analysis, Retail Analytics, Recommendation Systems, Fraud Detection, Inventory Optimization, and Web Usage Mining. The algorithm became extremely famous because of its practical business applications in supermarkets and e-commerce platforms.
-        </p>
-
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          For example, if customers frequently purchase <span className="font-bold">Bread + Butter + Milk</span> together, businesses can place products nearby, create combo offers, improve cross-selling, and build recommendation engines.
-        </p>
-        
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-10">Real-Life Motivation Behind Apriori</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Suppose a supermarket stores millions of purchase transactions.
-        </p>
-
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-8 w-fit">
-          <table className="min-w-full divide-y divide-slate-200">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-sm font-bold text-slate-700">Transaction ID</th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-slate-700">Items Purchased</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-200 bg-white font-mono text-sm">
-              <tr><td className="px-6 py-4 font-bold">T1</td><td className="px-6 py-4">Bread, Butter, Milk</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">T2</td><td className="px-6 py-4">Bread, Diapers, Beer</td></tr>
-              <tr><td className="px-6 py-4 font-bold">T3</td><td className="px-6 py-4">Milk, Diapers, Beer</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">T4</td><td className="px-6 py-4">Bread, Butter</td></tr>
-              <tr><td className="px-6 py-4 font-bold">T5</td><td className="px-6 py-4">Bread, Milk</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          A human analyst cannot manually analyze millions of such transactions efficiently. The Apriori Algorithm automatically discovers patterns such as: <span className="font-bold text-indigo-700">Customers buying bread often buy milk.</span> This information becomes extremely valuable for business intelligence.
+          Frequent itemsets can later be used to create association rules for market-basket analysis, cross-selling ideas, web-usage patterns, and other co-occurrence analysis. Apriori itself is mainly the <strong>frequent-itemset mining stage</strong>; confidence and lift are used when evaluating rules generated from those itemsets.
         </p>
       </div>
 
@@ -58,39 +73,32 @@ export function AprioriContent() {
 
       <div id="why-important">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Eye className="mr-3 text-indigo-600" /> Why the Apriori Algorithm Is Important
+          <Eye className="mr-3 text-indigo-600" /> The Apriori Property: Why Pruning Works
         </h2>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Modern businesses generate massive volumes of transactional data every second. Examples include online purchases, banking transactions, medical records, website clicks, streaming behavior, and mobile app usage.
-        </p>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Inside these datasets, there may exist hidden patterns that humans cannot easily identify. The Apriori Algorithm helps uncover <strong>meaningful hidden relationships between items</strong>. This makes it one of the foundational algorithms in Data Mining.
-        </p>
-
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-10">Core Concept Behind Apriori</h3>
         <div className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-xl p-6 shadow-md mb-8">
           <p className="text-xl font-bold text-center leading-relaxed">
-            "If an itemset is frequent, then all of its subsets must also be frequent."
+            If an itemset is frequent, every subset of that itemset must also be frequent.
           </p>
-          <p className="text-center text-indigo-100 mt-2">— The Apriori Property (Downward Closure Property)</p>
+          <p className="text-center text-indigo-100 mt-2">The downward-closure / Apriori property</p>
+        </div>
+
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          The most useful way to apply this idea is its pruning form:
+        </p>
+
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-6 mb-8 text-center">
+          <p className="font-mono text-slate-800 mb-3">If {`{Bread, Butter}`} is infrequent...</p>
+          <div className="text-2xl font-bold text-rose-700 mb-3">↓</div>
+          <p className="font-mono font-bold text-slate-900">{`{Bread, Milk, Butter}`} cannot be frequent.</p>
+          <p className="text-sm text-slate-700 mt-3">So Apriori can prune the larger candidate instead of wasting work counting it.</p>
         </div>
 
         <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-slate-900 text-lg mb-2">Understanding the Apriori Property</p>
-          <p className="text-slate-800 leading-relaxed mb-2">
-            Suppose <span className="font-mono font-bold">{`{Bread, Milk, Butter}`}</span> is a frequent itemset. Then all subsets must also be frequent:
+          <p className="font-bold text-slate-900 text-lg mb-2">Why is the property true?</p>
+          <p className="text-slate-800 leading-relaxed">
+            Every transaction that contains <span className="font-mono font-bold">{`{Bread, Milk, Butter}`}</span> must also contain <span className="font-mono font-bold">{`{Bread, Butter}`}</span>. Therefore, a larger itemset can never occur more often than one of its subsets.
           </p>
-          <ul className="list-disc pl-6 text-slate-800 font-mono text-sm space-y-1 mb-2">
-            <li>{`{Bread}`}</li>
-            <li>{`{Milk}`}</li>
-            <li>{`{Butter}`}</li>
-            <li>{`{Bread, Milk}`}</li>
-            <li>{`{Bread, Butter}`}</li>
-            <li>{`{Milk, Butter}`}</li>
-          </ul>
-          <p className="text-slate-800 italic">If even one subset is infrequent, the larger itemset cannot be frequent. This principle dramatically reduces unnecessary computations.</p>
         </div>
       </div>
 
@@ -98,76 +106,71 @@ export function AprioriContent() {
 
       <div id="key-terminologies">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Layers className="mr-3 text-indigo-600" /> Key Terminologies in Apriori
+          <Layers className="mr-3 text-indigo-600" /> Key Terminologies
         </h2>
-        
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Before understanding the algorithm deeply, we must understand several important concepts.
-        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div>
-            <h4 className="text-xl font-bold text-slate-800 mb-2">What Is an Item?</h4>
-            <p className="text-lg leading-relaxed text-slate-800 mb-2">
-              An item represents a single product or entity. Examples: Bread, Milk, Butter, Laptop, Phone.
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Item</h3>
+            <p className="text-slate-700">One entity, such as Bread, Milk, Butter, a webpage, or a product ID.</p>
           </div>
-          <div>
-            <h4 className="text-xl font-bold text-slate-800 mb-2">What Is an Itemset?</h4>
-            <p className="text-lg leading-relaxed text-slate-800 mb-2">
-              An itemset is a group of one or more items. Example: <span className="font-mono">{`{Bread, Milk}`}</span>.
-            </p>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Itemset</h3>
+            <p className="text-slate-700">A set of one or more items, such as <span className="font-mono">{`{Bread, Milk}`}</span>.</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Frequent Itemset</h3>
+            <p className="text-slate-700">An itemset whose support is at least the chosen minimum-support threshold.</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-slate-800 mb-2">Candidate Itemset</h3>
+            <p className="text-slate-700">A combination Apriori considers before deciding whether it is frequent.</p>
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-6">Types of Itemsets</h3>
-        <ul className="list-disc pl-6 mb-8 text-lg text-slate-800 space-y-2 font-mono">
-          <li>1-itemset: {`{Bread}`}</li>
-          <li>2-itemset: {`{Bread, Milk}`}</li>
-          <li>3-itemset: {`{Bread, Milk, Butter}`}</li>
-          <li>k-itemset</li>
-        </ul>
-
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">What Is a Frequent Itemset?</h3>
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          A frequent itemset is an itemset that appears sufficiently often in the transaction database. The frequency is determined using <strong>Support</strong>.
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Support</h3>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          Support tells us what fraction of transactions contain an itemset.
         </p>
-
         <div className="pl-4 border-l-4 border-sky-400 bg-sky-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-sky-900 text-lg mb-2">Support in Apriori</p>
-          <p className="text-slate-800 leading-relaxed mb-2">Support measures how frequently an itemset appears in the dataset.</p>
-          <p className="font-mono text-slate-800 mb-2">Support(X) = (Transactions containing X) / (Total Transactions)</p>
-          <div className="mt-4 pt-4 border-t border-sky-200">
-            <p className="font-mono text-sm text-slate-800 mb-1">Suppose: Total transactions = 10, Transactions containing Bread = 6</p>
-            <p className="font-mono text-sm text-slate-800 font-bold mb-2">Support(Bread) = 6 / 10 = 0.6</p>
-            <p className="text-slate-800 italic text-sm">Meaning: 60% of transactions contain Bread.</p>
-          </div>
+          <p className="font-mono text-slate-800 mb-3">Support(X) = Transactions containing X / Total transactions</p>
+          <p className="font-bold text-sky-900 mb-2">Worked example: {`{Bread, Milk}`}</p>
+          <p className="text-slate-800 mb-1">It appears in T1, T4 and T5 → <strong>3 transactions</strong>.</p>
+          <p className="font-mono text-slate-800">Support = 3 / 5 = 0.60 = <strong>60%</strong></p>
         </div>
-        
+
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Minimum Support</h3>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          <strong>Minimum Support</strong> is a threshold used to filter important itemsets. Example: If Minimum Support = 40%, any itemset appearing less than 40% of the time is discarded.
+          Minimum support is the threshold that decides which itemsets are frequent. A high threshold can remove rare but potentially useful patterns; a very low threshold can create a large number of candidates. It is therefore a modeling/business choice rather than a universal constant.
         </p>
 
-        <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-emerald-900 text-lg mb-2">Confidence in Apriori</p>
-          <p className="text-slate-800 leading-relaxed mb-2">Confidence measures how reliable an association rule is.</p>
-          <p className="font-mono text-slate-800 mb-2">Confidence(X → Y) = Support(X ∪ Y) / Support(X)</p>
-          <div className="mt-4 pt-4 border-t border-emerald-200">
-            <p className="font-mono text-sm text-slate-800 mb-1">Suppose: Bread appears in 5 transactions, Bread and Milk appear together in 4.</p>
-            <p className="font-mono text-sm text-slate-800 font-bold mb-2">Confidence(Bread → Milk) = 4 / 5 = 0.8</p>
-            <p className="text-slate-800 italic text-sm">Meaning: 80% of customers buying Bread also buy Milk.</p>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">After Apriori: Confidence and Lift</h3>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          Apriori first returns frequent itemsets. If we then generate a rule such as <strong>Bread → Milk</strong>, metrics such as confidence and lift help evaluate that rule.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-emerald-900 mb-2">Confidence</p>
+            <p className="font-mono text-sm text-slate-800 mb-2">Confidence(X → Y) = Support(X ∪ Y) / Support(X)</p>
+            <p className="text-sm text-slate-800">Bread support = 4/5 = 0.8</p>
+            <p className="text-sm text-slate-800">Bread + Milk support = 3/5 = 0.6</p>
+            <p className="font-mono font-bold text-sm text-slate-900 mt-2">0.6 / 0.8 = 0.75</p>
+          </div>
+          <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-amber-900 mb-2">Lift</p>
+            <p className="font-mono text-sm text-slate-800 mb-2">Lift(X → Y) = Confidence(X → Y) / Support(Y)</p>
+            <p className="text-sm text-slate-800">Confidence(Bread → Milk) = 0.75</p>
+            <p className="text-sm text-slate-800">Support(Milk) = 0.8</p>
+            <p className="font-mono font-bold text-sm text-slate-900 mt-2">0.75 / 0.8 = 0.9375</p>
           </div>
         </div>
 
-        <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-amber-900 text-lg mb-2">Lift in Apriori</p>
-          <p className="text-slate-800 leading-relaxed mb-2">Lift measures the strength of association between items.</p>
-          <p className="font-mono text-slate-800 mb-2">Lift(X → Y) = Confidence(X → Y) / Support(Y)</p>
-          <div className="mt-4 pt-4 border-t border-amber-200">
-            <p className="font-mono text-sm text-slate-800 mb-1">Suppose: Confidence = 0.8, Support(Milk) = 0.5</p>
-            <p className="font-mono text-sm text-slate-800 font-bold mb-2">Lift = 0.8 / 0.5 = 1.6</p>
-            <p className="text-slate-800 italic text-sm">Interpretation: Bread buyers are 1.6 times more likely to buy Milk.</p>
-          </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-amber-900 mb-2">Important interpretation</p>
+          <p className="text-slate-800">
+            Confidence is 75%, but lift is below 1 because Milk is already very common in this tiny dataset. This is why a high-looking confidence value alone does not prove a useful positive association.
+          </p>
         </div>
       </div>
 
@@ -175,68 +178,82 @@ export function AprioriContent() {
 
       <div id="step-by-step">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <RefreshCw className="mr-3 text-indigo-600" /> Complete Workflow and Step-by-Step Working
+          <RefreshCw className="mr-3 text-indigo-600" /> Apriori Step by Step
         </h2>
 
-        <div className="font-mono text-indigo-900 bg-indigo-50 p-6 rounded-xl border border-indigo-100 whitespace-pre overflow-x-auto w-fit mb-10">
-{`TRANSACTION DATABASE
-          │
-          ▼
-Generate 1-Itemsets
-          │
-          ▼
-Apply Minimum Support
-          │
-          ▼
-Generate Candidate 2-Itemsets
-          │
-          ▼
-Prune Infrequent Itemsets
-          │
-          ▼
-Generate Larger Itemsets
-          │
-          ▼
-Generate Association Rules
-          │
-          ▼
-Apply Confidence Threshold
-          │
-          ▼
-Final Strong Rules`}
+        <div className="font-mono text-indigo-900 bg-indigo-50 p-6 rounded-xl border border-indigo-100 whitespace-pre overflow-x-auto mb-10">
+{`TRANSACTIONS
+     │
+     ▼
+Count 1-itemsets
+     │
+     ▼
+Keep frequent 1-itemsets
+     │
+     ▼
+Join them to make candidate 2-itemsets
+     │
+     ▼
+Count + prune by minimum support
+     │
+     ▼
+Use frequent 2-itemsets to propose larger candidates
+     │
+     ▼
+Prune any candidate with an infrequent subset
+     │
+     ▼
+FREQUENT ITEMSETS
+     │
+     ▼
+(Optional next stage) Generate association rules`}
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Detailed Working Example</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Using the example transaction dataset (T1: Bread, Milk; T2: Bread, Butter; T3: Milk, Butter; T4: Bread, Milk, Butter; T5: Bread, Milk):
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Complete Worked Example</h3>
+        <p className="text-lg leading-relaxed mb-6 text-slate-800">
+          Use the five transactions from the opening example and set <strong>minimum support = 50%</strong>.
         </p>
 
-        <div className="space-y-6 mb-8">
-          <div className="pl-4 border-l-4 border-slate-300 bg-slate-50 py-3 pr-4 rounded-r-md">
-            <p className="font-bold text-slate-900 mb-1">Step 1 — Generate Frequent 1-Itemsets</p>
-            <p className="text-slate-800 text-sm font-mono">Bread: 4 (Support 0.8), Milk: 4 (Support 0.8), Butter: 3 (Support 0.6).<br/>If min support is 0.5, all three survive.</p>
+        <div className="space-y-6 mb-10">
+          <div className="pl-4 border-l-4 border-indigo-300 bg-indigo-50/60 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-slate-900 mb-2">Step 1 — Count 1-itemsets</p>
+            <div className="font-mono text-sm text-slate-800 space-y-1">
+              <p>Bread: 4 / 5 = 0.80 ✓</p>
+              <p>Milk: 4 / 5 = 0.80 ✓</p>
+              <p>Butter: 3 / 5 = 0.60 ✓</p>
+            </div>
+            <p className="text-sm text-slate-700 mt-2">All three pass 0.50, so all three can participate in candidate pairs.</p>
           </div>
-          <div className="pl-4 border-l-4 border-slate-300 bg-slate-50 py-3 pr-4 rounded-r-md">
-            <p className="font-bold text-slate-900 mb-1">Step 2 — Generate Candidate 2-Itemsets</p>
-            <p className="text-slate-800 text-sm font-mono">Pairs: {`{Bread, Milk}, {Bread, Butter}, {Milk, Butter}`}</p>
+
+          <div className="pl-4 border-l-4 border-indigo-300 bg-indigo-50/60 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-slate-900 mb-2">Step 2 — Generate and count candidate 2-itemsets</p>
+            <div className="font-mono text-sm text-slate-800 space-y-1">
+              <p>{`{Bread, Milk}`}: 3 / 5 = 0.60 ✓</p>
+              <p>{`{Bread, Butter}`}: 2 / 5 = 0.40 ✗</p>
+              <p>{`{Milk, Butter}`}: 2 / 5 = 0.40 ✗</p>
+            </div>
           </div>
-          <div className="pl-4 border-l-4 border-slate-300 bg-slate-50 py-3 pr-4 rounded-r-md">
-            <p className="font-bold text-slate-900 mb-1">Step 3 — Count 2-Itemset Frequencies</p>
-            <p className="text-slate-800 text-sm font-mono">{`{Bread, Milk}`}: 3 (0.6), {`{Bread, Butter}`}: 2 (0.4), {`{Milk, Butter}`}: 2 (0.4).<br/>Only {`{Bread, Milk}`} may survive depending on threshold.</p>
+
+          <div className="pl-4 border-l-4 border-rose-300 bg-rose-50 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-slate-900 mb-2">Step 3 — Apply the Apriori property before counting a 3-itemset</p>
+            <p className="text-slate-800 text-sm mb-2">
+              Consider candidate <span className="font-mono font-bold">{`{Bread, Milk, Butter}`}</span>.
+            </p>
+            <p className="text-slate-800 text-sm mb-2">
+              Two of its 2-item subsets — <span className="font-mono">{`{Bread, Butter}`}</span> and <span className="font-mono">{`{Milk, Butter}`}</span> — are already known to be infrequent.
+            </p>
+            <p className="font-bold text-rose-800 text-sm">Therefore the triple can be pruned without another support count.</p>
           </div>
-          <div className="pl-4 border-l-4 border-slate-300 bg-slate-50 py-3 pr-4 rounded-r-md">
-            <p className="font-bold text-slate-900 mb-1">Step 4 — Candidate Generation & Pruning</p>
-            <p className="text-slate-800 text-sm font-mono">Candidate 3-itemset: {`{Bread, Milk, Butter}`}. Count = 1 (Support = 0.2). Rejected.<br/><span className="italic mt-2 block">(Pruning removes unnecessary itemsets which improves efficiency.)</span></p>
-          </div>
-          <div className="pl-4 border-l-4 border-slate-300 bg-slate-50 py-3 pr-4 rounded-r-md">
-            <p className="font-bold text-slate-900 mb-1">Step 5 — Generate Association Rules</p>
-            <p className="text-slate-800 text-sm font-mono">Rule: Bread → Milk. Confidence = 3 / 4 = 0.75.<br/>Meaning: 75% of Bread buyers also purchase Milk.</p>
+
+          <div className="pl-4 border-l-4 border-emerald-300 bg-emerald-50 py-4 pr-4 rounded-r-md">
+            <p className="font-bold text-slate-900 mb-2">Step 4 — Final frequent itemsets at 50% support</p>
+            <p className="font-mono text-sm text-slate-800">{`{Bread}, {Milk}, {Butter}, {Bread, Milk}`}</p>
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Time Complexity of Apriori</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Why This Saves Work</h3>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Apriori can become computationally expensive because candidate itemsets grow exponentially. If there are <em>n</em> items, possible itemsets become <span className="font-mono">2<sup>n</sup> - 1</span>. This is why Apriori becomes slow for very large datasets and may require multiple database scans.
+          With <em>n</em> distinct items there are <span className="font-mono">2<sup>n</sup> − 1</span> possible non-empty itemsets in the full search space. Apriori does not blindly enumerate all of them: minimum-support filtering and downward-closure pruning can remove large parts of the search space. The amount of work still depends strongly on the number of items, transaction density, and support threshold.
         </p>
       </div>
 
@@ -244,57 +261,102 @@ Final Strong Rules`}
 
       <div id="applications-and-code">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Code className="mr-3 text-indigo-600" /> Python Implementation
+          <Code className="mr-3 text-indigo-600" /> Python Implementation with mlxtend
         </h2>
 
-        <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 border-l-4 border-l-indigo-500">
+        <p className="text-lg leading-relaxed mb-6 text-slate-800">
+          A transaction list is first converted into a one-hot Boolean table. Apriori then returns frequent itemsets with their support values. Association rules are a separate next step.
+        </p>
+
+        <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-8 border-l-4 border-l-indigo-500">
           <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
             <Code className="text-indigo-600 mr-3" />
-            <h4 className="font-bold text-slate-800 text-lg">Python Code: Apriori using mlxtend</h4>
+            <h3 className="font-bold text-slate-800 text-lg">Python Code: Apriori using mlxtend</h3>
           </div>
-          <div className="p-0">
-            <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">
-<pre><code>{`# Step 1 — Install Required Libraries
-# pip install mlxtend pandas
+          <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">
+<pre><code>{`# pip install pandas mlxtend
 
-# Step 2 — Import Libraries
 import pandas as pd
-from mlxtend.frequent_patterns import apriori
-from mlxtend.frequent_patterns import association_rules
+from mlxtend.preprocessing import TransactionEncoder
+from mlxtend.frequent_patterns import apriori, association_rules
 
-# Step 3 — Create Transaction Dataset
-data = {
-    'Bread': [1,1,0,1,1],
-    'Milk': [1,0,1,1,1],
-    'Butter': [0,1,1,1,0]
-}
-df = pd.DataFrame(data)
-print(df)
-# Output:
-#    Bread  Milk  Butter
-# 0      1     1       0
-# 1      1     0       1
-# 2      0     1       1
-# 3      1     1       1
-# 4      1     1       0
+# 1. Raw transactions
+transactions = [
+    ['Bread', 'Milk'],
+    ['Bread', 'Butter'],
+    ['Milk', 'Butter'],
+    ['Bread', 'Milk', 'Butter'],
+    ['Bread', 'Milk']
+]
 
-# Step 4 — Generate Frequent Itemsets
+# 2. Convert baskets to a Boolean one-hot table
+te = TransactionEncoder()
+encoded = te.fit(transactions).transform(transactions)
+df = pd.DataFrame(encoded, columns=te.columns_)
+
+# 3. Mine frequent itemsets
 frequent_itemsets = apriori(
     df,
-    min_support=0.4,
+    min_support=0.40,
     use_colnames=True
 )
-print(frequent_itemsets)
 
-# Step 5 — Generate Association Rules
+# Make item names easy to read and output deterministic
+display_itemsets = frequent_itemsets.copy()
+display_itemsets['items'] = display_itemsets['itemsets'].apply(
+    lambda x: ', '.join(sorted(x))
+)
+
+print(
+    display_itemsets[['support', 'items']]
+    .sort_values(['support', 'items'], ascending=[False, True])
+    .to_string(index=False)
+)
+
+# 4. Generate rules AFTER frequent-itemset mining
 rules = association_rules(
     frequent_itemsets,
-    metric="confidence",
-    min_threshold=0.7
+    metric='confidence',
+    min_threshold=0.70,
+    num_itemsets=len(df)
 )
-print(rules)`}</code></pre>
-            </div>
+
+rules['antecedent'] = rules['antecedents'].apply(
+    lambda x: ', '.join(sorted(x))
+)
+rules['consequent'] = rules['consequents'].apply(
+    lambda x: ', '.join(sorted(x))
+)
+
+print(
+    rules[['antecedent', 'consequent', 'support', 'confidence', 'lift']]
+    .sort_values(['antecedent', 'consequent'])
+    .round(3)
+    .to_string(index=False)
+)`}</code></pre>
           </div>
+        </div>
+
+        <div className="bg-slate-900 text-slate-100 rounded-xl p-6 mb-8 overflow-x-auto">
+          <p className="font-bold mb-3">Expected frequent itemsets</p>
+<pre className="text-sm font-mono">{` support          items
+     0.8          Bread
+     0.8           Milk
+     0.6    Bread, Milk
+     0.6         Butter
+     0.4  Bread, Butter
+     0.4   Butter, Milk`}</pre>
+          <p className="font-bold mt-6 mb-3">Rules with confidence ≥ 0.70</p>
+<pre className="text-sm font-mono">{`antecedent consequent  support  confidence  lift
+     Bread       Milk      0.6        0.75  0.938
+      Milk      Bread      0.6        0.75  0.938`}</pre>
+        </div>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-amber-900 mb-2">Why min_support = 0.40 in the code but 0.50 in the manual example?</p>
+          <p className="text-slate-800">
+            The manual 50% example is designed to make Apriori pruning obvious. The code lowers support to 40% so the pair itemsets containing Butter remain available and learners can see more frequent-itemset output. Changing the threshold changes what Apriori returns.
+          </p>
         </div>
       </div>
 
@@ -302,77 +364,125 @@ print(rules)`}</code></pre>
 
       <div id="comparisons-summary">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Target className="mr-3 text-indigo-600" /> Comparisons, Advantages & Disadvantages
+          <Target className="mr-3 text-indigo-600" /> Apriori vs FP-Growth
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Advantages</h3>
-            <ul className="list-disc pl-5 text-lg text-slate-800 space-y-3">
-              <li><strong>Easy to Understand:</strong> The logic is intuitive and beginner-friendly.</li>
-              <li><strong>Strong Mathematical Foundation:</strong> Based on clear support/confidence calculations.</li>
-              <li><strong>Good for Small Datasets:</strong> Performs well on moderate databases.</li>
-              <li><strong>Highly Interpretable:</strong> Generated rules are easy to explain.</li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Disadvantages</h3>
-            <ul className="list-disc pl-5 text-lg text-slate-800 space-y-3">
-              <li><strong>High Computational Cost:</strong> Large databases generate huge candidate sets.</li>
-              <li><strong>Multiple Database Scans:</strong> Algorithm repeatedly scans the dataset.</li>
-              <li><strong>Memory Intensive:</strong> Candidate generation consumes lots of memory.</li>
-              <li><strong>Poor Scalability:</strong> Not ideal for modern Big Data (FP-growth is preferred).</li>
-            </ul>
-          </div>
-        </div>
-
-        <h3 className="text-2xl font-bold text-slate-800 mb-4">Apriori vs FP-Growth</h3>
-        <div className="overflow-x-auto mb-8 max-w-4xl">
+        <div className="overflow-x-auto mb-8">
           <table className="min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden shadow-sm">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-left text-sm font-bold text-slate-700">Feature</th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-indigo-700">Apriori</th>
-                <th className="px-6 py-3 text-left text-sm font-bold text-emerald-700">FP-Growth</th>
+                <th className="px-5 py-3 text-left text-sm font-bold text-slate-700">Idea</th>
+                <th className="px-5 py-3 text-left text-sm font-bold text-indigo-700">Apriori</th>
+                <th className="px-5 py-3 text-left text-sm font-bold text-emerald-700">FP-Growth</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
+            <tbody className="divide-y divide-slate-200 bg-white text-sm">
               <tr>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">Candidate Generation</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-bold">Yes</td>
-                <td className="px-6 py-4 text-sm text-emerald-700">No</td>
+                <td className="px-5 py-4 font-medium text-slate-900">Frequent-itemset strategy</td>
+                <td className="px-5 py-4 text-slate-700">Generate candidate itemsets, then prune</td>
+                <td className="px-5 py-4 text-slate-700">Compress transactions into FP-tree structures and avoid explicit candidate generation</td>
               </tr>
               <tr className="bg-slate-50">
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">Speed and Memory</td>
-                <td className="px-6 py-4 text-sm text-amber-600">Slower / Higher Memory</td>
-                <td className="px-6 py-4 text-sm text-emerald-600 font-bold">Faster / Lower Memory</td>
+                <td className="px-5 py-4 font-medium text-slate-900">Repeated passes</td>
+                <td className="px-5 py-4 text-slate-700">Classical Apriori makes repeated passes as itemset size grows</td>
+                <td className="px-5 py-4 text-slate-700">Designed to reduce repeated candidate-counting work</td>
               </tr>
               <tr>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">Database Scans</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-bold">Multiple</td>
-                <td className="px-6 py-4 text-sm text-emerald-700">Fewer</td>
+                <td className="px-5 py-4 font-medium text-slate-900">Which is faster?</td>
+                <td className="px-5 py-4 text-slate-700" colSpan={2}>Depends on dataset size, density, support threshold and implementation. FP-Growth often avoids Apriori's candidate explosion, but do not treat one method as universally faster in every situation.</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Advantages</h3>
+        <ul className="list-disc pl-6 text-lg text-slate-800 space-y-2 mb-8">
+          <li>Simple, interpretable frequent-itemset logic.</li>
+          <li>The Apriori property provides intuitive and effective pruning.</li>
+          <li>Useful for teaching association mining and for manageable transaction datasets.</li>
+          <li>Support thresholds give direct control over what counts as frequent.</li>
+        </ul>
+
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Limitations</h3>
+        <ul className="list-disc pl-6 text-lg text-slate-800 space-y-2 mb-8">
+          <li>Low support thresholds can create very large candidate sets.</li>
+          <li>Dense transaction data can make combinatorial growth severe.</li>
+          <li>Classical Apriori may require repeated scans/counting passes.</li>
+          <li>Frequent co-occurrence does not imply causation or business value.</li>
+        </ul>
+
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Where Apriori-Style Analysis Can Help</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {[
+            ['Market Basket Analysis', 'Find products that frequently co-occur in baskets.'],
+            ['Cross-Sell Exploration', 'Generate candidate product combinations for later validation.'],
+            ['Web Usage Mining', 'Find pages or actions that often occur in the same sessions.'],
+            ['Operational Pattern Mining', 'Explore recurring combinations of events or categorical conditions.'],
+          ].map(([title, text]) => (
+            <div key={title} className="bg-white border border-slate-200 rounded-xl p-5">
+              <p className="font-bold text-slate-900 mb-1">{title}</p>
+              <p className="text-sm text-slate-700">{text}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* FINAL SUMMARY */}
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="common-mistakes">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Common Mistakes</h2>
+        <div className="space-y-4 mb-8">
+          {[
+            ['Counting a candidate that should already be pruned', 'If any required subset is infrequent, use the Apriori property and discard the larger candidate.'],
+            ['Thinking Apriori itself is the association rule', 'Apriori mines frequent itemsets. Rules and metrics such as confidence/lift come afterwards.'],
+            ['Assuming high confidence means a strong positive association', 'Always compare against the consequent baseline; lift can reveal that a high confidence is unsurprising.'],
+            ['Choosing minimum support mechanically', 'Threshold choice changes both computation and which patterns can be discovered.'],
+            ['Treating a rule as causal', 'Bread → Milk is a co-occurrence pattern, not proof that Bread causes Milk purchases.'],
+          ].map(([title, text]) => (
+            <div key={title} className="pl-4 border-l-4 border-rose-300 bg-rose-50 py-3 pr-4 rounded-r-md">
+              <p className="font-bold text-slate-900">{title}</p>
+              <p className="text-slate-700 text-sm mt-1">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div id="quick-recap">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Quick Recap</h2>
+        <div className="space-y-3 mb-8">
+          <details className="bg-white border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">If {`{A, B}`} is infrequent, should Apriori test {`{A, B, C}`} as a frequent candidate?</summary>
+            <p className="mt-3 text-slate-700">No. Because {`{A, B}`} is a subset of {`{A, B, C}`}, the larger itemset cannot be frequent.</p>
+          </details>
+          <details className="bg-white border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">What does minimum support control?</summary>
+            <p className="mt-3 text-slate-700">It controls the minimum transaction frequency required for an itemset to be considered frequent.</p>
+          </details>
+          <details className="bg-white border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">Does Apriori directly prove that one product causes another purchase?</summary>
+            <p className="mt-3 text-slate-700">No. It discovers frequent co-occurrence patterns. Association is not causation.</p>
+          </details>
+        </div>
+      </div>
+
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        The Apriori Algorithm is a foundational Data Mining and Association Rule Learning algorithm used to discover frequent itemsets and hidden relationships inside transactional datasets.
+        Apriori mines frequent itemsets by repeatedly generating candidates, measuring support and pruning combinations that cannot satisfy the minimum-support requirement.
       </p>
-      
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        The algorithm works by generating candidate itemsets, calculating support, pruning infrequent itemsets against the Apriori property (downward closure), and measuring confidence and lift to build robust rules. It is widely applied in retail analytics, market basket analysis, and recommendation systems to automatically infer customer behavior.
+        Its key insight is the downward-closure property: if a smaller itemset is infrequent, every larger itemset containing it must also be infrequent. This turns a potentially huge combination search into a more manageable pruning process when the data and support threshold allow it.
       </p>
 
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
+      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-8">
+        <p className="text-slate-900 font-bold mb-2 text-xl">Remember</p>
         <p className="text-slate-800 italic text-lg leading-relaxed">
-          Association does NOT imply causation. If you mine the rule <span className="font-bold">Bread → Milk</span>, it does NOT mean bread causes milk purchases. It only means they frequently occur together organically, offering a strong statistical correlation that can be harnessed for business intelligence—but not for proving causal mechanics.
+          Apriori answers: <strong>“Which item combinations occur frequently enough to keep exploring?”</strong> Association-rule metrics answer the next question: <strong>“Which of the resulting rules are interesting enough to examine?”</strong>
         </p>
+      </div>
+
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5 mb-10">
+        <p className="font-bold text-indigo-900 mb-2">Related lesson</p>
+        <a href="/learn/association-rules" className="text-indigo-700 font-semibold hover:underline">Association Rules → Support, Confidence and Lift</a>
       </div>
     </>
   );
