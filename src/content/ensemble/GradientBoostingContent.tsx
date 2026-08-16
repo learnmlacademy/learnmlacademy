@@ -1,440 +1,401 @@
 import React from 'react';
-import { GradientBoostingResidualDiagram } from '../../components/diagrams/EnsembleDiagrams';
-import { 
-  Target,
-  Layers,
+import {
   Activity,
-  Code,
-  ShieldCheck,
-  Check,
-  X as CloseIcon,
   AlertCircle,
-  GitMerge
+  Check,
+  Code,
+  GitMerge,
+  Layers,
+  ShieldCheck,
+  Target,
+  X as CloseIcon,
 } from 'lucide-react';
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
-} from 'recharts';
 
 export function GradientBoostingContent() {
-  const errorReductionData = [
-    { tree: 1, error: 20 },
-    { tree: 2, error: 14.5 },
-    { tree: 3, error: 10 },
-    { tree: 4, error: 6.5 },
-    { tree: 5, error: 4 },
-    { tree: 6, error: 2.2 },
-    { tree: 7, error: 1.1 },
-    { tree: 8, error: 0.5 },
-  ];
-
   return (
     <>
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Gradient Boosting</h1>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md">
-        Gradient Boosting belongs to a broader family of methods known as: <strong>Ensemble Learning Algorithms</strong>.</p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Ensemble learning refers to a very important idea in Artificial Intelligence:
+        Gradient Boosting builds a strong model <strong>one small correction at a time</strong>. Each new learner is added to improve what the current ensemble is still getting wrong.
       </p>
 
-      <p className="text-lg text-slate-700 italic leading-relaxed mb-6">
-        "Instead of depending on one model, combine many models together to create a stronger intelligent system."
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        This concept is inspired by real-world human decision making.
-      </p>
-      
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        For example: Suppose a hospital wants to diagnose a dangerous disease. Instead of depending on the opinion of a single doctor, the hospital may combine opinions from:
-      </p>
-      
-      <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-2">
-        <li>A radiologist</li>
-        <li>A cardiologist</li>
-        <li>A neurologist</li>
-        <li>A senior surgeon</li>
-      </ul>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Each expert contributes partial knowledge, and together they make a more reliable decision. Ensemble learning works using exactly the same philosophy. Instead of depending on one Machine Learning model, the system combines multiple smaller models together to achieve better predictive performance.
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Gradient Boosting is an advanced ensemble technique. It became the foundation for some of the world’s most successful Machine Learning systems, including: <strong>XGBoost, LightGBM, and CatBoost</strong>.
-      </p>
-
-      <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-8">
-        <p className="text-blue-900 font-bold mb-2 text-lg">These algorithms dominate:</p>
-        <ul className="list-disc pl-5 space-y-1 text-blue-800 text-lg">
-          <li>Kaggle competitions</li>
-          <li>Banking systems</li>
-          <li>Fraud detection systems</li>
-          <li>Recommendation engines</li>
-          <li>Insurance analytics</li>
-          <li>Search ranking systems</li>
-          <li>Customer churn prediction</li>
-          <li>Credit scoring systems</li>
-        </ul>
-      </div>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-10">
-        Even today, many large companies continue to use Gradient Boosting models in production because of their exceptional accuracy on structured/tabular data.
-      </p>
-
-      <hr className="border-slate-200 mt-10 mb-10" />
-
-      {/* WHY GRADIENT BOOSTING WAS NEEDED */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
-        <AlertCircle className="mr-2 text-indigo-600" /> Why Gradient Boosting Was Needed
-      </h2>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        To understand why Gradient Boosting became revolutionary, we first need to understand a major limitation of traditional Machine Learning models. Earlier Machine Learning systems often relied on building: <strong>One single predictive model</strong>.
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        However, depending on a single model creates many problems:
-      </p>
-
-      <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-2">
-        <li>The model may underfit</li>
-        <li>The model may overfit</li>
-        <li>Complex nonlinear patterns may be missed</li>
-        <li>Prediction errors may remain large</li>
-        <li>Difficult observations may never get corrected</li>
-      </ul>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Researchers realized that most models make mistakes in different regions of the dataset. This led to a very important question:
-      </p>
-
-      <p className="text-lg text-slate-700 italic leading-relaxed mb-6">
-        "What if a new model could learn from the mistakes of previous models?"
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        This idea became the foundation of Boosting algorithms. Gradient Boosting introduced a remarkable strategy: <strong>Build models sequentially, where every new model focuses specifically on correcting previous errors.</strong> This changed the entire landscape of Machine Learning.
-      </p>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        Real-World Intuition Behind Gradient Boosting
-      </h3>
-      
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Imagine a sculptor carving a statue from a rough block of stone. Initially: The sculpture is imperfect and contains many rough areas. The sculptor does not create the final masterpiece in one step. Instead:
-      </p>
-
-      <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-2">
-        <li>First rough carving</li>
-        <li>Then small refinements</li>
-        <li>Then finer corrections</li>
-        <li>Then polishing</li>
-        <li>Then tiny adjustments</li>
-      </ul>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Each step removes some remaining imperfection. After many iterations, the final sculpture becomes highly refined and beautiful.
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Gradient Boosting works using exactly the same philosophy. The first model creates a rough prediction. The next model identifies: <em>What mistakes still remain?</em> and tries to correct them. Then another model corrects the remaining errors. Then another. Then another. Over time, prediction quality improves dramatically. This iterative error-correction process is the heart of Gradient Boosting.
-      </p>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        The Fundamental Philosophy of Gradient Boosting
-      </h3>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The central philosophy behind Gradient Boosting is: <strong>Learn from mistakes repeatedly until errors become very small.</strong>
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Unlike Bagging algorithms such as Random Forest, where trees are trained independently in parallel, Gradient Boosting trains models: <strong>Sequentially</strong>. This means:
-      </p>
-
-      <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-2">
-        <li>Every new learner depends on previous learners</li>
-        <li>Every learner improves existing predictions</li>
-        <li>Every stage attempts to minimize remaining errors</li>
-      </ul>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        This sequential refinement makes Gradient Boosting extremely powerful.
-      </p>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        Why the Word “Gradient” Appears
-      </h3>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        The term <strong>Gradient</strong> comes from calculus and optimization theory. In mathematics, a gradient tells us: <em>Which direction reduces error fastest.</em>
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Gradient Boosting uses this optimization principle to minimize prediction errors step by step. This is why the algorithm combines Machine Learning, Ensemble learning, Optimization theory, and Gradient descent mathematics into one unified system.
-      </p>
-
-      <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-10 text-lg">
-        <p className="text-emerald-900 font-bold mb-2">Why Gradient Boosting Became So Powerful</p>
-        <p className="text-emerald-800 mb-2">Gradient Boosting became famous because it solved several major Machine Learning challenges simultaneously. It can:</p>
-        <ul className="list-disc pl-5 space-y-1 text-emerald-800 mb-4">
-          <li>Capture nonlinear relationships</li>
-          <li>Learn highly complex patterns</li>
-          <li>Reduce prediction errors iteratively</li>
-          <li>Handle structured data extremely well</li>
-          <li>Produce very high predictive accuracy</li>
-        </ul>
-        <p className="text-emerald-800 mb-0 font-bold">The Core Insight: New models do not learn the original target directly. They learn the mistakes of previous models.</p>
-      </div>
-
-      <hr className="border-slate-200 mt-10 mb-10" />
-
-      {/* CORE PHILOSOPHY & WORKFLOW */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
-        <Layers className="mr-2 text-indigo-600" /> Core Workflow and Components
-      </h2>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Before Gradient Boosting, traditional algorithms usually train once and stop learning. But Gradient Boosting introduced a revolutionary idea: Build models sequentially, where every new model focuses on correcting previous errors.
-      </p>
-      
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Suppose a student is learning mathematics. Initially, the student solves many problems incorrectly. The teacher now analyzes: <em>Which mistakes are still remaining?</em> The teacher then focuses only on those mistakes. After improvement, fewer mistakes remain. Again the teacher identifies remaining weak areas and improves them. Gradient Boosting works using exactly this philosophy.
-      </p>
-
-      <div className="pl-4 border-l-4 border-purple-400 bg-purple-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
-        <p className="text-purple-900 border-b border-purple-200 pb-2 mb-3 text-xl font-bold">Breaking Down the Name</p>
-        <p className="mb-2 text-purple-900"><strong>Boosting:</strong> Combining multiple weak learners to create a strong learner. Instead of depending on one large model, it combines many small models sequentially. Each model improves the mistakes of previous models.</p>
-        <p className="mb-0 text-purple-900"><strong>Gradient:</strong> Comes from Gradient Descent Optimization. The gradient tells us how to reduce prediction error step by step. Gradient Boosting uses gradients to optimize model performance iteratively.</p>
-      </div>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        High-Level Workflow of Gradient Boosting
-      </h3>
-
-      <div className="mb-10 text-lg space-y-4">
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>1. Initial Prediction:</strong> Starts with an initial guess (often the average).
+      {/* UNDERSTAND FIRST */}
+      <section className="mb-12">
+        <div className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-full px-4 py-2 mb-5">
+          <Target className="w-4 h-4" /> Understand First
         </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>2. Calculate Errors (Residuals):</strong> See how far the guess was from the actual target.
+
+        <h2 className="text-2xl font-bold text-slate-800 mb-5">Gradient Boosting in Simple Words</h2>
+
+        <p className="text-lg text-slate-700 leading-relaxed mb-6">
+          Imagine you make a prediction, check the mistake, then ask a small new model to learn a useful correction. You add that correction to the old prediction and repeat.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          {[
+            ['1', 'Start with a prediction', 'Make a simple first guess.'],
+            ['2', 'Measure what is wrong', 'Use a loss function to quantify error.'],
+            ['3', 'Train a correction model', 'Fit a small tree to the current error signal.'],
+            ['4', 'Add the correction', 'Update the prediction and repeat.'],
+          ].map(([step, title, text]) => (
+            <div key={step} className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+              <div className="w-9 h-9 rounded-full bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold mb-3">{step}</div>
+              <p className="font-bold text-slate-900 mb-2">{title}</p>
+              <p className="text-sm text-slate-600 leading-relaxed mb-0">{text}</p>
+            </div>
+          ))}
         </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>3. Train Weak Learner on Residual Errors:</strong> The next model is built using the residuals as targets, not the original target.
-        </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>4. Update Predictions:</strong> Add the new model's output (scaled by a learning rate) to the previous prediction.
-        </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>5. Calculate New Residuals:</strong> Re-calculate how far off we are now.
-        </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>6. Train Next Learner:</strong> Build a model on the <em>new</em> residuals.
-        </div>
-        <div className="pl-4 border-l-2 border-indigo-200 hover:border-indigo-500 transition-colors py-2">
-            <strong>7. Final Strong Model:</strong> Combine all learners after repeating sequentially.
-        </div>
-      </div>
 
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Gradient Boosting usually uses <strong>Small Decision Trees</strong> as weak learners. These trees are intentionally kept small because small trees generalize better, sequential correction improves accuracy, and simpler learners reduce overfitting.
-      </p>
-      <GradientBoostingResidualDiagram />
-
-
-      <hr className="border-slate-200 mt-10 mb-10" />
-
-      {/* MATHEMATICAL FOUNDATION */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
-        <Activity className="mr-2 text-rose-600" /> Loss Functions and Residual Errors
-      </h2>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The main objective is: <strong>Minimize the loss function iteratively.</strong> The algorithm continuously tries to reduce prediction error. A loss function measures how wrong the predictions are. Higher loss means more errors, lower loss means better predictions.
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Common Loss Functions include Mean Squared Error, Log Loss, Absolute Error, and Huber Loss.
-      </p>
-
-      <div className="pl-4 border-l-4 border-rose-400 bg-rose-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
-        <p className="font-bold text-rose-900 mb-2">Mean Squared Error (MSE)</p>
-        <p className="text-rose-800 mb-3">A common loss function: <code>MSE = (1/n) * Σ(y_actual - y_predicted)²</code></p>
-        <p className="text-rose-800 mb-2"><strong>Worked Example of MSE:</strong></p>
-        <ul className="list-disc pl-8 mb-2 text-rose-800">
-           <li>Actual: 10, Predicted: 8 ➔ Error: 2 ➔ Sq Error: 4</li>
-           <li>Actual: 15, Predicted: 14 ➔ Error: 1 ➔ Sq Error: 1</li>
-           <li>Actual: 20, Predicted: 18 ➔ Error: 2 ➔ Sq Error: 4</li>
-        </ul>
-        <p className="text-rose-800 font-bold">MSE = (4 + 1 + 4) / 3 = 3</p>
-      </div>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        Understanding Residual Errors
-      </h3>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Residual error means the difference between actual value and predicted value.
-      </p>
-      
-      <p className="text-lg text-slate-700 font-mono bg-slate-100 px-3 py-1 rounded inline-block mb-6">
-        Residual = Actual - Predicted
-      </p>
-
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        For example, if actual value = 100, and predicted value = 80, the residual is <code>100 - 80 = 20</code>. This remaining error (20) becomes the learning target for the next learner. The next learner does NOT predict original outputs directly. Instead it predicts Residual Errors. This is the most important idea in Gradient Boosting.
-      </p>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        Step-by-Step Working with Examples
-      </h3>
-
-      <div className="space-y-8 mb-10">
-        <div>
-          <p className="text-lg font-bold text-slate-800 mb-2">Step 1 — Initial Prediction</p>
-          <p className="text-lg text-slate-700">The algorithm first creates a simple prediction. For regression, it is usually the mean. If target values are 10, 12, 14, 16. Mean = (10+12+14+16)/4 = 13. Initial prediction becomes 13 for all samples.</p>
-        </div>
-        <div>
-          <p className="text-lg font-bold text-slate-800 mb-2">Step 2 — Calculate Residual Errors</p>
-          <p className="text-lg text-slate-700">Compute <code>Actual - Predicted</code>.<br/>Actual: 10, Pred: 13 ➔ Residual: -3<br/>Actual: 16, Pred: 13 ➔ Residual: +3</p>
-        </div>
-        <div>
-          <p className="text-lg font-bold text-slate-800 mb-2">Step 3 — Train Weak Learner on Residuals</p>
-          <p className="text-lg text-slate-700">A small decision tree is trained on Residual Errors. The tree learns how much correction is needed.</p>
-        </div>
-        <div>
-          <p className="text-lg font-bold text-slate-800 mb-2">Step 4 — Update Predictions</p>
-          <p className="text-lg text-slate-700 mb-2">New predictions are updated using: <code>New Prediction = Old Prediction + (Learning Rate × Tree Output)</code>.</p>
-          <p className="text-lg text-slate-700 italic border-l-4 border-slate-300 pl-3">Example: Old Prediction = 13, Tree Output = 2, Learning Rate = 0.1. Updated prediction = 13 + (0.1 × 2) = 13.2. Prediction improves gradually.</p>
-        </div>
-      </div>
-
-      <div className="mb-10 text-center">
-        <h4 className="font-bold text-indigo-900 text-xl mb-4">Iterative Error Reduction Visualization</h4>
-        <div className="w-full h-[300px] bg-white border rounded-xl shadow-sm pt-6 pr-6 pb-2">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={errorReductionData}>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-              <XAxis dataKey="tree" label={{ value: 'Number of Trees', position: 'insideBottom', offset: -10 }} />
-              <YAxis label={{ value: 'Residual Error', angle: -90, position: 'insideLeft', offset: 10 }} />
-              <Tooltip cursor={{fill: 'transparent'}} formatter={(value: any) => [`${value}`, 'Error']} />
-              <Line type="monotone" dataKey="error" stroke="#10b981" strokeWidth={4} dot={{r: 6}} activeDot={{r: 8}} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-
-      <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
-        Hyperparameters in Gradient Boosting
-      </h3>
-      <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-3">
-        <li><strong>Number of Trees:</strong> Controls how many weak learners will be created. Too many may cause overfitting.</li>
-        <li><strong>Maximum Depth:</strong> Controls tree complexity. Small depth = simpler trees, better generalization. Large depth = higher overfitting risk.</li>
-        <li><strong>Learning Rate vs Number of Trees:</strong> Important relationship: Small Learning Rate requires More Trees. This usually improves performance.</li>
-      </ul>
-
-
-      <hr className="border-slate-200 mt-10 mb-10" />
-
-      {/* PYTHON IMPLEMENTATION */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-indigo-800 border-b pb-2 flex items-center">
-        <Code className="mr-2 text-indigo-600" /> Implementing Gradient Boosting in Python
-      </h2>
-      <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        Now let us implement Gradient Boosting step by step using Scikit-Learn. We will predict house prices using a sample regression dataset.
-      </p>
-
-      <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
-        <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-          <div className="flex items-center">
-             <Code className="text-indigo-600 mr-2" />
-             <h4 className="font-bold text-indigo-800 text-xl">Gradient Boosting Regression</h4>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
+          <p className="font-bold text-slate-900 text-lg mb-4">One visual = one idea</p>
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
+            <div className="flex-1 bg-white border rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">Initial model</p>
+              <p className="font-bold text-slate-900">Prediction = 50</p>
+            </div>
+            <div className="text-slate-400 font-bold">→</div>
+            <div className="flex-1 bg-white border rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">Remaining error</p>
+              <p className="font-bold text-rose-700">Need +20</p>
+            </div>
+            <div className="text-slate-400 font-bold">→</div>
+            <div className="flex-1 bg-white border rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">New tree suggests</p>
+              <p className="font-bold text-indigo-700">Correction = +10</p>
+            </div>
+            <div className="text-slate-400 font-bold">→</div>
+            <div className="flex-1 bg-white border rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wide text-slate-500 mb-1">Updated model</p>
+              <p className="font-bold text-emerald-700">Prediction moves upward</p>
+            </div>
           </div>
         </div>
+
+        <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8">
+          <p className="text-amber-900 font-bold mb-2">Important:</p>
+          <p className="text-amber-900 mb-0">
+            For squared-error regression, the correction signal is closely related to the ordinary residual <code>actual - prediction</code>. For other loss functions, Gradient Boosting fits the <strong>negative gradient of the loss</strong>, so “fit the residuals” is a useful beginner explanation, not the complete general definition.
+          </p>
+        </div>
+
+        <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4">A Familiar Analogy</h3>
+        <p className="text-lg text-slate-700 leading-relaxed mb-6">
+          Think of a student solving a set of mathematics problems. The teacher first checks the answers, identifies the remaining weak areas, gives targeted practice, checks again, and repeats. Gradient Boosting works similarly: each stage is trained to improve the ensemble that already exists.
+        </p>
+      </section>
+
+      <hr className="border-slate-200 my-10" />
+
+      {/* WHY / ENSEMBLE */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
+        <AlertCircle className="mr-2 text-indigo-600" /> Why Gradient Boosting Is Useful
+      </h2>
+
+      <p className="text-lg text-slate-700 leading-relaxed mb-6">
+        A single model can miss useful patterns or make systematic errors. Ensemble learning combines several models so the final prediction can be stronger than relying on one model alone. Gradient Boosting does this <strong>sequentially</strong>: later learners are built with knowledge of what the current ensemble still needs to improve.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <p className="font-bold text-slate-900 mb-2">Bagging / Random Forest</p>
+          <p className="text-slate-700 mb-0">Many randomized models are trained largely independently, then their predictions are aggregated.</p>
+        </div>
+        <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
+          <p className="font-bold text-indigo-900 mb-2">Gradient Boosting</p>
+          <p className="text-indigo-900 mb-0">Models are added stage by stage, with each stage improving the current additive model.</p>
+        </div>
+      </div>
+
+      <p className="text-lg text-slate-700 leading-relaxed mb-8">
+        Gradient-boosted trees are widely used for regression and classification, especially on tabular data. Modern libraries such as XGBoost, LightGBM and CatBoost build on the broader gradient-boosting idea with additional optimization and engineering choices.
+      </p>
+
+      <hr className="border-slate-200 my-10" />
+
+      {/* CORE WORKFLOW */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
+        <Layers className="mr-2 text-indigo-600" /> Step-by-Step Workflow
+      </h2>
+
+      <div className="space-y-4 mb-8 text-lg">
+        {[
+          ['1. Initial prediction', 'Start with a simple initial model. For squared-error regression, a constant such as the mean target is a common starting point.'],
+          ['2. Compute the current error signal', 'Measure how the current predictions should change to reduce the chosen loss.'],
+          ['3. Fit a small regression tree', 'Train the next tree to approximate that correction signal.'],
+          ['4. Scale the tree output', 'Multiply the new tree contribution by the learning rate.'],
+          ['5. Update the ensemble', 'Add the scaled correction to the current prediction.'],
+          ['6. Repeat', 'Recompute the loss gradient and add another tree.'],
+          ['7. Final model', 'The prediction is the initial model plus the accumulated contributions of all fitted trees.'],
+        ].map(([title, text]) => (
+          <div key={title} className="pl-4 border-l-2 border-indigo-200 py-2">
+            <strong className="text-slate-900">{title}:</strong> <span className="text-slate-700">{text}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-purple-50 border border-purple-100 rounded-xl p-6 mb-8">
+        <p className="text-purple-900 font-bold text-lg mb-3">Breaking Down the Name</p>
+        <p className="text-purple-900 mb-2"><strong>Boosting:</strong> Build an additive ensemble sequentially.</p>
+        <p className="text-purple-900 mb-0"><strong>Gradient:</strong> Use the gradient of the loss function to determine the direction in which predictions should be corrected.</p>
+      </div>
+
+      <p className="text-lg text-slate-700 leading-relaxed mb-8">
+        Decision Trees are commonly used as the base learners in gradient-boosted trees. They are usually kept relatively small so that each stage makes a limited correction rather than trying to solve the entire problem in one tree.
+      </p>
+
+      <hr className="border-slate-200 my-10" />
+
+      {/* MATHEMATICS */}
+      <section className="mb-12">
+        <div className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-100 rounded-full px-4 py-2 mb-5">
+          <Activity className="w-4 h-4" /> Mathematics
+        </div>
+
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">Residuals, Loss and the Negative Gradient</h2>
+
+        <h3 className="text-xl font-bold text-indigo-800 mb-4">1. Mean Squared Error</h3>
+        <p className="text-lg text-slate-700 leading-relaxed mb-4">
+          For regression, one common loss is Mean Squared Error:
+        </p>
+        <div className="bg-slate-100 rounded-lg px-4 py-3 font-mono text-center text-lg mb-6">
+          MSE = (1 / n) × Σ(y - ŷ)²
+        </div>
+
+        <div className="bg-rose-50 border-l-4 border-rose-400 rounded-r-lg p-5 mb-8">
+          <p className="font-bold text-rose-900 mb-3">Worked MSE Example</p>
+          <p className="text-rose-900 mb-2">Actual values: 10, 15, 20</p>
+          <p className="text-rose-900 mb-3">Predictions: 8, 14, 18</p>
+          <div className="space-y-2 text-rose-900">
+            <p><strong>Step 1 — Errors:</strong> 2, 1, 2</p>
+            <p><strong>Step 2 — Squared errors:</strong> 4, 1, 4</p>
+            <p><strong>Step 3 — Add:</strong> 4 + 1 + 4 = 9</p>
+            <p className="mb-0"><strong>Step 4 — Average:</strong> 9 / 3 = <strong>3</strong></p>
+          </div>
+        </div>
+
+        <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4">2. Residuals for Squared-Error Regression</h3>
+        <div className="bg-slate-100 rounded-lg px-4 py-3 font-mono text-center text-lg mb-6">
+          Residual = Actual - Predicted
+        </div>
+
+        <p className="text-lg text-slate-700 leading-relaxed mb-6">
+          Suppose the actual target is <strong>100</strong> and the current prediction is <strong>80</strong>:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 text-center">
+          <div className="bg-white border rounded-xl p-5"><p className="text-sm text-slate-500 mb-1">Actual</p><p className="text-2xl font-bold">100</p></div>
+          <div className="bg-white border rounded-xl p-5"><p className="text-sm text-slate-500 mb-1">Prediction</p><p className="text-2xl font-bold">80</p></div>
+          <div className="bg-rose-50 border border-rose-100 rounded-xl p-5"><p className="text-sm text-rose-700 mb-1">Residual</p><p className="text-2xl font-bold text-rose-800">20</p></div>
+        </div>
+        <p className="text-lg text-slate-700 leading-relaxed mb-8">
+          With squared-error loss, fitting the next tree to residual-like corrections is equivalent to following the negative gradient up to a constant scaling. That is why residuals are such a useful way to first understand Gradient Boosting regression.
+        </p>
+
+        <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4">3. One Complete Update</h3>
+        <p className="text-lg text-slate-700 leading-relaxed mb-5">
+          Suppose the current prediction is <strong>13</strong>, the new tree predicts a correction of <strong>2</strong>, and the learning rate is <strong>0.1</strong>.
+        </p>
+        <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-6 mb-8">
+          <p className="text-emerald-900 mb-3"><strong>Update rule:</strong></p>
+          <p className="font-mono text-emerald-950 mb-4">New Prediction = Old Prediction + η × Tree Output</p>
+          <p className="text-emerald-900 mb-2"><strong>Step 1:</strong> 0.1 × 2 = 0.2</p>
+          <p className="text-emerald-900 mb-2"><strong>Step 2:</strong> 13 + 0.2 = 13.2</p>
+          <p className="text-emerald-900 mb-0"><strong>Updated prediction = 13.2</strong></p>
+        </div>
+
+        <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4">4. Tiny Four-Row Example</h3>
+        <p className="text-lg text-slate-700 leading-relaxed mb-4">
+          Targets: <strong>10, 12, 14, 16</strong>. Their mean is:
+        </p>
+        <div className="bg-slate-100 rounded-lg px-4 py-3 font-mono text-center text-lg mb-5">
+          (10 + 12 + 14 + 16) / 4 = 13
+        </div>
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full text-left border-collapse bg-white border border-slate-200 text-lg">
+            <thead>
+              <tr className="bg-slate-50 border-b">
+                <th className="p-3">Actual</th>
+                <th className="p-3">Initial prediction</th>
+                <th className="p-3">Residual</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                [10, 13, -3],
+                [12, 13, -1],
+                [14, 13, 1],
+                [16, 13, 3],
+              ].map((row) => (
+                <tr key={row[0]} className="border-b last:border-b-0">
+                  <td className="p-3">{row[0]}</td>
+                  <td className="p-3">{row[1]}</td>
+                  <td className="p-3 font-bold">{row[2] > 0 ? `+${row[2]}` : row[2]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr className="border-slate-200 my-10" />
+
+      {/* GOING DEEPER */}
+      <section className="mb-12">
+        <div className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-100 rounded-full px-4 py-2 mb-5">
+          <Layers className="w-4 h-4" /> Going Deeper
+        </div>
+
+        <h2 className="text-2xl font-bold text-slate-800 mb-6">The General Gradient-Boosting View</h2>
+        <p className="text-lg text-slate-700 leading-relaxed mb-5">
+          Gradient Boosting is more general than “predict the ordinary residual.” At stage <code>m</code>, it fits a learner to the direction that most reduces the selected differentiable loss function.
+        </p>
+        <div className="bg-slate-100 rounded-lg px-4 py-4 font-mono text-center text-base md:text-lg mb-6 overflow-x-auto">
+          rᵢₘ = - [∂L(yᵢ, F(xᵢ)) / ∂F(xᵢ)] at F = Fₘ₋₁
+        </div>
+        <p className="text-lg text-slate-700 leading-relaxed mb-8">
+          These values are often called <strong>pseudo-residuals</strong>. For squared-error regression they closely match ordinary residuals; for classification with log loss, the gradient has a different form.
+        </p>
+
+        <h3 className="text-xl font-bold text-indigo-800 mb-4">Learning Rate and Number of Trees</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white border rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-2">Small learning rate</p>
+            <p className="text-slate-700 mb-0">Each tree contributes a smaller correction, so more boosting stages are usually needed.</p>
+          </div>
+          <div className="bg-white border rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-2">Large learning rate</p>
+            <p className="text-slate-700 mb-0">Each tree has more influence. Too aggressive a value can hurt generalization.</p>
+          </div>
+          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
+            <p className="font-bold text-indigo-900 mb-2">Tune together</p>
+            <p className="text-indigo-900 mb-0">Treat learning rate and number of estimators as a coupled model-selection problem.</p>
+          </div>
+        </div>
+
+        <h3 className="text-xl font-bold text-indigo-800 mb-4">Other Important Hyperparameters</h3>
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full text-left border-collapse bg-white border border-slate-200 text-lg">
+            <thead>
+              <tr className="bg-slate-50 border-b"><th className="p-3">Parameter</th><th className="p-3">What it controls</th></tr>
+            </thead>
+            <tbody>
+              <tr className="border-b"><td className="p-3 font-mono">n_estimators</td><td className="p-3">Number of boosting stages.</td></tr>
+              <tr className="border-b"><td className="p-3 font-mono">learning_rate</td><td className="p-3">Shrinkage applied to each tree's contribution.</td></tr>
+              <tr className="border-b"><td className="p-3 font-mono">max_depth</td><td className="p-3">Maximum depth of each regression tree.</td></tr>
+              <tr className="border-b"><td className="p-3 font-mono">subsample</td><td className="p-3">Fraction of training rows used at each stage; values below 1 create stochastic gradient boosting.</td></tr>
+              <tr><td className="p-3 font-mono">n_iter_no_change</td><td className="p-3">Can enable early stopping when validation score stops improving.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-8">
+          <p className="text-blue-900 font-bold mb-2">Large datasets</p>
+          <p className="text-blue-900 mb-0">
+            Scikit-learn also provides histogram-based gradient boosting estimators. Its documentation recommends <code>HistGradientBoostingRegressor</code> as a much faster option than classic <code>GradientBoostingRegressor</code> for intermediate and large datasets (around 10,000 samples or more).
+          </p>
+        </div>
+      </section>
+
+      <hr className="border-slate-200 my-10" />
+
+      {/* PYTHON */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-indigo-800 border-b pb-2 flex items-center">
+        <Code className="mr-2 text-indigo-600" /> Simple Python Example
+      </h2>
+
+      <p className="text-lg text-slate-700 leading-relaxed mb-6">
+        This example uses Scikit-learn's built-in Diabetes regression dataset so the code can run without downloading an external dataset. It is an educational regression dataset, not a medical deployment example.
+      </p>
+
+      <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-10">
+        <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
+          <h4 className="font-bold text-indigo-800 text-xl">GradientBoostingRegressor</h4>
+        </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
-          <pre className="!m-0">
-<code>{`# Step 1 — Import Libraries
-from sklearn.datasets import fetch_california_housing
+          <pre className="!m-0"><code>{`from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 
-# Step 2 — Load Dataset (using California Housing instead of Boston)
-data = fetch_california_housing()
+# 1. Load a built-in regression dataset
+data = load_diabetes()
 X = data.data
 y = data.target
 
-# Step 3 — Train-Test Split
+# 2. Keep the test set untouched during training
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-# Step 4 — Create Gradient Boosting Model
-model = GradientBoostingRegressor(
-    n_estimators=100,
-    learning_rate=0.1,
-    max_depth=3,
+    X,
+    y,
+    test_size=0.2,
     random_state=42
 )
 
-# Step 5 — Train the Model
+# 3. Create the model
+model = GradientBoostingRegressor(
+    n_estimators=100,
+    learning_rate=0.05,
+    max_depth=2,
+    random_state=42
+)
+
+# 4. Train
 model.fit(X_train, y_train)
 
-# Step 6 — Predictions
+# 5. Predict unseen test rows
 predictions = model.predict(X_test)
 
-# Step 7 — Evaluate Model
+# 6. Evaluate
 mse = mean_squared_error(y_test, predictions)
-print(f"Mean Squared Error: {mse:.2f}")`}</code>
-          </pre>
+rmse = mse ** 0.5
+r2 = r2_score(y_test, predictions)
+
+print(f"MSE: {mse:.2f}")
+print(f"RMSE: {rmse:.2f}")
+print(f"R2: {r2:.3f}")`}</code></pre>
         </div>
         <div className="bg-slate-900 text-emerald-400 font-mono text-sm sm:text-base leading-relaxed p-4 border-t border-slate-700">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-3 h-3 rounded-full bg-rose-500"></div>
-            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-            <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-            <span className="text-slate-400 text-xs ml-2 font-sans uppercase tracking-wider">Terminal Output</span>
-          </div>
-          <p className="mb-1">Mean Squared Error: 0.29</p>
-          <p className="text-slate-400 text-sm mt-3 italic">Output may vary based on dataset choice (value shown is an example scaled MSE for CA housing. For Boston the textbook example is ~8.91).</p>
+          <p>MSE: 2742.88</p>
+          <p>RMSE: 52.37</p>
+          <p>R2: 0.482</p>
         </div>
       </div>
 
-      <hr className="border-slate-200 mt-10 mb-10" />
+      <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-10">
+        <p className="text-amber-900 font-bold mb-2">How to read this output</p>
+        <p className="text-amber-900 mb-0">
+          These scores belong only to this particular dataset, split and hyperparameter setting. They are not a general “expected accuracy” for Gradient Boosting. Use validation or cross-validation when comparing settings, then evaluate the chosen model on an untouched test set.
+        </p>
+      </div>
 
-      {/* ADVANTAGES VS DISADVANTAGES & COMPARISON */}
-      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2 flex items-center">
-        <ShieldCheck className="mr-2 text-indigo-600" /> Advantages & Comparison
+      <hr className="border-slate-200 my-10" />
+
+      {/* ADVANTAGES / LIMITATIONS */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
+        <ShieldCheck className="mr-2 text-indigo-600" /> Advantages and Limitations
       </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10 text-lg">
         <div>
-          <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center">
-            <Check className="mr-2 w-6 h-6" /> Advantages
-          </h3>
+          <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center"><Check className="mr-2 w-6 h-6" /> Advantages</h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li><strong>Extremely High Accuracy:</strong> Often outperforms many traditional ML algorithms on tabular data.</li>
-             <li><strong>Captures Complex Patterns:</strong> Excellent at finding highly complex nonlinear relationships.</li>
-             <li><strong>Handles Mixed Data:</strong> Deals smoothly with mixed feature types and requires less preprocessing.</li>
+            <li><strong>Strong tabular baseline:</strong> Often performs very well on structured datasets.</li>
+            <li><strong>Nonlinear patterns:</strong> Trees can represent nonlinear relationships and interactions.</li>
+            <li><strong>Flexible losses:</strong> The gradient-boosting framework can optimize different differentiable objectives.</li>
+            <li><strong>Little need for ordinary feature scaling:</strong> Tree split thresholds do not depend on Euclidean distance.</li>
           </ul>
         </div>
         <div>
-          <h3 className="text-xl font-bold text-red-800 mb-4 flex items-center">
-            <CloseIcon className="mr-2 w-6 h-6" /> Disadvantages
-          </h3>
+          <h3 className="text-xl font-bold text-red-800 mb-4 flex items-center"><CloseIcon className="mr-2 w-6 h-6" /> Limitations</h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li><strong>Slower Training:</strong> Models train sequentially, meaning it can't easily be parallelized like Bagging.</li>
-             <li><strong>Overfitting Risk:</strong> It can overfit specifically if too many trees are used or learning rate is too high.</li>
-             <li><strong>Tuning Sensitivity:</strong> Hyperparameter tuning is critical for optimal performance.</li>
+            <li><strong>Sequential training:</strong> Later boosting stages depend on earlier stages, limiting parallelism across stages.</li>
+            <li><strong>Hyperparameter interactions:</strong> Learning rate, number of trees and tree complexity must be considered together.</li>
+            <li><strong>Can overfit:</strong> Excessive capacity or too many stages can hurt generalization.</li>
+            <li><strong>Less interpretable than one tree:</strong> Hundreds of additive trees are harder to explain directly.</li>
           </ul>
         </div>
       </div>
-      
-      <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4 flex items-center">
-        <GitMerge className="mr-2" /> Gradient Boosting vs Random Forest
-      </h3>
+
+      <h3 className="text-xl font-bold text-indigo-800 mt-8 mb-4 flex items-center"><GitMerge className="mr-2" /> Gradient Boosting vs Random Forest</h3>
       <div className="overflow-x-auto bg-white rounded-lg border border-slate-200 shadow-sm mb-10">
         <table className="w-full text-left border-collapse text-lg">
           <thead>
@@ -445,36 +406,87 @@ print(f"Mean Squared Error: {mse:.2f}")`}</code>
             </tr>
           </thead>
           <tbody className="text-slate-700">
-             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Training Style</td><td className="p-4">Sequential</td><td className="p-4">Parallel</td></tr>
-             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Main Goal</td><td className="p-4 font-bold text-indigo-700">Reduce Bias</td><td className="p-4 font-bold text-emerald-700">Reduce Variance</td></tr>
-             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Speed</td><td className="p-4 text-rose-700">Slower</td><td className="p-4 text-emerald-700">Faster</td></tr>
-             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Overfitting Risk</td><td className="p-4">Higher</td><td className="p-4">Lower</td></tr>
-             <tr><td className="p-4 font-medium">Accuracy</td><td className="p-4 font-bold">Usually Higher</td><td className="p-4">Stable</td></tr>
+            <tr className="border-b"><td className="p-4 font-medium">Training style</td><td className="p-4">Sequential additive stages</td><td className="p-4">Trees trained largely independently</td></tr>
+            <tr className="border-b"><td className="p-4 font-medium">How diversity/improvement is created</td><td className="p-4">Each new tree follows the current loss gradient</td><td className="p-4">Bootstrap/feature randomness + averaging</td></tr>
+            <tr className="border-b"><td className="p-4 font-medium">Parallelism</td><td className="p-4">Harder across boosting stages</td><td className="p-4">Easier across trees</td></tr>
+            <tr className="border-b"><td className="p-4 font-medium">Tuning</td><td className="p-4">Learning rate and stage count are especially important</td><td className="p-4">Often a strong baseline with fewer sensitive interactions</td></tr>
+            <tr><td className="p-4 font-medium">Which is better?</td><td className="p-4" colSpan={2}>Neither universally. Compare them with appropriate validation for your dataset and metric.</td></tr>
           </tbody>
         </table>
       </div>
 
-      <hr className="border-slate-200 mt-10 mb-10" />
+      <hr className="border-slate-200 my-10" />
 
-      {/* FINAL SUMMARY */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
-        Final Summary
-      </h2>
-      <p className="text-lg text-slate-700 leading-relaxed mb-4">
-        Gradient Boosting is a powerful ensemble learning algorithm in Machine Learning. Its success comes from combining sequential learning, residual correction, gradient optimization, and weak learners.
-      </p>
-      
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The algorithm continuously learns from mistakes and improves predictions iteratively. Modern AI systems heavily rely on Gradient Boosting because of its high accuracy, flexibility, strong predictive performance, and robust ability to model complex patterns in tabular data. Because it iteratively zeroes in on errors through gradient descent logic, it has become the standard for predictive superiority.
-      </p>
-
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-         <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-         <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Every new learner should focus on predicting the remaining errors of previous learners. New models do not learn the original target directly. They learn the mistakes of previous models. That single principle forms the foundation of all Gradient Boosting algorithms used in modern Artificial Intelligence systems."
-         </p>
+      {/* USE CASES */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Where Gradient Boosting Is Used</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+        {[
+          ['Credit risk', 'Predict default or repayment risk from structured applicant data.'],
+          ['Fraud detection', 'Learn nonlinear interactions among transaction and account features.'],
+          ['Customer churn', 'Estimate which customers are likely to leave.'],
+          ['Demand forecasting', 'Predict numeric demand from historical and contextual features.'],
+          ['Insurance analytics', 'Model claims risk or expected cost.'],
+          ['Ranking and propensity', 'Estimate response, click or conversion likelihood from tabular features.'],
+        ].map(([title, text]) => (
+          <div key={title} className="bg-white border rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-1">{title}</p>
+            <p className="text-slate-700 mb-0">{text}</p>
+          </div>
+        ))}
       </div>
 
+      {/* COMMON MISTAKES */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Common Mistakes</h2>
+      <ul className="list-disc pl-8 text-lg text-slate-700 space-y-3 mb-10">
+        <li>Saying every Gradient Boosting model literally trains on <strong>ordinary residuals</strong>. That shortcut is exact only for particular losses such as squared error up to scaling; the general algorithm fits negative loss gradients.</li>
+        <li>Assuming training error must decrease in a way that guarantees validation performance will also improve forever.</li>
+        <li>Treating a smaller learning rate as automatically better without considering the number of boosting stages.</li>
+        <li>Tuning repeatedly on the final test set instead of using validation/cross-validation.</li>
+        <li>Assuming Gradient Boosting is always more accurate than Random Forest or every other model.</li>
+      </ul>
+
+      {/* FAQ */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Quick FAQ</h2>
+      <div className="space-y-4 mb-10">
+        <details className="bg-white border rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Does every new tree predict the original target?</summary>
+          <p className="text-slate-700 mt-3 mb-0">No. It is fitted to a correction signal derived from the gradient of the current loss. For squared-error regression, this is closely connected to residuals.</p>
+        </details>
+        <details className="bg-white border rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Does Gradient Boosting need feature scaling?</summary>
+          <p className="text-slate-700 mt-3 mb-0">Ordinary tree-based Gradient Boosting usually does not require standardization for the same reason KNN or SVM does; trees split using feature thresholds rather than distance calculations.</p>
+        </details>
+        <details className="bg-white border rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Is Gradient Boosting the same as Gradient Descent?</summary>
+          <p className="text-slate-700 mt-3 mb-0">No. Gradient Boosting uses gradient information in function space to add new learners. Gradient Descent usually updates numeric parameters of one model.</p>
+        </details>
+      </div>
+
+      {/* INTERNAL LINKS */}
+      <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 mb-10">
+        <p className="font-bold text-indigo-900 text-lg mb-3">Continue Learning</p>
+        <div className="flex flex-wrap gap-3">
+          <a href="/learn/boosting" className="text-indigo-700 font-semibold underline underline-offset-2">Boosting Overview</a>
+          <span className="text-indigo-300">•</span>
+          <a href="/learn/adaboost" className="text-indigo-700 font-semibold underline underline-offset-2">AdaBoost</a>
+          <span className="text-indigo-300">•</span>
+          <a href="/learn/random-forest" className="text-indigo-700 font-semibold underline underline-offset-2">Random Forest</a>
+          <span className="text-indigo-300">•</span>
+          <a href="/learn/xgboost" className="text-indigo-700 font-semibold underline underline-offset-2">XGBoost</a>
+        </div>
+      </div>
+
+      {/* FINAL SUMMARY */}
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
+      <p className="text-lg text-slate-700 leading-relaxed mb-4">
+        Gradient Boosting builds an additive model sequentially. It starts with an initial prediction, computes how the current ensemble should change to reduce the loss, fits a small tree to that correction signal, scales the contribution with a learning rate, and repeats.
+      </p>
+      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
+        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight</p>
+        <p className="text-slate-800 text-lg leading-relaxed mb-0">
+          <strong>Gradient Boosting does not build many independent trees.</strong> It builds a sequence in which each new tree is chosen to improve the ensemble that already exists.
+        </p>
+      </div>
     </>
   );
 }
