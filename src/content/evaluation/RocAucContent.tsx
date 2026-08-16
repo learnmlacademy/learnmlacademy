@@ -1,361 +1,293 @@
 import React from 'react';
-import { Target, Activity, Crosshair, BarChart2, ShieldAlert, Cpu, Code, Info } from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, AreaChart, Area, Legend } from 'recharts';
-
-const goodModelData = [
-  { fpr: 0, tpr: 0 },
-  { fpr: 0.05, tpr: 0.6 },
-  { fpr: 0.1, tpr: 0.8 },
-  { fpr: 0.2, tpr: 0.9 },
-  { fpr: 0.4, tpr: 0.95 },
-  { fpr: 0.6, tpr: 0.98 },
-  { fpr: 0.8, tpr: 0.99 },
-  { fpr: 1, tpr: 1 }
-];
-
-const randomModelData = [
-  { fpr: 0, tpr: 0 },
-  { fpr: 0.5, tpr: 0.5 },
-  { fpr: 1, tpr: 1 }
-];
-
-const perfectModelData = [
-  { fpr: 0, tpr: 0 },
-  { fpr: 0, tpr: 1 },
-  { fpr: 1, tpr: 1 }
-];
-
-const compModelData = [
-  { fpr: 0, ModelA: 0, ModelB: 0 },
-  { fpr: 0.1, ModelA: 0.8, ModelB: 0.4 },
-  { fpr: 0.2, ModelA: 0.9, ModelB: 0.65 },
-  { fpr: 0.4, ModelA: 0.95, ModelB: 0.8 },
-  { fpr: 0.6, ModelA: 0.98, ModelB: 0.9 },
-  { fpr: 0.8, ModelA: 0.99, ModelB: 0.95 },
-  { fpr: 1, ModelA: 1, ModelB: 1 }
-];
+import {
+  Activity,
+  BarChart2,
+  CheckCircle2,
+  Code,
+  Crosshair,
+  Info,
+  ShieldAlert,
+  Target,
+} from 'lucide-react';
 
 export function RocAucContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">AUC-ROC Curve in Machine Learning</h1>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          In Machine Learning classification problems, building a model is only one part of the task. The second and equally important task is: <strong>Evaluating how good the model actually is.</strong>
-        </p>
-        
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          A model may produce high accuracy, good predictions, and fast computation, but still fail badly in real-world applications if the evaluation metric is not properly understood.
-        </p>
-
-        <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-indigo-900 mb-2">The Illusion of Accuracy</p>
-          <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-indigo-900">
-            <li>A fraud detection system with <strong>99% accuracy</strong> may still wildly fail to detect the rare fraud transactions.</li>
-            <li>A cancer detection system may correctly classify most healthy patients but tragically miss actual cancer cases, maintaining high accuracy while failing its primary purpose.</li>
-          </ul>
-        </div>
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+          ROC-AUC in Machine Learning
+        </h1>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          In such situations, simple accuracy becomes insufficient. This is where the <strong>ROC Curve</strong> and <strong>AUC Score</strong> become extremely important. ROC and AUC are among the most powerful evaluation techniques used in Machine Learning. They help us understand:
+          A classifier often produces a <strong>score</strong> for each example: for instance, a fraud probability of 0.82 or a decision score from an SVM. A threshold then turns that score into a final class such as Fraud / Not Fraud.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 text-center"><span className="text-sky-800 font-bold text-sm">Class Separation</span></div>
-          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 text-center"><span className="text-sky-800 font-bold text-sm">Model Sensitivity</span></div>
-          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 text-center"><span className="text-sky-800 font-bold text-sm">False Alarm Rate</span></div>
-          <div className="bg-sky-50 border border-sky-100 rounded-xl p-3 text-center"><span className="text-sky-800 font-bold text-sm">Threshold Dynamics</span></div>
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-6">
+          <p className="font-bold text-indigo-900 mb-4">ROC-AUC in Simple Words</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
+            {[
+              ['1', 'Model gives scores'],
+              ['2', 'Change threshold'],
+              ['3', 'Track TPR and FPR'],
+              ['4', 'Summarize with AUC'],
+            ].map(([n, text]) => (
+              <div key={n} className="bg-white border border-indigo-100 rounded-lg p-3">
+                <div className="font-mono font-bold text-indigo-700 mb-1">Step {n}</div>
+                <div className="text-sm text-slate-700">{text}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
+        <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8">
+          <p className="font-bold text-amber-900 mb-2">Why accuracy alone can be misleading</p>
+          <p className="text-amber-900 leading-relaxed">
+            Suppose 990 of 1,000 transactions are normal and only 10 are fraud. A model that predicts “normal” every time gets 99% accuracy but detects none of the fraud cases. ROC-AUC is one useful way to study ranking performance across many thresholds instead of judging the model at only one threshold.
+          </p>
+        </div>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="what-is-roc">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Activity className="mr-3 text-indigo-600" /> What Is ROC Curve?
+          <Activity className="mr-3 text-indigo-600" /> What Is the ROC Curve?
         </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ROC stands for <strong>Receiver Operating Characteristic</strong>. The ROC curve is a graphical representation that shows how well a classification model distinguishes between classes at different threshold values. It plots the <strong>True Positive Rate (TPR)</strong> against the <strong>False Positive Rate (FPR)</strong> across multiple threshold settings.
+          ROC stands for <strong>Receiver Operating Characteristic</strong>. For binary classification, the ROC curve plots the <strong>True Positive Rate (TPR)</strong> against the <strong>False Positive Rate (FPR)</strong> as the decision threshold changes.
         </p>
 
-        <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-slate-800 mb-2">Historical Background</p>
-          <p className="text-slate-700 italic">
-            The ROC concept originally came from radar signal detection systems during World War II. Engineers used ROC curves to determine whether radar signals represented actual enemy aircraft or just random noise. Later, the concept was adapted for statistics and Machine Learning.
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-slate-900 mb-2">Important: use continuous prediction scores</p>
+          <p className="text-slate-700 leading-relaxed">
+            ROC analysis works best with continuous scores such as <code>predict_proba(... )[:, 1]</code> or a model's <code>decision_function()</code>. Hard class predictions like only 0 and 1 contain very little threshold information and usually produce only a small number of operating points.
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Core Idea: Probabilities, Not Just Classes</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Most Machine Learning classification algorithms do not directly predict a strict YES or NO. Instead, they predict <strong>Probabilities</strong>.
-        </p>
-
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-6 overflow-x-auto w-fit">
-          <table className="min-w-full divide-y divide-slate-200 text-left font-mono">
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">A tiny score example</h3>
+        <div className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm mb-6 overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-200 text-left">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Customer</th>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Fraud Probability</th>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Prediction (Threshold = 0.5)</th>
+                <th className="px-4 py-3 text-sm font-bold text-slate-700">Sample</th>
+                <th className="px-4 py-3 text-sm font-bold text-slate-700">Actual Class</th>
+                <th className="px-4 py-3 text-sm font-bold text-slate-700">Model Score</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white text-sm text-slate-800">
-              <tr><td className="px-6 py-4">A</td><td className="px-6 py-4 text-rose-600 font-bold">0.95</td><td className="px-6 py-4">Fraud (≥ 0.5)</td></tr>
-              <tr><td className="px-6 py-4">B</td><td className="px-6 py-4 text-rose-600 font-bold">0.80</td><td className="px-6 py-4">Fraud (≥ 0.5)</td></tr>
-              <tr><td className="px-6 py-4">C</td><td className="px-6 py-4 text-emerald-600">0.45</td><td className="px-6 py-4">Not Fraud (&lt; 0.5)</td></tr>
-              <tr><td className="px-6 py-4">D</td><td className="px-6 py-4 text-emerald-600">0.10</td><td className="px-6 py-4">Not Fraud (&lt; 0.5)</td></tr>
+            <tbody className="divide-y divide-slate-100 text-sm text-slate-800 font-mono">
+              <tr><td className="px-4 py-3">A</td><td className="px-4 py-3">Positive</td><td className="px-4 py-3">0.95</td></tr>
+              <tr><td className="px-4 py-3">B</td><td className="px-4 py-3">Positive</td><td className="px-4 py-3">0.85</td></tr>
+              <tr><td className="px-4 py-3">C</td><td className="px-4 py-3">Negative</td><td className="px-4 py-3">0.70</td></tr>
+              <tr><td className="px-4 py-3">D</td><td className="px-4 py-3">Positive</td><td className="px-4 py-3">0.60</td></tr>
+              <tr><td className="px-4 py-3">E</td><td className="px-4 py-3">Negative</td><td className="px-4 py-3">0.40</td></tr>
+              <tr><td className="px-4 py-3">F</td><td className="px-4 py-3">Negative</td><td className="px-4 py-3">0.20</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Why Different Thresholds Matter</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm">
-            <h4 className="font-bold text-rose-800 border-b pb-2 mb-3">Very Low Threshold (e.g. 0.1)</h4>
-            <p className="text-sm text-slate-800 leading-relaxed mb-3">Almost everything becomes positive. The model is highly aggressive in catching Frauds.</p>
-            <ul className="text-sm font-bold text-rose-900 space-y-1">
-              <li>High Recall (Catch all frauds)</li>
-              <li>Many False Positives (High false alarms)</li>
-            </ul>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Why changing the threshold matters</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-3">Threshold = 0.85</p>
+            <p className="font-mono text-sm text-slate-700 mb-2">Predicted positive: A, B</p>
+            <p className="font-mono text-sm text-slate-700">TP = 2, FP = 0, FN = 1, TN = 3</p>
+            <p className="font-mono text-sm text-indigo-700 mt-3">TPR = 2/3 = 0.667</p>
+            <p className="font-mono text-sm text-indigo-700">FPR = 0/3 = 0.000</p>
           </div>
-          <div className="bg-white border-2 border-slate-200 rounded-xl p-5 shadow-sm">
-            <h4 className="font-bold text-sky-800 border-b pb-2 mb-3">Very High Threshold (e.g. 0.95)</h4>
-            <p className="text-sm text-slate-800 leading-relaxed mb-3">Only highly confident predictions become positive. The model is highly conservative.</p>
-            <ul className="text-sm font-bold text-sky-900 space-y-1">
-              <li>Low False Positives (Very few false alarms)</li>
-              <li>Many Missed Positives (Low Recall)</li>
-            </ul>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-3">Threshold = 0.55</p>
+            <p className="font-mono text-sm text-slate-700 mb-2">Predicted positive: A, B, C, D</p>
+            <p className="font-mono text-sm text-slate-700">TP = 3, FP = 1, FN = 0, TN = 2</p>
+            <p className="font-mono text-sm text-indigo-700 mt-3">TPR = 3/3 = 1.000</p>
+            <p className="font-mono text-sm text-indigo-700">FPR = 1/3 = 0.333</p>
           </div>
         </div>
-        <p className="text-lg leading-relaxed text-indigo-900 font-bold">
-          The ROC curve captures this exact trade-off visualising how TPR and FPR deform as we drag that threshold from 0.0 to 1.0!
-        </p>
 
+        <p className="text-lg leading-relaxed text-slate-800">
+          Lowering the threshold caught the remaining positive example, but it also created a false alarm. The ROC curve records this trade-off over many thresholds.
+        </p>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="understanding-axes">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Crosshair className="mr-3 text-indigo-600" /> The Geometry of the ROC Curve
+          <Crosshair className="mr-3 text-indigo-600" /> Understanding the ROC Axes
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div>
-            <h3 className="text-xl font-bold text-slate-800 mb-3 border-b-2 border-orange-200 inline-block">X-Axis: False Positive Rate (FPR)</h3>
-            <p className="text-md text-slate-800 mb-3">Measures how many negative samples were incorrectly classified as positive (False alarms).</p>
-            <div className="bg-orange-50 border border-orange-100 p-4 rounded-xl font-mono text-sm mb-4">
-              <p className="font-bold text-orange-900 mb-2">FPR = FP / (FP + TN)</p>
-              <p className="text-orange-800 italic">Example (Spam): Out of 100 legitimate emails, 10 are marked spam. FPR = 10 / 100 = 10%.</p>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-orange-900 mb-3">X-Axis: False Positive Rate</h3>
+            <div className="font-mono font-bold text-orange-900 mb-3">FPR = FP / (FP + TN)</div>
+            <p className="text-sm text-orange-900">
+              If 10 of 100 actual negatives are incorrectly flagged positive, FPR = 10/100 = 0.10.
+            </p>
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-slate-800 mb-3 border-b-2 border-emerald-200 inline-block">Y-Axis: True Positive Rate (TPR)</h3>
-             <p className="text-md text-slate-800 mb-3">Also known as Recall or Sensitivity. Measures how many actual positive cases were correctly detected.</p>
-             <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl font-mono text-sm mb-4">
-              <p className="font-bold text-emerald-900 mb-2">TPR = TP / (TP + FN)</p>
-              <p className="text-emerald-800 italic">Example (Cancer): Out of 100 sick patients, 90 are detected. TPR = 90 / 100 = 90%.</p>
-            </div>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+            <h3 className="text-xl font-bold text-emerald-900 mb-3">Y-Axis: True Positive Rate</h3>
+            <div className="font-mono font-bold text-emerald-900 mb-3">TPR = TP / (TP + FN)</div>
+            <p className="text-sm text-emerald-900">
+              TPR is also Recall or Sensitivity. If 90 of 100 actual positives are detected, TPR = 90/100 = 0.90.
+            </p>
           </div>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 mt-8">ROC Visual Profiles</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {/* Random */}
-          <div className="border border-slate-200 bg-white rounded-xl shadow-sm p-4">
-            <h4 className="text-center font-bold text-slate-600 mb-2">Random Model (Diagonal)</h4>
-            <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={randomModelData}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="fpr" type="number" domain={[0,1]} hide />
-                  <YAxis type="number" domain={[0,1]} hide />
-                  <Line type="linear" dataKey="tpr" stroke="#64748b" strokeWidth={3} strokeDasharray="5 5" dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <p className="text-center text-xs text-slate-500 mt-2">Zero discrimination power. Like flipping a coin.</p>
-          </div>
-
-          {/* Good */}
-          <div className="border border-slate-200 bg-white rounded-xl shadow-sm p-4">
-            <h4 className="text-center font-bold text-indigo-600 mb-2">Good Model (Bowed)</h4>
-            <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={goodModelData}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="fpr" type="number" domain={[0,1]} hide />
-                  <YAxis type="number" domain={[0,1]} hide />
-                  <Line type="monotone" dataKey="tpr" stroke="#4f46e5" strokeWidth={3} dot={false} />
-                  <Line data={randomModelData} type="linear" dataKey="tpr" stroke="#94a3b8" strokeDasharray="3 3" dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <p className="text-center text-xs text-slate-500 mt-2">Pushes toward top-left. High TPR while maintaining acceptable FPR.</p>
-          </div>
-
-          {/* Perfect */}
-          <div className="border border-slate-200 bg-white rounded-xl shadow-sm p-4">
-            <h4 className="text-center font-bold text-emerald-600 mb-2">Perfect Classifier</h4>
-            <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={perfectModelData}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="fpr" type="number" domain={[0,1]} hide />
-                  <YAxis type="number" domain={[0,1]} hide />
-                  <Line type="stepBefore" dataKey="tpr" stroke="#10b981" strokeWidth={3} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-            <p className="text-center text-xs text-slate-500 mt-2">Snaps perfectly to the top-left corner. 100% TPR, 0% FPR.</p>
-          </div>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">One simple ROC picture</h3>
+        <div className="bg-white border border-slate-200 rounded-xl p-4 mb-6 max-w-2xl">
+          <svg viewBox="0 0 520 360" className="w-full h-auto" role="img" aria-label="Simple ROC curve showing random diagonal, a useful model curve, and ideal top-left point">
+            <line x1="70" y1="300" x2="470" y2="300" stroke="#475569" strokeWidth="2" />
+            <line x1="70" y1="300" x2="70" y2="40" stroke="#475569" strokeWidth="2" />
+            <line x1="70" y1="300" x2="470" y2="40" stroke="#94a3b8" strokeWidth="2" strokeDasharray="7 7" />
+            <polyline
+              points="70,300 85,180 110,115 150,80 235,62 350,50 470,40"
+              fill="none"
+              stroke="#4f46e5"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle cx="70" cy="40" r="7" fill="#059669" />
+            <text x="78" y="34" fontSize="14" fill="#047857">Ideal: FPR 0, TPR 1</text>
+            <text x="250" y="187" fontSize="13" fill="#64748b">Random-ranking diagonal</text>
+            <text x="175" y="83" fontSize="14" fontWeight="700" fill="#4338ca">Example ROC curve</text>
+            <text x="250" y="338" textAnchor="middle" fontSize="14" fill="#334155">False Positive Rate (FPR)</text>
+            <text x="22" y="175" textAnchor="middle" fontSize="14" fill="#334155" transform="rotate(-90 22 175)">True Positive Rate (TPR)</text>
+            <text x="55" y="305" textAnchor="end" fontSize="12" fill="#64748b">0</text>
+            <text x="55" y="45" textAnchor="end" fontSize="12" fill="#64748b">1</text>
+            <text x="470" y="320" textAnchor="middle" fontSize="12" fill="#64748b">1</text>
+          </svg>
         </div>
 
+        <p className="text-lg leading-relaxed text-slate-800">
+          Curves that reach toward the top-left generally indicate stronger ranking performance: high TPR can be achieved while keeping FPR relatively low. The diagonal represents random ranking in the usual binary ROC interpretation.
+        </p>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="what-is-auc">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <BarChart2 className="mr-3 text-indigo-600" /> What Is AUC (Area Under the Curve)?
+          <BarChart2 className="mr-3 text-indigo-600" /> What Is AUC?
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          AUC stands for <strong>Area Under the Curve</strong>. It mathematically computes the 2-dimensional area underneath the ROC curve, summarizing the classifier performance into a single scalar value.
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          AUC means <strong>Area Under the ROC Curve</strong>. It compresses the ROC curve into one number that summarizes how well the model's scores rank positive examples above negative examples across thresholds.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-          <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm overflow-x-auto w-full font-mono">
-            <table className="w-full text-slate-800">
-              <thead className="bg-slate-50 border-b">
-                <tr>
-                  <th className="p-3 text-left">AUC Value</th>
-                  <th className="p-3 text-left">Meaning</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-sm">
-                <tr><td className="p-3 font-bold text-emerald-600">1.0</td><td className="p-3">Perfect classifier</td></tr>
-                <tr><td className="p-3 font-bold text-emerald-500">0.9 – 0.99</td><td className="p-3">Excellent</td></tr>
-                <tr><td className="p-3 font-bold text-sky-500">0.8 – 0.89</td><td className="p-3">Very Good</td></tr>
-                <tr><td className="p-3 font-bold text-indigo-400">0.7 – 0.79</td><td className="p-3">Good</td></tr>
-                <tr><td className="p-3 font-bold text-slate-500">0.5</td><td className="p-3">Random guessing</td></tr>
-                <tr><td className="p-3 font-bold text-rose-500">&lt; 0.5</td><td className="p-3">Worse than random (Inverted)</td></tr>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-3">Useful reference points</p>
+            <table className="w-full text-sm">
+              <tbody className="divide-y divide-slate-100">
+                <tr><td className="py-3 font-mono font-bold">AUC = 1.0</td><td className="py-3">Perfect ranking on the evaluated data</td></tr>
+                <tr><td className="py-3 font-mono font-bold">AUC = 0.5</td><td className="py-3">Random-ranking baseline</td></tr>
+                <tr><td className="py-3 font-mono font-bold">AUC &lt; 0.5</td><td className="py-3">Ranking is worse than that baseline; investigate labels/scores/model</td></tr>
               </tbody>
             </table>
           </div>
-
-          <div className="flex flex-col justify-center">
-            <div className="h-[250px] w-full bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={goodModelData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                    <XAxis dataKey="fpr" type="number" domain={[0,1]} />
-                    <YAxis type="number" domain={[0,1]} />
-                    <Area type="monotone" dataKey="tpr" stroke="#4f46e5" fill="#e0e7ff" strokeWidth={3} />
-                  </AreaChart>
-                </ResponsiveContainer>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center flex-col text-indigo-900 pointer-events-none">
-                  <span className="font-bold text-lg opacity-70">AUC AREA</span>
-                  <span className="text-3xl font-extrabold opacity-80">0.92</span>
-                </div>
-            </div>
+          <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+            <p className="font-bold text-indigo-900 mb-3">Do not memorize universal labels</p>
+            <p className="text-indigo-900 leading-relaxed">
+              Rules such as “0.8 is always good” or “0.9 is always excellent” are not universal. Whether an AUC is useful depends on the task, data quality, costs of errors, baseline models, and deployment requirements.
+            </p>
           </div>
         </div>
 
         <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-emerald-900 mb-2">The Real Statistical Interpretation of AUC</p>
-          <p className="text-emerald-800 text-lg italic leading-relaxed">
-            If your AUC is 0.92, this strictly means: There is a <strong>92% probability</strong> that your model will rank a randomly chosen positive sample higher than a randomly chosen negative sample!
+          <p className="font-bold text-emerald-900 mb-2">Ranking interpretation</p>
+          <p className="text-emerald-900 leading-relaxed">
+            An AUC of 0.92 can be interpreted as the model having about a 92% chance of assigning a higher score to a randomly selected positive example than to a randomly selected negative example, under the usual ranking interpretation.
           </p>
         </div>
-
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="step-by-step">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Activity className="mr-3 text-indigo-600" /> Step-by-Step ROC Curve Construction
+          <Activity className="mr-3 text-indigo-600" /> How ROC Points Are Created
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Understanding the manual construction of ROC coordinates is vital to proving it evaluates ALL thresholds. Let us observe six items:
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Start with the score table from earlier. At each threshold, convert scores into positive/negative predictions, count TP/FP/FN/TN, and calculate TPR and FPR.
         </p>
 
-        <div className="bg-white p-4 border border-slate-200 rounded-xl shadow-sm mb-6 w-fit font-mono">
-          <table className="min-w-full divide-y divide-slate-200 text-left">
-            <thead className="bg-slate-50">
-              <tr>
-                <th className="px-6 py-2 text-sm font-bold">Sample</th>
-                <th className="px-6 py-2 text-sm font-bold">Actual</th>
-                <th className="px-6 py-2 text-sm font-bold">Probability</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
-              <tr><td className="px-6 py-2">A</td><td className="px-6 py-2">Positive</td><td className="px-6 py-2 text-rose-600 font-bold">0.95</td></tr>
-              <tr><td className="px-6 py-2">B</td><td className="px-6 py-2">Positive</td><td className="px-6 py-2 text-rose-600 font-bold">0.85</td></tr>
-              <tr><td className="px-6 py-2">C</td><td className="px-6 py-2">Negative</td><td className="px-6 py-2 text-emerald-600">0.70</td></tr>
-              <tr><td className="px-6 py-2">D</td><td className="px-6 py-2">Positive</td><td className="px-6 py-2 text-rose-600 font-bold">0.60</td></tr>
-              <tr><td className="px-6 py-2">E</td><td className="px-6 py-2">Negative</td><td className="px-6 py-2 text-emerald-600">0.40</td></tr>
-              <tr><td className="px-6 py-2">F</td><td className="px-6 py-2">Negative</td><td className="px-6 py-2 text-emerald-600">0.20</td></tr>
-            </tbody>
-          </table>
+        <div className="bg-slate-50 p-5 rounded-xl border border-slate-200 mb-8">
+          <p className="font-bold text-slate-900 mb-4">At threshold 0.85</p>
+          <div className="space-y-2 font-mono text-sm text-slate-700">
+            <p>TP = 2, FP = 0, FN = 1, TN = 3</p>
+            <p>TPR = 2 / (2 + 1) = 0.667</p>
+            <p>FPR = 0 / (0 + 3) = 0.000</p>
+            <p className="font-bold text-indigo-700 pt-2">ROC point = (0.000, 0.667)</p>
+          </div>
         </div>
 
-        <h3 className="text-xl font-bold text-slate-800 mb-4 mt-6">Walkthrough Simulation at <code>Threshold = 0.85</code></h3>
-        <p className="text-md text-slate-800 mb-4">
-          At threshold 0.85, only Samples <strong>A</strong> and <strong>B</strong> trigger as Positive predictions. Everything else defaults back to Negative.
+        <p className="text-lg leading-relaxed text-slate-800">
+          Repeating this process across score thresholds creates the sequence of ROC points. AUC summarizes the resulting curve.
         </p>
-
-        <div className="bg-slate-50 p-6 rounded-lg shadow-sm border border-slate-200 mb-8 space-y-3 font-mono text-sm">
-          <p><strong>1. Confusion Metrics:</strong> TP = 2 (A & B), FP = 0 (No false alarms), FN = 1 (Missed D), TN = 3 (C, E, F as negative)</p>
-          <p><strong>2. Calculate TPR:</strong> TPR = TP / (TP + FN) = 2 / (2 + 1) = <strong className="text-indigo-600 shadow-sm bg-white px-2 py-1 rounded border">0.667</strong></p>
-          <p><strong>3. Calculate FPR:</strong> FPR = FP / (FP + TN) = 0 / (0 + 3) = <strong className="text-indigo-600 shadow-sm bg-white px-2 py-1 rounded border">0.0</strong></p>
-          <p className="text-indigo-900 font-bold pt-4 border-t border-slate-300">New ROC Coordinate Generated: (FPR = 0.0, TPR = 0.667)</p>
-          <p className="text-slate-600 italic">This exact process loops for every distinct probability threshold (0.95, 0.85, 0.70...) generating the dots that form the curve.</p>
-        </div>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="why-useful">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Target className="mr-3 text-indigo-600" /> Comparing Models using ROC
+          <Target className="mr-3 text-indigo-600" /> Comparing Models with ROC-AUC
         </h2>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          ROC curves become incredibly powerful when actively choosing between multiple distinct models. Imagine training a Random Forest (Model A) versus a Support Vector Machine (Model B) that both happen to output roughly 85% basic accuracy.
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          ROC-AUC is useful when you care about how well models rank positives above negatives across many possible thresholds. It can reveal differences that a single fixed-threshold accuracy score hides.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 items-center">
-           <div className="h-[300px] w-full bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
-             <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={compModelData} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                  <XAxis dataKey="fpr" type="number" domain={[0,1]} label={{ value: 'FPR (False Alarms)', position: 'insideBottom', offset: -10 }} />
-                  <YAxis type="number" domain={[0,1]} label={{ value: 'TPR (Recall)', angle: -90, position: 'insideLeft', offset: 10 }} />
-                  <Tooltip />
-                  <Legend verticalAlign="top" height={36}/>
-                  <Line type="monotone" name="Model A (Dominant)" dataKey="ModelA" stroke="#10b981" strokeWidth={3} dot={false} />
-                  <Line type="monotone" name="Model B (Inferior)" dataKey="ModelB" stroke="#f43f5e" strokeWidth={3} dot={false} />
-                  <Line data={randomModelData} name="Random" type="linear" dataKey="tpr" stroke="#94a3b8" strokeDasharray="3 3" dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-           </div>
-           
-           <div>
-             <p className="text-lg font-bold text-emerald-800 border-b pb-2 mb-3 border-emerald-200">Visual Dominance is Absolute</p>
-             <p className="text-md leading-relaxed text-slate-800 mb-4">
-               Because Model A's green line is stretched closer to the top-left corner, its AUC area is distinctly larger. The graph objectively proves that Model A mathematically separates classes better over a much wider array of operating thresholds than Model B, despite identical accuracy metrics. 
-             </p>
-           </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white border border-slate-200 rounded-xl p-4">
+            <p className="font-bold text-slate-900 mb-2">Model A</p>
+            <p className="text-sm text-slate-700">AUC = 0.91</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-xl p-4">
+            <p className="font-bold text-slate-900 mb-2">Model B</p>
+            <p className="text-sm text-slate-700">AUC = 0.86</p>
+          </div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <p className="font-bold text-amber-900 mb-2">But ask one more question</p>
+            <p className="text-sm text-amber-900">Which model is better in the FPR/TPR region your application actually uses?</p>
+          </div>
         </div>
 
+        <div className="bg-sky-50 border border-sky-200 rounded-xl p-5 mb-6">
+          <p className="font-bold text-sky-900 mb-2">AUC is not the entire decision</p>
+          <p className="text-sky-900 leading-relaxed">
+            Two ROC curves can cross. A model with a larger overall AUC may still be worse in a narrow operating region that matters to your application. Always inspect the curve and connect evaluation to real false-positive and false-negative costs.
+          </p>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="threshold-selection">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <CheckCircle2 className="mr-3 text-indigo-600" /> ROC-AUC Does Not Choose Your Final Threshold
+        </h2>
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          ROC-AUC evaluates ranking across thresholds. Deployment still needs a particular decision threshold, and that threshold should reflect the real problem.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <p className="font-bold text-slate-900">Cost of False Positives</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <p className="font-bold text-slate-900">Cost of False Negatives</p>
+          </div>
+          <div className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <p className="font-bold text-slate-900">Operational Capacity</p>
+          </div>
+        </div>
+
+        <p className="text-slate-700 leading-relaxed">
+          For example, if investigators can review only a limited number of alerts each day, a threshold that produces an impractical number of false alarms may be unusable even when the overall ROC-AUC is strong.
+        </p>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
@@ -366,69 +298,77 @@ export function RocAucContent() {
         </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          We use <code>roc_curve</code> and <code>roc_auc_score</code> from <code>sklearn.metrics</code> to easily extract thresholds. Make sure to feed in <strong>probabilities</strong> (using <code>predict_proba</code>), NOT hard classes!
+          This example uses a leakage-safe Pipeline, an explicit stratified train/test split, continuous positive-class probabilities, and Scikit-learn's ROC utilities.
         </p>
 
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-10">
+        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
           <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
             <h4 className="font-bold text-slate-800">ROC Curve & AUC Score</h4>
             <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">Python</span>
           </div>
           <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 text-sm font-mono overflow-x-auto">
-            <pre className="!m-0">
-<code className="language-python">{`import matplotlib.pyplot as plt
+            <pre className="!m-0"><code className="language-python">{`import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import roc_curve, roc_auc_score
+from sklearn.metrics import roc_curve, roc_auc_score, RocCurveDisplay
 
-# 1. Load data
+# 1. Load educational binary-classification data
 X, y = load_breast_cancer(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# 2. Train Model
-model = LogisticRegression(max_iter=5000)
+# 2. Keep a final test set
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.30,
+    random_state=42,
+    stratify=y
+)
+
+# 3. Scale using training data inside the Pipeline, then fit
+model = make_pipeline(
+    StandardScaler(),
+    LogisticRegression(max_iter=2000)
+)
 model.fit(X_train, y_train)
 
-# 3. CRITICAL: Predict Probabilities (not hard predictions)
-y_probs = model.predict_proba(X_test)[:, 1] 
+# 4. Use continuous scores for the positive class
+#    (decision_function scores can also be used by many estimators)
+y_score = model.predict_proba(X_test)[:, 1]
 
-# 4. Compute ROC Curve metrics
-fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+# 5. Compute ROC points and ROC-AUC
+fpr, tpr, thresholds = roc_curve(y_test, y_score)
+auc_score = roc_auc_score(y_test, y_score)
 
-# 5. Compute the scalar AUC area
-auc_score = roc_auc_score(y_test, y_probs)
 print(f"AUC Score: {auc_score:.3f}")
+print(f"ROC points: {len(fpr)}")
 
-# 6. Plotting
-plt.plot(fpr, tpr, label=f'Model ROC (AUC = {auc_score:.3f})', color='green')
-plt.plot([0,1], [0,1], linestyle='--', color='gray', label='Random Guessing')
-plt.xlabel('False Positive Rate (FPR)')
-plt.ylabel('True Positive Rate (TPR)')
-plt.title('Receiver Operating Characteristic')
+# 6. Plot from the same predictions
+RocCurveDisplay.from_predictions(y_test, y_score)
+plt.plot([0, 1], [0, 1], "--", label="Random ranking")
 plt.legend()
-plt.show()`}</code>
-            </pre>
+plt.show()`}</code></pre>
           </div>
           <div className="bg-[#1e1e1e] p-4 font-mono text-sm border-t border-slate-700">
-            <p className="text-emerald-400 mb-4">Output:<br/>AUC Score: 0.993</p>
-            
-            <div className="bg-white p-4 rounded shadow-inner max-w-[500px] my-4 mx-auto">
-              <p className="text-center font-bold text-slate-800 text-sm mb-2 font-sans">Receiver Operating Characteristic</p>
-              <div className="h-[300px] w-full font-sans">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={goodModelData} margin={{ top: 10, right: 30, left: 10, bottom: 20 }}>
-                    <CartesianGrid stroke="#e2e8f0" strokeDasharray="5 5" />
-                    <XAxis dataKey="fpr" type="number" domain={[0,1]} label={{ value: 'False Positive Rate (FPR)', position: 'insideBottom', offset: -10, fill: '#475569', fontSize: 12 }} tick={{fill: '#475569', fontSize: 12}} />
-                    <YAxis type="number" domain={[0,1]} label={{ value: 'True Positive Rate (TPR)', angle: -90, position: 'insideLeft', offset: 15, fill: '#475569', fontSize: 12 }} tick={{fill: '#475569', fontSize: 12}} />
-                    <Line type="monotone" name="Model ROC (AUC = 0.993)" dataKey="tpr" stroke="#16a34a" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line data={randomModelData} name="Random Guessing" type="linear" dataKey="tpr" stroke="#94a3b8" strokeDasharray="5 5" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Legend wrapperStyle={{ fontSize: '12px', color: '#475569', paddingTop: '20px' }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
+            <p className="text-emerald-400">Expected output for this fixed split:</p>
+            <pre className="text-emerald-300 mt-2">{`AUC Score: 0.998
+ROC points: 6`}</pre>
           </div>
+        </div>
+
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-4">
+          <p className="font-bold text-slate-900 mb-2">Why only 6 plotted ROC points?</p>
+          <p className="text-slate-700 leading-relaxed">
+            Scikit-learn's <code>roc_curve</code> uses <code>drop_intermediate=True</code> by default, so thresholds whose ROC points are collinear with neighboring points can be omitted. This reduces plotting points without changing the ROC-AUC or the visual shape of the curve.
+          </p>
+        </div>
+
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+          <p className="font-bold text-amber-900 mb-2">Educational dataset note</p>
+          <p className="text-amber-900 leading-relaxed">
+            A high score on this built-in dataset is only a demonstration of the metric. It does not imply that a model is ready for medical or other high-stakes deployment.
+          </p>
         </div>
       </div>
 
@@ -436,61 +376,116 @@ plt.show()`}</code>
 
       <div id="roc-vs-pr">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <ShieldAlert className="mr-3 text-indigo-600" /> ROC Curve vs. Precision-Recall Curve
+          <ShieldAlert className="mr-3 text-indigo-600" /> ROC Curve vs Precision-Recall Curve
         </h2>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          The main disadvantage of ROC lies in severe edge cases of imbalance. When the negative class dramatically outnumbers the positive class (e.g. 1 million normal transactions to just 10 frauds), a massive change in the number of False Positives might only cause a micro-fractional shift in the FPR (since the denominator <code>FP + TN</code> is gigantic).
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          ROC and Precision-Recall curves answer related but different questions. When the positive class is very rare, a Precision-Recall curve can often be especially informative because precision directly reflects how many predicted positives are actually positive.
         </p>
-        
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-10 overflow-x-auto w-full md:w-3/4 font-mono">
-          <table className="min-w-full text-slate-800">
-            <thead>
-              <tr className="bg-slate-50 border-b">
-                <th className="p-3 text-left">Feature</th>
-                <th className="p-3 text-left border-l bg-indigo-50">ROC Curve</th>
-                <th className="p-3 text-left border-l bg-emerald-50">Precision-Recall Curve</th>
+
+        <div className="overflow-x-auto mb-8">
+          <table className="min-w-full bg-white border border-slate-200 rounded-xl text-sm">
+            <thead className="bg-slate-50">
+              <tr>
+                <th className="p-3 text-left">Curve</th>
+                <th className="p-3 text-left">Axes</th>
+                <th className="p-3 text-left">Useful focus</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 text-sm">
+            <tbody className="divide-y divide-slate-100">
               <tr>
-                <td className="p-3 font-bold">Metrics Used</td>
-                <td className="p-3 border-l font-semibold text-indigo-900 border-r">TPR vs FPR</td>
-                <td className="p-3 font-semibold text-emerald-900">Precision vs Recall</td>
+                <td className="p-3 font-bold">ROC</td>
+                <td className="p-3">TPR vs FPR</td>
+                <td className="p-3">Ranking trade-off across positives and negatives</td>
               </tr>
               <tr>
-                <td className="p-3 font-bold">Ideal Environment</td>
-                <td className="p-3 border-l border-r text-indigo-900">Balanced datasets</td>
-                <td className="p-3 text-emerald-900">Highly imbalanced, rare-event detection</td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold">Core Focus</td>
-                <td className="p-3 border-l border-r text-indigo-900">Evaluates general class separability</td>
-                <td className="p-3 text-emerald-900">Focuses intensely on positive class accuracy</td>
+                <td className="p-3 font-bold">Precision-Recall</td>
+                <td className="p-3">Precision vs Recall</td>
+                <td className="p-3">Positive-class retrieval quality, often informative for rare positives</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <p className="font-bold text-slate-900 mb-2">Do not choose only from a slogan</p>
+          <p className="text-slate-700">
+            “Balanced data = ROC” and “imbalanced data = PR” are useful beginner shortcuts but not universal rules. Look at the decision problem, class prevalence, operating region, and costs of mistakes.
+          </p>
+        </div>
       </div>
 
-      {/* FINAL SUMMARY */}
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        The ROC Curve and AUC Score represent the pinnacle standard for evaluating binary classification models in the field. Rather than statically committing to a 0.5 threshold like accuracy does, the ROC Curve simulates your model sliding dynamically across all valid threshold limits testing how violently the structure fractures.
-      </p>
-      
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Finding a model with an AUC stretching near 1.0 (approaching the top-left edge) mathematically guarantees your algorithm exhibits profound internal separation logic between the actual classes. It confirms the structure is solid, and you are free to slide the final production threshold around to dictate specific business needs without fear.
-      </p>
+      <hr className="border-slate-200 mt-8 mb-8" />
 
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-        <p className="text-slate-800 italic text-lg leading-relaxed">
-          Never plot ROC-AUC using hard logic predictions (0, 1). To produce the smooth bowed visual curve that actually evaluates the separation capability, you must structurally feed raw, fractional <strong>probabilities</strong> (e.g. via <code>predict_proba</code>) so the graphing architecture can slice those probability waves across multiple distinct threshold points.
+      <div id="multiclass">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
+          <Info className="mr-3 text-indigo-600" /> What About Multiclass Problems?
+        </h2>
+
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          The basic ROC curve is easiest to understand for binary classification. ROC-AUC can also be extended to multiclass and multilabel problems using strategies such as one-vs-rest or one-vs-one and then combining class-level scores with averaging choices.
+        </p>
+
+        <p className="text-slate-700">
+          For a first lesson, master the binary case first. The key idea remains the same: evaluate ranking scores rather than relying only on one hard threshold.
         </p>
       </div>
 
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="common-mistakes">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Common Mistakes</h2>
+        <div className="space-y-3">
+          {[
+            'Using only hard 0/1 predictions and expecting a meaningful multi-threshold ROC curve.',
+            'Treating AUC = 0.9 as universally “excellent” without considering the application.',
+            'Assuming a higher overall AUC means a model is better at every possible operating threshold.',
+            'Choosing a deployment threshold from ROC-AUC alone without considering FP/FN costs.',
+            'Ignoring Precision-Recall analysis when rare positive cases are especially important.',
+            'Calculating ROC-AUC on training data and reporting it as evidence of unseen-data performance.',
+          ].map((item) => (
+            <div key={item} className="bg-rose-50 border border-rose-100 rounded-lg p-4 text-rose-900">
+              {item}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="recap">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Quick Recap</h2>
+        <div className="space-y-4 mb-8">
+          <details className="bg-white border border-slate-200 rounded-xl p-4">
+            <summary className="font-bold cursor-pointer">What does the ROC curve plot?</summary>
+            <p className="mt-3 text-slate-700">True Positive Rate against False Positive Rate across changing score thresholds.</p>
+          </details>
+          <details className="bg-white border border-slate-200 rounded-xl p-4">
+            <summary className="font-bold cursor-pointer">Does ROC-AUC tell us the best production threshold?</summary>
+            <p className="mt-3 text-slate-700">No. It summarizes ranking across thresholds; the final threshold depends on the application's trade-offs and constraints.</p>
+          </details>
+          <details className="bg-white border border-slate-200 rounded-xl p-4">
+            <summary className="font-bold cursor-pointer">Should ROC be computed from hard predictions?</summary>
+            <p className="mt-3 text-slate-700">Use continuous model scores whenever possible. Hard labels discard most threshold-ranking information.</p>
+          </details>
+        </div>
+
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-10">
+          <p className="font-bold text-indigo-900 mb-3">Continue learning</p>
+          <div className="flex flex-wrap gap-3 text-sm">
+            <a href="/learn/confusion-matrix" className="text-indigo-700 underline font-semibold">Confusion Matrix</a>
+            <a href="/learn/logistic-regression" className="text-indigo-700 underline font-semibold">Logistic Regression</a>
+            <a href="/learn/cross-validation" className="text-indigo-700 underline font-semibold">Cross-Validation</a>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
+        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight</p>
+        <p className="text-slate-800 italic text-lg leading-relaxed">
+          ROC-AUC is mainly about <strong>ranking quality across thresholds</strong>. Use continuous scores, inspect the actual curve, and choose the final decision threshold using the real cost of mistakes—not AUC alone.
+        </p>
+      </div>
     </>
   );
 }
