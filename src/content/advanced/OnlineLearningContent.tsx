@@ -20,22 +20,33 @@ export function OnlineLearningContent() {
         Online Learning
       </h1>
 
+      <div className="bg-gradient-to-br from-indigo-50 via-white to-emerald-50 border border-indigo-200 rounded-2xl p-6 md:p-8 mb-8 not-prose">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">What if your data never stops?</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">A fraud model cannot wait forever for the next full retraining cycle.</h2>
+        <p className="text-slate-700 leading-relaxed mb-3">
+          Imagine a bank receiving thousands of new transactions every minute. Customer behaviour changes, new fraud patterns appear, and fresh labelled examples keep arriving. Retraining the entire model from zero after every small change would be wasteful.
+        </p>
+        <p className="text-slate-800 leading-relaxed m-0">
+          <strong>Online learning</strong> gives us another option: keep the model's current knowledge and update it a little as new information arrives.
+        </p>
+      </div>
+
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        Most introductory Machine Learning examples assume that we collect a dataset, train a model, and then use that trained model for predictions. That is a perfectly valid approach and is often called <strong>batch learning</strong> or <strong>offline learning</strong>.
+        Most introductory Machine Learning examples use <strong>batch learning</strong>: collect a dataset, train a model, deploy it, and retrain later. That approach is often the simplest and safest choice.
       </p>
 
       <p className="text-lg leading-relaxed mb-8 text-slate-800">
-        But some systems receive new data continuously. In those situations, we may want the model to update incrementally rather than retraining from scratch every time new labelled examples arrive. That idea is called <strong>online learning</strong> or <strong>incremental learning</strong>.
+        <strong>Online learning</strong>, also called <strong>incremental learning</strong>, is different. The model can continue learning from new labelled examples or mini-batches without throwing away everything it has already learned.
       </p>
 
       <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mb-10 not-prose">
-        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-4">Understand First</p>
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-4">The core loop</p>
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
           {[
-            { label: 'Receive new labelled data', icon: <Database className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'New observation arrives', icon: <Database className="w-6 h-6 mx-auto mb-2" /> },
             { label: 'Predict with current model', icon: <Gauge className="w-6 h-6 mx-auto mb-2" /> },
-            { label: 'Update model incrementally', icon: <RefreshCw className="w-6 h-6 mx-auto mb-2" /> },
-            { label: 'Repeat as data arrives', icon: <Stream className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'Observe label and error', icon: <CheckCircle2 className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'Update, then repeat', icon: <RefreshCw className="w-6 h-6 mx-auto mb-2" /> },
           ].map((step, index) => (
             <React.Fragment key={step.label}>
               <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4 text-sm font-semibold text-slate-800">
@@ -58,6 +69,37 @@ export function OnlineLearningContent() {
             </p>
           </div>
         </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">The Big Idea: Do Not Start From Zero</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Suppose a model has already learned from the first <strong>1,000 observations</strong>. Now 100 new labelled observations arrive. A full batch retraining process may train again using all 1,100 observations. An incremental learner can instead start from the model it already has and update it using the new information.
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-10 not-prose">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Full retraining idea</p>
+          <div className="text-sm font-semibold text-slate-800 space-y-2">
+            <div className="bg-white border rounded-lg p-3">Old 1,000 + new 100 observations</div>
+            <div className="text-center text-slate-400">↓</div>
+            <div className="bg-white border rounded-lg p-3">Train a new model again</div>
+          </div>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+          <p className="text-xs font-bold uppercase tracking-wider text-emerald-700 mb-3">Incremental idea</p>
+          <div className="text-sm font-semibold text-emerald-900 space-y-2">
+            <div className="bg-white border border-emerald-200 rounded-lg p-3">Existing trained model</div>
+            <div className="text-center text-emerald-500">+ new 100 observations ↓</div>
+            <div className="bg-white border border-emerald-200 rounded-lg p-3">Updated model</div>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-blue-50 border-l-4 border-blue-400 rounded-r-xl p-5 mb-12">
+        <p className="text-blue-900 leading-relaxed m-0">
+          <strong>Mental model:</strong> online learning is usually about <em>old model state + new data → updated model state</em>. The algorithm remembers what it has already learned and adjusts from there.
+        </p>
       </div>
 
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Batch Learning vs Online Learning</h2>
@@ -132,7 +174,26 @@ export function OnlineLearningContent() {
         ))}
       </div>
 
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">A Tiny Update Example</h2>
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">A Tiny Numerical Example: Updating Without Recalculating Everything</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Before updating a Machine Learning model, look at the same idea using something familiar: a running mean. Suppose we have already seen the values <strong>10, 20, 30</strong>. Their mean is 20. Now a new value, <strong>40</strong>, arrives.
+      </p>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-6 mb-6 not-prose">
+        <p className="text-sm text-slate-600 mb-2">Old mean</p>
+        <p className="font-mono text-lg text-slate-900 mb-5">(10 + 20 + 30) / 3 = 20</p>
+        <p className="text-sm text-slate-600 mb-2">Incremental update</p>
+        <p className="font-mono text-lg text-indigo-800 mb-2">new mean = old mean + (new value - old mean) / new count</p>
+        <p className="font-mono text-lg text-slate-900 mb-2">= 20 + (40 - 20) / 4</p>
+        <p className="font-mono text-lg font-bold text-emerald-700 m-0">= 25</p>
+      </div>
+
+      <p className="text-lg leading-relaxed mb-10 text-slate-800">
+        We reached the same mean as <code>(10 + 20 + 30 + 40) / 4</code>, but the update rule only needed the previous state, the new value, and the count. Incremental Machine Learning algorithms use the same broad principle, although their state and update rules are more sophisticated.
+      </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">From Intuition to Model Updates</h2>
 
       <p className="text-lg leading-relaxed mb-5 text-slate-800">
         Many incremental linear models can be understood using a Stochastic Gradient Descent style update:
@@ -175,6 +236,51 @@ export function OnlineLearningContent() {
         <div className="bg-white border border-slate-200 rounded-xl p-5">
           <h3 className="font-bold text-indigo-800 mb-2">Periodic incremental updates</h3>
           <p className="text-sm text-slate-700 leading-relaxed">Update every few minutes, hours, or days without retraining from scratch. The right cadence depends on feedback delay and business needs.</p>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">See <code>partial_fit()</code> in the Simplest Possible Way</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Scikit-learn's <code>StandardScaler</code> can update its running mean and variance with <code>partial_fit()</code>. This gives us a clean bridge from the running-mean intuition to a real API.
+      </p>
+
+      <div className="bg-slate-900 rounded-xl overflow-hidden shadow-lg mb-5 not-prose">
+        <div className="px-4 py-2 bg-slate-800 text-slate-300 text-xs">partial_fit_scaler.py</div>
+        <pre className="p-5 text-sm text-slate-100 overflow-x-auto leading-relaxed"><code>{`from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+batch_1 = [[10], [20], [30]]
+scaler.partial_fit(batch_1)
+print(scaler.mean_)
+
+batch_2 = [[40], [50]]
+scaler.partial_fit(batch_2)
+print(scaler.mean_)`}</code></pre>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-10 not-prose">
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Output</p>
+          <pre className="text-sm text-slate-800 m-0"><code>{`[20.]
+[30.]`}</code></pre>
+        </div>
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+          <p className="font-bold text-emerald-900 mb-2">Why does the mean become 30?</p>
+          <p className="font-mono text-sm text-emerald-900 mb-2">(10 + 20 + 30 + 40 + 50) / 5 = 30</p>
+          <p className="text-sm text-emerald-900 m-0">The second call updated the scaler's existing statistics instead of forgetting the first batch.</p>
+        </div>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-12 not-prose">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+          <h3 className="font-bold text-rose-900 mb-2">Repeated <code>fit()</code></h3>
+          <p className="text-sm text-rose-800 m-0">Conceptually starts a new fitting procedure and generally replaces previously learned estimator state.</p>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+          <h3 className="font-bold text-green-900 mb-2"><code>partial_fit()</code></h3>
+          <p className="text-sm text-green-800 m-0">Continues incremental learning from the estimator's current state using the next sample or mini-batch.</p>
         </div>
       </div>
 
@@ -264,6 +370,33 @@ print("Prequential accuracy:", round(correct / seen, 3))`}</code></pre>
 Streamed samples: 1000
 First 3 batch accuracies: [0.8, 0.8, 0.82]
 Prequential accuracy: 0.811`}</code></pre>
+      </div>
+
+      <h3 className="text-xl font-bold text-slate-900 mb-3">Spot the Bug: Which Stream Evaluation Is Honest?</h3>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-8 not-prose">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+          <p className="text-xs font-bold uppercase tracking-wider text-rose-700 mb-3">Pipeline A — misleading</p>
+          <div className="space-y-2 text-sm font-semibold text-rose-900">
+            <div className="bg-white border border-rose-200 rounded-lg p-3">New batch arrives</div>
+            <div className="text-center">↓</div>
+            <div className="bg-white border border-rose-200 rounded-lg p-3">Train on that batch</div>
+            <div className="text-center">↓</div>
+            <div className="bg-white border border-rose-200 rounded-lg p-3">Predict and score the same batch</div>
+          </div>
+          <p className="text-sm text-rose-800 mt-3 mb-0">The model has already seen the answers before you measure it.</p>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+          <p className="text-xs font-bold uppercase tracking-wider text-green-700 mb-3">Pipeline B — preferred</p>
+          <div className="space-y-2 text-sm font-semibold text-green-900">
+            <div className="bg-white border border-green-200 rounded-lg p-3">New batch arrives</div>
+            <div className="text-center">↓</div>
+            <div className="bg-white border border-green-200 rounded-lg p-3">Predict and score first</div>
+            <div className="text-center">↓</div>
+            <div className="bg-white border border-green-200 rounded-lg p-3">Then update the model</div>
+          </div>
+          <p className="text-sm text-green-800 mt-3 mb-0">This tests the model state that actually existed before learning from the new batch.</p>
+        </div>
       </div>
 
       <h3 className="text-xl font-bold text-slate-900 mb-3">Why predict before learning?</h3>
@@ -497,6 +630,23 @@ Prequential accuracy: 0.811`}</code></pre>
             <p className="text-sm text-slate-700 m-0">{correction}</p>
           </div>
         ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Check Your Understanding</h2>
+
+      <div className="space-y-4 mb-12">
+        <details className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">1. A recommendation system makes predictions every second, but its model is retrained only once a week. Is this online learning?</summary>
+          <p className="mt-3 mb-0 text-slate-700"><strong>No.</strong> It is streaming or real-time inference, but the model itself is not being updated incrementally.</p>
+        </details>
+        <details className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">2. Why should a new labelled batch usually be scored before <code>partial_fit()</code>?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Because otherwise the model has already learned from that batch, making the score partly a training score rather than an honest test of the previous model state.</p>
+        </details>
+        <details className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">3. Does online learning have to update after every individual row?</summary>
+          <p className="mt-3 mb-0 text-slate-700"><strong>No.</strong> Updates can happen one sample at a time, in mini-batches, or periodically while still continuing from the current model state.</p>
+        </details>
       </div>
 
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Quick Recap</h2>
