@@ -140,15 +140,38 @@ export function MLInterviewContent() {
         Machine Learning Interview Questions & Answers
       </h1>
       <p className="text-lg text-slate-600 leading-relaxed">
-        80+ ML interview questions asked at Google, Meta, Amazon, Microsoft, and top product companies — organized by level and topic. Every answer includes follow-up questions that interviewers typically ask next.
+        80+ Machine Learning interview questions organized by difficulty and topic, with concise explanations, practical examples, code where useful, and follow-up questions that help you prepare for deeper discussion.
       </p>
+
+      <div className="not-prose bg-gradient-to-br from-indigo-50 via-white to-violet-50 border border-indigo-200 rounded-2xl p-6 md:p-8 my-7">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">How to use this page</p>
+        <h2 className="text-2xl font-extrabold text-slate-900 mb-4">Do not memorize answers — practice explaining them</h2>
+        <p className="text-slate-700 leading-relaxed mb-5">
+          A strong ML interview answer usually has four parts: <strong>definition → intuition → trade-off → practical example</strong>.
+          Try answering each question aloud before opening the solution.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
+          {[
+            ['1', 'Define', 'What is it?'],
+            ['2', 'Explain', 'Why does it work?'],
+            ['3', 'Compare', 'When would you use it?'],
+            ['4', 'Apply', 'Give an example'],
+          ].map(([n, title, caption]) => (
+            <div key={n} className="bg-white border border-indigo-100 rounded-xl p-4">
+              <div className="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 font-bold text-sm flex items-center justify-center mx-auto mb-2">{n}</div>
+              <div className="font-bold text-slate-900">{title}</div>
+              <div className="text-xs text-slate-600 mt-1">{caption}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* Level guide */}
       <div className="not-prose flex flex-wrap gap-2 my-5">
         {[
-          { label: 'Fresher',      color: 'bg-emerald-100 text-emerald-800 border-emerald-200', desc: 'Asked in every round' },
+          { label: 'Fresher',      color: 'bg-emerald-100 text-emerald-800 border-emerald-200', desc: 'Common foundation questions' },
           { label: 'Intermediate', color: 'bg-amber-100 text-amber-800 border-amber-200',       desc: 'ML Engineer / Data Scientist roles' },
-          { label: 'Advanced',     color: 'bg-rose-100 text-rose-800 border-rose-200',           desc: 'Senior / FAANG-level' },
+          { label: 'Advanced',     color: 'bg-rose-100 text-rose-800 border-rose-200',           desc: 'Senior / deeper discussion' },
         ].map(l => (
           <div key={l.label} className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-semibold ${l.color}`}>
             {l.label} — <span className="font-normal opacity-80">{l.desc}</span>
@@ -1508,6 +1531,56 @@ Output: torch.Size([2, 10, 512])`}
         </div>
       </div>
 
+      <SectionHeading
+        title="Interview Answer Red Flags"
+        sub="Even technically correct answers can become weak if they are communicated poorly."
+      />
+      <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
+        {[
+          ['Only giving a definition', 'Add intuition, a trade-off, or a practical example so the interviewer can see that you understand the concept.'],
+          ['Using “always” and “never” too freely', 'Most ML choices depend on data, assumptions, metrics, latency, cost, interpretability, and business constraints.'],
+          ['Jumping to deep learning immediately', 'Start with the simplest suitable baseline and explain why additional complexity is justified.'],
+          ['Ignoring data leakage', 'Mention train/validation/test boundaries, preprocessing order, and time-aware splitting when relevant.'],
+          ['Quoting accuracy without context', 'Choose metrics that match class balance and the business cost of false positives and false negatives.'],
+          ['Reciting code without reasoning', 'Explain what each important step does and what could go wrong in production.'],
+        ].map(([title, body]) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="font-bold text-slate-900 mb-2">{title}</p>
+            <p className="text-sm text-slate-700 m-0 leading-relaxed">{body}</p>
+          </div>
+        ))}
+      </div>
+
+      <SectionHeading
+        title="Final Self-Check"
+        sub="If you can answer these without opening the explanations, you are building interview-ready understanding."
+      />
+      <div className="space-y-4 mb-12">
+        <details className="not-prose bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Can you explain bias vs variance using a real example?</summary>
+          <p className="mt-3 mb-0 text-slate-700">A strong answer should connect underfitting with high bias, overfitting with high variance, and explain how model complexity, regularization, more data, and validation affect the trade-off.</p>
+        </details>
+        <details className="not-prose bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Can you choose an evaluation metric for an imbalanced fraud problem?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Discuss precision, recall, PR-AUC, threshold choice, and the relative business cost of missed fraud versus false alarms instead of relying only on accuracy.</p>
+        </details>
+        <details className="not-prose bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Can you explain what you would do when a production model degrades?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Check data quality and pipeline changes, feature drift, label/target drift, metric changes, segment performance, leakage, serving differences, and whether retraining or rollback is appropriate.</p>
+        </details>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Continue Learning</h2>
+      <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
+        <Link to="/learn/deep-learning-intro" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous</p>
+          <p className="font-bold text-slate-900 m-0">Deep Learning Introduction</p>
+        </Link>
+        <Link to="/" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Curriculum complete</p>
+          <p className="font-bold text-slate-900 m-0">Return to LearnMLAcademy</p>
+        </Link>
+      </div>
     </div>
   );
 }
