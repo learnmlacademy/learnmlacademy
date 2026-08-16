@@ -1,34 +1,77 @@
 import React from 'react';
-import { Target, Layers, PlayCircle, Eye, AlertTriangle, Code, Columns, Share2 } from 'lucide-react';
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip as RechartsTooltip, Legend } from 'recharts';
+import { AlertTriangle, Columns, Layers } from 'lucide-react';
+
+const FoldRow = ({ label, validation }: { label: string; validation: number }) => (
+  <div className="grid grid-cols-[88px_repeat(5,minmax(44px,1fr))] gap-2 items-center text-sm">
+    <div className="font-bold text-slate-700">{label}</div>
+    {[1, 2, 3, 4, 5].map((fold) => (
+      <div
+        key={fold}
+        className={`rounded-md border px-2 py-3 text-center font-mono font-bold ${
+          fold === validation
+            ? 'bg-amber-100 border-amber-300 text-amber-900'
+            : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+        }`}
+      >
+        {fold === validation ? `V${fold}` : `T${fold}`}
+      </div>
+    ))}
+  </div>
+);
 
 export function CrossValidationContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cross Validation</h1>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Cross Validation evaluates how well a model performs on unseen data. It helps determine whether a model has truly learned meaningful patterns or is simply memorizing the training dataset.
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cross-Validation</h1>
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Cross-validation evaluates a model on several different held-out parts of the available training data. Instead of trusting one lucky or unlucky split, we rotate which observations are used for validation and summarize the results.
         </p>
 
         <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-indigo-900 text-lg mb-2">Main Objective:</p>
-          <p className="text-slate-800 italic leading-relaxed">
-            Estimate how well a Machine Learning model will generalize to new unseen data.
+          <p className="font-bold text-indigo-900 text-lg mb-2">Main idea</p>
+          <p className="text-slate-800 leading-relaxed">
+            <strong>Split into folds → train on most folds → validate on one fold → rotate → average the scores.</strong>
           </p>
         </div>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Cross Validation is primarily used to evaluate model performance, detect overfitting, compare multiple models, tune hyperparameters, and improve model reliability. Without proper validation techniques, Machine Learning models may produce misleadingly high accuracy during training but fail badly in real-world situations.
-        </p>
+        <h2 className="text-3xl font-bold text-indigo-800 mb-5">Cross-Validation in Simple Words</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-7">
+          {[
+            ['1', 'Split', 'Divide the development data into several folds.'],
+            ['2', 'Train', 'Train the model using all but one fold.'],
+            ['3', 'Validate', 'Score it on the fold that was left out.'],
+            ['4', 'Rotate', 'Repeat so every fold gets a turn.'],
+          ].map(([num, title, text]) => (
+            <div key={num} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+              <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-800 font-extrabold flex items-center justify-center mb-3">{num}</div>
+              <p className="font-bold text-slate-900 mb-1">{title}</p>
+              <p className="text-sm text-slate-700 leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-10">Why Cross Validation Is Necessary</h3>
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-slate-900 mb-3">Tiny 5-fold picture</p>
+          <div className="space-y-2 overflow-x-auto min-w-[620px]">
+            <FoldRow label="Round 1" validation={1} />
+            <FoldRow label="Round 2" validation={2} />
+            <FoldRow label="Round 3" validation={3} />
+            <FoldRow label="Round 4" validation={4} />
+            <FoldRow label="Round 5" validation={5} />
+          </div>
+          <p className="text-sm text-slate-600 mt-4">
+            <strong>T</strong> = training fold in that round. <strong>V</strong> = validation fold. Each sample is used for validation once in ordinary K-Fold.
+          </p>
+        </div>
+
+        <h2 className="text-3xl font-bold text-indigo-800 mb-4">Why Do We Need It?</h2>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Suppose a student memorizes answers to practice questions instead of understanding concepts. During practice, the student performs extremely well. But in the actual exam with unseen questions, performance becomes poor.
+          Imagine judging a student's ability using only one short practice test. A very easy or unusually difficult test can give a misleading impression. Several different tests provide a broader picture. A single train/test split has the same weakness: the measured score can depend on which rows happened to land in the hold-out set.
         </p>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          This is similar to what happens in Machine Learning. A model may memorize training data rather than learning actual relationships. This problem is called <span className="font-bold text-rose-600">Overfitting</span>. Cross Validation helps identify whether the model truly generalizes to unseen data.
+          Cross-validation does <strong>not automatically prevent overfitting</strong>. It gives repeated evidence about generalization and is useful for model comparison and hyperparameter selection. A model can still be over-tuned to repeated cross-validation decisions, which is why an untouched final test set can remain valuable.
         </p>
       </div>
 
@@ -36,316 +79,238 @@ export function CrossValidationContent() {
 
       <div id="the-problem">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <AlertTriangle className="mr-3 text-indigo-600" /> The Problem with Simple Train/Test Split
+          <AlertTriangle className="mr-3 text-indigo-600" /> Why One Split Can Be Misleading
         </h2>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          In Train/Test Split, one portion is used for training and one portion is used for testing (e.g., 80% Training, 20% Testing). 
-        </p>
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          The problem is: <strong>Performance depends heavily on the chosen split.</strong> Different random splits may produce different accuracy values.
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Suppose three reasonable train/validation splits of the same dataset produce these illustrative accuracy values:
         </p>
 
-        <div className="bg-white p-6 border border-slate-200 rounded-xl shadow-sm mb-8 w-fit">
+        <div className="bg-white p-5 border border-slate-200 rounded-xl shadow-sm mb-6 max-w-xl overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-200 text-left">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Split</th>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Accuracy</th>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">Split</th>
+                <th className="px-5 py-3 text-sm font-bold text-slate-700">Accuracy</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white font-mono text-sm">
-              <tr><td className="px-6 py-4 font-bold">Split 1</td><td className="px-6 py-4 text-emerald-600">92%</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold">Split 2</td><td className="px-6 py-4 text-rose-600">84%</td></tr>
-              <tr><td className="px-6 py-4 font-bold">Split 3</td><td className="px-6 py-4 text-blue-600">88%</td></tr>
+            <tbody className="divide-y divide-slate-200 font-mono text-sm">
+              <tr><td className="px-5 py-3 font-bold">Split 1</td><td className="px-5 py-3">92%</td></tr>
+              <tr><td className="px-5 py-3 font-bold">Split 2</td><td className="px-5 py-3">84%</td></tr>
+              <tr><td className="px-5 py-3 font-bold">Split 3</td><td className="px-5 py-3">88%</td></tr>
             </tbody>
           </table>
         </div>
-        
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          This inconsistency creates unreliable evaluation. Cross Validation solves this problem by evaluating the model multiple times on different subsets of data.
+
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Cross-validation reduces our dependence on one particular partition by evaluating several partitions. It does not remove all uncertainty, but it lets us see both the <strong>average score</strong> and how much the score changes across folds.
         </p>
-        
-        <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-slate-900 text-lg mb-2">Core Idea Behind Cross Validation</p>
-          <p className="text-slate-800 leading-relaxed">
-            Instead of using only one train/test split, the dataset is repeatedly divided into multiple training and testing sets. The model is trained and evaluated multiple times. Final performance is computed using the average of all evaluation scores, producing a much more reliable estimate.
+
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-blue-950 mb-3">Worked average</p>
+          <p className="font-mono text-blue-950 mb-2">Fold scores = 91%, 89%, 92%, 88%, 90%</p>
+          <p className="text-blue-950 mb-2">
+            Step 1: <span className="font-mono">91 + 89 + 92 + 88 + 90 = 450</span>
           </p>
+          <p className="text-blue-950 mb-2">
+            Step 2: <span className="font-mono">450 ÷ 5 = 90</span>
+          </p>
+          <p className="font-bold text-blue-950">Mean validation accuracy = 90%</p>
         </div>
-        
-        <h3 className="text-2xl font-bold text-slate-800 mb-4 mt-8">Real-Life Analogy</h3>
-        <p className="text-lg leading-relaxed text-slate-800 mb-6">
-          Imagine a teacher evaluating students. Instead of conducting only one exam, the teacher conducts multiple tests, assignments, and quizzes, then calculates the average performance. This gives a more reliable evaluation. Cross Validation works similarly.
-        </p>
-
-        <div className="font-mono text-indigo-900 bg-indigo-50 p-6 rounded-xl border border-indigo-100 whitespace-pre overflow-x-auto w-fit mb-10 text-sm">
-{`CROSS VALIDATION GOALS
-│
-├── Estimate model performance
-├── Reduce overfitting
-├── Improve generalization
-├── Tune hyperparameters
-├── Compare algorithms
-└── Detect model instability`}
-        </div>
-
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
       <div id="types">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Layers className="mr-3 text-indigo-600" /> Types of Cross Validation
+          <Layers className="mr-3 text-indigo-600" /> Cross-Validation and Validation Strategies
         </h2>
 
         <div className="space-y-12">
-          
-          {/* Hold-Out Validation */}
           <div>
             <h3 className="text-2xl font-bold text-slate-800 mb-4">1. Hold-Out Validation</h3>
             <p className="text-lg leading-relaxed text-slate-800 mb-4">
-              Hold-Out Validation is the simplest validation technique. The dataset is divided into a Training set and a Testing set (e.g., 80% Training, 20% Testing).
+              Hold-out validation makes one split into training and validation/test portions. It is fast and simple, but its estimate depends more strongly on that one split.
             </p>
-            <div className="pl-4 border-l-4 border-slate-300 bg-white py-4 pr-4 rounded-r-md mb-4 shadow-sm border border-slate-200">
-              <p className="font-bold text-slate-900 mb-2">Worked-Out Example</p>
-              <p className="text-slate-800 mb-2">Imagine a dataset of 10,000 photos of cats and dogs.</p>
-              <ul className="list-disc pl-5 font-mono text-sm space-y-1 text-slate-700">
-                <li>You randomly choose <strong>8,000 photos</strong> (80%) to teach (train) the model what a cat or dog looks like.</li>
-                <li>You hide the remaining <strong>2,000 photos</strong> (20%).</li>
-                <li>After training, you evaluate the model by showing it the 2,000 hidden photos to see how many it guesses correctly.</li>
-              </ul>
-              <p className="text-sm text-slate-500 italic mt-3">This creates 1 model evaluation. If you happened to accidentally put all the "easy" photos in the 20% test set, your score will be falsely high.</p>
-            </div>
-            <div className="font-mono text-sm text-slate-800 bg-slate-50 p-4 rounded-lg border mb-4">
+            <div className="font-mono text-sm text-slate-800 bg-slate-50 p-4 rounded-lg border mb-4 overflow-x-auto">
 {`FULL DATASET
 │
-├── TRAINING DATA (80%)
-└── TEST DATA (20%)`}
+├── TRAINING PORTION
+└── HELD-OUT PORTION`}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <p className="text-slate-700 mb-4">
+              Ratios such as 80/20 or 70/30 are examples, not universal rules. Dataset size and the reliability needed from evaluation should guide the choice.
+            </p>
+            <div className="bg-slate-900 text-slate-100 text-sm font-mono p-4 rounded-lg overflow-x-auto">
+<pre><code>{`from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)`}</code></pre>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">2. K-Fold Cross-Validation</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              K-Fold divides the data into <em>K</em> folds. In each round, one fold is held out for validation and the other <em>K − 1</em> folds are used for training. Every fold receives one validation turn.
+            </p>
+            <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-5">
+              <p className="font-bold text-blue-900 mb-2">Example: 100 samples, K = 5</p>
+              <p className="text-slate-800 mb-2">Each fold contains about 20 samples.</p>
+              <ul className="list-disc pl-6 text-slate-800 space-y-1">
+                <li>Each round trains on about 80 samples.</li>
+                <li>Each round validates on about 20 samples.</li>
+                <li>The process produces 5 validation scores.</li>
+              </ul>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-                <p className="font-bold text-emerald-900 mb-2">Advantages</p>
-                <ul className="list-disc pl-5 text-emerald-800 text-sm space-y-1">
-                  <li>Simple implementation and fast computation</li>
-                  <li>Good for large datasets</li>
+                <p className="font-bold text-emerald-900 mb-2">Useful because</p>
+                <ul className="list-disc pl-5 text-emerald-900 text-sm space-y-1">
+                  <li>Uses every sample for both training and validation across different rounds.</li>
+                  <li>Reduces dependence on one hold-out partition.</li>
                 </ul>
               </div>
               <div className="bg-rose-50 rounded-lg p-4 border border-rose-100">
-                <p className="font-bold text-rose-900 mb-2">Disadvantages</p>
-                <ul className="list-disc pl-5 text-rose-800 text-sm space-y-1">
-                  <li>Highly dependent on random split</li>
-                  <li>Unstable performance estimates & poor reliability on small datasets</li>
+                <p className="font-bold text-rose-900 mb-2">Trade-off</p>
+                <ul className="list-disc pl-5 text-rose-900 text-sm space-y-1">
+                  <li>Requires fitting the model K times.</li>
+                  <li>Fold choice must respect the structure of the data.</li>
                 </ul>
               </div>
             </div>
-            <div className="bg-slate-800 text-slate-200 text-sm font-mono p-4 rounded-lg overflow-x-auto">
-{`from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)`}
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">3. Stratified K-Fold</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              For binary or multiclass classification, Stratified K-Fold tries to preserve class proportions in each fold. This is particularly useful when one class is uncommon.
+            </p>
+            <div className="bg-sky-50 rounded-lg p-4 border border-sky-100 text-sky-950 font-mono text-sm mb-4 overflow-x-auto">
+{`ORIGINAL: approximately 90% Class A, 10% Class B
+FOLD 1:   approximately 90% Class A, 10% Class B
+FOLD 2:   approximately 90% Class A, 10% Class B
+...`}
+            </div>
+            <p className="text-slate-700 mb-4">
+              Stratification preserves proportions as closely as possible; exact percentages are not always possible because sample counts must be whole numbers. It also does not solve class imbalance by itself—it only makes the evaluation folds more representative of the label proportions.
+            </p>
+            <div className="bg-slate-900 text-slate-100 text-sm font-mono p-4 rounded-lg overflow-x-auto">
+<pre><code>{`from sklearn.model_selection import StratifiedKFold
+
+cv = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)`}</code></pre>
             </div>
           </div>
 
-          {/* K-Fold */}
           <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">2. K-Fold Cross Validation</h3>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">4. Leave-One-Out Cross-Validation (LOOCV)</h3>
             <p className="text-lg leading-relaxed text-slate-800 mb-4">
-              K-Fold Cross Validation is the most widely used Cross Validation technique. The dataset is divided into <em>K</em> equal-sized folds. The model is trained <em>K</em> times. Each time, one fold becomes validation data, and the remaining folds become training data.
+              LOOCV sets K equal to the number of samples. With 10 observations, it fits 10 models: each round validates on one observation and trains on the other nine.
             </p>
-            
-            <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-6">
-              <p className="font-bold text-blue-900 text-lg mb-2">Detailed Working of K-Fold (K=5)</p>
-              <p className="text-slate-800 leading-relaxed mb-2">Suppose dataset contains 100 samples. If K=5, each fold contains 20 samples. Each iteration: Training = 80 samples, Validation = 20 samples.</p>
-              <ul className="list-none text-slate-800 font-mono text-sm space-y-2 mt-4 border-t border-blue-200 pt-3">
-                <li>Iteration 1: Test → Fold 1 | Train → Fold 2,3,4,5</li>
-                <li>Iteration 2: Test → Fold 2 | Train → Fold 1,3,4,5</li>
-                <li>Iteration 3: Test → Fold 3 | Train → Fold 1,2,4,5</li>
-                <li>...</li>
-              </ul>
+            <div className="font-mono text-sm bg-slate-50 border rounded-lg p-4 mb-4 overflow-x-auto">
+{`Round 1: validate P1 | train P2 ... P10
+Round 2: validate P2 | train P1, P3 ... P10
+...
+Round 10: validate P10 | train P1 ... P9`}
             </div>
-            
+            <p className="text-slate-700">
+              LOOCV uses nearly all observations for training in each round, but can be computationally expensive and is not automatically the best choice just because a dataset is small.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">5. Leave-P-Out</h3>
             <p className="text-lg leading-relaxed text-slate-800 mb-4">
-              Suppose fold accuracies are: 91%, 89%, 92%, 88%, and 90%. Average accuracy = <strong>90%</strong>. This average becomes the final model accuracy.
+              Leave-P-Out validates on every possible set of <em>P</em> observations. The number of splits grows combinatorially.
             </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100">
-                <p className="font-bold text-emerald-900 mb-2">Advantages</p>
-                <ul className="list-disc pl-5 text-emerald-800 text-sm space-y-1">
-                  <li>More reliable evaluation and reduces variance</li>
-                  <li>Better dataset utilization and suitable for small datasets</li>
-                </ul>
-              </div>
-              <div className="bg-rose-50 rounded-lg p-4 border border-rose-100">
-                <p className="font-bold text-rose-900 mb-2">Disadvantages</p>
-                <ul className="list-disc pl-5 text-rose-800 text-sm space-y-1">
-                  <li>Computationally expensive</li>
-                  <li>Slower than Hold-Out validation</li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 rounded-lg overflow-x-auto text-sm font-mono mt-4">
-<pre><code>{`from sklearn.model_selection import KFold, cross_val_score
-from sklearn.linear_model import LogisticRegression
-
-# Initialization
-kf = KFold(n_splits=5, shuffle=True, random_state=42)
-model = LogisticRegression()
-
-# Complete Example
-scores = cross_val_score(model, X, y, cv=5)
-print(scores)        # e.g. [0.91 0.89 0.92 0.88 0.90]
-print(scores.mean()) # Average Accuracy = 0.90`}</code></pre>
+            <div className="bg-slate-50 border rounded-xl p-5">
+              <p className="font-bold text-slate-900 mb-2">Example: N = 5, P = 2</p>
+              <p className="text-slate-800 mb-2">Number of validation pairs:</p>
+              <p className="font-mono text-lg text-indigo-800">C(5, 2) = 10</p>
+              <p className="text-sm text-slate-600 mt-2">For N = 100 and P = 2, this already becomes 4,950 splits.</p>
             </div>
           </div>
 
-          {/* Stratified K-Fold */}
           <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">3. Stratified K-Fold Cross Validation</h3>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">6. Repeated K-Fold</h3>
             <p className="text-lg leading-relaxed text-slate-800 mb-4">
-              In classification problems, datasets may be imbalanced (e.g., 90 Spam, 10 Not Spam). Normal K-Fold may create folds with uneven class distribution, causing biased evaluation. <strong>Stratified K-Fold</strong> solves this by ensuring each fold preserves the original class distribution.
+              Repeated K-Fold builds several randomized K-Fold partitions. For example, 5 folds repeated 10 times produce 50 validation scores. This can show how sensitive performance is to different randomized fold assignments, at additional computational cost.
             </p>
-            <div className="pl-4 border-l-4 border-sky-300 bg-white py-4 pr-4 rounded-r-md mb-4 shadow-sm border border-slate-200">
-              <p className="font-bold text-sky-900 mb-2">Worked-Out Example</p>
-              <p className="text-slate-800 mb-2">Suppose you are predicting rare credit card fraud. Out of 10,000 transactions, only 100 are fraud (1%) and 9,900 are legitimate (99%). You use K=5 (5-Fold CV).</p>
-              <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-slate-700">
-                <li><strong>With Normal K-Fold:</strong> By random chance, Fold 1 might get 0 fraudulent rows. If Fold 1 is the test set, you have no way to evaluate fraud detection!</li>
-                <li><strong>With Stratified K-Fold:</strong> The algorithm forces each of the 5 folds to contain exactly 1% fraud.</li>
-                <li>Every fold will contain exactly 2,000 transactions (20 fraud, 1,980 legitimate).</li>
-              </ul>
-              <p className="text-sm text-slate-500 italic mt-3">This exact mirroring of the population guarantees stable and fair evaluation across all iterations.</p>
-            </div>
-            <div className="bg-sky-50 rounded-lg p-4 border border-sky-100 text-sky-900 font-mono text-sm mb-4">
-{`ORIGINAL DATASET: 90% Class A, 10% Class B
-Each Fold:        90% Class A, 10% Class B`}
-            </div>
-            <div className="bg-slate-800 text-slate-200 text-sm font-mono p-4 rounded-lg overflow-x-auto">
-{`from sklearn.model_selection import StratifiedKFold
-skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)`}
-            </div>
-          </div>
-          
-          {/* LOOCV */}
-          <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">4. Leave-One-Out Cross Validation (LOOCV)</h3>
-            <p className="text-lg leading-relaxed text-slate-800 mb-4">
-              LOOCV is an extreme version of K-Fold Cross Validation where K = N (Total number of samples). If the dataset has 100 samples, 99 are used for training, and 1 for testing. This repeats 100 times.
-            </p>
-            <div className="pl-4 border-l-4 border-rose-300 bg-white py-4 pr-4 rounded-r-md mb-4 shadow-sm border border-slate-200">
-              <p className="font-bold text-rose-900 mb-2">Worked-Out Example</p>
-              <p className="text-slate-800 mb-2">Imagine a medical study with only 10 rare-disease patients <code>[P1, P2, P3... P10]</code>.</p>
-              <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-slate-700">
-                <li><strong>Iteration 1:</strong> Train the model on patients <code>P2 through P10</code> (9 patients). Test if it correctly diagnoses <code>P1</code> (1 patient test set).</li>
-                <li><strong>Iteration 2:</strong> Train on <code>P1, P3, P4... P10</code>. Test against <code>P2</code>.</li>
-                <li>...</li>
-                <li><strong>Iteration 10:</strong> Train on <code>P1 through P9</code>. Test against <code>P10</code>.</li>
-              </ul>
-              <p className="mt-3 text-slate-800 text-sm italic">You perform exactly 10 iterations. Because you only leave one sample out each time, the model is trained on the absolute maximum amount of data possible (90% of the dataset) in every iteration, making it highly data-efficient but computationally heavy.</p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100 space-y-1">
-                <p className="font-bold text-emerald-900">Advantages:</p> Maximum data utilization, very low bias, good for very small datasets.
-              </div>
-              <div className="bg-rose-50 rounded-lg p-4 border border-rose-100 space-y-1">
-                <p className="font-bold text-rose-900">Disadvantages:</p> Extremely slow, computationally expensive, high variance.
-              </div>
+            <div className="font-mono text-sm bg-indigo-50 border border-indigo-100 rounded-lg p-4">
+{`5 folds × 10 repeats = 50 validation scores
+Final report: summarize the distribution (for example mean ± standard deviation)`}
             </div>
           </div>
 
-          {/* Other Techniques */}
           <div>
-            <h3 className="text-2xl font-bold text-slate-800 mb-4">Advanced Techniques</h3>
-            <div className="space-y-12">
-              <div className="bg-slate-50 p-6 border rounded-xl shadow-sm">
-                <h4 className="text-xl font-bold text-slate-800 mb-4">5. Leave-P-Out Cross Validation</h4>
-                <p className="text-lg leading-relaxed text-slate-800 mb-4">
-                  Leave-P-Out generalizes LOOCV by leaving <em>P</em> samples out for testing instead of just one. It creates training sets by selecting all possible combinations of N-P samples. 
-                </p>
-                <div className="pl-4 border-l-4 border-slate-300 bg-white py-4 pr-4 rounded-r-md mb-4">
-                  <p className="font-bold text-slate-900 mb-2">Worked-Out Example (P=2)</p>
-                  <p className="text-slate-800 mb-2">Suppose you have a dataset of 5 samples: <code>[A, B, C, D, E]</code>.</p>
-                  <p className="text-slate-800 mb-2">With P=2, you must test on every possible pair (which is 5 choose 2 = 10 iterations):</p>
-                  <ul className="list-disc pl-5 font-mono text-sm space-y-1 text-slate-700">
-                    <li>Iteration 1: Test = <code>[A, B]</code> | Train = <code>[C, D, E]</code></li>
-                    <li>Iteration 2: Test = <code>[A, C]</code> | Train = <code>[B, D, E]</code></li>
-                    <li>...</li>
-                    <li>Iteration 10: Test = <code>[D, E]</code> | Train = <code>[A, B, C]</code></li>
-                  </ul>
-                  <p className="text-sm text-slate-500 italic mt-3">Notice how quickly the combinations grow. If N=100 and P=2, you perform 4,950 evaluations. This combinatorial explosion makes it unfeasible for most real-world datasets.</p>
-                </div>
-              </div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">7. Repeated Random Splits (Shuffle / Monte Carlo Style)</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              Instead of partitioning the data into one fixed set of non-overlapping folds, repeated random splitting creates fresh train/validation partitions multiple times. Across repetitions, a sample may appear in validation more than once or not at all.
+            </p>
+            <div className="font-mono text-sm bg-emerald-50 border border-emerald-100 rounded-lg p-4 overflow-x-auto">
+{`Run 1: random train 80% | validation 20%
+Run 2: a new random 80/20 split
+Run 3: another random 80/20 split
+...`}
+            </div>
+          </div>
 
-              <div className="bg-slate-50 p-6 border rounded-xl shadow-sm">
-                <h4 className="text-xl font-bold text-slate-800 mb-4">6. Repeated K-Fold</h4>
-                <p className="text-lg leading-relaxed text-slate-800 mb-4">
-                  Repeated K-Fold performs the K-Fold process multiple times, using different random splits each time, which yields more stable performance estimates by reducing the randomness associated with a single K-fold partition.
-                </p>
-                <div className="pl-4 border-l-4 border-indigo-300 bg-white py-4 pr-4 rounded-r-md mb-4">
-                  <p className="font-bold text-indigo-900 mb-2">Worked-Out Example</p>
-                  <p className="text-slate-800 mb-2">Let's perform a <strong>5-Fold CV</strong> repeated <strong>10 times</strong>.</p>
-                  <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-slate-700">
-                    <li><strong>Run 1:</strong> Randomly shuffle data. Split into 5 folds. Produce 5 evaluations.</li>
-                    <li><strong>Run 2:</strong> Randomly shuffle data differently. Split into 5 new folds. Produce 5 evaluations.</li>
-                    <li>...</li>
-                    <li><strong>Run 10:</strong> Final shuffle. 5 new evaluations.</li>
-                  </ul>
-                  <p className="mt-3 text-slate-800 font-bold">Total Evaluations: 5 × 10 = 50.</p>
-                  <p className="text-sm text-slate-500 mt-1">The final accuracy is the average of all 50 evaluation metrics.</p>
-                </div>
-              </div>
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">8. Group-Aware Cross-Validation</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              If several rows belong to the same person, customer, machine, household, patient, or other entity, ordinary K-Fold can leak entity-specific information across train and validation folds. Group-aware splitting keeps a group out of both sides of the same split.
+            </p>
+            <div className="bg-purple-50 border border-purple-100 rounded-xl p-5 mb-4">
+              <p className="font-bold text-purple-950 mb-2">Example</p>
+              <p className="text-purple-950">
+                If each patient has five measurements, all measurements from Patient 17 should generally stay together in either training or validation for a given split—not be divided between both.
+              </p>
+            </div>
+            <div className="bg-slate-900 text-slate-100 text-sm font-mono p-4 rounded-lg overflow-x-auto">
+<pre><code>{`from sklearn.model_selection import GroupKFold, cross_val_score
 
-              <div className="bg-slate-50 p-6 border rounded-xl shadow-sm">
-                <h4 className="text-xl font-bold text-slate-800 mb-4">7. Monte Carlo Cross Validation (Repeated Random Subsampling)</h4>
-                <p className="text-lg leading-relaxed text-slate-800 mb-4">
-                  Unlike K-Fold which splits data into fixed mutual exclusive sets, Monte Carlo CV randomly splits the dataset into training and testing sets multiple times. Folds are not fixed, which means some samples may be left out entirely while others appear multiple times.
-                </p>
-                <div className="pl-4 border-l-4 border-emerald-300 bg-white py-4 pr-4 rounded-r-md mb-4">
-                  <p className="font-bold text-emerald-900 mb-2">Worked-Out Example</p>
-                  <p className="text-slate-800 mb-2">Dataset: 100 samples. Split: 80 Train / 20 Test. Iterations: 100.</p>
-                  <p className="text-slate-800 text-sm font-mono mb-2">
-                    Iteration 1: Random selection of 80% and 20%. Evaluate.<br/>
-                    Iteration 2: Fresh random selection of 80% and 20%. Evaluate.<br/>
-                    ...<br/>
-                    Iteration 100: Fresh random selection. Evaluate.
-                  </p>
-                  <p className="text-slate-800 text-sm">Because folds are drawn randomly with replacement <em>between</em> runs, it handles edge-case statistical variances well, but lacks the guarantee that every data point is tested exactly once like K-Fold does.</p>
-                </div>
-              </div>
+cv = GroupKFold(n_splits=5)
+scores = cross_val_score(model, X, y, cv=cv, groups=patient_id)`}</code></pre>
+            </div>
+          </div>
 
-              <div className="bg-slate-50 p-6 border rounded-xl shadow-sm">
-                <h4 className="text-xl font-bold text-slate-800 mb-4">8. Time Series Cross Validation</h4>
-                <p className="text-lg leading-relaxed text-slate-800 mb-4">
-                  Future data should never predict past data. Standard cross-validation randomly shuffles data, which breaks chronological order. Time Series CV ensures the training set only consists of observations that occurred prior to the test set.
-                </p>
-                <div className="pl-4 border-l-4 border-amber-300 bg-white py-4 pr-4 rounded-r-md mb-4">
-                  <p className="font-bold text-amber-900 mb-2">Worked-Out Example</p>
-                  <p className="text-slate-800 mb-2">Task: Predicting stock price for a year. Data: Jan, Feb, Mar, Apr, May.</p>
-                  <ul className="list-disc pl-5 font-mono text-sm space-y-2 text-slate-700">
-                    <li>Iteration 1: Train on <code>Jan</code> → Test on <code>Feb</code></li>
-                    <li>Iteration 2: Train on <code>Jan, Feb</code> → Test on <code>Mar</code></li>
-                    <li>Iteration 3: Train on <code>Jan, Feb, Mar</code> → Test on <code>Apr</code></li>
-                    <li>Iteration 4: Train on <code>Jan, Feb, Mar, Apr</code> → Test on <code>May</code></li>
-                  </ul>
-                  <p className="mt-3 text-slate-800 text-sm italic">This "expanding window" technique prevents future data leakage and faithfully replicates the reality of predicting the future using only what was known in the past.</p>
-                </div>
-              </div>
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">9. Time-Series Cross-Validation</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              Time-ordered data usually needs chronological splitting. Training on the future and validating on the past can create unrealistic leakage.
+            </p>
+            <div className="font-mono text-sm bg-amber-50 border border-amber-100 rounded-lg p-4 mb-4 overflow-x-auto">
+{`Round 1: Train Jan              → Validate Feb
+Round 2: Train Jan, Feb         → Validate Mar
+Round 3: Train Jan, Feb, Mar    → Validate Apr
+Round 4: Train Jan ... Apr      → Validate May`}
+            </div>
+            <p className="text-slate-700">
+              This expanding-window picture matches the basic idea behind <code>TimeSeriesSplit</code>: later training sets contain earlier training sets plus more historical data.
+            </p>
+          </div>
 
-              <div className="bg-slate-50 p-6 border rounded-xl shadow-sm">
-                <h4 className="text-xl font-bold text-slate-800 mb-4">9. Nested Cross Validation</h4>
-                <p className="text-lg leading-relaxed text-slate-800 mb-4">
-                  Nested Cross Validation is critical when you need to perform hyperparameter tuning AND evaluate the final model's generalized performance, without allowing the hyperparameters to accidentally "overfit" the test fold.
-                </p>
-                <div className="pl-4 border-l-4 border-purple-300 bg-white py-4 pr-4 rounded-r-md mb-4">
-                  <p className="font-bold text-purple-900 mb-2">Worked-Out Example</p>
-                  <p className="text-slate-800 mb-2">Let's use a 5-Fold Outer (Evaluation) and a 3-Fold Inner (Tuning) split on 100 samples.</p>
-                  <ol className="list-decimal pl-5 text-sm space-y-2 text-slate-700 mb-3">
-                    <li><strong>Outer Loop 1:</strong> 80 samples for "Outer Train", 20 samples for "Outer Test".</li>
-                    <li><strong>Inner Tuning:</strong> Take the 80 "Outer Train" samples. Split them into 3 inner folds. Test different settings (e.g. Learning Rate = 0.01 vs 0.1). Choose the best learning rate based on these 3 inner folds.</li>
-                    <li><strong>Outer Evaluation:</strong> Train a model with that best learning rate on the full 80 samples. Evaluate it against the unseen 20 "Outer Test" samples.</li>
-                    <li>Repeat the entire process for Outer Loop 2, 3, 4, 5.</li>
-                  </ol>
-                  <p className="text-slate-800 font-bold text-sm border-t pt-2 border-slate-200">Total Evaluations: 5 outer loops * 3 inner loops = 15 training runs per hyperparameter setting evaluated.</p>
-                </div>
-              </div>
+          <div>
+            <h3 className="text-2xl font-bold text-slate-800 mb-4">10. Nested Cross-Validation</h3>
+            <p className="text-lg leading-relaxed text-slate-800 mb-4">
+              Nested CV separates <strong>hyperparameter/model selection</strong> from <strong>performance estimation</strong> when you want a less optimistically biased estimate of a tuning procedure.
+            </p>
+            <div className="bg-purple-50 border border-purple-100 rounded-xl p-5">
+              <ol className="list-decimal pl-5 text-purple-950 space-y-2">
+                <li><strong>Outer split:</strong> hold out one fold for evaluation.</li>
+                <li><strong>Inner CV:</strong> tune choices using only the outer-training portion.</li>
+                <li><strong>Refit:</strong> train the selected setup on that outer-training portion.</li>
+                <li><strong>Outer score:</strong> evaluate once on the outer held-out fold.</li>
+                <li>Repeat across outer folds and summarize the outer scores.</li>
+              </ol>
             </div>
           </div>
         </div>
@@ -353,97 +318,196 @@ skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)`}
 
       <hr className="border-slate-200 mt-8 mb-8" />
 
+      <div id="pipeline-leakage">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Cross-Validation and Data Leakage</h2>
+        <p className="text-lg leading-relaxed text-slate-800 mb-5">
+          Cross-validation only gives a trustworthy estimate when every learned preprocessing step is fitted <strong>inside each training fold</strong>. Scaling, imputation, feature selection and PCA can all leak information if they are fitted once on the entire dataset before CV.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+            <p className="font-bold text-rose-950 mb-3">Wrong</p>
+            <pre className="text-sm font-mono whitespace-pre-wrap text-rose-950">{`X_scaled = scaler.fit_transform(X)
+
+# CV now receives data whose scaling
+# already learned from every row.
+cross_val_score(model, X_scaled, y, cv=cv)`}</pre>
+          </div>
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+            <p className="font-bold text-emerald-950 mb-3">Better</p>
+            <pre className="text-sm font-mono whitespace-pre-wrap text-emerald-950">{`pipeline = make_pipeline(
+    StandardScaler(),
+    LogisticRegression(max_iter=1000)
+)
+
+cross_val_score(pipeline, X, y, cv=cv)`}</pre>
+          </div>
+        </div>
+
+        <p className="text-slate-700">
+          A Scikit-learn <strong>Pipeline</strong> makes the scaler fit only on the training rows of each fold and then applies that fitted transformation to the fold being validated.
+        </p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="python-example">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Complete Python Example</h2>
+        <p className="text-lg text-slate-800 leading-relaxed mb-5">
+          The example below uses Iris classification, a Pipeline, and an explicit shuffled Stratified K-Fold so the splitting behavior is visible rather than hidden behind <code>cv=5</code>.
+        </p>
+
+        <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 rounded-lg overflow-x-auto text-sm font-mono mb-6">
+<pre><code>{`from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+X, y = load_iris(return_X_y=True)
+
+cv = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=42
+)
+
+model = make_pipeline(
+    StandardScaler(),
+    LogisticRegression(max_iter=1000)
+)
+
+scores = cross_val_score(
+    model,
+    X,
+    y,
+    cv=cv,
+    scoring='accuracy'
+)
+
+print('Fold scores:', scores.round(3))
+print('Mean accuracy:', round(scores.mean(), 3))
+print('Std deviation:', round(scores.std(), 3))`}</code></pre>
+        </div>
+
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 mb-6">
+          <p className="font-bold text-slate-900 mb-3">Expected output with these exact settings</p>
+          <pre className="font-mono text-sm text-slate-800 whitespace-pre-wrap">{`Fold scores: [1.    0.967 0.9   1.    0.9  ]
+Mean accuracy: 0.953
+Std deviation: 0.045`}</pre>
+        </div>
+
+        <p className="text-slate-700 leading-relaxed">
+          The mean says the five validation accuracies average about <strong>95.3%</strong> for this educational example. The standard deviation gives a compact view of how much the five scores vary. These numbers are not a promised Logistic Regression accuracy on other datasets.
+        </p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
       <div id="comparisons">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Columns className="mr-3 text-indigo-600" /> Choosing the Right Cross Validation Method
+          <Columns className="mr-3 text-indigo-600" /> Choosing a Validation Strategy
         </h2>
 
-        <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 border-l-4 border-l-indigo-500">
-          <table className="min-w-full divide-y divide-slate-200">
+        <div className="overflow-x-auto mb-10">
+          <table className="min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden shadow-sm">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Method</th>
-                <th className="px-6 py-3 text-sm font-bold text-slate-700">Best Use Case</th>
+                <th className="px-5 py-3 text-left font-bold text-slate-700">Situation</th>
+                <th className="px-5 py-3 text-left font-bold text-slate-700">Useful starting strategy</th>
+                <th className="px-5 py-3 text-left font-bold text-slate-700">Why</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
-              <tr><td className="px-6 py-4 font-bold text-slate-800">Hold-Out</td><td className="px-6 py-4 text-slate-700">Very large datasets</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold text-slate-800">K-Fold</td><td className="px-6 py-4 text-slate-700">General ML problems</td></tr>
-              <tr><td className="px-6 py-4 font-bold text-slate-800">Stratified K-Fold</td><td className="px-6 py-4 text-slate-700">Imbalanced classification</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold text-slate-800">LOOCV</td><td className="px-6 py-4 text-slate-700">Very small datasets</td></tr>
-              <tr><td className="px-6 py-4 font-bold text-slate-800">Time Series CV</td><td className="px-6 py-4 text-slate-700">Sequential data (Stocks, Weather)</td></tr>
-              <tr className="bg-slate-50"><td className="px-6 py-4 font-bold text-slate-800">Nested CV</td><td className="px-6 py-4 text-slate-700">Robust hyperparameter tuning</td></tr>
+            <tbody className="divide-y divide-slate-200 bg-white text-slate-700">
+              <tr><td className="px-5 py-4">Ordinary classification</td><td className="px-5 py-4 font-bold">Stratified K-Fold</td><td className="px-5 py-4">Preserves class proportions across folds.</td></tr>
+              <tr className="bg-slate-50"><td className="px-5 py-4">Ordinary regression</td><td className="px-5 py-4 font-bold">K-Fold</td><td className="px-5 py-4">Rotates held-out folds across the dataset.</td></tr>
+              <tr><td className="px-5 py-4">Repeated rows per person/entity</td><td className="px-5 py-4 font-bold">Group-aware CV</td><td className="px-5 py-4">Prevents the same group appearing on both sides of a split.</td></tr>
+              <tr className="bg-slate-50"><td className="px-5 py-4">Time-ordered forecasting</td><td className="px-5 py-4 font-bold">Time-series CV</td><td className="px-5 py-4">Respects chronology.</td></tr>
+              <tr><td className="px-5 py-4">Evaluating a tuning procedure</td><td className="px-5 py-4 font-bold">Nested CV</td><td className="px-5 py-4">Separates inner tuning from outer performance estimation.</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4">Cross Validation vs Train/Test Split</h3>
-        <div className="overflow-x-auto mb-8 max-w-4xl">
-          <table className="min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden shadow-sm text-lg">
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Cross-Validation vs One Train/Test Split</h3>
+        <div className="overflow-x-auto mb-8">
+          <table className="min-w-full divide-y divide-slate-200 border border-slate-200 rounded-lg overflow-hidden shadow-sm">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-6 py-3 text-left font-bold text-slate-700">Feature</th>
-                <th className="px-6 py-3 text-left font-bold text-indigo-700">Train/Test Split</th>
-                <th className="px-6 py-3 text-left font-bold text-emerald-700">Cross Validation</th>
+                <th className="px-5 py-3 text-left font-bold text-slate-700">Question</th>
+                <th className="px-5 py-3 text-left font-bold text-indigo-700">Single split</th>
+                <th className="px-5 py-3 text-left font-bold text-emerald-700">Cross-validation</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-200 bg-white">
-              <tr>
-                <td className="px-6 py-4 text-slate-900 font-medium">Number of evaluations</td>
-                <td className="px-6 py-4 text-indigo-700 font-bold">One</td>
-                <td className="px-6 py-4 text-emerald-700">Multiple</td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="px-6 py-4 text-slate-900 font-medium">Reliability & Variance</td>
-                <td className="px-6 py-4 text-indigo-700">Lower Reliability, High Variance</td>
-                <td className="px-6 py-4 text-emerald-700 font-bold">Higher Reliability, Low Variance</td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 text-slate-900 font-medium">Computation cost</td>
-                <td className="px-6 py-4 text-indigo-700 font-bold">Low (Faster)</td>
-                <td className="px-6 py-4 text-emerald-700">Higher (Slower)</td>
-              </tr>
-              <tr className="bg-slate-50">
-                <td className="px-6 py-4 text-slate-900 font-medium">Dataset utilization</td>
-                <td className="px-6 py-4 text-indigo-700">Lower</td>
-                <td className="px-6 py-4 text-emerald-700 font-bold">Better</td>
-              </tr>
+            <tbody className="divide-y divide-slate-200 bg-white text-slate-700">
+              <tr><td className="px-5 py-4 font-medium">How many evaluation partitions?</td><td className="px-5 py-4">One</td><td className="px-5 py-4">Several</td></tr>
+              <tr className="bg-slate-50"><td className="px-5 py-4 font-medium">Dependence on one split?</td><td className="px-5 py-4">Higher</td><td className="px-5 py-4">Reduced</td></tr>
+              <tr><td className="px-5 py-4 font-medium">Computation?</td><td className="px-5 py-4">Lower</td><td className="px-5 py-4">Higher because models are refit</td></tr>
+              <tr className="bg-slate-50"><td className="px-5 py-4 font-medium">Useful for model selection?</td><td className="px-5 py-4">Possible, but sensitive to one validation split</td><td className="px-5 py-4">Often more informative</td></tr>
             </tbody>
           </table>
         </div>
 
         <div className="bg-amber-50 rounded-xl p-6 border border-amber-200 mb-10">
-          <h4 className="text-xl font-bold flex items-center text-amber-900 mb-4">
-            <AlertTriangle className="mr-2" /> Common Mistakes in Cross Validation
-          </h4>
-          <ul className="list-disc pl-6 text-lg text-amber-900 space-y-3">
-            <li><strong>Data Leakage:</strong> Using test data during preprocessing. A very dangerous mistake.</li>
-            <li><strong>Forgetting Stratification:</strong> Creates biased classification results.</li>
-            <li><strong>Using Normal CV for Time Series:</strong> Breaks chronological order.</li>
-            <li><strong>Too Few Folds:</strong> Leads to unstable estimates.</li>
-            <li><strong>Too Many Folds:</strong> Increases computational cost unnecessarily.</li>
+          <h3 className="text-2xl font-bold flex items-center text-amber-950 mb-4">
+            <AlertTriangle className="mr-2" /> Common Mistakes
+          </h3>
+          <ul className="list-disc pl-6 text-amber-950 space-y-3">
+            <li><strong>Leakage before CV:</strong> fitting a scaler, imputer, PCA, or feature selector on all rows first.</li>
+            <li><strong>Ignoring groups:</strong> letting the same patient/customer/entity appear in training and validation.</li>
+            <li><strong>Random CV for time series:</strong> allowing future data to influence models evaluated on the past.</li>
+            <li><strong>Using accuracy blindly:</strong> an imbalanced classification problem may require precision, recall, F1, ROC-AUC, PR-AUC, or a business-specific metric instead.</li>
+            <li><strong>Thinking more folds are always better:</strong> more folds increase computation and change the statistical properties of the estimate.</li>
+            <li><strong>Tuning forever on the same CV:</strong> repeated decision-making can overfit the validation process itself.</li>
           </ul>
         </div>
       </div>
 
-      {/* FINAL SUMMARY */}
+      <div id="scikit-learn-details" className="bg-indigo-50 border border-indigo-100 rounded-xl p-6 mb-10">
+        <h2 className="text-2xl font-bold text-indigo-950 mb-4">A Useful Scikit-learn Detail</h2>
+        <p className="text-indigo-950 leading-relaxed mb-3">
+          When <code>cross_val_score(..., cv=5)</code> receives an ordinary binary or multiclass classifier, Scikit-learn uses a stratified K-Fold strategy. For other cases it uses K-Fold. With an integer <code>cv</code>, those default splitters do not shuffle.
+        </p>
+        <p className="text-indigo-950 leading-relaxed">
+          If you want shuffled folds with a fixed seed, create the splitter explicitly—as the Python example above does—and pass <code>cv=cv</code>. This also avoids a common coding mistake: creating a <code>KFold</code> object but then accidentally calling <code>cross_val_score(..., cv=5)</code>, which ignores that object.
+        </p>
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Quick Recap</h2>
+      <div className="space-y-3 mb-10">
+        <details className="border border-slate-200 rounded-lg p-4 bg-white">
+          <summary className="font-bold text-slate-900 cursor-pointer">Why not trust one train/test split?</summary>
+          <p className="mt-3 text-slate-700">Because the measured score can depend strongly on which rows happened to be held out. Cross-validation evaluates several held-out partitions.</p>
+        </details>
+        <details className="border border-slate-200 rounded-lg p-4 bg-white">
+          <summary className="font-bold text-slate-900 cursor-pointer">Does cross-validation prevent overfitting?</summary>
+          <p className="mt-3 text-slate-700">No. It helps evaluate and select models more carefully, but models and even the model-selection process can still overfit.</p>
+        </details>
+        <details className="border border-slate-200 rounded-lg p-4 bg-white">
+          <summary className="font-bold text-slate-900 cursor-pointer">Which splitter should I use for repeated measurements from the same patient?</summary>
+          <p className="mt-3 text-slate-700">Use a group-aware strategy so measurements from one patient do not leak across training and validation in the same split.</p>
+        </details>
+      </div>
+
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        Cross Validation evaluates how well a model will generalize to unseen data by repeatedly splitting and evaluating the dataset.
+        Cross-validation repeatedly trains and validates a model across different subsets of the available development data. Its main benefit is reducing dependence on one arbitrary split and giving a distribution of validation scores rather than one number.
       </p>
-      
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Among all techniques, K-Fold Cross Validation is the most widely used because it provides a good balance between reliability, computational efficiency, and model evaluation quality. Cross Validation is essential for building trustworthy, stable, and generalizable Machine Learning systems.
+        The most important skill is not memorizing “K = 5.” It is choosing a split strategy that matches the data: stratify classification labels when appropriate, respect groups, preserve time order, keep learned preprocessing inside each fold, and retain a genuinely untouched final test set when you need a final performance estimate.
       </p>
 
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-        <p className="text-slate-800 italic text-lg leading-relaxed">
-          Cross Validation helps balance Bias (model too simple) and Variance (model too sensitive). A single Train/Test Split may accidentally produce very easy or very difficult test data. By averaging multiple splits, Cross Validation provides a more stable, trustworthy performance estimate that reflects how the model will truly behave in production.
-        </p>
+      <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-10">
+        <p className="font-bold text-slate-900 mb-3">Continue learning</p>
+        <div className="flex flex-wrap gap-3">
+          <a href="/learn/train-test-split" className="text-indigo-700 hover:underline font-semibold">Train/Test Split</a>
+          <span className="text-slate-300">•</span>
+          <a href="/learn/overfitting-underfitting" className="text-indigo-700 hover:underline font-semibold">Overfitting &amp; Underfitting</a>
+          <span className="text-slate-300">•</span>
+          <a href="/learn/hyperparameter-tuning" className="text-indigo-700 hover:underline font-semibold">Hyperparameter Tuning</a>
+          <span className="text-slate-300">•</span>
+          <a href="/learn/grid-random-search" className="text-indigo-700 hover:underline font-semibold">Grid &amp; Random Search</a>
+        </div>
       </div>
     </>
   );
 }
-
