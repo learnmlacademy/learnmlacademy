@@ -4,584 +4,717 @@ export function ForecastingBasicsContent() {
   return (
     <div className="space-y-8">
       <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Forecasting Basics — Complete Guide</h1>
-      <p className="text-lg text-slate-500 mb-6">Time series decomposition, baseline models, evaluation metrics, and Python code with output</p>
-
-      {/* ── INTRO ── */}
-      <p className="text-lg leading-relaxed">
-        Time Series Forecasting is the process of using historical, time-ordered observations to predict future values. Unlike standard regression where rows are independent, time series data has <strong>temporal dependencies</strong> — yesterday's value influences today's, and today's influences tomorrow's. This single difference changes everything about how we must model, split, and evaluate data.
+      <p className="text-lg text-slate-500 mb-6">
+        Learn the forecasting workflow: understand time patterns, define the horizon, build simple baselines, evaluate on future periods, and only then add model complexity.
       </p>
 
-      {/* ── REAL WORLD USE CASES ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Real-World Forecasting Applications</h2>
-      <div className="not-prose grid md:grid-cols-3 gap-5 my-6">
-        {[
-          {icon:'📈', title:'Finance', color:'indigo', items:['Stock price prediction','Currency exchange rates','Revenue forecasting','Credit default risk scoring']},
-          {icon:'🌤️', title:'Operations', color:'emerald', items:['Weather & climate modeling','Energy demand forecasting','Supply chain inventory','Server traffic prediction']},
-          {icon:'🏪', title:'Business', color:'amber', items:['Retail sales forecasting','Customer churn prediction','Ad spend optimization','Product demand planning']},
-        ].map(f=>(
-          <div key={f.title} className={`bg-${f.color}-50 border border-${f.color}-200 rounded-xl p-5`}>
-            <div className="text-3xl mb-2">{f.icon}</div>
-            <h3 className={`font-bold text-${f.color}-900 text-lg mb-3`}>{f.title}</h3>
-            <ul className="space-y-1.5">
-              {f.items.map(i=><li key={i} className="text-sm text-slate-700 flex items-center gap-2"><span className={`text-${f.color}-500`}>▸</span>{i}</li>)}
+      {/* INTRO */}
+      <section className="space-y-4">
+        <p className="text-lg leading-relaxed">
+          <strong>Time series forecasting</strong> means using information available up to a point in time to estimate values that come later. The key difference from ordinary tabular prediction is that <strong>time order matters</strong>. A forecasting system must behave as if the future has not happened yet.
+        </p>
+
+        <div className="not-prose grid md:grid-cols-4 gap-3 my-6">
+          {[
+            ['1', 'Past data', 'Collect observations available up to the forecast origin.'],
+            ['2', 'Find structure', 'Look for level, trend, seasonality, cycles, events and useful predictors.'],
+            ['3', 'Forecast', 'Use a baseline or model to estimate one or more future periods.'],
+            ['4', 'Evaluate later', 'Compare forecasts with periods that were not used to fit or tune the model.'],
+          ].map(([n, title, text]) => (
+            <div key={n} className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
+              <div className="mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-700 text-sm font-bold text-white">{n}</div>
+              <p className="font-bold text-slate-900">{title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-slate-700">{text}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="not-prose rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <p className="font-bold text-amber-900">Forecasting is not the same as every prediction problem that mentions the future.</p>
+          <p className="mt-2 text-sm leading-relaxed text-amber-900">
+            Predicting next month's sales or tomorrow's electricity demand is forecasting because the target is ordered over time. Predicting whether a customer will churn can be a classification problem instead. The question is not only <em>when</em> the outcome happens, but whether the target itself is a time-indexed quantity that must be forecast over a horizon.
+          </p>
+        </div>
+      </section>
+
+      {/* APPLICATIONS */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Where Forecasting Is Used</h2>
+        <div className="not-prose grid md:grid-cols-3 gap-5 my-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900">Business</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li>Retail sales by day or month</li>
+              <li>Revenue and cash-flow planning</li>
+              <li>Product demand and inventory</li>
+              <li>Website traffic and orders</li>
             </ul>
           </div>
-        ))}
-      </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900">Operations</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li>Energy demand</li>
+              <li>Call-centre volume</li>
+              <li>Server load</li>
+              <li>Staffing requirements</li>
+            </ul>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <h3 className="font-bold text-slate-900">Environment & Finance</h3>
+            <ul className="mt-3 space-y-2 text-sm text-slate-700">
+              <li>Temperature or rainfall series</li>
+              <li>Power generation</li>
+              <li>Transaction volume</li>
+              <li>Financial time-series quantities</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-      {/* ── TIME SERIES COMPONENTS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">The 4 Components of a Time Series</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Every time series can be decomposed into four components. Understanding them is essential before choosing a forecasting model:
-      </p>
+      {/* FORECAST ORIGIN / HORIZON */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Two Words You Must Know: Forecast Origin and Horizon</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          The <strong>forecast origin</strong> is the last point at which you are allowed to use observed information. The <strong>forecast horizon</strong> tells you how far ahead you need to predict.
+        </p>
 
-      <div className="not-prose my-8">
-        <figure>
-          <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 1 — Time Series Decomposition</figcaption>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 overflow-x-auto">
-            <svg viewBox="0 0 700 320" className="w-full max-w-3xl mx-auto block" aria-label="Four time series component charts showing trend, seasonality, cyclical and residual patterns">
-              {/* Shared axis helpers */}
-              {[0,80,160,240].map((yOffset, idx) => {
-                const labels = ['Trend (T)', 'Seasonality (S)', 'Cyclic (C)', 'Residual / Noise (R)'];
-                const colors = ['#6366f1','#10b981','#f59e0b','#64748b'];
-                return (
-                  <g key={idx}>
-                    <text x="10" y={yOffset+18} fontSize="11" fontWeight="700" fill={colors[idx]}>{labels[idx]}</text>
-                    <line x1="10" y1={yOffset+55} x2="690" y2={yOffset+55} stroke="#e2e8f0" strokeWidth="1"/>
-                    <line x1="10" y1={yOffset+20} x2="10" y2={yOffset+75} stroke="#e2e8f0" strokeWidth="1"/>
-                  </g>
-                );
-              })}
-              {/* Trend — upward line */}
-              <path d="M 20,110 Q 200,95 400,70 Q 550,52 680,38" fill="none" stroke="#6366f1" strokeWidth="2.5"/>
-              {/* Seasonality — repeating waves */}
-              <path d="M 20,175 Q 55,150 90,175 Q 125,200 160,175 Q 195,150 230,175 Q 265,200 300,175 Q 335,150 370,175 Q 405,200 440,175 Q 475,150 510,175 Q 545,200 580,175 Q 615,150 650,175 Q 670,162 680,175" fill="none" stroke="#10b981" strokeWidth="2.5"/>
-              {/* Cyclic — slow broad waves */}
-              <path d="M 20,275 Q 120,250 240,262 Q 360,275 480,252 Q 580,235 680,258" fill="none" stroke="#f59e0b" strokeWidth="2.5"/>
-              {/* Residual — noisy flat */}
-              {[20,60,100,140,180,220,260,300,340,380,420,460,500,540,580,620,660].map((x,i)=>(
-                <line key={x} x1={x} y1={350} x2={x+30} y2={350+([3,-4,6,-2,5,-6,2,-3,7,-1,4,-5,3,-4,6,-2,5][i]||0)} stroke="#64748b" strokeWidth="1.5"/>
+        <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-5 my-6">
+          <div className="min-w-[650px]">
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+              {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'].map((m, i) => (
+                <div key={m} className={`flex-1 rounded-lg border p-3 text-center ${i <= 5 ? 'border-emerald-300 bg-emerald-100 text-emerald-900' : 'border-amber-300 bg-amber-100 text-amber-900'}`}>
+                  {m}
+                </div>
               ))}
-            </svg>
+            </div>
+            <div className="mt-3 flex justify-between text-sm">
+              <span className="font-semibold text-emerald-800">Observed past</span>
+              <span className="font-semibold text-indigo-800">Forecast origin: end of June</span>
+              <span className="font-semibold text-amber-800">3-step horizon: Jul–Sep</span>
+            </div>
           </div>
-        </figure>
-      </div>
+        </div>
 
-      <div className="not-prose grid md:grid-cols-2 gap-5 my-6">
-        {[
-          {name:'Trend (T)', color:'indigo', icon:'📈', desc:'The long-term direction of the series — upward, downward, or flat. Example: e-commerce sales growing year-over-year as online shopping increases. Trend does not have to be linear; it can curve.'},
-          {name:'Seasonality (S)', color:'emerald', icon:'🔄', desc:'Regular, repeating patterns at known, fixed intervals. Examples: retail sales spike every December, ice cream sales peak every July, website traffic dips every Sunday. Seasonality period is always known (daily, weekly, yearly).'},
-          {name:'Cyclic (C)', color:'amber', icon:'🌊', desc:'Irregular fluctuations without a fixed period. Driven by economic or business cycles — booms and busts. Example: housing market cycles over 7–12 years. Unlike seasonality, the cycle length is not fixed and cannot be read from a calendar.'},
-          {name:'Residual / Noise (R)', color:'slate', icon:'〰️', desc:'Everything left over after removing Trend, Seasonality, and Cyclic components. Pure random variation — unpredictable. A good model should leave only white noise in the residuals. If residuals show patterns, the model is missing something.'},
-        ].map(c=>(
-          <div key={c.name} className={`bg-${c.color}-50 border border-${c.color}-200 rounded-xl p-5`}>
-            <h3 className={`font-bold text-${c.color}-900 text-lg mb-2`}>{c.icon} {c.name}</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">{c.desc}</p>
+        <div className="not-prose grid md:grid-cols-2 gap-4 my-6">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+            <p className="font-bold text-emerald-900">One-step-ahead forecasting</p>
+            <p className="mt-2 text-sm text-emerald-900">Predict the next period, observe it when it arrives, then forecast the following period. New actual values may become available between forecasts.</p>
           </div>
-        ))}
-      </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+            <p className="font-bold text-amber-900">Multi-step forecasting</p>
+            <p className="mt-2 text-sm text-amber-900">Predict several future periods from one forecast origin. The evaluation setup must match this real deployment requirement.</p>
+          </div>
+        </div>
+      </section>
 
-      {/* ── PYTHON: DECOMPOSITION ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Python: Decomposing a Time Series</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Statsmodels provides a powerful <code className="bg-slate-100 px-1 rounded text-sm font-mono">seasonal_decompose</code> function that splits any time series into its components automatically:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">decomposition.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import pandas as pd
-import numpy as np
+      {/* PATTERNS */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Patterns in Time Series</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          A series does not have to contain every pattern below. These are common structures to look for before selecting a method.
+        </p>
+
+        <div className="not-prose grid md:grid-cols-2 gap-5 my-6">
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+            <h3 className="font-bold text-indigo-900">Trend</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">A long-run rise, fall or other smooth movement. Trend can be linear or curved.</p>
+            <div className="mt-4 flex h-16 items-end gap-2">
+              {[20, 28, 34, 42, 51, 60, 68].map((h) => <div key={h} className="flex-1 rounded-t bg-indigo-300" style={{ height: `${h}%` }} />)}
+            </div>
+          </div>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+            <h3 className="font-bold text-emerald-900">Seasonality</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">A repeating pattern tied to a known frequency, such as day-of-week, month-of-year or hour-of-day.</p>
+            <div className="mt-4 flex h-16 items-end gap-2">
+              {[25, 50, 75, 40, 25, 50, 75, 40].map((h, i) => <div key={i} className="flex-1 rounded-t bg-emerald-300" style={{ height: `${h}%` }} />)}
+            </div>
+          </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+            <h3 className="font-bold text-amber-900">Cycles</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">Longer rises and falls whose duration is not locked to a fixed calendar period, for example some business or economic cycles.</p>
+            <div className="mt-4 flex h-16 items-end gap-2">
+              {[20, 35, 55, 70, 62, 45, 30, 38].map((h, i) => <div key={i} className="flex-1 rounded-t bg-amber-300" style={{ height: `${h}%` }} />)}
+            </div>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <h3 className="font-bold text-slate-900">Irregular / residual variation</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">Variation not explained by the modeled structure. Residual patterns are a warning that the model may still be missing useful information.</p>
+            <div className="mt-4 flex h-16 items-end gap-2">
+              {[40, 25, 58, 33, 50, 20, 61, 38].map((h, i) => <div key={i} className="flex-1 rounded-t bg-slate-300" style={{ height: `${h}%` }} />)}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DECOMPOSITION */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Decomposition: Separate Trend, Seasonality and Residual</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          A common additive decomposition writes a series as:
+        </p>
+        <div className="not-prose rounded-xl border border-indigo-200 bg-indigo-50 p-5 text-center my-5">
+          <p className="font-mono text-lg font-bold text-indigo-950">Observed = Trend + Seasonal + Residual</p>
+        </div>
+        <p className="text-base leading-relaxed text-slate-700">
+          Notice that this decomposition does <strong>not</strong> return a separate “cycle” component. Different decomposition methods make different structural assumptions. In statsmodels, <code className="bg-slate-100 px-1 rounded text-sm font-mono">seasonal_decompose</code> is a simple moving-average-based decomposition and should be treated as an exploratory tool rather than a universal truth about the data.
+        </p>
+
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">decomposition.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+import pandas as pd
 from statsmodels.tsa.seasonal import seasonal_decompose
 
-# ── Create synthetic monthly sales data (3 years) ────────
-np.random.seed(42)
-dates = pd.date_range(start='2021-01-01', periods=36, freq='MS')
+# 4 years of monthly data with a known trend + seasonal pattern
+dates = pd.date_range("2021-01-01", periods=48, freq="MS")
+t = np.arange(48)
+seasonal_pattern = np.array([
+    -12, -8, -4, 0, 5, 10,
+     14,  9,  4, -2, -7, -9
+])
 
-trend     = np.linspace(100, 160, 36)           # Upward trend: 100→160
-seasonal  = 20 * np.sin(2 * np.pi * np.arange(36) / 12)  # Annual cycle
-noise     = np.random.normal(0, 5, 36)          # Random noise
+sales = 100 + 0.8 * t + np.tile(seasonal_pattern, 4)
+ts = pd.Series(sales, index=dates, name="sales")
 
-sales = trend + seasonal + noise
-ts = pd.Series(sales, index=dates, name='Monthly Sales')
+result = seasonal_decompose(
+    ts,
+    model="additive",
+    period=12
+)
 
-print("First 6 months of data:")
-print(ts.head(6).round(2))
+print("First 3 observed:", ts.head(3).round(1).to_list())
+print("First 3 seasonal:", result.seasonal.head(3).round(1).to_list())
+print(
+    "First 3 available trend:",
+    result.trend.dropna().head(3).round(1).to_list()
+)
+print(
+    "Max absolute residual:",
+    round(result.resid.dropna().abs().max(), 6)
+)
+
 # Output:
-# 2021-01-01     82.26
-# 2021-02-01     99.47
-# 2021-03-01    116.18
-# 2021-04-01    126.38
-# 2021-05-01    129.92
-# 2021-06-01    124.73
+# First 3 observed: [88.0, 92.8, 97.6]
+# First 3 seasonal: [-12.0, -8.0, -4.0]
+# First 3 available trend: [104.8, 105.6, 106.4]
+# Max absolute residual: 0.0`}</pre>
+        </div>
 
-# ── Decompose into components ────────────────────────────
-result = seasonal_decompose(ts, model='additive', period=12)
-# model='additive'   → series = Trend + Seasonal + Residual
-# model='multiplicative' → series = Trend × Seasonal × Residual
-# period=12          → we know the seasonal cycle is 12 months (annual)
+        <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <p className="font-bold text-slate-900">Why is the residual exactly zero here?</p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-700">
+            Because this teaching series was deliberately created as an exact additive trend plus a repeating 12-month seasonal pattern. Real data is usually noisier, so residuals will not normally be zero.
+          </p>
+        </div>
+      </section>
 
-# Access each component separately
-trend_component    = result.trend
-seasonal_component = result.seasonal
-residual_component = result.resid
+      {/* CHRONOLOGICAL SPLIT */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">The Core Evaluation Rule: Preserve Time Order</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          For ordinary forecasting, the evaluation set should occur <strong>after</strong> the training data. Randomly mixing future observations into training can produce an unrealistic estimate of performance.
+        </p>
 
-print("\\nTrend component (mid-series):")
-print(trend_component.dropna().iloc[6:12].round(2))
-# Output:
-# 2021-07-01    120.14
-# 2021-08-01    121.88
-# 2021-09-01    123.35
-# 2021-10-01    125.19
-# 2021-11-01    126.61
-# 2021-12-01    128.04
+        <div className="not-prose grid md:grid-cols-[3fr_1fr] gap-2 my-6">
+          <div className="rounded-lg border border-emerald-300 bg-emerald-100 p-4 text-center text-sm font-bold text-emerald-900">TRAIN: Jan 2021 → Dec 2023</div>
+          <div className="rounded-lg border border-amber-300 bg-amber-100 p-4 text-center text-sm font-bold text-amber-900">TEST: Jan → Dec 2024</div>
+        </div>
 
-print("\\nSeasonal component (one full cycle):")
-print(seasonal_component.iloc[:12].round(2))
-# Output:
-# 2021-01-01    -17.71   ← January is below average
-# 2021-02-01     -4.12   ← February slightly below
-# 2021-03-01      9.82   ← March above average
-# 2021-04-01     19.18   ← April peak
-# 2021-05-01     19.88   ← May peak
-# 2021-06-01     11.14   ← June above average
-# ... (repeats every 12 months)
+        <p className="text-base leading-relaxed text-slate-700">
+          “Never shuffle” is a good beginner rule for ordinary forecasting, but the deeper principle is more precise: <strong>your validation scheme must reproduce what information would really have been available at prediction time</strong>. In unusual experimental settings, another design may be justified—but it must not leak future information.
+        </p>
+      </section>
 
-print("\\nResidual std deviation:", residual_component.dropna().std().round(3))
-# Output: Residual std deviation: 4.987
-# → Close to our true noise of 5 → decomposition worked well!`}</pre>
-      </div>
+      {/* BASELINES */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Baseline Forecasts — Start Simple</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          A baseline gives you a minimum standard that a more complicated model should justify beating. The correct baseline depends on the series.
+        </p>
 
-      {/* ── TRAIN-TEST SPLIT ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">The Golden Rule — Never Shuffle Time Series Data</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        The most critical difference between time series and standard ML: <strong>you must split chronologically</strong>. Shuffling data breaks temporal order, leaking future information into your training set and making your model look artificially good.
-      </p>
-      <div className="not-prose my-8">
-        <figure>
-          <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 2 — Correct vs Wrong Train/Test Split</figcaption>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 overflow-x-auto">
-            <svg viewBox="0 0 680 200" className="w-full max-w-3xl mx-auto block" aria-label="Two diagrams showing correct chronological split versus incorrect random shuffle split">
-              {/* Correct split */}
-              <text x="340" y="18" textAnchor="middle" fontSize="12" fontWeight="700" fill="#15803d">✓ CORRECT — Chronological Split</text>
-              <rect x="20" y="28" width="430" height="40" rx="6" fill="#bbf7d0" stroke="#16a34a" strokeWidth="1.5"/>
-              <text x="235" y="53" textAnchor="middle" fontSize="12" fontWeight="600" fill="#14532d">Training Set — 2021 to 2023 (80%)</text>
-              <rect x="460" y="28" width="200" height="40" rx="6" fill="#fef9c3" stroke="#ca8a04" strokeWidth="1.5"/>
-              <text x="560" y="53" textAnchor="middle" fontSize="12" fontWeight="600" fill="#78350f">Test — 2024 (20%)</text>
-              <text x="20" y="84" fontSize="10" fill="#64748b">Jan 2021</text>
-              <text x="420" y="84" fontSize="10" fill="#64748b">Dec 2023</text>
-              <text x="458" y="84" fontSize="10" fill="#ca8a04">Jan 2024</text>
-              <text x="620" y="84" fontSize="10" fill="#ca8a04">Dec 2024</text>
-              <line x1="454" y1="28" x2="454" y2="68" stroke="#dc2626" strokeWidth="2" strokeDasharray="4 2"/>
-              <text x="454" y="98" textAnchor="middle" fontSize="10" fill="#dc2626" fontWeight="600">Split point (time boundary)</text>
-
-              {/* Wrong split */}
-              <text x="340" y="128" textAnchor="middle" fontSize="12" fontWeight="700" fill="#dc2626">✗ WRONG — Random Shuffle</text>
-              {[20,80,140,200,260,320,380,440,500,560].map((x,i)=>(
-                <rect key={x} x={x} y="138" width="50" height="40" rx="4"
-                  fill={[0,2,5,7,9].includes(i)?'#fecaca':'#bbf7d0'}
-                  stroke={[0,2,5,7,9].includes(i)?'#ef4444':'#16a34a'} strokeWidth="1"/>
-              ))}
-              {[20,80,140,200,260,320,380,440,500,560].map((x,i)=>(
-                <text key={x} x={x+25} y={163} textAnchor="middle" fontSize="9" fontWeight="600"
-                  fill={[0,2,5,7,9].includes(i)?'#991b1b':'#14532d'}>
-                  {['Mar24','Jan21','Sep23','Jun22','Dec24','Aug21','Apr23','Nov24','Jul22','Feb24'][i]}
-                </text>
-              ))}
-              <text x="340" y="198" textAnchor="middle" fontSize="10" fill="#dc2626">Future dates in training set! Model "cheats" → results are invalid.</text>
-            </svg>
+        <div className="not-prose grid md:grid-cols-3 gap-4 my-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Naive</p>
+            <p className="mt-2 text-sm text-slate-700">Forecast future values using the most recent observed value.</p>
           </div>
-        </figure>
-      </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Seasonal naive</p>
+            <p className="mt-2 text-sm text-slate-700">Forecast using the corresponding value from the previous seasonal cycle.</p>
+          </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Mean / moving baseline</p>
+            <p className="mt-2 text-sm text-slate-700">Use a historical mean or recent-window summary when that matches the problem.</p>
+          </div>
+        </div>
 
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">train_test_split_timeseries.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import pandas as pd
-import numpy as np
-
-# Create 3 years of monthly data
-dates = pd.date_range('2021-01-01', periods=36, freq='MS')
-values = np.cumsum(np.random.randn(36)) + 100
-ts = pd.Series(values, index=dates)
-
-# ── CORRECT: chronological split ─────────────────────────
-split_point = int(len(ts) * 0.8)       # 80% for training
-
-train = ts.iloc[:split_point]           # first 80% in time
-test  = ts.iloc[split_point:]           # last 20% in time
-
-print("Train period:", train.index[0].date(), "to", train.index[-1].date())
-print("Test period: ", test.index[0].date(),  "to", test.index[-1].date())
-print("Train size:", len(train), "| Test size:", len(test))
-# Output:
-# Train period: 2021-01-01 to 2023-04-01
-# Test period:  2023-05-01 to 2023-12-01
-# Train size: 28 | Test size: 8
-
-# ── NEVER DO THIS ─────────────────────────────────────────
-from sklearn.model_selection import train_test_split
-# X_train, X_test = train_test_split(ts, test_size=0.2, shuffle=True)
-# ↑ This shuffles time-ordered data → INVALID for time series!`}</pre>
-      </div>
-
-      {/* ── BASELINE MODELS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Baseline Forecasting Models — Always Start Simple</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Before training ARIMA or deep learning models, always establish a baseline. If your sophisticated model can't beat a simple baseline, it has learned nothing useful:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">baseline_forecasts.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import pandas as pd
-import numpy as np
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">baseline_forecasts.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-# Monthly sales: train on first 28 months, test on last 8
-np.random.seed(0)
-dates  = pd.date_range('2021-01-01', periods=36, freq='MS')
-sales  = 100 + np.arange(36)*1.5 + 10*np.sin(np.arange(36)*np.pi/6) + np.random.randn(36)*3
-ts     = pd.Series(sales.round(1), index=dates)
-train  = ts.iloc[:28]
-test   = ts.iloc[28:]
+# Same 4-year monthly teaching series
+dates = pd.date_range("2021-01-01", periods=48, freq="MS")
+t = np.arange(48)
+seasonal_pattern = np.array([
+    -12, -8, -4, 0, 5, 10,
+     14,  9,  4, -2, -7, -9
+])
 
-print("Actual test values:")
-print(test.round(2).to_string())
-# Output:
-# 2023-05-01    134.52
-# 2023-06-01    138.19
-# 2023-07-01    140.87
-# 2023-08-01    136.44
-# 2023-09-01    131.08
-# 2023-10-01    128.63
-# 2023-11-01    133.91
-# 2023-12-01    142.76
+sales = 100 + 0.8 * t + np.tile(seasonal_pattern, 4)
+ts = pd.Series(sales, index=dates, name="sales")
 
-# ── Baseline 1: Naive Forecast ───────────────────────────
-# Predict: next value = last known value
-naive = pd.Series(
-    [train.iloc[-1]] * len(test),
-    index=test.index
-)
-mae_naive = mean_absolute_error(test, naive)
-print(f"\\nNaive Forecast: {train.iloc[-1]:.2f} for all 8 months")
-print(f"Naive MAE: {mae_naive:.2f}")
-# Output:
-# Naive Forecast: 131.46 for all 8 months
-# Naive MAE: 6.83
+# Hold out the final 12 months
+train = ts.iloc[:-12]
+test = ts.iloc[-12:]
 
-# ── Baseline 2: Seasonal Naive ──────────────────────────
-# Predict: same value as 12 months ago (captures seasonality)
+# Baseline 1: repeat the last observed value
+naive = pd.Series(train.iloc[-1], index=test.index)
+
+# Baseline 2: repeat the previous 12-month seasonal cycle
 seasonal_naive = pd.Series(
-    train.iloc[-12:].values,   # last 12 months → repeat
+    train.iloc[-12:].to_numpy(),
     index=test.index
 )
-mae_seasonal = mean_absolute_error(test, seasonal_naive)
-print(f"\\nSeasonal Naive MAE: {mae_seasonal:.2f}")
-# Output: Seasonal Naive MAE: 4.21
 
-# ── Baseline 3: Rolling Mean ─────────────────────────────
-# Predict: average of last 3 months
-window = 3
-rolling_preds = []
-history = list(train.values)
-
-for _ in range(len(test)):
-    pred = np.mean(history[-window:])  # average of last 3 observations
-    rolling_preds.append(pred)
-    history.append(pred)               # append prediction as next "history"
-
-rolling_series = pd.Series(rolling_preds, index=test.index)
-mae_rolling = mean_absolute_error(test, rolling_series)
-print(f"Rolling Mean (3-month) MAE: {mae_rolling:.2f}")
-# Output: Rolling Mean (3-month) MAE: 5.47
-
-# ── Comparison Table ─────────────────────────────────────
-print("\\n── Baseline Comparison ──")
-print(f"{'Model':<25} {'MAE':>8} {'RMSE':>8}")
-print("─" * 45)
 for name, preds in [
-    ('Naive Forecast',     naive),
-    ('Seasonal Naive',     seasonal_naive),
-    ('Rolling Mean (3mo)', rolling_series),
+    ("Naive", naive),
+    ("Seasonal naive", seasonal_naive)
 ]:
-    mae  = mean_absolute_error(test, preds)
-    rmse = np.sqrt(mean_squared_error(test, preds))
-    print(f"{name:<25} {mae:>8.2f} {rmse:>8.2f}")
+    mae = mean_absolute_error(test, preds)
+    rmse = mean_squared_error(test, preds) ** 0.5
+    print(f"{name:<15} MAE={mae:.2f} RMSE={rmse:.2f}")
+
+print("Train:", train.index[0].date(), "to", train.index[-1].date())
+print("Test: ", test.index[0].date(), "to", test.index[-1].date())
+
 # Output:
-# ── Baseline Comparison ──
-# Model                       MAE     RMSE
-# ─────────────────────────────────────────
-# Naive Forecast             6.83     7.94
-# Seasonal Naive             4.21     5.03   ← Best baseline here
-# Rolling Mean (3mo)         5.47     6.18`}</pre>
-      </div>
+# Naive           MAE=14.57 RMSE=16.74
+# Seasonal naive  MAE=9.60 RMSE=9.60
+# Train: 2021-01-01 to 2023-12-01
+# Test:  2024-01-01 to 2024-12-01`}</pre>
+        </div>
 
-      {/* ── EVALUATION METRICS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Evaluation Metrics — Choosing the Right One</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Standard classification metrics (accuracy, F1) do not apply to forecasting. Use these regression-style error metrics instead:
-      </p>
-      <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
-        <table className="w-full text-sm">
-          <thead className="bg-indigo-600 text-white">
-            <tr>
-              <th className="p-3 text-left">Metric</th>
-              <th className="p-3 text-left">Formula</th>
-              <th className="p-3 text-left">Good For</th>
-              <th className="p-3 text-left">Watch Out</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
-            {[
-              ['MAE','mean(|actual − predicted|)','Intuitive; same units as data; robust to outliers','Treats all errors equally; large errors may matter more'],
-              ['MSE','mean((actual − predicted)²)','Penalizes large errors heavily','Units are squared (hard to interpret)'],
-              ['RMSE','√MSE','Same units as data + large-error penalty','Sensitive to outliers; one bad prediction distorts score'],
-              ['MAPE','mean(|actual−pred| / actual × 100%)','Percentage — great for stakeholder reports','Breaks when actual = 0; asymmetric (over-predicts penalty)'],
-              ['SMAPE','mean(2|actual−pred| / (|actual|+|pred|))','Symmetric MAPE; handles zeros better','Less intuitive than MAPE'],
-            ].map(([m,f,g,w])=>(
-              <tr key={m} className="hover:bg-slate-50">
-                <td className="p-3 font-bold text-indigo-700">{m}</td>
-                <td className="p-3 font-mono text-xs text-slate-600">{f}</td>
-                <td className="p-3 text-emerald-700 text-xs">{g}</td>
-                <td className="p-3 text-rose-600 text-xs">{w}</td>
+        <div className="not-prose rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <p className="font-bold text-amber-900">Do not memorize “seasonal naive is best.”</p>
+          <p className="mt-2 text-sm leading-relaxed text-amber-900">
+            It is better only for this particular example. A non-seasonal random-walk-like series may favor a naive forecast, while another dataset may need a different baseline.
+          </p>
+        </div>
+      </section>
+
+      {/* METRICS */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Forecast Error Metrics</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          Forecasting usually uses regression-style error measures because the target is numeric. No single metric is best for every problem.
+        </p>
+
+        <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
+          <table className="w-full text-sm">
+            <thead className="bg-indigo-700 text-white">
+              <tr>
+                <th className="p-3 text-left">Metric</th>
+                <th className="p-3 text-left">Main idea</th>
+                <th className="p-3 text-left">Useful when</th>
+                <th className="p-3 text-left">Caution</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-slate-100 bg-white">
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">MAE</td>
+                <td className="p-3">Average absolute error</td>
+                <td className="p-3">You want an error in the target's original units</td>
+                <td className="p-3">Does not increase the penalty quadratically for large misses</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">RMSE</td>
+                <td className="p-3">Square errors, average, then square-root</td>
+                <td className="p-3">Larger errors should receive more weight</td>
+                <td className="p-3">Can be strongly influenced by large errors</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">MAPE</td>
+                <td className="p-3">Absolute error relative to actual magnitude</td>
+                <td className="p-3">Relative percentage-style interpretation is meaningful</td>
+                <td className="p-3">Problematic when actual values are zero or very close to zero</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">MASE</td>
+                <td className="p-3">Scale MAE by a naive in-sample error</td>
+                <td className="p-3">Comparing error across series with different scales</td>
+                <td className="p-3">Requires a sensible scaling baseline and seasonal definition</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">evaluation_metrics.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+        <h3 className="text-xl font-bold text-slate-800 mb-3 mt-7">Worked Example</h3>
+        <p className="text-base leading-relaxed text-slate-700 mb-3">Suppose:</p>
+        <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5 font-mono text-sm my-4">
+          <p>Actual: &nbsp;&nbsp;&nbsp;120, 135, 128, 142, 130</p>
+          <p>Forecast: &nbsp;118, 140, 125, 145, 133</p>
+          <p className="mt-3">Absolute errors: 2, 5, 3, 3, 3</p>
+        </div>
 
-actual    = np.array([120, 135, 128, 142, 130])
-predicted = np.array([118, 140, 125, 145, 133])
+        <p className="text-base leading-relaxed">
+          Therefore:
+        </p>
+        <div className="not-prose grid md:grid-cols-3 gap-4 my-5">
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
+            <p className="text-sm text-indigo-800">MAE</p>
+            <p className="mt-1 font-mono text-lg font-bold text-indigo-950">(2+5+3+3+3)/5 = 3.20</p>
+          </div>
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
+            <p className="text-sm text-indigo-800">RMSE</p>
+            <p className="mt-1 font-mono text-lg font-bold text-indigo-950">≈ 3.35</p>
+          </div>
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center">
+            <p className="text-sm text-indigo-800">MAPE</p>
+            <p className="mt-1 font-mono text-lg font-bold text-indigo-950">≈ 2.43%</p>
+          </div>
+        </div>
 
-# MAE ────────────────────────────────────────────────────
-mae = np.mean(np.abs(actual - predicted))
-print(f"MAE:   {mae:.2f}")
-# Output: MAE:   3.40
-# → On average our forecast is off by 3.4 units
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">forecast_metrics.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
 
-# RMSE ───────────────────────────────────────────────────
-rmse = np.sqrt(np.mean((actual - predicted)**2))
-print(f"RMSE:  {rmse:.2f}")
-# Output: RMSE:  3.58
-# → Slightly higher than MAE → some larger errors present
+actual = np.array([120, 135, 128, 142, 130], dtype=float)
+predicted = np.array([118, 140, 125, 145, 133], dtype=float)
 
-# MAPE ───────────────────────────────────────────────────
-mape = np.mean(np.abs((actual - predicted) / actual)) * 100
-print(f"MAPE:  {mape:.2f}%")
-# Output: MAPE:  2.59%
-# → Average error is 2.59% of the actual value — easy to communicate!
+errors = actual - predicted
+mae = np.mean(np.abs(errors))
+rmse = np.sqrt(np.mean(errors ** 2))
+mape = np.mean(np.abs(errors / actual)) * 100
 
-# Which metric to report to stakeholders?
-print("\\nRule of thumb:")
-print("  → Technical report: use RMSE (penalizes big errors)")
-print("  → Business report:  use MAPE ('we're 2.6% off')")
-print("  → Outliers present: use MAE (more robust)")`}</pre>
-      </div>
+print(f"MAE:  {mae:.2f}")
+print(f"RMSE: {rmse:.2f}")
+print(f"MAPE: {mape:.2f}%")
 
-      {/* ── ML-BASED FORECASTING ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">ML-Based Forecasting — Turning Time Series into Supervised Learning</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        You can use any standard ML model (XGBoost, Random Forest) for forecasting by converting the time series into a supervised problem using <strong>lag features</strong>. The idea: use past values as input features to predict the next value.
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">ml_forecasting.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import pandas as pd
-import numpy as np
+# Output:
+# MAE:  3.20
+# RMSE: 3.35
+# MAPE: 2.43%`}</pre>
+        </div>
+
+        <div className="not-prose rounded-xl border border-rose-200 bg-rose-50 p-5">
+          <p className="font-bold text-rose-900">MAPE warning</p>
+          <p className="mt-2 text-sm leading-relaxed text-rose-900">
+            When actual values are zero or very close to zero, percentage errors can become undefined or extremely large. Do not choose MAPE only because percentages sound easy to explain.
+          </p>
+        </div>
+      </section>
+
+      {/* WALK FORWARD */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Walk-Forward / Time-Series Cross-Validation</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          One final holdout tells you how the model performed over one future window. During model development, you may want several historical forecast origins. A time-aware splitter repeatedly trains on earlier observations and validates on later observations.
+        </p>
+
+        <div className="not-prose space-y-2 my-6 font-mono text-sm">
+          <div className="rounded-lg border border-slate-200 bg-white p-3"><span className="text-emerald-700 font-bold">Fold 1:</span> [TRAIN 0–5] [VALIDATE 6–7]</div>
+          <div className="rounded-lg border border-slate-200 bg-white p-3"><span className="text-emerald-700 font-bold">Fold 2:</span> [TRAIN 0–7] [VALIDATE 8–9]</div>
+          <div className="rounded-lg border border-slate-200 bg-white p-3"><span className="text-emerald-700 font-bold">Fold 3:</span> [TRAIN 0–9] [VALIDATE 10–11]</div>
+        </div>
+
+        <p className="text-base leading-relaxed text-slate-700">
+          Standard K-Fold is not wrong because it always shuffles—it does not shuffle by default. The problem is that ordinary folds can train on observations that occur <strong>after</strong> the validation observations. That is why a time-aware splitting strategy is needed for forecasting.
+        </p>
+
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">time_series_split.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+from sklearn.model_selection import TimeSeriesSplit
+
+X = np.arange(12)
+cv = TimeSeriesSplit(n_splits=3, test_size=2)
+
+for i, (train_idx, valid_idx) in enumerate(cv.split(X), start=1):
+    print(
+        f"Fold {i}: train={train_idx.tolist()} "
+        f"validation={valid_idx.tolist()}"
+    )
+
+# Output:
+# Fold 1: train=[0, 1, 2, 3, 4, 5] validation=[6, 7]
+# Fold 2: train=[0, 1, 2, 3, 4, 5, 6, 7] validation=[8, 9]
+# Fold 3: train=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9] validation=[10, 11]`}</pre>
+        </div>
+
+        <div className="not-prose rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <p className="font-bold text-amber-900">Match the folds to the business horizon.</p>
+          <p className="mt-2 text-sm leading-relaxed text-amber-900">
+            If production requires a 12-month forecast from a single origin, evaluating only repeated one-month-ahead predictions can give a misleading impression. Validation should imitate the horizon, update frequency and data availability of the real system.
+          </p>
+        </div>
+      </section>
+
+      {/* ML FORECASTING */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Machine Learning Forecasting with Lag Features</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          A tabular ML model such as Gradient Boosting does not automatically understand time. We can convert past observations into features such as <code className="bg-slate-100 px-1 rounded text-sm font-mono">lag_1</code>, <code className="bg-slate-100 px-1 rounded text-sm font-mono">lag_12</code>, rolling statistics and calendar variables.
+        </p>
+
+        <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5 my-5 overflow-x-auto">
+          <table className="min-w-full text-sm">
+            <thead>
+              <tr className="text-left text-slate-600">
+                <th className="p-2">Target month</th>
+                <th className="p-2">lag_1</th>
+                <th className="p-2">lag_2</th>
+                <th className="p-2">lag_12</th>
+                <th className="p-2">month</th>
+                <th className="p-2">Target sales</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200 bg-white">
+              <tr><td className="p-2">Jan 2025</td><td className="p-2">Dec 2024</td><td className="p-2">Nov 2024</td><td className="p-2">Jan 2024</td><td className="p-2">1</td><td className="p-2 font-bold">?</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">ml_one_step_forecasting.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+import pandas as pd
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_error
 
-# ── Step 1: Create lag features ──────────────────────────
-np.random.seed(42)
-dates = pd.date_range('2020-01-01', periods=60, freq='MS')
-sales = 100 + np.arange(60)*0.8 + 12*np.sin(np.arange(60)*np.pi/6) + np.random.randn(60)*4
-df = pd.DataFrame({'date': dates, 'sales': sales.round(1)}).set_index('date')
+rng = np.random.default_rng(42)
+dates = pd.date_range("2019-01-01", periods=84, freq="MS")
+t = np.arange(84)
 
-# Create lag features: t-1, t-2, t-3, t-12 (same month last year)
-df['lag_1']  = df['sales'].shift(1)   # previous month
-df['lag_2']  = df['sales'].shift(2)   # 2 months ago
-df['lag_3']  = df['sales'].shift(3)   # 3 months ago
-df['lag_12'] = df['sales'].shift(12)  # same month last year
+sales = (
+    100
+    + 0.7 * t
+    + 12 * np.sin(2 * np.pi * t / 12)
+    + rng.normal(0, 2, 84)
+)
 
-# Calendar features (help capture seasonality)
-df['month']  = df.index.month         # 1–12
-df['quarter']= df.index.quarter       # 1–4
+df = pd.DataFrame({"sales": sales}, index=dates)
+df["lag_1"] = df["sales"].shift(1)
+df["lag_2"] = df["sales"].shift(2)
+df["lag_12"] = df["sales"].shift(12)
+df["month"] = df.index.month
+df = df.dropna()
 
-df = df.dropna()  # remove rows with NaN from shifting
+features = ["lag_1", "lag_2", "lag_12", "month"]
 
-print("Feature matrix sample:")
-print(df[['lag_1','lag_2','lag_3','lag_12','month','sales']].head(4).round(2))
+# Last 12 target months are evaluated chronologically
+train = df.iloc[:-12]
+test = df.iloc[-12:]
+
+model = GradientBoostingRegressor(
+    n_estimators=100,
+    max_depth=2,
+    learning_rate=0.05,
+    random_state=42
+)
+model.fit(train[features], train["sales"])
+
+pred = model.predict(test[features])
+naive_pred = test["lag_1"].to_numpy()
+
+print("Train rows:", len(train), "| Test rows:", len(test))
+print(
+    "Naive one-step MAE:",
+    round(mean_absolute_error(test["sales"], naive_pred), 2)
+)
+print(
+    "Gradient Boosting one-step MAE:",
+    round(mean_absolute_error(test["sales"], pred), 2)
+)
+print("First 3 model forecasts:", np.round(pred[:3], 2).tolist())
+
 # Output:
-#             lag_1   lag_2   lag_3  lag_12  month   sales
-# date
-# 2021-01-01  101.23   99.87  104.11   99.44      1  103.81
-# 2021-02-01  103.81  101.23   99.87  101.56      2  107.42
-# 2021-03-01  107.42  103.81  101.23  109.88      3  114.67
-# 2021-04-01  114.67  107.42  103.81  118.21      4  121.34
+# Train rows: 60 | Test rows: 12
+# Naive one-step MAE: 4.58
+# Gradient Boosting one-step MAE: 4.38
+# First 3 model forecasts: [144.02, 154.19, 155.89]`}</pre>
+        </div>
 
-# ── Step 2: Chronological train/test split ───────────────
-features = ['lag_1','lag_2','lag_3','lag_12','month','quarter']
-target   = 'sales'
+        <div className="not-prose rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+          <p className="font-bold text-indigo-950">What exactly did this ML example evaluate?</p>
+          <p className="mt-2 text-sm leading-relaxed text-indigo-900">
+            It is a <strong>rolling one-step-ahead</strong> setup. For each target month, lag features use actual observations from earlier months. This is appropriate when the real system receives each new actual value before making the next forecast. It is <strong>not</strong> the same as producing all 12 future months at once from a single forecast origin.
+          </p>
+        </div>
+      </section>
 
-split = int(len(df) * 0.8)
-X_train, y_train = df[features].iloc[:split], df[target].iloc[:split]
-X_test,  y_test  = df[features].iloc[split:],  df[target].iloc[split:]
-
-# ── Step 3: Train Gradient Boosting model ───────────────
-model = GradientBoostingRegressor(n_estimators=100, max_depth=3, random_state=42)
-model.fit(X_train, y_train)
-
-# ── Step 4: Evaluate ─────────────────────────────────────
-preds = model.predict(X_test)
-mae   = mean_absolute_error(y_test, preds)
-print(f"\\nGradient Boosting MAE: {mae:.2f}")
-# Output: Gradient Boosting MAE: 2.87
-# Compare: Seasonal Naive MAE was 4.21 → ML model wins!
-
-# ── Feature importance ───────────────────────────────────
-importances = pd.Series(model.feature_importances_, index=features)
-print("\\nFeature Importances:")
-print(importances.sort_values(ascending=False).round(3))
-# Output:
-# lag_1     0.412   ← previous month is most predictive
-# lag_12    0.281   ← same month last year (seasonality)
-# month     0.158   ← calendar month
-# lag_2     0.082
-# lag_3     0.047
-# quarter   0.020`}</pre>
-      </div>
-
-      {/* ── WALKFORWARD VALIDATION ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Walk-Forward Validation — The Right Way to Cross-Validate</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Standard k-fold cross-validation is invalid for time series because it shuffles data. Instead, use <strong>walk-forward validation</strong> (also called time series cross-validation): train on past, test on the next window, expand training set, repeat.
-      </p>
-      <div className="not-prose my-8">
-        <figure>
-          <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 3 — Walk-Forward Validation (5 Folds)</figcaption>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 overflow-x-auto">
-            <svg viewBox="0 0 660 220" className="w-full max-w-3xl mx-auto block" aria-label="Walk-forward validation showing 5 folds where training window expands and test window moves forward in time">
-              {[0,1,2,3,4].map(fold => {
-                const trainEnd = 8 + fold * 2;
-                const testEnd  = trainEnd + 2;
-                const y = 20 + fold * 38;
-                const blockW = 30;
-                return (
-                  <g key={fold}>
-                    <text x="4" y={y+20} fontSize="10" fill="#64748b" fontWeight="600">Fold {fold+1}</text>
-                    {Array.from({length:20},(_,i)=>(
-                      <rect key={i} x={60+i*blockW} y={y+4} width={blockW-2} height={28} rx="3"
-                        fill={i < trainEnd ? '#bbf7d0' : i < testEnd ? '#fef9c3' : '#f1f5f9'}
-                        stroke={i < trainEnd ? '#16a34a' : i < testEnd ? '#ca8a04' : '#e2e8f0'}
-                        strokeWidth="1"/>
-                    ))}
-                    {Array.from({length:20},(_,i)=>(
-                      i < trainEnd
-                        ? <text key={i} x={60+i*blockW+15} y={y+22} textAnchor="middle" fontSize="8" fill="#14532d">T</text>
-                        : i < testEnd
-                          ? <text key={i} x={60+i*blockW+15} y={y+22} textAnchor="middle" fontSize="8" fill="#78350f">V</text>
-                          : null
-                    ))}
-                  </g>
-                );
-              })}
-              <text x="140" y="212" fontSize="10" fill="#16a34a" fontWeight="600">■ Training</text>
-              <text x="220" y="212" fontSize="10" fill="#ca8a04" fontWeight="600">■ Validation</text>
-              <text x="310" y="212" fontSize="10" fill="#94a3b8" fontWeight="600">■ Not yet used</text>
-            </svg>
+      {/* MULTISTEP */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Going Deeper: Multi-Step Forecasting Strategies</h2>
+        <div className="not-prose grid md:grid-cols-3 gap-4 my-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Recursive</p>
+            <p className="mt-2 text-sm text-slate-700">Predict one step, feed that prediction back as an input, then predict the next step. Errors can accumulate.</p>
           </div>
-        </figure>
-      </div>
-
-      {/* ── COMMON MISTAKES ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Forecasting Mistakes</h2>
-      <div className="not-prose space-y-3 my-6">
-        {[
-          {icon:'❌', title:'Shuffling the data', fix:'Always split chronologically. Past → Train. Future → Test. No exceptions.'},
-          {icon:'❌', title:'Scaling before splitting', fix:'Fit StandardScaler on training data only, then transform both train and test with training statistics.'},
-          {icon:'❌', title:'Ignoring stationarity', fix:'ARIMA requires a stationary series. Check with ADF test; apply differencing if trend present.'},
-          {icon:'❌', title:'Skipping the baseline', fix:'Always compute Naive and Seasonal Naive baselines first. A sophisticated model that loses to Naive is not useful.'},
-          {icon:'❌', title:'Reporting accuracy instead of MAE/RMSE', fix:'Forecasting outputs continuous numbers. Use error magnitude metrics, not classification accuracy.'},
-          {icon:'❌', title:'One-step training, multi-step testing', fix:'If you need 12-month forecasts, train the model to predict 12 steps ahead or use a recursive forecasting strategy.'},
-        ].map(m=>(
-          <div key={m.title} className="bg-white border border-rose-200 rounded-xl p-4 flex gap-4">
-            <span className="text-xl flex-shrink-0 mt-0.5">{m.icon}</span>
-            <div>
-              <p className="font-bold text-rose-700 text-sm mb-1">{m.title}</p>
-              <p className="text-sm text-slate-600 leading-relaxed"><strong>Fix:</strong> {m.fix}</p>
-            </div>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Direct</p>
+            <p className="mt-2 text-sm text-slate-700">Train separate logic/models for different horizons, such as one-month-ahead and six-month-ahead.</p>
           </div>
-        ))}
-      </div>
-
-      {/* ── FORECASTING METHODS DEEP DIVE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Forecasting Methods Compared</h2>
-      <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        Choosing the right forecasting method depends on your data characteristics — whether it has a trend, seasonal patterns, multiple related variables, and how far ahead you need to predict.
-      </p>
-
-      <h3 className="text-xl font-bold text-slate-800 mb-3 mt-6">Statistical Methods — ARIMA Family</h3>
-      <p className="text-base leading-relaxed mb-4 text-slate-700">
-        ARIMA (AutoRegressive Integrated Moving Average) is the most widely used classical time series model. It captures three components: the AutoRegressive part (AR) models the relationship between the current value and its past values, the Integrated part (I) removes trend by differencing, and the Moving Average part (MA) models the relationship between the current value and past forecast errors. SARIMA extends ARIMA with seasonal terms — essential for retail sales, electricity demand, and monthly revenue data with clear repeating patterns.
-      </p>
-      <p className="text-base leading-relaxed mb-4 text-slate-700">
-        The key challenge with ARIMA is selecting the correct p, d, q parameters. The Akaike Information Criterion (AIC) and ACF/PACF plots help guide selection. The <strong>auto_arima</strong> function from the pmdarima library automates this search entirely.
-      </p>
-
-      <h3 className="text-xl font-bold text-slate-800 mb-3 mt-6">Machine Learning Methods — XGBoost and LightGBM</h3>
-      <p className="text-base leading-relaxed mb-4 text-slate-700">
-        Standard ML algorithms like XGBoost can be powerful forecasters when features are engineered correctly. The key is converting the time series into a supervised learning problem using <strong>lag features</strong> — past values as input features. For example, to forecast tomorrow's sales, use today's sales, yesterday's sales, and last week's sales as features. Rolling statistics (7-day mean, 30-day standard deviation) and calendar features (day of week, month, is_holiday) complete the feature set.
-      </p>
-      <p className="text-base leading-relaxed mb-4 text-slate-700">
-        XGBoost and LightGBM dominated the M5 Forecasting Competition — the most prestigious time series benchmark — because they handle non-linear relationships between lag features naturally and are robust to outliers without extensive preprocessing.
-      </p>
-
-      <h3 className="text-xl font-bold text-slate-800 mb-3 mt-6">Deep Learning — LSTM and Transformers</h3>
-      <p className="text-base leading-relaxed mb-6 text-slate-700">
-        LSTM networks capture complex long-range temporal dependencies particularly useful in multivariate settings — forecasting energy consumption using temperature, humidity, hour of day, and historical consumption simultaneously. Transformer-based architectures like Temporal Fusion Transformers (TFT) represent current state of the art, handling multiple seasonalities, missing data, and static covariates in a single architecture. Facebook Prophet remains popular for business forecasting — it decomposes series into trend, seasonality and holiday effects, producing interpretable forecasts with uncertainty intervals.
-      </p>
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Evaluation Metrics for Forecasting</h2>
-      <p className="text-lg leading-relaxed mb-4 text-slate-700">
-        The choice of evaluation metric significantly affects which model appears best. Always evaluate on multiple metrics and examine the forecast plot visually — numbers alone can hide systematic biases:
-      </p>
-      <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-8">
-        <table className="w-full text-sm">
-          <thead className="bg-indigo-600 text-white">
-            <tr>
-              <th className="p-3 text-left">Metric</th>
-              <th className="p-3 text-left">Best for</th>
-              <th className="p-3 text-left">Limitation</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
-            {[
-              ["MAE — Mean Absolute Error","Equal penalty for all error sizes","Does not penalise large errors more"],
-              ["RMSE — Root Mean Squared Error","When large errors are especially costly","Sensitive to outliers"],
-              ["MAPE — Mean Absolute Percentage Error","Comparing across different scales","Undefined when actual value = 0"],
-              ["sMAPE — Symmetric MAPE","Scale-free, more symmetric than MAPE","Can still be unstable near zero"],
-              ["MASE — Mean Absolute Scaled Error","Comparing models across different series","Requires naive baseline computation"],
-            ].map(([m,b,l]) => (
-              <tr key={m} className="hover:bg-slate-50">
-                <td className="p-3 font-bold text-indigo-700 text-xs">{m}</td>
-                <td className="p-3 text-xs text-emerald-700">{b}</td>
-                <td className="p-3 text-xs text-rose-600">{l}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">Summary</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Time series forecasting treats temporal order as a first-class citizen. Every series is composed of trend, seasonality, cyclic, and residual components — decompose first to understand what you are working with. Always split chronologically, establish baselines before sophisticated models, and evaluate with MAE, RMSE, or MAPE rather than accuracy. Lag features bridge the gap between time series and standard ML models.
-      </p>
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 mt-4 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-lg">Key Takeaway</p>
-        <p className="text-slate-800 italic text-base leading-relaxed">
-          A Seasonal Naive baseline (predicting same value as 12 months ago) often beats complex models on real business data. Always build the simplest possible baseline first — only add complexity when it demonstrably improves out-of-sample accuracy on a proper chronological split.
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <p className="font-bold text-slate-900">Multi-output</p>
+            <p className="mt-2 text-sm text-slate-700">Predict several future horizons together when the modeling method supports it.</p>
+          </div>
+        </div>
+        <p className="text-base leading-relaxed text-slate-700">
+          There is no universally best strategy. The right choice depends on horizon length, model type, data size and how errors propagate across steps.
         </p>
-      </div>
+      </section>
+
+      {/* POINT VS INTERVAL */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Point Forecasts and Forecast Intervals</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          A point forecast gives one number, such as “next month's demand = 1,250 units.” Real forecasts are uncertain, so many forecasting systems also report an interval.
+        </p>
+        <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5 my-5">
+          <p className="font-mono text-sm text-slate-800">Point forecast: 1,250 units</p>
+          <p className="mt-2 font-mono text-sm text-slate-800">Illustrative interval: 1,150 to 1,360 units</p>
+        </div>
+        <p className="text-base leading-relaxed text-slate-700">
+          An interval is not a guarantee that the future value must lie inside that range. Its interpretation depends on the method and assumptions used to construct it.
+        </p>
+      </section>
+
+      {/* METHODS */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Forecasting Methods Compared</h2>
+        <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
+          <table className="w-full text-sm">
+            <thead className="bg-indigo-700 text-white">
+              <tr>
+                <th className="p-3 text-left">Family</th>
+                <th className="p-3 text-left">Typical idea</th>
+                <th className="p-3 text-left">Useful when</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 bg-white">
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">Naive / seasonal naive</td>
+                <td className="p-3">Repeat recent or seasonal history</td>
+                <td className="p-3">Baseline and surprisingly competitive simple patterns</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">Moving averages</td>
+                <td className="p-3">Summarize a recent window</td>
+                <td className="p-3">Smoothing or simple short-horizon rules</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">Exponential smoothing</td>
+                <td className="p-3">Update level, trend and possibly seasonality</td>
+                <td className="p-3">Structured level/trend/seasonal patterns</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">ARIMA / seasonal extensions</td>
+                <td className="p-3">Autoregression, differencing and lagged innovations</td>
+                <td className="p-3">Linear time dependence with suitable transformations</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">Tabular ML</td>
+                <td className="p-3">Lag, rolling, calendar and external features</td>
+                <td className="p-3">Nonlinear relations or many useful predictors</td>
+              </tr>
+              <tr>
+                <td className="p-3 font-bold text-indigo-700">Sequence / deep learning</td>
+                <td className="p-3">Learn complex temporal representations</td>
+                <td className="p-3">Large or complex sequence problems where extra complexity is justified</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-base leading-relaxed text-slate-700">
+          A more complex family is not automatically more accurate. Model choice should be demonstrated by time-aware validation against meaningful baselines.
+        </p>
+      </section>
+
+      {/* COMMON MISTAKES */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Forecasting Mistakes</h2>
+        <div className="not-prose space-y-3 my-6">
+          {[
+            ['Leaking future information', 'Create features and preprocessing so that every forecast uses only information that existed at that forecast origin.'],
+            ['Using a random split by habit', 'Use chronological holdouts or time-aware folds when future periods are the real target.'],
+            ['Skipping a baseline', 'Measure naive or seasonal-naive performance before claiming that a complex model adds value.'],
+            ['Evaluating the wrong horizon', 'If production needs a 12-step forecast, validate a 12-step forecasting process—not only one-step predictions.'],
+            ['Using MAPE near zero', 'Choose another metric when zero or near-zero actual values make percentage errors unstable.'],
+            ['Calling every pattern “seasonality”', 'Seasonality repeats at a known frequency; longer irregular cycles are a different idea.'],
+            ['Treating decomposition as ground truth', 'Decomposition depends on the selected method, period and assumptions.'],
+            ['Assuming ARIMA requires a stationary raw series', 'Differencing is part of ARIMA; the modeled AR/MA structure is applied after the chosen integration/differencing treatment.'],
+          ].map(([title, fix]) => (
+            <div key={title} className="rounded-xl border border-rose-200 bg-white p-4">
+              <p className="font-bold text-rose-700">{title}</p>
+              <p className="mt-1 text-sm leading-relaxed text-slate-700"><strong>Better approach:</strong> {fix}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CHECKLIST */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">A Practical Forecasting Checklist</h2>
+        <div className="not-prose rounded-xl border border-indigo-200 bg-indigo-50 p-6">
+          <ol className="space-y-3 text-sm leading-relaxed text-slate-800">
+            <li><strong>1.</strong> Define the target, data frequency and forecast horizon.</li>
+            <li><strong>2.</strong> Plot the series and inspect trend, seasonality, missing periods and unusual events.</li>
+            <li><strong>3.</strong> Decide exactly what information is available at each forecast origin.</li>
+            <li><strong>4.</strong> Hold out later periods for realistic evaluation.</li>
+            <li><strong>5.</strong> Build at least one simple baseline.</li>
+            <li><strong>6.</strong> Choose metrics that reflect the cost and scale of mistakes.</li>
+            <li><strong>7.</strong> Train and tune models using time-aware validation.</li>
+            <li><strong>8.</strong> Compare models with the same horizon and same evaluation windows.</li>
+            <li><strong>9.</strong> Inspect residuals and forecast plots—not only a single score.</li>
+            <li><strong>10.</strong> Refit/update the forecasting process when new data arrives, according to the deployment plan.</li>
+          </ol>
+        </div>
+      </section>
+
+      {/* QUICK RECAP */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Quick Recap</h2>
+        <div className="not-prose space-y-3 my-6">
+          <details className="rounded-xl border border-slate-200 bg-white p-4">
+            <summary className="cursor-pointer font-bold text-slate-900">Why is a random train/test split risky for forecasting?</summary>
+            <p className="mt-3 text-sm leading-relaxed text-slate-700">Because training can contain observations that occur after validation/test observations, giving the model information that would not have existed at prediction time.</p>
+          </details>
+          <details className="rounded-xl border border-slate-200 bg-white p-4">
+            <summary className="cursor-pointer font-bold text-slate-900">Why build a naive baseline?</summary>
+            <p className="mt-3 text-sm leading-relaxed text-slate-700">It tells you whether the extra complexity of your forecasting model produces a meaningful improvement over a simple rule.</p>
+          </details>
+          <details className="rounded-xl border border-slate-200 bg-white p-4">
+            <summary className="cursor-pointer font-bold text-slate-900">Is one-step MAE enough if the business needs a 12-month forecast?</summary>
+            <p className="mt-3 text-sm leading-relaxed text-slate-700">No. The evaluation should reproduce the 12-step forecast horizon, because error behavior can change as the forecast moves farther from the origin.</p>
+          </details>
+        </div>
+      </section>
+
+      {/* LEARNING PATH */}
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Connect This Lesson</h2>
+        <div className="not-prose grid md:grid-cols-4 gap-3 my-5">
+          <a href="/learn/arima" className="rounded-xl border border-slate-200 bg-white p-4 font-semibold text-indigo-700 hover:border-indigo-300">ARIMA</a>
+          <a href="/learn/moving-average" className="rounded-xl border border-slate-200 bg-white p-4 font-semibold text-indigo-700 hover:border-indigo-300">Moving Average</a>
+          <a href="/learn/exponential-smoothing" className="rounded-xl border border-slate-200 bg-white p-4 font-semibold text-indigo-700 hover:border-indigo-300">Exponential Smoothing</a>
+          <a href="/learn/semi-supervised" className="rounded-xl border border-slate-200 bg-white p-4 font-semibold text-indigo-700 hover:border-indigo-300">Next: Semi-Supervised Learning</a>
+        </div>
+      </section>
+
+      {/* SUMMARY */}
+      <section>
+        <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">Summary</h2>
+        <p className="text-lg leading-relaxed mb-4">
+          Good forecasting begins with the evaluation design, not with the most advanced algorithm. Define the forecast origin and horizon, preserve time order, understand the series, establish meaningful baselines, and compare models on future-like windows using suitable error metrics.
+        </p>
+        <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 mt-4 mb-10">
+          <p className="text-slate-900 font-bold mb-2 text-lg">Key Takeaway</p>
+          <p className="text-slate-800 italic text-base leading-relaxed">
+            The best forecasting model is not the one with the most sophisticated name. It is the one that consistently improves on sensible baselines under an evaluation setup that matches how the future will actually arrive.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
