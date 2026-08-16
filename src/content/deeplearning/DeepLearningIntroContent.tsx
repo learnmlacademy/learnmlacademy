@@ -7,9 +7,41 @@ export function DeepLearningIntroContent() {
       <p className="text-lg text-slate-500 mb-6">From neurons to neural networks — why deep learning changed everything</p>
 
       {/* ── WHAT IS DEEP LEARNING ── */}
+      <div className="not-prose bg-gradient-to-br from-indigo-50 via-white to-violet-50 border border-indigo-200 rounded-2xl p-6 md:p-8">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">Start with the big idea</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
+          Deep Learning = neural networks learning useful representations in stages
+        </h2>
+        <p className="text-slate-700 leading-relaxed mb-6">
+          Imagine teaching a computer to recognize a cat in a photo. A traditional approach might require humans to design useful features first. A deep network can instead learn increasingly useful internal representations from data.
+        </p>
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
+          {[
+            ['Pixels', 'raw image values'],
+            ['Simple patterns', 'edges and textures'],
+            ['Larger patterns', 'eyes, ears, shapes'],
+            ['Prediction', 'cat'],
+          ].map(([title, caption], index) => (
+            <React.Fragment key={title}>
+              <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4">
+                <div className="font-bold text-indigo-900">{title}</div>
+                <div className="text-xs text-slate-600 mt-1">{caption}</div>
+              </div>
+              {index < 3 && <span className="text-indigo-400 font-bold text-xl rotate-90 md:rotate-0">→</span>}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
       <p className="text-lg leading-relaxed">
-        Deep Learning is a subfield of Machine Learning that trains artificial neural networks with <strong>many layers</strong> (hence "deep") to learn representations of data automatically — without being explicitly programmed to extract features. It is the technology behind voice assistants, face recognition, self-driving cars, and ChatGPT.
+        Deep Learning is a subfield of Machine Learning built around neural networks with multiple learned layers. These layers can learn useful representations directly from data, reducing the need to hand-design every feature. Deep learning is especially influential in areas such as computer vision, speech, natural-language processing, recommendation, and generative AI.
       </p>
+
+      <div className="not-prose bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5">
+        <p className="text-amber-900 m-0 leading-relaxed">
+          <strong>“Deep” does not mean “more intelligent.”</strong> It refers to the use of multiple learned layers between input and output. A deeper network is not automatically better; architecture, data, compute, optimization, and regularization all matter.
+        </p>
+      </div>
 
       {/* ML vs DL comparison table */}
       <div className="not-prose my-8">
@@ -25,11 +57,11 @@ export function DeepLearningIntroContent() {
             </thead>
             <tbody className="divide-y divide-slate-100 bg-white">
               {[
-                ['Feature Engineering','Manual — domain experts design features','Automatic — network learns features from raw data'],
-                ['Data Required','Works on small to medium datasets','Needs large datasets (10k–millions of samples)'],
-                ['Compute','CPU is sufficient','Requires GPUs / TPUs'],
-                ['Interpretability','Moderate (decision trees, logistic reg.)','Low — often called a "black box"'],
-                ['Best For','Tabular / structured data','Images, audio, text, video'],
+                ['Feature Engineering','Often relies more on hand-designed or precomputed features','Can learn many useful representations directly from data'],
+                ['Data Required','Often effective on small to medium structured datasets','Frequently benefits from larger datasets, though transfer learning can reduce data needs'],
+                ['Compute','Often practical on CPUs','Training larger models often benefits greatly from GPUs / TPUs'],
+                ['Interpretability','Varies by model; some methods are easier to inspect','Often harder to interpret directly, though many explanation tools exist'],
+                ['Best For','Often strong for tabular / structured data','Especially strong for images, audio, text, video, and large-scale representation learning'],
                 ['Examples','XGBoost, SVM, Random Forest','CNNs, RNNs, Transformers'],
               ].map(([a,b,c]) => (
                 <tr key={a} className="hover:bg-slate-50">
@@ -44,6 +76,28 @@ export function DeepLearningIntroContent() {
       </div>
 
       {/* ── WHY NOW ── */}
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">What Does “Learn Features Automatically” Actually Mean?</h2>
+      <p className="text-lg leading-relaxed mb-5">
+        The phrase sounds magical, but the idea is simple: each layer transforms the representation it receives. Later layers work with the patterns produced by earlier ones.
+      </p>
+      <div className="not-prose grid md:grid-cols-4 gap-4 mb-8">
+        {[
+          ['Layer 0', 'Raw input', 'pixels'],
+          ['Layer 1', 'Simple structure', 'edges'],
+          ['Layer 2', 'Combined structure', 'corners / textures'],
+          ['Later layers', 'Task-specific patterns', 'object parts / classes'],
+        ].map(([stage, title, example]) => (
+          <div key={stage} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <div className="text-xs font-bold text-indigo-600 uppercase mb-1">{stage}</div>
+            <div className="font-bold text-slate-900">{title}</div>
+            <div className="text-xs text-slate-600 mt-1">Example: {example}</div>
+          </div>
+        ))}
+      </div>
+      <p className="text-lg leading-relaxed mb-8">
+        These representations are learned because they help reduce the training objective. They are not manually named or guaranteed to correspond perfectly to human concepts.
+      </p>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Why Did Deep Learning Explode After 2012?</h2>
       <p className="text-lg leading-relaxed mb-4">
         Neural network theory dates back to the 1960s. The breakthrough came in 2012 when AlexNet crushed the ImageNet competition using GPUs. Three forces converged to make this possible:
@@ -112,6 +166,20 @@ export function DeepLearningIntroContent() {
       </div>
 
       {/* ── DEEP NETWORK ARCHITECTURE ── */}
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Why Stack Layers at All?</h2>
+      <p className="text-lg leading-relaxed mb-5">
+        A single layer can learn one transformation. By stacking layers, the network can compose transformations and represent more complicated relationships.
+      </p>
+      <div className="not-prose bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
+        <p className="font-mono text-sm md:text-base m-0">input → layer 1 → layer 2 → layer 3 → output</p>
+        <p className="text-sm text-slate-700 mt-3 mb-0">
+          Each layer receives the previous layer's representation, transforms it, and passes a new representation forward.
+        </p>
+      </div>
+      <div className="not-prose bg-rose-50 border border-rose-200 rounded-xl p-5 mb-10">
+        <p className="text-rose-900 m-0"><strong>Important:</strong> simply adding layers does not guarantee improvement. Very deep networks can be harder to train, slower, and easier to overfit without good architecture and regularization.</p>
+      </div>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Deep Network Architecture — Layers Explained</h2>
       <p className="text-lg leading-relaxed mb-4">
         A deep neural network stacks many neuron layers. Each layer transforms its input into a richer representation that the next layer builds upon:
@@ -210,6 +278,28 @@ export function DeepLearningIntroContent() {
       </div>
 
       {/* ── FORWARD + BACK PROP ── */}
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">How Does a Deep Network Actually Learn?</h2>
+      <p className="text-lg leading-relaxed mb-5">
+        Training is a repeated correction loop. The network predicts, measures how wrong it was, computes which parameters contributed to that error, and adjusts them.
+      </p>
+      <div className="not-prose flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center mb-8">
+        {[
+          ['1. Forward', 'make prediction'],
+          ['2. Loss', 'measure error'],
+          ['3. Backward', 'compute gradients'],
+          ['4. Optimizer', 'update parameters'],
+          ['5. Repeat', 'next batch'],
+        ].map(([title, caption], index) => (
+          <React.Fragment key={title}>
+            <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4">
+              <div className="font-bold text-indigo-900">{title}</div>
+              <div className="text-xs text-slate-600 mt-1">{caption}</div>
+            </div>
+            {index < 4 && <span className="text-indigo-400 font-bold text-xl rotate-90 md:rotate-0">→</span>}
+          </React.Fragment>
+        ))}
+      </div>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Forward Propagation + Backpropagation — The Training Loop</h2>
       <div className="not-prose grid md:grid-cols-2 gap-6 my-6">
         <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
@@ -237,6 +327,16 @@ export function DeepLearningIntroContent() {
       </div>
 
       {/* ── PYTHON CODE ── */}
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">A Tiny Parameter-Count Example</h2>
+      <p className="text-lg leading-relaxed mb-4">
+        Suppose a dense layer receives <strong>4 input values</strong> and contains <strong>3 neurons</strong>.
+      </p>
+      <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8">
+        <p className="font-mono m-0">weights = 4 × 3 = 12</p>
+        <p className="font-mono mt-2 mb-0">biases = 3</p>
+        <p className="font-mono mt-2 mb-0 font-bold text-indigo-900">total = 15 trainable parameters</p>
+      </div>
+
       <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Python Example — Build and Train a Deep Network</h2>
       <p className="text-lg leading-relaxed mb-4">
         Let us build a deep neural network with Keras on the classic breast cancer dataset and walk through every line:
@@ -433,6 +533,42 @@ print("Actual:   ", y_test[:5])
         </div>
       </div>
 
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10 border-b pb-2">Common Mistakes</h2>
+      <div className="not-prose space-y-3 mb-10">
+        {[
+          ['“Deep learning is always better than traditional ML.”', 'No. Tree-based models and simpler methods are often excellent choices for structured/tabular problems, especially with limited data.'],
+          ['“More layers automatically mean higher accuracy.”', 'No. Deeper models can be harder to optimize and may overfit or waste compute.'],
+          ['“Deep learning removes the need for data preparation.”', 'No. Data quality, labels, sampling, preprocessing, leakage control, and evaluation remain critical.'],
+          ['“Backpropagation is the optimizer.”', 'No. Backpropagation computes gradients; optimizers such as SGD or Adam use those gradients to update parameters.'],
+          ['“GPU means the model will always train faster.”', 'Not necessarily. Small models and small datasets may not benefit enough to justify accelerator overhead.'],
+        ].map(([mistake, correction]) => (
+          <div key={mistake} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p className="font-semibold text-slate-900 mb-1">{mistake}</p>
+            <p className="text-sm text-slate-700 m-0">{correction}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Quick Knowledge Check</h2>
+      <div className="space-y-4 mb-12">
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">1. Why is deep learning called “deep”?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Because the model contains multiple learned layers between its input and output representations.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">2. What is representation learning?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Learning useful internal features or transformations directly from data rather than manually specifying every feature.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">3. What happens immediately after the forward pass during training?</summary>
+          <p className="mt-3 mb-0 text-slate-700">The prediction is compared with the target using a loss function, then gradients are computed for parameter updates.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">4. A dense layer has 6 inputs and 4 neurons. How many trainable parameters?</summary>
+          <p className="mt-3 mb-0 text-slate-700">(6 × 4) + 4 biases = <strong>28 parameters</strong>.</p>
+        </details>
+      </div>
+
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">Summary</h2>
       <p className="text-lg leading-relaxed mb-4">
         Deep Learning uses stacked layers of artificial neurons to automatically learn hierarchical representations of raw data. The core training loop — forward propagation to make a prediction, compute the loss, backpropagate gradients, update weights — repeats thousands of times until the model converges. GPUs, big data, and algorithmic innovations (ReLU, dropout, Adam) unlocked the potential of networks hundreds of layers deep.
@@ -442,6 +578,17 @@ print("Actual:   ", y_test[:5])
         <p className="text-slate-800 italic text-base leading-relaxed">
           For structured tabular data, XGBoost almost always beats neural networks with far less effort. Deep Learning wins decisively on unstructured data — images, audio, text — where traditional feature engineering fails. Always start simple, then go deep only when justified.
         </p>
+      </div>
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Continue Learning</h2>
+      <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
+        <a href="/learn/neural-networks" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous</p>
+          <p className="font-bold text-slate-900 m-0">Neural Networks Explained</p>
+        </a>
+        <a href="/learn/ml-interview-questions" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Next</p>
+          <p className="font-bold text-slate-900 m-0">ML Interview Questions</p>
+        </a>
       </div>
     </div>
   );
