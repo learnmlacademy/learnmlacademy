@@ -10,10 +10,35 @@ export function HierarchicalContent() {
       <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Hierarchical Clustering</h1>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
-        Hierarchical Clustering is an algorithm in the field of <strong>Unsupervised Machine Learning</strong> used to group similar objects into clusters.</p>
+        Hierarchical Clustering is an <strong>unsupervised learning</strong> method that builds a tree of nested groups from similarities or distances between data points.
+      </p>
+
+      <div className="bg-white border border-indigo-200 rounded-xl p-6 mb-8 shadow-sm">
+        <h2 className="text-2xl font-bold text-indigo-900 mb-4">Hierarchical Clustering in Simple Words</h2>
+        <p className="text-lg text-slate-700 mb-5">
+          Imagine every student starts alone. We repeatedly join the most similar students or groups until one large hierarchy is formed. Later, we can cut that hierarchy at a chosen height to obtain clusters.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
+          {[
+            ['1', 'Start Alone', 'A   B   C   D'],
+            ['2', 'Merge Closest', '(A B)   C   D'],
+            ['3', 'Merge Again', '(A B)   (C D)'],
+            ['4', 'Build Tree', '((A B) (C D))'],
+          ].map(([step, title, example]) => (
+            <div key={step} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 font-bold text-indigo-800">{step}</div>
+              <p className="font-bold text-slate-800 mb-1">{title}</p>
+              <p className="font-mono text-sm text-slate-600 mb-0">{example}</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-slate-600 mt-4 mb-0">
+          <strong>Key idea:</strong> the hierarchy depends on the distance metric and linkage rule we choose. It is a model of grouping structure, not proof that the groups are objectively “natural.”
+        </p>
+      </div>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        It is a clustering technique used to discover <strong>Natural hierarchical relationships between data points</strong>. Unlike K-Means Clustering, which directly partitions data into a fixed number of clusters, Hierarchical Clustering creates:
+        Unlike K-Means, which directly produces a flat partition for a chosen number of clusters, hierarchical clustering can build a <strong>nested sequence of merges or splits</strong>.
       </p>
       
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
@@ -23,26 +48,26 @@ export function HierarchicalContent() {
       </div>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Hierarchical Clustering is extremely important because it allows us to understand Relationships between clusters, Nested grouping structures, Similarity levels among data points, and Cluster evolution step-by-step.
+        The hierarchy can help us inspect <strong>nested grouping structure</strong>, compare merge levels, and choose a useful clustering at different resolutions.
       </p>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The algorithm is widely used in Bioinformatics, Genetics, Medical research, Customer segmentation, Image analysis, Social network analysis, Document clustering, and Recommendation systems. It became especially famous in biology for analyzing DNA similarity, Gene expression, and Species evolution because hierarchical relationships naturally exist in biological systems.
+        Hierarchical clustering is used in areas such as bioinformatics, gene-expression analysis, document grouping, customer analysis, image analysis, and exploratory scientific research. The resulting dendrogram shows similarity under the chosen method; it should not automatically be interpreted as a true evolutionary or causal tree.
       </p>
 
       <hr className="border-slate-200 mt-10 mb-10" />
 
-      {/* WHY K-MEANS WAS NEEDED */}
+      {/* WHY USE HIERARCHICAL CLUSTERING */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2 flex items-center">
-        <AlertCircle className="mr-2 text-indigo-600" /> Why Hierarchical Clustering Was Needed
+        <AlertCircle className="mr-2 text-indigo-600" /> Why Use Hierarchical Clustering?
       </h2>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Earlier clustering algorithms like <strong>K-Means</strong> required one major thing before training: <strong>The value of K (Number of clusters)</strong>.
+        K-Means asks us to choose <strong>K</strong> before fitting. Hierarchical clustering offers a different view: build a hierarchy first, inspect it, and then choose a useful cut when appropriate.
       </p>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        But in many real-world problems, <strong>the correct number of clusters is unknown</strong>. Researchers wanted an algorithm that could:
+        This is useful when we want to:
       </p>
       <ul className="list-disc pl-8 mb-6 text-lg text-slate-700 space-y-1">
         <li>Automatically reveal grouping structure</li>
@@ -52,7 +77,7 @@ export function HierarchicalContent() {
       </ul>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        This led directly to the development of <strong>Hierarchical Clustering</strong>.
+        It is therefore best viewed as an <strong>alternative clustering strategy</strong>, not as a method that historically appeared simply because K-Means required K.
       </p>
 
       <h3 className="text-xl font-bold text-indigo-800 mt-10 mb-4">
@@ -356,7 +381,7 @@ export function HierarchicalContent() {
       </div>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Which Type Is More Common?</strong> In practical Machine Learning, <strong>Agglomerative Clustering</strong> is far more commonly used because it is Easier to implement, Computationally practical, and More intuitive.
+        <strong>Which type will we focus on?</strong> Most standard machine-learning libraries, including Scikit-learn's <code>AgglomerativeClustering</code>, focus on the <strong>bottom-up agglomerative</strong> approach. Divisive methods also exist, but their exact splitting strategy depends on the algorithm used.
       </p>
 
       <hr className="border-slate-200 mt-10 mb-10" />
@@ -395,19 +420,20 @@ export function HierarchicalContent() {
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
           <h4 className="text-lg font-bold text-indigo-800 mb-2">2. Complete Linkage</h4>
           <p className="text-lg text-slate-700 mb-2">Measures: <strong>Maximum distance between clusters</strong>. <code>D(A,B) = max(d(a,b))</code></p>
-          <p className="text-slate-700 mb-2">Clusters merge only if all points are reasonably close. Creates compact clusters.</p>
+          <p className="text-slate-700 mb-2">The farthest cross-cluster pair determines the linkage distance. This often favors tighter groups than single linkage, but the result still depends on the data.</p>
         </div>
 
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
           <h4 className="text-lg font-bold text-indigo-800 mb-2">3. Average Linkage</h4>
           <p className="text-lg text-slate-700 mb-2">Measures: <strong>Average pairwise distance between clusters</strong>.</p>
-          <p className="text-slate-700 mb-0">It balances Single linkage and Complete linkage, giving more stable clustering.</p>
+          <p className="text-slate-700 mb-0">It uses all cross-cluster pairs rather than only the closest or farthest pair. Whether it is preferable depends on the dataset and metric.</p>
         </div>
 
         <div className="p-5 bg-white border border-blue-200 bg-blue-50/30 rounded-lg shadow-sm border-l-4 border-l-blue-500">
-          <h4 className="text-lg font-bold text-blue-900 mb-2">4. Ward Linkage (Most Important)</h4>
-          <p className="text-lg text-slate-700 mb-2">Ward linkage is an important method. It minimizes: <strong>Increase in cluster variance</strong>.</p>
-          <p className="text-blue-900 font-medium mb-0">Core Idea: Ward method merges clusters causing Minimum information loss. It usually produces Compact clusters, Balanced groups, and Better practical clustering. This is why it is heavily used in practice.</p>
+          <h4 className="text-lg font-bold text-blue-900 mb-2">4. Ward Linkage</h4>
+          <p className="text-lg text-slate-700 mb-2">Ward linkage chooses the merge that produces the <strong>smallest increase in within-cluster sum of squares</strong>.</p>
+          <p className="text-blue-900 font-medium mb-2">It often favors compact groups, but it is not universally the best linkage.</p>
+          <p className="text-sm text-blue-900 mb-0"><strong>Important:</strong> in Scikit-learn, Ward linkage is used with Euclidean distance.</p>
         </div>
       </div>
 
@@ -418,9 +444,15 @@ export function HierarchicalContent() {
         <Calculator className="mr-2 text-indigo-600" /> Distance Metrics & Mathematical Calculation
       </h2>
       
-      <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        The algorithm needs a way to measure Similarity between points. The most commonly used is <strong>Euclidean Distance</strong>. For Points A(2,3) and B(6,7): <code>d = √(6-2)² + (7-3)² = √32 = 5.65</code>.
+      <p className="text-lg text-slate-700 leading-relaxed mb-4">
+        The algorithm needs a way to measure dissimilarity between points. A common choice is <strong>Euclidean distance</strong>. For A(2,3) and B(6,7):
       </p>
+      <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-5 mb-6 text-slate-800">
+        <p className="font-mono mb-2">d = √((6−2)² + (7−3)²)</p>
+        <p className="font-mono mb-2">= √(4² + 4²)</p>
+        <p className="font-mono mb-2">= √32</p>
+        <p className="font-mono font-bold mb-0">≈ 5.66</p>
+      </div>
 
       <div className="bg-slate-50 border border-slate-200 rounded-lg p-5 mb-8">
            <h3 className="text-lg font-bold text-slate-800 mb-3">Common Distance Metrics</h3>
@@ -430,6 +462,28 @@ export function HierarchicalContent() {
              <li>├─ <strong>Minkowski Distance</strong> (Generalized form of Euclidean and Manhattan)</li>
              <li>└─ <strong>Cosine Distance</strong> (Based on angle between vectors, highly used for text/documents)</li>
            </ul>
+      </div>
+
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
+        <h3 className="text-xl font-bold text-amber-900 mb-3">Why Feature Scaling Can Matter</h3>
+        <div className="overflow-x-auto mb-4">
+          <table className="w-full text-left border-collapse bg-white rounded-lg overflow-hidden">
+            <thead><tr className="bg-amber-100"><th className="p-3">Feature</th><th className="p-3">Difference</th></tr></thead>
+            <tbody className="text-slate-700">
+              <tr className="border-t"><td className="p-3">Age</td><td className="p-3">5 years</td></tr>
+              <tr className="border-t"><td className="p-3">Salary</td><td className="p-3">20,000 rupees</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-amber-900 mb-0">
+          With a distance-based method, a large numerical scale can dominate the calculation. Standardizing numerical features is often useful when units differ substantially. Whether scaling is appropriate still depends on what the features mean and on the chosen metric.
+        </p>
+      </div>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-8">
+        <h3 className="text-xl font-bold text-slate-800 mb-3">Metric and Linkage Must Be Compatible</h3>
+        <p className="text-slate-700 mb-3">Scikit-learn supports several metrics for agglomerative clustering, but not every metric works with every linkage.</p>
+        <p className="text-slate-700 mb-0"><strong>Example:</strong> <code>linkage='ward'</code> requires Euclidean distance. For <code>single</code>, <code>complete</code>, or <code>average</code>, other supported metrics may be used.</p>
       </div>
 
       <div className="bg-amber-50/50 border border-amber-200 p-6 rounded-xl my-6 shadow-sm">
@@ -633,11 +687,12 @@ export function HierarchicalContent() {
 
       <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8 text-lg">
         <p className="text-amber-900 font-bold mb-2">Choosing Number of Clusters Using Dendrogram</p>
-        <p className="text-amber-900 mb-0">Unlike K-Means, we don't need to guess K. We can draw a horizontal line (cut the dendrogram) later. If we cut it at height 3.0 in the example above, we obtain 2 clusters: Cluster 1 (A,B) and Cluster 2 (C,D).</p>
+        <p className="text-amber-900 mb-2">We can build a hierarchy first and choose a horizontal cut later. In the teaching dendrogram above, a cut at height 3.0 gives 2 clusters: (A,B) and (C,D).</p>
+        <p className="text-amber-900 mb-0"><strong>But:</strong> the cut height is a model-selection choice, not an automatically correct answer. Domain knowledge, validation measures such as silhouette score, and stability checks can help.</p>
       </div>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        <strong>Time Complexity:</strong> Hierarchical Clustering is computationally expensive. Typical complexity is O(n²) or higher. K-Means updates centroids efficiently, whereas Hierarchical repeatedly computes pairwise distances, making it much slower for huge datasets.
+        <strong>Scalability:</strong> standard hierarchical clustering can become expensive as the number of samples grows because the hierarchy is built from many pairwise relationships. Memory and runtime are often roughly quadratic-scale concerns, although exact cost depends on the linkage and implementation. For very large datasets, K-Means, MiniBatchKMeans, sampling, or structured connectivity constraints may be more practical.
       </p>
 
       <hr className="border-slate-200 mt-10 mb-10" />
@@ -657,40 +712,56 @@ export function HierarchicalContent() {
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
           <pre className="!m-0">
 <code>{`# Step 1 — Import Libraries
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.datasets import make_blobs
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 
-# Step 2 — Create Dataset
-X, y = make_blobs(n_samples=100, centers=3, random_state=42)
+# Step 2 — Create a reproducible teaching dataset
+X, _ = make_blobs(
+    n_samples=120,
+    centers=3,
+    cluster_std=0.70,
+    random_state=42
+)
 
 # ==========================================
-# APPROACH 1: Plotting the Dendrogram (Scipy)
+# APPROACH 1: Build and plot the hierarchy
 # ==========================================
-# Generate Linkage Matrix
 linked = linkage(X, method='ward')
 
-plt.figure(figsize=(10,6))
+plt.figure(figsize=(10, 6))
 dendrogram(linked)
 plt.title("Dendrogram using Ward Linkage")
+plt.ylabel("Linkage distance")
 plt.show()
 
 # ==========================================
-# APPROACH 2: Training the Model (Sklearn)
+# APPROACH 2: Cut the hierarchy into 3 groups
 # ==========================================
-# Once we decide K=3 from the dendrogram, we fit the model
-model = AgglomerativeClustering(n_clusters=3, linkage='ward')
+model = AgglomerativeClustering(
+    n_clusters=3,
+    linkage='ward'
+)
 labels = model.fit_predict(X)
 
-# Visualizing Clusters
-plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-plt.title("Hierarchical Clustering Output")
+print("Cluster sizes:", np.bincount(labels))
+print("Silhouette score:", round(silhouette_score(X, labels), 3))
+
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')
+plt.title("Agglomerative Clustering Output")
 plt.show()`}</code>
           </pre>
         </div>
         <div className="p-6 bg-slate-50 text-slate-700 border-b border-slate-200 text-lg">
-          <p className="mb-0"><strong>Understanding the Code:</strong> We use <code>scipy.cluster.hierarchy.linkage</code> to compute the distances and plot the dendrogram visually. Once we examine the tree and select K visually, we use <code>sklearn.cluster.AgglomerativeClustering</code> to build the final model and assign labels to the original points.</p>
+          <p className="mb-3"><strong>Understanding the Code:</strong> SciPy's <code>linkage</code> builds the hierarchy used by <code>dendrogram</code>. Scikit-learn's <code>AgglomerativeClustering</code> then returns a flat set of cluster labels for the selected number of groups.</p>
+          <div className="bg-slate-900 text-slate-100 rounded-lg p-4 font-mono text-sm">
+            <p className="mb-1">Cluster sizes: [40 40 40]</p>
+            <p className="mb-0">Silhouette score: 0.892</p>
+          </div>
+          <p className="mt-3 mb-0 text-sm"><strong>Important:</strong> cluster labels such as 0, 1, and 2 are arbitrary identifiers. The silhouette score is useful for comparison, not proof that 3 clusters are the one true grouping.</p>
         </div>
 
         {/* VISUAL OUTPUT */}
@@ -806,11 +877,11 @@ plt.show()`}</code>
       </h2>
 
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Suppose scientists analyze gene expression data. Genes with similar behavior may belong to Similar biological pathways, Similar diseases, or Similar evolutionary origins.
+        Suppose scientists analyze gene-expression measurements across samples. Genes with similar expression patterns may be grouped together for further investigation of possible shared biological behavior.
       </p>
       
       <p className="text-lg text-slate-700 leading-relaxed mb-8">
-        Hierarchical Clustering helps scientists discover <strong>Nested biological relationships</strong> through dendrogram analysis. This became one of the biggest applications of Hierarchical Clustering in bioinformatics.
+        Hierarchical clustering can reveal <strong>nested similarity patterns</strong> in such measurements. The dendrogram is an exploratory clustering result; biological or evolutionary conclusions require separate domain evidence and analysis.
       </p>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10 text-lg">
@@ -819,10 +890,10 @@ plt.show()`}</code>
             <Check className="mr-2 w-6 h-6" /> Advantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li>No need to specify K initially! You can cut the Dendrogram at any level.</li>
-             <li>Produces detailed hierarchy information and visualization.</li>
-             <li>Preserves all distance/similarity relationships between points.</li>
-             <li>Works exceptionally well for finding nested relationships in scientific data.</li>
+             <li>A full hierarchy can be inspected before choosing a final cut.</li>
+             <li>Produces a dendrogram that exposes nested merge structure.</li>
+             <li>Supports multiple linkage rules and, depending on linkage, different distance metrics.</li>
+             <li>Can be useful when nested grouping structure itself is scientifically or operationally interesting.</li>
           </ul>
         </div>
         <div>
@@ -830,10 +901,10 @@ plt.show()`}</code>
             <CloseIcon className="mr-2 w-6 h-6" /> Disadvantages
           </h3>
           <ul className="list-disc pl-5 space-y-3 text-slate-700">
-             <li>High computational cost (O(n²) or worse) - Very slow for large datasets.</li>
-             <li>Once a merge occurs, it cannot be undone or re-evaluated.</li>
-             <li>Sensitive to outliers (especially with Single or Complete linkage).</li>
-             <li>Sensitive to the choice of distance matrix and linkage criteria.</li>
+             <li>Can require substantial memory and runtime as sample count grows.</li>
+             <li>Standard agglomerative merging is greedy: an earlier merge is not later undone.</li>
+             <li>Results can change substantially with outliers, feature scaling, metric, and linkage choice.</li>
+             <li>A dendrogram does not automatically reveal one objectively correct cut height.</li>
           </ul>
         </div>
       </div>
@@ -851,10 +922,10 @@ plt.show()`}</code>
             </tr>
           </thead>
           <tbody className="text-slate-700">
-             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Need K Initially</td><td className="p-4 font-bold text-indigo-700">No</td><td className="p-4 text-emerald-600">Yes</td></tr>
+             <tr className="border-b border-slate-100"><td className="p-4 font-medium">Need K Initially</td><td className="p-4 font-bold text-indigo-700">Not to build a full dendrogram; a final cut still needs a choice</td><td className="p-4 text-emerald-600">Yes</td></tr>
              <tr className="border-b border-slate-100"><td className="p-4 font-medium">Visualization</td><td className="p-4 font-bold text-indigo-700">Dendrogram</td><td className="p-4 text-emerald-600">None inherent</td></tr>
              <tr className="border-b border-slate-100"><td className="p-4 font-medium">Speed / Scalability</td><td className="p-4 text-rose-600">Slower / Lower</td><td className="p-4 text-emerald-600">Faster / Higher</td></tr>
-             <tr><td className="p-4 font-medium">Cluster Shape</td><td className="p-4 text-indigo-700">Flexible</td><td className="p-4 text-emerald-600">Mostly spherical</td></tr>
+             <tr><td className="p-4 font-medium">Geometry</td><td className="p-4 text-indigo-700">Depends strongly on linkage and metric</td><td className="p-4 text-emerald-600">Favors compact centroid-based groups</td></tr>
           </tbody>
         </table>
       </div>
@@ -878,6 +949,41 @@ plt.show()`}</code>
         </ul>
       </div>
 
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
+        Common Mistakes
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+        {[
+          ['Treating the dendrogram as the truth', 'It visualizes the hierarchy produced by your metric and linkage choices.'],
+          ['Ignoring feature scales', 'Large numerical units can dominate distance calculations.'],
+          ['Calling one cut “the optimal K” automatically', 'Cut height should be justified with data, domain knowledge, and validation.'],
+          ['Using Ward with an incompatible metric', 'Ward linkage in Scikit-learn requires Euclidean distance.'],
+        ].map(([title, text]) => (
+          <div key={title} className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+            <p className="font-bold text-rose-900 mb-1">{title}</p>
+            <p className="text-slate-700 mb-0">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">
+        Quick FAQs
+      </h2>
+      <div className="space-y-3 mb-10">
+        <details className="bg-white border border-slate-200 rounded-lg p-4">
+          <summary className="font-bold text-slate-800 cursor-pointer">Do I have to choose K before hierarchical clustering?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Not if you first build a full hierarchy/dendrogram. To obtain a final flat clustering, however, you still need a rule such as a chosen cluster count or distance threshold.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-lg p-4">
+          <summary className="font-bold text-slate-800 cursor-pointer">Does hierarchical clustering need feature scaling?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Often yes when numerical features have very different units and the selected distance metric is scale-sensitive.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-lg p-4">
+          <summary className="font-bold text-slate-800 cursor-pointer">What should I learn next?</summary>
+          <p className="mt-3 mb-0 text-slate-700">Compare the method with <a href="/learn/kmeans" className="text-indigo-700 underline font-semibold">K-Means</a>, then study <a href="/learn/dbscan" className="text-indigo-700 underline font-semibold">DBSCAN</a>. If distance scales are unclear, review <a href="/learn/feature-scaling" className="text-indigo-700 underline font-semibold">Feature Scaling</a>.</p>
+        </details>
+      </div>
+
       <hr className="border-slate-200 mt-10 mb-10" />
 
       {/* FINAL SUMMARY */}
@@ -889,13 +995,13 @@ plt.show()`}</code>
       </p>
       
       <p className="text-lg text-slate-700 leading-relaxed mb-6">
-        Unlike K-Means, it does not require predefined cluster counts and provides rich hierarchical insights into the data structure. It is an industry standard across bioinformatics, gene expression, and taxonomy applications.
+        A full hierarchy can be built without choosing the final number of clusters first, but obtaining a flat clustering still requires a cut rule such as a cluster count or distance threshold. The method is especially useful when the nested grouping structure itself is worth inspecting.
       </p>
 
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
          <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
          <p className="text-slate-800 italic text-lg leading-relaxed">
-           "Clusters are formed gradually through hierarchical relationships between similar data points. Hierarchical Clustering reveals the actual evolutionary relationships *between* clusters, not just final, rigid cluster assignments. This makes it extremely mathematically elegant and practically valuable in scientific analysis."
+           "Hierarchical clustering does more than return cluster labels: it records a sequence of merges or splits. The dendrogram is valuable because it lets us inspect that structure at multiple resolutions—but its meaning always depends on the data, distance metric, linkage rule, and chosen cut."
          </p>
       </div>
 
