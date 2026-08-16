@@ -1,34 +1,58 @@
 import React from 'react';
-import { Target, TrendingUp, AlertTriangle, Lightbulb, BookOpen, Calculator, Code, Layers, ShieldCheck, Check, Network, Route } from 'lucide-react';
-import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Lightbulb, Code } from 'lucide-react';
 
 export function DBSCANContent() {
-  const moonData = [
-    { x: 1, y: 5 }, { x: 2, y: 6 }, { x: 3, y: 6.5 }, { x: 4, y: 6 }, { x: 5, y: 5 },
-    { x: 3, y: 4 }, { x: 4, y: 3.5 }, { x: 5, y: 3 }, { x: 6, y: 3.5 }, { x: 7, y: 4 }
-  ];
-
   return (
     <>
       <div id="introduction">
         <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">DBSCAN Clustering Guide</h1>
-        
+
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          DBSCAN stands for <strong>Density-Based Spatial Clustering of Applications with Noise</strong>. It is an unsupervised Machine Learning clustering algorithm that groups together data points that are closely packed in high-density regions while identifying isolated points as noise or outliers.
+          DBSCAN stands for <strong>Density-Based Spatial Clustering of Applications with Noise</strong>. It is an unsupervised clustering algorithm that looks for <strong>dense neighborhoods of points</strong> and can leave sufficiently isolated points outside the clusters as noise.
         </p>
 
-        <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Unlike clustering algorithms such as <strong>K-Means</strong> and <strong>Hierarchical Clustering</strong>, DBSCAN does not assume that clusters must be:
-        </p>
-        <ul className="list-disc pl-6 mb-6 text-lg text-slate-800 space-y-2">
-          <li>Circular</li>
-          <li>Convex</li>
-          <li>Spherical</li>
-        </ul>
+        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8" id="dbscan-simple-words">
+          <h2 className="text-2xl font-bold text-indigo-900 mb-4">DBSCAN in Simple Words</h2>
+          <p className="text-lg text-slate-800 mb-5">Imagine dots on a map. DBSCAN asks: <strong>“Where are enough dots packed close together?”</strong></p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
+            {[
+              ['1', 'Choose a radius', 'eps'],
+              ['2', 'Count nearby points', 'min_samples'],
+              ['3', 'Grow dense regions', 'Clusters'],
+              ['4', 'Leave isolated points', 'Noise'],
+            ].map(([step, title, label]) => (
+              <div key={step} className="bg-white border border-indigo-100 rounded-lg p-4">
+                <div className="w-8 h-8 mx-auto mb-2 rounded-full bg-indigo-100 text-indigo-800 font-bold flex items-center justify-center">{step}</div>
+                <p className="font-semibold text-slate-900">{title}</p>
+                <p className="text-sm text-slate-600 mt-1">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <p className="text-lg leading-relaxed mb-8 text-slate-800">
-          Instead, DBSCAN can discover <strong>Clusters of arbitrary shapes</strong>, which makes it extremely useful for real-world datasets.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8" id="dense-vs-noise-intuition">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
+            <p className="font-bold text-emerald-900 mb-3">Dense region → possible cluster</p>
+            <div className="font-mono text-emerald-900 whitespace-pre text-center">{`● ● ●
+ ● ● ● ●
+  ● ● ●`}</div>
+          </div>
+          <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+            <p className="font-bold text-rose-900 mb-3">Sparse / isolated → possible noise</p>
+            <div className="font-mono text-rose-900 whitespace-pre text-center">{`●             ×
+       ●
+                 ×`}</div>
+          </div>
+        </div>
+
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          Unlike K-Means, DBSCAN does not use centroids and does not require you to choose the final number of clusters before fitting. This lets it find many <strong>non-convex or curved cluster shapes</strong> when density is reasonably consistent within each cluster.
         </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-md mb-8">
+          <p className="font-bold text-amber-900 mb-1">Important:</p>
+          <p className="text-amber-900">A DBSCAN noise label means “this point did not satisfy the chosen density rules.” It does <strong>not</strong> automatically prove that the point is fraud, an error, or a real-world anomaly.</p>
+        </div>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
@@ -37,7 +61,7 @@ export function DBSCANContent() {
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Why Density-Based Clustering Was Needed</h2>
         
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Traditional clustering algorithms faced several limitations. For example, K-Means assumes that clusters are spherical. But real-world data often contains:
+          Centroid-based clustering such as K-Means works best when groups can be represented well by compact centers. Real-world data may instead contain:
         </p>
         <ul className="list-disc pl-6 mb-8 text-lg text-slate-800 space-y-2">
           <li>Curved structures</li>
@@ -49,12 +73,12 @@ export function DBSCANContent() {
           <p className="font-bold text-indigo-900 text-lg mb-2">Example: The Moon Shape Problem</p>
           <p className="text-slate-800 mb-4">Suppose data forms a moon shape:</p>
           <div className="text-4xl tracking-widest mb-4">🌙 &nbsp; &nbsp; 🌙</div>
-          <p className="text-slate-800">K-Means struggles because it tries to divide data using centroid boundaries. It cannot wrap around curves.</p>
+          <p className="text-slate-800">K-Means can struggle on this kind of non-convex geometry because each cluster is represented by a centroid. DBSCAN can instead connect points through dense neighborhoods.</p>
         </div>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Another Major Problem — Noise and Outliers</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Real-world datasets often contain Fraudulent transactions, Sensor errors, Abnormal user behavior, or Random noisy points. K-Means incorrectly forces such points into clusters because every point must belong to a centroid.
+          Real-world datasets can contain sensor errors, unusual transactions, abnormal behavior, or simply sparse observations. K-Means assigns every sample to one of its clusters, while DBSCAN can label samples that do not satisfy its density rules as noise.
         </p>
 
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
@@ -63,9 +87,9 @@ export function DBSCANContent() {
         <ol className="list-decimal pl-6 mb-6 text-lg text-slate-800 space-y-2">
           <li>Discover arbitrary-shaped clusters</li>
           <li>Ignore noisy points</li>
-          <li>Automatically determine cluster count</li>
+          <li>Form clusters without specifying the final cluster count in advance</li>
         </ol>
-        <p className="text-lg font-bold text-indigo-700">This led to the development of DBSCAN.</p>
+        <p className="text-lg font-semibold text-indigo-700">DBSCAN addresses these needs with a density-based definition of a cluster.</p>
       </div>
 
       <hr className="border-slate-200 mt-8 mb-8" />
@@ -105,16 +129,16 @@ Noise / Outliers`}
       <div id="what-makes-special">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">What Makes DBSCAN Special</h2>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          DBSCAN introduced several revolutionary ideas in clustering. It can:
+          DBSCAN is useful because its clustering rule can:
         </p>
         <ul className="list-disc pl-6 mb-6 text-lg text-slate-800 space-y-2">
           <li>Detect irregular cluster shapes</li>
-          <li>Automatically identify outliers</li>
+          <li>Assign sparse observations a noise label</li>
           <li>Work without a predefined cluster count</li>
-          <li>Handle noisy datasets effectively</li>
+          <li>Avoid forcing every sample into a cluster</li>
         </ul>
         <p className="text-lg leading-relaxed mb-8 text-slate-800">
-          These features made DBSCAN a fundamental clustering algorithm in Machine Learning.
+          These properties make DBSCAN an important alternative when centroid-based clustering does not match the geometry of the data.
         </p>
       </div>
 
@@ -131,7 +155,7 @@ Noise / Outliers`}
 │
 ├── Density
 ├── Epsilon (eps)
-├── MinPts
+├── min_samples
 ├── Core Points
 ├── Border Points
 └── Noise Points`}
@@ -153,7 +177,7 @@ Noise / Outliers`}
         
         <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8" id="parameters">
           <p className="text-lg font-bold text-amber-900 mb-2">1. Epsilon (eps or ε)</p>
-          <p className="text-slate-800 mb-4">Epsilon represents the neighborhood radius. If two points lie within the epsilon distance, they are considered neighbors.</p>
+          <p className="text-slate-800 mb-4"><code>eps</code> is the maximum neighborhood distance. Samples whose distance is at most <code>eps</code> can belong to the same local neighborhood.</p>
           <div className="font-mono text-sm whitespace-pre bg-white p-4 rounded border border-amber-200 text-slate-700 mb-4">
 {`        eps radius
       ┌───────────┐
@@ -162,22 +186,47 @@ Noise / Outliers`}
       │     ●     │
       └───────────┘`}
           </div>
-          <p className="text-slate-800 italic">All points inside the circle belong to the neighborhood.</p>
+          <p className="text-slate-800 italic">Think of eps as the size of the local neighborhood around a point.</p>
         </div>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           <strong>Why eps Is Important:</strong> Choosing eps incorrectly creates problems. 
-          If <em>eps is too small</em>, most points become noise because very few neighbors exist. 
-          If <em>eps is too large</em>, different clusters merge together, reducing clustering quality.
+          If <em>eps is too small</em>, more points may be labeled noise because neighborhoods are tiny. 
+          If <em>eps is too large</em>, nearby dense regions may merge into one cluster.
         </p>
 
         <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8" id="minpts">
-          <p className="text-lg font-bold text-amber-900 mb-2">2. MinPts</p>
-          <p className="text-slate-800 mb-4">MinPts means the minimum number of points required to form a dense region.</p>
-          <p className="text-slate-800 mb-2"><strong>Simple Example:</strong> Suppose MinPts = 5. This means a point needs at least 5 neighboring points inside its eps radius to become a core point.</p>
-          <p className="text-slate-800 font-bold mt-4">Rule of Thumb for Choosing MinPts:</p>
-          <p className="text-slate-800 font-mono mt-2 bg-white inline-block px-3 py-1 rounded border border-amber-200">MinPts ≥ D + 1</p>
-          <p className="text-slate-800 mt-2">Where D = number of dimensions. For 2D data, usually MinPts ≥ 3 or 4.</p>
+          <p className="text-lg font-bold text-amber-900 mb-2">2. min_samples (the MinPts idea)</p>
+          <p className="text-slate-800 mb-4"><code>min_samples</code> is the minimum number of samples required in an <code>eps</code>-neighborhood for the center sample to be a core point.</p>
+          <p className="text-slate-800 mb-3"><strong>Important Scikit-learn detail:</strong> this count <strong>includes the point itself</strong>.</p>
+          <p className="text-slate-800"><strong>Example:</strong> if <code>min_samples = 5</code>, a point is core when its eps-neighborhood contains at least 5 samples in total, counting itself.</p>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-6 mb-8" id="eps-minsamples-worked-example">
+          <h3 className="text-2xl font-bold text-slate-800 mb-4">Tiny Worked Example: Is P a Core Point?</h3>
+          <p className="text-lg text-slate-800 mb-4">Suppose <code>eps = 1.5</code> and <code>min_samples = 4</code>.</p>
+          <div className="font-mono bg-slate-50 border border-slate-200 rounded-lg p-4 mb-4 whitespace-pre text-center text-slate-800">{`Q      R
+   P
+      S        T`}</div>
+          <p className="text-slate-800 mb-2"><strong>Step 1:</strong> P's eps-neighborhood contains P, Q, R and S.</p>
+          <p className="text-slate-800 mb-2"><strong>Step 2:</strong> Total samples in the neighborhood = <strong>4</strong>.</p>
+          <p className="text-slate-800 mb-4"><strong>Step 3:</strong> Because <code>4 ≥ min_samples</code>, <strong>P is a core point</strong>.</p>
+          <p className="text-sm text-slate-600">If P had only 3 samples in its neighborhood, P would not be core. It could still become a border point if it lies within eps of another core point.</p>
+        </div>
+
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8" id="feature-scaling-dbscan">
+          <h3 className="text-2xl font-bold text-blue-900 mb-4">Why Feature Scaling Can Matter</h3>
+          <p className="text-lg text-slate-800 mb-4">DBSCAN commonly uses a distance metric. If one feature has much larger numerical units, it can dominate the distance.</p>
+          <div className="overflow-x-auto mb-4">
+            <table className="min-w-full text-sm bg-white border border-blue-100">
+              <thead><tr className="bg-blue-100"><th className="p-3 text-left">Feature</th><th className="p-3 text-left">Example difference</th></tr></thead>
+              <tbody>
+                <tr className="border-t"><td className="p-3">Age</td><td className="p-3">5</td></tr>
+                <tr className="border-t"><td className="p-3">Annual income</td><td className="p-3">20,000</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-slate-800">With raw Euclidean distance, income could dominate simply because of its units. Standardization is therefore often useful when numerical feature scales differ greatly, but scaling should still respect the meaning of the variables.</p>
         </div>
       </div>
 
@@ -192,7 +241,7 @@ Noise / Outliers`}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 shadow-sm">
             <h4 className="text-xl font-bold text-emerald-900 mb-3 text-center">1. Core Point</h4>
-            <p className="text-slate-800 mb-4 text-center">A core point is a point having at least MinPts neighbors inside its eps radius. They represent dense cluster regions.</p>
+            <p className="text-slate-800 mb-4 text-center">A core point has at least <code>min_samples</code> samples in its eps-neighborhood, counting itself. Core points form the dense interior of clusters.</p>
             <div className="bg-white rounded p-3 text-center border border-emerald-100 font-mono text-sm leading-relaxed text-emerald-800">
               &nbsp;&nbsp;&nbsp;● ● ● <br/>
               &nbsp;● ●<strong className="text-emerald-600">C</strong>● ●<br/>
@@ -203,7 +252,7 @@ Noise / Outliers`}
 
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-sm">
             <h4 className="text-xl font-bold text-blue-900 mb-3 text-center">2. Border Point</h4>
-            <p className="text-slate-800 mb-4 text-center">Border points lie near a dense region but do not themselves contain enough neighbors. They are connected to a cluster but not dense enough.</p>
+            <p className="text-slate-800 mb-4 text-center">A border point is not core itself, but it lies within eps of a core point and can therefore belong to that core point's cluster.</p>
             <div className="bg-white rounded p-3 text-center border border-blue-100 font-mono text-sm leading-relaxed text-blue-800">
               ● ● ● ● ●<br/>
               &nbsp;● ●<strong className="text-emerald-600">C</strong>● ●<br/>
@@ -215,7 +264,7 @@ Noise / Outliers`}
 
           <div className="bg-rose-50 border border-rose-200 rounded-xl p-6 shadow-sm">
             <h4 className="text-xl font-bold text-rose-900 mb-3 text-center">3. Noise Point</h4>
-            <p className="text-slate-800 mb-4 text-center">Noise points (also called outliers) are isolated points. They do not belong to clusters and do not satisfy density requirements.</p>
+            <p className="text-slate-800 mb-4 text-center">A final noise point is neither a core point nor assigned as a border point of a cluster. Scikit-learn gives such samples the label <code>-1</code>.</p>
             <div className="bg-white rounded p-3 text-center border border-rose-100 font-mono text-sm leading-relaxed text-rose-800">
               ● ● ● ●<br/>
               <br/>
@@ -237,7 +286,7 @@ Noise / Outliers`}
 
         <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md mb-8 font-mono text-indigo-900 whitespace-pre" id="workflow">
 {`Complete Workflow
-Choose eps and MinPts
+Choose eps and min_samples
            │
            ▼
 Find Core Points
@@ -258,11 +307,11 @@ Mark Remaining Points as Noise`}
         <div className="space-y-6 text-lg text-slate-800">
           <div>
             <h4 className="font-bold text-xl text-slate-900">Step 1 — Select a Point</h4>
-            <p>DBSCAN begins by selecting a random, unvisited point.</p>
+            <p>Conceptually, DBSCAN considers an unvisited point and inspects its local neighborhood. The exact processing order is an implementation detail.</p>
           </div>
           <div>
             <h4 className="font-bold text-xl text-slate-900">Step 2 — Find Neighbors</h4>
-            <p>It calculates all points inside the eps radius. Distance is usually measured using Euclidean Distance.</p>
+            <p>It finds samples whose distance is within <code>eps</code>. Euclidean distance is common, but Scikit-learn's DBSCAN supports other metrics too.</p>
             <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md my-4">
               <p className="font-mono text-blue-900 font-bold mb-2">Euclidean Distance Formula:</p>
               <p className="font-mono text-slate-800">d = √((x₂ - x₁)² + (y₂ - y₁)²)</p>
@@ -277,11 +326,11 @@ Mark Remaining Points as Noise`}
           </div>
           <div>
             <h4 className="font-bold text-xl text-slate-900">Step 3 — Determine Point Type</h4>
-            <p>If the number of neighbors ≥ MinPts, it is marked as a Core Point. Else, it is a Border point or noise.</p>
+            <p>If the eps-neighborhood contains at least <code>min_samples</code> samples (including the point itself), it is a core point. A non-core point can later belong to a cluster as a border point if it is within eps of a core point; otherwise it remains noise.</p>
           </div>
           <div>
             <h4 className="font-bold text-xl text-slate-900">Step 4 — Expand Cluster</h4>
-            <p>DBSCAN recursively expands clusters from core points. Neighboring dense points are connected together. This process creates density-connected regions.</p>
+            <p>From a core point, DBSCAN expands through neighboring core points and includes their reachable border points. This is what allows a cluster to follow a curved or irregular dense region.</p>
           </div>
         </div>
       </div>
@@ -305,7 +354,7 @@ Mark Remaining Points as Noise`}
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">2. Density Reachable</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          A point is density reachable if it can be connected through a chain of core points. Points become connected through dense paths.
+          Point q is density-reachable from p if there is a chain of points from p to q where each next point is directly density-reachable from the previous one. Intermediate expansion points must satisfy the core-point condition.
         </p>
         <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-3 pr-4 rounded-r-md mb-8 font-mono">
           A ●──●──●──● B
@@ -313,12 +362,12 @@ Mark Remaining Points as Noise`}
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">3. Density Connected</h3>
         <p className="text-lg leading-relaxed mb-8 text-slate-800">
-          Two points are density connected if both are reachable from some common core point. This property is what ultimately creates complete clusters.
+          Two points are density-connected if there exists a point from which both are density-reachable. This relation helps define which samples belong to the same density-based cluster.
         </p>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Why DBSCAN Handles Arbitrary Shapes</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Unlike K-Means, DBSCAN does not rely on centroids. Instead, it expands clusters through connected dense regions. Thus it can discover Curved clusters, Spiral structures, and Non-convex patterns.
+          Unlike K-Means, DBSCAN does not rely on one centroid per cluster. It expands through connected dense regions, so it can represent many curved or non-convex patterns when the density assumptions are suitable.
         </p>
       </div>
 
@@ -344,13 +393,13 @@ Mark Remaining Points as Noise`}
               </tr>
               <tr className="bg-slate-50">
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Handles Noise</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Yes</td>
-                <td className="px-6 py-4 text-sm text-slate-700">Poorly</td>
+                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Explicit noise label</td>
+                <td className="px-6 py-4 text-sm text-slate-700">Assigns every point</td>
               </tr>
               <tr>
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Arbitrary Shapes</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Yes</td>
-                <td className="px-6 py-4 text-sm text-slate-700">No</td>
+                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Can model many non-convex shapes</td>
+                <td className="px-6 py-4 text-sm text-slate-700">Favors compact centroid-based groups</td>
               </tr>
               <tr className="bg-slate-50">
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Uses Centroids</td>
@@ -358,9 +407,9 @@ Mark Remaining Points as Noise`}
                 <td className="px-6 py-4 text-sm text-slate-700">Yes</td>
               </tr>
               <tr>
-                <td className="px-6 py-4 text-sm text-slate-900 font-medium">Outlier Detection</td>
-                <td className="px-6 py-4 text-sm text-emerald-600 font-bold">Excellent</td>
-                <td className="px-6 py-4 text-sm text-rose-600 font-bold">Weak</td>
+                <td className="px-6 py-4 text-sm text-slate-900 font-medium">Sparse observations</td>
+                <td className="px-6 py-4 text-sm text-emerald-700 font-medium">Can label them as noise</td>
+                <td className="px-6 py-4 text-sm text-slate-700">No built-in noise class</td>
               </tr>
             </tbody>
           </table>
@@ -368,15 +417,15 @@ Mark Remaining Points as Noise`}
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Real-Life Example — Fraud Detection</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Suppose a bank analyzes transactions. Normal customers create dense transaction patterns. Fraudulent transactions appear Rare, Isolated, and Unusual.
+          Suppose a bank represents transactions using suitable behavioral features. Some unusual transactions may appear in sparse regions compared with common patterns.
         </p>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          DBSCAN can identify sparse abnormal transactions as noise points. This makes DBSCAN highly useful in Fraud detection, Cybersecurity, and Anomaly detection.
+          DBSCAN can flag such sparse observations as density-based noise candidates. They would still need investigation or a separate supervised/anomaly-detection process before being called fraud.
         </p>
 
-        <h3 className="text-2xl font-bold text-slate-800 mb-4">Determining Optimal eps</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mb-4">Choosing a Useful eps</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          One popular method to find the optimal epsilon is the <strong>K-Distance Graph</strong>.
+          A common heuristic for exploring <code>eps</code> is a <strong>k-distance graph</strong>. It is a visual aid, not a guarantee of one mathematically “optimal” epsilon.
         </p>
         <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-3 pr-4 rounded-r-md mb-8 text-slate-800">
           <p className="font-bold mb-2">K-Distance Graph Idea:</p>
@@ -385,7 +434,7 @@ Mark Remaining Points as Noise`}
             <li>Sort these distances</li>
             <li>Plot them</li>
           </ul>
-          <p className="mt-2 italic">A sharp bend or "elbow" in the graph indicates a good eps value.</p>
+          <p className="mt-2 italic">A bend can suggest a candidate eps value. Real datasets may have a weak or ambiguous bend, so validate the resulting clusters and use domain knowledge.</p>
         </div>
       </div>
 
@@ -401,46 +450,59 @@ Mark Remaining Points as Noise`}
           </div>
           <div className="p-0">
             <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">
-<pre><code>{`# Step 1 — Import Libraries
+<pre><code>{`# Step 1 — Import libraries
 import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn.cluster import DBSCAN
-from sklearn.datasets import make_blobs
+from sklearn.datasets import make_moons
+from sklearn.preprocessing import StandardScaler
 
-# Step 2 — Create Dataset
-X, y_true = make_blobs(
+# Step 2 — Create a curved, unlabeled-looking dataset
+# y_true is kept ONLY for evaluation later; DBSCAN never sees it.
+X, y_true = make_moons(
     n_samples=300,
-    centers=4,
-    cluster_std=0.50,
-    random_state=0
+    noise=0.05,
+    random_state=42
 )
 
-# Step 3 — Apply DBSCAN
+# Step 3 — Scale because DBSCAN is distance-based
+X_scaled = StandardScaler().fit_transform(X)
+
+# Step 4 — Fit DBSCAN
 db = DBSCAN(
-    eps=0.3,
-    min_samples=10
-).fit(X)
+    eps=0.20,
+    min_samples=5
+)
+labels = db.fit_predict(X_scaled)
 
-# Step 4 — Get Labels
-labels = db.labels_
-# Important: Label = -1 means noise point
-
-# Step 5 — Count Clusters
+# In Scikit-learn, label -1 means noise.
 n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
-print("Clusters:", n_clusters)
+n_noise = np.sum(labels == -1)
+n_core = len(db.core_sample_indices_)
+n_border = len(X_scaled) - n_core - n_noise
 
-# Step 6 — Visualize Clusters
-plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-plt.title("DBSCAN Clustering")
+print("Clusters:", n_clusters)
+print("Noise points:", n_noise)
+print("Core points:", n_core)
+print("Border points:", n_border)
+
+# Step 5 — Visualize
+plt.scatter(X_scaled[:, 0], X_scaled[:, 1], c=labels, cmap='viridis')
+plt.title("DBSCAN on Two-Moons Data")
 plt.show()`}</code></pre>
             </div>
           </div>
           <div className="bg-slate-50 border-t border-slate-200 p-4">
             <p className="font-mono text-sm mb-2 text-slate-800"><strong>Output Interpretation:</strong></p>
-            <p className="font-mono text-sm text-indigo-700">Clusters: 4</p>
-            <p className="text-sm text-slate-600 mt-2">
-              This means DBSCAN automatically discovered 4 dense regions without requiring a predefined K. Using color mapping, different colors represent different clusters, while black or isolated points represent noise.
+            <div className="font-mono text-sm text-indigo-700 space-y-1">
+              <p>Clusters: 2</p>
+              <p>Noise points: 2</p>
+              <p>Core points: 289</p>
+              <p>Border points: 9</p>
+            </div>
+            <p className="text-sm text-slate-600 mt-3">
+              DBSCAN finds two curved dense regions without receiving the generated class labels or a predefined cluster count. The numeric cluster IDs and plot colors are arbitrary; label <code>-1</code> is the special Scikit-learn noise label.
             </p>
           </div>
         </div>
@@ -451,17 +513,17 @@ plt.show()`}</code></pre>
       <div id="metrics">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Evaluation Metrics for DBSCAN</h2>
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Two common evaluation metrics for assessing the quality of DBSCAN clustering are the <strong>Silhouette Score</strong> and the <strong>Adjusted Rand Index (ARI)</strong>.
+          Cluster evaluation depends on what information you have. <strong>Silhouette Score</strong> is an internal geometry-based measure, while <strong>Adjusted Rand Index (ARI)</strong> requires reference labels and is therefore mainly available in labeled benchmarks or synthetic teaching examples.
         </p>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">1. Silhouette Score</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          The Silhouette score measures cluster separation quality.
+          The Silhouette score compares how close each sample is to its own cluster with how close it is to the nearest other cluster. Values range from -1 to 1. For DBSCAN, decide explicitly how you want to treat noise; below we compute the score on non-noise samples only.
         </p>
         <div className="grid grid-cols-3 gap-4 mb-4 text-center max-w-2xl">
           <div className="bg-emerald-50 border border-emerald-200 p-3 rounded shadow-sm">
             <p className="font-bold text-xl text-emerald-800">+1</p>
-            <p className="text-sm text-emerald-700">Excellent</p>
+            <p className="text-sm text-emerald-700">Well separated</p>
           </div>
           <div className="bg-amber-50 border border-amber-200 p-3 rounded shadow-sm">
             <p className="font-bold text-xl text-amber-800">0</p>
@@ -469,7 +531,7 @@ plt.show()`}</code></pre>
           </div>
           <div className="bg-rose-50 border border-rose-200 p-3 rounded shadow-sm">
             <p className="font-bold text-xl text-rose-800">-1</p>
-            <p className="text-sm text-rose-700">Incorrect</p>
+            <p className="text-sm text-rose-700">Possibly assigned poorly</p>
           </div>
         </div>
         <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-3 pr-4 rounded-r-md mb-8 inline-block">
@@ -478,7 +540,7 @@ plt.show()`}</code></pre>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">2. Adjusted Rand Index (ARI)</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ARI measures similarity between predicted and true clusters. <strong>1</strong> means perfect clustering, and <strong>0</strong> means random clustering.
+          ARI compares two cluster assignments while adjusting for chance. <strong>1</strong> means perfect agreement, values near <strong>0</strong> are expected for random-like independent labelings, and negative values are possible. In real unsupervised projects, true cluster labels often do not exist.
         </p>
 
         <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 w-full max-w-2xl">
@@ -486,14 +548,27 @@ plt.show()`}</code></pre>
             <h4 className="font-bold text-slate-800">Python Code for Evaluation</h4>
           </div>
           <div className="bg-[#1e1e1e] text-[#d4d4d4] p-4 font-mono text-sm">
-<pre><code>{`from sklearn import metrics
-from sklearn.metrics import adjusted_rand_score
+<pre><code>{`from sklearn.metrics import silhouette_score, adjusted_rand_score
 
-sc = metrics.silhouette_score(X, labels)
+# Exclude DBSCAN noise for this silhouette calculation.
+non_noise = labels != -1
+sil = silhouette_score(
+    X_scaled[non_noise],
+    labels[non_noise]
+)
+
+# y_true exists only because make_moons generated it for us.
 ari = adjusted_rand_score(y_true, labels)
 
-print("Silhouette:", sc)
-print("ARI:", ari)`}</code></pre>
+print(f"Silhouette (non-noise): {sil:.3f}")
+print(f"ARI vs generated labels: {ari:.3f}")`}</code></pre>
+          </div>
+          <div className="bg-slate-50 border-t border-slate-200 p-4">
+            <div className="font-mono text-sm text-indigo-700 space-y-1">
+              <p>Silhouette (non-noise): 0.389</p>
+              <p>ARI vs generated labels: 0.987</p>
+            </div>
+            <p className="text-sm text-slate-600 mt-3">The high ARI is possible here because this is a controlled synthetic dataset with reference labels. Do not expect ARI to be available in an ordinary unlabeled clustering task.</p>
           </div>
         </div>
       </div>
@@ -504,26 +579,26 @@ print("ARI:", ari)`}</code></pre>
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Complexity & Pros/Cons</h2>
         
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-slate-800 mb-4">Time Complexity of DBSCAN</h3>
-          <ul className="list-disc pl-6 text-lg text-slate-800 space-y-2">
-            <li><strong>Without indexing:</strong> O(n²)</li>
-            <li><strong>With spatial indexing structures (like KD-Tree):</strong> O(n log n)</li>
-          </ul>
+          <h3 className="text-2xl font-bold text-slate-800 mb-4">Computation and Memory</h3>
+          <p className="text-lg text-slate-800 mb-4">Runtime depends on the distance metric, dimensionality, neighborhood-search algorithm, and how many neighbors each point has. Brute-force neighborhood search can become quadratic.</p>
+          <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-r-md">
+            <p className="text-amber-900"><strong>Scikit-learn note:</strong> its DBSCAN implementation can require <code>O(n²)</code> memory in a worst case such as very large <code>eps</code> with low <code>min_samples</code>. So avoid memorizing one universal “O(n log n)” complexity claim.</p>
+          </div>
         </div>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Advantages of DBSCAN</h3>
         <ol className="list-decimal pl-6 mb-8 text-lg text-slate-800 space-y-4">
           <li><strong>No Need for Number of Clusters:</strong> Unlike K-Means, no predefined K is required.</li>
-          <li><strong>Handles Arbitrary Shapes:</strong> Can detect curved clusters, irregular groups, and complex structures.</li>
-          <li><strong>Excellent Outlier Detection:</strong> Noise points are naturally identified, which is extremely valuable in anomaly detection systems.</li>
-          <li><strong>Robust Against Noise:</strong> Performs well on noisy datasets.</li>
+          <li><strong>Non-convex shapes:</strong> Can follow many curved or irregular dense regions.</li>
+          <li><strong>Explicit noise label:</strong> Sparse samples can remain outside the discovered clusters.</li>
+          <li><strong>No forced assignment:</strong> Every observation does not have to belong to a cluster.</li>
         </ol>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Disadvantages of DBSCAN</h3>
         <ol className="list-decimal pl-6 mb-8 text-lg text-slate-800 space-y-4">
-          <li><strong>Sensitive to eps:</strong> Improper parameter selection severely affects performance.</li>
+          <li><strong>Sensitive to eps and min_samples:</strong> Different density settings can substantially change the result.</li>
           <li><strong>Difficulty with Varying Densities:</strong> Struggles when clusters have very different neighborhood densities.</li>
-          <li><strong>Poor Performance in High Dimensions:</strong> Distance calculations become less meaningful in high-dimensional spaces (Curse of Dimensionality).</li>
+          <li><strong>High dimensions:</strong> Distance neighborhoods can become less informative as dimensionality increases, especially without appropriate representation/scaling.</li>
         </ol>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">DBSCAN vs Hierarchical Clustering</h3>
@@ -539,18 +614,18 @@ print("ARI:", ari)`}</code></pre>
             <tbody className="divide-y divide-slate-200 bg-white">
               <tr>
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Noise Handling</td>
-                <td className="px-6 py-4 text-sm text-emerald-600 font-medium">Excellent</td>
-                <td className="px-6 py-4 text-sm text-rose-600">Weak</td>
+                <td className="px-6 py-4 text-sm text-emerald-700 font-medium">Explicit noise label</td>
+                <td className="px-6 py-4 text-sm text-slate-700">Usually assigns samples within the hierarchy</td>
               </tr>
               <tr className="bg-slate-50">
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Arbitrary Shapes</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Yes</td>
-                <td className="px-6 py-4 text-sm text-slate-700">Moderate</td>
+                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Often strong for non-convex dense shapes</td>
+                <td className="px-6 py-4 text-sm text-slate-700">Depends strongly on linkage + metric</td>
               </tr>
               <tr>
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Scalability</td>
-                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Better</td>
-                <td className="px-6 py-4 text-sm text-slate-700">Slower</td>
+                <td className="px-6 py-4 text-sm text-indigo-700 font-medium">Depends on neighborhood search</td>
+                <td className="px-6 py-4 text-sm text-slate-700">Can become expensive as n grows</td>
               </tr>
               <tr className="bg-slate-50">
                 <td className="px-6 py-4 text-sm text-slate-900 font-medium">Dendrogram</td>
@@ -592,32 +667,72 @@ print("ARI:", ari)`}</code></pre>
 
         <h3 className="text-2xl font-bold text-slate-800 mb-4">Advanced Variants of DBSCAN</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Researchers later developed improved versions to address DBSCAN's limitations:
+          Related density-based algorithms can address some limitations of a single global <code>eps</code>:
         </p>
         <ul className="list-disc pl-6 mb-6 text-lg text-slate-800 space-y-2">
-          <li><strong>HDBSCAN</strong> (Hierarchical DBSCAN)</li>
-          <li><strong>OPTICS</strong></li>
-          <li><strong>ADBSCAN</strong></li>
-          <li><strong>Lin-DBSCAN</strong></li>
+          <li><strong>HDBSCAN</strong> — combines density clustering across varying epsilon values and can better accommodate varying densities.</li>
+          <li><strong>OPTICS</strong> — orders samples by density-based reachability so cluster structure can be explored across neighborhood scales.</li>
         </ul>
         <p className="text-lg leading-relaxed text-slate-800 mb-8">
-          These variants improve Scalability, Adaptive density handling, and Hierarchical density clustering.
+          They are worth exploring when one fixed DBSCAN neighborhood scale is too restrictive.
         </p>
+      </div>
+
+      <hr className="border-slate-200 mt-8 mb-8" />
+
+      <div id="common-mistakes">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Common DBSCAN Mistakes</h2>
+        <ol className="list-decimal pl-6 text-lg text-slate-800 space-y-3 mb-8">
+          <li><strong>Forgetting that min_samples includes the point itself</strong> in Scikit-learn.</li>
+          <li><strong>Ignoring feature scale</strong> when using a distance metric.</li>
+          <li><strong>Treating every -1 label as a confirmed anomaly.</strong> It is only noise under the chosen density settings.</li>
+          <li><strong>Calling the k-distance elbow “the optimal eps.”</strong> It is a heuristic candidate that still needs validation.</li>
+          <li><strong>Expecting one eps to fit clusters with very different densities.</strong> Consider OPTICS or HDBSCAN when density varies strongly.</li>
+        </ol>
+      </div>
+
+      <div id="dbscan-faq" className="mb-10">
+        <h2 className="text-3xl font-bold text-indigo-800 mb-6">Quick FAQs</h2>
+        <div className="space-y-4">
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">Does DBSCAN need the number of clusters first?</summary>
+            <p className="mt-3 text-slate-700">No. You choose density parameters such as eps and min_samples; the number of resulting clusters emerges from those settings and the data.</p>
+          </details>
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">Does DBSCAN always find arbitrary-shaped clusters?</summary>
+            <p className="mt-3 text-slate-700">It can represent many non-convex shapes, but results still depend on density, feature representation, distance metric, eps and min_samples. Strongly varying cluster densities can be difficult.</p>
+          </details>
+          <details className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <summary className="font-bold text-slate-900 cursor-pointer">Does a DBSCAN noise point mean fraud?</summary>
+            <p className="mt-3 text-slate-700">No. It only means that the point did not belong to a sufficiently dense region under the chosen parameters.</p>
+          </details>
+        </div>
+      </div>
+
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-10" id="where-next">
+        <h2 className="text-2xl font-bold text-indigo-900 mb-3">Where to Go Next</h2>
+        <p className="text-slate-800 mb-3">Connect DBSCAN with the surrounding lessons:</p>
+        <div className="flex flex-wrap gap-3">
+          <a href="/learn/feature-scaling" className="text-indigo-700 underline font-medium">Feature Scaling</a>
+          <a href="/learn/kmeans" className="text-indigo-700 underline font-medium">K-Means</a>
+          <a href="/learn/hierarchical" className="text-indigo-700 underline font-medium">Hierarchical Clustering</a>
+          <a href="/learn/pca" className="text-indigo-700 underline font-medium">PCA</a>
+        </div>
       </div>
 
       {/* FINAL SUMMARY */}
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        DBSCAN is a density-based clustering algorithm that identifies dense regions of points while marking sparse regions as noise. Its major strengths include the fact that it needs no predefined cluster count, it has excellent outlier handling, the ability to detect arbitrary-shaped clusters, and strong performance on noisy data.
+        DBSCAN is a density-based clustering algorithm that expands clusters from dense neighborhoods and can label sufficiently sparse samples as noise. It does not require a predefined final cluster count and can represent many non-convex shapes when the data fits its density assumptions.
       </p>
       <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        The algorithm works using two key parameters: <strong>eps</strong> and <strong>MinPts</strong>, and categorizes points into three regions: Core points, Border points, and Noise points.
+        The two central parameters are <strong>eps</strong> and <strong>min_samples</strong>. Together they determine core points, border points, and final noise points.
       </p>
       
       <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10" id="final-insight">
         <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
         <p className="text-slate-800 italic text-lg leading-relaxed">
-          DBSCAN remains an essential clustering algorithm in Machine Learning because of its unparalleled ability to handle real-world irregular data structures and inherently filter out noise, avoiding the forced uniform shapes generated by centroid-based methods like K-Means.
+          Think of DBSCAN as <strong>“find dense neighborhoods and connect them.”</strong> Its results are only as meaningful as the chosen features, distance metric, scaling and density parameters, so always inspect and validate the discovered structure.
         </p>
       </div>
 
