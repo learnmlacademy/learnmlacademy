@@ -1,439 +1,455 @@
 import React from 'react';
-import { Target, Activity, Code, Layers, HelpCircle, BarChart2, CheckCircle, Brain, XCircle } from 'lucide-react';
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Legend, Tooltip } from 'recharts';
+import { AlertTriangle, CheckCircle, Code, Lightbulb } from 'lucide-react';
 
-const stationaryData = Array.from({ length: 50 }, (_, i) => ({
-  time: i,
-  value: 50 + Math.sin(i * 0.5) * 10 + (Math.random() * 5 - 2.5),
-}));
-
-const nonStationaryData = Array.from({ length: 50 }, (_, i) => ({
-  time: i,
-  value: 20 + i * 1.5 + Math.sin(i * 0.5) * 10 + (Math.random() * 5 - 2.5),
-}));
-
-const forecastData = [
-  ...Array.from({ length: 20 }, (_, i) => ({ time: `Day ${i+1}`, actual: 100 + i * 2.5 + Math.random() * 5, forecast: null })),
-  { time: 'Day 20', actual: 100 + 19 * 2.5 + Math.random() * 5, forecast: 100 + 19 * 2.5 + Math.random() * 5 }, // junction
-  ...Array.from({ length: 10 }, (_, i) => ({ time: `Day ${i+21}`, actual: null, forecast: 150 + i * 2.4 }))
-];
+const FlowBox = ({ title, text }: { title: string; text: string }) => (
+  <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+    <p className="font-bold text-indigo-800 mb-1">{title}</p>
+    <p className="text-sm text-slate-700 leading-relaxed">{text}</p>
+  </div>
+);
 
 export function ArimaContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">ARIMA (AutoRegressive Integrated Moving Average)</h1>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          In Machine Learning and Time Series Forecasting, one of the biggest challenges is predicting future values based on historical observations.
-        </p>
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+          ARIMA (AutoRegressive Integrated Moving Average)
+        </h1>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Unlike traditional Machine Learning datasets where rows are independent, time series data contains:
+          ARIMA is a classical statistical model for forecasting a time series from its own history. Unlike a normal table where row order may not matter, time-series observations arrive in sequence, so yesterday, last week, or last month can contain useful information about what comes next.
         </p>
 
-        <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-2 pr-4 rounded-r-md mb-6 inline-block">
-          <p className="text-indigo-900 font-bold">Temporal dependency</p>
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5 mb-8">
+          <p className="font-bold text-indigo-900 mb-4">ARIMA in Simple Words</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-stretch">
+            <FlowBox title="1. Look Back" text="Use earlier values of the series." />
+            <FlowBox title="2. Remove Trend" text="Difference the series when needed." />
+            <FlowBox title="3. Learn Errors" text="Use patterns in earlier forecast errors." />
+            <FlowBox title="4. Forecast" text="Combine the learned structure to predict future values." />
+          </div>
         </div>
 
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">A Tiny Example First</h2>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          which means: <br />
-          <span className="italic">Past values influence future values.</span>
+          Suppose monthly demand is:
         </p>
-
-        <h3 className="text-xl font-bold text-slate-800 mb-4 mt-8">Examples of time series data include:</h3>
-        
-        <div className="overflow-x-auto mb-8">
-          <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto mb-5">
+          <table className="w-full max-w-xl text-left border-collapse bg-white border rounded-lg overflow-hidden">
             <thead>
-              <tr className="border-b-2 border-slate-300 text-slate-800">
-                <th className="py-3 px-4 font-bold">Application</th>
-                <th className="py-3 px-4 font-bold">Example</th>
+              <tr className="bg-slate-50 border-b">
+                <th className="px-4 py-3">Month</th>
+                <th className="px-4 py-3">Demand</th>
               </tr>
             </thead>
             <tbody className="text-slate-700">
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Stock Market</td><td className="py-2 px-4">Daily stock prices</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Weather Forecasting</td><td className="py-2 px-4">Temperature prediction</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Banking</td><td className="py-2 px-4">Monthly revenue</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Retail</td><td className="py-2 px-4">Sales forecasting</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Transportation</td><td className="py-2 px-4">Traffic prediction</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Energy</td><td className="py-2 px-4">Electricity demand forecasting</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Healthcare</td><td className="py-2 px-4">Patient monitoring</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-2 px-4 font-semibold">Social Media</td><td className="py-2 px-4">User activity prediction</td></tr>
+              <tr className="border-b"><td className="px-4 py-2">January</td><td className="px-4 py-2">100</td></tr>
+              <tr className="border-b"><td className="px-4 py-2">February</td><td className="px-4 py-2">108</td></tr>
+              <tr><td className="px-4 py-2">March</td><td className="px-4 py-2">117</td></tr>
             </tbody>
           </table>
         </div>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          One of the most important classical forecasting algorithms used for time series analysis is <strong>ARIMA</strong>.
+          The level is rising, but the <strong>changes</strong> are only <code className="bg-slate-100 px-1 rounded">+8</code> and <code className="bg-slate-100 px-1 rounded">+9</code>. ARIMA can model a series after differencing and combine that with lagged values and lagged errors.
         </p>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ARIMA is a statistical forecasting model designed specifically for <em>Sequential time-dependent data</em>. It uses:
-        </p>
-        <ul className="list-square pl-6 text-lg leading-relaxed text-slate-800 mb-6">
-          <li>Previous observations</li>
-          <li>Previous errors</li>
-          <li>Differencing</li>
-        </ul>
-
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          to predict future values. ARIMA became extremely popular because it works well for many real-world forecasting problems, is mathematically interpretable, performs strongly on short-term forecasting, and requires only historical time series data.
-        </p>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Unlike Deep Learning models which may require huge datasets, ARIMA can often perform very well even with smaller datasets, and understanding it deeply is extremely important for Data Science and Machine Learning practitioners.
+        <p className="text-lg leading-relaxed mb-6 text-slate-800">
+          Common time-series examples include sales, demand, traffic, sensor readings, financial quantities, website activity, and other measurements collected repeatedly over time. ARIMA is most appropriate when the series can be represented reasonably well by a linear non-seasonal ARIMA structure; strongly seasonal series usually need seasonal terms such as SARIMA.
         </p>
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
+      <hr className="border-slate-200 my-8" />
 
       <div id="what-it-stands-for">
-        <h2 className="text-2xl font-bold text-indigo-800 mb-6">What Does ARIMA Stand For?</h2>
-        
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ARIMA stands for:
-        </p>
-        <ul className="list-disc pl-6 text-lg leading-relaxed text-slate-800 font-bold mb-6">
-          <li>AutoRegressive</li>
-          <li>Integrated</li>
-          <li>Moving Average</li>
-        </ul>
-        
-        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-8 font-mono text-sm leading-relaxed text-indigo-900 shadow-sm inline-block">
-          ARIMA<br/>
-          │<br/>
-          ├── AR → AutoRegression<br/>
-          ├── I  → Integrated<br/>
-          └── MA → Moving Average
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">What Does ARIMA(p, d, q) Mean?</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
+            <p className="text-3xl font-black text-blue-700 mb-2">p</p>
+            <p className="font-bold text-slate-900">AutoRegressive order</p>
+            <p className="text-slate-700 mt-2">How many lagged values are included in the AR part.</p>
+          </div>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+            <p className="text-3xl font-black text-emerald-700 mb-2">d</p>
+            <p className="font-bold text-slate-900">Differencing order</p>
+            <p className="text-slate-700 mt-2">How many rounds of differencing are used by the integrated part.</p>
+          </div>
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+            <p className="text-3xl font-black text-amber-700 mb-2">q</p>
+            <p className="font-bold text-slate-900">Moving-Average order</p>
+            <p className="text-slate-700 mt-2">How many lagged error terms are included in the MA part.</p>
+          </div>
         </div>
 
-        <h3 className="text-xl font-bold text-slate-800 mb-4">Understanding the Core Idea of ARIMA</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ARIMA predicts future values using patterns hidden inside historical observations. The model assumes <em>past behavior influences future behavior</em>.
-        </p>
-        
-        <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-3 pr-4 rounded-r-md mb-8">
-          <p className="text-emerald-900 text-lg leading-relaxed">
-            For example, if electricity demand has been increasing gradually over previous weeks, ARIMA attempts to learn this structure and forecast future demand. Similarly stock prices, sales trends, weather data, or website traffic often show patterns over time. ARIMA mathematically models these patterns.
+        <div className="rounded-lg bg-slate-50 border border-slate-200 p-5 mb-8">
+          <p className="font-bold text-slate-900 mb-2">Example: ARIMA(2, 1, 1)</p>
+          <p className="text-slate-700 leading-relaxed">
+            Use an AR order of 2, difference once, and use an MA order of 1. This notation describes the model structure; it does not mean those values are automatically correct for every dataset.
           </p>
         </div>
-
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
+      <hr className="border-slate-200 my-8" />
 
       <div id="components-detail">
-        <h2 className="text-2xl font-bold text-indigo-800 mb-6">Components of ARIMA in Detail</h2>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">The Three Parts of ARIMA</h2>
 
-        {/* 1. AutoRegression */}
-        <h3 className="text-xl font-bold text-slate-800 mb-4">1. AutoRegression (AR)</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 text-slate-800">
-          <strong>Definition:</strong> The autoregressive part means the <em>current value depends on previous values</em>.
-        </p>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 text-slate-800">
-          <strong>Real-Life Intuition:</strong> Suppose today's temperature depends on yesterday's temperature and the day-before-yesterday's temperature. This dependency is modeled using Autoregression.
-        </p>
-
-        <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-blue-900 mb-2">Mathematical Formula of AR(p)</p>
-          <p className="text-lg font-mono text-blue-800 bg-white p-3 rounded mb-3 inline-block">
-            Y<sub>t</sub> = c + ϕ<sub>1</sub>Y<sub>t-1</sub> + ϕ<sub>2</sub>Y<sub>t-2</sub> + ⋯ + ϕ<sub>p</sub>Y<sub>t-p</sub> + ε<sub>t</sub>
-          </p>
-          <ul className="text-sm font-sans text-blue-900">
-            <li><strong>Y<sub>t</sub>:</strong> Current value, <strong>Y<sub>t-1</sub>:</strong> Previous value</li>
-            <li><strong>ϕ:</strong> AR coefficients, <strong>c:</strong> Constant</li>
-            <li><strong>ε:</strong> Error term, <strong>p:</strong> Number of lag observations</li>
-          </ul>
-        </div>
-
-        {/* 2. Integrated */}
-        <h3 className="text-xl font-bold text-slate-800 mb-4 mt-10">2. Integrated (I)</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 text-slate-800">
-          <strong>Definition:</strong> The integrated component handles differencing. Differencing removes trends and makes the series <em>stationary</em>.
-        </p>
-        
-        <p className="font-bold text-slate-800 mb-2">What Is Stationarity?</p>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 text-slate-800">
-          A stationary series has constant mean, constant variance, and stable statistical behavior over time. ARIMA assumes statistical properties remain stable over time. Non-stationary data can produce unreliable forecasts.
-        </p>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 mt-6">
-          <div className="bg-white border p-4 rounded-xl shadow-sm">
-             <p className="text-center font-bold text-emerald-700 mb-4 font-sans text-sm tracking-wider uppercase">Stationary Series (Stable Mean)</p>
-             <div className="h-[200px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
-                 <LineChart data={stationaryData}>
-                   <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-                   <XAxis dataKey="time" hide />
-                   <YAxis hide domain={['auto', 'auto']} />
-                   <Line type="monotone" dataKey="value" stroke="#059669" dot={false} strokeWidth={2} />
-                 </LineChart>
-               </ResponsiveContainer>
-             </div>
-          </div>
-          <div className="bg-white border p-4 rounded-xl shadow-sm">
-             <p className="text-center font-bold text-red-700 mb-4 font-sans text-sm tracking-wider uppercase">Non-Stationary Series (Trending)</p>
-             <div className="h-[200px] w-full">
-               <ResponsiveContainer width="100%" height="100%">
-                 <LineChart data={nonStationaryData}>
-                   <CartesianGrid strokeDasharray="3 3" opacity={0.5} />
-                   <XAxis dataKey="time" hide />
-                   <YAxis hide domain={['auto', 'auto']} />
-                   <Line type="monotone" dataKey="value" stroke="#dc2626" dot={false} strokeWidth={2} />
-                 </LineChart>
-               </ResponsiveContainer>
-             </div>
-          </div>
-        </div>
-
-        <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-slate-900 mb-2">Differencing Process</p>
-          <p className="text-slate-800 mb-3">Differencing subtracts consecutive observations (First Difference: Y'<sub>t</sub> = Y<sub>t</sub> - Y<sub>t-1</sub>). Order of differencing (<strong>d</strong>) represents how many times differencing is applied.</p>
-        </div>
-
-        {/* 3. Moving Average */}
-        <h3 className="text-xl font-bold text-slate-800 mb-4 mt-10">3. Moving Average (MA)</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 text-slate-800">
-          <strong>Definition:</strong> The moving average component models the relationship between the current value and previous forecast errors.
-        </p>
-
-        <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md mb-8">
-          <p className="font-bold text-blue-900 mb-2">Mathematical Formula of MA(q)</p>
-          <p className="text-lg font-mono text-blue-800 bg-white p-3 rounded mb-3 inline-block">
-            Y<sub>t</sub> = c + ε<sub>t</sub> + θ<sub>1</sub>ε<sub>t-1</sub> + θ<sub>2</sub>ε<sub>t-2</sub> + ⋯ + θ<sub>q</sub>ε<sub>t-q</sub>
-          </p>
-          <ul className="text-sm font-sans text-blue-900">
-            <li><strong>ε:</strong> Error term</li>
-            <li><strong>θ:</strong> MA coefficients</li>
-            <li><strong>q:</strong> Number of lagged errors</li>
-          </ul>
-        </div>
-        
-      </div>
-
-      <hr className="border-slate-200 mt-8 mb-8" />
-
-      <div id="model-notation">
-        <h2 className="text-2xl font-bold text-indigo-800 mb-6">ARIMA Model Notation</h2>
+        <h3 className="text-xl font-bold text-slate-800 mb-3">1. AR — AutoRegression</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          ARIMA is typically written as: <code className="bg-slate-100 font-bold px-2 py-1 rounded">ARIMA(p, d, q)</code>
+          The AR part relates the current value to earlier values of the series. An AR(p) model can be written as:
         </p>
+        <div className="rounded-lg border-l-4 border-blue-400 bg-blue-50 p-5 mb-5 overflow-x-auto">
+          <p className="font-mono text-blue-900 whitespace-nowrap">
+            Y<sub>t</sub> = c + ϕ<sub>1</sub>Y<sub>t-1</sub> + ... + ϕ<sub>p</sub>Y<sub>t-p</sub> + ε<sub>t</sub>
+          </p>
+        </div>
 
-        <table className="w-full text-left border-collapse mb-8 max-w-[600px]">
-          <thead>
-            <tr className="border-b-2 border-slate-300 text-slate-800 bg-slate-50">
-              <th className="py-3 px-4 font-bold">Parameter</th>
-              <th className="py-3 px-4 font-bold">Meaning</th>
-            </tr>
-          </thead>
-          <tbody className="text-slate-700">
-            <tr className="border-b border-slate-200"><td className="py-2 px-4 font-bold">p</td><td className="py-2 px-4">Number of AR terms</td></tr>
-            <tr className="border-b border-slate-200"><td className="py-2 px-4 font-bold">d</td><td className="py-2 px-4">Number of differencing operations</td></tr>
-            <tr className="border-b border-slate-200"><td className="py-2 px-4 font-bold">q</td><td className="py-2 px-4">Number of MA terms</td></tr>
-          </tbody>
-        </table>
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-slate-900 mb-3">Worked AR example</p>
+          <p className="text-slate-700 mb-2">Suppose <code>c = 10</code>, <code>ϕ₁ = 0.6</code>, <code>ϕ₂ = 0.2</code>, and the last two values are 50 and 46.</p>
+          <p className="font-mono text-sm bg-slate-50 p-3 rounded mb-2">Forecast part = 10 + (0.6 × 50) + (0.2 × 46)</p>
+          <p className="font-mono text-sm bg-slate-50 p-3 rounded mb-2">= 10 + 30 + 9.2</p>
+          <p className="font-mono text-sm bg-slate-50 p-3 rounded font-bold">= 49.2</p>
+          <p className="text-sm text-slate-600 mt-3">This isolates the lagged-value contribution for a simple teaching example; a full stochastic model also includes an innovation/error term.</p>
+        </div>
 
-        <p className="text-lg leading-relaxed mb-4 text-slate-800 font-medium">
-          Example: <code className="bg-slate-100 px-2 py-1 rounded">ARIMA(2, 1, 1)</code> means it uses 2 lag observations, applies first-order differencing, and uses 1 lagged error.
+        <h3 className="text-xl font-bold text-slate-800 mb-3">2. I — Integrated / Differencing</h3>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          Differencing replaces the original levels with changes between observations. First differencing is:
         </p>
-        
-        <h3 className="text-xl font-bold text-slate-800 mb-4 mt-8">Types of ARIMA Models</h3>
-        <ul className="list-disc pl-6 text-lg leading-relaxed text-slate-800 mb-6 space-y-2">
-          <li><strong>ARIMA:</strong> Handles non-seasonal time series.</li>
-          <li><strong>SARIMA:</strong> Handles seasonal patterns (e.g., Monthly sales, Yearly weather patterns).</li>
-          <li><strong>SARIMAX:</strong> SARIMA with external variables.</li>
-          <li><strong>ARIMAX:</strong> ARIMA with exogenous variables.</li>
-        </ul>
+        <div className="rounded-lg border-l-4 border-emerald-400 bg-emerald-50 p-5 mb-5">
+          <p className="font-mono text-emerald-900">Y&apos;<sub>t</sub> = Y<sub>t</sub> − Y<sub>t-1</sub></p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          <div className="border rounded-xl p-5 bg-white">
+            <p className="font-bold text-slate-900 mb-3">Original series</p>
+            <p className="font-mono text-slate-700">100 → 108 → 117</p>
+            <p className="text-sm text-slate-600 mt-2">The level is trending upward.</p>
+          </div>
+          <div className="border rounded-xl p-5 bg-white">
+            <p className="font-bold text-slate-900 mb-3">First difference</p>
+            <p className="font-mono text-slate-700">108 − 100 = 8</p>
+            <p className="font-mono text-slate-700">117 − 108 = 9</p>
+            <p className="text-sm text-slate-600 mt-2">If one round is used, then d = 1.</p>
+          </div>
+        </div>
+
+        <h3 className="text-xl font-bold text-slate-800 mb-3">3. MA — Moving Average</h3>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          In ARIMA, <strong>Moving Average does not mean a rolling average of recent observations</strong>. The MA part models the current value using previous innovation/error terms.
+        </p>
+        <div className="rounded-lg border-l-4 border-amber-400 bg-amber-50 p-5 mb-5 overflow-x-auto">
+          <p className="font-mono text-amber-900 whitespace-nowrap">
+            Y<sub>t</sub> = c + ε<sub>t</sub> + θ<sub>1</sub>ε<sub>t-1</sub> + ... + θ<sub>q</sub>ε<sub>t-q</sub>
+          </p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8">
+          <p className="font-bold text-slate-900 mb-3">Simple one-step MA intuition</p>
+          <p className="text-slate-700 mb-2">Suppose the baseline is 20, <code>θ₁ = 0.5</code>, and the previous error was <code>−4</code>.</p>
+          <p className="font-mono text-sm bg-slate-50 p-3 rounded mb-2">Forecast contribution = 20 + (0.5 × −4)</p>
+          <p className="font-mono text-sm bg-slate-50 p-3 rounded font-bold">= 18</p>
+          <p className="text-sm text-slate-600 mt-3">For a one-step forecast, the unknown future innovation has expected value zero under the model.</p>
+        </div>
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
+      <hr className="border-slate-200 my-8" />
+
+      <div id="stationarity">
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">Stationarity and Why d Matters</h2>
+        <p className="text-lg leading-relaxed mb-4 text-slate-800">
+          A stationary process has statistical behavior that does not systematically drift over time. In practical ARIMA modeling, we often difference a non-stationary level series so that the remaining process is more suitable for ARMA-style modeling.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+            <p className="font-bold text-emerald-900 mb-3">More stationary-looking</p>
+            <div className="flex items-end gap-2 h-24 px-2">
+              {[52, 47, 54, 49, 53, 46, 51, 55, 48, 52].map((v, i) => (
+                <div key={i} className="flex-1 bg-emerald-500/70 rounded-t" style={{ height: `${v}%` }} />
+              ))}
+            </div>
+            <p className="text-sm text-emerald-900 mt-3">Values fluctuate around a broadly stable level.</p>
+          </div>
+          <div className="rounded-xl border border-red-200 bg-red-50 p-5">
+            <p className="font-bold text-red-900 mb-3">Clearly trending</p>
+            <div className="flex items-end gap-2 h-24 px-2">
+              {[18, 25, 31, 39, 46, 53, 61, 70, 79, 90].map((v, i) => (
+                <div key={i} className="flex-1 bg-red-500/70 rounded-t" style={{ height: `${v}%` }} />
+              ))}
+            </div>
+            <p className="text-sm text-red-900 mt-3">The level changes systematically over time.</p>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 mb-8 flex gap-3">
+          <AlertTriangle className="shrink-0 text-amber-700 mt-1" />
+          <div>
+            <p className="font-bold text-amber-900 mb-1">Avoid over-differencing</p>
+            <p className="text-amber-900 leading-relaxed">Differencing is not automatically better. Unnecessary extra differencing can introduce undesirable structure and make forecasts noisier. Choose d using diagnostics and validation rather than mechanically differencing until the graph looks flat.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 my-8" />
 
       <div id="working-principle">
-        <h2 className="text-2xl font-bold text-indigo-800 mb-6">Working Principle of ARIMA</h2>
-        
-        <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 mb-10 font-mono text-sm leading-relaxed text-indigo-900 shadow-sm inline-block">
-          ARIMA WORKFLOW<br/>
-          │<br/>
-          ├── Collect Time Series Data<br/>
-          ├── Check Stationarity<br/>
-          ├── Apply Differencing<br/>
-          ├── Plot ACF/PACF<br/>
-          ├── Select p,d,q<br/>
-          ├── Train ARIMA Model<br/>
-          ├── Forecast Future Values<br/>
-          └── Evaluate Forecast
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">A Practical ARIMA Workflow</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <FlowBox title="1. Plot the series" text="Inspect trend, seasonality, missing periods, outliers, and structural changes." />
+          <FlowBox title="2. Keep time order" text="Use an earlier training period and a later validation/test period. Do not randomly shuffle a forecasting series." />
+          <FlowBox title="3. Examine stationarity" text="Use plots, domain knowledge, and tests such as ADF as supporting evidence." />
+          <FlowBox title="4. Choose d" text="Difference when needed so the modeled process is more stable." />
+          <FlowBox title="5. Explore p and q" text="ACF/PACF can provide clues; candidate models can then be compared." />
+          <FlowBox title="6. Fit and diagnose" text="Check residuals and compare candidate models using criteria such as AIC plus forecasting performance." />
+          <FlowBox title="7. Forecast" text="Generate forecasts from the end of the training period into future periods." />
+          <FlowBox title="8. Evaluate chronologically" text="Use MAE, RMSE or a domain-specific metric on later observations that were not used to fit the model." />
         </div>
 
-        <h3 className="text-xl font-bold text-slate-800 mb-3"><span className="text-indigo-600">Step 1 —</span> Check Stationarity via ADF Test</h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-3">ADF Test — What the p-value Actually Means</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          The Augmented Dickey-Fuller (ADF) test checks whether the series contains a unit root. A p-value {"<"} 0.05 indicates the series is stationary.
+          The Augmented Dickey-Fuller test has a null hypothesis that the series contains a unit root. A small p-value, such as below a chosen 5% significance level, is evidence for rejecting that null under the test specification. It is better to say this than to say “p &lt; 0.05 proves stationarity.”
         </p>
 
-        <h3 className="text-xl font-bold text-slate-800 mb-3 mt-8"><span className="text-indigo-600">Step 2 —</span> Plot ACF and PACF</h3>
-        <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          <strong>ACF (Autocorrelation Function)</strong> measures correlation between observations at different lags. It helps identify <strong>q</strong>.<br/>
-          <strong>PACF (Partial Autocorrelation Function)</strong> removes indirect lag effects. It helps identify <strong>p</strong>.
+        <h3 className="text-xl font-bold text-slate-800 mb-3 mt-8">ACF and PACF</h3>
+        <div className="overflow-x-auto mb-5">
+          <table className="w-full text-left border-collapse bg-white border rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-slate-50 border-b">
+                <th className="px-4 py-3">Tool</th>
+                <th className="px-4 py-3">Simple meaning</th>
+                <th className="px-4 py-3">Classical clue</th>
+              </tr>
+            </thead>
+            <tbody className="text-slate-700">
+              <tr className="border-b">
+                <td className="px-4 py-3 font-bold">ACF</td>
+                <td className="px-4 py-3">Correlation between the series and its lagged values.</td>
+                <td className="px-4 py-3">Can help suggest MA structure.</td>
+              </tr>
+              <tr>
+                <td className="px-4 py-3 font-bold">PACF</td>
+                <td className="px-4 py-3">Lag relationship after accounting for shorter-lag linear effects.</td>
+                <td className="px-4 py-3">Can help suggest AR structure.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-slate-600 mb-8">
+          These are identification heuristics, not mechanical rules that always reveal the correct p and q for a mixed ARIMA model.
         </p>
 
-        <h3 className="text-xl font-bold text-slate-800 mb-3 mt-8"><span className="text-indigo-600">Step 3 —</span> Model Selection (Grid Search & AIC)</h3>
+        <h3 className="text-xl font-bold text-slate-800 mb-3">AIC — Useful, but Not a Forecast Guarantee</h3>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Grid search tries multiple combinations of (p,d,q) and selects the best model using <strong>AIC (Akaike Information Criterion)</strong>. A lower AIC indicates a better model because it penalizes model complexity.
+          AIC balances model fit with model complexity. When several candidate models are fitted to the same data under comparable assumptions, a lower AIC is preferred by that criterion. But the lowest AIC does not guarantee the best future forecast, so chronological validation still matters.
         </p>
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
+      <hr className="border-slate-200 my-8" />
 
       <div id="python-implementation">
         <h2 className="text-2xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Code className="mr-3 text-indigo-600" /> Complete Python Implementation of ARIMA
+          <Code className="mr-3 text-indigo-600" /> Python: A Self-Contained ARIMA Example
         </h2>
-        
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
-          <div className="bg-slate-50 px-4 py-3 border-b flex items-center">
-            <h3 className="font-bold text-indigo-800">1. Imports & Setup</h3>
-          </div>
-          <div className="bg-[#1e1e1e] p-4 font-mono text-sm overflow-x-auto">
-            <pre className="text-[#d4d4d4] !m-0"><code className="language-python">{`import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          This example creates a reproducible non-seasonal series, keeps the final 12 months as an untouched time-ordered test period, checks the effect of first differencing, compares a small set of ARIMA orders by AIC, and evaluates the forecast.
+        </p>
+
+        <div className="bg-[#1e1e1e] rounded-xl p-4 font-mono text-sm overflow-x-auto mb-5">
+          <pre className="text-[#d4d4d4] !m-0"><code className="language-python">{`import itertools
+import warnings
+import numpy as np
+import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-import itertools
-import warnings
-warnings.filterwarnings('ignore')`}</code></pre>
-          </div>
-        </div>
 
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
-          <div className="bg-slate-50 px-4 py-3 border-b flex items-center">
-            <h3 className="font-bold text-indigo-800">2. Load Data & Stationarity Check</h3>
-          </div>
-          <div className="bg-[#1e1e1e] p-4 font-mono text-sm overflow-x-auto">
-            <pre className="text-[#d4d4d4] !m-0"><code className="language-python">{`data = pd.read_csv('AirPassengers.csv', index_col='Month', parse_dates=True)
-ts = data['#Passengers']
+# 1. Create a reproducible non-seasonal time series
+rng = np.random.default_rng(42)
+n = 120
+noise = rng.normal(0, 1.2, n)
 
-# ADF Test
-result = adfuller(ts)
-print("ADF Statistic:", result[0])
-print("p-value:", result[1])
+values = np.zeros(n)
+values[0] = 50
+change = 0.0
 
-# If p-value > 0.05, apply differencing
-ts_diff = ts.diff().dropna() `}</code></pre>
-          </div>
-        </div>
+for t in range(1, n):
+    change = 0.55 * change + 0.25 + noise[t]
+    values[t] = values[t - 1] + change
 
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
-          <div className="bg-slate-50 px-4 py-3 border-b flex items-center">
-            <h3 className="font-bold text-indigo-800">3. Grid Search for Best Model</h3>
-          </div>
-          <div className="bg-[#1e1e1e] p-4 font-mono text-sm overflow-x-auto">
-            <pre className="text-[#d4d4d4] !m-0"><code className="language-python">{`p = range(0, 4)
-d = range(0, 3)
-q = range(0, 4)
-pdq = list(itertools.product(p, d, q))
+series = pd.Series(
+    values,
+    index=pd.date_range("2015-01-01", periods=n, freq="MS"),
+    name="value"
+)
+
+# 2. Chronological split: last 12 months are test data
+train = series.iloc[:-12]
+test = series.iloc[-12:]
+
+# 3. ADF before and after first differencing
+adf_level = adfuller(train, autolag="AIC")
+adf_diff = adfuller(train.diff().dropna(), autolag="AIC")
+
+print("Level ADF p-value:", round(adf_level[1], 4))
+print("Differenced ADF p-value:", round(adf_diff[1], 4))
+
+# 4. Small teaching search over p and q, keeping d=1
+candidates = list(itertools.product(range(3), [1], range(3)))
 
 best_aic = np.inf
 best_order = None
 
-for order in pdq:
+for order in candidates:
     try:
-        model = ARIMA(ts, order=order)
-        results = model.fit()
-        if results.aic < best_aic:
-            best_aic = results.aic
+        # Some deliberately tested candidates may emit start-value/convergence warnings.
+        # We compare the models that successfully fit.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            fitted = ARIMA(train, order=order).fit()
+
+        if fitted.aic < best_aic:
+            best_aic = fitted.aic
             best_order = order
-    except:
-        continue
+    except Exception:
+        pass
 
-print("Best ARIMA Order:", best_order)`}</code></pre>
-          </div>
-          <div className="bg-[#1e1e1e] text-emerald-400 p-4 font-mono text-sm border-t border-slate-700">
-            <p>Output:</p>
-            <p>Best ARIMA Order: (2, 1, 1)</p>
-          </div>
+print("Best order by AIC:", best_order)
+print("Best AIC:", round(best_aic, 2))
+
+# 5. Fit selected model and forecast the test period
+model = ARIMA(train, order=best_order).fit()
+forecast = model.forecast(steps=len(test))
+
+mae = np.mean(np.abs(test - forecast))
+rmse = np.sqrt(np.mean((test - forecast) ** 2))
+
+print("First 3 forecasts:", forecast.iloc[:3].round(2).tolist())
+print("MAE:", round(mae, 2))
+print("RMSE:", round(rmse, 2))`}</code></pre>
         </div>
 
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
-          <div className="bg-slate-50 px-4 py-3 border-b flex items-center">
-            <h3 className="font-bold text-indigo-800">4. Final Forecast & Visualization</h3>
-          </div>
-          <div className="bg-[#1e1e1e] p-4 font-mono text-sm overflow-x-auto">
-            <pre className="text-[#d4d4d4] !m-0"><code className="language-python">{`final_model = ARIMA(ts, order=best_order)
-results = final_model.fit()
-
-forecast_values = results.forecast(steps=10)
-print(forecast_values)
-
-# Plotting...`}</code></pre>
-          </div>
-          
-          <div className="bg-[#1e1e1e] p-4 font-mono text-sm border-t border-slate-700">
-            <div className="bg-white p-4 rounded shadow-inner max-w-[600px] my-4 mx-auto">
-              <p className="text-center font-bold text-slate-800 text-sm mb-2 font-sans tracking-wider uppercase">Sales Forecast</p>
-              <div className="h-[250px] w-full font-sans">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={forecastData} margin={{ top: 10, right: 30, left: 10, bottom: 0 }}>
-                    <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" />
-                    <XAxis dataKey="time" type="category" tick={{fill: '#475569', fontSize: 12}} hide />
-                    <YAxis type="number" domain={['auto', 'auto']} tick={{fill: '#475569', fontSize: 12}} />
-                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                    <Line type="monotone" name="Actual Sales" dataKey="actual" stroke="#0ea5e9" strokeWidth={2} dot={false} isAnimationActive={false} />
-                    <Line type="monotone" name="ARIMA Forecast" dataKey="forecast" stroke="#f59e0b" strokeWidth={2.5} strokeDasharray="5 5" dot={false} isAnimationActive={false} />
-                    <Legend wrapperStyle={{ fontSize: '12px', color: '#475569', paddingTop: '10px' }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-          </div>
+        <div className="bg-slate-950 text-emerald-300 rounded-xl p-5 font-mono text-sm mb-6 overflow-x-auto">
+          <p>Level ADF p-value: 0.5364</p>
+          <p>Differenced ADF p-value: 0.0</p>
+          <p>Best order by AIC: (1, 1, 0)</p>
+          <p>Best AIC: 294.38</p>
+          <p>First 3 forecasts: [92.62, 92.36, 92.2]</p>
+          <p>MAE: 1.14</p>
+          <p>RMSE: 1.28</p>
         </div>
 
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 mb-8 flex gap-3">
+          <CheckCircle className="shrink-0 text-emerald-700 mt-1" />
+          <div>
+            <p className="font-bold text-emerald-900 mb-1">What this example teaches</p>
+            <p className="text-emerald-900 leading-relaxed">The raw training series does not give strong ADF evidence against a unit root, while the first-differenced series does. Among this deliberately small candidate set, ARIMA(1,1,0) has the lowest AIC. We still evaluate its forecast on later unseen observations rather than trusting AIC alone.</p>
+          </div>
+        </div>
       </div>
 
-      <hr className="border-slate-200 mt-8 mb-8" />
+      <hr className="border-slate-200 my-8" />
 
-      <div id="comparison">
-        <h2 className="text-2xl font-bold text-indigo-800 mb-6">ARIMA vs Machine Learning Models</h2>
-
+      <div id="model-variants">
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">ARIMA, SARIMA and Exogenous Variables</h2>
         <div className="overflow-x-auto mb-8">
-          <table className="w-full text-left border-collapse bg-white shadow-sm rounded-lg overflow-hidden border">
+          <table className="w-full text-left border-collapse bg-white border rounded-lg overflow-hidden">
             <thead>
-              <tr className="bg-indigo-50 border-b-2 border-indigo-200 text-indigo-900">
-                <th className="py-4 px-4 font-bold">Feature</th>
-                <th className="py-4 px-4 font-bold border-l border-indigo-100">ARIMA</th>
-                <th className="py-4 px-4 font-bold border-l border-indigo-100">ML Models (e.g. LSTMs)</th>
+              <tr className="bg-indigo-50 border-b">
+                <th className="px-4 py-3">Model idea</th>
+                <th className="px-4 py-3">Use it when...</th>
               </tr>
             </thead>
             <tbody className="text-slate-700">
-              <tr className="border-b border-slate-200"><td className="py-3 px-4 font-semibold">Data Needed</td><td className="py-3 px-4 border-l border-slate-100">Small</td><td className="py-3 px-4 border-l border-slate-100">Large</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-3 px-4 font-semibold">Interpretability</td><td className="py-3 px-4 border-l border-slate-100 font-bold text-emerald-600">High</td><td className="py-3 px-4 border-l border-slate-100">Medium/Low</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-3 px-4 font-semibold">Handles Nonlinearity</td><td className="py-3 px-4 border-l border-slate-100">Poor</td><td className="py-3 px-4 border-l border-slate-100 font-bold text-emerald-600">Better</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-3 px-4 font-semibold">Sequential Awareness</td><td className="py-3 px-4 border-l border-slate-100 font-bold text-emerald-600">Excellent</td><td className="py-3 px-4 border-l border-slate-100">Depends</td></tr>
-              <tr className="border-b border-slate-200"><td className="py-3 px-4 font-semibold">Short-Term Forecast</td><td className="py-3 px-4 border-l border-slate-100 font-bold text-emerald-600">Excellent</td><td className="py-3 px-4 border-l border-slate-100">Good</td></tr>
-              <tr><td className="py-3 px-4 font-semibold">Long-Term Forecast</td><td className="py-3 px-4 border-l border-slate-100">Moderate</td><td className="py-3 px-4 border-l border-slate-100 font-bold text-emerald-600">Better in DL</td></tr>
+              <tr className="border-b"><td className="px-4 py-3 font-bold">ARIMA(p,d,q)</td><td className="px-4 py-3">You need a non-seasonal ARIMA structure based primarily on the series history.</td></tr>
+              <tr className="border-b"><td className="px-4 py-3 font-bold">SARIMA</td><td className="px-4 py-3">There is repeating seasonal structure requiring seasonal AR, differencing, or MA terms.</td></tr>
+              <tr><td className="px-4 py-3 font-bold">ARIMA/SARIMAX with exogenous variables</td><td className="px-4 py-3">External predictors such as price, promotions, temperature, or holidays should enter the forecasting model.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5 mb-8">
+          <p className="font-bold text-indigo-900 mb-2">Seasonal example</p>
+          <p className="text-indigo-900 leading-relaxed">If monthly sales show a pattern that repeats every 12 months, a plain non-seasonal ARIMA may miss that seasonal structure. A seasonal specification can add terms with period <code className="bg-white px-1 rounded">s = 12</code>.</p>
+        </div>
+      </div>
+
+      <hr className="border-slate-200 my-8" />
+
+      <div id="comparison">
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">ARIMA vs Other Forecasting Approaches</h2>
+        <p className="text-lg leading-relaxed mb-5 text-slate-800">
+          Avoid treating one family as universally better. ARIMA is a useful interpretable baseline for many linear time-series problems, while other statistical or machine-learning approaches may be stronger when seasonality, nonlinear relationships, many external predictors, multiple related series, or large-scale data become central.
+        </p>
+        <div className="overflow-x-auto mb-8">
+          <table className="w-full text-left border-collapse bg-white border rounded-lg overflow-hidden">
+            <thead>
+              <tr className="bg-slate-50 border-b">
+                <th className="px-4 py-3">Question</th>
+                <th className="px-4 py-3">ARIMA perspective</th>
+              </tr>
+            </thead>
+            <tbody className="text-slate-700">
+              <tr className="border-b"><td className="px-4 py-3 font-semibold">Interpretability</td><td className="px-4 py-3">Explicit lag, differencing, and error structure can be inspected.</td></tr>
+              <tr className="border-b"><td className="px-4 py-3 font-semibold">Nonlinearity</td><td className="px-4 py-3">Standard ARIMA is fundamentally a linear model.</td></tr>
+              <tr className="border-b"><td className="px-4 py-3 font-semibold">Seasonality</td><td className="px-4 py-3">Use seasonal extensions when seasonal structure is important.</td></tr>
+              <tr><td className="px-4 py-3 font-semibold">Model choice</td><td className="px-4 py-3">Compare against sensible baselines and alternatives using chronological validation.</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* FINAL SUMMARY */}
+      <hr className="border-slate-200 my-8" />
+
+      <div id="common-mistakes">
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">Common ARIMA Mistakes</h2>
+        <div className="space-y-4 mb-8">
+          {[
+            ['Randomly shuffling the series', 'Forecasting evaluation should respect time order.'],
+            ['Assuming p-value < 0.05 proves stationarity', 'ADF tests a unit-root null under a chosen specification; use it with plots and other diagnostics.'],
+            ['Choosing p and q mechanically from ACF/PACF', 'They are useful clues, especially in simpler AR/MA cases, but mixed models need broader diagnostics and validation.'],
+            ['Calling the lowest AIC the guaranteed best forecast', 'AIC is an in-sample model-selection criterion; later-period forecast performance still matters.'],
+            ['Using plain ARIMA for strong seasonality without checking it', 'Seasonal patterns may require seasonal differencing and seasonal AR/MA terms.'],
+            ['Confusing MA(q) with a rolling moving average', 'The MA in ARIMA refers to lagged model innovations/errors, not simply averaging recent observations.'],
+          ].map(([title, text]) => (
+            <div key={title} className="rounded-lg border border-slate-200 bg-white p-4">
+              <p className="font-bold text-slate-900">{title}</p>
+              <p className="text-slate-700 mt-1">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div id="faq">
+        <h2 className="text-2xl font-bold text-indigo-800 mb-6">Quick FAQ</h2>
+        <div className="space-y-4 mb-8">
+          <div className="border rounded-lg p-5 bg-white">
+            <p className="font-bold text-slate-900 mb-2">Does ARIMA require the raw series itself to be stationary?</p>
+            <p className="text-slate-700">Not necessarily. The integrated part allows differencing. The goal is for the appropriately differenced process modeled by the ARMA terms to satisfy the model assumptions reasonably well.</p>
+          </div>
+          <div className="border rounded-lg p-5 bg-white">
+            <p className="font-bold text-slate-900 mb-2">Is ARIMA only for one-step-ahead forecasts?</p>
+            <p className="text-slate-700">No. Multi-step forecasts are possible, although uncertainty generally grows as the forecast horizon extends.</p>
+          </div>
+          <div className="border rounded-lg p-5 bg-white">
+            <p className="font-bold text-slate-900 mb-2">What should I learn next?</p>
+            <p className="text-slate-700">Continue with <a href="/learn/moving-average" className="text-indigo-700 font-semibold hover:underline">Moving Average</a>, <a href="/learn/exponential-smoothing" className="text-indigo-700 font-semibold hover:underline">Exponential Smoothing</a>, and <a href="/learn/forecasting-basics" className="text-indigo-700 font-semibold hover:underline">Forecasting Basics</a>.</p>
+          </div>
+        </div>
+      </div>
+
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        ARIMA is one of the most important and foundational algorithms in Time Series Forecasting. It combines AutoRegression, Differencing, and Moving Average to model sequential data and predict future observations.
-      </p>
-
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        It is widely used because it provides strong short-term forecasting, mathematical interpretability, and reliable statistical forecasting without requiring millions of data points like deep neural networks.
-      </p>
-
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-        <p className="text-slate-800 italic text-lg leading-relaxed">
-          ARIMA assumes relationships in data are linear and that the underlying statistical properties remain stable over time (stationarity). Always verify stationarity, properly difference your data, and use Grid Search with AIC to find the optimal p, d, and q parameters before trusting a forecast.
-        </p>
+      <div className="rounded-xl border-l-4 border-indigo-500 bg-indigo-50 p-6 mb-10">
+        <div className="flex gap-3">
+          <Lightbulb className="shrink-0 text-indigo-700 mt-1" />
+          <div>
+            <p className="font-bold text-indigo-950 text-xl mb-2">Most Important Insight</p>
+            <p className="text-indigo-950 text-lg leading-relaxed">
+              ARIMA combines lagged values, differencing, and lagged errors. Choose p, d, and q using evidence rather than fixed rules, respect time order during evaluation, inspect residuals, and validate forecasts on later unseen observations. For strong seasonal structure, move to a seasonal extension rather than forcing plain ARIMA to explain everything.
+            </p>
+          </div>
+        </div>
       </div>
     </>
   );
