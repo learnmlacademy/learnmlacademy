@@ -1,26 +1,17 @@
 import React from 'react';
-import { Database, Zap, ShieldAlert, Activity, Cpu } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, AreaChart, Area } from 'recharts';
-
-const batchVsOnlineData = [
-  { time: 'Day 1', batch: 50, online: 50 },
-  { time: 'Day 2', batch: 50, online: 60 },
-  { time: 'Day 3', batch: 50, online: 70 },
-  { time: 'Day 4', batch: 50, online: 75 },
-  { time: 'Day 5', batch: 80, online: 80 }, // Batch retraining occurs here
-  { time: 'Day 6', batch: 80, online: 85 },
-  { time: 'Day 7', batch: 80, online: 88 },
-];
-
-const conceptDriftData = [
-  { time: 1, accuracy: 95 },
-  { time: 2, accuracy: 94 },
-  { time: 3, accuracy: 95 },
-  { time: 4, accuracy: 90 }, // Drift starts
-  { time: 5, accuracy: 75 },
-  { time: 6, accuracy: 55 },
-  { time: 7, accuracy: 40 },
-];
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Cpu,
+  Database,
+  Gauge,
+  RefreshCw,
+  ShieldAlert,
+  Stream,
+  XCircle,
+  Zap,
+} from 'lucide-react';
 
 export function OnlineLearningContent() {
   return (
@@ -30,464 +21,524 @@ export function OnlineLearningContent() {
       </h1>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        Machine Learning systems are traditionally trained using fixed historical datasets. The model is trained once and then deployed for prediction. This traditional approach is called <strong>Batch Learning</strong> or <em>Offline Learning</em>.
-      </p>
-
-      <ul className="list-disc pl-6 space-y-2 text-lg text-slate-800 mb-8">
-        <li>Entire dataset is available beforehand</li>
-        <li>Training occurs all at once</li>
-        <li>Model remains mostly unchanged after deployment</li>
-      </ul>
-
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        This approach works well for many applications. However, modern real-world systems often generate data continuously (e.g., social media feeds, live stock prices, credit card transactions, streaming platforms, and IoT sensor readings).
-      </p>
-
-      <div className="pl-4 border-l-4 border-amber-400 bg-amber-50 py-4 pr-4 rounded-r-md mb-8 shadow-sm">
-         <div className="flex items-start">
-            <ShieldAlert className="text-amber-600 w-6 h-6 mr-3 mt-1 shrink-0" />
-            <div>
-               <h4 className="font-bold text-amber-900 text-lg mb-2">The Challenge: Data Never Stops</h4>
-               <p className="text-amber-800 leading-relaxed m-0 text-[15px]">
-                  If a traditional batch model is retrained repeatedly from scratch on continuous data, training becomes excessively expensive, memory requirements spike, processing becomes too slow, and real-time adaptation becomes practically impossible.
-               </p>
-            </div>
-         </div>
-      </div>
-
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        To solve this problem, Machine Learning introduced <strong>Online Learning</strong>. It allows Machine Learning systems to learn continuously from incoming data, instead of waiting for complete datasets.
-      </p>
-
-      <hr className="border-slate-200 mt-8 mb-10" />
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">What is Online Learning?</h2>
-      
-      <p className="text-lg text-slate-700 italic leading-relaxed mb-6">
-        Online Learning is a Machine Learning approach where the model updates itself incrementally as new data arrives. Instead of learning from the entire dataset at once, the model learns one observation at a time or in small mini-batches.
+        Most introductory Machine Learning examples assume that we collect a dataset, train a model, and then use that trained model for predictions. That is a perfectly valid approach and is often called <strong>batch learning</strong> or <strong>offline learning</strong>.
       </p>
 
       <p className="text-lg leading-relaxed mb-8 text-slate-800">
-        <strong>The Core Idea:</strong> Learn continuously while data arrives. The model adapts dynamically to new patterns, changing behavior, evolving environments, and streaming data. Just like a child learns continuously from daily experiences and feedback—rather than receiving all knowledge on day one—an online learning model continuously improves over time.
+        But some systems receive new data continuously. In those situations, we may want the model to update incrementally rather than retraining from scratch every time new labelled examples arrive. That idea is called <strong>online learning</strong> or <strong>incremental learning</strong>.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 mt-6">
-         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center"><Database className="w-5 h-5 mr-2 text-indigo-600" /> Batch Learning</h3>
-            <p className="text-slate-700 leading-relaxed text-[15px] mb-4">The entire dataset is used at once. You must collect all data, train the model, deploy it, and then retrain it completely later when data becomes stale.</p>
-            <ul className="text-sm text-slate-600 space-y-1 pl-0 list-none m-0">
-               <li>• High memory usage</li>
-               <li>• Slow real-time adaptability</li>
-               <li>• High cost for retraining</li>
-            </ul>
-         </div>
-         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-            <h3 className="text-xl font-bold text-slate-800 mb-2 flex items-center"><Zap className="w-5 h-5 mr-2 text-emerald-600" /> Online Learning</h3>
-            <p className="text-slate-700 leading-relaxed text-[15px] mb-4">The model updates continuously. When new data is received, the model updates, predicts, and is immediately ready for the next stream of data.</p>
-            <ul className="text-sm text-slate-600 space-y-1 pl-0 list-none m-0">
-               <li>• Low memory footprint</li>
-               <li>• Fast, real-time adaptation</li>
-               <li>• Excellent for streaming data</li>
-            </ul>
-         </div>
-      </div>
-
-      <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12 flex flex-col md:flex-row">
-         <div className="w-full md:w-1/3 p-6 flex flex-col justify-center bg-indigo-50 border-r border-indigo-100">
-            <h3 className="text-xl font-bold text-indigo-900 mb-2">Learning Trajectory</h3>
-            <p className="text-indigo-800 text-[15px] leading-relaxed">
-              Batch models stagnate until an expensive retraining event occurs (the step). Online learning models incrementally gain knowledge and adapt smoothly to new patterns.
-            </p>
-         </div>
-         <div className="w-full md:w-2/3 p-6 h-72">
-            <ResponsiveContainer width="100%" height="100%">
-               <LineChart data={batchVsOnlineData} margin={{ top: 20, right: 20, bottom: 20, left: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" opacity={0.5} vertical={false} />
-                  <XAxis dataKey="time" stroke="#64748b" fontSize={12} dy={10} />
-                  <YAxis domain={[40, 100]} stroke="#64748b" fontSize={12} />
-                  <RechartsTooltip cursor={{strokeDasharray: '3 3'}} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
-                  <Legend iconType="circle" />
-                  <Line type="stepAfter" dataKey="batch" name="Batch Learning" stroke="#94a3b8" strokeWidth={3} dot={false} />
-                  <Line type="monotone" dataKey="online" name="Online Learning" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-               </LineChart>
-            </ResponsiveContainer>
-         </div>
-      </div>
-
-      <hr className="border-slate-200 mt-8 mb-10" />
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">The Threat of Concept Drift</h2>
-      
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Online learning enables systems to adapt to changing environments. In the real world, the statistical properties of a target variable often change over time in unforeseen ways. This is known as <strong>Concept Drift</strong>.
-      </p>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm flex flex-col">
-          <div className="bg-slate-50 border-b border-slate-200 p-4">
-             <h4 className="font-bold text-slate-800 flex items-center m-0">
-               <Activity className="w-5 h-5 mr-2 text-rose-600" />
-               Impact of Concept Drift on Static Models
-             </h4>
-          </div>
-          <div className="p-6 flex-grow" style={{ minHeight: '250px' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={conceptDriftData} margin={{ top: 10, right: 10, bottom: 20, left: 0 }}>
-                <defs>
-                  <linearGradient id="colorAcc" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#e11d48" stopOpacity={0.8}/>
-                    <stop offset="95%" stopColor="#e11d48" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="time" stroke="#64748b" fontSize={12} dy={10} />
-                <YAxis domain={[0, 100]} stroke="#64748b" fontSize={12} />
-                <RechartsTooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
-                <Area type="monotone" dataKey="accuracy" name="Model Accuracy" stroke="#e11d48" fillOpacity={1} fill="url(#colorAcc)" />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="flex flex-col justify-center">
-            <h4 className="font-bold text-xl text-slate-900 mb-3">Real-Life Example</h4>
-            <p className="text-slate-700 leading-relaxed mb-4">
-              Fraud detection systems face continuously changing fraud patterns. Fraudsters constantly invent new strategies (Fraud Type A morphs into Fraud Type B). 
-            </p>
-            <p className="text-slate-700 leading-relaxed mb-0">
-              Static (Batch) models become outdated rapidly, and their accuracy drops dramatically as drift occurs. Online learning models adapt automatically, preserving accuracy as the target variable evolves.
-            </p>
-        </div>
-      </div>
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Types of Online Learning</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
-           <div className="flex items-center mb-3">
-              <span className="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full text-xs mr-3">1</span>
-              <h4 className="font-bold text-slate-900 text-lg m-0">Pure Online Learning</h4>
-           </div>
-           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-              The model updates after every single data point. When it receives 1 transaction, it updates immediately.
-           </p>
-           <p className="text-xs font-semibold text-emerald-600 mb-1">Pros: Extremely fast adaptation</p>
-           <p className="text-xs font-semibold text-rose-600 m-0">Cons: Sensitive to noisy outliers</p>
-        </div>
-
-        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
-           <div className="flex items-center mb-3">
-              <span className="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full text-xs mr-3">2</span>
-              <h4 className="font-bold text-slate-900 text-lg m-0">Incremental Learning</h4>
-           </div>
-           <p className="text-slate-600 text-sm leading-relaxed mb-3">
-              The model learns gradually from small chunks of data (e.g., updating after every 100 samples).
-           </p>
-           <p className="text-xs font-semibold text-emerald-600 m-0">Pros: More stable, efficient memory</p>
-        </div>
-
-        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
-           <div className="flex items-center mb-3">
-              <span className="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full text-xs mr-3">3</span>
-              <h4 className="font-bold text-slate-900 text-lg m-0">Mini-Batch Online Learning</h4>
-           </div>
-           <p className="text-slate-600 text-sm leading-relaxed m-0">
-              Standard in Deep Learning. It updates sizes in small mini-batches (e.g., 32 samples). It reduces noise, improves stability, and benefits from vectorized hardware acceleration.
-           </p>
-        </div>
-
-        <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl">
-           <div className="flex items-center mb-3">
-              <span className="bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full text-xs mr-3">4</span>
-              <h4 className="font-bold text-slate-900 text-lg m-0">Streaming Learning</h4>
-           </div>
-           <p className="text-slate-600 text-sm leading-relaxed m-0">
-              Handles virtually infinite continuous data streams, usually found in IoT devices, sensor networks, or live social media pipelines.
-           </p>
-        </div>
-      </div>
-
-      <hr className="border-slate-200 mt-8 mb-10" />
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-6 border-b pb-2">Mathematical Understanding: SGD</h2>
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Online learning heavily relies on <strong>Stochastic Gradient Descent (SGD)</strong>. Unlike Batch Gradient Descent which uses the entire dataset to compute gradients, SGD computes the gradient and updates the weights using a <em>single sample</em> (or mini-batch).
-      </p>
-
-      <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-4 rounded-r-md mb-10 shadow-sm">
-         <h4 className="font-mono text-slate-800 font-bold text-lg mb-3">SGD Update Formula:</h4>
-         <div className="text-xl mb-4 pl-4 text-indigo-800 font-serif">
-            w = w - η (∂J / ∂w)
-         </div>
-         <ul className="text-slate-700 space-y-1 mb-0 list-none pl-0">
-            <li><strong>w</strong> = Model weight matrix</li>
-            <li><strong>η</strong> (eta) = Learning rate</li>
-            <li><strong>J</strong> = Cost function (error)</li>
-         </ul>
-      </div>
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-6 border-b pb-2">Python Implementation (Scikit-Learn)</h2>
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        In Scikit-Learn, online learning is implemented via estimators that support the <code>partial_fit()</code> method. This allows the model to learn incrementally without retraining from scratch.
-      </p>
-
-      {/* Step-by-Step Code View */}
-      <div className="space-y-6 mb-12">
-        <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
-          <div className="bg-slate-50 border-b border-slate-200 p-4">
-            <h4 className="font-bold text-indigo-900 flex items-center m-0">
-               <Cpu className="w-5 h-5 mr-2 text-indigo-600" />
-               Implementing Online SGD Classifier
-            </h4>
-          </div>
-          <div className="p-0 bg-[#1e1e1e]">
-            <pre className="text-[#d4d4d4] font-mono text-sm p-4 overflow-x-auto whitespace-pre-wrap m-0">
-<span className="text-emerald-400">from</span> sklearn.linear_model <span className="text-emerald-400">import</span> SGDClassifier
-<span className="text-emerald-400">from</span> sklearn.datasets <span className="text-emerald-400">import</span> make_classification
-<span className="text-emerald-400">from</span> sklearn.metrics <span className="text-emerald-400">import</span> accuracy_score
-
-<span className="text-slate-500"># 1. Create a dummy streaming dataset</span>
-X, y = make_classification(n_samples=1000, n_features=20, random_state=42)
-
-<span className="text-slate-500"># 2. Initialize the SGD Model for Online Learning</span>
-model = SGDClassifier(loss=<span className="text-amber-300">"log_loss"</span>)
-
-<span className="text-slate-500"># 3. Incremental Training (Simulating a live stream)</span>
-<span className="text-emerald-400">for</span> i <span className="text-emerald-400">in</span> <span className="text-cyan-300">range</span>(<span className="text-cyan-300">len</span>(X)):
-    <span className="text-slate-500"># Use partial_fit to update the model one sample at a time</span>
-    <span className="text-slate-500"># Important: The classes parameter must be provided on the first call</span>
-    model.partial_fit(
-        X[i:i+1], 
-        y[i:i+1], 
-        classes=[0, 1]
-    )
-
-<span className="text-slate-500"># 4. Predict and Evaluate</span>
-predictions = model.predict(X_test)
-<span className="text-cyan-300">print</span>(<span className="text-amber-300">f"Accuracy: &#123;accuracy_score(y_test, predictions)&#125;"</span>)
-            </pre>
-            <div className="bg-slate-800 p-4 border-t border-slate-700 text-slate-300 text-sm">
-               <strong>Note:</strong> <code>partial_fit()</code> is the core mechanism here. It updates the weights slightly based on the current sample, then remembers those weights for the next iteration.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <hr className="border-slate-200 mt-8 mb-10" />
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Advantages & Disadvantages</h2>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-r-xl">
-           <h4 className="text-green-900 font-bold mb-4 flex items-center text-xl m-0">
-             Benefits
-           </h4>
-           <ul className="space-y-3 text-green-800 m-0 pl-0 list-none">
-             <li className="flex items-start"><span className="text-green-600 font-bold mr-2 text-lg leading-none">✓</span> Real-Time Adaptation to concept drift and changing environments.</li>
-             <li className="flex items-start"><span className="text-green-600 font-bold mr-2 text-lg leading-none">✓</span> Memory Efficient as it does not require storing the full massive dataset in RAM.</li>
-             <li className="flex items-start"><span className="text-green-600 font-bold mr-2 text-lg leading-none">✓</span> Faster Updates without the exorbitant computational cost of starting from scratch.</li>
-             <li className="flex items-start"><span className="text-green-600 font-bold mr-2 text-lg leading-none">✓</span> Excellent for Live Streaming infrastructure, IoT, and high-frequency trading.</li>
-           </ul>
-        </div>
-        <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-xl">
-           <h4 className="text-red-900 font-bold mb-4 flex items-center text-xl m-0">
-             Risks & Disadvantages
-           </h4>
-           <ul className="space-y-3 text-red-800 m-0 pl-0 list-none">
-             <li className="flex items-start"><span className="text-red-600 font-bold mr-2 text-lg leading-none">×</span> Sensitive to Noise. A stream of corrupted or anomalous data will actively break the live model.</li>
-             <li className="flex items-start"><span className="text-red-600 font-bold mr-2 text-lg leading-none">×</span> Catastrophic Forgetting. The model may focus too much on recent trends and entirely forget older baseline patterns.</li>
-             <li className="flex items-start"><span className="text-red-600 font-bold mr-2 text-lg leading-none">×</span> Tricky Learning Rate. Tuning how aggressively the model updates is difficult in production.</li>
-             <li className="flex items-start"><span className="text-red-600 font-bold mr-2 text-lg leading-none">×</span> Security Risks. Poisoning attacks where adversaries stream fake data to manipulate the model.</li>
-           </ul>
-        </div>
-      </div>
-
-      {/* ── ALGORITHMS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Key Online Learning Algorithms</h2>
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Several algorithms are specifically designed for online learning scenarios. Here are the most widely used in production systems:
-      </p>
-      <div className="space-y-4 mb-10 not-prose">
-        {[
-          { num:"01", name:"Stochastic Gradient Descent (SGD)", color:"indigo",
-            desc:"The workhorse of online learning. Updates model weights using the gradient computed from a single sample or mini-batch. Extremely memory efficient — only one sample needs to be in memory at a time. The foundation of all deep learning training.",
-            use:"Neural networks, linear classifiers, large-scale NLP. Used by TensorFlow and PyTorch internally for every training step.",
-            sklearn:"SGDClassifier, SGDRegressor — both support partial_fit()" },
-          { num:"02", name:"Passive-Aggressive Algorithms", color:"blue",
-            desc:"A family of online learning algorithms that are passive when a prediction is correct (weights unchanged) and aggressive when a prediction is wrong (weights updated as little as possible to correct the mistake). Parameter C controls aggressiveness.",
-            use:"Real-time text classification, spam detection, sentiment analysis on streaming data.",
-            sklearn:"PassiveAggressiveClassifier, PassiveAggressiveRegressor" },
-          { num:"03", name:"Perceptron", color:"emerald",
-            desc:"The oldest online learning algorithm. Updates weights only when a misclassification occurs — zero update on correct predictions. Guaranteed to converge if data is linearly separable. The conceptual ancestor of all neural networks.",
-            use:"Binary classification on linearly separable streaming data, educational demonstrations of online learning.",
-            sklearn:"Perceptron — supports partial_fit()" },
-          { num:"04", name:"Hoeffding Trees (VFDT)", color:"amber",
-            desc:"A decision tree algorithm designed for data streams. Uses the Hoeffding bound (a statistical guarantee) to decide when enough examples have been seen to confidently choose a split. Can process millions of examples with bounded memory.",
-            use:"IoT sensor stream classification, network intrusion detection, real-time weather pattern detection.",
-            sklearn:"Available in the River library — river.tree.HoeffdingTreeClassifier" },
-          { num:"05", name:"ADWIN (Adaptive Windowing)", color:"violet",
-            desc:"A change detection algorithm that maintains a variable-length window of recent data. Automatically shrinks the window when concept drift is detected (distribution changes), keeping only the most relevant recent data for model updates.",
-            use:"Any online learning system that needs automatic concept drift detection without manual threshold setting.",
-            sklearn:"Available in River — river.drift.ADWIN" },
-        ].map(a => (
-          <div key={a.num} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-            <div className={`bg-${a.color}-600 px-5 py-3 flex items-center gap-3`}>
-              <span className="text-white/60 font-black text-xl">{a.num}</span>
-              <h3 className="text-white font-bold text-base">{a.name}</h3>
-            </div>
-            <div className="p-5 space-y-3">
-              <p className="text-slate-700 text-sm leading-relaxed">{a.desc}</p>
-              <div className="grid sm:grid-cols-2 gap-2">
-                <div className="bg-slate-50 rounded-lg p-3">
-                  <p className="text-xs font-bold text-slate-500 uppercase mb-1">Use cases</p>
-                  <p className="text-xs text-slate-600 leading-relaxed">{a.use}</p>
-                </div>
-                <div className="bg-indigo-50 rounded-lg p-3">
-                  <p className="text-xs font-bold text-indigo-500 uppercase mb-1">Implementation</p>
-                  <p className="text-xs font-mono text-indigo-700">{a.sklearn}</p>
-                </div>
+      <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6 mb-10 not-prose">
+        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-4">Understand First</p>
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
+          {[
+            { label: 'Receive new labelled data', icon: <Database className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'Predict with current model', icon: <Gauge className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'Update model incrementally', icon: <RefreshCw className="w-6 h-6 mx-auto mb-2" /> },
+            { label: 'Repeat as data arrives', icon: <Stream className="w-6 h-6 mx-auto mb-2" /> },
+          ].map((step, index) => (
+            <React.Fragment key={step.label}>
+              <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4 text-sm font-semibold text-slate-800">
+                {step.icon}
+                {step.label}
               </div>
-            </div>
-          </div>
-        ))}
+              {index < 3 && <ArrowRight className="w-5 h-5 text-indigo-400 mx-auto rotate-90 md:rotate-0" />}
+            </React.Fragment>
+          ))}
+        </div>
       </div>
 
-      {/* ── LEARNING RATE SCHEDULING ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Learning Rate Scheduling in Online Learning</h2>
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        The learning rate η determines how aggressively the model updates on each new sample. A fixed learning rate is rarely optimal — too high causes instability, too low causes slow adaptation. Learning rate schedules automatically adjust η over time:
-      </p>
-      <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-8">
-        <table className="w-full text-sm">
-          <thead className="bg-indigo-600 text-white">
+      <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5 mb-10">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0 mt-1" />
+          <div>
+            <h3 className="font-bold text-amber-900 mb-2">Important idea</h3>
+            <p className="text-amber-900 leading-relaxed m-0">
+              Online learning does <strong>not</strong> mean that every prediction system must retrain after every single event. Updates may happen one sample at a time or in small mini-batches. The defining idea is that the model can continue learning from new data without starting from zero each time.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Batch Learning vs Online Learning</h2>
+
+      <div className="grid md:grid-cols-2 gap-6 mb-10 not-prose">
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <Database className="w-5 h-5 text-slate-600" /> Batch Learning
+          </h3>
+          <div className="space-y-3 text-sm text-slate-700">
+            <p><strong>Typical flow:</strong> collect data → train → deploy → retrain later.</p>
+            <p>The model normally stays fixed between retraining cycles.</p>
+            <p>Often simpler to reproduce, validate, and govern.</p>
+          </div>
+        </div>
+
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+          <h3 className="text-xl font-bold text-emerald-900 mb-3 flex items-center gap-2">
+            <Zap className="w-5 h-5 text-emerald-600" /> Online Learning
+          </h3>
+          <div className="space-y-3 text-sm text-emerald-900">
+            <p><strong>Typical flow:</strong> receive new data → predict → update → continue.</p>
+            <p>The model can adapt incrementally as labelled data becomes available.</p>
+            <p>Useful for streams, very large datasets, or changing environments.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-12 not-prose">
+        <table className="w-full text-sm bg-white">
+          <thead className="bg-slate-800 text-white">
             <tr>
-              <th className="p-3 text-left">Schedule</th>
-              <th className="p-3 text-left">Formula</th>
-              <th className="p-3 text-left">Behaviour</th>
-              <th className="p-3 text-left">Best for</th>
+              <th className="p-3 text-left">Question</th>
+              <th className="p-3 text-left">Batch</th>
+              <th className="p-3 text-left">Online / Incremental</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
-            {[
-              ["Constant","η = η₀","Never changes","Tracking concept drift — need fast adaptation forever"],
-              ["Inverse scaling","η = η₀ / t^0.25","Slowly decreases over time","Stationary data — want stability as model matures"],
-              ["Optimal (Pegasos)","η = 1 / (λ × t)","Decreases proportional to step","SVM-style online learning with L2 regularisation"],
-              ["Adaptive (AdaGrad)","η_i = η₀ / √(sum of past gradients)","Per-feature rates, auto-decreases","Sparse data — rare features get higher effective rate"],
-            ].map(([s,f,b,u]) => (
-              <tr key={s} className="hover:bg-slate-50">
-                <td className="p-3 font-bold text-indigo-700">{s}</td>
-                <td className="p-3 font-mono text-xs text-slate-600">{f}</td>
-                <td className="p-3 text-xs text-slate-600">{b}</td>
-                <td className="p-3 text-xs text-emerald-700">{u}</td>
-              </tr>
-            ))}
+          <tbody className="divide-y divide-slate-100">
+            <tr><td className="p-3 font-semibold">How is the model updated?</td><td className="p-3">Periodic retraining</td><td className="p-3">Incremental updates</td></tr>
+            <tr><td className="p-3 font-semibold">Must all data fit in memory?</td><td className="p-3">Not always, but commonly assumed</td><td className="p-3">No; can process small chunks</td></tr>
+            <tr><td className="p-3 font-semibold">Can it react quickly to change?</td><td className="p-3">Depends on retraining frequency</td><td className="p-3">Potentially, if feedback arrives quickly</td></tr>
+            <tr><td className="p-3 font-semibold">Operational complexity</td><td className="p-3">Usually lower</td><td className="p-3">Usually higher</td></tr>
           </tbody>
         </table>
       </div>
 
-      {/* ── REAL WORLD SYSTEMS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Real-World Online Learning Systems</h2>
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Some of the most impactful production ML systems in the world rely on online learning to stay current with rapidly changing user behaviour:
-      </p>
-      <div className="grid md:grid-cols-2 gap-5 mb-8 not-prose">
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Do Not Confuse These Terms</h2>
+
+      <div className="space-y-4 mb-12 not-prose">
         {[
-          { icon:"🎯", title:"Google Ads CTR Prediction", color:"blue",
-            desc:"Google processes billions of ad impressions per day. The click-through rate prediction model updates in real time with each click or non-click event. A model trained last week is already stale — online learning keeps it current with current user intent and market conditions." },
-          { icon:"💳", title:"Visa / Mastercard Fraud Detection", color:"rose",
-            desc:"Fraud patterns change daily as criminals adapt. Batch models trained monthly cannot keep up. Online learning models update with every transaction — if a new fraud pattern emerges at 2am, the model detects it by 3am without any human intervention." },
-          { icon:"📱", title:"TikTok / Instagram Feed Ranking", color:"violet",
-            desc:"User preferences shift hourly. A video that was trending yesterday may be irrelevant today. Recommendation models update continuously with each watch event, like, and scroll-past, keeping the feed aligned with current mood and interests." },
-          { icon:"🏭", title:"Industrial IoT Predictive Maintenance", color:"amber",
-            desc:"Sensors on factory machines stream readings continuously. Online learning models learn each machine's unique baseline pattern and alert when readings deviate — identifying potential failures hours before they occur, saving millions in downtime costs." },
-        ].map(a => (
-          <div key={a.title} className={`bg-${a.color}-50 border border-${a.color}-200 rounded-xl p-5`}>
-            <div className="text-3xl mb-2">{a.icon}</div>
-            <h3 className={`font-bold text-${a.color}-900 text-base mb-2`}>{a.title}</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">{a.desc}</p>
+          {
+            title: 'Online learning',
+            text: 'The model itself is updated incrementally as new labelled examples or feedback become available.',
+          },
+          {
+            title: 'Streaming inference',
+            text: 'Predictions are made on a live stream, but the model may remain completely fixed. Streaming prediction is not automatically online learning.',
+          },
+          {
+            title: 'Out-of-core learning',
+            text: 'Data is processed in chunks because the full dataset is too large for RAM. The dataset can be historical and fixed; it does not have to be a live stream.',
+          },
+          {
+            title: 'Reinforcement learning',
+            text: 'An agent chooses actions and learns from rewards. It is a different learning paradigm, even though learning may also happen sequentially.',
+          },
+        ].map((item) => (
+          <div key={item.title} className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="font-bold text-slate-900 mb-1">{item.title}</h3>
+            <p className="text-sm text-slate-700 leading-relaxed m-0">{item.text}</p>
           </div>
         ))}
       </div>
 
-      {/* ── RIVER LIBRARY ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">The River Library — Online ML in Python</h2>
-      <p className="text-lg leading-relaxed mb-4 text-slate-800">
-        While sklearn supports online learning via <code className="bg-slate-100 px-1 rounded text-sm">partial_fit()</code>, the <strong>River</strong> library is built from the ground up for streaming data. Every algorithm in River processes one sample at a time:
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">A Tiny Update Example</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Many incremental linear models can be understood using a Stochastic Gradient Descent style update:
       </p>
-      <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm mb-8 not-prose">
-        <div className="bg-slate-800 px-4 py-2 flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-400"/>
-          <span className="w-2.5 h-2.5 rounded-full bg-yellow-400"/>
-          <span className="w-2.5 h-2.5 rounded-full bg-green-400"/>
-          <span className="text-slate-300 text-xs ml-1">river_online_learning.py</span>
+
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 mb-6 not-prose">
+        <p className="text-center text-xl font-serif text-indigo-800 mb-4">w<sub>new</sub> = w<sub>old</sub> − η × gradient</p>
+        <div className="grid sm:grid-cols-3 gap-3 text-sm">
+          <div className="bg-white border rounded-lg p-3"><strong>w</strong><br />model parameter</div>
+          <div className="bg-white border rounded-lg p-3"><strong>η</strong><br />learning rate</div>
+          <div className="bg-white border rounded-lg p-3"><strong>gradient</strong><br />direction of local loss change</div>
         </div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-4 text-sm font-mono overflow-x-auto leading-relaxed">{`# pip install river
-from river import linear_model, preprocessing, metrics, stream
-
-# River uses a pipeline that processes one sample at a time
-model = preprocessing.StandardScaler() | linear_model.LogisticRegression()
-metric = metrics.Accuracy()
-
-# Simulate a data stream — process one record at a time
-from sklearn.datasets import make_classification
-import numpy as np
-
-X, y = make_classification(n_samples=1000, n_features=10, random_state=42)
-
-for xi, yi in stream.iter_array(X, y):
-    # 1. Predict BEFORE learning (realistic evaluation)
-    y_pred = model.predict_one(xi)
-
-    # 2. Update metric
-    metric.update(yi, y_pred)
-
-    # 3. Learn from this sample
-    model.learn_one(xi, yi)
-
-print(f"Running accuracy: {metric}")
-# Output: Running accuracy: Accuracy: 89.30%
-
-# Key insight: model.learn_one() and model.predict_one()
-# process exactly ONE sample — perfect for streaming pipelines`}</pre>
       </div>
 
-      {/* ── WHEN TO USE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Batch vs Online — When to Choose Each</h2>
-      <div className="grid sm:grid-cols-2 gap-4 mb-8 not-prose">
+      <p className="text-lg leading-relaxed mb-4 text-slate-800">
+        Suppose the current weight is <strong>0.50</strong>, the learning rate is <strong>0.10</strong>, and the gradient from the new example is <strong>−0.40</strong>.
+      </p>
+
+      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 mb-10 not-prose">
+        <p className="font-mono text-slate-900 mb-2">w_new = 0.50 − 0.10 × (−0.40)</p>
+        <p className="font-mono text-slate-900 mb-2">w_new = 0.50 + 0.04</p>
+        <p className="font-mono font-bold text-indigo-800 m-0">w_new = 0.54</p>
+      </div>
+
+      <p className="text-lg leading-relaxed mb-10 text-slate-800">
+        The model has changed a little after seeing new information. Online learning repeats this type of update many times. The exact update depends on the algorithm and its loss function.
+      </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">How Often Can We Update?</h2>
+
+      <div className="grid md:grid-cols-3 gap-5 mb-12 not-prose">
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <h3 className="font-bold text-indigo-800 mb-2">One sample at a time</h3>
+          <p className="text-sm text-slate-700 leading-relaxed">Update after every labelled observation. This can adapt quickly but may react strongly to noisy observations.</p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <h3 className="font-bold text-indigo-800 mb-2">Mini-batch updates</h3>
+          <p className="text-sm text-slate-700 leading-relaxed">Collect a small chunk such as 32, 100, or 1000 observations and update once per chunk. This is often more computationally convenient.</p>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
+          <h3 className="font-bold text-indigo-800 mb-2">Periodic incremental updates</h3>
+          <p className="text-sm text-slate-700 leading-relaxed">Update every few minutes, hours, or days without retraining from scratch. The right cadence depends on feedback delay and business needs.</p>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Python: Incremental Learning with <code>partial_fit()</code></h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Scikit-learn provides several estimators with a <code>partial_fit()</code> method. Each call updates an already-existing model using the supplied mini-batch instead of restarting training from the beginning.
+      </p>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-6">
+        <div className="flex gap-3">
+          <Cpu className="w-6 h-6 text-blue-600 shrink-0 mt-1" />
+          <p className="text-blue-900 leading-relaxed m-0">
+            For classifiers such as <code>SGDClassifier</code>, the complete set of possible classes must be supplied on the <strong>first</strong> <code>partial_fit()</code> call. Later calls can omit it.
+          </p>
+        </div>
+      </div>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        The example below uses an initial <strong>200-sample warm-up period</strong>. The scaler is fitted only on that historical chunk and then frozen. The remaining 1000 samples arrive in 100-sample batches.
+      </p>
+
+      <div className="bg-slate-900 rounded-xl overflow-hidden shadow-lg mb-6 not-prose">
+        <div className="px-4 py-2 bg-slate-800 text-slate-300 text-xs">online_learning.py</div>
+        <pre className="p-5 text-sm text-slate-100 overflow-x-auto leading-relaxed"><code>{`import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.linear_model import SGDClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+X, y = make_classification(
+    n_samples=1200,
+    n_features=10,
+    n_informative=6,
+    n_redundant=2,
+    class_sep=1.2,
+    flip_y=0.03,
+    random_state=42,
+)
+
+warmup = 200
+batch_size = 100
+classes = np.array([0, 1])
+
+# Use only historical data to learn scaling statistics.
+scaler = StandardScaler().fit(X[:warmup])
+
+model = SGDClassifier(
+    loss="log_loss",
+    learning_rate="constant",
+    eta0=0.01,
+    alpha=0.0001,
+    random_state=42,
+)
+
+# First incremental update.
+X0 = scaler.transform(X[:warmup])
+model.partial_fit(X0, y[:warmup], classes=classes)
+
+correct = 0
+seen = 0
+batch_scores = []
+
+for start in range(warmup, len(X), batch_size):
+    stop = min(start + batch_size, len(X))
+    X_batch = scaler.transform(X[start:stop])
+    y_batch = y[start:stop]
+
+    # 1. TEST FIRST: predict before learning this batch.
+    y_pred = model.predict(X_batch)
+    batch_scores.append(accuracy_score(y_batch, y_pred))
+    correct += (y_pred == y_batch).sum()
+    seen += len(y_batch)
+
+    # 2. THEN TRAIN on the newly labelled batch.
+    model.partial_fit(X_batch, y_batch)
+
+print("Warm-up samples:", warmup)
+print("Streamed samples:", seen)
+print("First 3 batch accuracies:", [round(s, 3) for s in batch_scores[:3]])
+print("Prequential accuracy:", round(correct / seen, 3))`}</code></pre>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-10 not-prose">
+        <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">Expected output</p>
+        <pre className="text-sm text-slate-800 overflow-x-auto m-0"><code>{`Warm-up samples: 200
+Streamed samples: 1000
+First 3 batch accuracies: [0.8, 0.8, 0.82]
+Prequential accuracy: 0.811`}</code></pre>
+      </div>
+
+      <h3 className="text-xl font-bold text-slate-900 mb-3">Why predict before learning?</h3>
+      <p className="text-lg leading-relaxed mb-8 text-slate-800">
+        If we train on a batch and then score that same batch, the result is partly a training score. In a stream, a more realistic approach is often <strong>test-then-train</strong> (also called prequential evaluation): predict using the model state available at that moment, observe the true label when it arrives, measure the error, and only then update the model.
+      </p>
+
+      <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5 mb-12 not-prose">
+        <p className="font-bold text-emerald-900 mb-3">Prequential pattern</p>
+        <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-emerald-900">
+          <span className="bg-white border border-emerald-200 rounded-lg px-3 py-2">Predict</span>
+          <ArrowRight className="w-4 h-4" />
+          <span className="bg-white border border-emerald-200 rounded-lg px-3 py-2">Observe label</span>
+          <ArrowRight className="w-4 h-4" />
+          <span className="bg-white border border-emerald-200 rounded-lg px-3 py-2">Score</span>
+          <ArrowRight className="w-4 h-4" />
+          <span className="bg-white border border-emerald-200 rounded-lg px-3 py-2">Update</span>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Preprocessing Must Be Stream-Safe Too</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Incremental learning is not only about the final classifier. Any preprocessing step that learns statistics from data must also respect time/order.
+      </p>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-8 not-prose">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+          <h3 className="font-bold text-rose-900 mb-2 flex items-center gap-2"><XCircle className="w-5 h-5" /> Risky</h3>
+          <pre className="text-xs text-rose-900 overflow-x-auto"><code>{`scaler.fit(X_all)
+# scaler has seen future stream data`}</code></pre>
+        </div>
         <div className="bg-green-50 border border-green-200 rounded-xl p-5">
-          <h3 className="font-bold text-green-800 mb-3">✅ Choose Online Learning when</h3>
-          <ul className="space-y-2 text-sm text-green-700">
-            <li className="flex items-start gap-2"><span>•</span>Data arrives continuously as a stream</li>
-            <li className="flex items-start gap-2"><span>•</span>Dataset is too large to fit in memory</li>
-            <li className="flex items-start gap-2"><span>•</span>Distribution shifts over time (concept drift)</li>
-            <li className="flex items-start gap-2"><span>•</span>Real-time adaptation is a business requirement</li>
-            <li className="flex items-start gap-2"><span>•</span>Retraining from scratch is too computationally expensive</li>
-          </ul>
+          <h3 className="font-bold text-green-900 mb-2 flex items-center gap-2"><CheckCircle2 className="w-5 h-5" /> Safer idea</h3>
+          <pre className="text-xs text-green-900 overflow-x-auto"><code>{`scaler.fit(X_initial_history)
+# future batches remain unseen`}</code></pre>
+        </div>
+      </div>
+
+      <p className="text-lg leading-relaxed mb-10 text-slate-800">
+        Scikit-learn's <code>StandardScaler</code> itself supports <code>partial_fit()</code> for online mean/variance updates. However, if both the feature transformation and the model are changing over time, you must design the update order carefully so that evaluation does not use future information and the model sees a consistent feature representation. Dedicated streaming libraries can make this workflow easier.
+      </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Concept Drift: When the World Changes</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Online learning is especially interesting when the data-generating process changes. But the word <strong>drift</strong> covers several different situations.
+      </p>
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-8 not-prose">
+        <table className="w-full text-sm bg-white">
+          <thead className="bg-indigo-600 text-white">
+            <tr>
+              <th className="p-3 text-left">Change</th>
+              <th className="p-3 text-left">Simple meaning</th>
+              <th className="p-3 text-left">Example</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            <tr><td className="p-3 font-bold">Data / covariate drift</td><td className="p-3">The distribution of inputs changes</td><td className="p-3">Customers now use newer devices</td></tr>
+            <tr><td className="p-3 font-bold">Class-prior shift</td><td className="p-3">How common each class is changes</td><td className="p-3">Fraud becomes more frequent</td></tr>
+            <tr><td className="p-3 font-bold">Concept drift</td><td className="p-3">The relationship between inputs and target changes</td><td className="p-3">Patterns that indicated fraud last year no longer mean the same thing</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5 mb-10">
+        <div className="flex gap-3">
+          <ShieldAlert className="w-6 h-6 text-amber-600 shrink-0 mt-1" />
+          <p className="text-amber-900 leading-relaxed m-0">
+            <strong>Online learning does not automatically solve drift.</strong> If labels arrive slowly, updates are noisy, the chosen model cannot represent the new pattern, or harmful data enters the stream, the model can still perform poorly. Drift should be monitored rather than assumed to be fixed by continuous updates.
+          </p>
+        </div>
+      </div>
+
+      <h3 className="text-xl font-bold text-slate-900 mb-3">A simple drift story</h3>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-12 not-prose">
+        {[
+          ['Period 1', 'Old pattern works'],
+          ['Period 2', 'Behaviour begins changing'],
+          ['Period 3', 'Errors increase'],
+          ['Period 4', 'Model may need adaptation'],
+        ].map(([title, text], index) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <div className="text-xs font-bold text-indigo-600 mb-1">{index + 1}</div>
+            <div className="font-bold text-slate-900 mb-1">{title}</div>
+            <div className="text-xs text-slate-600">{text}</div>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Algorithms That Can Learn Incrementally</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        Not every Scikit-learn estimator supports incremental training. A practical clue is whether the estimator exposes a <code>partial_fit()</code> method.
+      </p>
+
+      <div className="overflow-x-auto rounded-xl border border-slate-200 shadow-sm mb-10 not-prose">
+        <table className="w-full text-sm bg-white">
+          <thead className="bg-slate-800 text-white">
+            <tr>
+              <th className="p-3 text-left">Task</th>
+              <th className="p-3 text-left">Examples</th>
+              <th className="p-3 text-left">Why useful</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            <tr><td className="p-3 font-bold">Classification</td><td className="p-3 font-mono text-xs">SGDClassifier, Perceptron, MultinomialNB</td><td className="p-3">Can update from successive mini-batches</td></tr>
+            <tr><td className="p-3 font-bold">Regression</td><td className="p-3 font-mono text-xs">SGDRegressor</td><td className="p-3">Incremental linear regression-style learning</td></tr>
+            <tr><td className="p-3 font-bold">Clustering</td><td className="p-3 font-mono text-xs">MiniBatchKMeans</td><td className="p-3">Processes small batches instead of all rows at once</td></tr>
+            <tr><td className="p-3 font-bold">Neural networks</td><td className="p-3 font-mono text-xs">MLPClassifier, MLPRegressor</td><td className="p-3">Scikit-learn also exposes incremental updates for these estimators</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className="text-xl font-bold text-slate-900 mb-3">What about trees and drift detectors?</h3>
+      <p className="text-lg leading-relaxed mb-8 text-slate-800">
+        Streaming-focused libraries such as <strong>River</strong> include methods designed specifically for evolving streams, including Hoeffding-style trees and drift detectors such as ADWIN. These are useful advanced topics, but they are not required to understand the core idea of incremental learning.
+      </p>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Learning Rate Matters</h2>
+
+      <p className="text-lg leading-relaxed mb-5 text-slate-800">
+        For SGD-style online models, the learning rate controls how strongly new data changes the model.
+      </p>
+
+      <div className="grid md:grid-cols-3 gap-5 mb-8 not-prose">
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
+          <h3 className="font-bold text-rose-900 mb-2">Too large</h3>
+          <p className="text-sm text-rose-800">Updates may jump around and react too strongly to individual batches.</p>
+        </div>
+        <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+          <h3 className="font-bold text-green-900 mb-2">Reasonable</h3>
+          <p className="text-sm text-green-800">The model can learn while remaining reasonably stable.</p>
         </div>
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-5">
-          <h3 className="font-bold text-amber-800 mb-3">✅ Stick with Batch Learning when</h3>
-          <ul className="space-y-2 text-sm text-amber-700">
-            <li className="flex items-start gap-2"><span>•</span>Full historical dataset is available and fits in memory</li>
-            <li className="flex items-start gap-2"><span>•</span>Distribution is stable — past data represents future well</li>
-            <li className="flex items-start gap-2"><span>•</span>Model interpretability and reproducibility are required</li>
-            <li className="flex items-start gap-2"><span>•</span>Training frequency can be weekly or monthly</li>
-            <li className="flex items-start gap-2"><span>•</span>Complex models (deep CNNs, large ensembles) are needed</li>
-          </ul>
+          <h3 className="font-bold text-amber-900 mb-2">Too small</h3>
+          <p className="text-sm text-amber-800">Adaptation may be so slow that the model cannot keep up with meaningful change.</p>
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
-      
-      <p className="text-lg leading-relaxed mb-6 text-slate-800">
-        Online Learning is a paradigm where Machine Learning models learn continuously from incoming data streams, rather than training statically on historical, offline batches. It is a mandatory architecture for systems operating in dynamic, real-time environments like high-frequency trading, real-time fraud detection, ad-click prediction, and large-scale recommendation systems.
+      <p className="text-lg leading-relaxed mb-10 text-slate-800">
+        Scikit-learn's <code>SGDClassifier</code> supports several learning-rate schedules such as <code>constant</code>, <code>optimal</code>, <code>invscaling</code>, and <code>adaptive</code>. These schedules are not the same thing as algorithms such as AdaGrad or Adam.
       </p>
 
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-slate-400 mt-6 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-xl">Most Important Insight to Remember:</p>
-        <p className="text-slate-800 italic text-lg leading-relaxed m-0">
-          The real world doesn't stand still, and neither should your models. Online learning fights the inevitable decay known as "Concept Drift" by allowing models to adapt incrementally, utilizing real-time optimization algorithms like Stochastic Gradient Descent.
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Where Online Learning Can Be Useful</h2>
+
+      <div className="grid md:grid-cols-2 gap-5 mb-10 not-prose">
+        {[
+          ['Fraud / abuse detection', 'New labelled transactions or moderation decisions can be incorporated incrementally when feedback is available.'],
+          ['Spam and text filtering', 'Vocabulary and message patterns can evolve, making incremental updates useful.'],
+          ['Recommendation / ranking signals', 'Recent clicks, views, and preferences may carry useful information about current behaviour.'],
+          ['IoT and operational monitoring', 'Continuous sensor streams may be processed without keeping the entire history in memory.'],
+        ].map(([title, text]) => (
+          <div key={title} className="bg-white border border-slate-200 rounded-xl p-5">
+            <h3 className="font-bold text-slate-900 mb-2">{title}</h3>
+            <p className="text-sm text-slate-700 leading-relaxed m-0">{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-12">
+        <p className="text-blue-900 leading-relaxed m-0">
+          These are <strong>possible applications</strong>, not claims that every production system in these domains uses online learning. Many real systems deliberately use scheduled batch retraining, hybrid architectures, or human approval before model updates.
         </p>
       </div>
 
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Benefits and Risks</h2>
+
+      <div className="grid md:grid-cols-2 gap-6 mb-12 not-prose">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-6">
+          <h3 className="font-bold text-green-900 text-lg mb-4">Potential benefits</h3>
+          <ul className="space-y-3 text-sm text-green-900 pl-0 list-none m-0">
+            <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />Can process data in small chunks.</li>
+            <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />May adapt faster than infrequent full retraining.</li>
+            <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />Useful when the dataset is larger than available memory.</li>
+            <li className="flex gap-2"><CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />Can incorporate recent labelled feedback continuously.</li>
+          </ul>
+        </div>
+
+        <div className="bg-rose-50 border border-rose-200 rounded-xl p-6">
+          <h3 className="font-bold text-rose-900 text-lg mb-4">Important risks</h3>
+          <ul className="space-y-3 text-sm text-rose-900 pl-0 list-none m-0">
+            <li className="flex gap-2"><XCircle className="w-4 h-4 shrink-0 mt-0.5" />Bad labels or corrupted data can change the model immediately.</li>
+            <li className="flex gap-2"><XCircle className="w-4 h-4 shrink-0 mt-0.5" />Recent observations can be over-emphasized.</li>
+            <li className="flex gap-2"><XCircle className="w-4 h-4 shrink-0 mt-0.5" />Evaluation and rollback are more operationally difficult.</li>
+            <li className="flex gap-2"><XCircle className="w-4 h-4 shrink-0 mt-0.5" />Adversarial or poisoned inputs can be especially dangerous.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">When Should You Choose Online Learning?</h2>
+
+      <div className="grid md:grid-cols-2 gap-6 mb-12 not-prose">
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
+          <h3 className="font-bold text-indigo-800 mb-3">Online learning is worth considering when...</h3>
+          <ul className="text-sm text-slate-700 space-y-2 pl-5 list-disc">
+            <li>data arrives continuously or is too large for memory,</li>
+            <li>recent labelled feedback should affect the model quickly,</li>
+            <li>full retraining is expensive,</li>
+            <li>the environment may change over time, and</li>
+            <li>you can monitor, validate, and roll back updates safely.</li>
+          </ul>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
+          <h3 className="font-bold text-slate-800 mb-3">Batch learning may be simpler when...</h3>
+          <ul className="text-sm text-slate-700 space-y-2 pl-5 list-disc">
+            <li>the environment changes slowly,</li>
+            <li>labels arrive only after long delays,</li>
+            <li>periodic retraining is inexpensive enough,</li>
+            <li>strict reproducibility/governance is important, or</li>
+            <li>the chosen model does not support safe incremental updates.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Common Mistakes</h2>
+
+      <div className="space-y-3 mb-12 not-prose">
+        {[
+          ['“A model making real-time predictions is automatically online learning.”', 'No. The model may make streaming predictions while remaining completely fixed.'],
+          ['“Online learning means one record at a time.”', 'Not necessarily. Mini-batch incremental updates are also common.'],
+          ['“Online learning automatically fixes concept drift.”', 'No. Adaptation depends on feedback, model capacity, learning rate, data quality, and monitoring.'],
+          ['“I can preprocess the whole stream first.”', 'That may leak future information. Preprocessing must respect the same chronology as model training.'],
+          ['“More recent data should always dominate old data.”', 'That is a modeling choice, not a universal law. Some old patterns remain important.'],
+          ['“partial_fit() is equivalent to calling fit() repeatedly.”', 'No. partial_fit continues incremental training, while fit() generally represents a new fitting procedure and may reset learned state.'],
+        ].map(([mistake, correction]) => (
+          <div key={mistake} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <p className="font-semibold text-slate-900 mb-1">{mistake}</p>
+            <p className="text-sm text-slate-700 m-0">{correction}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Quick Recap</h2>
+
+      <div className="space-y-4 mb-12">
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">What is the central idea of online learning?</summary>
+          <p className="mt-3 mb-0 text-slate-700">The model can continue updating incrementally as new labelled data arrives instead of always retraining from scratch.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Why is “predict first, then learn” useful?</summary>
+          <p className="mt-3 mb-0 text-slate-700">It evaluates the model using the state that actually existed before the new labelled example or batch was incorporated.</p>
+        </details>
+        <details className="bg-white border border-slate-200 rounded-xl p-5">
+          <summary className="font-bold text-slate-900 cursor-pointer">Does online learning guarantee adaptation to concept drift?</summary>
+          <p className="mt-3 mb-0 text-slate-700">No. Online updates create the possibility of adaptation, but successful adaptation still depends on feedback speed, algorithm choice, data quality, hyperparameters, and monitoring.</p>
+        </details>
+      </div>
+
+      <h2 className="text-2xl font-bold text-slate-800 mt-10 mb-4 border-b pb-2">Final Takeaway</h2>
+
+      <div className="bg-slate-50 border-l-4 border-indigo-500 rounded-r-xl p-6 mb-10">
+        <p className="text-lg text-slate-800 leading-relaxed m-0">
+          <strong>Online learning is incremental model updating.</strong> It is valuable when data or environments evolve, when datasets are too large for memory, or when waiting for full retraining is undesirable. But it adds operational risk: the model can learn from bad data just as quickly as it can learn from useful data. Good online systems therefore combine incremental learning with careful evaluation, drift monitoring, data-quality checks, and rollback strategies.
+        </p>
+      </div>
+
+      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Continue Learning</h2>
+      <div className="grid md:grid-cols-3 gap-4 mb-10 not-prose">
+        <a href="/learn/batch-vs-online" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Foundation</p>
+          <p className="font-bold text-slate-900 m-0">Batch vs Online</p>
+        </a>
+        <a href="/learn/semi-supervised" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous</p>
+          <p className="font-bold text-slate-900 m-0">Semi-Supervised Learning</p>
+        </a>
+        <a href="/learn/reinforcement-learning-adv" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Next</p>
+          <p className="font-bold text-slate-900 m-0">Reinforcement Learning (Advanced)</p>
+        </a>
+      </div>
     </div>
   );
 }
