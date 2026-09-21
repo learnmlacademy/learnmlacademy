@@ -6,6 +6,126 @@
   NODE_VERSION = "20"
 
 [[redirects]]
+  from = "/learn/genai-apis-open-models"
+  to = "/learn/genai-deployment"
+  status = 301
+
+[[redirects]]
+  from = "/learn/language-model-evolution"
+  to = "/learn/llm-intro"
+  status = 301
+
+[[redirects]]
+  from = "/learn/context-windows"
+  to = "/learn/tokenization-embeddings"
+  status = 301
+
+[[redirects]]
+  from = "/learn/encoder-decoder-models"
+  to = "/learn/transformers-attention"
+  status = 301
+
+[[redirects]]
+  from = "/learn/hugging-face"
+  to = "/learn/efficient-llm-serving"
+  status = 301
+
+[[redirects]]
+  from = "/learn/llm-data-preparation"
+  to = "/learn/pretraining-finetuning"
+  status = 301
+
+[[redirects]]
+  from = "/learn/llm-scaling-laws"
+  to = "/learn/pretraining-finetuning"
+  status = 301
+
+[[redirects]]
+  from = "/learn/distributed-llm-training"
+  to = "/learn/pretraining-finetuning"
+  status = 301
+
+[[redirects]]
+  from = "/learn/lora-peft"
+  to = "/learn/instruction-tuning-rlhf"
+  status = 301
+
+[[redirects]]
+  from = "/learn/knowledge-distillation"
+  to = "/learn/efficient-llm-serving"
+  status = 301
+
+[[redirects]]
+  from = "/learn/quantization-inference"
+  to = "/learn/efficient-llm-serving"
+  status = 301
+
+[[redirects]]
+  from = "/learn/structured-output-function-calling"
+  to = "/learn/prompt-engineering"
+  status = 301
+
+[[redirects]]
+  from = "/learn/rag-evaluation"
+  to = "/learn/advanced-rag"
+  status = 301
+
+[[redirects]]
+  from = "/learn/llm-benchmarking-selection"
+  to = "/learn/llm-evaluation"
+  status = 301
+
+[[redirects]]
+  from = "/learn/types-of-ai-agents"
+  to = "/learn/agentic-ai-intro"
+  status = 301
+
+[[redirects]]
+  from = "/learn/agents-vs-workflows"
+  to = "/learn/agentic-ai-intro"
+  status = 301
+
+[[redirects]]
+  from = "/learn/reliable-agent-tools"
+  to = "/learn/tool-calling"
+  status = 301
+
+[[redirects]]
+  from = "/learn/react-agent-pattern"
+  to = "/learn/planning-reflection"
+  status = 301
+
+[[redirects]]
+  from = "/learn/human-in-the-loop"
+  to = "/learn/durable-long-running-agents"
+  status = 301
+
+[[redirects]]
+  from = "/learn/agent-to-agent-communication"
+  to = "/learn/multi-agent-systems"
+  status = 301
+
+[[redirects]]
+  from = "/learn/code-agents-sandboxing"
+  to = "/learn/browser-computer-use-agents"
+  status = 301
+
+[[redirects]]
+  from = "/learn/agent-failure-recovery"
+  to = "/learn/agent-security"
+  status = 301
+
+[[redirects]]
+  from = "/learn/agent-cost-latency-budgets"
+  to = "/learn/agent-observability-deployment"
+  status = 301
+
+[[redirects]]
+  from = "/learn/agent-trajectory-evaluation"
+  to = "/learn/agent-evaluation-safety"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

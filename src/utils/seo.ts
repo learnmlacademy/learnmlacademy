@@ -190,8 +190,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 7. Model Evaluation
     "train-test-split": {
-      title: "Train Test Split in Machine Learning with Python | Scikit-Learn",
-      description: "Learn train test split in Machine Learning with Python and scikit-learn. Use train_test_split(), test_size, random_state, shuffle and stratify with examples."
+      title: "Train-Test Split & Validation Sets | ML Workflow essentials",
+      description: "Understand why splitting your dataset into training, validation, and testing sets is crucial to prevent data leakage and evaluate models properly."
     },
     "cross-validation": {
       title: "K-Fold Cross-Validation Explained | Robust ML Evaluation",
@@ -261,21 +261,257 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     // 10. Deep Learning & Interviews
     "neural-networks": {
       title: "Neural Networks Explained Simply | Deep Learning Basics",
-      description: "What is a Neural Network? Learn the biology-inspired basics of deep learning, activation functions, and forward propagation."
+      description: "Learn neural networks from scratch with a simple real-life example, original labelled diagrams, plain-English terms, step-by-step calculations, and beginner Python code."
+    },
+    "activation-functions": {
+      title: "Activation Functions Explained | ReLU, Sigmoid, Tanh & Softmax",
+      description: "Learn activation functions with simple examples, original graphs, comparisons, Python code, and a practical guide to choosing ReLU, sigmoid, tanh, softmax, and more."
     },
     "deep-learning-intro": {
-      title: "Introduction to Deep Learning vs Machine Learning",
-      description: "Discover the difference between Machine Learning and Deep Learning, understand CNNs/RNNs, and start building with PyTorch and TensorFlow."
+      title: "Deep Learning Basics and Model Types | Beginner Tutorial",
+      description: "Understand how deep learning works and when to use neural networks, CNNs, RNNs, Transformers and generative models through diagrams, comparisons and code."
+    },
+    "math-foundations-deep-learning": {
+      title: "Essential Math for Neural Networks | Visual Beginner Guide",
+      description: "Understand scalars, vectors, matrices, tensor shapes, dot products, derivatives, gradients and the chain rule through neural-network examples."
+    },
+    "tensors-frameworks-gpus": {
+      title: "Tensors, PyTorch, TensorFlow and GPUs | Beginner Guide",
+      description: "Learn tensor dimensions, shapes, dtypes, reshape, broadcasting, matrix multiplication, framework roles and GPU acceleration with visual examples."
+    },
+    "loss-functions-deep-learning": {
+      title: "Loss Functions: MSE, MAE and Cross-Entropy Explained",
+      description: "Learn how neural networks measure error with MSE, MAE, Huber and cross-entropy using formulas, worked examples, graphs and choice guidance."
+    },
+    "backpropagation": {
+      title: "Backpropagation and Automatic Differentiation Explained",
+      description: "Follow one neural-network mistake forward and backward, calculate gradients with the chain rule, update a weight and verify the result with PyTorch."
+    },
+    "attention-transformers-deep-learning": {
+      title: "Sequence-to-Sequence Models and Attention | Beginner Tutorial",
+      description: "Learn how an encoder and decoder transform one sequence into another, why one fixed context becomes a bottleneck, and how attention creates a relevant context for each output step."
+    },
+    "transformers-deep-learning": {
+      title: "Transformers for Deep Learning | Architecture Tutorial",
+      description: "Learn self-attention, Q, K and V, multi-head attention, positional information, residual paths, normalization and encoder-decoder architecture."
+    },
+    "transfer-learning": {
+      title: "Transfer Learning and Fine-Tuning | Beginner Tutorial",
+      description: "Learn how to reuse pretrained backbones, replace task-specific heads, freeze layers, and fine-tune in stages with smaller learning rates for reusable features."
+    },
+    "self-supervised-few-shot-learning": {
+      title: "Self-Supervised and Few-Shot Learning Explained",
+      description: "Understand how pretraining learns representations from unlabelled data and how few-shot methods adapt to new tasks with very few labels."
+    },
+    "state-space-models": {
+      title: "State-Space Models for Deep Learning | Advanced Topic",
+      description: "Explore recurrent state equations, structured state-space models and selective sequence updates outside the core Deep Learning learning path."
+    },
+    "generative-ai-intro": {
+      title: "What Is Generative AI? | Beginner Introduction",
+      description: "Learn what Generative AI creates, how it differs from retrieval and prediction, and where generated text, images, audio, video, and code are used."
+    },
+    "generative-vs-discriminative": {
+      title: "Generative vs Discriminative Models",
+      description: "Compare predictive mappings such as p(y|x) with generative data modelling, then calculate p(x), p(x,y), p(x|y), and p(y|x) from a small example."
+    },
+    "how-generative-models-learn": {
+      title: "How Generative Models Learn and Generate New Data",
+      description: "Understand data distributions, latent representations, randomness, sampling, conditioning, and the difference between training and generation through original beginner examples."
+    },
+    vae: {
+      title: "Variational Autoencoders for Generation | VAE Tutorial",
+      description: "Learn how VAEs extend autoencoders with probabilistic latent representations, sampling, reconstruction, and KL regularization to generate new data."
+    },
+    gans: {
+      title: "Generative Adversarial Networks (GANs)",
+      description: "Learn how generator and discriminator updates alternate, how GAN losses are calculated, why fake samples are detached, and how common training failures appear."
+    },
+    "diffusion-models": {
+      title: "Diffusion Models | Forward Noising and Reverse Denoising",
+      description: "Follow the forward noise schedule, calculate a noisy sample, understand noise-prediction training, and trace iterative generation from random noise."
+    },
+    "stable-latent-diffusion": {
+      title: "Latent Diffusion and Stable Diffusion Architecture",
+      description: "Learn how text encoding, latent representations, U-Net denoising, schedulers, and VAE decoding work together in Stable Diffusion."
+    },
+    "controlling-diffusion-models": {
+      title: "Controlling Diffusion Models | CFG, Inpainting and ControlNet",
+      description: "Learn how guidance, seeds, schedulers, image-to-image strength, inpainting masks, and ControlNet-style conditions steer diffusion inference."
+    },
+    "finetuning-image-models": {
+      title: "Fine-Tuning Image Models | Textual Inversion, DreamBooth and LoRA",
+      description: "Compare Textual Inversion, DreamBooth, and LoRA, calculate low-rank parameter counts, and plan data, training, and held-out validation for image-model adaptation."
+    },
+    "multimodal-ai": {
+      title: "Multimodal Generative AI | Text, Image and Audio",
+      description: "Learn how modality encoders, alignment, cross-modal interaction, and output decoders connect text, images, and audio for understanding and generation."
+    },
+    "audio-music-video-generation": {
+      title: "Audio, Speech, Music and Video Generation",
+      description: "Explore how generative models represent, condition, create, and evaluate speech, sound, music, and temporally consistent video."
+    },
+    "synthetic-data": {
+      title: "Synthetic Data Generation | Methods, Utility and Privacy",
+      description: "Learn how rules, simulation, statistical models, and generative models create synthetic data, and how fidelity, coverage, utility, privacy, and real-world testing differ."
+    },
+    "evaluating-generative-models": {
+      title: "Evaluating Generative Models | Metrics, Human Review and Trade-offs",
+      description: "Learn how to evaluate generative models across quality, diversity, adherence, factuality, safety, latency, and cost using fixed test sets, FID, KID, alignment metrics, and human review."
+    },
+    "responsible-generative-ai": {
+      title: "Responsible Generative AI | Risks, Controls and Monitoring",
+      description: "Learn how to engineer responsible Generative AI systems with intended-use boundaries, data and privacy controls, red teaming, human review, monitoring, and incident response."
+    },
+    "choosing-generative-model": {
+      title: "Choosing the Right Generative AI Model | Practical Decision Guide",
+      description: "Choose a generative model by user job, modality, hard constraints, measured quality, latency, cost, privacy, licensing, safety, deployment, and evaluation evidence."
+    },
+    "building-genai-apps": {
+      title: "Building Generative AI Applications | Validation and Workflow Design",
+      description: "Build reliable Generative AI applications with narrow goals, structured outputs, schema and evidence validation, deterministic rules, fallbacks, human review, and evaluation harnesses."
+    },
+    "genai-deployment": {
+      title: "Deploying Generative AI Applications | APIs, Serving and Reliability",
+      description: "Learn hosted API versus self-hosted model trade-offs, secret management, timeouts, retries, scaling, observability, canary rollouts, fallbacks, and production deployment."
+    },
+    "text-generation-decoding": {
+      title: "Greedy, Temperature, Top-k and Top-p Decoding",
+      description: "Learn how language models turn token probabilities into text using greedy decoding, temperature, top-k, top-p, and repetition controls."
+    },
+    "hugging-face": {
+      title: "Hugging Face Transformers and Model Inference",
+      description: "Learn how to find, inspect, load, and run pretrained transformer models with the Hugging Face Hub, pipelines, tokenizers, and AutoModel classes."
+    },
+    "project-customer-churn": {
+      title: "Customer Churn Prediction — End-to-End ML Project",
+      description: "Build a leakage-safe churn classifier with preprocessing, Logistic Regression, a tree comparison, threshold selection, business-aware metrics and production monitoring."
+    },
+    "project-credit-risk": {
+      title: "Credit Risk Prediction with Explainable ML",
+      description: "Build an educational credit-risk workflow with class-imbalance metrics, threshold costs, individual explanations, fairness cautions and responsible production boundaries."
+    },
+    "project-sales-forecasting": {
+      title: "Sales Forecasting — End-to-End Time-Series Project",
+      description: "Build a chronological retail forecasting workflow with naive baselines, Holt-Winters, MAE, RMSE, residual analysis, leakage checks and monitoring."
+    },
+    "project-image-classification": {
+      title: "Image Classification with Transfer Learning Project",
+      description: "Adapt a pretrained ResNet to CIFAR-10 with augmentation, frozen and fine-tuned stages, learning curves, class errors, inference and a saved model contract."
+    },
+    "project-genai-app": {
+      title: "Build a Generative AI Application End-to-End",
+      description: "Build a provider-neutral GenAI application with structured output, deterministic validation, bounded retries, safety checks, evaluation and deployment controls."
+    },
+    "project-rag-document-qa": {
+      title: "Build a Document Q&A System with RAG",
+      description: "Build a local RAG pipeline from document extraction and chunking through vector retrieval, grounded answers, citations, evaluation and insufficient-evidence handling."
+    },
+    "project-ai-agent": {
+      title: "Build an AI Agent with Tools & Memory",
+      description: "Build a bounded local support agent with typed tools, short-term state, approved persistent memory, stop budgets, successful traces and safe abstention."
+    },
+    "project-multi-agent-research": {
+      title: "Build a Multi-Agent Research Assistant",
+      description: "Build a bounded coordinator–researcher–verifier–synthesizer workflow with typed handoffs, shared state, conflict handling and quality-versus-cost evaluation."
+    },
+    "ai-engineering-mlops": {
+      title: "AI Engineering & MLOps: From Notebook to Production",
+      description: "Learn how validated data, feature pipelines, experiment lineage, model registries, serving, monitoring, feedback and governance turn a notebook model into a reliable production AI system."
+    },
+    "ml-data-feature-pipelines": {
+      title: "Production Data, Feature & ML Pipelines",
+      description: "Build reliable batch and streaming data pipelines with schema contracts, point-in-time features, offline and online serving, orchestration, backfills and training-serving consistency."
+    },
+    "experiment-tracking-model-registry": {
+      title: "Experiment Tracking, Reproducibility, Lineage & Model Registry",
+      description: "Connect code, data, features, parameters, environments, artifacts and metrics, then govern candidate approval, production promotion and rollback through a model registry."
+    },
+    "batch-online-inference": {
+      title: "Batch, Online & Streaming Inference Architectures",
+      description: "Compare batch, synchronous online and streaming prediction systems through latency, throughput, freshness, queueing, scaling, failure recovery and a worked capacity example."
+    },
+    "ml-cicd-continuous-training": {
+      title: "Testing, CI/CD & Continuous Training for ML",
+      description: "Test code, data, features, models and integrations, then separate continuous integration, controlled delivery and evidence-driven continuous training."
+    },
+    "ml-monitoring-drift": {
+      title: "ML Monitoring, Data Drift & Model Decay",
+      description: "Monitor service, data, predictions and delayed outcomes; distinguish covariate, label and concept drift; calculate PSI and decide when retraining is justified."
+    },
+    "production-ai-reliability": {
+      title: "Production AI Reliability, Security, Cost & Governance",
+      description: "Design production AI for availability, bounded failure, SLOs, least privilege, artifact integrity, cost per prediction, auditability, incident response and rollback."
+    },
+    "ml-system-design": {
+      title: "End-to-End ML/AI System Design",
+      description: "Design a real-time fraud detection system from validated events and online features through safe decisions, monitoring, delayed labels, retraining, canary release and rollback."
+    },
+    "ai-data-career-paths": {
+      title: "AI & Data Career Paths | Choose the Right Role",
+      description: "Compare Machine Learning Engineer, AI Engineer, Generative AI/LLM Engineer and Data Scientist roles by daily work, skills, ownership and portfolio evidence."
+    },
+    "ml-engineer-roadmap": {
+      title: "Machine Learning Engineer Roadmap | Skills & Projects",
+      description: "Follow a practical Machine Learning Engineer path through Python, SQL, ML evaluation, pipelines, serving, MLOps, system design, projects and interviews."
+    },
+    "ai-engineer-roadmap": {
+      title: "AI Engineer Roadmap | Skills, Projects & Learning Path",
+      description: "Learn the software, ML, transformer, RAG, tool-calling, agent, evaluation, security and production skills used to build modern AI applications."
+    },
+    "genai-llm-engineer-roadmap": {
+      title: "Generative AI & LLM Engineer Roadmap | RAG to LLMOps",
+      description: "Build a staged LLM engineering path covering transformers, tokenization, prompting, retrieval, RAG, evaluation, LoRA, serving, LLMOps and agents."
+    },
+    "data-scientist-roadmap": {
+      title: "Data Scientist Roadmap | Statistics, SQL, ML & Projects",
+      description: "Follow a realistic Data Scientist learning path through Python, SQL, statistics, EDA, experiments, ML, forecasting, communication, projects and interviews."
+    },
+    "interview-preparation-strategy": {
+      title: "How AI & ML Interviews Work | Preparation Strategy",
+      description: "Understand modern AI/ML interview rounds, translate job descriptions into a preparation matrix, practice concise answers and use flexible study-planning frameworks."
     },
     "ml-interview-questions": {
-      title: "Top 50 Machine Learning Interview Questions & Answers",
-      description: "Prepare for your FAANG ML interview. Algorithm questions, coding challenges, and statistics theory regarding Machine Learning."
+      title: "Machine Learning Interview Questions | ML, Statistics & Evaluation",
+      description: "Prepare high-value ML interview answers covering statistics, leakage, bias and variance, algorithms, model evaluation, numerical metrics and production diagnosis."
+    },
+    "deep-learning-interview-questions": {
+      title: "Deep Learning Interview Questions | Training & Architectures",
+      description: "Practice deep-learning interview reasoning with forward and backward passes, gradients, activations, optimizers, convolution shapes, Transformers and debugging."
+    },
+    "genai-llm-rag-interview": {
+      title: "Generative AI, LLM & RAG Interview Questions",
+      description: "Prepare for LLM and RAG interviews with substantial questions on tokens, decoding, prompting, retrieval, citations, evaluation, safety, latency and cost."
+    },
+    "agentic-ai-interview": {
+      title: "Agentic AI Interview Questions | Tools, State & Safety",
+      description: "Practice agentic AI interview scenarios covering workflows, tool authorization, memory, state, planning, MCP, multi-agent systems, safety and evaluation."
+    },
+    "python-ai-ml-interview": {
+      title: "Python Coding for AI & ML Interviews | Solved Problems",
+      description: "Solve practical Python interview exercises for AI and data roles with assumptions, reasoning, runnable code, complexity, edge cases and follow-ups."
+    },
+    "sql-ai-data-interview": {
+      title: "SQL for AI & Data Interviews | Solved Query Problems",
+      description: "Practice SQL interview problems using joins, CTEs, aggregation, CASE, window functions, ranking, deduplication, rolling metrics and funnel analysis."
+    },
+    "ml-ai-system-design-interview": {
+      title: "ML System Design Interview Guide | Architecture & Trade-offs",
+      description: "Use a reusable ML/AI system-design framework across fraud, recommendations, churn, forecasting, RAG, LLM serving, moderation and agentic workflows."
+    },
+    "mlops-production-interview": {
+      title: "MLOps & Production ML Interview Scenarios | Debugging Guide",
+      description: "Diagnose training-serving skew, stale features, schema changes, leakage, registry mismatch, latency, drift, failed gates, canaries and production cost."
+    },
+    "behavioral-project-interview": {
+      title: "AI/ML Project, Resume & Behavioral Interview Guide",
+      description: "Explain AI/ML projects credibly, write evidence-rich resume bullets and prepare honest behavioral answers using STAR plus rationale, trade-offs and learning."
     }
   };
 
   return seoData[topicId] || {
     title: `${defaultTitle} Tutorial | ML Academy`,
-    description: `Complete guide to ${defaultTitle} in Machine Learning. Learn with intuitive explanations, math breakdowns, and Python code examples.`
+    description: `Learn the central ideas behind ${defaultTitle}, what its main components do, how they connect in practice, and where the approach can fail.`
   };
 };
 

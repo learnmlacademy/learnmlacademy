@@ -21,34 +21,13 @@ const staticPages = [
   { url: '/disclaimer', priority: '0.3', changefreq: 'yearly' },
 ];
 
-// All 63 tutorial topic IDs (kept in sync with src/data/curriculum.ts)
-const topicIds = [
-  // Foundations
-  'what-is-ml', 'types-of-ml', 'supervised-learning-intro', 'unsupervised-learning-intro',
-  'reinforcement-learning-intro', 'batch-vs-online', 'ml-lifecycle',
-  // Python & ML Libraries
-  'python-for-ml', 'numpy-essentials', 'pandas-essentials', 'scikit-learn-essentials',
-  // Data Preprocessing & Feature Engineering
-  'eda', 'handling-missing-data', 'encoding-categorical', 'bias-variance', 'feature-scaling',
-  'feature-engineering', 'feature-selection', 'data-visualization',
-  // Supervised Learning
-  'regression-intro', 'linear-regression', 'gradient-descent', 'polynomial-regression',
-  'ridge-regression', 'lasso-regression', 'classification-intro', 'logistic-regression',
-  'decision-trees', 'naive-bayes', 'knn', 'svm',
-  // Ensemble Learning
-  'random-forest', 'bagging', 'boosting', 'adaboost', 'gradient-boosting', 'xgboost',
-  // Unsupervised Learning
-  'kmeans', 'hierarchical', 'dbscan', 'pca', 'tsne', 'association-rules', 'apriori',
-  // Model Evaluation & Optimization
-  'train-test-split', 'cross-validation', 'overfitting-underfitting', 'cost-functions',
-  'hyperparameter-tuning', 'grid-random-search', 'confusion-matrix', 'roc-auc',
-  // Time Series & Forecasting
-  'arima', 'moving-average', 'exponential-smoothing', 'forecasting-basics',
-  // Advanced Learning Paradigms
-  'semi-supervised', 'online-learning', 'reinforcement-learning-adv', 'multi-armed-bandits',
-  // Deep Learning & Interviews
-  'neural-networks', 'deep-learning-intro', 'ml-interview-questions',
-];
+// Read tutorial IDs directly from the curriculum so the sitemap cannot become stale.
+const curriculumSource = fs.readFileSync(
+  path.join(__dirname, 'src', 'data', 'curriculum.ts'),
+  'utf8'
+);
+const topicIds = [...curriculumSource.matchAll(/\{\s*id:\s*"([^"]+)",\s*title:\s*"[^"]+"(?:,\s*module:\s*"[^"]+")?\s*\}/g)]
+  .map(match => match[1]);
 
 // Blog post slugs (kept in sync with src/data/blog.ts)
 const blogSlugs = [

@@ -5,26 +5,11 @@ export function TrainTestSplitContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train-Test Split in Machine Learning with Python</h1>
+        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train/Test Split in Machine Learning</h1>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Train/Test Split is one of the most fundamental ideas in Machine Learning. We use one part of the available data to <strong>train</strong> a model and keep another part aside to check how well the trained model performs on data it did not use for fitting.
         </p>
-
-        <div className="bg-slate-900 text-slate-100 rounded-xl p-5 mb-8 overflow-x-auto">
-          <h2 className="text-xl font-bold text-white mb-3">Quick Python Example: scikit-learn train_test_split()</h2>
-          <pre className="font-mono text-sm leading-relaxed whitespace-pre"><code>{`from sklearn.model_selection import train_test_split
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X,
-    y,
-    test_size=0.2,
-    random_state=42
-)`}</code></pre>
-          <p className="text-slate-300 mt-4 mb-0">
-            <code className="text-white">test_size=0.2</code> keeps 20% of the data for testing, while <code className="text-white">random_state=42</code> makes the split reproducible.
-          </p>
-        </div>
 
         <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8">
           <h2 className="text-2xl font-bold text-indigo-900 mb-4">Train/Test Split in Simple Words</h2>

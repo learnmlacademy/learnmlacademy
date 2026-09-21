@@ -8,7 +8,6 @@ import {
   Gauge,
   RefreshCw,
   ShieldAlert,
-  Stream,
   XCircle,
   Zap,
 } from 'lucide-react';

@@ -1,3 +1,125 @@
 {
+  "redirects": [
+    {
+      "source": "/learn/genai-apis-open-models",
+      "destination": "/learn/genai-deployment",
+      "permanent": true
+    },
+    {
+      "source": "/learn/language-model-evolution",
+      "destination": "/learn/llm-intro",
+      "permanent": true
+    },
+    {
+      "source": "/learn/context-windows",
+      "destination": "/learn/tokenization-embeddings",
+      "permanent": true
+    },
+    {
+      "source": "/learn/encoder-decoder-models",
+      "destination": "/learn/transformers-attention",
+      "permanent": true
+    },
+    {
+      "source": "/learn/hugging-face",
+      "destination": "/learn/efficient-llm-serving",
+      "permanent": true
+    },
+    {
+      "source": "/learn/llm-data-preparation",
+      "destination": "/learn/pretraining-finetuning",
+      "permanent": true
+    },
+    {
+      "source": "/learn/llm-scaling-laws",
+      "destination": "/learn/pretraining-finetuning",
+      "permanent": true
+    },
+    {
+      "source": "/learn/distributed-llm-training",
+      "destination": "/learn/pretraining-finetuning",
+      "permanent": true
+    },
+    {
+      "source": "/learn/lora-peft",
+      "destination": "/learn/instruction-tuning-rlhf",
+      "permanent": true
+    },
+    {
+      "source": "/learn/knowledge-distillation",
+      "destination": "/learn/efficient-llm-serving",
+      "permanent": true
+    },
+    {
+      "source": "/learn/quantization-inference",
+      "destination": "/learn/efficient-llm-serving",
+      "permanent": true
+    },
+    {
+      "source": "/learn/structured-output-function-calling",
+      "destination": "/learn/prompt-engineering",
+      "permanent": true
+    },
+    {
+      "source": "/learn/rag-evaluation",
+      "destination": "/learn/advanced-rag",
+      "permanent": true
+    },
+    {
+      "source": "/learn/llm-benchmarking-selection",
+      "destination": "/learn/llm-evaluation",
+      "permanent": true
+    },
+    {
+      "source": "/learn/types-of-ai-agents",
+      "destination": "/learn/agentic-ai-intro",
+      "permanent": true
+    },
+    {
+      "source": "/learn/agents-vs-workflows",
+      "destination": "/learn/agentic-ai-intro",
+      "permanent": true
+    },
+    {
+      "source": "/learn/reliable-agent-tools",
+      "destination": "/learn/tool-calling",
+      "permanent": true
+    },
+    {
+      "source": "/learn/react-agent-pattern",
+      "destination": "/learn/planning-reflection",
+      "permanent": true
+    },
+    {
+      "source": "/learn/human-in-the-loop",
+      "destination": "/learn/durable-long-running-agents",
+      "permanent": true
+    },
+    {
+      "source": "/learn/agent-to-agent-communication",
+      "destination": "/learn/multi-agent-systems",
+      "permanent": true
+    },
+    {
+      "source": "/learn/code-agents-sandboxing",
+      "destination": "/learn/browser-computer-use-agents",
+      "permanent": true
+    },
+    {
+      "source": "/learn/agent-failure-recovery",
+      "destination": "/learn/agent-security",
+      "permanent": true
+    },
+    {
+      "source": "/learn/agent-cost-latency-budgets",
+      "destination": "/learn/agent-observability-deployment",
+      "permanent": true
+    },
+    {
+      "source": "/learn/agent-trajectory-evaluation",
+      "destination": "/learn/agent-evaluation-safety",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/((?!assets/).*)", "destination": "/index.html" }]
 }

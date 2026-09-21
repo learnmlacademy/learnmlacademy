@@ -1,19 +1,16 @@
-import React, { useEffect, lazy, Suspense } from "react";
-import { createPortal } from "react-dom";
-import { useParams, Navigate, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, lazy, Suspense, useRef } from "react";
+import { useParams, Navigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
 import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
 
-import {
-  ChevronRight,
-  ExternalLink,
-  ArrowLeft,
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
-
 import { GenericContent } from "../content/GenericContent";
 import { QuizSection } from "../components/QuizSection";
+import { ContinueLearning } from "../components/lesson/ContinueLearning";
+import type { LearningDestination } from "../components/lesson/PreviousNextCard";
+import {
+  LegacyInlineEndingCleanup,
+  LegacyLessonSummary,
+} from "../components/LegacyLessonEnding";
 
 // Lazy-loaded content components — each is a separate JS chunk loaded on demand
 const WhatIsMLContent = lazy(() => import("../content/foundations/WhatIsMLContent").then(m => ({ default: m.WhatIsMLContent })));
@@ -87,10 +84,44 @@ const MultiArmedBanditsContent = lazy(() => import("../content/advanced/MultiArm
 
 const NeuralNetworksContent = lazy(() => import("../content/deeplearning/NeuralNetworksContent").then(m => ({ default: m.NeuralNetworksContent })));
 const DeepLearningIntroContent = lazy(() => import("../content/deeplearning/DeepLearningIntroContent").then(m => ({ default: m.DeepLearningIntroContent })));
-const MLInterviewContent = lazy(() => import("../content/interview/MLInterviewContent").then(m => ({ default: m.MLInterviewContent })));
+const MathFoundationsContent = lazy(() => import("../content/deeplearning/MathFoundationsContent").then(m => ({ default: m.MathFoundationsContent })));
+const TensorsFrameworksGPUsContent = lazy(() => import("../content/deeplearning/TensorsFrameworksGPUsContent").then(m => ({ default: m.TensorsFrameworksGPUsContent })));
+const ActivationFunctionsContent = lazy(() => import("../content/deeplearning/ActivationFunctionsContent").then(m => ({ default: m.ActivationFunctionsContent })));
+const LossFunctionsContent = lazy(() => import("../content/deeplearning/LossFunctionsContent").then(m => ({ default: m.LossFunctionsContent })));
+const BackpropagationContent = lazy(() => import("../content/deeplearning/BackpropagationContent").then(m => ({ default: m.BackpropagationContent })));
+const TrainingLoopContent = lazy(() => import("../content/deeplearning/TrainingLoopContent").then(m => ({ default: m.TrainingLoopContent })));
+const OptimizersContent = lazy(() => import("../content/deeplearning/OptimizersContent").then(m => ({ default: m.OptimizersContent })));
+const InitializationNormalizationContent = lazy(() => import("../content/deeplearning/InitializationNormalizationContent").then(m => ({ default: m.InitializationNormalizationContent })));
+const RegularizationContent = lazy(() => import("../content/deeplearning/RegularizationContent").then(m => ({ default: m.RegularizationContent })));
+const DataAugmentationContent = lazy(() => import("../content/deeplearning/DataAugmentationContent").then(m => ({ default: m.DataAugmentationContent })));
+const CNNContent = lazy(() => import("../content/deeplearning/CNNContent").then(m => ({ default: m.CNNContent })));
+const CNNArchitecturesContent = lazy(() => import("../content/deeplearning/CNNArchitecturesContent").then(m => ({ default: m.CNNArchitecturesContent })));
+const DetectionSegmentationContent = lazy(() => import("../content/deeplearning/DetectionSegmentationContent").then(m => ({ default: m.DetectionSegmentationContent })));
+const VisionTransformersContent = lazy(() => import("../content/deeplearning/VisionTransformersContent").then(m => ({ default: m.VisionTransformersContent })));
+const RecurrentSequenceContent = lazy(() => import("../content/deeplearning/RecurrentSequenceContent").then(m => ({ default: m.RecurrentSequenceContent })));
+const StateSpaceModelsContent = lazy(() => import("../content/deeplearning/StateSpaceModelsContent").then(m => ({ default: m.StateSpaceModelsContent })));
+const AttentionTransformersContent = lazy(() => import("../content/deeplearning/AttentionTransformersContent").then(m => ({ default: m.AttentionTransformersContent })));
+const TransformersDeepLearningContent = lazy(() => import("../content/deeplearning/AttentionTransformersContent").then(m => ({ default: m.TransformersDeepLearningContent })));
+const DeepLearningNLPContent = lazy(() => import("../content/deeplearning/DeepLearningNLPContent").then(m => ({ default: m.DeepLearningNLPContent })));
+const AutoencodersContent = lazy(() => import("../content/deeplearning/AutoencodersContent").then(m => ({ default: m.AutoencodersContent })));
+const TransferLearningContent = lazy(() => import("../content/deeplearning/TransferLearningContent").then(m => ({ default: m.TransferLearningContent })));
+const SelfSupervisedFewShotContent = lazy(() => import("../content/deeplearning/TransferLearningContent").then(m => ({ default: m.SelfSupervisedFewShotContent })));
+const GraphNeuralNetworksContent = lazy(() => import("../content/deeplearning/GraphNeuralNetworksContent").then(m => ({ default: m.GraphNeuralNetworksContent })));
+const ScientificNetworksContent = lazy(() => import("../content/deeplearning/ScientificNetworksContent").then(m => ({ default: m.ScientificNetworksContent })));
+const ModelDeploymentContent = lazy(() => import("../content/deeplearning/ModelDeploymentContent").then(m => ({ default: m.ModelDeploymentContent })));
+const ModernAIContent = lazy(() => import("../content/modernai/ModernAIContent").then(m => ({ default: m.ModernAIContent })));
+const LLMConsolidatedContent = lazy(() => import("../content/modernai/LLMConsolidatedContent").then(m => ({ default: m.LLMConsolidatedContent })));
+const HowGenerativeModelsLearnContent = lazy(() => import("../content/modernai/HowGenerativeModelsLearnContent").then(m => ({ default: m.HowGenerativeModelsLearnContent })));
+const GenerativeAIBatchOneContent = lazy(() => import("../content/modernai/GenerativeAIBatchOneContent").then(m => ({ default: m.GenerativeAIBatchOneContent })));
+const GenerativeAIBatchTwoContent = lazy(() => import("../content/modernai/GenerativeAIBatchTwoContent").then(m => ({ default: m.GenerativeAIBatchTwoContent })));
+const GenerativeAIBatchThreeContent = lazy(() => import("../content/modernai/GenerativeAIBatchThreeContent").then(m => ({ default: m.GenerativeAIBatchThreeContent })));
+const ProjectsContent = lazy(() => import("../content/projects/ProjectsContent").then(m => ({ default: m.ProjectsContent })));
+const MLOpsContent = lazy(() => import("../content/mlops/MLOpsContent").then(m => ({ default: m.MLOpsContent })));
+const CareerInterviewContent = lazy(() => import("../content/interview/CareerInterviewContent").then(m => ({ default: m.CareerInterviewContent })));
 
 import { AffiliateRecommendation } from "../components/AffiliateRecommendation";
 import { NewsletterSignup } from "../components/NewsletterSignup";
+import { LessonShell } from "../components/lesson/LessonShell";
 
 // We will dynamically render content based on ID.
 // For topics without implemented content yet, we show a placeholder.
@@ -98,6 +129,31 @@ import { NewsletterSignup } from "../components/NewsletterSignup";
 function getTopicNavigation(currentId: string) {
   let prev = null;
   let next = null;
+
+  const currentCategory = curriculum.find((category) =>
+    category.subtopics.some((topic) => topic.id === currentId)
+  );
+  if (currentCategory?.id === "deep-learning" || currentCategory?.id === "advanced-deep-learning") {
+    const currentIndex = currentCategory.subtopics.findIndex((topic) => topic.id === currentId);
+    if (currentIndex > 0) prev = currentCategory.subtopics[currentIndex - 1];
+    if (currentIndex >= 0 && currentIndex < currentCategory.subtopics.length - 1) {
+      next = currentCategory.subtopics[currentIndex + 1];
+    }
+    return { prev, next };
+  }
+
+  if (currentCategory?.id === "generative-ai") {
+    const currentIndex = currentCategory.subtopics.findIndex((topic) => topic.id === currentId);
+    if (currentIndex > 0) prev = currentCategory.subtopics[currentIndex - 1];
+    if (currentIndex >= 0 && currentIndex < currentCategory.subtopics.length - 1) {
+      next = currentCategory.subtopics[currentIndex + 1];
+    } else if (currentIndex === currentCategory.subtopics.length - 1) {
+      next = curriculum
+        .find((category) => category.id === "large-language-models")
+        ?.subtopics.find((topic) => topic.id === "llm-intro") ?? null;
+    }
+    return { prev, next };
+  }
 
   const allTopics = curriculum.flatMap((c) => c.subtopics);
   const currentIndex = allTopics.findIndex((t) => t.id === currentId);
@@ -187,35 +243,205 @@ const contentMap: Record<string, React.ElementType> = {
 
     "neural-networks": NeuralNetworksContent,
     "deep-learning-intro": DeepLearningIntroContent,
-    "ml-interview-questions": MLInterviewContent,
+    "tensors-frameworks-gpus": TensorsFrameworksGPUsContent,
+    "activation-functions": ActivationFunctionsContent,
+    "loss-functions-deep-learning": LossFunctionsContent,
+    backpropagation: BackpropagationContent,
+    "computational-graphs-autodiff": BackpropagationContent,
+    "neural-network-training-loop": TrainingLoopContent,
+    "deep-learning-optimizers": OptimizersContent,
+    "learning-rate-scheduling": OptimizersContent,
+    "weight-initialization": InitializationNormalizationContent,
+    "batch-normalization": InitializationNormalizationContent,
+    "deep-learning-regularization": RegularizationContent,
+    "vanishing-exploding-gradients": InitializationNormalizationContent,
+    "data-augmentation-deep-learning": DataAugmentationContent,
+    cnn: CNNContent,
+    "cnn-architectures-resnet": CNNArchitecturesContent,
+    "computer-vision": ModernAIContent,
+    "object-detection": DetectionSegmentationContent,
+    "rnn-lstm": RecurrentSequenceContent,
+    "state-space-models": StateSpaceModelsContent,
+    "gru-bidirectional-seq2seq": RecurrentSequenceContent,
+    "deep-learning-nlp": DeepLearningNLPContent,
+    "transfer-learning": TransferLearningContent,
+    autoencoders: AutoencodersContent,
+    "self-supervised-contrastive-learning": TransferLearningContent,
+    "graph-neural-networks": GraphNeuralNetworksContent,
+    "debugging-neural-networks": ModernAIContent,
+    "saving-deploying-deep-models": ModelDeploymentContent,
+    "math-foundations-deep-learning": MathFoundationsContent,
+    "mlp-universal-approximation": NeuralNetworksContent,
+    "advanced-neural-optimization": ModernAIContent,
+    "normalization-methods": InitializationNormalizationContent,
+    "label-smoothing-distillation-ensembles": RegularizationContent,
+    "deep-learning-generalization": RegularizationContent,
+    "curriculum-meta-few-shot": TransferLearningContent,
+    "self-supervised-few-shot-learning": SelfSupervisedFewShotContent,
+    "unet-deeplab-gradcam": DetectionSegmentationContent,
+    "vision-transformers": VisionTransformersContent,
+    "state-space-bptt": RecurrentSequenceContent,
+    "attention-transformers-deep-learning": AttentionTransformersContent,
+    "transformers-deep-learning": TransformersDeepLearningContent,
+    "autoencoder-variants": AutoencodersContent,
+    "pinn-kan-topological-networks": ScientificNetworksContent,
+
+    "generative-ai-intro": GenerativeAIBatchOneContent,
+    "generative-vs-discriminative": GenerativeAIBatchOneContent,
+    "how-generative-models-learn": HowGenerativeModelsLearnContent,
+    gans: GenerativeAIBatchOneContent,
+    vae: GenerativeAIBatchOneContent,
+    "diffusion-models": GenerativeAIBatchOneContent,
+    "stable-latent-diffusion": GenerativeAIBatchTwoContent,
+    "controlling-diffusion-models": GenerativeAIBatchTwoContent,
+    "finetuning-image-models": GenerativeAIBatchTwoContent,
+    "text-generation-decoding": LLMConsolidatedContent,
+    "hugging-face": ModernAIContent,
+    "multimodal-ai": GenerativeAIBatchTwoContent,
+    "audio-music-video-generation": GenerativeAIBatchTwoContent,
+    "synthetic-data": GenerativeAIBatchTwoContent,
+    "evaluating-generative-models": GenerativeAIBatchThreeContent,
+    "choosing-generative-model": GenerativeAIBatchThreeContent,
+    "genai-apis-open-models": ModernAIContent,
+    "building-genai-apps": GenerativeAIBatchThreeContent,
+    "genai-deployment": GenerativeAIBatchThreeContent,
+    "responsible-generative-ai": GenerativeAIBatchThreeContent,
+
+    "llm-intro": LLMConsolidatedContent,
+    "language-model-evolution": ModernAIContent,
+    "tokenization-embeddings": LLMConsolidatedContent,
+    "transformers-attention": LLMConsolidatedContent,
+    "encoder-decoder-models": ModernAIContent,
+    "context-windows": ModernAIContent,
+    "pretraining-finetuning": LLMConsolidatedContent,
+    "llm-data-preparation": ModernAIContent,
+    "llm-scaling-laws": ModernAIContent,
+    "distributed-llm-training": ModernAIContent,
+    "instruction-tuning-rlhf": LLMConsolidatedContent,
+    "lora-peft": ModernAIContent,
+    "knowledge-distillation": ModernAIContent,
+    "quantization-inference": ModernAIContent,
+    "efficient-llm-serving": LLMConsolidatedContent,
+    "prompt-engineering": LLMConsolidatedContent,
+    "structured-output-function-calling": ModernAIContent,
+    "semantic-search-embeddings": LLMConsolidatedContent,
+    "vector-databases": LLMConsolidatedContent,
+    rag: LLMConsolidatedContent,
+    "advanced-rag": LLMConsolidatedContent,
+    "rag-evaluation": ModernAIContent,
+    "llm-evaluation": LLMConsolidatedContent,
+    "reasoning-models": LLMConsolidatedContent,
+    "llm-benchmarking-selection": ModernAIContent,
+    llmops: LLMConsolidatedContent,
+    "llm-hallucinations-safety": LLMConsolidatedContent,
+
+    "agentic-ai-intro": ModernAIContent,
+    "types-of-ai-agents": ModernAIContent,
+    "agents-vs-workflows": ModernAIContent,
+    "tool-calling": ModernAIContent,
+    "agent-context-engineering": ModernAIContent,
+    "reliable-agent-tools": ModernAIContent,
+    "agent-memory": ModernAIContent,
+    "planning-reflection": ModernAIContent,
+    "agent-state-graphs": ModernAIContent,
+    "durable-long-running-agents": ModernAIContent,
+    "react-agent-pattern": ModernAIContent,
+    "agentic-rag": ModernAIContent,
+    "multi-agent-systems": ModernAIContent,
+    "agent-to-agent-communication": ModernAIContent,
+    "agent-frameworks": ModernAIContent,
+    "model-context-protocol": ModernAIContent,
+    "human-in-the-loop": ModernAIContent,
+    "building-ai-agent": ModernAIContent,
+    "browser-computer-use-agents": ModernAIContent,
+    "code-agents-sandboxing": ModernAIContent,
+    "agent-security": ModernAIContent,
+    "agent-failure-recovery": ModernAIContent,
+    "agent-cost-latency-budgets": ModernAIContent,
+    "agent-evaluation-safety": ModernAIContent,
+    "agent-trajectory-evaluation": ModernAIContent,
+    "agent-observability-deployment": ModernAIContent,
+    "project-customer-churn": ProjectsContent,
+    "project-credit-risk": ProjectsContent,
+    "project-sales-forecasting": ProjectsContent,
+    "project-image-classification": ProjectsContent,
+    "project-genai-app": ProjectsContent,
+    "project-rag-document-qa": ProjectsContent,
+    "project-ai-agent": ProjectsContent,
+    "project-multi-agent-research": ProjectsContent,
+    "ai-engineering-mlops": MLOpsContent,
+    "ml-data-feature-pipelines": MLOpsContent,
+    "experiment-tracking-model-registry": MLOpsContent,
+    "batch-online-inference": MLOpsContent,
+    "ml-cicd-continuous-training": MLOpsContent,
+    "ml-monitoring-drift": MLOpsContent,
+    "production-ai-reliability": MLOpsContent,
+    "ml-system-design": MLOpsContent,
+    "ai-data-career-paths": CareerInterviewContent,
+    "ml-engineer-roadmap": CareerInterviewContent,
+    "ai-engineer-roadmap": CareerInterviewContent,
+    "genai-llm-engineer-roadmap": CareerInterviewContent,
+    "data-scientist-roadmap": CareerInterviewContent,
+    "interview-preparation-strategy": CareerInterviewContent,
+    "ml-interview-questions": CareerInterviewContent,
+    "deep-learning-interview-questions": CareerInterviewContent,
+    "genai-llm-rag-interview": CareerInterviewContent,
+    "agentic-ai-interview": CareerInterviewContent,
+    "python-ai-ml-interview": CareerInterviewContent,
+    "sql-ai-data-interview": CareerInterviewContent,
+    "ml-ai-system-design-interview": CareerInterviewContent,
+    "mlops-production-interview": CareerInterviewContent,
+    "behavioral-project-interview": CareerInterviewContent,
   };
 
+const topicAliases: Record<string, string> = {
+  "mlp-universal-approximation": "neural-networks",
+  "computational-graphs-autodiff": "backpropagation",
+  "debugging-neural-networks": "neural-network-training-loop",
+  "advanced-neural-optimization": "deep-learning-optimizers",
+  "learning-rate-scheduling": "deep-learning-optimizers",
+  "batch-normalization": "weight-initialization",
+  "normalization-methods": "weight-initialization",
+  "vanishing-exploding-gradients": "weight-initialization",
+  "label-smoothing-distillation-ensembles": "deep-learning-regularization",
+  "deep-learning-generalization": "deep-learning-regularization",
+  "computer-vision": "cnn",
+  "unet-deeplab-gradcam": "object-detection",
+  "state-space-bptt": "state-space-models",
+  "gru-bidirectional-seq2seq": "attention-transformers-deep-learning",
+  "autoencoder-variants": "autoencoders",
+  "self-supervised-contrastive-learning": "self-supervised-few-shot-learning",
+  "curriculum-meta-few-shot": "self-supervised-few-shot-learning",
+  "genai-apis-open-models": "genai-deployment",
+  "language-model-evolution": "llm-intro",
+  "context-windows": "tokenization-embeddings",
+  "encoder-decoder-models": "transformers-attention",
+  "hugging-face": "efficient-llm-serving",
+  "llm-data-preparation": "pretraining-finetuning",
+  "llm-scaling-laws": "pretraining-finetuning",
+  "distributed-llm-training": "pretraining-finetuning",
+  "lora-peft": "instruction-tuning-rlhf",
+  "knowledge-distillation": "efficient-llm-serving",
+  "quantization-inference": "efficient-llm-serving",
+  "structured-output-function-calling": "prompt-engineering",
+  "rag-evaluation": "advanced-rag",
+  "llm-benchmarking-selection": "llm-evaluation",
+  "types-of-ai-agents": "agentic-ai-intro",
+  "agents-vs-workflows": "agentic-ai-intro",
+  "reliable-agent-tools": "tool-calling",
+  "react-agent-pattern": "planning-reflection",
+  "human-in-the-loop": "durable-long-running-agents",
+  "agent-to-agent-communication": "multi-agent-systems",
+  "code-agents-sandboxing": "browser-computer-use-agents",
+  "agent-failure-recovery": "agent-security",
+  "agent-cost-latency-budgets": "agent-observability-deployment",
+  "agent-trajectory-evaluation": "agent-evaluation-safety",
+};
 
-import { BookOpen, Code2, Network, BarChart3, Binary, Layers, BrainCircuit, LineChart, FileTerminal } from 'lucide-react';
-
-function getCategoryIcon(categoryId: string) {
-  if (categoryId.includes('python')) return <Code2 className="w-12 h-12 text-white/90" />;
-  if (categoryId.includes('supervised')) return <LineChart className="w-12 h-12 text-white/90" />;
-  if (categoryId.includes('unsupervised')) return <Network className="w-12 h-12 text-white/90" />;
-  if (categoryId.includes('evaluation')) return <BarChart3 className="w-12 h-12 text-white/90" />;
-  if (categoryId.includes('ensemble')) return <Layers className="w-12 h-12 text-white/90" />;
-  if (categoryId.includes('deeplearning')) return <BrainCircuit className="w-12 h-12 text-white/90" />;
-  return <BookOpen className="w-12 h-12 text-white/90" />;
-}
-
-function getCategoryGradient(categoryId: string) {
-  if (categoryId.includes('python')) return 'from-emerald-600 to-teal-800';
-  if (categoryId.includes('supervised')) return 'from-blue-600 to-indigo-900';
-  if (categoryId.includes('unsupervised')) return 'from-purple-600 to-fuchsia-900';
-  if (categoryId.includes('evaluation')) return 'from-amber-500 to-orange-700';
-  if (categoryId.includes('ensemble')) return 'from-rose-600 to-red-900';
-  if (categoryId.includes('deeplearning')) return 'from-slate-800 to-black';
-  return 'from-indigo-600 to-blue-900';
-}
 
 export function TopicPage() {
   const { topicId } = useParams<{ topicId: string }>();
-  const navigate = useNavigate();
+  const articleRef = useRef<HTMLElement | null>(null);
  
    // Scroll to top and set SEO on route change
    useEffect(() => {
@@ -262,6 +488,10 @@ export function TopicPage() {
     }
   }, [topicId]);
 
+  if (topicId && topicAliases[topicId]) {
+    return <Navigate to={`/learn/${topicAliases[topicId]}`} replace />;
+  }
+
   if (!topicId) return <Navigate to="/" />;
 
   const topicData = getTopicById(topicId);
@@ -275,139 +505,118 @@ export function TopicPage() {
   
 
   const ContentComponent = contentMap[topicId];
+  const isGenerativeAILesson = category.id === "generative-ai";
+  const isLLMLesson = category.id === "large-language-models";
+  const isAgenticAILesson = category.id === "agentic-ai";
+  const isProjectLesson = category.id === "projects";
+  const isMLOpsLesson = category.id === "ai-engineering-mlops";
+  const isCareerInterviewLesson = category.id === "interview-preparation";
+  const isModernStandardizedLesson =
+    isGenerativeAILesson ||
+    isLLMLesson ||
+    isAgenticAILesson ||
+    isProjectLesson ||
+    isMLOpsLesson ||
+    isCareerInterviewLesson;
+  const isLegacyStandardizedLesson = !isModernStandardizedLesson;
+
+  const renderQuiz = () => (
+    <div key={`quiz-${subtopic.id}`}><QuizSection topicId={subtopic.id} topicTitle={subtopic.title} /></div>
+  );
+
+  const advancedDestinations: Record<string, { primary?: LearningDestination; secondary?: LearningDestination }> = {
+    "state-space-models": {
+      primary: { label: "Related advanced topic", title: "Physics-Informed, KAN and Topological Networks", to: "/learn/pinn-kan-topological-networks", context: "Advanced / bridge content" },
+      secondary: { label: "Back to Deep Learning", title: "Deep Learning Basics and Model Types", to: "/learn/deep-learning-intro", context: "Core Deep Learning path" },
+    },
+    "deep-learning-nlp": {
+      primary: { label: "Continue to LLMs", title: "What Are Large Language Models?", to: "/learn/llm-intro", context: "LLMs & RAG path" },
+      secondary: { label: "Back to Deep Learning", title: "Deep Learning Basics and Model Types", to: "/learn/deep-learning-intro", context: "Core Deep Learning path" },
+    },
+    "pinn-kan-topological-networks": {
+      primary: { label: "Related advanced topic", title: "State-Space Models", to: "/learn/state-space-models", context: "Advanced / bridge content" },
+      secondary: { label: "Back to Deep Learning", title: "Deep Learning Basics and Model Types", to: "/learn/deep-learning-intro", context: "Core Deep Learning path" },
+    },
+  };
+
+  const relatedTopics = category.subtopics
+    .filter(item => item.id !== topicId)
+    .slice(0, 4)
+    .map(item => ({ title: item.title, to: `/learn/${item.id}` }));
+  const standardPrimary = next
+    ? { label: "Next lesson", title: next.title, to: `/learn/${next.id}`, context: getTopicById(next.id)?.category.title }
+    : undefined;
+  const standardSecondary = prev
+    ? { label: "Previous lesson", title: prev.title, to: `/learn/${prev.id}`, context: getTopicById(prev.id)?.category.title }
+    : undefined;
+  const destinations = category.id === "advanced-deep-learning"
+    ? advancedDestinations[topicId] ?? {}
+    : { primary: standardPrimary, secondary: standardSecondary };
+
+  const renderStandardContinueLearning = (headingId: string) => (
+    <ContinueLearning
+      headingId={headingId}
+      primary={destinations.primary}
+      secondary={destinations.secondary}
+      related={category.id === "advanced-deep-learning" ? [] : relatedTopics}
+    />
+  );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col">
-      <div className="flex flex-col lg:flex-row gap-8 mt-6">
-        {/* Main Content Area */}
-        <div className="lg:col-span-8 flex-1 min-w-0">
-          {/* Breadcrumbs */}
-          <nav className="flex items-center text-sm text-slate-500 mb-8 font-medium">
-            <span className="hover:text-slate-900 transition-colors uppercase tracking-wider text-xs">
-              {category.title.replace(/^\d+\.\s*/, "")}
-            </span>
-            <ChevronRight className="h-4 w-4 mx-2 text-slate-300" />
-            <span className="text-slate-900">{subtopic.title}</span>
-          </nav>
-
-          
-          {/* Topic Hero */}
-          <div className={`relative overflow-hidden rounded-2xl p-8 md:p-10 mb-10 shadow-lg bg-gradient-to-br ${getCategoryGradient(category.id)}`}>
-            {/* Background decorative elements */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-10 w-40 h-40 bg-black/20 rounded-full blur-2xl"></div>
-            
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
-              <div className="shrink-0 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                {getCategoryIcon(category.id)}
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-white/90 text-xs font-bold uppercase tracking-wider mb-4 border border-white/10">
-                  {category.title.replace(/^\d+\.\s*/, "")}
-                </div>
-                <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight mb-4 leading-tight">
-                  {subtopic.title}
-                </h1>
-                <p className="text-lg text-white/80 max-w-2xl leading-relaxed">
-                  {getSEOData(topicId || '', subtopic.title).description}
-                </p>
-              </div>
-            </div>
+    <LessonShell
+      topicId={topicId}
+      title={subtopic.title}
+      description={getSEOData(topicId, subtopic.title).description}
+      category={category.title}
+      module={subtopic.module}
+    >
+      <article
+        ref={articleRef}
+        data-lesson-body
+        key={`article-${topicId}`}
+        className="lesson-body prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
+      >
+        <div className="not-prose mb-8 flex items-center gap-3 border-b border-slate-200 pb-4">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-base font-extrabold text-indigo-700">
+            ML
           </div>
-
-          {/* Main Content Render */}
-          <article
-            key={`article-${topicId}`}
-            className="prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
-          >
-            {/* Author Byline */}
-            <div className="flex items-center gap-3 mb-8 not-prose border-b border-slate-200 pb-4">
-              <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-lg">
-                ML
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-slate-900">Written by the ML Academy Team</p>
-                <p className="text-xs text-slate-500">Machine Learning Engineers & Educators</p>
-              </div>
-            </div>
-
-            <Suspense fallback={
-              <div className="animate-pulse space-y-4 py-8">
-                <div className="h-6 bg-slate-200 rounded w-3/4"></div>
-                <div className="h-4 bg-slate-200 rounded w-full"></div>
-                <div className="h-4 bg-slate-200 rounded w-5/6"></div>
-                <div className="h-4 bg-slate-200 rounded w-full"></div>
-              </div>
-            }>
-              {ContentComponent ? <ContentComponent /> : <GenericContent title={subtopic.title} />}
-            </Suspense>
-          </article>
-
-          {/* Related Topics Section */}
-          <div className="mt-12 bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-800 mb-3 flex items-center gap-2">
-              Related Topics
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {category.subtopics
-                .filter(t => t.id !== topicId)
-                .slice(0, 4)
-                .map(t => (
-                  <Link 
-                    key={t.id} 
-                    to={`/learn/${t.id}`}
-                    className="inline-flex items-center px-3 py-1.5 rounded-md bg-indigo-50 text-indigo-700 text-sm font-medium hover:bg-indigo-100 transition-colors"
-                  >
-                    {t.title}
-                  </Link>
-                ))}
-            </div>
-          </div>
-
-          {subtopic.id !== 'ml-interview-questions' && (
-            <div key={`quiz-${subtopic.id}`}><QuizSection topicId={subtopic.id} topicTitle={subtopic.title} /></div>
-          )}
-
-          {/* Newsletter Signup */}
-          <NewsletterSignup />
-
-          {/* Global Affiliate Recommendation Section */}
-          <AffiliateRecommendation />
-
-          {/* Page Navigation */}
-          <div className="mt-12 flex items-center justify-between border-t border-slate-200 pt-8">
-            {prev ? (
-              <Link
-                to={`/learn/${prev.id}`}
-                className="group flex flex-col space-y-1 text-slate-500 hover:text-indigo-600 transition-colors w-1/2 pr-4"
-              >
-                <span className="flex items-center text-sm font-medium gap-1">
-                  <ArrowLeft className="h-4 w-4" /> Previous
-                </span>
-                <span className="text-slate-900 font-semibold group-hover:text-indigo-600 truncate">
-                  {prev.title}
-                </span>
-              </Link>
-            ) : (
-              <div className="w-1/2" />
-            )}
-
-            {next && (
-              <Link
-                to={`/learn/${next.id}`}
-                className="group flex flex-col items-end text-right space-y-1 text-slate-500 hover:text-indigo-600 transition-colors w-1/2 pl-4"
-              >
-                <span className="flex items-center text-sm font-medium gap-1">
-                  Next <ArrowRight className="h-4 w-4" />
-                </span>
-                <span className="text-slate-900 font-semibold group-hover:text-indigo-600 truncate">
-                  {next.title}
-                </span>
-              </Link>
-            )}
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Written by the ML Academy Team</p>
+            <p className="text-xs text-slate-500">Machine Learning Engineers & Educators</p>
           </div>
         </div>
-      </div>
-    </div>
+
+        <Suspense fallback={
+          <div className="animate-pulse space-y-4 py-8" aria-label="Loading lesson">
+            <div className="h-6 w-3/4 rounded bg-slate-200" />
+            <div className="h-4 w-full rounded bg-slate-200" />
+            <div className="h-4 w-5/6 rounded bg-slate-200" />
+            <div className="h-4 w-full rounded bg-slate-200" />
+          </div>
+        }>
+          {ContentComponent ? <ContentComponent /> : <GenericContent title={subtopic.title} />}
+          {isLegacyStandardizedLesson && (
+            <LegacyInlineEndingCleanup articleRef={articleRef} topicId={topicId} />
+          )}
+        </Suspense>
+      </article>
+
+      {isModernStandardizedLesson ? (
+        <>
+          {renderQuiz()}
+          {renderStandardContinueLearning("continue-learning-heading")}
+          <NewsletterSignup />
+          <AffiliateRecommendation />
+        </>
+      ) : (
+        <>
+          <LegacyLessonSummary topicId={topicId} />
+          {renderQuiz()}
+          {renderStandardContinueLearning(`continue-learning-${topicId}`)}
+          <NewsletterSignup />
+          <AffiliateRecommendation />
+        </>
+      )}
+    </LessonShell>
   );
 }

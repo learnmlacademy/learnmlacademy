@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { getQuizzesForTopicId, QuizQuestion } from '../data/quizzes';
-import { Target, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { getQuizzesForTopicId } from '../data/quizzes';
+import { AlertCircle, CheckCircle2, Target, XCircle } from 'lucide-react';
 
 export function QuizSection({ topicTitle, topicId }: { topicTitle?: string; topicId?: string }) {
   const id = topicId || topicTitle || '';
@@ -12,109 +12,126 @@ export function QuizSection({ topicTitle, topicId }: { topicTitle?: string; topi
 
   const handleSelect = (quizId: number, optionIndex: number) => {
     if (showResults[quizId]) return;
-    setSelectedAnswers(prev => ({ ...prev, [quizId]: optionIndex }));
+    setSelectedAnswers(previous => ({ ...previous, [quizId]: optionIndex }));
   };
 
   const handleCheck = (quizId: number) => {
     if (selectedAnswers[quizId] === undefined || selectedAnswers[quizId] === null) return;
-    setShowResults(prev => ({ ...prev, [quizId]: true }));
+    setShowResults(previous => ({ ...previous, [quizId]: true }));
+    requestAnimationFrame(() => document.getElementById(`quiz-result-${id}-${quizId}`)?.focus({ preventScroll: true }));
   };
 
   return (
-    <div className="mt-16 pt-12 border-t-2 border-slate-200">
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-slate-900 flex items-center mb-4">
-          <Target className="mr-3 text-indigo-600 h-8 w-8" />
+    <section data-knowledge-check className="mt-16 border-t-2 border-[var(--lma-border-default)] pt-10 sm:pt-12" aria-labelledby={`knowledge-check-${id}`}>
+      <div className="mb-7">
+        <h2 id={`knowledge-check-${id}`} className="flex items-center gap-3 text-3xl font-extrabold text-[var(--lma-text-primary)]">
+          <Target className="h-8 w-8 shrink-0 text-[var(--lma-brand)]" aria-hidden="true" />
           Knowledge Check
         </h2>
-        <p className="text-lg text-slate-600">
-          Test your understanding with these questions. Select an answer and click Check to see the explanation.
+        <p className="mt-3 text-base leading-relaxed text-[var(--lma-text-secondary)] sm:text-lg">
+          Test your understanding. Choose one answer for each question, then check it to reveal the result and explanation.
         </p>
       </div>
 
-      <div className="space-y-8">
+      <div className="space-y-6">
         {quizzes.map((quiz, index) => {
-          const isRevealed = showResults[quiz.id];
+          const isRevealed = Boolean(showResults[quiz.id]);
           const selected = selectedAnswers[quiz.id];
           const isCorrect = selected === quiz.correctAnswerIndex;
+          const resultId = `quiz-result-${id}-${quiz.id}`;
+          const groupName = `quiz-${id}-${quiz.id}`;
 
           return (
-            <div key={quiz.id} className="bg-white border rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-                <h3 className="font-bold text-slate-800 text-lg flex items-start">
-                  <span className="bg-indigo-100 text-indigo-800 text-sm py-1 px-3 rounded-full mr-3 mt-0.5 shrink-0">
-                    Q{index + 1}
+            <form
+              key={quiz.id}
+              className="rounded-2xl border border-[var(--lma-border-default)] bg-[var(--lma-surface)] p-4 shadow-sm sm:p-6"
+              onSubmit={event => {
+                event.preventDefault();
+                handleCheck(quiz.id);
+              }}
+            >
+              <fieldset disabled={isRevealed} aria-describedby={isRevealed ? resultId : undefined}>
+                <legend className="w-full text-lg font-extrabold leading-snug text-[var(--lma-text-primary)]">
+                  <span className="mb-3 block text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--lma-brand)]">
+                    Question {index + 1} of {quizzes.length}
                   </span>
                   {quiz.question}
-                </h3>
-              </div>
+                </legend>
 
-              <div className="p-6">
-                <div className="space-y-3 mb-6">
-                  {quiz.options.map((opt, optIdx) => {
-                    let optionClass = "border-slate-200 hover:border-indigo-300 hover:bg-slate-50 cursor-pointer text-slate-700";
-
-                    if (isRevealed) {
-                      if (optIdx === quiz.correctAnswerIndex) {
-                        optionClass = "border-emerald-500 bg-emerald-50 text-emerald-900";
-                      } else if (optIdx === selected) {
-                        optionClass = "border-rose-500 bg-rose-50 text-rose-900";
-                      } else {
-                        optionClass = "border-slate-200 opacity-50 cursor-not-allowed";
-                      }
-                    } else if (selected === optIdx) {
-                      optionClass = "border-indigo-500 bg-indigo-50 text-indigo-900 ring-1 ring-indigo-500";
-                    }
+                <div className="mt-5 space-y-3">
+                  {quiz.options.map((option, optionIndex) => {
+                    const selectedOption = selected === optionIndex;
+                    const correctOption = isRevealed && optionIndex === quiz.correctAnswerIndex;
+                    const incorrectSelection = isRevealed && selectedOption && !isCorrect;
+                    const optionState = correctOption
+                      ? 'border-[var(--lma-success)] bg-[var(--lma-success-soft)] text-[var(--lma-success-text)]'
+                      : incorrectSelection
+                        ? 'border-[var(--lma-danger)] bg-[var(--lma-danger-soft)] text-[var(--lma-danger-text)]'
+                        : selectedOption
+                          ? 'border-[var(--lma-brand)] bg-[var(--lma-brand-soft)] text-[var(--lma-brand-text)] ring-1 ring-[var(--lma-focus-ring)]'
+                          : 'border-[var(--lma-border-default)] bg-[var(--lma-surface)] text-[var(--lma-text-secondary)] hover:border-[var(--lma-brand-border)] hover:bg-[var(--lma-canvas)]';
 
                     return (
-                      <div
-                        key={optIdx}
-                        onClick={() => handleSelect(quiz.id, optIdx)}
-                        className={`p-4 rounded-lg border-2 transition-all ${optionClass}`}
+                      <label
+                        key={optionIndex}
+                        className={`flex min-h-12 items-start gap-3 rounded-xl border-2 p-3.5 text-sm font-medium leading-relaxed transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-[var(--lma-focus-ring)] has-[:focus-visible]:ring-offset-2 sm:p-4 ${optionState} ${isRevealed ? 'cursor-default' : 'cursor-pointer'}`}
                       >
-                        <div className="flex items-center">
-                          <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center shrink-0
-                            ${selected === optIdx ? 'border-indigo-500' : 'border-slate-300'}
-                            ${isRevealed && optIdx === quiz.correctAnswerIndex ? 'border-emerald-500 bg-emerald-500' : ''}
-                            ${isRevealed && optIdx === selected && !isCorrect ? 'border-rose-500 bg-rose-500' : ''}
-                          `}>
-                            {isRevealed && optIdx === quiz.correctAnswerIndex && <CheckCircle2 className="w-4 h-4 text-white" />}
-                            {isRevealed && optIdx === selected && !isCorrect && <XCircle className="w-4 h-4 text-white" />}
-                            {!isRevealed && selected === optIdx && <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></div>}
-                          </div>
-                          <span className="font-medium text-sm leading-relaxed">{opt}</span>
-                        </div>
-                      </div>
+                        <input
+                          type="radio"
+                          name={groupName}
+                          value={optionIndex}
+                          checked={selectedOption}
+                          onChange={() => handleSelect(quiz.id, optionIndex)}
+                          className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--lma-brand)]"
+                        />
+                        <span className="min-w-0 flex-1">
+                        <span>{option}</span>
+                        {correctOption && (
+                          <span className="mt-2 flex items-center gap-1 text-xs font-extrabold text-[var(--lma-success-text)]">
+                            <CheckCircle2 className="h-4 w-4" aria-hidden="true" />
+                            {selectedOption ? 'Your answer · Correct' : 'Correct answer'}
+                          </span>
+                        )}
+                        {incorrectSelection && (
+                          <span className="mt-2 flex items-center gap-1 text-xs font-extrabold text-[var(--lma-danger-text)]">
+                            <XCircle className="h-4 w-4" aria-hidden="true" /> Your answer
+                          </span>
+                        )}
+                        </span>
+                      </label>
                     );
                   })}
                 </div>
+              </fieldset>
 
-                {!isRevealed ? (
-                  <button
-                    onClick={() => handleCheck(quiz.id)}
-                    disabled={selected === undefined || selected === null}
-                    className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Check Answer
-                  </button>
-                ) : (
-                  <div className={`p-4 rounded-lg flex items-start border-l-4 ${isCorrect ? 'bg-emerald-50 border-emerald-500' : 'bg-rose-50 border-rose-500'}`}>
-                    <AlertCircle className={`h-6 w-6 mr-3 shrink-0 ${isCorrect ? 'text-emerald-600' : 'text-rose-600'}`} />
-                    <div>
-                      <p className={`font-bold text-sm mb-1 ${isCorrect ? 'text-emerald-900' : 'text-rose-900'}`}>
-                        {isCorrect ? 'Correct!' : 'Not quite'}
-                      </p>
-                      <p className={`text-sm ${isCorrect ? 'text-emerald-800' : 'text-rose-800'}`}>
-                        {quiz.explanation}
-                      </p>
-                    </div>
+              {!isRevealed ? (
+                <button
+                  type="submit"
+                  disabled={selected === undefined || selected === null}
+                  className="mt-5 min-h-11 rounded-lg bg-[var(--lma-brand)] px-5 py-2.5 font-bold text-[var(--lma-brand-contrast)] transition hover:bg-[var(--lma-brand-hover)] disabled:cursor-not-allowed disabled:opacity-45"
+                >
+                  Check Answer
+                </button>
+              ) : (
+                <div
+                  id={resultId}
+                  role="status"
+                  tabIndex={-1}
+                  aria-live="polite"
+                  className={`mt-5 flex items-start gap-3 rounded-xl border p-4 ${isCorrect ? 'border-[var(--lma-success-border)] bg-[var(--lma-success-soft)]' : 'border-[var(--lma-danger-border)] bg-[var(--lma-danger-soft)]'}`}
+                >
+                  <AlertCircle className={`mt-0.5 h-5 w-5 shrink-0 ${isCorrect ? 'text-[var(--lma-success-text)]' : 'text-[var(--lma-danger-text)]'}`} aria-hidden="true" />
+                  <div>
+                    <p className={`font-extrabold ${isCorrect ? 'text-[var(--lma-success-text)]' : 'text-[var(--lma-danger-text)]'}`}>{isCorrect ? 'Correct.' : 'Incorrect.'}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-[var(--lma-text-secondary)]">{quiz.explanation}</p>
+                    <p className="mt-2 text-xs font-semibold text-[var(--lma-text-secondary)]">This answer is now locked for this attempt.</p>
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
+            </form>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
