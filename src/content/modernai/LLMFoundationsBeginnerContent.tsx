@@ -159,6 +159,8 @@ function TokenizationEmbeddingsLesson() {
         />
       </section>
 
+      <Bridge question="Now the model has numerical token representations. How can each token decide which other tokens matter?" to="/learn/transformers-attention" label="Transformer Architecture & Attention" />
+
       <SummaryCard items={[
         "LLMs first split text into model-specific pieces called tokens.",
         "A token ID is a vocabulary index, not a measure of meaning.",
@@ -167,8 +169,6 @@ function TokenizationEmbeddingsLesson() {
         "The context window is a finite current working budget and must include room for the answer.",
         "A large context window is not the same as persistent application memory.",
       ]} />
-
-      <Bridge question="Now the model has numerical token representations. How can each token decide which other tokens matter?" to="/learn/transformers-attention" label="Transformer Architecture & Attention" />
     </div>
   );
 }
@@ -271,6 +271,8 @@ function TransformersAttentionLesson() {
         <Callout role="mistake" title="Causal masking matters"><p>During decoder training, allowing a position to see the correct future token would leak the answer. A causal mask blocks that future visibility.</p></Callout>
       </section>
 
+      <Bridge question="The Transformer can now produce scores for possible next tokens. How does the system choose which token to actually generate?" to="/learn/text-generation-decoding" label="Text Generation & Decoding" />
+
       <SummaryCard items={[
         "Attention lets each token position weight information from other allowed positions.",
         "Query supports looking for a match, Key supports matching, and Value carries the information to mix.",
@@ -279,8 +281,6 @@ function TransformersAttentionLesson() {
         "Decoder-only Transformers use causal masking and are a natural fit for next-token generation.",
         "The Transformer produces useful contextual representations; the next lesson explains how scores become actual generated tokens.",
       ]} />
-
-      <Bridge question="The Transformer can now produce scores for possible next tokens. How does the system choose which token to actually generate?" to="/learn/text-generation-decoding" label="Text Generation & Decoding" />
     </div>
   );
 }
@@ -350,6 +350,8 @@ function DecodingLesson() {
         <Callout role="warning" title="Decoding does not create truth"><p>Changing temperature, top-k, or top-p changes how a model chooses among its predicted continuations. It does not supply missing evidence or guarantee correctness.</p></Callout>
       </section>
 
+      <Bridge question="We know how the model turns its internal scores into text. How should we write the request we give it so the task is clear and testable?" to="/learn/prompt-engineering" label="Prompt Engineering" />
+
       <SummaryCard items={[
         "An LLM first produces raw vocabulary scores called logits.",
         "Softmax converts logits into a probability distribution over candidate next tokens.",
@@ -358,8 +360,6 @@ function DecodingLesson() {
         "Top-k keeps a fixed number of candidates, while top-p keeps enough candidates to reach a cumulative probability mass.",
         "Decoding settings should match the task, and structured outputs still require validation.",
       ]} />
-
-      <Bridge question="We know how the model turns its internal scores into text. How should we write the request we give it so the task is clear and testable?" to="/learn/prompt-engineering" label="Prompt Engineering" />
     </div>
   );
 }
@@ -436,6 +436,8 @@ function PromptEngineeringLesson() {
         <p>A good prompt can improve how clearly the model understands the task. It cannot magically give the model a current private policy, a missing database record, or guaranteed facts.</p>
       </section>
 
+      <Bridge question="Prompting changes the request but not the model's learned parameters. How were those parameters learned in the first place?" to="/learn/pretraining-finetuning" label="Pretraining & Fine-Tuning" />
+
       <SummaryCard items={[
         "A useful prompt makes the task, context, constraints, and output contract explicit.",
         "Examples can clarify a desired pattern, but they must not conflict with the written instructions.",
@@ -444,8 +446,6 @@ function PromptEngineeringLesson() {
         "Prompt debugging should remove ambiguity and conflicting constraints before changing unrelated components.",
         "Prompting changes the input to a trained model; it does not retrain the model or automatically provide missing knowledge.",
       ]} />
-
-      <Bridge question="Prompting changes the request but not the model's learned parameters. How were those parameters learned in the first place?" to="/learn/pretraining-finetuning" label="Pretraining & Fine-Tuning" />
     </div>
   );
 }
@@ -529,6 +529,8 @@ function PretrainingFinetuningLesson() {
         <Callout role="info" title="Why multiple GPUs may help"><p>If the complete model fits on each GPU and the goal is more batch throughput, <strong>data parallelism</strong> is a natural starting idea: replicas process different batches, then synchronize gradients. Other parallel strategies solve different constraints.</p></Callout>
       </section>
 
+      <Bridge question="Pretraining creates a broad language model. How do we teach it to follow instructions, reflect preferences, and specialize efficiently?" to="/learn/instruction-tuning-rlhf" label="SFT, RLHF & LoRA" />
+
       <SummaryCard items={[
         "Pretraining repeatedly performs next-token prediction, loss calculation, backpropagation, and parameter updates over a broad corpus.",
         "Data quality, diversity, deduplication, and held-out validation affect what the model learns and how reliably progress is measured.",
@@ -537,8 +539,6 @@ function PretrainingFinetuningLesson() {
         "Fine-tuning continues training an existing model for a narrower goal.",
         "Raw weight memory is only one part of training memory; activations, gradients, optimizer state, and other overhead also matter.",
       ]} />
-
-      <Bridge question="Pretraining creates a broad language model. How do we teach it to follow instructions, reflect preferences, and specialize efficiently?" to="/learn/instruction-tuning-rlhf" label="SFT, RLHF & LoRA" />
     </div>
   );
 }
@@ -620,6 +620,8 @@ function AlignmentLesson() {
         <p>If the model already follows the desired style but simply lacks current private information, full fine-tuning is usually the wrong first tool. That is the problem RAG is designed to address.</p>
       </section>
 
+      <Bridge question="Fine-tuning can change behavior. But what if the model's behavior is fine and the missing piece is today's private or current information?" to="/learn/rag" label="Retrieval-Augmented Generation (RAG)" />
+
       <SummaryCard items={[
         "Supervised fine-tuning trains on curated instruction–response pairs to shape desired behavior.",
         "Preference feedback compares candidate responses and can be used by RLHF or other post-training methods.",
@@ -628,8 +630,6 @@ function AlignmentLesson() {
         "A 512×512 matrix with rank-8 LoRA uses 4,096 + 4,096 = 8,192 adapter matrix parameters in the toy example.",
         "Prompting changes the input, RAG supplies external evidence, and fine-tuning changes learned behavior.",
       ]} />
-
-      <Bridge question="Fine-tuning can change behavior. But what if the model's behavior is fine and the missing piece is today's private or current information?" to="/learn/rag" label="Retrieval-Augmented Generation (RAG)" />
     </div>
   );
 }
