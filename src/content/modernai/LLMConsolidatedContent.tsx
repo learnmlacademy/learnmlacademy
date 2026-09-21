@@ -12,6 +12,7 @@ import { llmLessonEnhancements } from "./llmLessonEnhancements";
 import { LLMIntroProofContent } from "./LLMIntroProofContent";
 import { LLMFoundationsBeginnerContent } from "./LLMFoundationsBeginnerContent";
 import { LLMRAGBeginnerContent } from "./LLMRAGBeginnerContent";
+import { LLMProductionBeginnerContent } from "./LLMProductionBeginnerContent";
 
 type LessonSection = {
   title: string;
@@ -1261,6 +1262,9 @@ export function LLMConsolidatedContent() {
   }
   if (["rag", "semantic-search-embeddings", "vector-databases", "advanced-rag"].includes(topicId)) {
     return <LLMRAGBeginnerContent topicId={topicId} />;
+  }
+  if (["llm-evaluation", "llm-hallucinations-safety", "reasoning-models", "efficient-llm-serving", "llmops"].includes(topicId)) {
+    return <LLMProductionBeginnerContent topicId={topicId} />;
   }
   const lesson = lessons[topicId];
   const enhancement = llmLessonEnhancements[topicId];
