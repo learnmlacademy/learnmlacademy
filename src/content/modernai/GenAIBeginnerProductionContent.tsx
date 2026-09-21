@@ -1,4 +1,5 @@
-import { useParams } from "react-router-dom";\nimport { Callout } from "../../components/content/Callout";
+import { useParams } from "react-router-dom";
+import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
 import { FigureShell } from "../../components/content/FigureShell";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
@@ -257,7 +258,8 @@ function DeployingGenerativeApplications() {
   );
 }
 
-export function GenAIBeginnerProductionContent() {\n  const { topicId = "" } = useParams<{ topicId: string }>();
+export function GenAIBeginnerProductionContent() {
+  const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "evaluating-generative-models") return <EvaluatingGenerativeModels />;
   if (topicId === "responsible-generative-ai") return <ResponsibleGenerativeAI />;
   if (topicId === "choosing-generative-model") return <ChoosingGenerativeModel />;
