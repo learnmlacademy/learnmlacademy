@@ -298,7 +298,8 @@ function SyntheticDataLesson() {
   );
 }
 
-export function GenAIBeginnerMediaContent() {\n  const { topicId = "" } = useParams<{ topicId: string }>();
+export function GenAIBeginnerMediaContent() {
+  const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "stable-latent-diffusion") return <StableLatentDiffusion />;
   if (topicId === "controlling-diffusion-models") return <ControllingDiffusion />;
   if (topicId === "finetuning-image-models") return <FineTuningImages />;
