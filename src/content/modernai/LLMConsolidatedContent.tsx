@@ -10,6 +10,7 @@ import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { getTopicById } from "../../data/curriculum";
 import { llmLessonEnhancements } from "./llmLessonEnhancements";
 import { LLMIntroProofContent } from "./LLMIntroProofContent";
+import { LLMFoundationsBeginnerContent } from "./LLMFoundationsBeginnerContent";
 
 type LessonSection = {
   title: string;
@@ -1254,6 +1255,9 @@ function ComparisonTable({ table }: { table: NonNullable<LessonSection["table"]>
 export function LLMConsolidatedContent() {
   const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "llm-intro") return <LLMIntroProofContent />;
+  if (["tokenization-embeddings", "transformers-attention", "text-generation-decoding", "prompt-engineering", "pretraining-finetuning", "instruction-tuning-rlhf"].includes(topicId)) {
+    return <LLMFoundationsBeginnerContent topicId={topicId} />;
+  }
   const lesson = lessons[topicId];
   const enhancement = llmLessonEnhancements[topicId];
   const match = getTopicById(topicId);
