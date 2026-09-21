@@ -377,7 +377,8 @@ function DiffusionLesson() {
   );
 }
 
-export function GenAIBeginnerFoundationsContent() {\n  const { topicId = "" } = useParams<{ topicId: string }>();
+export function GenAIBeginnerFoundationsContent() {
+  const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "generative-ai-intro") return <GenAIIntro />;
   if (topicId === "generative-vs-discriminative") return <GenerativeVsDiscriminative />;
   if (topicId === "how-generative-models-learn") return <HowGenerativeModelsLearn />;
