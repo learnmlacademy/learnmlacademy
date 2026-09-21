@@ -190,8 +190,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 7. Model Evaluation
     "train-test-split": {
-      title: "Train-Test Split & Validation Sets | ML Workflow essentials",
-      description: "Understand why splitting your dataset into training, validation, and testing sets is crucial to prevent data leakage and evaluate models properly."
+      title: "Train Test Split in Machine Learning with Python | Scikit-Learn",
+      description: "Learn train test split in Machine Learning with Python and scikit-learn. Use train_test_split(), test_size, random_state, shuffle and stratify with examples."
     },
     "cross-validation": {
       title: "K-Fold Cross-Validation Explained | Robust ML Evaluation",
