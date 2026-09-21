@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
 import { FigureShell } from "../../components/content/FigureShell";
@@ -377,7 +377,7 @@ function DiffusionLesson() {
   );
 }
 
-export function GenAIBeginnerFoundationsContent({ topicId }: { topicId: string }) {
+export function GenAIBeginnerFoundationsContent() {\n  const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "generative-ai-intro") return <GenAIIntro />;
   if (topicId === "generative-vs-discriminative") return <GenerativeVsDiscriminative />;
   if (topicId === "how-generative-models-learn") return <HowGenerativeModelsLearn />;
