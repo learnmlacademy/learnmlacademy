@@ -13,11 +13,11 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
     },
     {
       id: 2,
-      question: "In the lesson's tiny count model, “machine” is followed by “learning” 6 times, “vision” 2 times, and “translation” 2 times. What is P(learning | machine)?",
-      options: ["0.20","0.40","0.60","0.80"],
-      correctAnswerIndex: 2,
-      explanation: "There are 10 observed continuations after “machine” and 6 are “learning”, so 6/10 = 0.60.",
-      questionType: "numerical/formula",
+      question: "During LLM training, what happens after the model makes a poor next-token prediction?",
+      options: ["The model deletes the training sentence","The model uses the prediction error to adjust its internal parameters","The chatbot automatically searches the web","The model stores the correct sentence as a permanent database row"],
+      correctAnswerIndex: 1,
+      explanation: "During training, the model compares its prediction with the observed continuation, calculates an error, and uses that error to adjust internal parameters.",
+      questionType: "conceptual",
     },
     {
       id: 3,
