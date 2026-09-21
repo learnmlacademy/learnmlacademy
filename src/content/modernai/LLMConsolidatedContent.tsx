@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { getTopicById } from "../../data/curriculum";
 import { llmLessonEnhancements } from "./llmLessonEnhancements";
+import { LLMIntroProofContent } from "./LLMIntroProofContent";
 
 type LessonSection = {
   title: string;
@@ -40,65 +41,6 @@ type ConsolidatedLesson = {
 };
 
 const lessons: Record<string, ConsolidatedLesson> = {
-  "llm-intro": {
-    intro: [
-      "A language model studies sequences of text and learns to assign probabilities to what may come next. A Large Language Model, or LLM, is a neural language model trained with a very large number of parameters and a very large collection of tokens. It can generate text because it repeats one basic operation: inspect the available context, estimate the next-token probabilities, choose a token, and continue.",
-      "An LLM is not the same thing as a chatbot. The LLM is the prediction model. A chatbot is an application around that model, with instructions, conversation handling, retrieval, tools, safety checks, and a user interface."
-    ],
-    analogy: "Ordinary autocomplete suggests the next word from a short history. An LLM is a much larger and more flexible version: it can use a long context and learned numerical representations, but it is still producing a probable continuation rather than consulting a guaranteed database of truth.",
-    objectives: [
-      "Explain what a language model predicts and how repeated prediction produces text.",
-      "Distinguish the model itself from a chatbot or LLM application.",
-      "Trace the progression from n-gram counts to neural networks and Transformers.",
-      "Recognize why fluent output can still be unsupported, biased, or stale."
-    ],
-    stages: [
-      { title: "Read the context", body: "The model receives the tokens already available in the request or generated so far." },
-      { title: "Score candidates", body: "It produces one score for every possible next token in its vocabulary." },
-      { title: "Choose one token", body: "A decoding rule converts the scores into a selected token; Lesson 4 studies those rules." },
-      { title: "Repeat", body: "The selected token joins the context and the model predicts again until a stopping rule is reached." }
-    ],
-    sections: [
-      {
-        title: "From local counts to learned representations",
-        paragraphs: [
-          "An n-gram model counts short token sequences. A bigram model, for example, estimates the next token from only the current token. It is fast and interpretable, but an unseen phrase may have no useful count, and a fixed short history cannot represent distant context.",
-          "Neural language models replace a separate count for every phrase with learned vector representations and shared parameters. Related patterns can influence one another even when an exact phrase was rare. Recurrent models added a learned running state; Transformers later used attention to connect relevant positions more directly and to train efficiently in parallel."
-        ]
-      },
-      {
-        title: "Why scale changes capability—but not the basic job",
-        paragraphs: [
-          "Modern LLMs combine Transformer-style sequence processing with large training corpora, many learned parameters, and substantial compute. Pretraining creates a broad next-token predictor; post-training can then shape instruction following, preferences, and specialist behavior.",
-          "Scale can improve generality, but it does not turn probability prediction into guaranteed factual retrieval. The model may reproduce bias, use stale patterns, or invent a plausible continuation. Important applications therefore add evidence, validation, permissions, and monitoring around it."
-        ]
-      }
-    ],
-    example: {
-      title: "A tiny count-based next-token model",
-      setup: "Suppose a training corpus contains ten occurrences of the token “machine” followed by another token: “learning” appears 6 times, “vision” 2 times, and “translation” 2 times.",
-      steps: [
-        "Total observations after “machine” = 6 + 2 + 2 = 10.",
-        "The count for “learning” is 6.",
-        "P(learning | machine) = 6 / 10 = 0.60.",
-        "The model would rank “learning” highest for this tiny context."
-      ],
-      result: "The calculation explains n-gram probability, but it also exposes the limitation: an unseen continuation has no count. Neural models learn shared representations that can generalize beyond an exact stored phrase.",
-      code: `from collections import Counter
-
-pairs = [("machine", "learning")] * 6
-pairs += [("machine", "vision")] * 2
-pairs += [("machine", "translation")] * 2
-
-counts = Counter(next_token for current, next_token in pairs
-                 if current == "machine")
-total = sum(counts.values())
-probabilities = {token: count / total for token, count in counts.items()}
-print(probabilities)  # learning: 0.6, vision: 0.2, translation: 0.2`
-    },
-    caution: "Do not describe an LLM as a stored copy of the internet or as a chatbot with guaranteed knowledge. It is a learned probability model whose application behavior depends on additional software and controls.",
-    takeaway: "Modern LLMs are the latest stage of language modelling: they generate by repeating next-token prediction, using learned representations and Transformer context rather than short count tables."
-  },
 
   "tokenization-embeddings": {
     intro: [
@@ -1311,6 +1253,7 @@ function ComparisonTable({ table }: { table: NonNullable<LessonSection["table"]>
 
 export function LLMConsolidatedContent() {
   const { topicId = "" } = useParams<{ topicId: string }>();
+  if (topicId === "llm-intro") return <LLMIntroProofContent />;
   const lesson = lessons[topicId];
   const enhancement = llmLessonEnhancements[topicId];
   const match = getTopicById(topicId);
