@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
 import { FigureShell } from "../../components/content/FigureShell";
@@ -298,7 +298,7 @@ function SyntheticDataLesson() {
   );
 }
 
-export function GenAIBeginnerMediaContent({ topicId }: { topicId: string }) {
+export function GenAIBeginnerMediaContent() {\n  const { topicId = "" } = useParams<{ topicId: string }>();
   if (topicId === "stable-latent-diffusion") return <StableLatentDiffusion />;
   if (topicId === "controlling-diffusion-models") return <ControllingDiffusion />;
   if (topicId === "finetuning-image-models") return <FineTuningImages />;
