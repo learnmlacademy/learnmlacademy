@@ -111,10 +111,9 @@ const ScientificNetworksContent = lazy(() => import("../content/deeplearning/Sci
 const ModelDeploymentContent = lazy(() => import("../content/deeplearning/ModelDeploymentContent").then(m => ({ default: m.ModelDeploymentContent })));
 const ModernAIContent = lazy(() => import("../content/modernai/ModernAIContent").then(m => ({ default: m.ModernAIContent })));
 const LLMConsolidatedContent = lazy(() => import("../content/modernai/LLMConsolidatedContent").then(m => ({ default: m.LLMConsolidatedContent })));
-const HowGenerativeModelsLearnContent = lazy(() => import("../content/modernai/HowGenerativeModelsLearnContent").then(m => ({ default: m.HowGenerativeModelsLearnContent })));
-const GenerativeAIBatchOneContent = lazy(() => import("../content/modernai/GenerativeAIBatchOneContent").then(m => ({ default: m.GenerativeAIBatchOneContent })));
-const GenerativeAIBatchTwoContent = lazy(() => import("../content/modernai/GenerativeAIBatchTwoContent").then(m => ({ default: m.GenerativeAIBatchTwoContent })));
-const GenerativeAIBatchThreeContent = lazy(() => import("../content/modernai/GenerativeAIBatchThreeContent").then(m => ({ default: m.GenerativeAIBatchThreeContent })));
+const GenAIBeginnerFoundationsContent = lazy(() => import("../content/modernai/GenAIBeginnerFoundationsContent").then(m => ({ default: m.GenAIBeginnerFoundationsContent })));
+const GenAIBeginnerMediaContent = lazy(() => import("../content/modernai/GenAIBeginnerMediaContent").then(m => ({ default: m.GenAIBeginnerMediaContent })));
+const GenAIBeginnerProductionContent = lazy(() => import("../content/modernai/GenAIBeginnerProductionContent").then(m => ({ default: m.GenAIBeginnerProductionContent })));
 const ProjectsContent = lazy(() => import("../content/projects/ProjectsContent").then(m => ({ default: m.ProjectsContent })));
 const MLOpsContent = lazy(() => import("../content/mlops/MLOpsContent").then(m => ({ default: m.MLOpsContent })));
 const CareerInterviewContent = lazy(() => import("../content/interview/CareerInterviewContent").then(m => ({ default: m.CareerInterviewContent })));
@@ -286,26 +285,26 @@ const contentMap: Record<string, React.ElementType> = {
     "autoencoder-variants": AutoencodersContent,
     "pinn-kan-topological-networks": ScientificNetworksContent,
 
-    "generative-ai-intro": GenerativeAIBatchOneContent,
-    "generative-vs-discriminative": GenerativeAIBatchOneContent,
-    "how-generative-models-learn": HowGenerativeModelsLearnContent,
-    gans: GenerativeAIBatchOneContent,
-    vae: GenerativeAIBatchOneContent,
-    "diffusion-models": GenerativeAIBatchOneContent,
-    "stable-latent-diffusion": GenerativeAIBatchTwoContent,
-    "controlling-diffusion-models": GenerativeAIBatchTwoContent,
-    "finetuning-image-models": GenerativeAIBatchTwoContent,
+    "generative-ai-intro": GenAIBeginnerFoundationsContent,
+    "generative-vs-discriminative": GenAIBeginnerFoundationsContent,
+    "how-generative-models-learn": GenAIBeginnerFoundationsContent,
+    gans: GenAIBeginnerFoundationsContent,
+    vae: GenAIBeginnerFoundationsContent,
+    "diffusion-models": GenAIBeginnerFoundationsContent,
+    "stable-latent-diffusion": GenAIBeginnerMediaContent,
+    "controlling-diffusion-models": GenAIBeginnerMediaContent,
+    "finetuning-image-models": GenAIBeginnerMediaContent,
     "text-generation-decoding": LLMConsolidatedContent,
     "hugging-face": ModernAIContent,
-    "multimodal-ai": GenerativeAIBatchTwoContent,
-    "audio-music-video-generation": GenerativeAIBatchTwoContent,
-    "synthetic-data": GenerativeAIBatchTwoContent,
-    "evaluating-generative-models": GenerativeAIBatchThreeContent,
-    "choosing-generative-model": GenerativeAIBatchThreeContent,
+    "multimodal-ai": GenAIBeginnerMediaContent,
+    "audio-music-video-generation": GenAIBeginnerMediaContent,
+    "synthetic-data": GenAIBeginnerMediaContent,
+    "evaluating-generative-models": GenAIBeginnerProductionContent,
+    "choosing-generative-model": GenAIBeginnerProductionContent,
     "genai-apis-open-models": ModernAIContent,
-    "building-genai-apps": GenerativeAIBatchThreeContent,
-    "genai-deployment": GenerativeAIBatchThreeContent,
-    "responsible-generative-ai": GenerativeAIBatchThreeContent,
+    "building-genai-apps": GenAIBeginnerProductionContent,
+    "genai-deployment": GenAIBeginnerProductionContent,
+    "responsible-generative-ai": GenAIBeginnerProductionContent,
 
     "llm-intro": LLMConsolidatedContent,
     "language-model-evolution": ModernAIContent,
