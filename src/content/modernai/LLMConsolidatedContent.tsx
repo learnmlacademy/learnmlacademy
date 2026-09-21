@@ -11,6 +11,7 @@ import { getTopicById } from "../../data/curriculum";
 import { llmLessonEnhancements } from "./llmLessonEnhancements";
 import { LLMIntroProofContent } from "./LLMIntroProofContent";
 import { LLMFoundationsBeginnerContent } from "./LLMFoundationsBeginnerContent";
+import { LLMRAGBeginnerContent } from "./LLMRAGBeginnerContent";
 
 type LessonSection = {
   title: string;
@@ -1257,6 +1258,9 @@ export function LLMConsolidatedContent() {
   if (topicId === "llm-intro") return <LLMIntroProofContent />;
   if (["tokenization-embeddings", "transformers-attention", "text-generation-decoding", "prompt-engineering", "pretraining-finetuning", "instruction-tuning-rlhf"].includes(topicId)) {
     return <LLMFoundationsBeginnerContent topicId={topicId} />;
+  }
+  if (["rag", "semantic-search-embeddings", "vector-databases", "advanced-rag"].includes(topicId)) {
+    return <LLMRAGBeginnerContent topicId={topicId} />;
   }
   const lesson = lessons[topicId];
   const enhancement = llmLessonEnhancements[topicId];
