@@ -7,10 +7,11 @@ const vite = await createServer({
 });
 
 try {
-  const [{ curriculum }, { blogPosts }, seo] = await Promise.all([
+  const [{ curriculum }, { blogPosts }, seo, entry] = await Promise.all([
     vite.ssrLoadModule('/src/data/curriculum.ts'),
     vite.ssrLoadModule('/src/data/blog.ts'),
     vite.ssrLoadModule('/src/utils/seo.ts'),
+    vite.ssrLoadModule('/prerender/entry-server.tsx'),
   ]);
 
   const topicCount = curriculum.flatMap((category) => category.subtopics).length;
@@ -20,8 +21,11 @@ try {
   if (!Array.isArray(blogPosts) || typeof seo.getSEOData !== 'function') {
     throw new Error('Prerender metadata modules did not load correctly.');
   }
+  if (typeof entry.render !== 'function') {
+    throw new Error('Prerender server entry did not expose render().');
+  }
 
-  console.log(`prerender diagnostic: metadata loaded for ${topicCount} lessons and ${blogPosts.length} blog posts.`);
+  console.log(`prerender diagnostic: server entry loaded for ${topicCount} lessons and ${blogPosts.length} blog posts.`);
 } finally {
   await vite.close();
 }
