@@ -151,9 +151,11 @@ try {
 
   const lessonRoutes = topics.map((topic) => `/learn/${topic.id}`);
   const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
-  // Diagnostic stage: render the home route first. Once this succeeds,
-  // the full route set is restored below.
-  const routes = ['/'];
+  const routes = [
+    ...staticMeta.keys(),
+    ...lessonRoutes,
+    ...blogRoutes,
+  ];
 
   for (const route of routes) {
     const appHtml = await render(route);
@@ -202,7 +204,7 @@ try {
   }
 
   console.log(
-    `prerender: diagnostic wrote ${routes.length} static HTML page.`,
+    `prerender: wrote ${routes.length} static HTML pages (${lessonRoutes.length} lessons, ${blogRoutes.length} blog posts, ${staticMeta.size} static pages).`,
   );
 } finally {
   await vite.close();
