@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, BookOpen, Star, CheckCircle2, Users, Award } from 'lucide-react';
+import { Download, CheckCircle2, Award } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 
 export function CheatsheetPage() {
@@ -27,16 +27,16 @@ export function CheatsheetPage() {
       <section className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-sm font-semibold px-4 py-1.5 rounded-full mb-6">
-            <Award className="w-3.5 h-3.5"/> Free Download — No sign-up required
+            <Award className="w-3.5 h-3.5"/> Free ML Interview PDF
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
             ML Interview Cheatsheet
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
-              100 Questions &amp; Answers
+              Questions &amp; Answers
             </span>
           </h1>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8 leading-relaxed">
-            A comprehensive PDF covering everything you need for ML engineer interviews — from basic theory to FAANG system design questions. Written by practising ML engineers.
+            A practical PDF for ML engineer interview preparation — from core theory and model evaluation to deep learning, system design and interview strategy.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="#get-pdf"
@@ -45,11 +45,11 @@ export function CheatsheetPage() {
             </a>
             <div className="flex items-center gap-2 text-slate-400 text-sm">
               <CheckCircle2 className="w-4 h-4 text-green-400"/>
-              <span>PDF • 100 questions • Enter email to download</span>
+              <span>PDF • Enter email to download instantly</span>
             </div>
           </div>
           <div className="flex flex-wrap justify-center gap-6 mt-10">
-            {[["100", "Questions"], ["15", "Sections"], ["Free", "Forever"], ["PDF", "Format"]].map(([v,l]) => (
+            {[["15", "Sections"], ["Free", "Download"], ["PDF", "Format"], ["Practical", "Q&A"]].map(([v,l]) => (
               <div key={l} className="bg-white/8 border border-white/12 rounded-xl px-5 py-3 text-center">
                 <div className="font-bold text-white text-xl">{v}</div>
                 <div className="text-slate-400 text-xs">{l}</div>
@@ -112,10 +112,10 @@ export function CheatsheetPage() {
             ))}
           </div>
           <div className="text-center mt-8">
-            <p className="text-slate-500 mb-4">These are just 3 of 100 questions in the full PDF</p>
+            <p className="text-slate-500 mb-4">These are 3 examples from the full PDF</p>
             <a href="#get-pdf"
               className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-sm">
-              <Download className="w-5 h-5"/> Get All 100 Questions Free
+              <Download className="w-5 h-5"/> Get the Full PDF Free
             </a>
           </div>
         </div>
