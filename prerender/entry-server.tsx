@@ -4,8 +4,7 @@ import { Route, Routes, StaticRouter } from 'react-router';
 
 async function routeElement(url: string) {
   if (url === '/') {
-    const { HomePage } = await import('../src/pages/HomePage');
-    return { kind: 'index' as const, element: <HomePage /> };
+    return { kind: 'index' as const, element: <main>Home prerender diagnostic</main> };
   }
   if (url.startsWith('/learn/')) {
     const { TopicPage } = await import('../src/pages/TopicPage');
