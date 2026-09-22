@@ -9,13 +9,12 @@ const fs = require('fs');
 const path = require('path');
 
 const BASE_URL = 'https://www.learnmlacademy.com';
-const today = new Date().toISOString().split('T')[0];
-
 const staticPages = [
   { url: '/', priority: '1.0', changefreq: 'weekly' },
   { url: '/about', priority: '0.7', changefreq: 'monthly' },
   { url: '/curriculum', priority: '0.8', changefreq: 'weekly' },
   { url: '/blog', priority: '0.7', changefreq: 'weekly' },
+  { url: '/cheatsheet', priority: '0.7', changefreq: 'monthly' },
   { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { url: '/terms', priority: '0.3', changefreq: 'yearly' },
   { url: '/disclaimer', priority: '0.3', changefreq: 'yearly' },
@@ -43,21 +42,18 @@ const urls = [
   ...staticPages.map(p => `
   <url>
     <loc>${BASE_URL}${p.url}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`),
   ...topicIds.map(id => `
   <url>
     <loc>${BASE_URL}/learn/${id}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>`),
   ...blogSlugs.map(slug => `
   <url>
     <loc>${BASE_URL}/blog/${slug}</loc>
-    <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>`),
