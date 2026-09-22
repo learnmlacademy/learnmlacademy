@@ -25,7 +25,12 @@ try {
     throw new Error('Prerender server entry did not expose render().');
   }
 
-  console.log(`prerender diagnostic: server entry loaded for ${topicCount} lessons and ${blogPosts.length} blog posts.`);
+  const homeHtml = await entry.render('/');
+  if (typeof homeHtml !== 'string' || homeHtml.length < 500) {
+    throw new Error('Home prerender returned unexpectedly little HTML.');
+  }
+
+  console.log(`prerender diagnostic: home rendered with ${homeHtml.length} characters.`);
 } finally {
   await vite.close();
 }
