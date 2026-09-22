@@ -121,12 +121,6 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/((?!assets/|api/).*)",
-      "destination": "/index.html"
-    }
-  ],
   "functions": {
     "api/newsletter.ts": {
       "includeFiles": "private/ML_Interview_Cheatsheet.pdf"
