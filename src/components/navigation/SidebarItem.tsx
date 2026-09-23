@@ -27,22 +27,23 @@ export function SidebarItem({
       onClick={onNavigate}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs leading-snug transition-colors',
+        'group relative flex items-center justify-between gap-2 rounded-md py-1.5 pl-3 pr-2 text-[13px] leading-snug transition-all duration-150',
         active
-          ? 'bg-indigo-50 font-semibold text-indigo-700'
-          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+          ? 'bg-indigo-50/90 font-semibold text-indigo-700 shadow-2xs before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-indigo-600'
+          : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900',
       )}
     >
-      <span
-        className={cn(
-          'w-5 shrink-0 text-right text-[10px] tabular-nums font-mono',
-          active ? 'font-bold text-indigo-600' : 'text-slate-400 group-hover:text-slate-500',
-        )}
-      >
-        {lessonNumber}
-      </span>
-
-      <span className="min-w-0 flex-1 truncate">{title}</span>
+      <div className="flex min-w-0 items-center gap-2">
+        <span
+          className={cn(
+            'w-4 shrink-0 font-mono text-[10px] tabular-nums',
+            active ? 'font-bold text-indigo-600' : 'text-slate-400 group-hover:text-slate-500',
+          )}
+        >
+          {lessonNumber}
+        </span>
+        <span className="truncate">{title}</span>
+      </div>
 
       {completed && (
         <CheckCircle2
