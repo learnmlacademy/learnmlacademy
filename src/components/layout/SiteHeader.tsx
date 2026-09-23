@@ -19,7 +19,7 @@ const primaryLinks = [
 
 export function SiteHeader({ menuButtonRef, searchButtonRef, navigationOpen, onOpenNavigation }: SiteHeaderProps) {
   return (
-    <header className="relative z-40 h-16 shrink-0 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
+    <header className="relative z-40 h-16 shrink-0 border-b border-slate-200 bg-white px-4 sm:px-6">
       <div className="mx-auto flex h-full max-w-[1440px] items-center gap-3">
         <button
           ref={menuButtonRef}
@@ -28,7 +28,7 @@ export function SiteHeader({ menuButtonRef, searchButtonRef, navigationOpen, onO
           aria-controls="mobile-curriculum-drawer"
           aria-expanded={navigationOpen}
           onClick={() => onOpenNavigation(false)}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-950 xl:hidden"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-950 xl:hidden"
         >
           <Menu className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -40,16 +40,16 @@ export function SiteHeader({ menuButtonRef, searchButtonRef, navigationOpen, onO
           </span>
         </Link>
 
-        <nav aria-label="Primary navigation" className="ml-2 hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary navigation" className="ml-4 hidden h-full items-center gap-6 lg:flex">
           {primaryLinks.map(link => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) => cn(
-                'rounded-lg px-3 py-2 text-sm font-semibold transition-colors',
+                'flex h-full items-center border-b-2 pt-0.5 text-sm font-semibold transition-colors',
                 isActive
-                  ? 'bg-indigo-50 text-indigo-700'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-950',
+                  ? 'border-indigo-600 text-indigo-700'
+                  : 'border-transparent text-slate-600 hover:border-slate-300 hover:text-slate-950',
               )}
             >
               {link.label}
@@ -66,16 +66,16 @@ export function SiteHeader({ menuButtonRef, searchButtonRef, navigationOpen, onO
           aria-controls="mobile-curriculum-drawer"
           aria-expanded={navigationOpen}
           onClick={() => onOpenNavigation(true)}
-          className="ml-auto flex h-11 w-11 items-center justify-center rounded-xl text-slate-600 hover:bg-slate-100 hover:text-slate-950 md:hidden"
+          className="ml-auto flex h-10 w-10 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 hover:text-slate-950 md:hidden"
         >
           <Search className="h-5 w-5" aria-hidden="true" />
         </button>
 
         <Link
           to="/cheatsheet"
-          className="hidden min-h-10 items-center justify-center rounded-xl bg-indigo-600 px-4 text-sm font-bold text-white transition-colors hover:bg-indigo-700 sm:inline-flex"
+          className="hidden min-h-10 items-center justify-center border-l border-slate-200 pl-4 text-sm font-semibold text-slate-700 transition-colors hover:text-indigo-700 sm:inline-flex"
         >
-          Free PDF
+          Interview PDF
         </Link>
 
         <div className="hidden w-5 shrink-0 2xl:block" aria-hidden="true" />
