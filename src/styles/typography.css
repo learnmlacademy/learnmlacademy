@@ -34,14 +34,26 @@
 
 .lesson-body :where(h2) {
   scroll-margin-top: 6rem;
+  margin-top: 3.25rem;
+  letter-spacing: -0.025em;
 }
 
 .lesson-body :where(h3) {
   scroll-margin-top: 6rem;
+  margin-top: 2rem;
+  letter-spacing: -0.015em;
 }
 
 .lesson-body :where(p, li) {
-  line-height: 1.72;
+  line-height: 1.76;
+}
+
+.lesson-body :where(p) {
+  text-wrap: pretty;
+}
+
+.lesson-body :where(h2, h3) {
+  text-wrap: balance;
 }
 
 .lesson-body :where(pre) {
