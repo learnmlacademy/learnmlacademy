@@ -13,11 +13,11 @@ type CalloutProps = {
 };
 
 const roleStyles: Record<CalloutRole, { icon: typeof Info; shell: string; iconColor: string }> = {
-  info: { icon: Info, shell: 'border-[var(--lma-info-border)] bg-[var(--lma-info-soft)]', iconColor: 'text-[var(--lma-info)]' },
-  tip: { icon: Lightbulb, shell: 'border-[var(--lma-warning-border)] bg-[var(--lma-warning-soft)]', iconColor: 'text-[var(--lma-warning-text)]' },
-  warning: { icon: AlertTriangle, shell: 'border-[var(--lma-warning-border)] bg-[var(--lma-warning-soft)]', iconColor: 'text-[var(--lma-warning-text)]' },
-  mistake: { icon: XCircle, shell: 'border-[var(--lma-danger-border)] bg-[var(--lma-danger-soft)]', iconColor: 'text-[var(--lma-danger-text)]' },
-  interview: { icon: MessageSquareText, shell: 'border-[var(--lma-brand-border)] bg-[var(--lma-brand-soft)]', iconColor: 'text-[var(--lma-brand)]' },
+  info: { icon: Info, shell: 'border-l-[var(--lma-info)] bg-[var(--lma-info-soft)]', iconColor: 'text-[var(--lma-info)]' },
+  tip: { icon: Lightbulb, shell: 'border-l-[var(--lma-warning)] bg-[var(--lma-warning-soft)]', iconColor: 'text-[var(--lma-warning-text)]' },
+  warning: { icon: AlertTriangle, shell: 'border-l-[var(--lma-warning)] bg-[var(--lma-warning-soft)]', iconColor: 'text-[var(--lma-warning-text)]' },
+  mistake: { icon: XCircle, shell: 'border-l-[var(--lma-danger)] bg-[var(--lma-danger-soft)]', iconColor: 'text-[var(--lma-danger-text)]' },
+  interview: { icon: MessageSquareText, shell: 'border-l-[var(--lma-brand)] bg-[var(--lma-brand-soft)]', iconColor: 'text-[var(--lma-brand)]' },
 };
 
 export function Callout({ children, role = 'info', title, icon, className }: CalloutProps) {
@@ -29,7 +29,7 @@ export function Callout({ children, role = 'info', title, icon, className }: Cal
       role="note"
       data-callout-role={role}
       className={cn(
-        'not-prose flex items-start gap-3 rounded-xl border p-4 text-sm leading-relaxed text-[var(--lma-text-secondary)] sm:p-5',
+        'not-prose flex items-start gap-3 border-l-4 px-4 py-3 text-sm leading-relaxed text-[var(--lma-text-secondary)] sm:px-5 sm:py-4',
         style.shell,
         className,
       )}
