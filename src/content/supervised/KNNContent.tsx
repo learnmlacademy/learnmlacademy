@@ -148,7 +148,7 @@ export function KNNContent() {
               <circle cx="248" cy="165" r="105" fill="none" stroke="#6366f1" strokeWidth="1.8" strokeDasharray="6 3"/>
               <text x="345" y="78" fontSize="9" fill="#6366f1" fontWeight="700">Circle reaches the 5th neighbour</text>
               {/* Lines to 5 nearest */}
-              {[[168,128,'#3b82f6'],[195,102,'#3b82f6'],[148,148,'#3b82f6'],[308,198,'#ef4444'],[338,158,'#ef4444']].map(([nx,ny,col],i)=>(
+              {([[168,128,'#3b82f6'],[195,102,'#3b82f6'],[148,148,'#3b82f6'],[308,198,'#ef4444'],[338,158,'#ef4444']] as const).map(([nx,ny,col],i)=>(
                 <line key={"l"+i} x1="248" y1="165" x2={nx} y2={ny}
                   stroke={col} strokeWidth="1.2" strokeDasharray="4 2" opacity="0.7"/>
               ))}

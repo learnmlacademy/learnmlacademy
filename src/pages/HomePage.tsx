@@ -195,7 +195,7 @@ export function HomePage() {
                     className="group flex h-full gap-4 rounded-2xl border border-slate-200 bg-white p-5 transition-colors hover:border-indigo-300 hover:bg-indigo-50/40 md:flex-col"
                   >
                     <span className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-indigo-100 bg-indigo-50 text-indigo-700">
-                      <Icon className="h-6 w-6" aria-hidden="true" />
+                      <Icon className="h-6 w-6" aria-hidden={true} />
                       <span className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-[11px] font-extrabold text-white">
                         {index + 1}
                       </span>
