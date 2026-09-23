@@ -506,6 +506,200 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     "behavioral-project-interview": {
       title: "AI/ML Project, Resume & Behavioral Interview Guide",
       description: "Explain AI/ML projects credibly, write evidence-rich resume bullets and prepare honest behavioral answers using STAR plus rationale, trade-offs and learning."
+    },
+
+    // Explicit metadata for redesigned Deep Learning and Modern AI lessons
+    "neural-network-training-loop": {
+      title: "Neural Network Training Loop & Debugging | ML Academy",
+      description: "Learn the full neural network training loop: forward pass, loss calculation, backpropagation, optimizer updates, validation, and practical debugging checks."
+    },
+    "deep-learning-optimizers": {
+      title: "Deep Learning Optimizers: SGD, Momentum & Adam",
+      description: "Compare SGD, Momentum and Adam for neural network training, including learning-rate behavior, stability, convergence trade-offs, and practical selection guidance."
+    },
+    "weight-initialization": {
+      title: "Weight Initialization & Normalization in Neural Networks",
+      description: "Understand weight initialization, normalization and stable gradients in deep networks, including He and Glorot initialization, BatchNorm, and common failure modes."
+    },
+    "deep-learning-regularization": {
+      title: "Deep Learning Regularization: Dropout, Weight Decay & More",
+      description: "Learn how dropout, weight decay, early stopping and related regularization techniques reduce overfitting and improve neural network generalization."
+    },
+    "data-augmentation-deep-learning": {
+      title: "Data Augmentation for Deep Learning | Images & Beyond",
+      description: "Learn practical data augmentation for deep learning, when transformations help, how they affect generalization, and which augmentations can damage labels or meaning."
+    },
+    "cnn": {
+      title: "Convolutional Neural Networks (CNNs) Explained with Examples",
+      description: "Learn how CNNs use filters, feature maps, pooling and learned hierarchies for image classification, with intuitive explanations, examples, and practical guidance."
+    },
+    "cnn-architectures-resnet": {
+      title: "CNN Architectures: AlexNet, VGG, Inception & ResNet",
+      description: "Compare major CNN architectures from AlexNet and VGG to Inception and ResNet, including the design ideas that improved depth, efficiency, and trainability."
+    },
+    "object-detection": {
+      title: "Object Detection, Segmentation & Grad-CAM Explained",
+      description: "Learn the difference between image classification, object detection and segmentation, plus how Grad-CAM helps inspect which image regions influence a model."
+    },
+    "vision-transformers": {
+      title: "Vision Transformers (ViT) Explained for Beginners",
+      description: "Understand how Vision Transformers split images into patches, apply attention, build image representations, and compare conceptually with convolutional networks."
+    },
+    "rnn-lstm": {
+      title: "RNN, LSTM & GRU Explained for Sequence Learning",
+      description: "Learn how RNNs process sequences, why long-term dependencies are difficult, and how LSTM and GRU gates help preserve useful information across time steps."
+    },
+    "autoencoders": {
+      title: "Autoencoders Explained: Compression, Denoising & Anomaly Detection",
+      description: "Learn how autoencoders encode and reconstruct data, what the latent representation means, and how variants support denoising, compression and anomaly detection."
+    },
+    "graph-neural-networks": {
+      title: "Graph Neural Networks (GNNs) Explained with Examples",
+      description: "Understand graph neural networks, message passing, node and graph representations, and how GNNs learn from connected data such as networks and relationships."
+    },
+    "saving-deploying-deep-models": {
+      title: "Save, Load & Deploy Deep Learning Models",
+      description: "Learn how to save, version, load and deploy trained deep learning models safely, including inference concerns, reproducibility, validation and production checks."
+    },
+    "deep-learning-nlp": {
+      title: "Deep Learning for NLP | Embeddings, RNNs & Transformers",
+      description: "Learn how deep learning represents and processes language using embeddings, recurrent models, attention and Transformers, with a clear path from basics to modern NLP."
+    },
+    "pinn-kan-topological-networks": {
+      title: "PINNs, KANs & Topological Neural Networks Explained",
+      description: "Explore physics-informed neural networks, Kolmogorov-Arnold Networks and topological neural approaches, including their core ideas, use cases and important limitations."
+    },
+    "vae": {
+      title: "Variational Autoencoders (VAEs) for Generative AI",
+      description: "Learn how Variational Autoencoders encode data into a probabilistic latent space, use the reparameterization idea, and generate new samples with controlled variation."
+    },
+    "gans": {
+      title: "Generative Adversarial Networks (GANs) Explained",
+      description: "Understand how GAN generators and discriminators learn through adversarial training, why instability and mode collapse occur, and where GANs remain useful."
+    },
+    "llm-intro": {
+      title: "Large Language Models (LLMs) Explained for Beginners",
+      description: "Learn what large language models are, how next-token prediction creates text, how modern LLMs evolved, and where application behavior differs from the model itself."
+    },
+    "tokenization-embeddings": {
+      title: "LLM Tokenization, Embeddings & Context Windows",
+      description: "Understand tokens, token IDs, embeddings and context windows, including worked token-budget examples and why representation choices affect LLM applications."
+    },
+    "transformers-attention": {
+      title: "Transformer Architecture & Attention in LLMs",
+      description: "Learn the Transformer architecture behind modern LLMs, including self-attention, positional information, layers, model families, and the flow from tokens to predictions."
+    },
+    "prompt-engineering": {
+      title: "Prompt Engineering, Structured Outputs & Tool Calling",
+      description: "Learn practical prompt engineering for LLM applications, including clear instructions, examples, structured outputs, validation, and the boundary to reliable tool calling."
+    },
+    "pretraining-finetuning": {
+      title: "How LLMs Are Trained: Pretraining, Data & Scale",
+      description: "Learn how large language models are pretrained on token sequences, how data and compute shape training, and why pretraining differs from later adaptation and alignment."
+    },
+    "instruction-tuning-rlhf": {
+      title: "LLM Fine-Tuning: SFT, RLHF & LoRA Explained",
+      description: "Understand supervised fine-tuning, preference alignment, RLHF and LoRA, including what each method changes and when application-level retrieval may be a better choice."
+    },
+    "rag": {
+      title: "Retrieval-Augmented Generation (RAG) Explained",
+      description: "Learn how RAG retrieves external evidence before LLM generation, including indexing, retrieval, context assembly, citations, failure boundaries and safe abstention."
+    },
+    "semantic-search-embeddings": {
+      title: "Semantic Search with Embeddings for RAG",
+      description: "Learn how semantic search uses embeddings and similarity to retrieve meaning-related passages, with intuitive examples, ranking concepts and practical RAG connections."
+    },
+    "vector-databases": {
+      title: "Vector Databases Explained for LLM & RAG Applications",
+      description: "Understand what vector databases store, how similarity search and metadata filtering work, and how indexes support scalable retrieval for LLM and RAG applications."
+    },
+    "advanced-rag": {
+      title: "Advanced RAG: Chunking, Reranking & Evaluation",
+      description: "Learn advanced RAG techniques including chunking, hybrid retrieval, reranking and retrieval evaluation, with worked metrics and guidance for debugging weak evidence."
+    },
+    "llm-evaluation": {
+      title: "LLM Evaluation: Benchmarks, Quality, Safety & Cost",
+      description: "Learn how to evaluate LLM applications with versioned test sets, deterministic checks, human review and model graders across quality, safety, latency and cost."
+    },
+    "llm-hallucinations-safety": {
+      title: "LLM Hallucinations, Guardrails & Responsible AI",
+      description: "Understand LLM hallucinations and practical guardrails, including grounding, validation, permissions, abstention, safety boundaries and responsible application design."
+    },
+    "reasoning-models": {
+      title: "Reasoning Models & Test-Time Compute Explained",
+      description: "Learn what reasoning models and test-time compute change, when additional inference effort can help, and why more reasoning steps do not automatically guarantee accuracy."
+    },
+    "efficient-llm-serving": {
+      title: "Efficient LLM Inference & Serving Explained",
+      description: "Learn the fundamentals of efficient LLM serving, including KV cache, quantization, batching, throughput, time to first token and end-to-end latency trade-offs."
+    },
+    "llmops": {
+      title: "LLMOps: Production LLM Applications, Monitoring & Deployment",
+      description: "Learn how to version, evaluate, observe and release production LLM applications across models, prompts, retrieval, tools, safety, latency, cost and rollback."
+    },
+    "agentic-ai-intro": {
+      title: "Agentic AI Explained: Agents, Workflows & Autonomy",
+      description: "Learn what Agentic AI means, how agents differ from fixed workflows and chatbots, and how bounded decide-act-observe loops balance useful autonomy with control."
+    },
+    "tool-calling": {
+      title: "AI Agent Tool Calling & Reliable Tool Design",
+      description: "Learn how AI agents propose tool calls while trusted code validates authorization, schemas and side effects, with practical guidance on retries, errors and idempotency."
+    },
+    "building-ai-agent": {
+      title: "Build a Simple AI Agent in Python | Step-by-Step",
+      description: "Build a small bounded AI agent from goal and tool calling through state, observations, tracing and stop rules, using a transparent Python example with safe abstention."
+    },
+    "planning-reflection": {
+      title: "AI Agent Planning, ReAct & Reflection Explained",
+      description: "Learn how AI agents use planning, ReAct-style action loops and bounded reflection, including observable trajectories, replanning, verifier checks and stop conditions."
+    },
+    "agent-context-engineering": {
+      title: "Context Engineering for AI Agents Explained",
+      description: "Learn how to assemble reliable agent context using relevance, trust, recency and token budgets, while separating instructions, evidence, history and retrieved memory."
+    },
+    "agent-memory": {
+      title: "AI Agent Memory: Short-Term, Long-Term & Persistence",
+      description: "Understand working, episodic, semantic and procedural memory for AI agents, including write and recall policies, provenance, stale facts, privacy and deletion."
+    },
+    "agent-state-graphs": {
+      title: "AI Agent State Machines & Graph Workflows",
+      description: "Learn how state machines and graphs make AI agent execution explicit and testable using typed state, nodes, conditional routing, bounded loops and parallel branches."
+    },
+    "durable-long-running-agents": {
+      title: "Durable AI Agents & Human-in-the-Loop Workflows",
+      description: "Learn how long-running AI agents checkpoint state, wait for events or approvals, resume safely, avoid duplicate side effects and revalidate authority after pauses."
+    },
+    "agentic-rag": {
+      title: "Agentic RAG Explained: Adaptive Retrieval for AI Agents",
+      description: "Learn how Agentic RAG decides when and how to retrieve, rewrites queries, checks evidence sufficiency and bounds adaptive retrieval by latency, cost and safety."
+    },
+    "multi-agent-systems": {
+      title: "Multi-Agent Systems, Handoffs & Agent Communication",
+      description: "Understand manager-worker systems, agents-as-tools and handoffs, including delegation contracts, context transfer, task ownership, coordination costs and failure modes."
+    },
+    "model-context-protocol": {
+      title: "Model Context Protocol (MCP) for AI Agents Explained",
+      description: "Learn the MCP host-client-server model, capability discovery and invocation, and why protocol interoperability still requires authentication, authorization and consent."
+    },
+    "agent-frameworks": {
+      title: "AI Agent Frameworks: LangGraph, CrewAI & AutoGen",
+      description: "Compare agent framework control models, including LangGraph, CrewAI and AutoGen, and learn when plain code, graphs, crews or event-driven orchestration fit best."
+    },
+    "browser-computer-use-agents": {
+      title: "Browser & Computer-Use AI Agents Explained",
+      description: "Learn how browser, computer-use and code-executing agents observe, act and verify through changing interfaces, with API-first design, sandboxing and confirmation controls."
+    },
+    "agent-security": {
+      title: "AI Agent Security, Guardrails & Failure Recovery",
+      description: "Learn how to defend AI agents against prompt injection, excessive permissions and unsafe side effects using trust boundaries, least privilege, validation and recovery."
+    },
+    "agent-evaluation-safety": {
+      title: "AI Agent Evaluation: Task Success, Safety & Trajectories",
+      description: "Learn how to evaluate both agent outcomes and trajectories across tool accuracy, unnecessary steps, recovery, safety, cost and reproducible scenario-based tests."
+    },
+    "agent-observability-deployment": {
+      title: "AI Agent Observability, Cost, Latency & Deployment",
+      description: "Learn how to trace, monitor and deploy AI agents with measurable latency and cost budgets, release controls, runtime safeguards and production observability."
     }
   };
 
