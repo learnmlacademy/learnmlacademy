@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
-import { List, ChevronDown } from 'lucide-react';
+import { ChevronDown, List } from 'lucide-react';
 import { LessonHeader } from './LessonHeader';
 
 type TocItem = {
@@ -27,12 +27,12 @@ function slugify(value: string) {
 
 function TableOfContents({ items, compact = false }: { items: TocItem[]; compact?: boolean }) {
   const list = (
-    <ol className={compact ? 'mt-3 space-y-1.5' : 'mt-4 space-y-2'}>
+    <ol className={compact ? 'mt-3 space-y-1.5' : 'mt-3 space-y-1'}>
       {items.map(item => (
         <li key={item.id}>
           <a
             href={`#${item.id}`}
-            className="block rounded-lg px-2 py-1.5 text-sm leading-snug text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+            className="block py-1.5 text-sm leading-snug text-slate-600 hover:text-indigo-700"
           >
             {item.label}
           </a>
@@ -43,7 +43,7 @@ function TableOfContents({ items, compact = false }: { items: TocItem[]; compact
 
   if (compact) {
     return (
-      <details className="mb-7 rounded-xl border border-slate-200 bg-white p-4 2xl:hidden">
+      <details className="mb-8 border-y border-slate-200 py-3 2xl:hidden">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold text-slate-900">
           <span className="flex items-center gap-2"><List className="h-4 w-4 text-indigo-600" aria-hidden="true" />On this page</span>
           <ChevronDown className="h-4 w-4 text-slate-500" aria-hidden="true" />
@@ -54,11 +54,8 @@ function TableOfContents({ items, compact = false }: { items: TocItem[]; compact
   }
 
   return (
-    <nav aria-label="On this page" className="sticky top-6 rounded-xl border border-slate-200 bg-white p-4">
-      <p className="flex items-center gap-2 text-sm font-extrabold text-slate-900">
-        <List className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-        On this page
-      </p>
+    <nav aria-label="On this page" className="sticky top-6 border-l border-slate-300 pl-5">
+      <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">On this page</p>
       {list}
     </nav>
   );
@@ -127,7 +124,7 @@ export function LessonShell({
       <div
         ref={contentRootRef}
         className={showToc
-          ? '2xl:grid 2xl:grid-cols-[minmax(0,var(--lma-reading-width))_var(--lma-toc-width)] 2xl:justify-center 2xl:gap-10'
+          ? '2xl:grid 2xl:grid-cols-[minmax(0,var(--lma-reading-width))_var(--lma-toc-width)] 2xl:justify-center 2xl:gap-12'
           : 'mx-auto max-w-[var(--lma-reading-width)]'}
       >
         <div className="min-w-0">
