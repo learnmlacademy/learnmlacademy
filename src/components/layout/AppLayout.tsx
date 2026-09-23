@@ -22,6 +22,12 @@ export function AppLayout() {
   useEffect(() => {
     setDrawerOpen(false);
     mainRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+
+    const focusFrame = window.requestAnimationFrame(() => {
+      mainRef.current?.focus({ preventScroll: true });
+    });
+
+    return () => window.cancelAnimationFrame(focusFrame);
   }, [location.pathname]);
 
   const openDrawer = (focusSearch = false) => {
