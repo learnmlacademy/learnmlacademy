@@ -73,9 +73,9 @@
 
   /* Layout */
   --lma-header-height: 4rem;
-  --lma-curriculum-width: 18.25rem;
-  --lma-reading-width: 48.75rem;
-  --lma-toc-width: 14rem;
+  --lma-curriculum-width: 17.5rem;
+  --lma-reading-width: 52rem;
+  --lma-toc-width: 15rem;
 }
 
 html {

@@ -52,7 +52,7 @@ export function AppLayout() {
         {showDesktopCurriculum && (
           <aside
             aria-label="Curriculum navigation"
-            className="lma-scrollbar hidden w-[var(--lma-curriculum-width)] shrink-0 overflow-y-auto border-r border-slate-200 bg-white p-3 xl:block"
+            className="lma-scrollbar hidden w-[var(--lma-curriculum-width)] shrink-0 overflow-y-auto border-r border-slate-200/90 bg-white px-2.5 py-4 lg:block"
           >
             <CurriculumNav activeTopicId={activeTopicId} />
           </aside>

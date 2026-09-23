@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ChevronDown, List } from 'lucide-react';
+import { List, ChevronDown, Share2, ArrowUpRight, BookOpen } from 'lucide-react';
 import { LessonHeader } from './LessonHeader';
 
 type TocItem = {
@@ -18,35 +18,55 @@ type LessonShellProps = {
 };
 
 function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '')
-    .slice(0, 48) || 'section';
+  return (
+    value
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 48) || 'section'
+  );
 }
 
-function TableOfContents({ items, compact = false }: { items: TocItem[]; compact?: boolean }) {
+function TableOfContents({
+  items,
+  activeId,
+  compact = false,
+}: {
+  items: TocItem[];
+  activeId?: string;
+  compact?: boolean;
+}) {
   const list = (
-    <ol className={compact ? 'mt-3 space-y-1.5' : 'mt-3 space-y-1'}>
-      {items.map(item => (
-        <li key={item.id}>
-          <a
-            href={`#${item.id}`}
-            className="block py-1.5 text-sm leading-snug text-slate-600 hover:text-indigo-700"
-          >
-            {item.label}
-          </a>
-        </li>
-      ))}
+    <ol className={compact ? 'mt-2 space-y-1' : 'mt-2.5 space-y-1 text-xs'}>
+      {items.map(item => {
+        const isActive = activeId === item.id;
+        return (
+          <li key={item.id}>
+            <a
+              href={`#${item.id}`}
+              className={`block rounded-md px-2 py-1 leading-snug transition-colors ${
+                isActive
+                  ? 'bg-indigo-50 font-semibold text-indigo-700'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
     </ol>
   );
 
   if (compact) {
     return (
-      <details className="mb-8 border-y border-slate-200 py-3 2xl:hidden">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 font-bold text-slate-900">
-          <span className="flex items-center gap-2"><List className="h-4 w-4 text-indigo-600" aria-hidden="true" />On this page</span>
-          <ChevronDown className="h-4 w-4 text-slate-500" aria-hidden="true" />
+      <details className="mb-6 rounded-xl border border-slate-200 bg-white p-3.5 xl:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-xs font-bold text-slate-800">
+          <span className="flex items-center gap-2">
+            <List className="h-3.5 w-3.5 text-indigo-600" aria-hidden="true" />
+            On this page
+          </span>
+          <ChevronDown className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
         </summary>
         {list}
       </details>
@@ -54,9 +74,26 @@ function TableOfContents({ items, compact = false }: { items: TocItem[]; compact
   }
 
   return (
-    <nav aria-label="On this page" className="sticky top-6 border-l border-slate-300 pl-5">
-      <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">On this page</p>
+    <nav aria-label="On this page" className="sticky top-20 pl-2">
+      <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-slate-900">
+        <List className="h-3.5 w-3.5 text-indigo-600" aria-hidden="true" />
+        On this page
+      </p>
       {list}
+
+      {/* Quick Community / Feedback link */}
+      <div className="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 space-y-2">
+        <button
+          type="button"
+          onClick={() => {
+            navigator.clipboard?.writeText(window.location.href);
+          }}
+          className="flex items-center gap-1.5 font-medium text-slate-600 hover:text-indigo-600 transition"
+        >
+          <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+          <span>Copy lesson link</span>
+        </button>
+      </div>
     </nav>
   );
 }
@@ -71,6 +108,7 @@ export function LessonShell({
 }: LessonShellProps) {
   const contentRootRef = useRef<HTMLDivElement>(null);
   const [tocItems, setTocItems] = useState<TocItem[]>([]);
+  const [activeSectionId, setActiveSectionId] = useState<string>('');
 
   useEffect(() => {
     const root = contentRootRef.current;
@@ -83,14 +121,16 @@ export function LessonShell({
       ) as HTMLElement[];
       const visibleHeadings = headings.filter(heading => !heading.closest('[hidden]'));
 
-      const items = visibleHeadings.map((heading, index) => {
-        const label = (heading.textContent || '').replace(/\s+/g, ' ').trim();
-        const generatedId = `lesson-section-${index + 1}-${slugify(label)}`;
-        if (!heading.id || document.querySelectorAll(`[id="${heading.id}"]`).length > 1) {
-          heading.id = generatedId;
-        }
-        return { id: heading.id, label, level: 2 as const };
-      }).filter(item => item.label);
+      const items = visibleHeadings
+        .map((heading, index) => {
+          const label = (heading.textContent || '').replace(/\s+/g, ' ').trim();
+          const generatedId = `lesson-section-${index + 1}-${slugify(label)}`;
+          if (!heading.id || document.querySelectorAll(`[id="${heading.id}"]`).length > 1) {
+            heading.id = generatedId;
+          }
+          return { id: heading.id, label, level: 2 as const };
+        })
+        .filter(item => item.label);
 
       const signature = items.map(item => `${item.id}:${item.label}`).join('|');
       if (signature !== lastSignature) {
@@ -110,30 +150,61 @@ export function LessonShell({
     };
   }, [topicId]);
 
-  const showToc = tocItems.length >= 4;
+  // Scrollspy for active heading
+  useEffect(() => {
+    if (tocItems.length === 0) return;
+
+    const onScroll = () => {
+      const headings = tocItems
+        .map(item => document.getElementById(item.id))
+        .filter((el): el is HTMLElement => el !== null);
+
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const rect = headings[i].getBoundingClientRect();
+        if (rect.top <= 120) {
+          setActiveSectionId(headings[i].id);
+          return;
+        }
+      }
+      if (headings.length > 0) {
+        setActiveSectionId(headings[0].id);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [tocItems]);
+
+  const showToc = tocItems.length >= 3;
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-4 py-7 sm:px-6 sm:py-10 lg:px-8">
-      <LessonHeader
-        title={title}
-        description={description}
-        category={category}
-        module={module}
-      />
-
+    <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8">
       <div
         ref={contentRootRef}
-        className={showToc
-          ? '2xl:grid 2xl:grid-cols-[minmax(0,var(--lma-reading-width))_var(--lma-toc-width)] 2xl:justify-center 2xl:gap-12'
-          : 'mx-auto max-w-[var(--lma-reading-width)]'}
+        className={
+          showToc
+            ? 'xl:grid xl:grid-cols-[minmax(0,1fr)_220px] xl:gap-10'
+            : 'max-w-4xl mx-auto'
+        }
       >
-        <div className="min-w-0">
-          {showToc && <TableOfContents items={tocItems} compact />}
+        {/* Main Reading Center */}
+        <div className="min-w-0 max-w-3xl">
+          <LessonHeader
+            title={title}
+            description={description}
+            category={category}
+            module={module}
+          />
+
+          {showToc && <TableOfContents items={tocItems} activeId={activeSectionId} compact />}
+
           {children}
         </div>
+
+        {/* Right Sticky Table of Contents (Option A Docs Style) */}
         {showToc && (
-          <aside className="hidden 2xl:block">
-            <TableOfContents items={tocItems} />
+          <aside className="hidden xl:block">
+            <TableOfContents items={tocItems} activeId={activeSectionId} />
           </aside>
         )}
       </div>

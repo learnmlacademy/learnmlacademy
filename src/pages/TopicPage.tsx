@@ -573,18 +573,8 @@ export function TopicPage() {
         ref={articleRef}
         data-lesson-body
         key={`article-${topicId}`}
-        className="lesson-body prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
+        className="lesson-body prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
       >
-        <div className="not-prose mb-8 flex items-center gap-3 border-b border-slate-200 pb-4">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-base font-extrabold text-indigo-700">
-            ML
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-slate-900">Written by the ML Academy Team</p>
-            <p className="text-xs text-slate-500">Machine Learning Engineers & Educators</p>
-          </div>
-        </div>
-
         <Suspense fallback={
           <div className="animate-pulse space-y-4 py-8" aria-label="Loading lesson">
             <div className="h-6 w-3/4 rounded bg-slate-200" />

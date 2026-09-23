@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import type { LearningNavigationGroup } from '../../data/learningNavigation';
 import { getGroupLessonCount, getLessonNumber } from '../../data/learningNavigation';
 import { cn } from '../layout/classNames';
@@ -29,55 +29,46 @@ export function NavigationGroup({
   );
 
   return (
-    <section
-      className={cn(
-        'overflow-hidden rounded-xl border bg-white transition-colors',
-        expanded ? 'border-indigo-200' : 'border-slate-200',
-      )}
-    >
+    <div className="mb-1">
       <button
         type="button"
         aria-expanded={expanded}
         aria-controls={`learning-group-${group.id}`}
         onClick={onToggle}
         className={cn(
-          'flex min-h-12 w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-slate-50',
-          isActive && 'text-indigo-700',
+          'group flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left transition-colors',
+          isActive
+            ? 'bg-slate-100 font-bold text-slate-900'
+            : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900',
         )}
       >
-        <span
-          className={cn(
-            'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold',
-            isActive || expanded
-              ? 'bg-indigo-600 text-white'
-              : 'bg-slate-100 text-slate-600',
-          )}
-        >
-          {index + 1}
-        </span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-sm font-bold leading-tight">
+        <div className="flex items-center gap-2 min-w-0">
+          <ChevronRight
+            className={cn(
+              'h-3.5 w-3.5 shrink-0 text-slate-400 transition-transform duration-150',
+              expanded && 'rotate-90 text-slate-600',
+            )}
+            aria-hidden="true"
+          />
+          <span className="truncate text-xs font-semibold leading-tight">
             {group.shortTitle ?? group.title}
           </span>
-          <span className="mt-0.5 block text-[11px] font-medium text-slate-500">
-            {count} lessons
-          </span>
+        </div>
+
+        <span className="shrink-0 text-[11px] font-medium text-slate-400">
+          {count}
         </span>
-        <ChevronDown
-          className={cn(
-            'h-4 w-4 shrink-0 text-slate-400 transition-transform',
-            expanded && 'rotate-180 text-indigo-600',
-          )}
-          aria-hidden="true"
-        />
       </button>
 
       {expanded && (
-        <div id={`learning-group-${group.id}`} className="border-t border-slate-100 px-2 py-2">
+        <div
+          id={`learning-group-${group.id}`}
+          className="ml-3.5 mt-0.5 border-l border-slate-200 pl-2 py-0.5 space-y-0.5"
+        >
           {group.categories.map(category => (
-            <div key={category.id} className="mb-3 last:mb-0">
+            <div key={category.id} className="mb-2 last:mb-0">
               {(group.categories.length > 1 || category.subtopics.some(topic => topic.module)) && (
-                <p className="mb-1 px-3 pt-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                <p className="px-2.5 pb-1 pt-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   {category.title.replace(/^\d+\.\s*/, '')}
                 </p>
               )}
@@ -85,7 +76,7 @@ export function NavigationGroup({
                 {category.subtopics.map((topic, topicIndex) => (
                   <div key={topic.id}>
                     {topic.module && topic.module !== category.subtopics[topicIndex - 1]?.module && (
-                      <p className="px-3 pb-1 pt-3 text-[10px] font-bold uppercase tracking-[0.12em] text-indigo-600">
+                      <p className="px-2.5 pb-0.5 pt-2 text-[10px] font-bold uppercase tracking-wider text-indigo-600">
                         {topic.module}
                       </p>
                     )}
@@ -103,6 +94,6 @@ export function NavigationGroup({
           ))}
         </div>
       )}
-    </section>
+    </div>
   );
 }

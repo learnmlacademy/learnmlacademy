@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Bookmark, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import { cn } from '../layout/classNames';
 
 type SidebarItemProps = {
@@ -19,7 +19,6 @@ export function SidebarItem({
   lessonNumber,
   active = false,
   completed = false,
-  bookmarked = false,
   onNavigate,
 }: SidebarItemProps) {
   return (
@@ -28,31 +27,27 @@ export function SidebarItem({
       onClick={onNavigate}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex min-h-11 items-start gap-2.5 rounded-lg px-3 py-2.5 text-sm leading-snug transition-colors',
+        'group flex items-center gap-2.5 rounded-md px-2.5 py-1.5 text-xs leading-snug transition-colors',
         active
-          ? 'bg-indigo-600 font-semibold text-white shadow-sm'
-          : 'font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950',
+          ? 'bg-indigo-50 font-semibold text-indigo-700'
+          : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
       )}
     >
       <span
         className={cn(
-          'mt-0.5 w-6 shrink-0 text-right text-[11px] tabular-nums',
-          active ? 'text-indigo-200' : 'text-slate-400',
+          'w-5 shrink-0 text-right text-[10px] tabular-nums font-mono',
+          active ? 'font-bold text-indigo-600' : 'text-slate-400 group-hover:text-slate-500',
         )}
       >
-        {lessonNumber}.
+        {lessonNumber}
       </span>
-      <span className="min-w-0 flex-1 break-words">{title}</span>
+
+      <span className="min-w-0 flex-1 truncate">{title}</span>
+
       {completed && (
         <CheckCircle2
-          className={cn('mt-0.5 h-4 w-4 shrink-0', active ? 'text-white' : 'text-emerald-600')}
+          className={cn('h-3.5 w-3.5 shrink-0', active ? 'text-indigo-600' : 'text-emerald-600')}
           aria-label="Completed"
-        />
-      )}
-      {bookmarked && (
-        <Bookmark
-          className={cn('mt-0.5 h-4 w-4 shrink-0', active ? 'text-white' : 'text-indigo-600')}
-          aria-label="Bookmarked"
         />
       )}
     </Link>
