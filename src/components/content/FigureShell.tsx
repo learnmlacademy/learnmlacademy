@@ -38,13 +38,13 @@ export function FigureShell({
       data-figure-shell
       aria-labelledby={labelledBy}
       aria-describedby={describedBy}
-      className={cn('not-prose my-7 overflow-hidden rounded-2xl border border-[var(--lma-border-default)] bg-[var(--lma-surface)] shadow-sm', width === 'wide' && 'lesson-wide', className)}
+      className={cn('not-prose my-8 overflow-hidden border-y border-[var(--lma-border-default)] bg-[var(--lma-surface)]', width === 'wide' && 'lesson-wide', className)}
     >
       {(title || eyebrow || learningQuestion) && (
-        <header className="border-b border-[var(--lma-border-default)] bg-[var(--lma-canvas)] px-4 py-4 sm:px-6">
-          {eyebrow && <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--lma-brand)]">{eyebrow}</p>}
+        <header className="border-b border-[var(--lma-border-default)] px-4 py-4 sm:px-6">
+          {eyebrow && <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--lma-brand)]">{eyebrow}</p>}
           {title && <h3 id={`${prefix}-title`} className={cn('text-lg font-extrabold leading-snug text-[var(--lma-text-primary)]', eyebrow && 'mt-1')}>{title}</h3>}
-          {learningQuestion && <p className="mt-1 text-sm font-medium leading-relaxed text-[var(--lma-brand)]">{learningQuestion}</p>}
+          {learningQuestion && <p className="mt-1 text-sm font-medium leading-relaxed text-[var(--lma-text-secondary)]">{learningQuestion}</p>}
         </header>
       )}
       <div className="lma-scrollbar overflow-x-auto p-4 sm:p-6">{children}</div>
