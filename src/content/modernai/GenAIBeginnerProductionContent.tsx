@@ -246,6 +246,12 @@ function DeployingGenerativeApplications() {
         <p>After offline tests pass, a new version can receive a small canary slice of real traffic. Compare reliability, quality, safety, cost, and latency with the current version. Define stop conditions and test rollback before increasing exposure.</p>
       </section>
 
+      <section className="space-y-4">
+        <h2>Where Generative AI hands off to Large Language Models</h2>
+        <p>Generative AI is the broad family: it includes systems that create text, images, audio, video, synthetic data, and more. The next curriculum section zooms into one especially important branch—<strong>Large Language Models</strong>—so you can understand tokens, embeddings, Transformers, text generation, prompting, RAG, evaluation, serving, and LLMOps in a deliberate sequence.</p>
+        <p>You do not need to relearn the deployment ideas from this lesson. The LLM section will reuse the same engineering mindset while going much deeper into how language models work and how text-focused applications are built.</p>
+      </section>
+
       <SummaryCard items={[
         "Deployment adds security, availability, observability, cost, scaling, and recovery requirements to a working generative workflow.",
         "Hosted versus self-hosted inference should be chosen from measured privacy, control, cost, latency, and operating capability.",
