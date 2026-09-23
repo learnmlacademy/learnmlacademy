@@ -57,7 +57,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "agent-context-engineering": {
-    "lessonNumber": 3,
+    "lessonNumber": 5,
     "title": "Context Engineering for Agents",
     "action": "PRESERVE + EXPAND WITH WORKED BUDGET",
     "targetedInstruction": "Add explicit distinction: context is the working packet for the next decision; memory is persisted information that may be retrieved into context later. Teach relevance, trust, recency, and token budget as four selection axes.",
@@ -79,7 +79,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "agent-memory": {
-    "lessonNumber": 4,
+    "lessonNumber": 6,
     "title": "Memory in AI Agents: Short-Term, Long-Term & Persistence",
     "action": "PRESERVE + TARGETED ENRICHMENT",
     "targetedInstruction": "Keep the current privacy/write-policy material. Add conflict/staleness handling and source provenance. Avoid reteaching vector database mechanics from LLM.",
@@ -100,7 +100,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "planning-reflection": {
-    "lessonNumber": 5,
+    "lessonNumber": 4,
     "title": "Planning, ReAct & Reflection",
     "action": "PRESERVE + TARGETED ENRICHMENT",
     "targetedInstruction": "Keep the current chain-of-thought caution. Emphasize observable decisions, actions, evidence, and verifier results rather than hidden reasoning. Add explicit no-progress and max-step stopping rules.",
@@ -121,7 +121,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "agent-state-graphs": {
-    "lessonNumber": 6,
+    "lessonNumber": 7,
     "title": "Agent Workflows, State Machines & Graphs",
     "action": "MODERATE EXPANSION",
     "targetedInstruction": "Expand the current compact page with typed state, deterministic nodes vs model-directed nodes, bounded loops, parallel branches, and why explicit graphs improve testability. Persistence stays in Lesson 7.",
@@ -142,7 +142,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "durable-long-running-agents": {
-    "lessonNumber": 7,
+    "lessonNumber": 8,
     "title": "Durable & Long-Running Agents with Human-in-the-Loop",
     "action": "PRESERVE + TARGETED ENRICHMENT",
     "targetedInstruction": "Preserve checkpoint/idempotency/HITL merge. Add distinction between waiting and holding a request open, plus expiry/cancellation and revalidation before resuming consequential actions.",
@@ -163,7 +163,7 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "agentic-rag": {
-    "lessonNumber": 8,
+    "lessonNumber": 9,
     "title": "Agentic RAG",
     "action": "SUBSTANTIVE EXPANSION",
     "targetedInstruction": "This page is currently too thin. Add retrieval decision, query transformation, source choice, evidence sufficiency, conflicting evidence, bounded retries, authority/provenance, and when Agentic RAG is not worth the latency/cost. Do not reteach embeddings/vector DB fundamentals.",
@@ -185,10 +185,10 @@ export const agenticLessonEnhancements: Record<string, AgenticEnhancement> = {
     ]
   },
   "building-ai-agent": {
-    "lessonNumber": 9,
+    "lessonNumber": 3,
     "title": "Build a Simple AI Agent End-to-End",
-    "action": "SUBSTANTIVE EXPANSION — FLAGSHIP SYNTHESIS LESSON",
-    "targetedInstruction": "Turn this into the path’s synthesis lesson. Walk through goal → instructions → tool schema → state → loop → observation → stop condition → validation → trace → one failure case. Prefer a small transparent agent over framework magic.",
+    "action": "SUBSTANTIVE EXPANSION — EARLY HANDS-ON BRIDGE",
+    "targetedInstruction": "Place this immediately after Tool Calling so the learner sees a complete agent before advanced subsystems. Walk through goal → instructions → one read-only tool → tiny state → bounded loop → observation → stop condition → validation → trace → one failure case. Introduce planning, context, memory, and graphs only as names that later lessons will unpack; do not require them as prerequisites.",
     "visuals": [
       "bounded-agent-architecture"
     ],
