@@ -1,173 +1,203 @@
-import { useEffect } from 'react';
+import React, { useState, useEffect, type ComponentType } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import {
+  ArrowRight,
+  Bot,
+  BrainCircuit,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Code2,
+  FileQuestion,
+  FolderKanban,
+  Lightbulb,
+  MessageSquareText,
+  Network,
+  Route,
+  ServerCog,
+  Sparkles,
+  Search,
+  BookOpen,
+  Terminal,
+  Zap,
+  GraduationCap,
+  Layers,
+  Flame,
+  ChevronRight,
+} from 'lucide-react';
 import { WebsiteSchema } from '../components/SchemaMarkup';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 import { curriculum } from '../data/curriculum';
 
-const cleanCategoryTitle = (title: string) => title.replace(/^\d+\.\s*/, '');
-
-const getCategory = (id: string) => curriculum.find(category => category.id === id);
-
-const getTopic = (id: string) => {
-  for (const category of curriculum) {
-    const topic = category.subtopics.find(subtopic => subtopic.id === id);
-    if (topic) return topic;
-  }
-  return null;
+type JourneyStage = {
+  id: string;
+  title: string;
+  categoryTitle: string;
+  description: string;
+  route: string;
+  count: number;
+  icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
+  highlights: { title: string; route: string }[];
 };
 
-const countCategories = (ids: string[]) =>
-  ids.reduce((total, id) => total + (getCategory(id)?.subtopics.length ?? 0), 0);
+const countLessons = (categoryId: string) =>
+  curriculum.find(category => category.id === categoryId)?.subtopics.length ?? 0;
 
-const learningAreas = [
+const machineLearningCount = curriculum
+  .slice(0, 9)
+  .reduce((total, category) => total + category.subtopics.length, 0);
+
+const journeyStages: JourneyStage[] = [
   {
-    number: '01',
+    id: 'foundations',
     title: 'Machine Learning',
-    description: 'Foundations, Python, preprocessing, supervised and unsupervised learning, evaluation, forecasting and advanced learning paradigms.',
+    categoryTitle: 'Foundations to Advanced Algorithms',
+    description: 'Master data preparation, regression, classification, clustering, and ensemble models.',
     route: '/learn/what-is-ml',
-    categoryIds: [
-      'foundations',
-      'python-ml-libs',
-      'data-preprocessing',
-      'supervised-learning',
-      'ensemble-learning',
-      'unsupervised-learning',
-      'model-evaluation',
-      'time-series',
-      'advanced-paradigms',
-    ],
-    featuredIds: [
-      'what-is-ml',
-      'types-of-ml',
-      'python-for-ml',
-      'feature-engineering',
-      'linear-regression',
-      'decision-trees',
-      'random-forest',
-      'train-test-split',
+    count: machineLearningCount,
+    icon: Network,
+    highlights: [
+      { title: 'Linear & Logistic Regression', route: '/learn/linear-regression' },
+      { title: 'Decision Trees & Random Forest', route: '/learn/random-forest' },
+      { title: 'Gradient Boosting & XGBoost', route: '/learn/xgboost' },
+      { title: 'Model Evaluation & Metrics', route: '/learn/classification-metrics' },
     ],
   },
   {
-    number: '02',
+    id: 'deep-learning',
     title: 'Deep Learning',
-    description: 'Neural networks from first principles through CNNs, sequence models, transformers, transfer learning and newer architectures.',
+    categoryTitle: 'Neural Nets, Vision & Attention',
+    description: 'Build intuition for backpropagation, CNNs, RNNs, and transformer architectures.',
     route: '/learn/deep-learning-intro',
-    categoryIds: ['deep-learning', 'advanced-deep-learning'],
-    featuredIds: [
-      'deep-learning-intro',
-      'neural-networks',
-      'activation-functions',
-      'backpropagation',
-      'cnn',
-      'transformers-deep-learning',
-      'transfer-learning',
-      'graph-neural-networks',
+    count: countLessons('deep-learning'),
+    icon: BrainCircuit,
+    highlights: [
+      { title: 'Neural Networks from Scratch', route: '/learn/neural-network-from-scratch' },
+      { title: 'Backpropagation & Optimizers', route: '/learn/backpropagation' },
+      { title: 'Convolutional Neural Networks (CNNs)', route: '/learn/cnn' },
+      { title: 'Attention & Transformers', route: '/learn/transformers' },
     ],
   },
   {
-    number: '03',
+    id: 'generative-ai',
     title: 'Generative AI',
-    description: 'How generative models learn, major model families, multimodal systems, evaluation, responsible use and production applications.',
+    categoryTitle: 'Diffusion, VAEs & Modern GenAI',
+    description: 'Learn how probabilistic models and diffusion generate images, audio, and synthesis.',
     route: '/learn/generative-ai-intro',
-    categoryIds: ['generative-ai'],
-    featuredIds: [
-      'generative-ai-intro',
-      'how-generative-models-learn',
-      'vae',
-      'gans',
-      'diffusion-models',
-      'multimodal-ai',
-      'building-genai-apps',
-      'genai-deployment',
+    count: countLessons('generative-ai'),
+    icon: Sparkles,
+    highlights: [
+      { title: 'Diffusion Models Explained', route: '/learn/diffusion-models' },
+      { title: 'Variational Autoencoders (VAEs)', route: '/learn/vae' },
+      { title: 'Generative Adversarial Nets (GANs)', route: '/learn/gans' },
+      { title: 'Prompt Engineering & Multimodal', route: '/learn/prompt-engineering' },
     ],
   },
   {
-    number: '04',
-    title: 'Large Language Models & RAG',
-    description: 'Tokens, transformers, prompting, training, alignment, retrieval, evaluation, serving and production LLM systems.',
+    id: 'large-language-models',
+    title: 'LLMs & RAG',
+    categoryTitle: 'Embeddings, Retrieval & Fine-Tuning',
+    description: 'Study language models, vector databases, semantic search, and production RAG.',
     route: '/learn/llm-intro',
-    categoryIds: ['large-language-models'],
-    featuredIds: [
-      'llm-intro',
-      'tokenization-embeddings',
-      'transformers-attention',
-      'prompt-engineering',
-      'rag',
-      'advanced-rag',
-      'llm-evaluation',
-      'llmops',
+    count: countLessons('large-language-models'),
+    icon: MessageSquareText,
+    highlights: [
+      { title: 'Retrieval-Augmented Generation (RAG)', route: '/learn/rag' },
+      { title: 'Embeddings & Vector Databases', route: '/learn/vector-databases' },
+      { title: 'Fine-Tuning: SFT, LoRA & RLHF', route: '/learn/instruction-tuning-rlhf' },
+      { title: 'LLM Evaluation & Benchmarks', route: '/learn/llm-evaluation' },
     ],
   },
   {
-    number: '05',
+    id: 'agentic-ai',
     title: 'Agentic AI',
-    description: 'Tool use, planning, context, memory, durable execution, agentic RAG, multi-agent systems, MCP, safety and deployment.',
+    categoryTitle: 'Autonomous Agents, Tools & Graphs',
+    description: 'Connect models with real tools, state graphs, long-term memory, and multi-agent systems.',
     route: '/learn/agentic-ai-intro',
-    categoryIds: ['agentic-ai'],
-    featuredIds: [
-      'agentic-ai-intro',
-      'tool-calling',
-      'building-ai-agent',
-      'planning-reflection',
-      'agent-memory',
-      'agentic-rag',
-      'model-context-protocol',
-      'agent-security',
+    count: countLessons('agentic-ai'),
+    icon: Bot,
+    highlights: [
+      { title: 'Tool Calling & Function Design', route: '/learn/tool-calling' },
+      { title: 'ReAct, Planning & Reflection', route: '/learn/planning-reflection' },
+      { title: 'Agent Memory & Context Engineering', route: '/learn/agent-memory' },
+      { title: 'Multi-Agent Workflows & MCP', route: '/learn/multi-agent-systems' },
     ],
   },
   {
-    number: '06',
+    id: 'ai-engineering-mlops',
     title: 'AI Engineering & MLOps',
-    description: 'Data and feature pipelines, experiment tracking, inference, CI/CD, monitoring, reliability and end-to-end system design.',
+    categoryTitle: 'From Experiment to Production',
+    description: 'Deploy reliable inference pipelines, monitor drift, and design production AI systems.',
     route: '/learn/ai-engineering-mlops',
-    categoryIds: ['ai-engineering-mlops'],
-    featuredIds: [
-      'ai-engineering-mlops',
-      'ml-data-feature-pipelines',
-      'experiment-tracking-model-registry',
-      'batch-online-inference',
-      'ml-cicd-continuous-training',
-      'ml-monitoring-drift',
-      'production-ai-reliability',
-      'ml-system-design',
+    count: countLessons('ai-engineering-mlops'),
+    icon: ServerCog,
+    highlights: [
+      { title: 'Batch & Online Serving Architectures', route: '/learn/batch-online-inference' },
+      { title: 'Pipelines & Model Registries', route: '/learn/experiment-tracking-model-registry' },
+      { title: 'Drift Monitoring & Model Decay', route: '/learn/ml-monitoring-drift' },
+      { title: 'End-to-End System Design', route: '/learn/ml-system-design' },
     ],
   },
 ];
 
-const popularLessonIds = [
-  'train-test-split',
-  'feature-selection',
-  'types-of-ml',
-  'data-visualization',
-  'ridge-regression',
-  'xgboost',
+const featuredProjects = [
+  {
+    title: 'Customer Churn Prediction',
+    category: 'End-to-End ML',
+    description: 'Production pipeline with feature engineering, XGBoost, and model evaluation.',
+    route: '/learn/project-customer-churn',
+    difficulty: 'Beginner / Intermediate',
+  },
+  {
+    title: 'Document Q&A System with RAG',
+    category: 'LLM & Search',
+    description: 'Semantic vector retrieval, chunking strategies, and grounded answer synthesis.',
+    route: '/learn/project-rag-document-qa',
+    difficulty: 'Intermediate',
+  },
+  {
+    title: 'Autonomous AI Research Agent',
+    category: 'Agentic AI',
+    description: 'Multi-agent orchestration with live search tools, state machine, and synthesis.',
+    route: '/learn/project-multi-agent-research',
+    difficulty: 'Advanced',
+  },
 ];
 
-const projectIds = [
-  'project-customer-churn',
-  'project-sales-forecasting',
-  'project-rag-document-qa',
-  'project-ai-agent',
+const careerTracks = [
+  {
+    title: 'Machine Learning Engineer',
+    route: '/learn/ml-engineer-roadmap',
+    desc: 'Algorithms, feature pipelines, scikit-learn, and production modeling.',
+  },
+  {
+    title: 'AI / LLM Engineer',
+    route: '/learn/genai-llm-engineer-roadmap',
+    desc: 'RAG systems, embeddings, prompt engineering, and evaluation.',
+  },
+  {
+    title: 'Data Scientist',
+    route: '/learn/data-scientist-roadmap',
+    desc: 'Statistical inference, EDA, business insights, and predictive modeling.',
+  },
+  {
+    title: 'System Design & Interview Prep',
+    route: '/learn/ml-ai-system-design-interview',
+    desc: 'Scalable architecture questions, failure recovery, and trade-offs.',
+  },
 ];
-
-const startingPoints = [
-  ['New to machine learning?', 'Start with What Is Machine Learning', '/learn/what-is-ml'],
-  ['Know classical ML already?', 'Start Deep Learning', '/learn/deep-learning-intro'],
-  ['Interested in modern generative models?', 'Start Generative AI', '/learn/generative-ai-intro'],
-  ['Building with language models?', 'Start LLMs & RAG', '/learn/llm-intro'],
-  ['Want systems that can use tools?', 'Start Agentic AI', '/learn/agentic-ai-intro'],
-] as const;
 
 export function HomePage() {
+  const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
+  const [searchFilter, setSearchFilter] = useState('');
+
   const tutorialCount = curriculum.reduce(
     (total, category) => total + category.subtopics.length,
     0,
   );
-  const projectCount = getCategory('projects')?.subtopics.length ?? 0;
+  const projectCount = countLessons('projects');
 
   useEffect(() => {
-    document.title = 'ML Academy — Learn Machine Learning with Structured Tutorials & Code';
+    document.title = 'Learn ML Academy — Machine Learning to Agentic AI Curriculum';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
@@ -184,186 +214,423 @@ export function HomePage() {
     canonical.setAttribute('href', 'https://www.learnmlacademy.com');
   }, [tutorialCount]);
 
+  const activeStage = journeyStages[selectedTrackIndex];
+  const ActiveIcon = activeStage.icon;
+
+  const filteredCurriculum = searchFilter.trim()
+    ? curriculum
+        .map(category => ({
+          ...category,
+          subtopics: category.subtopics.filter(st =>
+            st.title.toLowerCase().includes(searchFilter.toLowerCase()),
+          ),
+        }))
+        .filter(category => category.subtopics.length > 0)
+    : [];
+
   return (
-    <div className="bg-white text-slate-900">
+    <div className="bg-slate-50">
       <WebsiteSchema />
 
-      <section className="border-b border-slate-200">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:px-8 lg:py-14">
-          <div className="max-w-4xl">
-            <p className="text-sm font-semibold text-indigo-700">LearnMLAcademy</p>
-            <h1 className="mt-3 text-4xl font-extrabold tracking-[-0.035em] text-slate-950 sm:text-5xl lg:text-[3.45rem] lg:leading-[1.05]">
-              Learn Machine Learning, Deep Learning and Modern AI
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              A free, structured curriculum with clear explanations, mathematics, worked examples, Python code, original teaching diagrams and practice questions.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm font-semibold">
-              <Link to="/learn/what-is-ml" className="inline-flex items-center gap-2 text-indigo-700 hover:text-indigo-900">
-                Start with Machine Learning <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link to="/curriculum" className="text-slate-700 hover:text-slate-950">
-                Browse the full curriculum
-              </Link>
+      {/* Hero Section: Compact, Content-First, Immediate High-Value Exploration */}
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+          <div className="grid items-start gap-8 lg:grid-cols-12">
+            
+            {/* Left Column: Direct Value Proposition & Action */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center gap-2 text-xs font-semibold text-indigo-700">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                <span>FREE INTERACTIVE CURRICULUM</span>
+                <span aria-hidden="true">·</span>
+                <span>{tutorialCount} LESSONS</span>
+                <span aria-hidden="true">·</span>
+                <span>{projectCount} GUIDED PROJECTS</span>
+              </div>
+
+              <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl leading-[1.15]">
+                Learn Machine Learning to Agentic AI
+              </h1>
+              
+              <p className="mt-3 text-base leading-relaxed text-slate-600 sm:text-lg">
+                Step-by-step tutorials with real Python code, interactive diagrams, quizzes, and production architectures. No fluff, completely free.
+              </p>
+
+              {/* Quick Navigation Action Hub */}
+              <div className="mt-5 flex flex-wrap items-center gap-3">
+                <Link
+                  to="/learn/what-is-ml"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Start From Day 1 <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/curriculum"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 text-sm font-semibold text-slate-800 transition hover:bg-slate-50 hover:border-slate-400"
+                >
+                  <BookOpen className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                  Full Curriculum
+                </Link>
+                <Link
+                  to="/cheatsheet"
+                  className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50/70 px-4 text-sm font-semibold text-indigo-900 transition hover:bg-indigo-100"
+                >
+                  Interview Cheatsheet (PDF)
+                </Link>
+              </div>
+
+              {/* Instant Inline Topic Quick-Filter */}
+              <div className="mt-6 relative max-w-lg">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                  <input
+                    type="text"
+                    value={searchFilter}
+                    onChange={(e) => setSearchFilter(e.target.value)}
+                    placeholder="Search any topic (e.g., 'RAG', 'Random Forest', 'Backpropagation')..."
+                    className="h-10 w-full rounded-xl border border-slate-200 bg-slate-50 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                  {searchFilter && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchFilter('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-slate-700"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+
+                {/* Live Search Quick Results Dropdown */}
+                {searchFilter.trim() && (
+                  <div className="absolute left-0 right-0 top-12 z-20 max-h-72 overflow-y-auto rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+                    {filteredCurriculum.length === 0 ? (
+                      <p className="p-3 text-sm text-slate-500">No lessons matched &quot;{searchFilter}&quot;.</p>
+                    ) : (
+                      <div className="space-y-2">
+                        {filteredCurriculum.map(cat => (
+                          <div key={cat.id} className="text-xs">
+                            <p className="px-2 py-1 font-bold text-indigo-700">{cat.title}</p>
+                            <div className="space-y-0.5">
+                              {cat.subtopics.map(st => (
+                                <Link
+                                  key={st.id}
+                                  to={`/learn/${st.id}`}
+                                  className="flex items-center justify-between rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-900"
+                                >
+                                  <span>{st.title}</span>
+                                  <ArrowRight className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-            <p className="mt-5 text-sm text-slate-500">
-              <strong className="font-semibold text-slate-800">{tutorialCount} lessons</strong>
-              <span className="mx-2" aria-hidden="true">·</span>
-              {projectCount} guided projects
-              <span className="mx-2" aria-hidden="true">·</span>
-              Machine Learning to production AI systems
-            </p>
+
+            {/* Right Column: Interactive Track Switcher Visible Above the Fold */}
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl border border-slate-200 bg-slate-900 p-5 text-white shadow-sm">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center gap-2">
+                    <ActiveIcon className="h-5 w-5 text-indigo-400" aria-hidden={true} />
+                    <span className="text-sm font-bold text-slate-100">{activeStage.title} Track</span>
+                  </div>
+                  <span className="text-xs font-semibold text-slate-400">{activeStage.count} lessons</span>
+                </div>
+
+                {/* Track Selector Tabs */}
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {journeyStages.map((stage, idx) => (
+                    <button
+                      key={stage.id}
+                      type="button"
+                      onClick={() => setSelectedTrackIndex(idx)}
+                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
+                        selectedTrackIndex === idx
+                          ? 'bg-indigo-600 text-white shadow-sm'
+                          : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 hover:text-white'
+                      }`}
+                    >
+                      {stage.title}
+                    </button>
+                  ))}
+                </div>
+
+                <p className="mt-3 text-xs leading-relaxed text-slate-300">
+                  {activeStage.description}
+                </p>
+
+                {/* Immediate Topic Highlights */}
+                <div className="mt-3.5 space-y-1.5">
+                  {activeStage.highlights.map(item => (
+                    <Link
+                      key={item.route}
+                      to={item.route}
+                      className="group flex items-center justify-between rounded-lg bg-slate-800/50 px-3 py-2 text-xs font-medium text-slate-200 transition hover:bg-indigo-950/60 hover:text-white border border-slate-800"
+                    >
+                      <span className="flex items-center gap-2 truncate">
+                        <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-400" aria-hidden="true" />
+                        <span className="truncate">{item.title}</span>
+                      </span>
+                      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-indigo-300" aria-hidden="true" />
+                    </Link>
+                  ))}
+                </div>
+
+                <div className="mt-4 flex items-center justify-between pt-2 border-t border-slate-800/80">
+                  <span className="text-xs text-slate-400">Jump right into this topic</span>
+                  <Link
+                    to={activeStage.route}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-400 hover:text-indigo-300"
+                  >
+                    Explore Track <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
 
-      <section className="py-10 sm:py-12" aria-labelledby="curriculum-heading">
+      {/* Immediate Content Grid: Start Learning Right Away */}
+      <section className="py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-4 border-b border-slate-200 pb-6 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-end">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div>
-              <p className="text-sm font-semibold text-indigo-700">Curriculum</p>
-              <h2 id="curriculum-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-                A structured path from foundations to production
+              <h2 className="text-xl font-extrabold tracking-tight text-slate-950 sm:text-2xl">
+                Learning Pathways & Core Topics
               </h2>
+              <p className="text-xs text-slate-500 sm:text-sm mt-0.5">
+                Every track contains verified Python snippets, conceptual diagrams, and knowledge checks.
+              </p>
             </div>
-            <p className="leading-7 text-slate-600">
-              The curriculum is organized as a progression, but every lesson can also be used as a standalone reference.
-            </p>
+            <Link
+              to="/curriculum"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 sm:text-sm"
+            >
+              View all 16 modules ({tutorialCount} lessons) <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
           </div>
 
-          <div className="grid gap-x-10 lg:grid-cols-2">
-            {learningAreas.map(area => {
-              const topics = area.featuredIds.map(getTopic).filter(Boolean);
-              const count = countCategories(area.categoryIds);
+          {/* 6 Core Journey Stage Cards */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {journeyStages.map((stage) => {
+              const Icon = stage.icon;
               return (
-                <section key={area.number} className="border-b border-slate-200 py-8">
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-mono text-sm font-semibold text-slate-400">{area.number}</span>
-                    <h3 className="text-2xl font-extrabold tracking-tight text-slate-950">{area.title}</h3>
+                <div
+                  key={stage.id}
+                  className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-indigo-300 hover:shadow-sm"
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700">
+                        <Icon className="h-5 w-5" aria-hidden={true} />
+                      </div>
+                      <span className="text-xs font-semibold text-slate-500">
+                        {stage.count} lessons
+                      </span>
+                    </div>
+                    
+                    <h3 className="mt-3.5 text-base font-bold text-slate-950">
+                      <Link to={stage.route} className="hover:text-indigo-600 transition">
+                        {stage.title}
+                      </Link>
+                    </h3>
+                    
+                    <p className="mt-1 text-xs font-semibold text-indigo-600">
+                      {stage.categoryTitle}
+                    </p>
+                    
+                    <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                      {stage.description}
+                    </p>
+
+                    {/* Quick Lesson Links inside card */}
+                    <div className="mt-4 border-t border-slate-100 pt-3">
+                      <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Key Topics</p>
+                      <ul className="space-y-1.5">
+                        {stage.highlights.slice(0, 3).map(h => (
+                          <li key={h.route}>
+                            <Link
+                              to={h.route}
+                              className="group flex items-center justify-between text-xs text-slate-700 hover:text-indigo-600 transition"
+                            >
+                              <span className="truncate group-hover:underline">{h.title}</span>
+                              <ChevronRight className="h-3 w-3 shrink-0 text-slate-400 group-hover:translate-x-0.5 group-hover:text-indigo-600" aria-hidden="true" />
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                  <p className="mt-3 max-w-2xl leading-7 text-slate-600">{area.description}</p>
-                  <ul className="mt-5 grid gap-x-8 gap-y-2 sm:grid-cols-2">
-                    {topics.map(topic => topic && (
-                      <li key={topic.id}>
-                        <Link
-                          to={`/learn/${topic.id}`}
-                          className="group inline-flex items-start gap-2 text-[0.95rem] font-medium leading-6 text-slate-700 hover:text-indigo-700"
-                        >
-                          <span className="mt-[0.65rem] h-px w-3 shrink-0 bg-slate-300 group-hover:bg-indigo-500" aria-hidden="true" />
-                          <span>{topic.title}</span>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link to={area.route} className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">
-                    Explore {count} lessons <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                </section>
+
+                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                    <Link
+                      to={stage.route}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800"
+                    >
+                      Start module <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </Link>
+                  </div>
+                </div>
               );
             })}
           </div>
-
-          <div className="pt-7">
-            <Link to="/curriculum" className="inline-flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-700">
-              View all {tutorialCount} lessons in the curriculum <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      <section className="border-y border-slate-200 bg-slate-50 py-12 sm:py-16" aria-labelledby="lesson-example-heading">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8 lg:items-start">
-          <div>
-            <p className="text-sm font-semibold text-indigo-700">Inside a lesson</p>
-            <h2 id="lesson-example-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
-              From intuition to calculation
-            </h2>
-            <p className="mt-4 leading-7 text-slate-600">
-              Each lesson starts with the intuition, then works through the mathematics, a small reproducible example, practical code and what the result means.
-            </p>
-            <Link to="/learn/gradient-descent" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">
-              Open the Gradient Descent lesson <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </div>
-
-          <div className="border-l-2 border-slate-900 pl-6 sm:pl-8">
-            <p className="text-sm font-bold text-slate-950">Worked example — one gradient descent step</p>
-            <div className="mt-5 space-y-4 text-slate-700">
-              <p>Start with <code className="font-mono font-semibold text-slate-950">J(w) = (w − 3)²</code> and <code className="font-mono font-semibold text-slate-950">w = 7</code>.</p>
-              <p><strong className="text-slate-950">1.</strong> Cost: <code className="font-mono">J(7) = 16</code></p>
-              <p><strong className="text-slate-950">2.</strong> Gradient: <code className="font-mono">2(w − 3) = 8</code></p>
-              <p><strong className="text-slate-950">3.</strong> With learning rate <code className="font-mono">0.1</code>: <code className="font-mono">w_new = 7 − 0.1 × 8 = 6.2</code></p>
-              <p><strong className="text-slate-950">4.</strong> New cost: <code className="font-mono">J(6.2) = 10.24</code></p>
-              <p className="border-t border-slate-300 pt-4 text-sm leading-6 text-slate-600">
-                The cost fell from 16 to 10.24, so this update moved the parameter in the right direction.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 sm:py-16">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <section aria-labelledby="start-heading">
-            <p className="text-sm font-semibold text-indigo-700">Start at your level</p>
-            <h2 id="start-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Where should I start?</h2>
-            <div className="mt-7 divide-y divide-slate-200 border-y border-slate-200">
-              {startingPoints.map(([question, answer, route]) => (
-                <div key={route} className="py-4">
-                  <p className="text-sm text-slate-500">{question}</p>
-                  <Link to={route} className="mt-1 inline-flex items-center gap-2 font-bold text-slate-900 hover:text-indigo-700">
-                    {answer} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section aria-labelledby="projects-heading">
-            <p className="text-sm font-semibold text-indigo-700">Practice</p>
-            <h2 id="projects-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Projects that connect the lessons</h2>
-            <div className="mt-7 divide-y divide-slate-200 border-y border-slate-200">
-              {projectIds.map(id => {
-                const project = getTopic(id);
-                return project ? (
-                  <Link key={id} to={`/learn/${id}`} className="group flex items-center justify-between gap-4 py-4">
-                    <span className="font-semibold leading-6 text-slate-800 group-hover:text-indigo-700">{project.title}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-indigo-600" aria-hidden="true" />
-                  </Link>
-                ) : null;
-              })}
-            </div>
-            <Link to="/learn/project-customer-churn" className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">
-              Explore all {projectCount} projects <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
-          </section>
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200 bg-slate-50 py-12" aria-labelledby="popular-heading">
+      {/* Guided Projects & Career Interview Section */}
+      <section className="border-t border-slate-200 bg-white py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-[18rem_1fr]">
-            <div>
-              <p className="text-sm font-semibold text-indigo-700">Useful references</p>
-              <h2 id="popular-heading" className="mt-2 text-2xl font-extrabold text-slate-950">Popular lessons</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">A few lessons learners frequently discover while searching for practical ML explanations.</p>
-            </div>
-            <div className="grid gap-x-8 border-t border-slate-300 sm:grid-cols-2 lg:grid-cols-3">
-              {popularLessonIds.map(id => {
-                const topic = getTopic(id);
-                return topic ? (
-                  <Link key={id} to={`/learn/${id}`} className="group flex min-h-16 items-center justify-between gap-3 border-b border-slate-300 py-3">
-                    <span className="font-semibold leading-5 text-slate-800 group-hover:text-indigo-700">{topic.title}</span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-indigo-600" aria-hidden="true" />
+          <div className="grid gap-8 lg:grid-cols-12">
+            
+            {/* Real Guided Projects (7 cols) */}
+            <div className="lg:col-span-7">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <FolderKanban className="h-4 w-4 text-indigo-600" aria-hidden="true" />
+                    <h2 className="text-lg font-bold text-slate-950">Hands-on Guided Projects</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">End-to-end code implementations ready to run and portfolio-grade.</p>
+                </div>
+                <Link
+                  to="/learn/project-customer-churn"
+                  className="text-xs font-bold text-indigo-600 hover:underline"
+                >
+                  All {projectCount} projects →
+                </Link>
+              </div>
+
+              <div className="space-y-3">
+                {featuredProjects.map(project => (
+                  <Link
+                    key={project.route}
+                    to={project.route}
+                    className="group block rounded-xl border border-slate-200 bg-slate-50/70 p-4 transition hover:border-indigo-300 hover:bg-white hover:shadow-xs"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+                          <span className="text-indigo-700 font-bold">{project.category}</span>
+                          <span aria-hidden="true">·</span>
+                          <span>{project.difficulty}</span>
+                        </div>
+                        <h3 className="mt-1 text-sm font-bold text-slate-950 group-hover:text-indigo-600 transition">
+                          {project.title}
+                        </h3>
+                        <p className="mt-1 text-xs text-slate-600">
+                          {project.description}
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:translate-x-1 group-hover:text-indigo-600 transition mt-1" aria-hidden="true" />
+                    </div>
                   </Link>
-                ) : null;
-              })}
+                ))}
+              </div>
+            </div>
+
+            {/* Career & Interview Preparation (5 cols) */}
+            <div className="lg:col-span-5">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <BriefcaseBusiness className="h-4 w-4 text-indigo-600" aria-hidden="true" />
+                    <h2 className="text-lg font-bold text-slate-950">Career Roadmaps & Prep</h2>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">Role requirements, technical interview questions, and system design.</p>
+                </div>
+                <Link
+                  to="/learn/ai-data-career-paths"
+                  className="text-xs font-bold text-indigo-600 hover:underline"
+                >
+                  View roadmaps →
+                </Link>
+              </div>
+
+              <div className="grid gap-2.5">
+                {careerTracks.map(track => (
+                  <Link
+                    key={track.route}
+                    to={track.route}
+                    className="group flex flex-col justify-center rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition hover:border-indigo-300 hover:bg-white hover:shadow-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-700 transition">
+                        {track.title}
+                      </span>
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 group-hover:text-indigo-600 transition" aria-hidden="true" />
+                    </div>
+                    <span className="mt-1 text-[11px] text-slate-500 leading-snug">
+                      {track.desc}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+
+              {/* Free PDF Banner Box */}
+              <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/60 p-3.5 flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-xs font-bold text-indigo-950">ML Interview Cheatsheet</p>
+                  <p className="text-[11px] text-indigo-700">Concise 8-page reference PDF with math, code & metrics.</p>
+                </div>
+                <Link
+                  to="/cheatsheet"
+                  className="shrink-0 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-700 transition"
+                >
+                  Get PDF
+                </Link>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Teaching Standard / Features Bar */}
+      <section className="border-t border-slate-200 bg-slate-100/70 py-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="flex items-center gap-3">
+              <Lightbulb className="h-5 w-5 text-indigo-600 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold text-slate-900">Intuitive First</p>
+                <p className="text-[11px] text-slate-500">Visual analogies before dense mathematical proofs</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <Code2 className="h-5 w-5 text-indigo-600 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold text-slate-900">Runnable Python</p>
+                <p className="text-[11px] text-slate-500">260+ copyable snippets with scikit-learn, PyTorch & APIs</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <CheckCircle2 className="h-5 w-5 text-indigo-600 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold text-slate-900">Knowledge Checks</p>
+                <p className="text-[11px] text-slate-500">Instant interactive quizzes on key concepts and pitfalls</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <ServerCog className="h-5 w-5 text-indigo-600 shrink-0" aria-hidden="true" />
+              <div>
+                <p className="text-xs font-bold text-slate-900">Production Focus</p>
+                <p className="text-[11px] text-slate-500">System design, drift, MLOps, and cost optimization</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-10">
+      {/* Newsletter Signup at Bottom */}
+      <section className="border-t border-slate-200 bg-white py-8">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <NewsletterSignup />
         </div>
