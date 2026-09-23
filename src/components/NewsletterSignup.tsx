@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Mail, Download, CheckCircle, Loader } from 'lucide-react';
+import { CheckCircle, Download, Loader, Mail } from 'lucide-react';
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -35,9 +35,7 @@ export function NewsletterSignup() {
     try {
       const response = await fetch('/api/newsletter', {
         method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
+        headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ email: trimmed }),
       });
 
@@ -70,20 +68,20 @@ export function NewsletterSignup() {
 
   if (status === 'success') {
     return (
-      <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-8 text-center my-10">
-        <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-4" />
-        <h3 className="text-xl font-bold text-slate-900 mb-2">You're all set! 🎉</h3>
-        <p className="text-slate-600 mb-6 max-w-md mx-auto">
-          Your email was saved and the PDF download has started.
+      <div className="my-10 border-y border-slate-300 py-7 text-center">
+        <CheckCircle className="mx-auto mb-3 h-8 w-8 text-emerald-600" aria-hidden="true" />
+        <h3 className="text-xl font-bold text-slate-900">Your PDF is ready</h3>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
+          Your email was saved and the download has started.
         </p>
         {downloadUrl && (
           <a
             href={downloadUrl}
             download="ML_Interview_Cheatsheet.pdf"
-            className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-colors"
+            className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900"
           >
-            <Download className="w-4 h-4" />
-            Download PDF Again
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Download PDF again
           </a>
         )}
       </div>
@@ -91,26 +89,19 @@ export function NewsletterSignup() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-6 md:p-8 my-10">
-      <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-        <div className="flex-shrink-0 w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-          <Download className="w-7 h-7 text-white" />
-        </div>
-
-        <div className="flex-1">
-          <h3 className="text-xl font-bold text-slate-900 mb-1">
-            Free Download: ML Interview Cheatsheet
-          </h3>
-          <p className="text-slate-500 text-sm leading-relaxed">
-            A practical ML interview question-and-answer pack covering core algorithms,
-            evaluation, Python, deep learning, system design and interview strategy.
-            Enter your email to download it instantly.
+    <div className="my-10 border-y border-slate-300 py-6 md:py-7">
+      <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-indigo-700">Free interview resource</p>
+          <h3 className="mt-2 text-xl font-bold text-slate-900">ML Interview Cheatsheet</h3>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
+            Core algorithms, evaluation, Python, deep learning, system design and interview strategy in one practical PDF.
           </p>
         </div>
 
-        <div className="flex flex-col gap-2 w-full md:w-auto">
-          <div className="flex flex-col sm:flex-row gap-2">
-            <div className="flex flex-col gap-1">
+        <div className="flex w-full flex-col gap-2 md:w-auto">
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <div>
               <input
                 type="email"
                 value={email}
@@ -123,34 +114,30 @@ export function NewsletterSignup() {
                 placeholder="your@email.com"
                 disabled={status === 'loading'}
                 aria-label="Email address"
-                className="px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 w-full sm:w-60 disabled:opacity-60"
+                className="w-full border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-400 sm:w-60 disabled:opacity-60"
               />
-              {errorMsg && (
-                <span className="text-red-600 text-xs px-1" role="alert">{errorMsg}</span>
-              )}
+              {errorMsg && <span className="mt-1 block px-1 text-xs text-red-600" role="alert">{errorMsg}</span>}
             </div>
             <button
               type="button"
               onClick={handleSubmit}
               disabled={status === 'loading'}
-              className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-white px-5 py-2.5 rounded-xl font-semibold text-sm transition-colors whitespace-nowrap shadow-sm"
+              className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:opacity-60"
             >
               {status === 'loading' ? (
                 <>
-                  <Loader className="w-4 h-4 animate-spin" />
+                  <Loader className="h-4 w-4 animate-spin" aria-hidden="true" />
                   Preparing...
                 </>
               ) : (
                 <>
-                  <Mail className="w-4 h-4" />
-                  Get Free PDF
+                  <Mail className="h-4 w-4" aria-hidden="true" />
+                  Get PDF
                 </>
               )}
             </button>
           </div>
-          <p className="text-xs text-slate-400 text-center sm:text-left px-1">
-            No spam. Unsubscribe anytime.
-          </p>
+          <p className="px-1 text-xs text-slate-400">No spam. Unsubscribe anytime.</p>
         </div>
       </div>
     </div>
