@@ -569,14 +569,6 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       title: "PINNs, KANs & Topological Neural Networks Explained",
       description: "Explore physics-informed neural networks, Kolmogorov-Arnold Networks and topological neural approaches, including their core ideas, use cases and important limitations."
     },
-    "vae": {
-      title: "Variational Autoencoders (VAEs) for Generative AI",
-      description: "Learn how Variational Autoencoders encode data into a probabilistic latent space, use the reparameterization idea, and generate new samples with controlled variation."
-    },
-    "gans": {
-      title: "Generative Adversarial Networks (GANs) Explained",
-      description: "Understand how GAN generators and discriminators learn through adversarial training, why instability and mode collapse occur, and where GANs remain useful."
-    },
     "llm-intro": {
       title: "Large Language Models (LLMs) Explained for Beginners",
       description: "Learn what large language models are, how next-token prediction creates text, how modern LLMs evolved, and where application behavior differs from the model itself."
