@@ -223,7 +223,7 @@ export function HomePage() {
             <div>
               <p className="text-sm font-semibold text-indigo-700">Curriculum</p>
               <h2 id="curriculum-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950 sm:text-4xl">
-                See what you can learn before you scroll
+                A structured path from foundations to production
               </h2>
             </div>
             <p className="leading-7 text-slate-600">
@@ -276,10 +276,10 @@ export function HomePage() {
           <div>
             <p className="text-sm font-semibold text-indigo-700">Inside a lesson</p>
             <h2 id="lesson-example-heading" className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">
-              The page teaches the idea instead of decorating it
+              From intuition to calculation
             </h2>
             <p className="mt-4 leading-7 text-slate-600">
-              Concepts are introduced in plain language, then traced through the mathematics, a small worked example, code and interpretation.
+              Each lesson starts with the intuition, then works through the mathematics, a small reproducible example, practical code and what the result means.
             </p>
             <Link to="/learn/gradient-descent" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900">
               Open the Gradient Descent lesson <ArrowRight className="h-4 w-4" aria-hidden="true" />
