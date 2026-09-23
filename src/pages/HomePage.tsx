@@ -264,36 +264,28 @@ export function HomePage() {
     <div className="bg-slate-50 min-h-screen">
       <WebsiteSchema />
 
-      {/* TOP BAR / QUICK ANNOUNCEMENT & SEARCH HERO */}
+      {/* CLEAN HERO HEADER & SEARCH */}
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            {/* Title & Live Badge */}
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
-                <span className="font-extrabold uppercase tracking-wider text-indigo-700">Learn ML Academy</span>
-                <span aria-hidden="true">·</span>
-                <span>{tutorialCount} Tutorials</span>
-                <span aria-hidden="true">·</span>
-                <span>{projectCount} Projects</span>
-                <span aria-hidden="true">·</span>
-                <span>100% Free & Open Source</span>
-              </div>
-              <h1 className="mt-0.5 text-xl font-black tracking-tight text-slate-950 sm:text-2xl lg:text-3xl">
-                The Practical Curriculum: From ML Foundations to Agentic AI
+              <h1 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                Machine Learning & AI Engineering Curriculum
               </h1>
+              <p className="mt-1 text-sm text-slate-600">
+                Intuitive explanations, runnable code snippets, and end-to-end production systems.
+              </p>
             </div>
 
-            {/* Top Actions & Inline Topic Search */}
-            <div className="flex items-center gap-2.5 sm:self-auto">
+            {/* Quick Actions & Live Topic Search */}
+            <div className="flex items-center gap-2.5">
               <div className="relative w-full sm:w-72">
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" aria-hidden="true" />
                 <input
                   type="text"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  placeholder="Search 200+ lessons (e.g. RAG, CNN)..."
+                  placeholder="Search any topic (e.g. RAG, CNN)..."
                   className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 />
                 {searchFilter && (
@@ -336,16 +328,16 @@ export function HomePage() {
               </div>
 
               <Link
-                to="/cheatsheet"
-                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 px-3 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition"
+                to="/curriculum"
+                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-slate-300 bg-white px-3.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition"
               >
-                Cheatsheet PDF
+                Curriculum Index
               </Link>
               <Link
-                to="/curriculum"
-                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 px-3 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
+                to="/cheatsheet"
+                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 px-3.5 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
               >
-                Full Index
+                Interview PDF
               </Link>
             </div>
           </div>
