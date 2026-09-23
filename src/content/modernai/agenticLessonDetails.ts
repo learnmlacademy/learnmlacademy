@@ -395,17 +395,19 @@ export const agenticLessonDetails: Record<string, AgenticLessonDetail> = {
 
   "building-ai-agent": {
     objectives: [
-      "Assemble one transparent bounded agent without a framework.",
-      "Trace goal, instructions, tool schema, state, observation, and stopping.",
-      "Run a standard-library example through success and abstention paths.",
-      "Turn a failure into a validation or evaluation case.",
+      "Connect the first two lessons—agent loops and tool calling—into one complete working example.",
+      "Identify the minimum parts of a bounded agent without needing planning, memory, or a framework yet.",
+      "Run a standard-library example through both supported-answer and safe-abstention paths.",
+      "Read the trace so later lessons on planning, context, memory, graphs, and evaluation have a concrete foundation.",
     ],
     sections: [
       {
-        title: "Build the mechanism before adding framework abstractions",
+        title: "Build the core loop before learning the advanced subsystems",
         paragraphs: [
+          "You already have enough background to build a first agent. Lesson 1 introduced the bounded decide → act → observe loop, and Lesson 2 showed that a model may propose a tool call while trusted application code validates and executes it. This lesson simply connects those two ideas into one small program.",
           "Start with one narrow job whose success can be checked. Write the goal and instructions separately: the goal describes the requested outcome, while instructions define permitted behavior, evidence requirements, and when to abstain. Add one read-only tool with a small schema and validate every proposed argument before execution.",
-          "The state records the goal, evidence, step count, and trace. On each iteration, a deterministic decision function chooses search, final answer, or abstain; the tool returns an observation; state is updated; and stop rules prevent an endless loop. In a real LLM application the model may propose the decision, but validation and limits remain deterministic application responsibilities.",
+          "The tiny state in this example records only the goal, evidence, step count, and trace. That is enough to understand the mechanism. Later lessons will improve one part at a time: planning chooses better next steps, context engineering chooses what the model sees, memory persists useful information, state graphs make execution explicit, and durable execution survives long waits and restarts.",
+          "On each iteration, a decision function chooses search, final answer, or abstain; the tool returns an observation; state is updated; and stop rules prevent an endless loop. In a real LLM application the model may propose the decision, but validation and limits remain deterministic application responsibilities.",
         ],
       },
       {
