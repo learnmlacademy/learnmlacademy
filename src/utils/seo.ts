@@ -14,7 +14,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn what Supervised Learning is, how labeled data works, and common algorithms used for classification and regression tasks."
     },
     "unsupervised-learning-intro": {
-      title: "Unsupervised Learning Explained | Clustering & Dimensionality Reduction",
+      title: "Unsupervised Learning | Clustering & Dimensionality Reduction",
       description: "Understand Unsupervised Learning with Python. Learn how K-Means, DBSCAN, and PCA find hidden patterns in unlabelled data — no labels required."
     },
     "reinforcement-learning-intro": {
@@ -84,7 +84,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 4. Supervised Learning
     "regression-intro": {
-      title: "Regression in Machine Learning | Predicting Continuous Values with Python",
+      title: "Regression in Machine Learning | Continuous Value Prediction",
       description: "Introduction to regression in Machine Learning. Learn how regression algorithms predict continuous values and when to use each type, with Python code examples."
     },
     "linear-regression": {
@@ -134,7 +134,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 5. Ensemble Learning
     "random-forest": {
-      title: "Random Forest Algorithm Explained | Bagging & Ensemble Learning in Python",
+      title: "Random Forest Explained | Bagging & Ensemble Learning",
       description: "Learn how Random Forests combine decision trees to cut variance and overfitting. Covers feature importance, hyperparameter tuning, and Python scikit-learn code."
     },
     "bagging": {
@@ -202,11 +202,11 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Master the diagnosis of Overfitting and Underfitting in predictive models and learn actionable techniques to mitigate both."
     },
     "cost-functions": {
-      title: "Cost Functions & Loss Functions in Machine Learning | MSE, MAE & Cross-Entropy",
+      title: "Cost & Loss Functions in ML | MSE, MAE & Cross-Entropy",
       description: "Understand MSE, MAE, Log Loss, and Cross-Entropy cost functions in Machine Learning. Learn which loss function to use for regression vs classification in Python."
     },
     "hyperparameter-tuning": {
-      title: "Hyperparameter Tuning in Machine Learning | Grid Search & Optuna Python Guide",
+      title: "Hyperparameter Tuning | Grid Search & Optuna Guide",
       description: "Learn to tune ML hyperparameters with Grid Search, Random Search, and Bayesian Optimisation. Python scikit-learn and Optuna examples with real output."
     },
     "grid-random-search": {
@@ -250,7 +250,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how Online Machine Learning continuously updates models in real-time as new data streams arrive without retraining from scratch."
     },
     "reinforcement-learning-adv": {
-      title: "Advanced Reinforcement Learning | Q-Learning & Deep Q-Networks (DQN) in Python",
+      title: "Advanced Reinforcement Learning | Q-Learning & DQN",
       description: "Advanced RL: Markov Decision Processes, Q-Learning, and Deep Q-Networks (DQN) explained with Python and OpenAI Gym implementation examples."
     },
     "multi-armed-bandits": {
