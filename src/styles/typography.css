@@ -76,11 +76,31 @@
   font-size: 0.9375rem;
 }
 
+/* Wide teaching figures can break out of the reading column, but never beyond
+   the actual content area at the current responsive breakpoint. */
 .lesson-wide {
   width: min(67.5rem, calc(100vw - 2rem));
   max-width: none;
   margin-left: 50%;
   transform: translateX(-50%);
+}
+
+@media (min-width: 640px) {
+  .lesson-wide {
+    width: min(67.5rem, calc(100vw - 3rem));
+  }
+}
+
+@media (min-width: 1024px) {
+  .lesson-wide {
+    width: min(67.5rem, calc(100vw - 4rem));
+  }
+}
+
+@media (min-width: 1280px) {
+  .lesson-wide {
+    width: min(67.5rem, calc(100vw - var(--lma-curriculum-width) - 4rem));
+  }
 }
 
 @media (max-width: 639px) {
