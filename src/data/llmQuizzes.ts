@@ -10,7 +10,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Search the training corpus for an exact matching sentence",
         "Retrain all model parameters after every word",
         "Predict or score possible next tokens from the available context",
-        "Convert every previous token back into raw training documents"
+        "Convert every previous token back into raw training documents",
       ],
       correctAnswerIndex: 2,
       explanation: "Autoregressive generation repeatedly scores possible next tokens from the current context, selects one, appends it, and repeats.",
@@ -23,7 +23,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The model uses the prediction error to adjust its internal parameters",
         "The model deletes the training sentence",
         "The chatbot automatically searches the web",
-        "The model stores the correct sentence as a permanent database row"
+        "The model stores the correct sentence as a permanent database row",
       ],
       correctAnswerIndex: 0,
       explanation: "During training, the model compares its prediction with the observed continuation, calculates an error, and uses that error to adjust internal parameters.",
@@ -36,7 +36,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "N-grams can only process images",
         "N-grams always use a longer context than Transformers",
         "Neural models store every possible sentence exactly",
-        "N-grams depend on observed short-sequence counts, while neural models share learned representations across patterns"
+        "N-grams depend on observed short-sequence counts, while neural models share learned representations across patterns",
       ],
       correctAnswerIndex: 3,
       explanation: "Count-based n-grams may have no useful count for an unseen sequence; neural models can generalize through shared learned parameters and representations.",
@@ -49,7 +49,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "That token generation happens sequentially",
         "That fluent generation is equivalent to guaranteed exact retrieval",
         "That a chatbot can include application logic",
-        "That models use numerical representations"
+        "That models use numerical representations",
       ],
       correctAnswerIndex: 1,
       explanation: "Fluent next-token generation can still produce unsupported or altered wording. Exact authoritative text should come from a trusted source/retrieval path.",
@@ -62,7 +62,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The chatbot is an application around an LLM and adds several system capabilities",
         "The LLM and the whole chatbot application are the same thing",
         "Every capability listed is part of the LLM weights",
-        "Retrieval is another name for next-token prediction"
+        "Retrieval is another name for next-token prediction",
       ],
       correctAnswerIndex: 0,
       explanation: "The LLM is one model component; conversation handling, retrieval, tools, safety, and UI are application-level capabilities.",
@@ -77,7 +77,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Every token is exactly one English word",
         "Tokens are model-specific pieces that may be words, subwords, punctuation, bytes, or special symbols",
         "Token IDs are semantic similarity scores",
-        "Every tokenizer splits the same text identically"
+        "Every tokenizer splits the same text identically",
       ],
       correctAnswerIndex: 1,
       explanation: "Tokenization is model-specific, and token units can take several forms rather than mapping one-to-one with words.",
@@ -90,7 +90,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The token is 4,217 times more important than token 1",
         "It directly stores the token's English definition",
         "It is the token's cosine similarity",
-        "It is a vocabulary index used to look up the token's representation"
+        "It is a vocabulary index used to look up the token's representation",
       ],
       correctAnswerIndex: 3,
       explanation: "Token IDs are arbitrary vocabulary indexes; semantic relationships come from learned representations, not numeric closeness of IDs.",
@@ -103,7 +103,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "400 tokens",
         "300 tokens",
         "200 tokens",
-        "600 tokens"
+        "600 tokens",
       ],
       correctAnswerIndex: 0,
       explanation: "Planned total is 2,000 tokens, so 2,000 − 1,600 = 400.",
@@ -116,7 +116,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Tokens are always twice the number of words",
         "Context windows are measured only in characters",
         "Token counts depend on the actual tokenizer and the text's language, punctuation, code, and vocabulary patterns",
-        "Embeddings eliminate tokenization"
+        "Embeddings eliminate tokenization",
       ],
       correctAnswerIndex: 2,
       explanation: "Visible word count is not a reliable token count because tokenization is model- and text-dependent.",
@@ -129,7 +129,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Context is temporary for a request; persistent memory requires application-managed storage and reinsertion",
         "Context windows contain only images",
         "Context windows cannot include user input",
-        "Embedding vectors automatically persist forever"
+        "Embedding vectors automatically persist forever",
       ],
       correctAnswerIndex: 0,
       explanation: "A context window is request-time working context, not durable application memory.",
@@ -144,7 +144,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Query is the final answer, Key is an encryption password, Value is the loss",
         "They are three unrelated tokenizers",
         "Query, Key, and Value are fixed English labels assigned to attention heads",
-        "Query expresses what a position looks for, Key supports matching, and Value carries information to be mixed"
+        "Query expresses what a position looks for, Key supports matching, and Value carries information to be mixed",
       ],
       correctAnswerIndex: 3,
       explanation: "Q/K determine matching weights, while V contains the information combined according to those weights.",
@@ -157,7 +157,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "[1.000, 2.000]",
         "[0.731, 0.269]",
         "[0.731, 0.538]",
-        "[0.269, 0.731]"
+        "[0.269, 0.731]",
       ],
       correctAnswerIndex: 2,
       explanation: "`0.731×[1,0] + 0.269×[0,2] = [0.731,0.538]`.",
@@ -170,7 +170,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "To guarantee factual answers",
         "To prevent larger-dimensional dot products from making softmax excessively sharp",
         "To remove the Value vectors",
-        "To convert encoder-only models into decoder-only models"
+        "To convert encoder-only models into decoder-only models",
       ],
       correctAnswerIndex: 1,
       explanation: "Scaling moderates dot-product magnitude and stabilizes the softmax distribution.",
@@ -183,7 +183,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Decoder-only with causal visibility",
         "Encoder-only with unrestricted future target visibility",
         "A vector database",
-        "An n-gram index only"
+        "An n-gram index only",
       ],
       correctAnswerIndex: 0,
       explanation: "Decoder-only causal models are designed to predict the next token without seeing future target tokens.",
@@ -196,7 +196,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The causal mask is missing or incorrect",
         "The feed-forward layer is too small",
         "The tokenizer must be removed",
-        "Multi-head attention should be replaced by retrieval"
+        "Multi-head attention should be replaced by retrieval",
       ],
       correctAnswerIndex: 0,
       explanation: "Causal masking exists specifically to prevent future-token leakage.",
@@ -211,7 +211,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Unnormalized scores for candidate vocabulary tokens",
         "Final verified facts",
         "Stored training documents",
-        "Token IDs sorted alphabetically"
+        "Token IDs sorted alphabetically",
       ],
       correctAnswerIndex: 0,
       explanation: "The model outputs logits, which are converted into probabilities before token selection.",
@@ -224,7 +224,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The model learned new facts",
         "The higher temperature made the first token certain",
         "The higher temperature flattened the distribution",
-        "The vocabulary shrank to one token"
+        "The vocabulary shrank to one token",
       ],
       correctAnswerIndex: 2,
       explanation: "Higher temperature reduces relative logit differences before softmax, making lower-ranked candidates more viable.",
@@ -237,7 +237,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Top-p always keeps exactly p tokens",
         "Top-k keeps a fixed number of candidates; top-p keeps enough high-probability candidates to reach a cumulative probability mass",
         "Top-p retrains the model",
-        "Top-k changes the context window"
+        "Top-k changes the context window",
       ],
       correctAnswerIndex: 1,
       explanation: "k is a candidate count, while p is a cumulative probability threshold.",
@@ -250,7 +250,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Softmax requires a vector database",
         "Deterministic generation requires fine-tuning",
         "Temperature can only be greater than 10",
-        "Literal division by zero is invalid; deterministic generation should be handled as a separate decoding setting"
+        "Literal division by zero is invalid; deterministic generation should be handled as a separate decoding setting",
       ],
       correctAnswerIndex: 3,
       explanation: "Implementations generally represent deterministic selection separately; `T=0` should not be taught as literal arithmetic.",
@@ -263,7 +263,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Deterministic or tightly constrained decoding plus validation",
         "Very high temperature with unconstrained sampling",
         "Random top-k values on every request",
-        "Maximum repetition"
+        "Maximum repetition",
       ],
       correctAnswerIndex: 0,
       explanation: "Schema-sensitive extraction benefits from stable decoding and application-side validation rather than creativity-oriented sampling.",
@@ -278,7 +278,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "To make every token ID identical",
         "To reduce repeated examples from disproportionately dominating the training mixture",
         "To eliminate the need for validation data",
-        "To make model parameters smaller automatically"
+        "To make model parameters smaller automatically",
       ],
       correctAnswerIndex: 1,
       explanation: "Repeated documents can overweight particular patterns and create leakage/quality problems.",
@@ -291,7 +291,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Causal pretraining learns to predict the next observed token at each position",
         "The model must reverse every sequence",
         "Token IDs cannot appear twice",
-        "Validation requires removing t₁"
+        "Validation requires removing t₁",
       ],
       correctAnswerIndex: 0,
       explanation: "Each position learns the token that follows its available prefix.",
@@ -304,7 +304,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "`−ln(0.50) ≈ 0.693` is lower",
         "Both are 1.0",
         "`−ln(0.80) ≈ 0.223` is lower",
-        "Probability and loss are unrelated"
+        "Probability and loss are unrelated",
       ],
       correctAnswerIndex: 2,
       explanation: "Assigning more probability to the observed target reduces negative log-likelihood.",
@@ -317,7 +317,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Top-p sampling",
         "Delete half the vocabulary",
         "RAG",
-        "Data parallelism"
+        "Data parallelism",
       ],
       correctAnswerIndex: 3,
       explanation: "Data parallelism lets replicas process different batches and synchronize gradients when each device can hold the model.",
@@ -330,7 +330,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Nothing; training memory equals raw weight memory",
         "Activations, gradients, optimizer state, buffers, and communication overhead",
         "A larger temperature",
-        "A vector index"
+        "A vector index",
       ],
       correctAnswerIndex: 1,
       explanation: "The 2 GB estimate covers idealized raw weights only; training needs substantial additional state and temporary memory.",
@@ -345,7 +345,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Store documents in a vector database",
         "Increase context length without training",
         "Quantize every weight to 4 bits",
-        "Train on curated inputs/instructions paired with desired target responses"
+        "Train on curated inputs/instructions paired with desired target responses",
       ],
       correctAnswerIndex: 3,
       explanation: "SFT directly trains desired response behavior from supervised examples.",
@@ -358,7 +358,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Alignment only changes token IDs",
         "Alignment shapes behavior under particular data/objectives and still requires evaluation and system controls",
         "Truthfulness is guaranteed only by temperature",
-        "SFT never changes behavior"
+        "SFT never changes behavior",
       ],
       correctAnswerIndex: 1,
       explanation: "Post-training can improve behavior but does not eliminate distribution shift, adversarial inputs, or unsupported outputs.",
@@ -371,7 +371,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "8,192",
         "4,096",
         "16,384",
-        "262,144"
+        "262,144",
       ],
       correctAnswerIndex: 0,
       explanation: "The two low-rank matrices contain 4,096 + 4,096 = 8,192 parameters.",
@@ -384,7 +384,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Full fine-tuning",
         "Increase LoRA rank",
         "RAG with authorized current evidence",
-        "Distill the model"
+        "Distill the model",
       ],
       correctAnswerIndex: 2,
       explanation: "The gap is external/current factual evidence, which RAG is designed to supply without encoding it into weights.",
@@ -397,7 +397,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Nothing; LoRA always updates W directly",
         "The base-freezing assumption has been violated",
         "The tokenizer is too small",
-        "RLHF must run first"
+        "RLHF must run first",
       ],
       correctAnswerIndex: 1,
       explanation: "In standard LoRA adapter training the base matrix stays frozen while low-rank adapter parameters are learned.",
@@ -412,7 +412,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Human preference labels",
         "The entire training corpus",
         "Previous attention key/value states that can be reused",
-        "Vector database metadata"
+        "Vector database metadata",
       ],
       correctAnswerIndex: 2,
       explanation: "Cached past attention states reduce recomputation as the model generates later tokens.",
@@ -425,7 +425,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "0.25 GB",
         "1 GB",
         "0.5 GB",
-        "8 GB"
+        "8 GB",
       ],
       correctAnswerIndex: 1,
       explanation: "One billion parameters at roughly one byte each is about one billion bytes, approximately 1 GB as a simple teaching estimate.",
@@ -438,7 +438,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "KV caching is impossible with quantized weights",
         "4-bit weights always contain more bytes",
         "Quantization retrains the tokenizer",
-        "Bit width alone does not determine speed; kernels, hardware support, runtime, and workload matter"
+        "Bit width alone does not determine speed; kernels, hardware support, runtime, and workload matter",
       ],
       correctAnswerIndex: 3,
       explanation: "Memory reduction is clear at the representation level, but actual latency depends on the execution stack.",
@@ -451,7 +451,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Time to first token",
         "Training epoch count",
         "Recall@k",
-        "LoRA rank"
+        "LoRA rank",
       ],
       correctAnswerIndex: 0,
       explanation: "Time to first token captures initial interactive responsiveness; tokens/sec describes generation rate after that.",
@@ -464,7 +464,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "RAG recall has become perfect",
         "Better factuality with worse embeddings",
         "Lower context with higher LoRA rank",
-        "Better throughput with worse queueing/latency"
+        "Better throughput with worse queueing/latency",
       ],
       correctAnswerIndex: 3,
       explanation: "Batching can improve hardware utilization and throughput while adding waiting time for individual requests.",
@@ -479,7 +479,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Only a long system message",
         "Token ID, GPU brand, ANN index, and batch size",
         "Task, context, constraints, and output contract",
-        "A random seed and no validation"
+        "A random seed and no validation",
       ],
       correctAnswerIndex: 2,
       explanation: "Clear task definition, relevant evidence/context, explicit constraints, and an output contract make behavior measurable.",
@@ -492,7 +492,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "That required fields and types exist",
         "That the values are factually supported and allowed by business rules",
         "That the JSON parser succeeded",
-        "That the shape is predictable"
+        "That the shape is predictable",
       ],
       correctAnswerIndex: 1,
       explanation: "Structural validation does not prove semantic truth, authorization, or business validity.",
@@ -505,7 +505,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Add five more unrelated examples",
         "Fine-tune immediately",
         "Increase vector-database size",
-        "Remove or reconcile the conflicting constraints and retest on the same cases"
+        "Remove or reconcile the conflicting constraints and retest on the same cases",
       ],
       correctAnswerIndex: 3,
       explanation: "Prompt debugging should isolate the actual ambiguity/conflict before changing unrelated components.",
@@ -518,7 +518,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Reject or repair the arguments through the defined validation policy",
         "Execute it because the model proposed it",
         "Change the user's identity",
-        "Ignore the schema"
+        "Ignore the schema",
       ],
       correctAnswerIndex: 0,
       explanation: "Application code owns schema validation and execution; model proposals are not trusted commands.",
@@ -531,7 +531,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Unconstrained prose only",
         "A defined structured-output schema plus semantic/business validation",
         "Maximum-temperature sampling",
-        "An ANN index"
+        "An ANN index",
       ],
       correctAnswerIndex: 1,
       explanation: "A schema provides predictable fields/types, while additional validation checks their meaning and correctness.",
@@ -546,7 +546,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Finding only documents with the exact same words",
         "Updating LLM weights during every search",
         "Retrieving meaning-related text even when wording differs",
-        "Replacing all metadata authorization"
+        "Replacing all metadata authorization",
       ],
       correctAnswerIndex: 2,
       explanation: "Embeddings enable meaning-based similarity beyond exact lexical overlap.",
@@ -559,7 +559,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "0.707",
         "0",
         "−0.707",
-        "1.414"
+        "1.414",
       ],
       correctAnswerIndex: 0,
       explanation: "Dot product is 1, norms are √2 and 1, so cosine is `1/√2 ≈ 0.707`.",
@@ -572,7 +572,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The query has been retrained",
         "Cosine ignores coordinates completely",
         "Larger vectors are always more relevant",
-        "Cosine compares direction after normalizing by vector magnitudes"
+        "Cosine compares direction after normalizing by vector magnitudes",
       ],
       correctAnswerIndex: 3,
       explanation: "The vectors point in the same direction; cosine normalizes away overall magnitude.",
@@ -585,7 +585,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Top-k stops working only when k=5",
         "Their vector spaces may be incompatible, making distances meaningless",
         "Token IDs must match across all LLMs",
-        "ANN always corrects the mismatch"
+        "ANN always corrects the mismatch",
       ],
       correctAnswerIndex: 1,
       explanation: "Similarity is meaningful only when query and corpus vectors inhabit compatible representation spaces.",
@@ -598,7 +598,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Only semantic similarity",
         "RLHF",
         "Lexical or hybrid retrieval because exact identifiers are often better matched lexically",
-        "Larger generation temperature"
+        "Larger generation temperature",
       ],
       correctAnswerIndex: 2,
       explanation: "Semantic search is not universally superior; exact terms/codes often benefit from lexical search or a hybrid design.",
@@ -613,7 +613,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The vector database itself by definition",
         "The embedding model",
         "The metadata filter",
-        "The HTTP router"
+        "The HTTP router",
       ],
       correctAnswerIndex: 1,
       explanation: "The embedding model maps content to vectors; the database stores/searches those vectors.",
@@ -626,7 +626,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "It automatically enforces user authorization",
         "Exact search is always faster than any index at any scale",
         "Exact search does not need an embedding model",
-        "It examines all eligible vectors and may be simple enough at small scale"
+        "It examines all eligible vectors and may be simple enough at small scale",
       ],
       correctAnswerIndex: 3,
       explanation: "Brute-force exact comparison can be operationally simple and fully accurate when the dataset is small enough.",
@@ -639,7 +639,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "No need for vector similarity",
         "Guaranteed higher accuracy and zero memory",
         "Higher scalability/lower search work in exchange for possible neighbour recall loss",
-        "It turns vectors into text"
+        "It turns vectors into text",
       ],
       correctAnswerIndex: 2,
       explanation: "Approximate indexes reduce search work but may miss some true nearest neighbours.",
@@ -652,7 +652,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Authorization/scope enforcement",
         "Cosine similarity arithmetic",
         "LoRA rank",
-        "Temperature scaling"
+        "Temperature scaling",
       ],
       correctAnswerIndex: 0,
       explanation: "Metadata relevance filters do not automatically enforce access control; authorization must be explicit.",
@@ -665,7 +665,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Assume SQL cannot store/search vectors",
         "Fine-tune the LLM instead",
         "Evaluate a vector extension in the existing relational system before adding specialized infrastructure",
-        "Remove metadata"
+        "Remove metadata",
       ],
       correctAnswerIndex: 2,
       explanation: "A relational database with vector support can be sufficient; choose specialized infrastructure only when measured requirements justify it.",
@@ -680,7 +680,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "It can supply current/private/domain evidence without retraining the whole model",
         "It removes the need for a language model",
         "It guarantees every answer is true",
-        "It makes tokenization unnecessary"
+        "It makes tokenization unnecessary",
       ],
       correctAnswerIndex: 0,
       explanation: "Retrieval provides external evidence that may be newer or private rather than relying only on model parameters.",
@@ -693,7 +693,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Asking the user for clarification",
         "Generating the final answer to the current user",
         "Selecting the next output token",
-        "Chunking and embedding approved source documents"
+        "Chunking and embedding approved source documents",
       ],
       correctAnswerIndex: 3,
       explanation: "Source preparation and indexing occur before individual user questions.",
@@ -706,7 +706,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "LoRA",
         "Training data collection",
         "Context assembly",
-        "ANN indexing necessarily"
+        "ANN indexing necessarily",
       ],
       correctAnswerIndex: 2,
       explanation: "Retrieval succeeded, but the correct evidence was lost before generation.",
@@ -719,7 +719,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The citation is automatically valid because the LLM produced it",
         "The citation is not traceable evidence and should fail validation",
         "The vector database should increase temperature",
-        "The answer must be correct anyway"
+        "The answer must be correct anyway",
       ],
       correctAnswerIndex: 1,
       explanation: "Citations should map to actual retrieved source metadata rather than be invented.",
@@ -732,7 +732,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Invent a likely answer",
         "Abstain or escalate according to the application's evidence policy",
         "Increase top-p until something sounds plausible",
-        "Disable authorization"
+        "Disable authorization",
       ],
       correctAnswerIndex: 1,
       explanation: "When evidence is insufficient, a controlled no-answer/escalation is safer than unsupported generation.",
@@ -747,7 +747,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "They eliminate embedding computation",
         "They guarantee perfect factual answers",
         "They remove all duplicate content",
-        "They can preserve context that would otherwise be split across a boundary"
+        "They can preserve context that would otherwise be split across a boundary",
       ],
       correctAnswerIndex: 3,
       explanation: "Overlap can retain boundary context, though it also duplicates text and consumes storage/context.",
@@ -760,7 +760,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Full fine-tuning for every query",
         "Only high-temperature generation",
         "Hybrid lexical + dense retrieval",
-        "Remove all metadata"
+        "Remove all metadata",
       ],
       correctAnswerIndex: 2,
       explanation: "Lexical retrieval can preserve exact code matching while dense retrieval captures semantic description.",
@@ -773,7 +773,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "0.50",
         "0.33",
         "0.67",
-        "1.00"
+        "1.00",
       ],
       correctAnswerIndex: 0,
       explanation: "Recall@3 is relevant items retrieved divided by total known relevant items: 1/2 = 0.5.",
@@ -786,7 +786,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The final LLM answer must now be correct",
         "Retrieval found all labelled relevant chunks in the top 3 for that case",
         "The reranker has zero latency",
-        "The model cannot hallucinate"
+        "The model cannot hallucinate",
       ],
       correctAnswerIndex: 1,
       explanation: "Recall localizes retrieval quality; generation and claim support still require separate evaluation.",
@@ -799,7 +799,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Tokenizer vocabulary ID assignment",
         "Pretraining corpus size",
         "Reranker scores/features and candidate ordering",
-        "RLHF preference labels"
+        "RLHF preference labels",
       ],
       correctAnswerIndex: 2,
       explanation: "The retrieval stage succeeded; the first observed failure occurs at reranking.",
@@ -814,7 +814,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Application success and failure costs determine which dimensions actually matter",
         "Leaderboards contain no numbers",
         "Every application must use the same benchmark",
-        "Latency never matters"
+        "Latency never matters",
       ],
       correctAnswerIndex: 0,
       explanation: "Model quality is task- and constraint-dependent; a benchmark cannot define every product's success criteria.",
@@ -827,7 +827,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "It cannot read text",
         "It can have rubric, position, and correlated model biases that require calibration",
         "It is always slower than human review",
-        "It cannot output scores"
+        "It cannot output scores",
       ],
       correctAnswerIndex: 1,
       explanation: "Model judges are useful but can systematically favor particular phrasing/order or share errors with evaluated models.",
@@ -840,7 +840,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "A only",
         "Neither",
         "Both",
-        "B only"
+        "B only",
       ],
       correctAnswerIndex: 3,
       explanation: "A fails the hard latency gate; B passes all three requirements.",
@@ -853,7 +853,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Benchmarks require random prompts",
         "Different hardware always makes the smaller model win",
         "The comparison mixes model differences with evaluation/serving differences",
-        "Human review becomes impossible"
+        "Human review becomes impossible",
       ],
       correctAnswerIndex: 2,
       explanation: "A fair comparison keeps relevant workload/configuration factors consistent or explicitly accounts for them.",
@@ -866,7 +866,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Ignore residency because the benchmark is higher",
         "Increase temperature",
         "Treat it as ineligible under the hard requirement",
-        "Add more benchmark tasks until residency changes"
+        "Add more benchmark tasks until residency changes",
       ],
       correctAnswerIndex: 2,
       explanation: "Hard product/legal/operational constraints are eligibility gates, not soft scores that can be averaged away.",
@@ -881,7 +881,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "A vector with low magnitude",
         "Any sentence longer than one line",
         "Every correct calculation",
-        "A claim not sufficiently supported by the evidence the application requires"
+        "A claim not sufficiently supported by the evidence the application requires",
       ],
       correctAnswerIndex: 3,
       explanation: "The issue is lack of required evidential support, even if the sentence sounds plausible.",
@@ -894,7 +894,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Prompt injection / trust-boundary attack",
         "Quantization error",
         "Tokenizer overflow only",
-        "LoRA collapse"
+        "LoRA collapse",
       ],
       correctAnswerIndex: 0,
       explanation: "Untrusted content is trying to override instructions and obtain unauthorized behavior.",
@@ -907,7 +907,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Add another attention head",
         "Increase temperature",
         "Retrieval freshness, index version, and date filters",
-        "Change LoRA rank"
+        "Change LoRA rank",
       ],
       correctAnswerIndex: 2,
       explanation: "The evidence itself is stale, so the first failure boundary is retrieval/provenance rather than generation.",
@@ -920,7 +920,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Model confidence alone",
         "Application authorization plus appropriate human confirmation/review for the high-impact action",
         "A disclaimer only",
-        "A larger context window"
+        "A larger context window",
       ],
       correctAnswerIndex: 1,
       explanation: "High-impact actions need independent authorization and meaningful review, not merely model text.",
@@ -933,7 +933,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "It automatically deletes citations",
         "It makes the model deterministic",
         "It disables retrieval",
-        "A prompt cannot replace evidence checks, authorization, validation, evaluation, and monitoring"
+        "A prompt cannot replace evidence checks, authorization, validation, evaluation, and monitoring",
       ],
       correctAnswerIndex: 3,
       explanation: "Different failure modes require controls at the boundary where they occur.",
@@ -948,7 +948,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "The number of documents in the pretraining corpus",
         "Extra computation allocated during inference before/finalizing an answer",
         "The size of a vector database",
-        "Only the GPU used during original training"
+        "Only the GPU used during original training",
       ],
       correctAnswerIndex: 1,
       explanation: "Test-time compute is inference-time resource allocation rather than pretraining size.",
@@ -961,7 +961,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "800 tokens, unchanged",
         "1,600 tokens",
         "2,400 tokens",
-        "3,200 tokens"
+        "3,200 tokens",
       ],
       correctAnswerIndex: 3,
       explanation: "`4 × 800 = 3,200`, four times the basic generation volume in this toy model.",
@@ -974,7 +974,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Longer or multiple attempts can reinforce a wrong assumption, and selection quality/task difficulty matter",
         "More compute always disables token generation",
         "A verifier can never fail",
-        "Reasoning models do not use tokens"
+        "Reasoning models do not use tokens",
       ],
       correctAnswerIndex: 0,
       explanation: "Improvement is task- and allocation-dependent rather than monotonic.",
@@ -987,7 +987,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Add random retrieval chunks",
         "Increase font size",
         "Execute the tests in an appropriate controlled environment",
-        "Use a larger token ID"
+        "Use a larger token ID",
       ],
       correctAnswerIndex: 2,
       explanation: "Deterministic external verification directly tests the property that matters.",
@@ -1000,7 +1000,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Remove all evaluation",
         "Replace reasoning with ANN",
         "State that chain-of-thought is always a database field",
-        "Teach observable behavior and verification without assuming hidden internal reasoning traces are exposed"
+        "Teach observable behavior and verification without assuming hidden internal reasoning traces are exposed",
       ],
       correctAnswerIndex: 3,
       explanation: "Internal reasoning mechanisms/traces may be private or undisclosed; teaching should stay at observable behavior and system controls.",
@@ -1015,7 +1015,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Prompts, decoding, retrieval/index versions, schemas, tools, and runtime configuration can also change the result",
         "Model names never identify models",
         "Reproduction requires deleting logs",
-        "Only GPU temperature matters"
+        "Only GPU temperature matters",
       ],
       correctAnswerIndex: 0,
       explanation: "The application stack contains many versioned components that influence behavior.",
@@ -1028,7 +1028,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Online observability retrains the model after every request",
         "They are exactly the same",
         "Offline eval tests known cases before/around release; online observability measures real production traffic and failures",
-        "Offline evaluation cannot measure latency"
+        "Offline evaluation cannot measure latency",
       ],
       correctAnswerIndex: 2,
       explanation: "They answer different questions and complement each other.",
@@ -1041,7 +1041,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "0.16",
         "4",
         "5.8",
-        "40"
+        "40",
       ],
       correctAnswerIndex: 1,
       explanation: "`5 requests/s × 0.8 s = 4` average requests in flight; bursts and tail latency still need headroom.",
@@ -1054,7 +1054,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Disable timeouts entirely",
         "Unlimited retries",
         "Larger embeddings",
-        "Bounded retry classification plus idempotency where supported"
+        "Bounded retry classification plus idempotency where supported",
       ],
       correctAnswerIndex: 3,
       explanation: "Retrying transient failures may be appropriate, but idempotency helps prevent duplicate processing of one logical operation.",
@@ -1067,7 +1067,7 @@ export const llmQuizData: Record<string, QuizQuestion[]> = {
         "Replace the old stack for 100% of users immediately",
         "Disable monitoring to avoid bias",
         "Delete the previous version before deployment",
-        "Use a shadow/canary rollout with predefined stop conditions and tested rollback"
+        "Use a shadow/canary rollout with predefined stop conditions and tested rollback",
       ],
       correctAnswerIndex: 3,
       explanation: "Controlled exposure limits impact while real reliability, quality, safety, and cost are compared.",
