@@ -1,626 +1,772 @@
 import React from 'react';
 
+type TermCardProps = {
+  term: string;
+  plainMeaning: string;
+  example: string;
+  color: string;
+};
+
+function TermCard({ term, plainMeaning, example, color }: TermCardProps) {
+  return (
+    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+      <div className={`inline-flex rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${color}`}>
+        {term}
+      </div>
+      <p className="font-semibold text-slate-900 mt-3 mb-1">{plainMeaning}</p>
+      <p className="text-sm text-slate-600 m-0"><strong>In our example:</strong> {example}</p>
+    </div>
+  );
+}
+
+function BasicNeuronFlowDiagram() {
+  return (
+    <figure className="not-prose my-7">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm overflow-x-auto">
+        <svg viewBox="0 0 920 330" className="w-full min-w-[760px]" role="img" aria-labelledby="basic-neuron-title basic-neuron-desc">
+          <title id="basic-neuron-title">The five parts of an artificial neuron</title>
+          <desc id="basic-neuron-desc">Input values travel along weighted connections, are added with a bias, pass through an activation function, and produce an output.</desc>
+
+          <rect x="16" y="20" width="888" height="286" rx="20" fill="#f8fafc" stroke="#e2e8f0" />
+          <text x="105" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#3730a3">1 · INPUTS</text>
+          <text x="290" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#0369a1">2 · WEIGHTED CONNECTIONS</text>
+          <text x="480" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#6d28d9">3 · ADD + BIAS</text>
+          <text x="675" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#b45309">4 · ACTIVATION</text>
+          <text x="842" y="55" textAnchor="middle" fontSize="15" fontWeight="800" fill="#047857">5 · OUTPUT</text>
+
+          {[
+            [102, 103, 'x₁'],
+            [102, 165, 'x₂'],
+            [102, 227, 'x₃'],
+          ].map(([x, y, label], index) => (
+            <g key={String(label)}>
+              <circle cx={Number(x)} cy={Number(y)} r="27" fill="#4f46e5" />
+              <text x={Number(x)} y={Number(y) + 6} textAnchor="middle" fontSize="18" fontWeight="800" fill="white">{label}</text>
+              <line x1="129" y1={Number(y)} x2="420" y2="165" stroke="#38bdf8" strokeWidth="3" />
+              <rect x={222 + index * 23} y={Number(y) + (165 - Number(y)) * 0.45 - 13} width="48" height="26" rx="7" fill="white" stroke="#7dd3fc" />
+              <text x={246 + index * 23} y={Number(y) + (165 - Number(y)) * 0.45 + 5} textAnchor="middle" fontSize="12" fontWeight="700" fill="#0369a1">w{index + 1}</text>
+            </g>
+          ))}
+
+          <circle cx="480" cy="165" r="57" fill="#8b5cf6" />
+          <text x="480" y="156" textAnchor="middle" fontSize="27" fontWeight="700" fill="white">Σ</text>
+          <text x="480" y="180" textAnchor="middle" fontSize="12" fontWeight="700" fill="white">weighted sum</text>
+          <line x1="480" y1="78" x2="480" y2="105" stroke="#f43f5e" strokeWidth="3" />
+          <polygon points="473,102 487,102 480,113" fill="#f43f5e" />
+          <rect x="445" y="65" width="70" height="30" rx="8" fill="#fff1f2" stroke="#fda4af" />
+          <text x="480" y="85" textAnchor="middle" fontSize="12" fontWeight="800" fill="#be123c">bias b</text>
+
+          <line x1="537" y1="165" x2="608" y2="165" stroke="#64748b" strokeWidth="3" />
+          <polygon points="602,158 616,165 602,172" fill="#64748b" />
+          <circle cx="675" cy="165" r="58" fill="#f59e0b" />
+          <text x="675" y="156" textAnchor="middle" fontSize="20" fontWeight="800" fill="white">g(z)</text>
+          <text x="675" y="179" textAnchor="middle" fontSize="12" fontWeight="700" fill="white">activation rule</text>
+
+          <line x1="733" y1="165" x2="793" y2="165" stroke="#64748b" strokeWidth="3" />
+          <polygon points="787,158 801,165 787,172" fill="#64748b" />
+          <circle cx="842" cy="165" r="41" fill="#059669" />
+          <text x="842" y="172" textAnchor="middle" fontSize="22" fontWeight="800" fill="white">ŷ</text>
+
+          <rect x="250" y="262" width="420" height="30" rx="9" fill="#eef2ff" />
+          <text x="460" y="282" textAnchor="middle" fontSize="13" fontWeight="700" fill="#3730a3">output = activation(weighted inputs + bias)</text>
+        </svg>
+      </div>
+      <figcaption className="text-sm text-slate-600 text-center mt-3">
+        Figure 1: The complete journey through one artificial neuron. Every label is explained below before it is used later.
+      </figcaption>
+    </figure>
+  );
+}
+
+function BiologicalVsArtificialDiagram() {
+  return (
+    <figure className="not-prose my-7">
+      <div className="bg-gradient-to-br from-rose-50 via-white to-emerald-50 border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm overflow-x-auto">
+        <svg viewBox="0 0 980 430" className="w-full min-w-[780px]" role="img" aria-labelledby="comparison-title comparison-desc">
+          <title id="comparison-title">A biological neuron compared with an artificial neuron</title>
+          <desc id="comparison-desc">Dendrites, synapses, cell body, firing response, and axon are compared with inputs, weights, weighted sum and bias, activation, and output.</desc>
+
+          <rect x="18" y="20" width="440" height="350" rx="20" fill="#fff1f2" stroke="#fda4af" />
+          <rect x="522" y="20" width="440" height="350" rx="20" fill="#ecfdf5" stroke="#6ee7b7" />
+          <text x="238" y="55" textAnchor="middle" fontSize="19" fontWeight="800" fill="#9f1239">BIOLOGICAL NEURON</text>
+          <text x="742" y="55" textAnchor="middle" fontSize="19" fontWeight="800" fill="#047857">ARTIFICIAL NEURON</text>
+
+          <path d="M 92 117 C 125 120, 135 150, 170 172 M 80 172 C 120 166, 132 178, 170 190 M 95 247 C 124 230, 137 216, 171 207 M 126 88 C 136 120, 150 145, 181 169 M 119 277 C 133 247, 151 225, 180 211" fill="none" stroke="#e11d48" strokeWidth="6" strokeLinecap="round" />
+          <circle cx="201" cy="191" r="55" fill="#fb7185" stroke="#be123c" strokeWidth="3" />
+          <circle cx="201" cy="191" r="20" fill="#be123c" opacity="0.75" />
+          <line x1="256" y1="191" x2="377" y2="191" stroke="#f59e0b" strokeWidth="10" strokeLinecap="round" />
+          {[279, 315, 351].map((x) => <ellipse key={x} cx={x} cy="191" rx="14" ry="22" fill="#fde68a" stroke="#d97706" strokeWidth="2" />)}
+          <path d="M 377 191 C 403 179, 418 160, 434 143 M 377 191 C 408 194, 420 211, 438 226 M 377 191 C 403 205, 408 239, 422 254" fill="none" stroke="#e11d48" strokeWidth="5" strokeLinecap="round" />
+          <text x="99" y="101" textAnchor="middle" fontSize="13" fontWeight="700" fill="#9f1239">Dendrites</text>
+          <text x="99" y="118" textAnchor="middle" fontSize="11" fill="#64748b">receive signals</text>
+          <text x="201" y="279" textAnchor="middle" fontSize="13" fontWeight="700" fill="#9f1239">Cell body</text>
+          <text x="201" y="296" textAnchor="middle" fontSize="11" fill="#64748b">combines signals</text>
+          <text x="320" y="133" textAnchor="middle" fontSize="13" fontWeight="700" fill="#9f1239">Axon</text>
+          <text x="320" y="150" textAnchor="middle" fontSize="11" fill="#64748b">carries output</text>
+          <text x="105" y="337" textAnchor="middle" fontSize="12" fill="#64748b">Synapses change how strongly signals influence the cell.</text>
+
+          {[
+            [575, 112, 'x₁'],
+            [575, 190, 'x₂'],
+            [575, 268, 'x₃'],
+          ].map(([x, y, label], index) => (
+            <g key={String(label)}>
+              <circle cx={Number(x)} cy={Number(y)} r="25" fill="#10b981" />
+              <text x={Number(x)} y={Number(y) + 5} textAnchor="middle" fontSize="15" fontWeight="800" fill="white">{label}</text>
+              <line x1="600" y1={Number(y)} x2="695" y2="190" stroke="#34d399" strokeWidth="3" />
+              <text x={635 + index * 4} y={Number(y) + (190 - Number(y)) * 0.43 - 5} textAnchor="middle" fontSize="12" fontWeight="800" fill="#047857">w{index + 1}</text>
+            </g>
+          ))}
+          <circle cx="735" cy="190" r="58" fill="#059669" />
+          <line x1="735" y1="132" x2="735" y2="248" stroke="white" strokeWidth="2" strokeDasharray="5 4" opacity="0.8" />
+          <text x="713" y="184" textAnchor="middle" fontSize="21" fontWeight="800" fill="white">Σ+b</text>
+          <text x="758" y="184" textAnchor="middle" fontSize="21" fontWeight="800" fill="white">g</text>
+          <text x="713" y="205" textAnchor="middle" fontSize="10" fill="#d1fae5">combine</text>
+          <text x="758" y="205" textAnchor="middle" fontSize="10" fill="#d1fae5">activate</text>
+          <line x1="793" y1="190" x2="887" y2="190" stroke="#047857" strokeWidth="4" />
+          <polygon points="878,181 896,190 878,199" fill="#047857" />
+          <text x="875" y="170" textAnchor="middle" fontSize="17" fontWeight="800" fill="#047857">output ŷ</text>
+          <text x="575" y="318" textAnchor="middle" fontSize="12" fontWeight="700" fill="#047857">Inputs</text>
+          <text x="655" y="318" textAnchor="middle" fontSize="12" fontWeight="700" fill="#047857">Weights</text>
+          <text x="742" y="318" textAnchor="middle" fontSize="12" fontWeight="700" fill="#047857">Neuron</text>
+          <text x="872" y="318" textAnchor="middle" fontSize="12" fontWeight="700" fill="#047857">Prediction</text>
+
+          <rect x="185" y="388" width="610" height="30" rx="9" fill="#ffffff" stroke="#cbd5e1" />
+          <text x="490" y="408" textAnchor="middle" fontSize="13" fontWeight="700" fill="#334155">This is a memory aid—not a claim that an artificial network thinks like a brain.</text>
+        </svg>
+      </div>
+      <figcaption className="text-sm text-slate-600 text-center mt-3">
+        Figure 2: The biological analogy helps name the parts, but the artificial neuron is only a mathematical calculation.
+      </figcaption>
+    </figure>
+  );
+}
+
+function NetworkOverviewDiagram() {
+  return (
+    <figure className="not-prose my-7">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 md:p-6 shadow-sm overflow-x-auto">
+        <svg
+          viewBox="0 0 900 420"
+          className="w-full min-w-[720px]"
+          role="img"
+          aria-labelledby="network-title network-description"
+        >
+          <title id="network-title">A labelled neural network that predicts whether a student will pass</title>
+          <desc id="network-description">Three input values connect to four hidden neurons, which connect to one output showing a 67 percent chance of passing.</desc>
+
+          <rect x="18" y="20" width="205" height="376" rx="18" fill="#eef2ff" stroke="#a5b4fc" />
+          <rect x="342" y="20" width="215" height="376" rx="18" fill="#f5f3ff" stroke="#c4b5fd" />
+          <rect x="681" y="20" width="201" height="376" rx="18" fill="#ecfdf5" stroke="#6ee7b7" />
+
+          <text x="120" y="53" textAnchor="middle" fontSize="18" fontWeight="700" fill="#3730a3">INPUT LAYER</text>
+          <text x="120" y="75" textAnchor="middle" fontSize="12" fill="#64748b">Facts we give the network</text>
+          <text x="449" y="53" textAnchor="middle" fontSize="18" fontWeight="700" fill="#6d28d9">HIDDEN LAYER</text>
+          <text x="449" y="75" textAnchor="middle" fontSize="12" fill="#64748b">Combines the facts</text>
+          <text x="781" y="53" textAnchor="middle" fontSize="18" fontWeight="700" fill="#047857">OUTPUT LAYER</text>
+          <text x="781" y="75" textAnchor="middle" fontSize="12" fill="#64748b">Gives the answer</text>
+
+          {[
+            [120, 130, 'Study hours', '0.8'],
+            [120, 230, 'Attendance', '0.9'],
+            [120, 330, 'Sleep', '0.7'],
+          ].map(([x, y, label, value]) => (
+            <g key={String(label)}>
+              <circle cx={Number(x)} cy={Number(y)} r="35" fill="#4f46e5" />
+              <text x={Number(x)} y={Number(y) + 5} textAnchor="middle" fontSize="17" fontWeight="700" fill="white">{value}</text>
+              <text x={Number(x)} y={Number(y) + 55} textAnchor="middle" fontSize="13" fontWeight="600" fill="#312e81">{label}</text>
+            </g>
+          ))}
+
+          {[130, 200, 270, 340].map((y, index) => (
+            <g key={y}>
+              <circle cx="449" cy={y} r="29" fill="#8b5cf6" />
+              <text x="449" y={y + 5} textAnchor="middle" fontSize="14" fontWeight="700" fill="white">H{index + 1}</text>
+            </g>
+          ))}
+
+          {[130, 230, 330].flatMap((startY) =>
+            [130, 200, 270, 340].map((endY) => (
+              <line key={`${startY}-${endY}`} x1="156" y1={startY} x2="419" y2={endY} stroke="#a5b4fc" strokeWidth="1.5" opacity="0.7" />
+            )),
+          )}
+          {[130, 200, 270, 340].map((startY) => (
+            <line key={startY} x1="478" y1={startY} x2="727" y2="225" stroke="#c4b5fd" strokeWidth="2" opacity="0.8" />
+          ))}
+
+          <circle cx="781" cy="225" r="54" fill="#059669" />
+          <text x="781" y="218" textAnchor="middle" fontSize="24" fontWeight="800" fill="white">67%</text>
+          <text x="781" y="242" textAnchor="middle" fontSize="13" fontWeight="700" fill="white">chance to pass</text>
+
+          <rect x="245" y="91" width="80" height="45" rx="8" fill="white" stroke="#cbd5e1" />
+          <text x="285" y="109" textAnchor="middle" fontSize="11" fontWeight="700" fill="#475569">LINES ARE</text>
+          <text x="285" y="125" textAnchor="middle" fontSize="11" fill="#475569">weights</text>
+          <path d="M 285 136 L 285 169" stroke="#64748b" strokeWidth="1.5" />
+          <polygon points="280,166 290,166 285,174" fill="#64748b" />
+
+          <text x="449" y="383" textAnchor="middle" fontSize="12" fill="#6d28d9">Each circle is one artificial neuron</text>
+        </svg>
+      </div>
+      <figcaption className="text-sm text-slate-600 text-center mt-3">
+        Figure 3: Information moves from left to right. The numbers are illustrative, not a real student assessment.
+      </figcaption>
+    </figure>
+  );
+}
+
+function SingleNeuronDiagram() {
+  return (
+    <figure className="not-prose my-7">
+      <div className="bg-gradient-to-br from-slate-50 to-indigo-50 border border-slate-200 rounded-2xl p-4 md:p-6 overflow-x-auto">
+        <svg viewBox="0 0 850 330" className="w-full min-w-[690px]" role="img" aria-labelledby="neuron-title neuron-desc">
+          <title id="neuron-title">The calculation inside one artificial neuron</title>
+          <desc id="neuron-desc">Study, attendance, and sleep inputs are multiplied by weights, added with a bias, and passed through an activation function.</desc>
+
+          {[
+            [82, 72, 'Study', '0.8', '× 0.7'],
+            [82, 165, 'Attendance', '0.9', '× 0.8'],
+            [82, 258, 'Sleep', '0.7', '× 0.3'],
+          ].map(([x, y, label, value, weight]) => (
+            <g key={String(label)}>
+              <circle cx={Number(x)} cy={Number(y)} r="32" fill="#4f46e5" />
+              <text x={Number(x)} y={Number(y) + 5} textAnchor="middle" fill="white" fontSize="16" fontWeight="700">{value}</text>
+              <text x={Number(x)} y={Number(y) + 51} textAnchor="middle" fill="#334155" fontSize="12" fontWeight="600">{label}</text>
+              <line x1="114" y1={Number(y)} x2="276" y2="165" stroke="#818cf8" strokeWidth="3" />
+              <rect x="157" y={Number(y) + (165 - Number(y)) * 0.42 - 14} width="62" height="28" rx="7" fill="white" stroke="#a5b4fc" />
+              <text x="188" y={Number(y) + (165 - Number(y)) * 0.42 + 5} textAnchor="middle" fill="#4338ca" fontSize="12" fontWeight="700">{weight}</text>
+            </g>
+          ))}
+
+          <circle cx="330" cy="165" r="57" fill="#7c3aed" />
+          <text x="330" y="151" textAnchor="middle" fill="white" fontSize="13" fontWeight="700">ADD</text>
+          <text x="330" y="172" textAnchor="middle" fill="white" fontSize="12">weighted clues</text>
+          <text x="330" y="192" textAnchor="middle" fill="#ddd6fe" fontSize="12">+ bias (−0.8)</text>
+
+          <line x1="388" y1="165" x2="473" y2="165" stroke="#64748b" strokeWidth="3" />
+          <polygon points="468,158 482,165 468,172" fill="#64748b" />
+          <text x="430" y="146" textAnchor="middle" fill="#475569" fontSize="12" fontWeight="700">z = 0.69</text>
+
+          <rect x="482" y="112" width="145" height="106" rx="18" fill="#f59e0b" />
+          <text x="554" y="145" textAnchor="middle" fill="white" fontSize="14" fontWeight="800">ACTIVATION</text>
+          <text x="554" y="168" textAnchor="middle" fill="white" fontSize="13">turns the score</text>
+          <text x="554" y="188" textAnchor="middle" fill="white" fontSize="13">into a useful output</text>
+
+          <line x1="627" y1="165" x2="710" y2="165" stroke="#64748b" strokeWidth="3" />
+          <polygon points="705,158 719,165 705,172" fill="#64748b" />
+
+          <circle cx="766" cy="165" r="50" fill="#059669" />
+          <text x="766" y="159" textAnchor="middle" fill="white" fontSize="21" fontWeight="800">0.67</text>
+          <text x="766" y="181" textAnchor="middle" fill="white" fontSize="12" fontWeight="700">output</text>
+
+          <text x="330" y="300" textAnchor="middle" fill="#475569" fontSize="13">Multiply → add → activate. That is the basic job of a neuron.</text>
+        </svg>
+      </div>
+      <figcaption className="text-sm text-slate-600 text-center mt-3">Figure 4: A neuron is a short mathematical recipe, not a tiny human brain.</figcaption>
+    </figure>
+  );
+}
+
+function LearningLoopDiagram() {
+  const items = [
+    ['1', 'Look', 'Read one training example', '#4f46e5'],
+    ['2', 'Guess', 'Make a prediction', '#7c3aed'],
+    ['3', 'Check', 'Measure how wrong it was', '#e11d48'],
+    ['4', 'Adjust', 'Change weights a little', '#059669'],
+  ];
+
+  return (
+    <figure className="not-prose my-7">
+      <div className="bg-slate-900 rounded-2xl p-5 md:p-7 overflow-x-auto">
+        <div className="flex min-w-[760px] items-stretch gap-3">
+          {items.map(([number, title, caption, color], index) => (
+            <React.Fragment key={number}>
+              <div className="flex-1 bg-white rounded-xl p-4 text-center">
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full text-white font-bold" style={{ backgroundColor: color }}>{number}</span>
+                <p className="font-extrabold text-slate-900 mt-3 mb-1">{title}</p>
+                <p className="text-xs text-slate-600 m-0">{caption}</p>
+              </div>
+              {index < items.length - 1 && <div className="self-center text-white text-2xl font-bold">→</div>}
+            </React.Fragment>
+          ))}
+          <div className="self-center text-indigo-300 font-bold text-sm pl-1">↺ repeat</div>
+        </div>
+      </div>
+      <figcaption className="text-sm text-slate-600 text-center mt-3">Figure 5: Training repeats this feedback loop with many examples.</figcaption>
+    </figure>
+  );
+}
+
 export function NeuralNetworksContent() {
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Neural Networks — Complete Deep Dive</h1>
-      <p className="text-lg text-slate-500 mb-6">Weights, biases, activation functions, forward pass, backprop — everything explained with code and visuals</p>
-
-      {/* ── INTUITION-FIRST INTRO ── */}
-      <div className="not-prose bg-gradient-to-br from-indigo-50 via-white to-violet-50 border border-indigo-200 rounded-2xl p-6 md:p-8 mb-8">
-        <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">Understand First</p>
-        <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 mb-4">
-          A neural network is a chain of tiny decision-makers
-        </h2>
-        <p className="text-slate-700 leading-relaxed mb-6">
-          Imagine predicting whether a student will pass an exam using <strong>study hours</strong>, <strong>sleep</strong>, and <strong>attendance</strong>.
-          One small unit can combine those clues. A network connects many such units so later layers can combine simpler patterns into more useful ones.
+      <header className="mb-8">
+        <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2">Deep Learning · Beginner Lesson</p>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-3">Neural Networks Explained</h2>
+        <p className="text-lg text-slate-600 leading-relaxed mb-0">
+          Learn what a neural network is using one simple student-result example—before we introduce formulas or code.
         </p>
+      </header>
 
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 text-center">
+      <div className="not-prose bg-emerald-50 border border-emerald-200 rounded-2xl p-5 md:p-6">
+        <p className="font-bold text-emerald-900 mb-2">You do not need calculus for this lesson.</p>
+        <p className="text-emerald-900/80 m-0 leading-relaxed">
+          If you understand “important clues,” “a guess,” and “learning from a mistake,” you already have the ideas needed to begin.
+        </p>
+      </div>
+
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">What Is a Neural Network?</h2>
+        <p className="text-lg leading-relaxed">
+          A <strong>neural network</strong> is a computer model that learns a relationship between inputs and an output. It contains small calculation units called <strong>neurons</strong>, arranged in <strong>layers</strong> and joined by numbered connections called <strong>weights</strong>.
+        </p>
+        <p className="text-lg leading-relaxed">
+          During training, the network sees examples with known answers. It makes guesses, checks its mistakes, and slowly changes its weights. After enough useful examples, it can make a prediction for an example it has not seen before.
+        </p>
+        <div className="not-prose bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5 my-5">
+          <p className="text-amber-950 m-0">
+            <strong>Important:</strong> an artificial neuron is not a real brain cell. It is only a few mathematical operations. The word “neural” comes from historical inspiration, not because the model thinks like a person.
+          </p>
+        </div>
+        <h3 className="text-xl font-bold text-slate-900 mt-8 mb-3">Biological neuron vs artificial neuron</h3>
+        <p className="text-lg leading-relaxed">
+          The biological comparison is useful as a memory aid: dendrites receive signals, synapses affect their strength, the cell body combines them, and the axon carries a response. An artificial neuron borrows that rough story using inputs, weights, a calculation, an activation function, and an output.
+        </p>
+        <BiologicalVsArtificialDiagram />
+
+        <h3 className="text-xl font-bold text-slate-900 mt-8 mb-3">From one neuron to a complete network</h3>
+        <p className="text-lg leading-relaxed">
+          A network connects many artificial neurons in layers. The following diagram shows those parts in our student-result problem.
+        </p>
+        <NetworkOverviewDiagram />
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">The Five Key Components of a Neural Network</h2>
+        <p className="text-lg leading-relaxed mb-5">
+          Before solving an example, first see what a neural network is made of. These five ideas appear in every later section.
+        </p>
+        <div className="not-prose grid md:grid-cols-2 gap-4">
           {[
-            ['Inputs', 'study • sleep • attendance'],
-            ['Weighted clues', 'how important is each input?'],
-            ['Hidden patterns', 'combine useful signals'],
-            ['Prediction', 'pass probability'],
-          ].map(([title, caption], index) => (
-            <React.Fragment key={title}>
-              <div className="flex-1 bg-white border border-indigo-100 rounded-xl p-4">
-                <div className="font-bold text-indigo-900">{title}</div>
-                <div className="text-xs text-slate-600 mt-1">{caption}</div>
-              </div>
-              {index < 3 && (
-                <span className="text-indigo-400 font-bold text-xl rotate-90 md:rotate-0">→</span>
-              )}
-            </React.Fragment>
+            ['1', 'Neurons (or nodes)', 'Small calculation units. A neuron receives numbers, combines them, and sends a new number forward.', 'bg-indigo-50 border-indigo-200 text-indigo-800'],
+            ['2', 'Connections', 'Lines that carry a number from one neuron to another. Each connection has a weight.', 'bg-sky-50 border-sky-200 text-sky-800'],
+            ['3', 'Weights and biases', 'Numbers the network learns. Weights control the strength of connections; a bias gives a neuron an adjustable starting push.', 'bg-violet-50 border-violet-200 text-violet-800'],
+            ['4', 'Propagation', 'The movement of calculations through the network. A forward pass produces an answer; a backward pass carries information about the error.', 'bg-amber-50 border-amber-200 text-amber-800'],
+            ['5', 'Learning rule', 'The method for improving the parameters. Backpropagation finds how each parameter affected the error, and an optimizer changes it a little.', 'bg-emerald-50 border-emerald-200 text-emerald-800'],
+          ].map(([number, title, text, colors]) => (
+            <div key={number} className={`${colors} border rounded-xl p-5 flex gap-4`}>
+              <span className="flex-shrink-0 h-9 w-9 rounded-full bg-white/90 flex items-center justify-center font-extrabold shadow-sm">{number}</span>
+              <div><h3 className="font-extrabold text-slate-900 mb-1">{title}</h3><p className="text-sm text-slate-700 m-0 leading-relaxed">{text}</p></div>
+            </div>
           ))}
         </div>
 
-        <p className="text-center font-bold text-indigo-800 mt-6 mb-0">
-          Input → Weighted Sum → Activation → Next Layer → Prediction
+        <BasicNeuronFlowDiagram />
+
+        <h3 className="text-xl font-bold text-slate-900 mt-7 mb-4">Learning happens in three repeating stages</h3>
+        <div className="not-prose grid md:grid-cols-3 gap-4">
+          {[
+            ['1', 'Input computation', 'Data enters as numbers. Each neuron multiplies its inputs by weights, adds them, and adds its bias.'],
+            ['2', 'Output generation', 'The values move forward through the layers until the network produces a prediction.'],
+            ['3', 'Iterative refinement', 'The prediction is compared with the known answer. The network adjusts weights and biases, then tries again.'],
+          ].map(([number, title, text]) => (
+            <div key={number} className="relative bg-slate-900 text-white rounded-xl p-5 pt-7">
+              <span className="absolute -top-3 left-5 rounded-full bg-indigo-500 px-3 py-1 text-xs font-bold">Stage {number}</span>
+              <h4 className="font-extrabold mb-2">{title}</h4>
+              <p className="text-sm text-slate-300 m-0 leading-relaxed">{text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Beginner Word Bank: Know These Terms Before We Use Them</h2>
+        <p className="text-lg leading-relaxed mb-5">
+          You do not have to memorize this list now. Use it as a map: when a word appears later, you will already know its plain meaning.
         </p>
-      </div>
+        <div className="not-prose grid md:grid-cols-2 gap-3">
+          {[
+            ['Input / feature', 'A number given to the network, such as study time.'],
+            ['Neuron / node', 'A unit that multiplies, adds, and activates numbers.'],
+            ['Connection', 'A path that carries a value from one neuron to another.'],
+            ['Weight (w)', 'A learned number showing the strength and direction of a connection.'],
+            ['Bias (b)', 'A learned starting adjustment added inside a neuron.'],
+            ['Weighted sum (z)', 'Inputs multiplied by weights, added together, then combined with the bias.'],
+            ['Activation function', 'A rule that changes the weighted sum into the neuron’s outgoing signal.'],
+            ['ReLU', 'Rectified Linear Unit: it changes negative values to 0 and keeps positive values.'],
+            ['Sigmoid', 'An activation that turns a number into a value between 0 and 1, often used for a yes/no probability.'],
+            ['Softmax', 'An output activation that turns several class scores into probabilities adding to 100%.'],
+            ['Layer', 'A group of neurons working at the same stage: input, hidden, or output.'],
+            ['Prediction / output (ŷ)', 'The answer produced by the network. The symbol ŷ means “predicted answer.”'],
+            ['Label / target (y)', 'The known correct answer used during training or evaluation.'],
+            ['Forward pass', 'Moving calculations from the inputs to the prediction. Also called forward propagation.'],
+            ['Loss', 'One number that measures how wrong the prediction is. Lower is usually better.'],
+            ['Backpropagation', 'Calculating how much each parameter contributed to the loss, moving from output toward input.'],
+            ['Optimizer / learning rule', 'The rule—such as SGD or Adam—that uses gradients to update parameters.'],
+            ['Parameter', 'Any number the network learns; weights and biases are parameters.'],
+            ['Batch', 'A small group of training examples processed together.'],
+            ['Epoch', 'One complete pass through all training examples.'],
+            ['Learning rate', 'A setting that controls how large each parameter update is.'],
+          ].map(([term, meaning]) => (
+            <div key={term} className="bg-white border border-slate-200 rounded-xl p-4 flex gap-3">
+              <span className="mt-1 h-2.5 w-2.5 rounded-full bg-indigo-500 flex-shrink-0" />
+              <div><p className="font-bold text-slate-900 mb-1">{term}</p><p className="text-sm text-slate-600 m-0 leading-relaxed">{meaning}</p></div>
+            </div>
+          ))}
+        </div>
+        <div className="not-prose mt-4 bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <p className="text-sm text-amber-950 m-0"><strong>Notation tip:</strong> <span className="font-mono">y</span> is the correct answer; <span className="font-mono">ŷ</span> (“y-hat”) is the network’s predicted answer.</p>
+        </div>
+      </section>
 
-      <p className="text-lg leading-relaxed">
-        A Neural Network is a mathematical function that maps inputs to outputs by stacking layers of computational units called <strong>neurons</strong>. Each neuron performs a weighted sum of its inputs, adds a bias, and passes the result through an activation function. Training adjusts the network's weights and biases so its predictions become more useful for the chosen task.
-      </p>
-
-      <div className="not-prose bg-amber-50 border-l-4 border-amber-400 rounded-r-xl p-5 my-6">
-        <p className="text-amber-900 m-0 leading-relaxed">
-          <strong>Do not think of an artificial neuron as a tiny brain cell.</strong> It is simply a mathematical computation. The biological analogy is useful for intuition, but modern neural networks are engineered mathematical models, not simulations of the human brain.
-        </p>
-      </div>
-
-      {/* ── BIOLOGICAL ANALOGY ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Biological Inspiration</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Artificial neural networks were historically inspired in part by simplified ideas about biological neurons. The analogy can help us remember the parts, but the correspondence is only approximate. A biological neuron receives signals through dendrites and communicates through its axon; an artificial neuron represents this idea with inputs, weights, a weighted sum, bias, and an activation function:
-      </p>
-      <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
-        <table className="w-full text-sm">
-          <thead className="bg-indigo-600 text-white">
-            <tr><th className="p-3 text-left">Biological Neuron</th><th className="p-3 text-left">Artificial Neuron</th></tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Start With a Real-Life Problem</h2>
+        <div className="not-prose bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-2xl p-6 md:p-8 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wider text-indigo-200 mb-2">Our example throughout this lesson</p>
+          <h3 className="text-2xl font-extrabold mb-4">Which students may need extra help before an exam?</h3>
+          <p className="text-indigo-50 leading-relaxed mb-5">
+            A teacher has records from previous students: their study time, attendance, sleep, and whether they passed. The teacher wants a program that can examine a new student’s information and estimate the chance of passing.
+          </p>
+          <div className="grid md:grid-cols-3 gap-3">
             {[
-              ['Dendrites (receive signals)','Inputs x₁, x₂, ..., xₙ'],
-              ['Synapse strength','Weights w₁, w₂, ..., wₙ'],
-              ['Cell body (sums signals)','Weighted sum: z = Σ(wᵢ·xᵢ) + b'],
-              ['Firing threshold','Activation function f(z)'],
-              ['Axon (transmits signal)','Output: a = f(z)'],
-            ].map(([bio,art])=>(
-              <tr key={bio} className="hover:bg-slate-50">
-                <td className="p-3 text-slate-700">{bio}</td>
-                <td className="p-3 font-mono text-indigo-700 font-semibold">{art}</td>
-              </tr>
+              ['Information in', 'Study, attendance, sleep'],
+              ['Pattern to learn', 'Which combinations usually lead to passing?'],
+              ['Answer out', 'A probability such as 67%'],
+            ].map(([title, text]) => (
+              <div key={title} className="bg-white/10 border border-white/20 rounded-xl p-4">
+                <p className="font-bold mb-1">{title}</p>
+                <p className="text-sm text-indigo-100 m-0">{text}</p>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ── SINGLE NEURON MATHS ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Single Neuron Mathematics</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Every neuron does exactly two things:
-      </p>
-      <div className="not-prose grid md:grid-cols-2 gap-5 my-6">
-        <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5">
-          <h3 className="font-bold text-indigo-900 mb-3">Step 1 — Weighted Sum</h3>
-          <div className="bg-white rounded-lg p-4 font-mono text-center text-lg mb-3 border border-indigo-100">
-            z = w₁x₁ + w₂x₂ + w₃x₃ + b
-          </div>
-          <p className="text-sm text-slate-700">Each input <strong>xᵢ</strong> is multiplied by its weight <strong>wᵢ</strong> (how important that input is), then all products are summed and a bias <strong>b</strong> is added. Bias lets the neuron shift its output independently of the inputs — like the y-intercept in y=mx+b.</p>
-        </div>
-        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-5">
-          <h3 className="font-bold text-emerald-900 mb-3">Step 2 — Activation Function</h3>
-          <div className="bg-white rounded-lg p-4 font-mono text-center text-lg mb-3 border border-emerald-100">
-            a = f(z)
-          </div>
-          <p className="text-sm text-slate-700">The activation function <strong>f</strong> transforms z into the neuron's output. It introduces non-linearity — without it, all layers collapse into a single linear transformation and the network cannot learn complex patterns.</p>
-        </div>
-      </div>
-
-      {/* ── WORKED EXAMPLE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Worked Example — One Neuron, Step by Step</h2>
-
-      <p className="text-lg leading-relaxed mb-4">
-        Before touching Python, let us calculate one neuron by hand. Suppose the inputs are <strong>x₁ = 2</strong> and <strong>x₂ = 3</strong>, the weights are <strong>w₁ = 0.5</strong> and <strong>w₂ = 1</strong>, and the bias is <strong>b = −1</strong>.
-      </p>
-
-      <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-xl p-6 my-6">
-        <div className="space-y-3 text-slate-800">
-          <p className="font-mono m-0">z = (w₁ × x₁) + (w₂ × x₂) + b</p>
-          <p className="font-mono m-0">z = (0.5 × 2) + (1 × 3) − 1</p>
-          <p className="font-mono m-0">z = 1 + 3 − 1 = <strong>3</strong></p>
-          <div className="border-t border-indigo-200 pt-3 mt-3">
-            <p className="font-mono m-0">a = ReLU(3) = <strong>3</strong></p>
           </div>
         </div>
-      </div>
+        <p className="text-lg leading-relaxed mt-5">
+          We could write fixed rules such as “if study time is above six hours, predict pass.” But real life is rarely one rule. A student may study less and have excellent attendance, or study more but sleep very little. A neural network can learn how several clues work <em>together</em> from examples.
+        </p>
+      </section>
 
-      <p className="text-lg leading-relaxed mb-6">
-        That is a neuron: <strong>multiply → add → activate</strong>. A neural network repeats this same basic idea across many neurons and layers.
-      </p>
-      <p className="text-lg leading-relaxed mb-4">
-        Suppose a single neuron receives 3 inputs. Let us trace the exact calculation:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">single_neuron_example.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">What Happens Inside One Neuron?</h2>
+        <p className="text-lg leading-relaxed">
+          A neuron has three small jobs: <strong>multiply</strong> each input by its weight, <strong>add</strong> those results and the bias, then <strong>activate</strong> the result. The diagram follows one imaginary student. To keep the arithmetic readable, we manually scale each teaching input against a stated reference: 8 study hours out of 10 gives 8÷10=0.8; 90% attendance gives 90÷100=0.9; and 7 sleep hours against a 10-hour reference gives 7÷10=0.7. These are teaching choices, not a recommended school-scoring system.
+        </p>
+        <SingleNeuronDiagram />
 
-# Inputs: age=25, hours_studied=8, previous_score=70
-x = np.array([25, 8, 70])
-
-# Weights learned during training
-w = np.array([0.1, 0.5, 0.3])
-
-# Bias
-b = -20
-
-# Step 1: Weighted sum
-z = np.dot(w, x) + b
-print(f"z = (0.1×25) + (0.5×8) + (0.3×70) + (−20)")
-print(f"z = 2.5 + 4.0 + 21.0 − 20 = {z}")
-# Output: z = 2.5 + 4.0 + 21.0 − 20 = 7.5
-
-# Step 2: Apply ReLU activation
-def relu(z):
-    return max(0, z)
-
-a = relu(z)
-print(f"a = ReLU({z}) = {a}")
-# Output: a = ReLU(7.5) = 7.5
-
-# If z were negative (e.g., z = -3):
-print(f"a = ReLU(-3) = {relu(-3)}")
-# Output: a = ReLU(-3) = 0  ← neuron is "off"`}</pre>
-      </div>
-
-      {/* ── LAYER ARCHITECTURE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Network Architecture — Layers in Depth</h2>
-      <div className="not-prose space-y-4 my-6">
-        {[
-          {
-            name:'Input Layer',
-            icon:'📥',
-            card:'bg-indigo-50 border-indigo-200',
-            title:'text-indigo-900',
-            desc:'Represents the input features supplied to the network. If one example has 30 numeric features, the input representation has 30 values before those values are transformed by the first learned layer.'
-          },
-          {
-            name:'Hidden Layers',
-            icon:'🧠',
-            card:'bg-violet-50 border-violet-200',
-            title:'text-violet-900',
-            desc:'Learn intermediate representations. Earlier layers may capture simpler patterns while later layers can combine them into more task-specific patterns. “Deep” simply refers to using multiple learned layers; there is no universal rule that deep learning begins at exactly three hidden layers.'
-          },
-          {
-            name:'Output Layer',
-            icon:'📤',
-            card:'bg-emerald-50 border-emerald-200',
-            title:'text-emerald-900',
-            desc:'Produces the final model output. Common designs include one sigmoid output for binary classification, multiple logits followed by softmax for multi-class classification, or a linear output for regression.'
-          },
-        ].map(l=>(
-          <div key={l.name} className={`${l.card} border rounded-xl p-5 flex gap-4`}>
-            <span className="text-3xl flex-shrink-0">{l.icon}</span>
-            <div>
-              <h3 className={`font-bold ${l.title} text-lg mb-1`}>{l.name}</h3>
-              <p className="text-sm text-slate-700 leading-relaxed">{l.desc}</p>
+        <h3 className="text-xl font-bold text-slate-900 mt-7 mb-4">The same calculation, one line at a time</h3>
+        <div className="not-prose space-y-3">
+          {[
+            ['1', 'Multiply every clue by its weight', '(0.8 × 0.7) + (0.9 × 0.8) + (0.7 × 0.3)'],
+            ['2', 'Add the three answers', '0.56 + 0.72 + 0.21 = 1.49'],
+            ['3', 'Add the bias', '1.49 + (−0.80) = 0.69'],
+            ['4', 'Apply sigmoid activation', 'sigmoid(0.69) ≈ 0.67'],
+            ['5', 'Read the output', 'The neuron estimates a 67% chance of passing.'],
+          ].map(([number, title, calculation]) => (
+            <div key={number} className="flex gap-4 bg-white border border-slate-200 rounded-xl p-4">
+              <span className="flex-shrink-0 h-8 w-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">{number}</span>
+              <div>
+                <p className="font-bold text-slate-900 mb-1">{title}</p>
+                <p className="font-mono text-sm text-slate-600 m-0">{calculation}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* ── ACTIVATION FUNCTIONS WITH CODE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Activation Functions — Code + Output</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Here is how each activation function transforms the same set of input values — notice how they produce completely different outputs:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">activation_functions.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
-
-z = np.array([-3.0, -1.0, 0.0, 1.0, 3.0])
-
-# ── 1. Sigmoid ───────────────────────────────────────────
-def sigmoid(z):
-    return 1 / (1 + np.exp(-z))
-
-print("Sigmoid:", np.round(sigmoid(z), 3))
-# Output: [0.047  0.269  0.5    0.731  0.953]
-# → Always between 0 and 1. Good for binary output probability.
-
-# ── 2. Tanh ──────────────────────────────────────────────
-def tanh(z):
-    return np.tanh(z)
-
-print("Tanh:", np.round(tanh(z), 3))
-# Output: [-0.995 -0.762  0.     0.762  0.995]
-# → Between -1 and 1 and zero-centered. Used in some hidden/recurrent architectures.
-
-# ── 3. ReLU ──────────────────────────────────────────────
-def relu(z):
-    return np.maximum(0, z)
-
-print("ReLU:", relu(z))
-# Output: [0.  0.  0.  1.  3.]
-# → Negative inputs → 0. Positive inputs unchanged.
-# → Simple and efficient; a common hidden-layer activation.
-
-# ── 4. Leaky ReLU ────────────────────────────────────────
-def leaky_relu(z, alpha=0.01):
-    return np.where(z > 0, z, alpha * z)
-
-print("Leaky ReLU:", leaky_relu(z))
-# Output: [-0.03  -0.01   0.     1.     3.  ]
-# → Small negative slope for z<0. Can reduce the risk of permanently inactive ReLU units.
-
-# ── 5. Softmax (for multi-class output) ──────────────────
-def softmax(z):
-    exp_z = np.exp(z - np.max(z))   # subtract max for numerical stability
-    return exp_z / exp_z.sum()
-
-logits = np.array([2.0, 1.0, 0.5])  # raw scores for 3 classes
-print("Softmax:", np.round(softmax(logits), 3))
-# Output: [0.627  0.239  0.133]
-# → All values sum to 1.0 → Interpreted as class probabilities.`}</pre>
-      </div>
-
-      {/* ── SVG ACTIVATION CURVES ── */}
-      <div className="not-prose my-8">
-        <figure>
-          <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 1 — Activation Function Curves</figcaption>
-          <div className="grid md:grid-cols-3 gap-4">
-            {/* Sigmoid curve */}
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-indigo-600 px-4 py-2 text-white text-sm font-bold text-center">Sigmoid</div>
-              <svg viewBox="0 0 200 140" className="w-full p-2" aria-label="Sigmoid activation function S-curve from 0 to 1">
-                <line x1="0" y1="70" x2="200" y2="70" stroke="#e2e8f0" strokeWidth="1"/>
-                <line x1="100" y1="0" x2="100" y2="140" stroke="#e2e8f0" strokeWidth="1"/>
-                <text x="195" y="67" fontSize="8" fill="#94a3b8">x</text>
-                <text x="104" y="8" fontSize="8" fill="#94a3b8">f(x)</text>
-                <text x="2" y="20" fontSize="7" fill="#64748b">1.0</text>
-                <text x="2" y="73" fontSize="7" fill="#64748b">0.5</text>
-                <text x="2" y="132" fontSize="7" fill="#64748b">0.0</text>
-                <path d="M 10,128 Q 60,125 80,110 Q 100,70 120,30 Q 140,15 190,12" fill="none" stroke="#6366f1" strokeWidth="2.5" strokeLinecap="round"/>
-                <circle cx="100" cy="70" r="3" fill="#6366f1"/>
-                <text x="105" y="68" fontSize="8" fill="#6366f1">(0, 0.5)</text>
-              </svg>
-            </div>
-            {/* ReLU curve */}
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-emerald-600 px-4 py-2 text-white text-sm font-bold text-center">ReLU</div>
-              <svg viewBox="0 0 200 140" className="w-full p-2" aria-label="ReLU activation function flat at zero then linear">
-                <line x1="0" y1="70" x2="200" y2="70" stroke="#e2e8f0" strokeWidth="1"/>
-                <line x1="100" y1="0" x2="100" y2="140" stroke="#e2e8f0" strokeWidth="1"/>
-                <text x="195" y="67" fontSize="8" fill="#94a3b8">x</text>
-                <text x="104" y="8" fontSize="8" fill="#94a3b8">f(x)</text>
-                <path d="M 10,70 L 100,70 L 190,10" fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round"/>
-                <circle cx="100" cy="70" r="3" fill="#10b981"/>
-                <text x="105" y="68" fontSize="8" fill="#10b981">(0, 0)</text>
-                <text x="30" y="82" fontSize="8" fill="#64748b">f=0 (x&lt;0)</text>
-                <text x="120" y="35" fontSize="8" fill="#64748b">f=x (x≥0)</text>
-              </svg>
-            </div>
-            {/* Tanh curve */}
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-amber-600 px-4 py-2 text-white text-sm font-bold text-center">Tanh</div>
-              <svg viewBox="0 0 200 140" className="w-full p-2" aria-label="Tanh activation function S-curve from negative 1 to 1">
-                <line x1="0" y1="70" x2="200" y2="70" stroke="#e2e8f0" strokeWidth="1"/>
-                <line x1="100" y1="0" x2="100" y2="140" stroke="#e2e8f0" strokeWidth="1"/>
-                <text x="195" y="67" fontSize="8" fill="#94a3b8">x</text>
-                <text x="104" y="8" fontSize="8" fill="#94a3b8">f(x)</text>
-                <text x="2" y="14" fontSize="7" fill="#64748b">+1</text>
-                <text x="2" y="73" fontSize="7" fill="#64748b">0</text>
-                <text x="2" y="136" fontSize="7" fill="#64748b">−1</text>
-                <path d="M 10,132 Q 60,128 80,100 Q 100,70 120,40 Q 140,12 190,8" fill="none" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round"/>
-                <circle cx="100" cy="70" r="3" fill="#f59e0b"/>
-                <text x="105" y="68" fontSize="8" fill="#f59e0b">(0, 0)</text>
-              </svg>
-            </div>
-          </div>
-        </figure>
-      </div>
-
-      {/* ── FORWARD PROPAGATION IN CODE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Forward Propagation — From Scratch in NumPy</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Let us build a 2-layer neural network (1 hidden layer) from scratch — no Keras, no PyTorch — to see exactly what happens at each step:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">forward_prop_scratch.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
-
-# ── Network: 2 inputs → 3 hidden neurons → 1 output ─────
-np.random.seed(42)
-
-# Randomly initialize weights and biases
-W1 = np.random.randn(2, 3)   # shape (input_size, hidden_size) = (2, 3)
-b1 = np.zeros((1, 3))        # one bias per hidden neuron
-
-W2 = np.random.randn(3, 1)   # shape (hidden_size, output_size) = (3, 1)
-b2 = np.zeros((1, 1))        # one bias for the output neuron
-
-print("W1 shape:", W1.shape)  # (2, 3)
-print("W2 shape:", W2.shape)  # (3, 1)
-
-# ── Single sample input: [study_hours=5, sleep_hours=7] ──
-X = np.array([[5.0, 7.0]])    # shape (1, 2)
-
-# ── Forward pass through Hidden Layer ────────────────────
-Z1 = np.dot(X, W1) + b1      # (1,2) @ (2,3) = (1,3)
-print("Z1 (pre-activation):", np.round(Z1, 3))
-# Output: Z1 = [[13.145 -2.330  1.599]]
-
-A1 = np.maximum(0, Z1)       # ReLU activation
-print("A1 (post-ReLU):", np.round(A1, 3))
-# e.g., A1 = [[ 0.249  3.101  0.   ]]
-# Note: -1.508 became 0 → that neuron is "off"
-
-# ── Forward pass through Output Layer ────────────────────
-Z2 = np.dot(A1, W2) + b2     # (1,3) @ (3,1) = (1,1)
-print("Z2 (pre-activation):", np.round(Z2, 3))
-# Output: Z2 = [[20.007]]
-
-# Sigmoid for binary classification (pass or fail)
-A2 = 1 / (1 + np.exp(-Z2))  # sigmoid
-print("A2 (prediction probability):", np.round(A2, 3))
-# e.g., A2 = [[0.863]]
-# → 86.3% probability of passing
-
-prediction = (A2 > 0.5).astype(int)
-print("Predicted class:", prediction[0][0])
-# Output: Predicted class: 1  → Pass`}</pre>
-      </div>
-
-      {/* ── BACKPROP ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Backpropagation — How the Network Learns</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Backpropagation computes how sensitive the loss is to each trainable parameter. Using the <strong>chain rule of calculus</strong>, gradients are passed from the output side of the network back through earlier layers. An optimizer then uses those gradients to update the parameters.
-      </p>
-
-      <div className="not-prose grid md:grid-cols-2 gap-5 my-6">
-        <div className="bg-sky-50 border border-sky-200 rounded-xl p-5">
-          <p className="text-xs font-bold uppercase tracking-wider text-sky-700 mb-2">Forward pass</p>
-          <p className="font-bold text-slate-900 mb-2">“What did the network predict?”</p>
-          <p className="text-sm text-slate-700 m-0">Inputs move forward through the layers until the network produces a prediction and a loss value.</p>
+          ))}
         </div>
-        <div className="bg-rose-50 border border-rose-200 rounded-xl p-5">
-          <p className="text-xs font-bold uppercase tracking-wider text-rose-700 mb-2">Backward pass</p>
-          <p className="font-bold text-slate-900 mb-2">“Which parameters should change?”</p>
-          <p className="text-sm text-slate-700 m-0">Gradients tell us how a small change in each parameter would affect the loss.</p>
+        <p className="text-base text-slate-600 mt-4">
+          These weights were chosen only to show the arithmetic. In a real network, training discovers useful weight and bias values from data.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Why Do We Need More Than One Neuron?</h2>
+        <p className="text-lg leading-relaxed">
+          One neuron can form one simple decision. Many neurons can notice different combinations. One hidden neuron may respond strongly to “high attendance and moderate study,” while another may respond to “long study but little sleep.” The next layer can combine those smaller patterns into a better prediction.
+        </p>
+        <div className="not-prose grid md:grid-cols-3 gap-4 my-6">
+          {[
+            ['Input layer', 'Receives values', 'It does not learn a secret meaning; it holds the facts we provide.'],
+            ['Hidden layer(s)', 'Builds useful patterns', 'These layers are called hidden because we do not directly provide or read their answers.'],
+            ['Output layer', 'Answers the task', 'Its shape depends on whether we want a number, yes/no answer, or one of many classes.'],
+          ].map(([title, subtitle, text], index) => (
+            <div key={title} className="relative bg-white border border-slate-200 rounded-xl p-5">
+              <span className="absolute -top-3 left-4 bg-indigo-600 text-white rounded-full px-3 py-1 text-xs font-bold">Layer {index + 1}</span>
+              <h3 className="font-extrabold text-slate-900 mt-2 mb-1">{title}</h3>
+              <p className="font-semibold text-indigo-700 mb-2">{subtitle}</p>
+              <p className="text-sm text-slate-600 m-0">{text}</p>
+            </div>
+          ))}
         </div>
-      </div>
+        <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-xl p-5">
+          <p className="font-bold text-indigo-950 mb-2">Why is it called “deep” learning?</p>
+          <p className="text-indigo-900/80 m-0">A deep neural network contains several learned layers between the input and output. “Deep” describes the stack of transformations—not human-like depth of thought.</p>
+        </div>
+      </section>
 
-      <h3 className="text-xl font-bold text-slate-800 mb-3">Tiny Weight-Update Example</h3>
-      <p className="text-lg leading-relaxed mb-4">
-        If a weight is currently <strong>0.80</strong>, its gradient is <strong>0.30</strong>, and the learning rate is <strong>0.10</strong>:
-      </p>
-      <div className="not-prose bg-slate-50 border border-slate-200 rounded-xl p-5 mb-8">
-        <p className="font-mono m-0">w_new = w_old − learning_rate × gradient</p>
-        <p className="font-mono mt-2 mb-0">w_new = 0.80 − (0.10 × 0.30) = <strong>0.77</strong></p>
-      </div>
-      <div className="not-prose my-8">
-        <figure>
-          <figcaption className="text-center text-sm font-semibold text-slate-600 mb-4 uppercase tracking-wider">Figure 2 — Training Loop: Forward Pass → Loss → Backprop → Update</figcaption>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 overflow-x-auto">
-            <svg viewBox="0 0 720 120" className="w-full max-w-3xl mx-auto block" aria-label="Training loop showing input data flowing forward through network to loss then gradients flowing backward to update weights">
-              {/* Boxes */}
-              {[
-                ['Input\nData','#e0e7ff','#6366f1',30],
-                ['Forward\nProp','#d1fae5','#10b981',165],
-                ['Loss\nFunction','#fef3c7','#f59e0b',300],
-                ['Backprop\n(Gradients)','#fee2e2','#ef4444',435],
-                ['Update\nWeights','#ede9fe','#8b5cf6',570],
-              ].map(([label,fill,stroke,x])=>(
-                <g key={String(x)}>
-                  <rect x={Number(x)} y="30" width="110" height="55" rx="10" fill={String(fill)} stroke={String(stroke)} strokeWidth="1.5"/>
-                  {String(label).split('\n').map((line,i)=>(
-                    <text key={i} x={Number(x)+55} y={55+i*16} textAnchor="middle" fontSize="12" fontWeight="600" fill="#1e293b">{line}</text>
-                  ))}
-                </g>
-              ))}
-              {/* Forward arrows */}
-              {[140,275,410,545].map(x=>(
-                <g key={x}>
-                  <line x1={x} y1="57" x2={x+22} y2="57" stroke="#475569" strokeWidth="1.5"/>
-                  <polygon points={`${x+22},52 ${x+27},57 ${x+22},62`} fill="#475569"/>
-                </g>
-              ))}
-              {/* Backward arrow */}
-              <path d="M 625,85 Q 625,108 400,108 Q 175,108 85,85" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="6 3"/>
-              <polygon points="85,85 80,92 90,92" fill="#ef4444"/>
-              <text x="360" y="118" textAnchor="middle" fontSize="11" fill="#ef4444" fontWeight="600">← Gradients flow backward (backpropagation)</text>
-            </svg>
-          </div>
-        </figure>
-      </div>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">How the Network Makes One Prediction</h2>
+        <p className="text-lg leading-relaxed mb-5">Moving information from input to output is called a <strong>forward pass</strong> (or forward propagation). Follow our student once through the network:</p>
+        <ol className="not-prose space-y-4 list-none p-0">
+          {[
+            ['Prepare the inputs', 'Study, attendance, and sleep are converted to numbers on similar scales. Text or images would also need to be converted to numbers.'],
+            ['Send values into the hidden layer', 'Every hidden neuron receives the inputs, applies its own weights and bias, and uses an activation function.'],
+            ['Pass hidden outputs forward', 'Those outputs become the inputs for the next layer. The same simple neuron calculation happens again.'],
+            ['Produce a final score', 'The output neuron returns 0.67. For this teaching task we read that as an estimated 67% chance of passing.'],
+            ['Apply a decision rule if needed', 'If this teaching example uses 0.50 as its manually chosen threshold, 0.67 becomes “likely to pass.” The probability and threshold are different things.'],
+          ].map(([title, text], index) => (
+            <li key={title} className="flex gap-4">
+              <div className="flex-shrink-0 h-10 w-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-extrabold">{index + 1}</div>
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex-1">
+                <p className="font-bold text-slate-900 mb-1">{title}</p>
+                <p className="text-sm text-slate-700 m-0 leading-relaxed">{text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Where Do All Those Parameters Come From?</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        A dense layer connects every input to every neuron. So a layer with <strong>3 inputs</strong> and <strong>4 neurons</strong> has:
-      </p>
-      <div className="not-prose bg-violet-50 border border-violet-200 rounded-xl p-6 my-6">
-        <p className="font-mono m-0">weights = 3 × 4 = 12</p>
-        <p className="font-mono mt-2 mb-0">biases = 4</p>
-        <p className="font-mono mt-2 mb-0 font-bold text-violet-900">total trainable parameters = 12 + 4 = 16</p>
-      </div>
-      <p className="text-lg leading-relaxed mb-8">
-        General rule for a Dense layer: <strong>(number of inputs × number of neurons) + number of neurons</strong>. This is exactly the calculation you will see in the Keras model summary below.
-      </p>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">How Does a Neural Network Learn?</h2>
+        <p className="text-lg leading-relaxed">
+          At the beginning, weights are usually small, unhelpful numbers, so the guesses are poor. Training improves them using examples whose correct answers are known.
+        </p>
+        <LearningLoopDiagram />
 
-      {/* ── FULL TRAINING EXAMPLE ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Complete Training Example with Keras</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Now let us train a neural network on the MNIST handwritten digits dataset — a classic benchmark. The goal is to classify 28×28 pixel images into digits 0–9:
-      </p>
-      <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
-        <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">mnist_neural_network.py</div>
-        <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import tensorflow as tf
-from tensorflow.keras.datasets import mnist
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten
-from tensorflow.keras.utils import to_categorical
+        <div className="not-prose grid md:grid-cols-2 gap-4 my-6">
+          <TermCard term="Label / target" plainMeaning="The correct answer attached to a training example." example="pass = 1 and fail = 0." color="bg-blue-100 text-blue-800" />
+          <TermCard term="Loss" plainMeaning="One number that measures how wrong the model is." example="predicting 0.20 when the answer is pass produces more loss than predicting 0.80." color="bg-rose-100 text-rose-800" />
+          <TermCard term="Backpropagation" plainMeaning="A method for finding how each weight contributed to the loss." example="it sends responsibility for the error backward through the layers." color="bg-violet-100 text-violet-800" />
+          <TermCard term="Optimizer" plainMeaning="The rule that uses that information to update the parameters." example="SGD or Adam moves each weight a small amount intended to reduce future loss." color="bg-emerald-100 text-emerald-800" />
+        </div>
 
-# ── Step 1: Load MNIST dataset ───────────────────────────
-(X_train, y_train), (X_test, y_test) = mnist.load_data()
+        <h3 className="text-xl font-bold text-slate-900 mt-7 mb-3">One tiny learning moment</h3>
+        <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+          <table className="w-full text-sm min-w-[620px]">
+            <thead className="bg-slate-900 text-white">
+              <tr><th className="p-3 text-left">What happened?</th><th className="p-3 text-left">Value</th><th className="p-3 text-left">Plain meaning</th></tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 bg-white">
+              <tr><td className="p-3 font-semibold">Known label</td><td className="p-3 font-mono">1 (pass)</td><td className="p-3">This past student actually passed.</td></tr>
+              <tr><td className="p-3 font-semibold">Network prediction</td><td className="p-3 font-mono">0.35</td><td className="p-3">The model gave only a 35% pass chance.</td></tr>
+              <tr><td className="p-3 font-semibold">Loss</td><td className="p-3">High</td><td className="p-3">The guess was far from the known answer.</td></tr>
+              <tr><td className="p-3 font-semibold">Correction</td><td className="p-3">Small weight changes</td><td className="p-3">Backpropagation and the optimizer make the next guess slightly better.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-lg leading-relaxed mt-5">
+          One pass through all training examples is called an <strong>epoch</strong>. A small group processed together is a <strong>batch</strong>. The <strong>learning rate</strong> controls how large each update is. Too large can jump past a good solution; too small can make learning very slow.
+        </p>
+      </section>
 
-print("Training images:", X_train.shape)   # (60000, 28, 28)
-print("Test images:", X_test.shape)        # (10000, 28, 28)
-print("Pixel range before:", X_train.min(), "to", X_train.max())
-# Output: Pixel range before: 0 to 255
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Activation Functions, Without the Mystery</h2>
+        <p className="text-lg leading-relaxed">An activation function decides what signal a neuron sends onward. Without non-linear activations, many stacked layers would still behave like one simple straight-line rule.</p>
+        <div className="not-prose grid md:grid-cols-3 gap-4 my-6">
+          {[
+            ['ReLU', 'Hidden layers', 'Negative number → 0. Positive number → keep it.', '−2 → 0, 3 → 3', 'bg-indigo-600'],
+            ['Sigmoid', 'Yes/no output', 'Squeezes any number into the range 0 to 1.', '0.67 can be read as 67%', 'bg-emerald-600'],
+            ['Softmax', 'Many-class output', 'Turns several scores into probabilities that add to 100%.', 'cat 70%, dog 20%, bird 10%', 'bg-amber-600'],
+          ].map(([name, use, meaning, example, color]) => (
+            <div key={name} className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+              <div className={`${color} text-white p-4`}><p className="font-extrabold text-xl m-0">{name}</p><p className="text-xs text-white/80 mt-1 mb-0">Usually used for: {use}</p></div>
+              <div className="p-4"><p className="text-sm text-slate-700 mb-3">{meaning}</p><p className="font-mono text-xs bg-slate-100 rounded-lg p-3 m-0">{example}</p></div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-# ── Step 2: Normalize pixels 0→255 to 0→1 ──────────────
-X_train = X_train / 255.0
-X_test  = X_test  / 255.0
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Different Neural Networks for Different Data</h2>
+        <p className="text-lg leading-relaxed mb-5">“Neural network” is a family name. The shape of the network changes to suit the kind of information it receives. As a beginner, remember these main choices:</p>
+        <div className="not-prose space-y-4">
+          {[
+            ['Dense / Feedforward network', 'Rows of numbers', 'Student records, house prices, simple classification', 'Data moves forward through fully connected layers.', '→ → →'],
+            ['Convolutional neural network (CNN)', 'Images and grids', 'Recognizing a cat, reading an X-ray, detecting a road sign', 'Small filters look for local patterns such as edges and shapes.', '▦ → ◫'],
+            ['Recurrent network (RNN, LSTM, GRU)', 'Ordered sequences', 'Older text systems, speech, and time-series forecasting', 'A state carries information from earlier steps.', '○ ↻ ○'],
+            ['Transformer', 'Long sequences and relationships', 'Translation, chatbots, summarization, vision models', 'Attention lets each item consider other relevant items.', '● ⇄ ●'],
+            ['Autoencoder', 'Compressing and rebuilding data', 'Noise removal, anomaly detection, representation learning', 'An encoder compresses; a decoder reconstructs.', 'wide → narrow → wide'],
+            ['Generative adversarial network (GAN)', 'Creating new samples', 'Synthetic faces, artwork, data augmentation', 'A generator and a discriminator improve through competition.', 'creator ⇄ judge'],
+          ].map(([name, data, example, idea, sketch]) => (
+            <div key={name} className="grid md:grid-cols-[190px_1fr_150px] gap-4 items-center bg-white border border-slate-200 rounded-xl p-5">
+              <div><p className="font-extrabold text-slate-900 m-0">{name}</p><p className="text-xs font-semibold text-indigo-600 mt-1 mb-0">Typical input: {data}</p></div>
+              <div><p className="text-sm text-slate-700 mb-1">{idea}</p><p className="text-xs text-slate-500 m-0"><strong>Example:</strong> {example}</p></div>
+              <div className="font-mono text-center bg-indigo-50 text-indigo-800 rounded-lg px-3 py-3 text-sm font-bold">{sketch}</div>
+            </div>
+          ))}
+        </div>
+        <p className="text-sm text-slate-600 mt-4">There are more specialized architectures, but these six give a beginner the most useful map. Later lessons on this site explain CNNs, recurrent networks, transformers, autoencoders, and GANs separately.</p>
+      </section>
 
-# ── Step 3: One-hot encode labels ───────────────────────
-# Label 3 → [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
-y_train_ohe = to_categorical(y_train, 10)
-y_test_ohe  = to_categorical(y_test, 10)
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">A Complete Two-Layer Forward Pass in NumPy</h2>
+        <p className="text-lg leading-relaxed">The single-neuron calculation above explains the basic operation. A layer performs several such calculations together. This executable example uses one student row, two hidden neurons, and one output neuron. Every array is written explicitly so the printed intermediate values can be checked.</p>
+        <div className="not-prose grid gap-3 sm:grid-cols-2 lg:grid-cols-4 my-5">
+          {[
+            ['X shape [1,3]', '1 example × 3 input features'],
+            ['W1 shape [3,2]', '3 incoming features × 2 hidden neurons'],
+            ['A1 shape [1,2]', '2 hidden outputs for the one example'],
+            ['W2 shape [2,1]', '2 hidden outputs × 1 final neuron'],
+          ].map(([shape, meaning]) => <div key={shape} className="rounded-xl border border-indigo-200 bg-indigo-50 p-4"><p className="font-mono font-bold text-indigo-900">{shape}</p><p className="mt-2 text-xs leading-relaxed text-slate-600">{meaning}</p></div>)}
+        </div>
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">two_layer_forward.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
 
-# ── Step 4: Build the network ────────────────────────────
-model = Sequential([
-    Flatten(input_shape=(28, 28)),   # 28x28=784 pixels → flat vector
-    Dense(128, activation='relu'),   # Hidden layer 1: 784 → 128
-    Dense(64,  activation='relu'),   # Hidden layer 2: 128 → 64
-    Dense(10,  activation='softmax') # Output: 64 → 10 class probabilities
+X = np.array([[0.8, 0.9, 0.7]])
+W1 = np.array([[ 0.5, -0.4],
+               [ 0.3,  0.6],
+               [-0.2,  0.1]])
+b1 = np.array([0.1, -0.2])
+
+Z1 = X @ W1 + b1
+A1 = np.maximum(0, Z1)       # ReLU
+
+W2 = np.array([[0.8],
+               [0.4]])
+b2 = np.array([-0.1])
+
+Z2 = A1 @ W2 + b2
+A2 = 1 / (1 + np.exp(-Z2))   # sigmoid
+
+print("Z1:", Z1)  # [[0.63 0.09]]
+print("A1:", A1)  # [[0.63 0.09]]
+print("Z2:", Z2)  # [[0.44]]
+print("A2:", A2)  # [[0.60825903]]`}</pre>
+        </div>
+        <div className="not-prose rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-sm leading-relaxed text-emerald-950"><strong>How the values were chosen:</strong> X reuses the three teaching inputs. W1, b1, W2 and b2 are manually chosen example parameters; a real network initializes parameters and then learns them. Z means the value before activation, A means the value after activation, and the layer number is written as 1 or 2. The final 0.608 is produced by the model—not supplied as a label—and means an estimated 60.8% pass probability under this toy setup.</div>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Try the Neuron in Python</h2>
+        <p className="text-lg leading-relaxed">This short program repeats the hand calculation from Figure 4. It does not train a full network yet; it shows exactly how one neuron creates an output.</p>
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">one_neuron.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import math
+
+# One student's input values (scaled between 0 and 1)
+study = 0.8
+attendance = 0.9
+sleep = 0.7
+
+# Example weights and bias
+weighted_sum = (
+    study * 0.7
+    + attendance * 0.8
+    + sleep * 0.3
+    - 0.8
+)
+
+# Sigmoid changes the raw score into a value from 0 to 1
+probability = 1 / (1 + math.exp(-weighted_sum))
+
+print(round(weighted_sum, 2))  # 0.69
+print(round(probability, 2))   # 0.67
+print(f"Estimated pass chance: {probability:.0%}")
+# Estimated pass chance: 67%`}</pre>
+        </div>
+
+        <h3 className="text-xl font-bold text-slate-900 mb-3">Now connect neurons with Keras</h3>
+        <p className="text-lg leading-relaxed">Libraries create and train all those connected neurons for us. This is the smallest readable model for three student inputs and one yes/no output:</p>
+        <div className="not-prose bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm my-6">
+          <div className="bg-slate-800 px-4 py-2 text-slate-300 text-xs font-mono">student_network.py</div>
+          <pre className="bg-[#1e1e1e] text-[#d4d4d4] p-5 font-mono text-sm overflow-x-auto leading-relaxed">{`import numpy as np
+from tensorflow import keras
+
+keras.utils.set_random_seed(7)
+
+# Eight labelled teaching examples. Each row is
+# [study, attendance, sleep]; each target is pass=1 or fail=0.
+X_train = np.array([
+    [0.9, 0.9, 0.8], [0.8, 0.7, 0.7], [0.7, 0.9, 0.6], [0.6, 0.8, 0.8],
+    [0.2, 0.4, 0.5], [0.3, 0.3, 0.6], [0.4, 0.5, 0.4], [0.1, 0.6, 0.5],
+], dtype=np.float32)
+y_train = np.array([1, 1, 1, 1, 0, 0, 0, 0], dtype=np.float32)
+
+model = keras.Sequential([
+    keras.layers.Input(shape=(3,)),       # 3 inputs
+    keras.layers.Dense(4, activation="relu"),  # 4 hidden neurons
+    keras.layers.Dense(1, activation="sigmoid") # pass chance
 ])
 
-print("\\nModel Summary:")
-model.summary()
-# Layer (type)           Output Shape    Param #
-# ─────────────────────────────────────────────
-# flatten (Flatten)      (None, 784)     0
-# dense (Dense)          (None, 128)     100,480  ← 784×128 + 128 biases
-# dense_1 (Dense)        (None, 64)      8,256    ← 128×64 + 64 biases
-# dense_2 (Dense)        (None, 10)      650      ← 64×10 + 10 biases
-# Total trainable params: 109,386
-
-# ── Step 5: Compile ──────────────────────────────────────
 model.compile(
-    optimizer='adam',
-    loss='categorical_crossentropy',  # for multi-class (one-hot targets)
-    metrics=['accuracy']
+    optimizer="adam",              # how weights are adjusted
+    loss="binary_crossentropy",     # how wrong each guess is
+    metrics=["accuracy"]
 )
 
-# ── Step 6: Train ────────────────────────────────────────
-history = model.fit(
-    X_train, y_train_ohe,
-    epochs=10,
-    batch_size=128,
-    validation_split=0.1,  # use 10% of train set for validation
-    verbose=1
-)
-# Example output (exact values can vary by TensorFlow version, hardware, and random initialization):
-# Epoch  1/10 - loss: 0.2621 - accuracy: 0.9244 - val_accuracy: 0.9633
-# Epoch  5/10 - loss: 0.0712 - accuracy: 0.9783 - val_accuracy: 0.9758
-# Epoch 10/10 - loss: 0.0322 - accuracy: 0.9897 - val_accuracy: 0.9791
+model.fit(X_train, y_train, epochs=50, batch_size=4, verbose=0)
 
-# ── Step 7: Evaluate on unseen test data ─────────────────
-test_loss, test_acc = model.evaluate(X_test, y_test_ohe, verbose=0)
-print(f"\\nTest Accuracy: {test_acc:.4f}")
-# Output: Test Accuracy: 0.9785
-# → The model correctly classifies 97.85% of unseen handwritten digits!
+chance = model.predict([[0.8, 0.9, 0.7]])[0][0]
+print(f"Estimated pass chance: {chance:.0%}")
+# The seed makes this teaching run repeatable on a given setup, but minor
+# numerical differences can still occur across TensorFlow versions/hardware.`}</pre>
+        </div>
+        <div className="not-prose grid gap-4 md:grid-cols-2">
+          <div className="bg-sky-50 border border-sky-200 rounded-xl p-5"><p className="font-bold text-sky-950 mb-2">How the calls match the concept</p><p className="text-sm leading-relaxed text-sky-900 m-0"><code>Dense</code> creates trainable weights and biases. <code>compile</code> selects the error rule and update algorithm. <code>fit</code> repeats prediction, loss, gradients and updates. <code>predict</code> performs only the forward calculation with the learned parameter values.</p></div>
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-5"><p className="font-bold text-amber-950 mb-2">What this example cannot justify</p><p className="text-sm leading-relaxed text-amber-900 m-0">Eight invented rows cannot support a real student decision. A real system would need representative data, clear definitions, separate validation and test sets, fairness review and human oversight. This code exists only to make the mechanics executable.</p></div>
+        </div>
+      </section>
 
-# ── Step 8: Inspect a prediction ─────────────────────────
-import numpy as np
-sample = X_test[0:1]                    # first test image
-probs  = model.predict(sample)[0]      # 10 probabilities
-pred   = np.argmax(probs)              # digit with highest probability
-print(f"Predicted digit: {pred}")
-print(f"Confidence: {probs[pred]*100:.1f}%")
-print(f"Actual digit: {y_test[0]}")
-# Output:
-# Predicted digit: 7
-# Confidence: 99.8%
-# Actual digit: 7`}</pre>
-      </div>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">What Can Go Wrong?</h2>
+        <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm">
+          <table className="w-full text-sm min-w-[720px]">
+            <thead className="bg-slate-900 text-white"><tr><th className="p-3 text-left">Problem</th><th className="p-3 text-left">In simple English</th><th className="p-3 text-left">What to check</th></tr></thead>
+            <tbody className="divide-y divide-slate-100 bg-white">
+              {[
+                ['Poor or biased data', 'The examples do not represent the people or situations where the model will be used.', 'Coverage, labels, missing groups, and data collection.'],
+                ['Overfitting', 'The network memorizes training examples but performs poorly on new ones.', 'Validation results, simpler models, regularization, and more useful data.'],
+                ['Underfitting', 'The network has not learned the useful pattern even on training data.', 'Input quality, model capacity, learning rate, and training time.'],
+                ['Wrong metric', 'A high-looking number hides the failures that actually matter.', 'Precision, recall, class balance, and real-world cost of mistakes.'],
+                ['Too much confidence', 'A probability is treated as certainty.', 'Calibration, uncertainty, human review, and safe thresholds.'],
+              ].map(([problem, meaning, check]) => <tr key={problem}><td className="p-3 font-bold text-rose-700">{problem}</td><td className="p-3 text-slate-700">{meaning}</td><td className="p-3 text-emerald-700">{check}</td></tr>)}
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-      {/* Line by line */}
-      <h3 className="text-xl font-bold text-slate-800 mb-4">Line-by-Line Explanation</h3>
-      <div className="not-prose space-y-3 my-4">
-        {[
-          ['X_train / 255.0','Scales pixel values from 0–255 to 0–1. Keeping numeric inputs on a reasonable scale often makes optimization easier and more stable.'],
-          ['to_categorical(y_train, 10)','One-hot encoding: digit 3 becomes [0,0,0,1,0,0,0,0,0,0]. This representation matches categorical_crossentropy in this example; alternatively, sparse_categorical_crossentropy can work directly with integer class labels.'],
-          ['Flatten(input_shape=(28,28))','Reshapes the 28×28 2D image into a flat vector of 784 numbers. Dense (fully connected) layers expect 1D input, not 2D grids.'],
-          ['Dense(128, activation="relu")','Creates 128 neurons, each connected to all 784 inputs. 128 × 784 = 100,352 weights, plus 128 biases = 100,480 parameters in this layer alone.'],
-          ['Dense(10, activation="softmax")','10 output neurons, one per digit class. Softmax ensures all 10 probabilities sum to exactly 1.0, so they represent a proper probability distribution.'],
-          ['loss="categorical_crossentropy"','Measures how far the predicted probability distribution is from the true one-hot label. If the true label is class 3 but we predict only 20% probability for class 3, the loss is high.'],
-          ['np.argmax(probs)','Returns the index of the highest probability — the digit the model thinks is most likely. If probs = [0.01, 0.01, 0.01, 0.95, ...], argmax = 3.'],
-        ].map(([code, exp]) => (
-          <div key={String(code)} className="bg-white border border-slate-200 rounded-xl p-4 flex gap-4">
-            <div className="flex-shrink-0 font-mono text-xs bg-slate-100 text-indigo-700 px-3 py-1 rounded h-fit mt-1 whitespace-nowrap">{code}</div>
-            <p className="text-sm text-slate-700 leading-relaxed">{exp}</p>
-          </div>
-        ))}
-      </div>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Check Your Understanding</h2>
+        <div className="space-y-4">
+          {[
+            ['1. What does a weight represent?', 'It represents how strongly one input or neuron influences the next neuron.'],
+            ['2. What are the three basic jobs inside a neuron?', 'Multiply inputs by weights, add the results and bias, then apply an activation function.'],
+            ['3. What is the difference between a prediction and a label?', 'A prediction is the network’s guess. A label is the known correct answer supplied in training or evaluation data.'],
+            ['4. Does backpropagation directly choose the final answer?', 'No. Backpropagation calculates how the parameters contributed to the loss. An optimizer uses that information to adjust them.'],
+            ['5. Which network would you first consider for images?', 'A convolutional neural network (CNN), because its filters are designed to find local visual patterns.'],
+          ].map(([question, answer]) => (
+            <details key={question} className="bg-white border border-slate-200 rounded-xl p-5">
+              <summary className="font-bold text-slate-900 cursor-pointer">{question}</summary>
+              <p className="mt-3 mb-0 text-slate-700">{answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
-      {/* ── OVERFITTING ── */}
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10">Common Problems and How to Fix Them</h2>
-      <div className="not-prose overflow-x-auto rounded-xl border border-slate-200 shadow-sm my-6">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-800 text-white">
-            <tr><th className="p-3 text-left">Problem</th><th className="p-3 text-left">Symptom</th><th className="p-3 text-left">Fix</th></tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 bg-white">
-            {[
-              ['Overfitting','High train accuracy, low test accuracy','Add Dropout layers, reduce network size, use more data, L2 regularization'],
-              ['Underfitting','Low train accuracy AND low test accuracy','Add more layers/neurons, train longer, reduce regularization'],
-              ['Vanishing Gradient','Early layers learn nothing; loss stuck','Use ReLU instead of sigmoid; use BatchNorm; try residual connections'],
-              ['Exploding Gradient','Loss becomes NaN or Inf during training','Reduce learning rate; add gradient clipping; use BatchNorm'],
-              ['Dead ReLU neurons','Neurons always output 0, never update','Use Leaky ReLU; reduce learning rate; check weight initialization'],
-              ['Slow convergence','Loss barely decreases each epoch','Switch to Adam optimizer; increase learning rate; check data scaling'],
-            ].map(([prob,sym,fix])=>(
-              <tr key={prob} className="hover:bg-slate-50">
-                <td className="p-3 font-bold text-rose-700">{prob}</td>
-                <td className="p-3 text-slate-600">{sym}</td>
-                <td className="p-3 text-emerald-700">{fix}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">Summary: The Whole Idea in Seven Lines</h2>
+        <div className="not-prose bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
+          <ol className="space-y-3 m-0 pl-5 text-indigo-950">
+            <li>Inputs are numbers that describe one example.</li>
+            <li>Weights describe how strongly information should influence the next neuron.</li>
+            <li>Each neuron multiplies, adds a bias, and applies an activation function.</li>
+            <li>Layers pass those results forward until the network makes a prediction.</li>
+            <li>A loss function measures the prediction’s error against the known answer.</li>
+            <li>Backpropagation and an optimizer adjust weights and biases.</li>
+            <li>Repeating this with useful data lets the network improve on its task.</li>
+          </ol>
+        </div>
+      </section>
 
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 mt-10 border-b pb-2">Common Conceptual Mistakes</h2>
-      <div className="not-prose space-y-3 mb-10">
-        {[
-          ['“A neuron understands one human-readable concept.”', 'Not necessarily. A learned unit is a mathematical feature detector, and its meaning may not map cleanly to a single human concept.'],
-          ['“More layers always mean a better model.”', 'No. Extra capacity can increase computation and overfitting risk. Architecture should match the problem and available data.'],
-          ['“The activation function creates the weights.”', 'No. The activation transforms a neuron’s pre-activation value; training adjusts the weights and biases.'],
-          ['“Backpropagation itself updates the weights.”', 'Backpropagation computes gradients. An optimizer such as SGD or Adam uses those gradients to update parameters.'],
-          ['“A 99% training accuracy means the model is excellent.”', 'Not by itself. Generalization should be checked on validation/test data that was not used to fit the model.'],
-        ].map(([mistake, correction]) => (
-          <div key={mistake} className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-            <p className="font-semibold text-slate-900 mb-1">{mistake}</p>
-            <p className="text-sm text-slate-700 m-0">{correction}</p>
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Quick Knowledge Check</h2>
-      <div className="space-y-4 mb-12">
-        <details className="bg-white border border-slate-200 rounded-xl p-5">
-          <summary className="font-bold text-slate-900 cursor-pointer">1. What are the two main calculations inside a neuron?</summary>
-          <p className="mt-3 mb-0 text-slate-700">Compute a weighted sum plus bias, then apply an activation function.</p>
-        </details>
-        <details className="bg-white border border-slate-200 rounded-xl p-5">
-          <summary className="font-bold text-slate-900 cursor-pointer">2. Why do hidden layers usually need non-linear activations?</summary>
-          <p className="mt-3 mb-0 text-slate-700">Without non-linearity, stacking linear transformations still produces only another linear transformation, greatly limiting the patterns the network can represent.</p>
-        </details>
-        <details className="bg-white border border-slate-200 rounded-xl p-5">
-          <summary className="font-bold text-slate-900 cursor-pointer">3. What is the difference between forward propagation and backpropagation?</summary>
-          <p className="mt-3 mb-0 text-slate-700">Forward propagation computes predictions and loss. Backpropagation computes gradients of that loss with respect to the trainable parameters.</p>
-        </details>
-        <details className="bg-white border border-slate-200 rounded-xl p-5">
-          <summary className="font-bold text-slate-900 cursor-pointer">4. A Dense layer receives 5 inputs and has 3 neurons. How many trainable parameters does it have?</summary>
-          <p className="mt-3 mb-0 text-slate-700">(5 × 3) + 3 biases = <strong>18 parameters</strong>.</p>
-        </details>
-      </div>
-
-      <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">Summary</h2>
-      <p className="text-lg leading-relaxed mb-4">
-        Neural networks are mathematical function approximators built from stacked layers of neurons. Each neuron computes a weighted sum of its inputs, adds a bias, and applies a non-linear activation function. Training uses forward propagation to make predictions, a loss function to measure error, backpropagation to compute gradients, and gradient descent to update weights. By stacking learned transformations, neural networks can represent complex non-linear relationships, although performance still depends on data quality, architecture, optimization, regularization, and evaluation.
-      </p>
-      <div className="bg-slate-50 p-6 rounded-lg shadow-sm border-l-4 border-indigo-500 mt-4 mb-10">
-        <p className="text-slate-900 font-bold mb-2 text-lg">Key Takeaway</p>
-        <p className="text-slate-800 italic text-base leading-relaxed">
-          Neural networks become much easier to understand when you reduce them to four ideas: weighted sums, activation functions, forward propagation, and gradient-based parameter updates. Once these are clear, deeper architectures are combinations and extensions of the same foundation.
-        </p>
-      </div>
-
-      <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Continue Learning</h2>
-      <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
-        <a href="/learn/multi-armed-bandits" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
-          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous</p>
-          <p className="font-bold text-slate-900 m-0">Multi-Armed Bandits</p>
-        </a>
-        <a href="/learn/deep-learning-intro" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
-          <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Next</p>
-          <p className="font-bold text-slate-900 m-0">Deep Learning Introduction</p>
-        </a>
-      </div>
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4 border-b pb-2">Continue Learning</h2>
+        <div className="not-prose grid md:grid-cols-2 gap-4 mb-10">
+          <a href="/learn/deep-learning-intro" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+            <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Previous concept</p>
+            <p className="font-bold text-slate-900 m-0">Deep Learning Basics and Model Types</p>
+          </a>
+          <a href="/learn/math-foundations-deep-learning" className="border border-slate-200 rounded-xl p-4 hover:border-indigo-300 hover:bg-indigo-50 transition-colors no-underline">
+            <p className="text-xs font-bold text-indigo-600 uppercase mb-1">Next concept</p>
+            <p className="font-bold text-slate-900 m-0">Essential Math for Neural Networks</p>
+          </a>
+        </div>
+      </section>
     </div>
   );
 }

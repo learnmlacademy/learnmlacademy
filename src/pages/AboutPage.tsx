@@ -8,7 +8,7 @@ export function AboutPage() {
       let el = document.querySelector(selector) as HTMLMetaElement | null;
       if (el) el.setAttribute(attr, value);
     };
-    const desc = 'Learn about ML Academy — a free platform teaching Machine Learning, Deep Learning, and Python to students and engineers worldwide with 63+ hands-on tutorials.';
+    const desc = 'Learn about ML Academy — a free platform teaching Machine Learning, Deep Learning, Generative AI, LLMs, and Agentic AI with 133 hands-on tutorials.';
     setMeta('meta[name="description"]', 'content', desc);
     setMeta('meta[property="og:title"]', 'content', 'About ML Academy');
     setMeta('meta[property="og:description"]', 'content', desc);

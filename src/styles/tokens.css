@@ -1,0 +1,155 @@
+:root {
+  color-scheme: light;
+
+  /* Canvas */
+  --lma-canvas: #f8fafc;
+  --lma-canvas-subtle: #f1f5f9;
+  --lma-surface: #ffffff;
+  --lma-surface-raised: #ffffff;
+  --lma-surface-inverse: #172033;
+
+  /* Text */
+  --lma-text-primary: #172033;
+  --lma-text-secondary: #475569;
+  --lma-text-muted: #64748b;
+  --lma-text-inverse: #f8fafc;
+  --lma-text-link: #4f46e5;
+
+  /* Border */
+  --lma-border-subtle: #e8edf3;
+  --lma-border-default: #d8e0ea;
+  --lma-border-strong: #aebccc;
+
+  /* Brand */
+  --lma-brand: #4f46e5;
+  --lma-brand-hover: #4338ca;
+  --lma-brand-soft: #eef2ff;
+  --lma-brand-contrast: #ffffff;
+
+  /* Semantic */
+  --lma-info: #2563eb;
+  --lma-info-soft: #eff6ff;
+  --lma-success: #059669;
+  --lma-success-soft: #ecfdf5;
+  --lma-warning: #d97706;
+  --lma-warning-soft: #fffbeb;
+  --lma-danger: #dc2626;
+  --lma-danger-soft: #fef2f2;
+
+  /* Shared educational surfaces and accessible status text. */
+  --lma-brand-text: #312e81;
+  --lma-brand-border: #c7d2fe;
+  --lma-info-border: #bfdbfe;
+  --lma-success-text: #065f46;
+  --lma-success-border: #a7f3d0;
+  --lma-warning-text: #92400e;
+  --lma-warning-border: #fde68a;
+  --lma-danger-text: #991b1b;
+  --lma-danger-border: #fecaca;
+  --lma-code-canvas: #0f172a;
+  --lma-code-hover: #243248;
+  --lma-code-border: #475569;
+  --lma-code-muted: #cbd5e1;
+
+  --lma-diagram-input: var(--lma-info);
+  --lma-diagram-process: var(--lma-brand);
+  --lma-diagram-evidence: var(--lma-info);
+  --lma-diagram-output: var(--lma-success);
+  --lma-diagram-accepted: var(--lma-success);
+  --lma-diagram-warning: var(--lma-warning);
+  --lma-diagram-rejected: var(--lma-danger);
+  --lma-diagram-connector: var(--lma-text-muted);
+
+  /* Focus */
+  --lma-focus-ring: #6366f1;
+
+  /* Shape and elevation */
+  --lma-radius-sm: 0.5rem;
+  --lma-radius-md: 0.75rem;
+  --lma-radius-lg: 1rem;
+  --lma-radius-marketing: 1.5rem;
+  --lma-shadow-low: 0 1px 2px rgb(15 23 42 / 0.06), 0 8px 24px rgb(15 23 42 / 0.04);
+  --lma-shadow-overlay: 0 24px 64px rgb(15 23 42 / 0.2);
+
+  /* Layout */
+  --lma-header-height: 4rem;
+  --lma-curriculum-width: 18.25rem;
+  --lma-reading-width: 48.75rem;
+  --lma-toc-width: 14rem;
+}
+
+html {
+  background: var(--lma-canvas);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--lma-canvas);
+  color: var(--lma-text-primary);
+}
+
+button,
+a,
+input,
+summary,
+[tabindex]:not([tabindex="-1"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid var(--lma-focus-ring);
+  outline-offset: 3px;
+}
+
+.lma-skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 100;
+  transform: translateY(-180%);
+  border-radius: var(--lma-radius-sm);
+  background: var(--lma-surface-inverse);
+  color: var(--lma-text-inverse);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: transform 150ms ease;
+}
+
+.lma-skip-link:focus {
+  transform: translateY(0);
+}
+
+.lma-scrollbar {
+  scrollbar-color: #cbd5e1 transparent;
+  scrollbar-width: thin;
+}
+
+.lma-scrollbar::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+.lma-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #cbd5e1;
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
