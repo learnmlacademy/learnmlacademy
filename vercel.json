@@ -1,6 +1,91 @@
 {
   "redirects": [
     {
+      "source": "/learn/mlp-universal-approximation",
+      "destination": "/learn/neural-networks",
+      "permanent": true
+    },
+    {
+      "source": "/learn/computational-graphs-autodiff",
+      "destination": "/learn/backpropagation",
+      "permanent": true
+    },
+    {
+      "source": "/learn/debugging-neural-networks",
+      "destination": "/learn/neural-network-training-loop",
+      "permanent": true
+    },
+    {
+      "source": "/learn/advanced-neural-optimization",
+      "destination": "/learn/deep-learning-optimizers",
+      "permanent": true
+    },
+    {
+      "source": "/learn/learning-rate-scheduling",
+      "destination": "/learn/deep-learning-optimizers",
+      "permanent": true
+    },
+    {
+      "source": "/learn/batch-normalization",
+      "destination": "/learn/weight-initialization",
+      "permanent": true
+    },
+    {
+      "source": "/learn/normalization-methods",
+      "destination": "/learn/weight-initialization",
+      "permanent": true
+    },
+    {
+      "source": "/learn/vanishing-exploding-gradients",
+      "destination": "/learn/weight-initialization",
+      "permanent": true
+    },
+    {
+      "source": "/learn/label-smoothing-distillation-ensembles",
+      "destination": "/learn/deep-learning-regularization",
+      "permanent": true
+    },
+    {
+      "source": "/learn/deep-learning-generalization",
+      "destination": "/learn/deep-learning-regularization",
+      "permanent": true
+    },
+    {
+      "source": "/learn/computer-vision",
+      "destination": "/learn/cnn",
+      "permanent": true
+    },
+    {
+      "source": "/learn/unet-deeplab-gradcam",
+      "destination": "/learn/object-detection",
+      "permanent": true
+    },
+    {
+      "source": "/learn/state-space-bptt",
+      "destination": "/learn/state-space-models",
+      "permanent": true
+    },
+    {
+      "source": "/learn/gru-bidirectional-seq2seq",
+      "destination": "/learn/attention-transformers-deep-learning",
+      "permanent": true
+    },
+    {
+      "source": "/learn/autoencoder-variants",
+      "destination": "/learn/autoencoders",
+      "permanent": true
+    },
+    {
+      "source": "/learn/self-supervised-contrastive-learning",
+      "destination": "/learn/self-supervised-few-shot-learning",
+      "permanent": true
+    },
+    {
+      "source": "/learn/curriculum-meta-few-shot",
+      "destination": "/learn/self-supervised-few-shot-learning",
+      "permanent": true
+    },
+    {
       "source": "/learn/genai-apis-open-models",
       "destination": "/learn/genai-deployment",
       "permanent": true
