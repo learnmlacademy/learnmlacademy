@@ -712,30 +712,82 @@ export const getCanonicalUrl = (topicId?: string): string => {
 export const getLearningResourceSchema = (
   topicId: string,
   title: string,
-  description: string
+  description: string,
+  categoryTitle?: string
 ): string => {
+  const pageUrl = `${BASE_URL}/learn/${topicId}`;
   return JSON.stringify({
     "@context": "https://schema.org",
-    "@type": "LearningResource",
-    "name": title,
-    "description": description,
-    "url": `${BASE_URL}/learn/${topicId}`,
-    "educationalLevel": "Beginner to Advanced",
-    "learningResourceType": "Tutorial",
-    "inLanguage": "en",
-    "isAccessibleForFree": true,
-    "provider": {
-      "@type": "Organization",
-      "name": "ML Academy",
-      "url": BASE_URL
-    },
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": BASE_URL },
-        { "@type": "ListItem", "position": 2, "name": "Learn", "item": `${BASE_URL}/learn` },
-        { "@type": "ListItem", "position": 3, "name": title, "item": `${BASE_URL}/learn/${topicId}` }
-      ]
-    }
+    "@graph": [
+      {
+        "@type": ["TechArticle", "LearningResource"],
+        "@id": `${pageUrl}#article`,
+        "url": pageUrl,
+        "headline": title,
+        "name": title,
+        "description": description,
+        "educationalLevel": "Beginner to Advanced",
+        "learningResourceType": "Tutorial",
+        "inLanguage": "en-US",
+        "isAccessibleForFree": true,
+        "image": `${BASE_URL}/og-image.png`,
+        "datePublished": "2025-01-15T08:00:00+00:00",
+        "dateModified": new Date().toISOString(),
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": pageUrl
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Learn ML Academy",
+          "url": BASE_URL
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Learn ML Academy",
+          "url": BASE_URL,
+          "logo": {
+            "@type": "ImageObject",
+            "url": `${BASE_URL}/favicon.svg`
+          }
+        },
+        "teaches": title,
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": BASE_URL
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Curriculum",
+            "item": `${BASE_URL}/curriculum`
+          },
+          ...(categoryTitle ? [{
+            "@type": "ListItem",
+            "position": 3,
+            "name": categoryTitle.replace(/^\d+\.\s*/, ''),
+            "item": `${BASE_URL}/curriculum`
+          }] : []),
+          {
+            "@type": "ListItem",
+            "position": categoryTitle ? 4 : 3,
+            "name": title,
+            "item": pageUrl
+          }
+        ]
+      }
+    ]
   });
 };
+

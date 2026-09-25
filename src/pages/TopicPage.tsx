@@ -6,6 +6,7 @@ import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils
 import { GenericContent } from "../content/GenericContent";
 import { QuizSection } from "../components/QuizSection";
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
+import { WasThisHelpful } from "../components/lesson/WasThisHelpful";
 import type { LearningDestination } from "../components/lesson/PreviousNextCard";
 import {
   LegacyInlineEndingCleanup,
@@ -473,6 +474,18 @@ export function TopicPage() {
         setMeta('meta[property="og:title"]', 'content', seo.title);
         setMeta('meta[property="og:description"]', 'content', seo.description);
         setMeta('meta[property="og:url"]', 'content', getCanonicalUrl(topicId));
+        setMeta('meta[property="og:site_name"]', 'content', 'Learn ML Academy');
+        setMeta('meta[property="og:type"]', 'content', 'article');
+        setMeta('meta[property="og:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
+        setMeta('meta[property="article:section"]', 'content', topicInfo.category.title.replace(/^\d+\.\s*/, ''));
+        setMeta('meta[property="article:published_time"]', 'content', '2025-01-15T08:00:00Z');
+        setMeta('meta[property="article:modified_time"]', 'content', new Date().toISOString());
+
+        // Twitter Card tags
+        setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
+        setMeta('meta[name="twitter:title"]', 'content', seo.title);
+        setMeta('meta[name="twitter:description"]', 'content', seo.description);
+        setMeta('meta[name="twitter:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
 
         // JSON-LD: LearningResource + BreadcrumbList
         let scriptSchema = document.querySelector('#schema-topic') as HTMLScriptElement;
@@ -482,7 +495,7 @@ export function TopicPage() {
           scriptSchema.setAttribute('type', 'application/ld+json');
           document.head.appendChild(scriptSchema);
         }
-        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description);
+        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description, topicInfo.category.title);
       }
     }
   }, [topicId]);
@@ -520,7 +533,9 @@ export function TopicPage() {
   const isLegacyStandardizedLesson = !isModernStandardizedLesson;
 
   const renderQuiz = () => (
-    <div key={`quiz-${subtopic.id}`}><QuizSection topicId={subtopic.id} topicTitle={subtopic.title} /></div>
+    <div id="quiz-section" key={`quiz-${subtopic.id}`} className="scroll-mt-20">
+      <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+    </div>
   );
 
   const advancedDestinations: Record<string, { primary?: LearningDestination; secondary?: LearningDestination }> = {
@@ -589,6 +604,9 @@ export function TopicPage() {
           )}
         </Suspense>
       </article>
+
+      {/* Reader Feedback (Competitive UX Standard) */}
+      <WasThisHelpful topicId={topicId} topicTitle={subtopic.title} />
 
       {isModernStandardizedLesson ? (
         <>
