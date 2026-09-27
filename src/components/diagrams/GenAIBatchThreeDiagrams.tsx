@@ -164,7 +164,7 @@ export function PixelVsLatentDiffusionDiagram() {
       caption="The dimensions are one common architecture-specific example, not a universal Stable Diffusion rule. The VAE surrounds the latent denoising loop; it is not repeated at every denoising step."
       description="Two lanes compare pixel and latent diffusion. The pixel lane repeatedly denoises a large image tensor shaped one by three by 512 by 512 before producing an image. The latent lane passes an image through a fixed VAE encoder once, repeatedly denoises a much smaller one by four by 64 by 64 latent, then passes the final latent through a fixed VAE decoder once. Labels show 786432 pixel values versus 16384 latent values, or 48 times fewer values in this example."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 560">
           <defs><ArrowMarker id={pixelArrow} color="#0284c7" /><ArrowMarker id={latentArrow} color="#7c3aed" /></defs>
           <Boundary x={18} y={42} width={964} height={190} label="PIXEL SPACE · LARGE REPEATED WORK" tone="sky" />
@@ -202,7 +202,7 @@ export function PixelVsLatentDiffusionDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 970">
           <defs><ArrowMarker id={`${pixelArrow}-mobile`} color="#0284c7" /><ArrowMarker id={`${latentArrow}-mobile`} color="#7c3aed" /></defs>
           <Boundary x={8} y={28} width={284} height={360} label="PIXEL SPACE" tone="sky" />
@@ -213,23 +213,23 @@ export function PixelVsLatentDiffusionDiagram() {
           <NoiseTile x={72} y={284} size={40} strength={3} /><NoiseTile x={130} y={284} size={40} strength={7} /><NoiseTile x={188} y={284} size={40} strength={11} />
           <text x="150" y="365" textAnchor="middle" fontSize="11" fontWeight="700" fill="#0c4a6e">each step handles pixel-sized data</text>
 
-          <Boundary x={8} y={430} width={284} height={510} label="LATENT SPACE" tone="violet" />
+          <Boundary x={8} y={430} width={284} height={530} label="LATENT SPACE" tone="violet" />
           <PhotoTile x={25} y={468} width={72} height={58} label="image" />
           <Tag x={214} y={434} text="FIXED" tone="violet" />
           <DiagramNode x={125} y={462} width={150} height={64} title="VAE encoder" detail="outside loop" tone="violet" />
           <Connector d="M97 496 H115" markerId={`${latentArrow}-mobile`} />
           <TensorTile x={112} y={575} size={76} cells={4} label="[1, 4, 64, 64]" detail="16,384 values" tone="violet" />
-          <Connector d="M200 496 C235 496 235 548 188 600" markerId={`${latentArrow}-mobile`} />
+          <Connector d="M200 526 C200 546 175 546 175 565" markerId={`${latentArrow}-mobile`} />
           <rect x="48" y="705" width="204" height="92" rx="16" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2.5" strokeDasharray="7 5" />
           <text x="150" y="728" textAnchor="middle" fontSize="11.5" fontWeight="800" fill="#4c1d95">REPEAT ON SMALL LATENT</text>
           <NoiseTile x={75} y={742} size={38} strength={3} /><NoiseTile x={131} y={742} size={38} strength={7} /><NoiseTile x={187} y={742} size={38} strength={11} />
-          <Connector d="M150 685 V700" markerId={`${latentArrow}-mobile`} />
+          <Connector d="M150 694 V704" markerId={`${latentArrow}-mobile`} width={1.5} />
           <Tag x={22} y={816} text="FIXED" tone="violet" />
           <DiagramNode x={22} y={846} width={130} height={60} title="VAE decoder" detail="outside loop" tone="violet" />
           <PhotoTile x={198} y={847} width={72} height={58} label="image" />
           <Connector d="M150 797 V826 C150 837 100 837 100 846" markerId={`${latentArrow}-mobile`} />
           <Connector d="M152 876 H188" markerId={`${latentArrow}-mobile`} />
-          <Tag x={64} y={914} text="48× FEWER VALUES · THIS EXAMPLE" tone="emerald" />
+          <Tag x={36} y={936} text="48× FEWER VALUES · THIS EXAMPLE" tone="emerald" />
         </DiagramCanvas>
       </div>
       <Legend items={[
@@ -250,7 +250,7 @@ export function StableDiffusionArchitectureDiagram() {
       caption="Pure text-to-image starts from sampled latent noise, not a VAE-encoded input image. The learned U-Net predicts an update; the separate scheduler calculates the next latent; the fixed VAE decoder converts only the final latent to pixels."
       description="A user prompt passes through a fixed tokenizer and text encoder to form contextual text representations. A user-selected seed controls sampled latent noise. The noisy latent, timestep, and text representations meet in a fixed U-Net, where a cross-attention arrow carries text information into latent features. A separate scheduler calculates an updated latent and loops it through the U-Net repeatedly. The final latent passes through a fixed VAE decoder to a generated image. A separate inset shows that a VAE encoder is used for training and image-start workflows, not to start pure text-to-image generation."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 660">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={cross} color="#7c3aed" /></defs>
           <Boundary x={18} y={40} width={442} height={176} label="TEXT STREAM" tone="sky" />
@@ -263,7 +263,7 @@ export function StableDiffusionArchitectureDiagram() {
           <Boundary x={18} y={260} width={442} height={172} label="LATENT START · PURE TEXT-TO-IMAGE" tone="amber" />
           <DiagramNode x={42} y={312} width={112} height={66} title="Seed" detail="user chosen" tone="sky" />
           <DiagramNode x={205} y={302} width={150} height={86} title="Sample latent noise" detail="random xT" tone="amber" />
-          <Connector d="M154 345 H195" markerId={arrow} tone="slate" label="controls sampler" labelX={174} labelY={331} />
+          <Connector d="M154 345 H195" markerId={arrow} tone="slate" label="controls sampler" labelX={130} labelY={286} />
           <text x="238" y="414" textAnchor="middle" fontSize="11.5" fontWeight="700" fill="#78350f">NO INPUT IMAGE IS ENCODED HERE</text>
 
           <Boundary x={492} y={158} width={488} height={322} label="ITERATIVE LATENT DENOISING" tone="violet" />
@@ -293,8 +293,8 @@ export function StableDiffusionArchitectureDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
-        <DiagramCanvas viewBox="0 0 300 1270">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+        <DiagramCanvas viewBox="0 0 300 1300">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${cross}-mobile`} color="#7c3aed" /></defs>
           <Boundary x={8} y={28} width={284} height={238} label="TEXT STREAM" tone="sky" />
           <DiagramNode x={25} y={66} width={110} height={58} title="Prompt" detail="user supplied" tone="sky" />
@@ -327,8 +327,8 @@ export function StableDiffusionArchitectureDiagram() {
           <PhotoTile x={110} y={1110} width={80} height={62} label="generated image" />
           <Connector d="M226 1077 C226 1097 150 1097 150 1100" markerId={`${arrow}-mobile`} tone="slate" />
 
-          <Boundary x={8} y={1198} width={284} height={62} label="TRAINING / IMG2IMG ONLY" tone="sky" />
-          <text x="150" y="1238" textAnchor="middle" fontSize="10.8" fontWeight="700" fill="#0c4a6e">input image → VAE encoder → starting latent</text>
+          <Boundary x={8} y={1228} width={284} height={62} label="TRAINING / IMG2IMG ONLY" tone="sky" />
+          <text x="150" y="1268" textAnchor="middle" fontSize="10.8" fontWeight="700" fill="#0c4a6e">input image → VAE encoder → starting latent</text>
         </DiagramCanvas>
       </div>
       <Legend items={[
@@ -351,7 +351,7 @@ export function ClassifierFreeGuidanceDiagram() {
       caption="The numbers are pedagogical scalar values, not pixels. Both 0.2 and 0.5 are model outputs for the same noisy latent and timestep; scale 3 is chosen by the user or developer; 1.1 is calculated."
       description="The same noisy latent x t and timestep enter two evaluations of the same fixed denoiser. The unconditional or negative branch produces epsilon hat uncond equal to 0.2. The prompt-conditioned branch produces epsilon hat cond equal to 0.5. Their difference is 0.3, the chosen guidance scale 3 expands it to 0.9, and adding the 0.2 baseline gives guided prediction 1.1. A number line shows that scale 3 pushes the guided result beyond the ordinary conditional output 0.5."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 520">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={math} color="#7c3aed" /></defs>
           <DiagramNode x={28} y={205} width={155} height={82} title="Same xₜ + t" detail="model inputs" tone="sky" />
@@ -387,7 +387,7 @@ export function ClassifierFreeGuidanceDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 930">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${math}-mobile`} color="#7c3aed" /></defs>
           <DiagramNode x={70} y={28} width={160} height={64} title="Same xₜ + t" detail="both model inputs" tone="sky" />
@@ -439,7 +439,7 @@ export function DiffusionControlMethodsDiagram() {
       caption="Prompt/CFG supplies language only; image-to-image supplies an entire starting composition; inpainting supplies a spatial edit mask; ControlNet-style guidance supplies explicit geometry such as pose, edges, depth, or segments."
       description="Four spatially different mini diagrams compare diffusion controls. Prompt and guidance send only a text bubble toward a flexible generated scene. Image-to-image sends an existing scene plus a strength control toward a transformed scene with the same broad layout. Inpainting overlays a highlighted mask on one region of an image and changes only that region under a prompt. A ControlNet-style path sends a stick-pose condition and a prompt toward a generated figure that follows the same pose. Each mini diagram names what the method attempts to preserve."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 700">
           <defs><ArrowMarker id={arrow} /></defs>
           <Boundary x={18} y={38} width={462} height={286} label="PROMPT / CFG · LANGUAGE CONSTRAINT" tone="amber" />
@@ -484,7 +484,7 @@ export function DiffusionControlMethodsDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 1240">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <Boundary x={8} y={28} width={284} height={260} label="PROMPT / CFG" tone="amber" />
@@ -536,7 +536,7 @@ export function FineTuningMethodsDiagram() {
       caption="All three begin with a pretrained generator. Textual Inversion learns a small token representation, DreamBooth adapts more model capacity in an implementation-dependent way, and LoRA learns compact low-rank side matrices while the original weight stays frozen."
       description="A shared frozen pretrained model branches into three distinct adaptation diagrams. Textual Inversion adds one trainable row to a token embedding table while the base model remains frozen and saves a tiny embedding artifact. DreamBooth highlights several adaptable regions inside a larger model, notes that implementations vary and do not necessarily update every parameter, and saves a larger-capacity artifact. LoRA shows a frozen W matrix beside narrow trainable A and B matrices and saves a compact adapter. Capacity bars compare the relative amount of learned state conceptually rather than claiming universal file sizes."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 620">
           <defs><ArrowMarker id={arrow} /></defs>
           <DiagramNode x={390} y={32} width={220} height={76} title="Pretrained generator" detail="common frozen starting model" tone="violet" />
@@ -582,7 +582,7 @@ export function FineTuningMethodsDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 1180">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <DiagramNode x={65} y={25} width={170} height={66} title="Pretrained model" detail="common start · frozen" tone="violet" />
@@ -636,7 +636,7 @@ export function LoRASidePathDiagram() {
       caption="Toy shapes for teaching: W is 4 × 4, A is 1 × 4, and B is 4 × 1. Real layers are usually much larger. W stays fixed; A and B train; both paths are added to produce the adapted output."
       description="Input x splits into two paths. The base path multiplies x by a frozen four by four matrix W to produce W x. The adapter path multiplies x by a trainable one by four matrix A, creating a rank-one representation, then by a trainable four by one matrix B to produce B A x. A chosen scale multiplies the adapter result. The frozen W x and scaled B A x meet at a plus operator and produce the adapted output W x plus scale times B A x. The narrow drawings of A and B show why the update is low rank."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 540">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={train} color="#059669" /></defs>
           <Tag x={28} y={24} text="TOY SHAPES FOR TEACHING" tone="amber" />
@@ -671,7 +671,7 @@ export function LoRASidePathDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 920">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${train}-mobile`} color="#059669" /></defs>
           <Tag x={56} y={20} text="TOY SHAPES FOR TEACHING" tone="amber" />
@@ -687,7 +687,7 @@ export function LoRASidePathDiagram() {
           <MatrixGlyph x={28} y={535} rows={1} cols={4} cell={22} label="A = 1 × 4" tone="emerald" />
           <DiagramNode x={142} y={512} width={80} height={68} title="rank 1" detail="Ax" tone="emerald" />
           <MatrixGlyph x={252} y={498} rows={4} cols={1} cell={20} label="B" tone="emerald" />
-          <text x="72" y="512" textAnchor="middle" fontSize="10.5" fontWeight="800" fill="#064e3b">SAME INPUT x ↓</text>
+          <text x="72" y="500" textAnchor="middle" fontSize="10.5" fontWeight="800" fill="#064e3b">SAME INPUT x ↓</text>
           <Connector d="M116 546 H132" markerId={`${train}-mobile`} tone="emerald" />
           <Connector d="M222 546 H242" markerId={`${train}-mobile`} tone="emerald" />
           <DiagramNode x={50} y={650} width={105} height={66} title="BAx" detail="4 values" tone="emerald" />

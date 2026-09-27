@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
-import { FigureShell } from "../../components/content/FigureShell";
+import { GenAIIntuition, GenAIWorkedLab } from "./GenAITutorialExpansion";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 
@@ -37,17 +37,8 @@ function GenAIIntro() {
         <p><strong>Generative AI</strong> learns patterns from examples and uses those patterns—plus guidance supplied at use time—to create a new candidate.</p>
       </section>
 
-      <FigureShell
-        title="Retrieval, prediction, and generation answer different kinds of questions"
-        caption="Generation creates a candidate. That candidate can still be wrong, unsafe, or unsupported."
-        accessibleDescription="Three columns compare retrieval returning an existing item, predictive machine learning returning a score or label, and generative AI constructing a new candidate output."
-      >
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-4"><strong>Retrieval</strong><p className="mt-2 text-sm">“Show the approved refund-policy paragraph.”</p><p className="mt-2 text-sm text-slate-600">Returns stored evidence.</p></div>
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-4"><strong>Prediction</strong><p className="mt-2 text-sm">“How likely is this payment to be fraud?”</p><p className="mt-2 text-sm text-slate-600">Returns a label, score, or number.</p></div>
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4"><strong>Generation</strong><p className="mt-2 text-sm">“Draft a friendly refund explanation from these facts.”</p><p className="mt-2 text-sm text-slate-600">Constructs new content.</p></div>
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="generative-ai-intro" />
+
 
       <section className="space-y-4">
         <h2>What can generative AI create?</h2>
@@ -77,6 +68,8 @@ function GenAIIntro() {
         <p>Generated output should be treated as a <strong>candidate</strong>. In important workflows, verify facts and policy before publishing or acting on it.</p>
       </section>
 
+      <GenAIWorkedLab topicId="generative-ai-intro" />
+
       <Bridge question="If generative AI creates samples while predictive ML maps inputs to labels or numbers, what exactly is the mathematical difference between those goals?" to="/learn/generative-vs-discriminative" label="Generative vs Discriminative Models" />
 
       <SummaryCard items={[
@@ -99,6 +92,8 @@ function GenerativeVsDiscriminative() {
         <p className="text-lg">Suppose an email contains the word <strong>“offer”</strong>. A discriminative model may ask: <strong>“Given this email, how likely is spam?”</strong> A generative model can instead learn how examples from different classes tend to occur and use that learned data process for sampling or derived predictions.</p>
         <p>The usual discriminative direction is <strong>p(y | x)</strong>: predict target y after observing input x.</p>
       </section>
+
+      <GenAIIntuition topicId="generative-vs-discriminative" />
 
       <DataTable
         title="Choose the goal from the job"
@@ -129,6 +124,8 @@ function GenerativeVsDiscriminative() {
         <Callout role="tip" title="Use the simplest model that matches the real job"><p>If the product only needs a reliable house-price estimate, directly learning that prediction may be simpler than modelling every way a house description can occur.</p></Callout>
       </section>
 
+      <GenAIWorkedLab topicId="generative-vs-discriminative" />
+
       <Bridge question="A generative model is supposed to learn how data tends to occur. What does it actually mean to learn a distribution and then sample from it?" to="/learn/how-generative-models-learn" label="How Generative Models Learn" />
 
       <SummaryCard items={[
@@ -151,6 +148,8 @@ function HowGenerativeModelsLearn() {
         <p className="text-lg">Imagine a tiny dataset of scene labels. If forests appear often, coasts sometimes, and cities less often, a generator can learn that some outcomes are more plausible than others.</p>
         <p>A <strong>distribution</strong> is a way of describing which values or combinations are more or less likely. A model does not need to store every training file as a searchable copy to learn such patterns.</p>
       </section>
+
+      <GenAIIntuition topicId="how-generative-models-learn" />
 
       <section className="space-y-4">
         <h2>Sampling turns probabilities into one concrete choice</h2>
@@ -194,6 +193,8 @@ function HowGenerativeModelsLearn() {
         ]}/>
       </section>
 
+      <GenAIWorkedLab topicId="how-generative-models-learn" />
+
       <Bridge question="A VAE also uses randomness, but instead of sampling a simple category it samples a hidden numerical representation. How does that work?" to="/learn/vae" label="Variational Autoencoders" />
 
       <SummaryCard items={[
@@ -214,18 +215,11 @@ function VAELesson() {
       <section className="space-y-4">
         <h2>Why not encode every example into one exact hidden point?</h2>
         <p className="text-lg">A normal autoencoder compresses an input into a latent representation and reconstructs it. A <strong>Variational Autoencoder (VAE)</strong> adds uncertainty: the encoder describes a <strong>distribution</strong> for each latent dimension instead of one fixed point.</p>
-        <p>That makes nearby latent samples meaningful and gives the model a smoother space from which to generate new examples.</p>
+        <p>Training encourages a more organized latent space from which to sample, although useful reconstructions and realistic new samples still need to be checked.</p>
       </section>
 
-      <FigureShell
-        title="VAE: encode a distribution, sample a latent, then decode"
-        caption="For generation, you can sample z from the learned prior and decode it without first encoding a real input."
-        accessibleDescription="A flow shows input x entering an encoder, producing mean mu and variance information, sampling latent z using random epsilon, and decoding z to a reconstructed or generated output."
-      >
-        <div className="grid gap-3 md:grid-cols-5">
-          {["Input x","Encoder","μ and σ","Sample z","Decoder → output"].map((x,i)=><div key={x} className="relative rounded-xl border border-slate-200 bg-white p-4 text-center font-semibold">{x}{i<4&&<span className="absolute -right-4 top-1/2 hidden -translate-y-1/2 text-indigo-500 md:block">→</span>}</div>)}
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="vae" />
+
 
       <section className="space-y-4">
         <h2>Reparameterization keeps randomness compatible with learning</h2>
@@ -256,6 +250,8 @@ function VAELesson() {
         <p>If the KL term falls near zero and changing z barely changes the output, the decoder may have learned to ignore the latent variable. This failure is called <strong>posterior collapse</strong>.</p>
       </section>
 
+      <GenAIWorkedLab topicId="vae" />
+
       <Bridge question="VAEs learn through reconstruction plus regularization. GANs take a very different route: can one network learn to generate by trying to fool another?" to="/learn/gans" label="Generative Adversarial Networks" />
 
       <SummaryCard items={[
@@ -279,14 +275,8 @@ function GANLesson() {
         <p>The generator improves because it receives a learning signal from how successfully the discriminator detects its fakes.</p>
       </section>
 
-      <FigureShell title="The GAN game" caption="Training alternates: improve D at detecting real/fake, then improve G at producing samples that D treats as real." accessibleDescription="Random noise enters the generator to create a fake sample. Real and fake samples enter the discriminator. The discriminator learns to separate them, while the generator learns from discriminator feedback.">
-        <div className="grid gap-4 md:grid-cols-4">
-          <div className="rounded-xl border bg-white p-4 text-center">Random z</div>
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-center font-bold">Generator G</div>
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-center">Fake sample G(z)</div>
-          <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-center font-bold">Discriminator D</div>
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="gans" />
+
 
       <section className="space-y-4">
         <h2>Two update phases must stay separate</h2>
@@ -316,6 +306,8 @@ function GANLesson() {
         <p>If the goal is “generate the digit 7”, provide the class label as extra information to both the generator and discriminator. The condition helps G create the requested class and helps D judge whether the sample matches it.</p>
       </section>
 
+      <GenAIWorkedLab topicId="gans" />
+
       <Bridge question="GANs learn through competition. Diffusion models avoid that game and instead learn many small denoising steps. How does that turn random noise into a sample?" to="/learn/diffusion-models" label="Diffusion Models" />
 
       <SummaryCard items={[
@@ -338,12 +330,8 @@ function DiffusionLesson() {
         <p className="text-lg">A diffusion model learns to reverse a gradual noising process. During training, we deliberately add known noise to real data. The model learns to predict that noise. During generation, we start from random noise and repeatedly apply learned denoising steps.</p>
       </section>
 
-      <FigureShell title="Training and generation run in opposite directions" caption="Training knows the sampled noise because we added it. Generation starts from random noise and repeatedly uses the trained denoiser plus a scheduler." accessibleDescription="Training path goes from clean sample to noisy sample with known epsilon and learns a denoiser. Generation path starts at random noise and applies repeated reverse updates to create a structured sample.">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5"><strong>Training</strong><p className="mt-2 text-sm">clean x₀ → add known ε at timestep t → noisy xₜ → predict ε̂ → compare ε̂ with ε → update parameters</p></div>
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5"><strong>Generation</strong><p className="mt-2 text-sm">random xT → predict noise → scheduler computes a less noisy sample → repeat → structured output</p></div>
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="diffusion-models" />
+
 
       <section className="space-y-4">
         <h2>A one-value forward-noising example</h2>
@@ -362,6 +350,8 @@ function DiffusionLesson() {
         <p>The denoising network predicts noise-related information. The <strong>scheduler</strong> stores the timestep sequence and numerical reverse-update rule that turns the current sample into the next, usually less noisy sample.</p>
         <p>More reverse steps mean more model evaluations, which can increase quality in some settings but also increases latency and compute.</p>
       </section>
+
+      <GenAIWorkedLab topicId="diffusion-models" />
 
       <Bridge question="Pixel-space diffusion can be expensive because every denoising step works on all pixels. What if we denoise a much smaller learned representation instead?" to="/learn/stable-latent-diffusion" label="Latent Diffusion & Stable Diffusion" />
 

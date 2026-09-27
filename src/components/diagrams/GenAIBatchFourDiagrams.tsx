@@ -128,7 +128,7 @@ export function MultimodalRepresentationDiagram() {
       caption="This is a common conceptual pattern, not a universal architecture. Systems may align, fuse, project, or cross-attend between modality representations in different places."
       description="Three input streams are shown. Raw text passes through a text encoder to a text representation. Raw pixels pass through a vision encoder to a visual representation. Raw sound passes through an audio encoder to an audio representation. The three numerical representations enter an alignment, fusion, or cross-attention stage, then an output-specific generator or decoder branches to generated text, image, or audio. The diagram explains that raw modalities require different front ends even when their representations later interact."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 570">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-violet`} color="#7c3aed" /></defs>
           <Boundary x={18} y={38} width={455} height={468} label="MODALITY-SPECIFIC REPRESENTATION PATHS" tone="sky" />
@@ -166,7 +166,7 @@ export function MultimodalRepresentationDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 900">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-mobile-violet`} color="#7c3aed" /></defs>
           <Boundary x={8} y={28} width={284} height={135} label="TEXT PATH" tone="amber" />
@@ -224,7 +224,7 @@ export function MultimodalTaskPathsDiagram() {
       caption="The four pathways use different inputs and outputs. A fixed-label decision can be multimodal without open-ended generation; a caption, answer, image, or edit is newly generated."
       description="Four spatially distinct examples compare understanding and generation. First, an image and question enter a multimodal model that generates a written answer. Second, an image enters a captioning model that generates a text caption. Third, a text prompt enters an image generator and produces a new image. Fourth, an image and instruction enter an editing model that produces a changed image while preserving the source composition."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 650">
           <defs><ArrowMarker id={arrow} /></defs>
           <Boundary x={18} y={35} width={465} height={270} label="IMAGE + QUESTION → GENERATED ANSWER" tone="sky" />
@@ -265,7 +265,7 @@ export function MultimodalTaskPathsDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 1210">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <Boundary x={8} y={28} width={284} height={260} label="IMAGE + QUESTION → ANSWER" tone="sky" />
@@ -323,7 +323,7 @@ export function AudioRepresentationPipelineDiagram() {
       caption="The full chain is a teaching map, not a rule that every model uses every stage. Some systems model waveforms directly; others use spectrograms, learned continuous features, discrete audio tokens, or combinations."
       description="Sound pressure is sampled into a waveform whose horizontal axis is time and vertical axis is amplitude. A possible transformation reorganizes it into a spectrogram with time and frequency axes. A learned compressor or tokenizer can produce a shorter sequence of model-facing audio units. A generative model predicts or reconstructs a representation, and an audio decoder produces a waveform. A count strip shows that sixteen thousand samples per second times two seconds equals thirty-two thousand waveform values."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 570">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-violet`} color="#7c3aed" /></defs>
           <Boundary x={18} y={40} width={690} height={365} label="REPRESENTATION CHOICES · ARCHITECTURES VARY" tone="sky" />
@@ -353,7 +353,7 @@ export function AudioRepresentationPipelineDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 1120">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-mobile-violet`} color="#7c3aed" /></defs>
           <Boundary x={8} y={28} width={284} height={790} label="AUDIO OPTIONS · SYSTEMS VARY" tone="sky" />
@@ -396,7 +396,7 @@ export function SyntheticDataPipelineDiagram() {
       caption="Fidelity, coverage, privacy and label correctness answer different questions. TSTR keeps the final utility test real: train on synthetic or mixed data, then test on untouched real examples."
       description="Authorized real evidence and domain knowledge feed four alternative synthesis methods: rules, simulation, statistical synthesis, and a generative model. These methods produce a synthetic dataset. Four separate branches check fidelity, diversity and coverage, privacy and memorization, and label correctness. After relevant checks pass, a downstream model trains on synthetic or mixed data. It is then evaluated on an untouched real test set that was held aside before synthesis and training."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 700">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /><ArrowMarker id={`${arrow}-green`} color="#059669" /></defs>
           <DiagramNode x={24} y={82} width={150} height={72} title="Authorized real data" detail="training evidence" tone="sky" />
@@ -430,7 +430,7 @@ export function SyntheticDataPipelineDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 1390">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-mobile-green`} color="#059669" /></defs>
           <DiagramNode x={18} y={30} width={125} height={66} title="Real evidence" detail="authorized" tone="sky" />
@@ -484,7 +484,7 @@ export function SyntheticDistributionDiagram() {
       caption="Both bars contain 100 examples. Synthetic B doubles from 20 to 40, which may be intentional for coverage, but the 60/40 synthetic distribution no longer reproduces the real 80/20 population frequency."
       description="Two proportional bars compare one hundred real examples, with class A equal to eighty and class B equal to twenty, against one hundred synthetic examples, with A equal to sixty and B equal to forty. The B segment is visibly twice as wide in the synthetic bar. One interpretation branch says that reproducing population frequency has lower fidelity. A second branch says that increasing minority coverage may be deliberate. Both lead to validation on untouched real held-out data."
     >
-      <div className="hidden lg:block">
+      <div className="hidden @min-[800px]/genai:block">
         <DiagramCanvas viewBox="0 0 1000 560">
           <defs>
             <ArrowMarker id={arrow} />
@@ -525,7 +525,7 @@ export function SyntheticDistributionDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] lg:hidden">
+      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
         <DiagramCanvas viewBox="0 0 300 780">
           <defs>
             <ArrowMarker id={`${arrow}-mobile`} />

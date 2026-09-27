@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
-import { FigureShell } from "../../components/content/FigureShell";
+import { GenAIIntuition, GenAIWorkedLab } from "./GenAITutorialExpansion";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 
@@ -24,6 +24,8 @@ function StableLatentDiffusion() {
         <p><strong>Latent diffusion</strong> first represents images in a smaller learned latent space, performs diffusion there, then decodes the final latent back to pixels.</p>
       </section>
 
+      <GenAIIntuition topicId="stable-latent-diffusion" />
+
       <section className="space-y-4">
         <h2>The compression advantage in numbers</h2>
         <DataTable title="Pixel tensor versus latent tensor" headers={["Representation","Shape","Scalar values"]} rows={[
@@ -33,11 +35,6 @@ function StableLatentDiffusion() {
         <FormulaBlock expression="786,432 / 16,384 = 48" explanation="The latent has 48 times fewer scalar values in this example. The spatial width/height are each 8× smaller, which means 64× fewer spatial locations, but the channel counts differ." />
       </section>
 
-      <FigureShell title="Text-to-image latent diffusion" caption="The U-Net-style denoiser works in latent space; the VAE decoder converts the final latent to pixels." accessibleDescription="A pipeline shows prompt tokenization and text encoding feeding cross-attention in a latent denoiser. Random latent noise is iteratively denoised by the model and scheduler, then decoded by a VAE decoder to an image.">
-        <div className="grid gap-3 md:grid-cols-5">
-          {["Prompt → text encoder","Random latent noise","Latent denoiser + cross-attention","Scheduler updates","VAE decoder → image"].map((x,i)=><div key={x} className="relative rounded-xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold">{x}{i<4&&<span className="absolute -right-4 top-1/2 hidden -translate-y-1/2 text-indigo-500 md:block">→</span>}</div>)}
-        </div>
-      </FigureShell>
 
       <section className="space-y-4">
         <h2>What starts pure text-to-image generation?</h2>
@@ -50,6 +47,8 @@ function StableLatentDiffusion() {
         <p>Compression is the reason latent diffusion is efficient, but it can also lose fine pixel detail. Small text, thin lines, and tiny textures may be harder to preserve through the VAE representation.</p>
         <Callout role="tip" title="Image-to-image needs the encoder again"><p>If the workflow starts from an uploaded image, the VAE encoder maps those pixels into latent space before noise and denoising are applied.</p></Callout>
       </section>
+
+      <GenAIWorkedLab topicId="stable-latent-diffusion" />
 
       <Bridge question="The architecture can generate from a prompt, but how do we control pose, composition, edited regions, strength, and prompt adherence?" to="/learn/controlling-diffusion-models" label="Controlling Diffusion Models" />
 
@@ -72,6 +71,8 @@ function ControllingDiffusion() {
         <h2>“Generate an image” is not enough when you need control</h2>
         <p className="text-lg">Sometimes you want a new image but need to preserve a pose, edit only one region, keep most of a reference composition, or strengthen prompt adherence. Diffusion systems provide different controls for different goals.</p>
       </section>
+
+      <GenAIIntuition topicId="controlling-diffusion-models" />
 
       <DataTable title="Match the control to the requirement" headers={["Need","Useful starting control"]} rows={[
         ["Repeat the same stochastic start","Random seed"],
@@ -100,6 +101,8 @@ function ControllingDiffusion() {
         <p>For an exact supplied pose, a pose-based ControlNet-style condition is a stronger starting point than a seed or extra negative prompting because the pose map directly represents the geometry you want to preserve.</p>
       </section>
 
+      <GenAIWorkedLab topicId="controlling-diffusion-models" />
+
       <Bridge question="Inference controls keep the base model fixed. What if you need the model itself to learn a new visual concept, subject, or style?" to="/learn/finetuning-image-models" label="Fine-Tuning Image Generation Models" />
 
       <SummaryCard items={[
@@ -121,6 +124,8 @@ function FineTuningImages() {
         <h2>When prompting is not enough</h2>
         <p className="text-lg">Prompts, seeds, masks, and guidance change how a pretrained model is used. <strong>Fine-tuning</strong> is different: it performs training-time adaptation so learned embeddings or parameter updates change.</p>
       </section>
+
+      <GenAIIntuition topicId="finetuning-image-models" />
 
       <DataTable title="Three adaptation ideas" headers={["Method","What learns","Useful when"]} rows={[
         ["Textual Inversion","One or a few token embeddings","A compact placeholder should represent a small visual concept"],
@@ -145,6 +150,8 @@ function FineTuningImages() {
         <p>If one placeholder token only needs to represent a small concept, Textual Inversion can be a compact starting point. If you need a more expressive adaptation while keeping the base frozen, LoRA is often a stronger option. Full-model retraining is not the default answer.</p>
       </section>
 
+      <GenAIWorkedLab topicId="finetuning-image-models" />
+
       <Bridge question="So far we have mostly discussed one input and one output modality at a time. How do systems connect text, images, audio, and other modalities?" to="/learn/multimodal-ai" label="Multimodal Generative AI" />
 
       <SummaryCard items={[
@@ -168,11 +175,8 @@ function MultimodalLesson() {
         <p>Multimodal does <strong>not</strong> automatically mean generative. An image+question system that only chooses one label from a fixed list is multimodal but not open-ended generation.</p>
       </section>
 
-      <FigureShell title="Encode, align or fuse, then decode for the destination modality" caption="The output-specific decoder matters because text, image, and audio require different generation mechanisms." accessibleDescription="Text, image, and audio encoders produce representations that can be aligned or fused. An output-specific decoder then produces text tokens, image latents, or audio.">
-        <div className="grid gap-4 md:grid-cols-3">
-          {["Text / image / audio encoders","Shared or fused representation","Output-specific decoder"].map((x,i)=><div key={x} className="rounded-xl border border-slate-200 bg-white p-5 text-center font-bold">{x}</div>)}
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="multimodal-ai" />
+
 
       <section className="space-y-4">
         <h2>A tiny alignment calculation</h2>
@@ -185,6 +189,8 @@ function MultimodalLesson() {
         <p>For visual question answering, keep the text question fixed and change only the image. If the answer barely changes even when visual evidence changes, the system may be relying on the question prior and ignoring the image.</p>
         <Callout role="warning" title="Fluent multimodal output can still hallucinate"><p>If an accessibility description says a ramp is present when no ramp is visible, treat that as an unsupported claim and compare it against localized visual evidence. Broad embedding similarity does not prove a specific object exists.</p></Callout>
       </section>
+
+      <GenAIWorkedLab topicId="multimodal-ai" />
 
       <Bridge question="Audio and video add another challenge: time. How do generative systems represent sound, music, motion, and consistency across moments?" to="/learn/audio-music-video-generation" label="Audio, Speech, Music & Video Generation" />
 
@@ -207,6 +213,8 @@ function TemporalMediaLesson() {
         <h2>Images are spatial. Audio and video are spatial <em>and temporal</em>.</h2>
         <p className="text-lg">A good audio clip or video is not just a collection of individually plausible pieces. Timing, rhythm, identity, motion, and state must remain coherent across time.</p>
       </section>
+
+      <GenAIIntuition topicId="audio-music-video-generation" />
 
       <section className="space-y-4">
         <h2>Waveforms and spectrograms describe sound differently</h2>
@@ -234,6 +242,8 @@ function TemporalMediaLesson() {
         <p>Text-to-video begins from text guidance. Image-to-video also receives a reference frame, so the system must preserve its identity and composition while inventing plausible motion over time.</p>
       </section>
 
+      <GenAIWorkedLab topicId="audio-music-video-generation" />
+
       <Bridge question="Generative models can create media, but they can also create training and testing records. When is synthetic data useful—and how do we know it is faithful, useful, and private?" to="/learn/synthetic-data" label="Synthetic Data Generation" />
 
       <SummaryCard items={[
@@ -256,6 +266,8 @@ function SyntheticDataLesson() {
         <p className="text-lg">Synthetic data is created by rules, simulations, statistical models, or generative models instead of being a direct observation of every real example.</p>
         <p>It can help when real data is scarce, sensitive, expensive, or missing important scenarios—but it must be evaluated against the real task.</p>
       </section>
+
+      <GenAIIntuition topicId="synthetic-data" />
 
       <section className="space-y-4">
         <h2>Augmentation and full synthesis are not the same</h2>
@@ -283,6 +295,8 @@ function SyntheticDataLesson() {
         <p><strong>Train-on-synthetic, test-on-real (TSTR)</strong> directly tests utility by fitting on synthetic data and measuring the downstream model on an untouched real test set.</p>
         <Callout role="warning" title="Realistic does not mean private"><p>A generator can reproduce or closely resemble source records. Duplicate, nearest-neighbour, disclosure, and membership-risk tests address privacy questions that visual realism cannot answer.</p></Callout>
       </section>
+
+      <GenAIWorkedLab topicId="synthetic-data" />
 
       <Bridge question="We now have many ways to generate content. How do we evaluate whether one generator is actually better for a particular user job?" to="/learn/evaluating-generative-models" label="Evaluating Generative Models" />
 

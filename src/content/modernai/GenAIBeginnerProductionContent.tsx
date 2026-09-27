@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
-import { FigureShell } from "../../components/content/FigureShell";
+import { GenAIIntuition, GenAIWorkedLab } from "./GenAITutorialExpansion";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 
@@ -12,6 +12,8 @@ function EvaluatingGenerativeModels() {
         <h2>One beautiful sample does not prove a generator is good</h2>
         <p className="text-lg">Generative systems are stochastic: the same request can produce different outputs. Evaluation therefore needs a <strong>set of representative cases</strong>, repeated runs where variation matters, and several dimensions rather than one universal score.</p>
       </section>
+
+      <GenAIIntuition topicId="evaluating-generative-models" />
 
       <section className="space-y-4">
         <h2>Different metrics answer different questions</h2>
@@ -46,6 +48,8 @@ function EvaluatingGenerativeModels() {
         <p>For random generators, repeat important cases with recorded settings and report variation or pass rates instead of relying on one lucky output.</p>
       </section>
 
+      <GenAIWorkedLab topicId="evaluating-generative-models" />
+
       <SummaryCard items={[
         "Generative evaluation needs representative test cases and repeated runs when randomness matters.",
         "Quality, adherence, diversity, latency, cost, and safety answer different questions.",
@@ -66,6 +70,8 @@ function ResponsibleGenerativeAI() {
         <p className="text-lg">Risk depends on the whole system: who uses it, what information it receives, what actions it can trigger, how errors affect people, and what review or recovery exists.</p>
         <p>A brainstorming assistant reviewed by an employee and an automated system that changes a person's eligibility record can use similar models but require very different controls.</p>
       </section>
+
+      <GenAIIntuition topicId="responsible-generative-ai" />
 
       <section className="space-y-4">
         <h2>Start with a specific intended use</h2>
@@ -93,6 +99,8 @@ function ResponsibleGenerativeAI() {
         <Callout role="warning" title="A disclaimer is not containment"><p>“AI can make mistakes” communicates uncertainty but does not prevent or recover from a private-data leak.</p></Callout>
       </section>
 
+      <GenAIWorkedLab topicId="responsible-generative-ai" />
+
       <SummaryCard items={[
         "Generative-AI risk depends on the entire application, not only the model.",
         "A useful intended-use statement names the user, task, evidence/environment, and review level.",
@@ -113,11 +121,8 @@ function ChoosingGenerativeModel() {
         <p className="text-lg">If exact retrieval, deterministic rules, a predictive model, or a template can complete the user job, open-ended generation may add cost and failure modes without adding value.</p>
       </section>
 
-      <FigureShell title="Select by constraints, not by model popularity" caption="Filter candidates by hard requirements first; compare quality, cost, and convenience only among eligible options." accessibleDescription="A funnel begins with the user job, then applies capability, data/privacy, latency, licensing, and deployment constraints before benchmarking eligible candidates.">
-        <div className="grid gap-3 md:grid-cols-5">
-          {["User job","Must-have capability","Privacy / data location","Latency / deployment","Benchmark eligible choices"].map((x)=> <div key={x} className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold">{x}</div>)}
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="choosing-generative-model" />
+
 
       <section className="space-y-4">
         <h2>Family-level starting points</h2>
@@ -146,6 +151,8 @@ function ChoosingGenerativeModel() {
         <Callout role="warning" title="Privacy constraints enter early"><p>If a hospital requires data to remain in an approved environment, treat that as a hard provider/deployment constraint before benchmarking—not as an optional preference after choosing a model.</p></Callout>
       </section>
 
+      <GenAIWorkedLab topicId="choosing-generative-model" />
+
       <SummaryCard items={[
         "Question whether generation is necessary before choosing a generative model.",
         "Filter candidates by hard capability, privacy, licensing, latency, and deployment constraints first.",
@@ -166,11 +173,8 @@ function BuildingGenerativeApplications() {
         <p className="text-lg">A production application must decide what inputs are allowed, what evidence to retrieve, how to shape the request, how to validate the output, what actions are permitted, and what happens when something is ambiguous or wrong.</p>
       </section>
 
-      <FigureShell title="A reliable generative application wraps the model in deterministic controls" caption="The model creates a draft. The application owns evidence, validation, permissions, user flow, and failure handling." accessibleDescription="A pipeline shows input validation, optional retrieval, model generation, structure validation, semantic/business validation, then human review or safe action.">
-        <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
-          {["Validate input","Retrieve evidence","Generate draft","Check schema","Check meaning / permissions","Review or act"].map((x)=> <div key={x} className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold">{x}</div>)}
-        </div>
-      </FigureShell>
+      <GenAIIntuition topicId="building-genai-apps" />
+
 
       <section className="space-y-4">
         <h2>Structure validation and factual validation are different</h2>
@@ -193,6 +197,8 @@ function BuildingGenerativeApplications() {
         <p>If a contractual action item names an owner but the transcript is ambiguous, require participant confirmation or human review rather than silently converting the generated guess into an external action.</p>
       </section>
 
+      <GenAIWorkedLab topicId="building-genai-apps" />
+
       <SummaryCard items={[
         "A generative application wraps a model with input, evidence, validation, permission, user-flow, and failure-handling logic.",
         "The model output is a draft, not automatically a trusted application result.",
@@ -212,6 +218,8 @@ function DeployingGenerativeApplications() {
         <h2>Deployment turns a working demo into a service</h2>
         <p className="text-lg">A deployed generative application must stay secure, responsive, observable, affordable, and recoverable while real users send unpredictable traffic.</p>
       </section>
+
+      <GenAIIntuition topicId="genai-deployment" />
 
       <section className="space-y-4">
         <h2>Hosted versus self-hosted is a measured trade-off</h2>
@@ -251,6 +259,8 @@ function DeployingGenerativeApplications() {
         <p>Generative AI is the broad family: it includes systems that create text, images, audio, video, synthetic data, and more. The next curriculum section zooms into one especially important branch—<strong>Large Language Models</strong>—so you can understand tokens, embeddings, Transformers, text generation, prompting, RAG, evaluation, serving, and LLMOps in a deliberate sequence.</p>
         <p>You do not need to relearn the deployment ideas from this lesson. The LLM section will reuse the same engineering mindset while going much deeper into how language models work and how text-focused applications are built.</p>
       </section>
+
+      <GenAIWorkedLab topicId="genai-deployment" />
 
       <SummaryCard items={[
         "Deployment adds security, availability, observability, cost, scaling, and recovery requirements to a working generative workflow.",
