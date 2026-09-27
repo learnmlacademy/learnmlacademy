@@ -26,7 +26,7 @@ export function GenAIFigure({ title, caption, description, children }: GenAIFigu
 
   return (
     <figure
-      className="@container/genai not-prose overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
+      className="@container/genai not-prose overflow-hidden border-y border-slate-200 bg-white py-5"
       aria-labelledby={titleId}
       aria-describedby={`${captionId} ${descriptionId}`}
     >
