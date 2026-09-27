@@ -1,6 +1,6 @@
 {
   "llm-intro": {
-    "title": "From Repeated Phrases to a Language Model",
+    "title": "2. First Model: Learn Continuation Probabilities from Repeated Phrases",
     "paragraphs": [
       "Suppose a help desk has three short training messages: “please send receipt”, “please send details”, and “please send receipt”. A simple language model can count what follows “send”. It has seen receipt twice and details once, so its estimated probabilities are 2/3 and 1/3. No one wrote a rule saying receipt must follow send; the counts came from the examples.",
       "This count-based model makes the idea of learning visible, but it only remembers one preceding word. It cannot distinguish “please send” from “do not send” if both end at send. A modern neural language model uses learned numerical representations and a much richer permitted context. The same broad job remains: assign probabilities to possible continuations.",
@@ -32,7 +32,7 @@
       "Choose receipt because it has the largest count, then inspect what follows receipt.",
       "The training boundary marker <end> stops the loop. It is not printed as part of the answer."
     ],
-    "labTitle": "Python: Train and Use a Tiny Count-Based Language Model",
+    "labTitle": "13. Hands-On: Train and Use a Tiny Count-Based Language Model",
     "setup": "Run with Python 3; only the standard library is used. This is a real bigram model on three invented sentences, not a miniature Transformer or a useful general assistant.",
     "code": "from collections import Counter, defaultdict\n\nmessages = [\n    \"please send receipt\",\n    \"please send details\",\n    \"please send receipt\",\n]\ncounts = defaultdict(Counter)\nfor message in messages:\n    tokens = [\"<start>\"] + message.split() + [\"<end>\"]\n    for previous, following in zip(tokens, tokens[1:]):\n        counts[previous][following] += 1\n\ntotal = sum(counts[\"send\"].values())\nfor token, count in counts[\"send\"].items():\n    print(f\"P({token} | send) = {count / total:.3f}\")\n\ncontext, generated = \"send\", [\"send\"]\nfor _ in range(6):\n    if context not in counts:\n        break\n    token = counts[context].most_common(1)[0][0]\n    if token == \"<end>\":\n        break\n    generated.append(token)\n    context = token\n\nprint(\"Continuation:\", \" \".join(generated))\nprint(\"Knows what follows refund:\", \"refund\" in counts)",
     "notes": [
@@ -64,7 +64,7 @@
     "output": "P(receipt | send) = 0.667\r\nP(details | send) = 0.333\r\nContinuation: send receipt\r\nKnows what follows refund: False"
   },
   "tokenization-embeddings": {
-    "title": "Why Subword Pieces Help with Unfamiliar Words",
+    "title": "3. Why Subword Tokens Help with Unfamiliar Words",
     "paragraphs": [
       "A vocabulary containing every complete word would need separate entries for low, lower, lowest, and many names or spelling variants. At the opposite extreme, a character tokenizer can represent many words but produces longer sequences. Subword tokenization sits between these choices: common sequences become reusable pieces while less common words can be assembled from smaller units.",
       "Byte-pair encoding, or BPE, learns merge operations from repeated adjacent pieces. In our deliberately small corpus, low appears three times, lower twice, and slow once. Counting across those repetitions makes l followed by o a frequent pair. Merging that pair produces lo; a later merge can combine lo with w. The merge order is part of the tokenizer, not something an LLM invents for each request.",
@@ -96,7 +96,7 @@
       "Merge (l,o) into lo, recount, then merge (lo,w) into low.",
       "Now lower contains [low,e,r]. Reusing low reduced this word from five pieces to three without making lower a vocabulary entry."
     ],
-    "labTitle": "Python: Learn Two BPE Merge Rules",
+    "labTitle": "4. Hands-On: Learn Two BPE Merge Rules",
     "setup": "Python 3, standard library only. These character-based merges teach the BPE mechanism. They do not reproduce the tokenizer of any commercial or downloaded model.",
     "code": "from collections import Counter\n\nfrequencies = {\"low\": 3, \"lower\": 2, \"slow\": 1}\npieces = {word: list(word) for word in frequencies}\n\nfor step in range(2):\n    pairs = Counter()\n    for word, tokens in pieces.items():\n        for pair in zip(tokens, tokens[1:]):\n            pairs[pair] += frequencies[word]\n    best = max(pairs, key=pairs.get)  # First encountered wins ties.\n    print(f\"Merge {step + 1}: {best} count={pairs[best]}\")\n    for word, tokens in pieces.items():\n        merged, i = [], 0\n        while i < len(tokens):\n            if tuple(tokens[i:i + 2]) == best:\n                merged.append(\"\".join(best))\n                i += 2\n            else:\n                merged.append(tokens[i])\n                i += 1\n        pieces[word] = merged\n\nfor word, tokens in pieces.items():\n    print(word, \"->\", tokens)\nprint(\"lower: 5 characters ->\", len(pieces[\"lower\"]), \"pieces\")",
     "notes": [
@@ -128,7 +128,7 @@
     "output": "Merge 1: ('l', 'o') count=6\r\nMerge 2: ('lo', 'w') count=6\r\nlow -> ['low']\r\nlower -> ['low', 'e', 'r']\r\nslow -> ['s', 'low']\r\nlower: 5 characters -> 3 pieces"
   },
   "transformers-attention": {
-    "title": "Following One Query Through an Attention Head",
+    "title": "3. Follow One Query Through an Attention Head",
     "paragraphs": [
       "Attention becomes less mysterious when you follow one token through the calculation. Suppose its query is [2,1]. Two earlier positions offer keys [1,0] and [0,1]. Comparing the query with each key produces scores 2 and 1. These are compatibility scores, not probabilities, and not labels such as “important word” assigned by a human.",
       "The key width is two, so the scale factor is √2. After division, softmax turns [1.414,0.707] into weights of about [0.670,0.330]. The first position contributes more, but the second still contributes. With value vectors [1,0] and [0,2], the resulting vector is about [0.670,0.660]. Each coordinate is a weighted sum, not the selection of one whole word.",
@@ -160,7 +160,7 @@
       "Normalize exponentials: the weights become about 0.670 and 0.330 and sum to one.",
       "Multiply and add values: 0.670×[1,0] + 0.330×[0,2] ≈ [0.670,0.660]."
     ],
-    "labTitle": "Python: Calculate One Attention Output Without a Framework",
+    "labTitle": "6. Hands-On: Calculate One Attention Output Without a Framework",
     "setup": "Python 3, standard library only. This program calculates one head's weighted lookup, not a complete trained Transformer.",
     "code": "from math import exp, sqrt\n\nquery = [2.0, 1.0]\nkeys = [[1.0, 0.0], [0.0, 1.0]]\nvalues = [[1.0, 0.0], [0.0, 2.0]]\nscores = [\n    sum(q * k for q, k in zip(query, key)) / sqrt(len(query))\n    for key in keys\n]\nshift = max(scores)\nexponentials = [exp(score - shift) for score in scores]\nweights = [value / sum(exponentials) for value in exponentials]\noutput = [\n    sum(weight * value[j] for weight, value in zip(weights, values))\n    for j in range(len(values[0]))\n]\n\nprint(\"Scaled scores:\", [round(x, 3) for x in scores])\nprint(\"Weights:\", [round(x, 3) for x in weights])\nprint(\"Weight sum:\", round(sum(weights), 3))\nprint(\"Mixed value:\", [round(x, 3) for x in output])\nprint(\"Causal visibility (row attends to column):\")\nfor row in range(3):\n    print([int(column <= row) for column in range(3)])",
     "notes": [
@@ -192,7 +192,7 @@
     "output": "Scaled scores: [1.414, 0.707]\r\nWeights: [0.67, 0.33]\r\nWeight sum: 1.0\r\nMixed value: [0.67, 0.66]\r\nCausal visibility (row attends to column):\r\n[1, 0, 0]\r\n[1, 1, 0]\r\n[1, 1, 1]"
   },
   "text-generation-decoding": {
-    "title": "From a Probability Distribution to an Actual Choice",
+    "title": "2. Separate the Probability Distribution from the Final Token Choice",
     "paragraphs": [
       "A probability distribution does not itself choose a token. Greedy decoding picks the largest probability. Sampling instead draws a token according to the probabilities. Temperature changes the distribution before that draw; top-k and top-p can remove candidates. Keeping these operations separate makes it easier to understand what each setting changes.",
       "Use the lesson's logits [2,1,0]. At temperature 1, the probabilities are approximately [0.665,0.245,0.090]. For a top-p threshold of 0.80, the first candidate alone covers only 0.665, so include the second as well. Their combined mass is about 0.910, which crosses the threshold. Remove the third candidate and renormalize the survivors to [0.731,0.269]. The threshold is a minimum retained mass, not a rule requiring exactly 80%.",
@@ -224,7 +224,7 @@
       "Keep sunny and cold. Divide each probability by their combined mass to obtain [0.731,0.269].",
       "Compare T=2 separately: a flatter distribution increases the chance of lower-ranked tokens, but supplies no new facts."
     ],
-    "labTitle": "Python: Compare Temperature and Nucleus Filtering",
+    "labTitle": "7. Hands-On: Compare Temperature and Nucleus Filtering",
     "setup": "Python 3, standard library only. The logits are chosen examples, not the output of a downloaded model. The code calculates probabilities deterministically, making the displayed output reproducible.",
     "code": "from math import exp\n\ntokens = [\"sunny\", \"cold\", \"changing\"]\nlogits = [2.0, 1.0, 0.0]\n\ndef softmax(scores, temperature):\n    if temperature <= 0:\n        raise ValueError(\"Use greedy selection separately when T=0.\")\n    scaled = [score / temperature for score in scores]\n    weights = [exp(score - max(scaled)) for score in scaled]\n    return [weight / sum(weights) for weight in weights]\n\nfor temperature in [1.0, 2.0]:\n    probs = softmax(logits, temperature)\n    print(f\"T={temperature}:\", [round(p, 3) for p in probs])\n\nprobs = softmax(logits, 1.0)\nkept, mass = [], 0.0\nfor index in sorted(range(len(tokens)), key=lambda i: probs[i], reverse=True):\n    kept.append(index)\n    mass += probs[index]\n    if mass >= 0.80:\n        break\n\nprint(\"Top-p candidates:\", [tokens[i] for i in kept])\nprint(\"Renormalized:\", [round(probs[i] / mass, 3) for i in kept])\nprint(\"Greedy token:\", tokens[max(range(len(tokens)), key=lambda i: probs[i])])",
     "notes": [
@@ -256,7 +256,7 @@
     "output": "T=1.0: [0.665, 0.245, 0.09]\r\nT=2.0: [0.506, 0.307, 0.186]\r\nTop-p candidates: ['sunny', 'cold']\r\nRenormalized: [0.731, 0.269]\r\nGreedy token: sunny"
   },
   "prompt-engineering": {
-    "title": "Turning an Instruction into a Checkable Contract",
+    "title": "6. Turn an Instruction into a Checkable Output Contract",
     "paragraphs": [
       "Imagine a support assistant that drafts a refund request for a staff member. “Handle this refund” is ambiguous: should it summarize the request, propose an amount, or actually move money? A better prompt asks for a proposal with named fields and explicitly says that application code decides whether an action is allowed. The difference is not politeness; it is a clear boundary between language generation and execution.",
       "An output contract states the expected structure, allowed values, and handling of missing information. For example, an order ID must refer to an existing order; amount_cents must be an integer within its refundable balance; and the signed-in user must own that order. A JSON object can satisfy the first syntactic requirement while failing every business requirement. That is why validation happens after parsing.",
@@ -288,7 +288,7 @@
       "Compare the authenticated user's ID and the available refundable balance with the proposal.",
       "Return an eligibility result only. In a real refund workflow, any required human approval and idempotent execution would still follow."
     ],
-    "labTitle": "Python: Validate Three Refund Proposals Without Executing Them",
+    "labTitle": "8. Hands-On: Validate Refund Proposals Without Executing Them",
     "setup": "Python 3, standard library only. The three JSON strings are simulated model outputs and the orders are invented. This code performs checks only; it never makes a payment or calls an external service.",
     "code": "import json\n\norders = {\n    \"A17\": {\"owner\": \"user-7\", \"refundable_cents\": 1500},\n    \"B22\": {\"owner\": \"user-9\", \"refundable_cents\": 2500},\n}\nauthenticated_user = \"user-7\"  # Supplied by trusted authentication.\n\ndef check(raw):\n    try:\n        proposal = json.loads(raw)\n    except json.JSONDecodeError:\n        return \"REJECT: invalid JSON\"\n    if not isinstance(proposal, dict) or set(proposal) != {\"order_id\", \"amount_cents\"}:\n        return \"REJECT: fields\"\n    if type(proposal[\"order_id\"]) is not str or type(proposal[\"amount_cents\"]) is not int:\n        return \"REJECT: types\"\n    order = orders.get(proposal[\"order_id\"])\n    if order is None or order[\"owner\"] != authenticated_user:\n        return \"REJECT: not authorized\"\n    if not 0 < proposal[\"amount_cents\"] <= order[\"refundable_cents\"]:\n        return \"REJECT: amount\"\n    return \"ELIGIBLE FOR APPROVAL: not executed\"\n\nproposals = [\n    '{\"order_id\":\"A17\",\"amount_cents\":1000}',\n    '{\"order_id\":\"A17\",\"amount_cents\":\"1000\"}',\n    '{\"order_id\":\"B22\",\"amount_cents\":1000}',\n]\nfor number, raw in enumerate(proposals, 1):\n    print(f\"Proposal {number}: {check(raw)}\")",
     "notes": [
@@ -320,7 +320,7 @@
     "output": "Proposal 1: ELIGIBLE FOR APPROVAL: not executed\r\nProposal 2: REJECT: types\r\nProposal 3: REJECT: not authorized"
   },
   "pretraining-finetuning": {
-    "title": "How Prediction Error Changes a Model",
+    "title": "5. How Prediction Error Changes Model Parameters",
     "paragraphs": [
       "A training example must give the model something to predict and an observed answer against which to compare it. For causal language modeling, the answer comes from the text itself: after the prefix “the door is”, the next token in the training sequence might be “open”. A training batch contains many such positions. The model assigns probabilities to the vocabulary; the loss penalizes low probability on the observed target.",
       "To see the update without hiding it behind a framework, shrink the problem to three possible next tokens: open, closed, and locked. Suppose four training positions with the same toy context have targets open, open, open, closed. The empirical target frequencies are [0.75,0.25,0]. We start with three zero logits, which give equal probability 1/3. For this small softmax model, the gradient of mean cross-entropy with respect to each logit is predicted probability minus target frequency.",
@@ -352,7 +352,7 @@
       "With learning rate 0.5, the updated logits are approximately [0.208,−0.042,−0.167].",
       "Recalculate softmax and loss after each update. Falling training loss demonstrates fitting these examples; it does not demonstrate generalization."
     ],
-    "labTitle": "Python: Run Eight Gradient Updates on a Tiny Language-Prediction Problem",
+    "labTitle": "6. Hands-On: Run Gradient Updates on a Tiny Language-Prediction Problem",
     "setup": "Python 3, standard library only. This trains a three-logit categorical model with explicit gradients. It is not full LLM pretraining, but the loss and update arithmetic are real.",
     "code": "from math import exp, log\n\ntarget_frequency = [0.75, 0.25, 0.0]\nlogits = [0.0, 0.0, 0.0]\nlearning_rate = 0.5\n\ndef probabilities(scores):\n    weights = [exp(value - max(scores)) for value in scores]\n    return [weight / sum(weights) for weight in weights]\n\nfor step in range(9):\n    p = probabilities(logits)\n    loss = -sum(f * log(prob) for f, prob in zip(target_frequency, p))\n    if step in [0, 1, 4, 8]:\n        print(f\"step={step} loss={loss:.3f} p={[round(x, 3) for x in p]}\")\n    if step < 8:\n        gradient = [prob - f for prob, f in zip(p, target_frequency)]\n        logits = [\n            value - learning_rate * grad\n            for value, grad in zip(logits, gradient)\n        ]\n\nprint(\"Most probable next token:\", [\"open\", \"closed\", \"locked\"][p.index(max(p))])",
     "notes": [
@@ -384,7 +384,7 @@
     "output": "step=0 loss=1.099 p=[0.333, 0.333, 0.333]\r\nstep=1 loss=0.965 p=[0.406, 0.316, 0.279]\r\nstep=4 loss=0.767 p=[0.56, 0.265, 0.175]\r\nstep=8 loss=0.683 p=[0.655, 0.231, 0.114]\r\nMost probable next token: open"
   },
   "instruction-tuning-rlhf": {
-    "title": "Separate the Learning Goal from the Parameters You Train",
+    "title": "4. Separate the Learning Objective from the Parameters You Train",
     "paragraphs": [
       "SFT, preference optimization, and LoRA answer different questions. Supervised fine-tuning specifies what good responses look like. Preference training specifies which response is preferred under a rubric. LoRA specifies an efficient parameterization of an update. You can use LoRA while performing SFT; they are not competing names for the same stage.",
       "For SFT, a batch contains instructions and desired responses. The loss can be restricted to response tokens so the model learns to produce the target answer rather than being rewarded for repeating the prompt. Preference methods use comparisons; common RLHF pipelines fit a reward model and then optimize a policy, while direct preference methods use a different objective. Neither a fluent preferred answer nor a large reward automatically proves factual correctness.",
@@ -416,7 +416,7 @@
       "B=[0.2,0.4]ᵀ converts −0.1 to [−0.02,−0.04]; scaling by 2 gives [−0.04,−0.08].",
       "Add the two paths: [2,1]+[−0.04,−0.08]=[1.96,0.92]. W has not changed."
     ],
-    "labTitle": "Python: Trace a Frozen Matrix and a LoRA Side Path",
+    "labTitle": "7. Hands-On: Trace a Frozen Matrix and a LoRA Side Path",
     "setup": "Python 3, standard library only. Adapter values are supplied teaching values, not trained here. The program demonstrates the forward transformation and parameter counts.",
     "code": "def matvec(matrix, vector):\n    return [sum(a * b for a, b in zip(row, vector)) for row in matrix]\n\nx = [2.0, 1.0, 3.0]\nW = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]\nA = [[0.1, 0.0, -0.1]]\nB = [[0.2], [0.4]]\nrank, alpha = 1, 2\nbefore = [row[:] for row in W]\n\nbase = matvec(W, x)\ncompressed = matvec(A, x)\ndelta = [alpha / rank * value for value in matvec(B, compressed)]\noutput = [a + b for a, b in zip(base, delta)]\n\nprint(\"Frozen path:\", base)\nprint(\"A x:\", [round(v, 3) for v in compressed])\nprint(\"Scaled adapter:\", [round(v, 3) for v in delta])\nprint(\"Combined output:\", [round(v, 3) for v in output])\nprint(\"Base unchanged:\", W == before)\nprint(\"512x512, rank 8 adapter parameters:\", 8 * 512 + 512 * 8)\nprint(\"Adapter/full matrix ratio:\", f\"{(8 * 512 + 512 * 8) / (512 * 512):.3%}\")",
     "notes": [
@@ -448,7 +448,7 @@
     "output": "Frozen path: [2.0, 1.0]\r\nA x: [-0.1]\r\nScaled adapter: [-0.04, -0.08]\r\nCombined output: [1.96, 0.92]\r\nBase unchanged: True\r\n512x512, rank 8 adapter parameters: 8192\r\nAdapter/full matrix ratio: 3.125%"
   },
   "rag": {
-    "title": "Build an Evidence Packet, Not Just a Search Result",
+    "title": "4. Strengthen Retrieval with an Evidence Packet: Text, Source, Scope, and Version",
     "paragraphs": [
       "Finding a sentence containing “leave” is not enough to answer a leave-policy question. It may concern another country, a withdrawn policy, or meal allowances that use similar wording. A RAG application needs an evidence packet: the selected text together with its source ID, applicable scope, and version. These details let a reader inspect why a claim should apply to the question.",
       "For a concrete example, an authenticated India employee asks how many unused leave days can be carried forward. Our invented corpus has a current India policy allowing up to five, a UK policy allowing eight, an older India policy allowing three, and a meal-allowance passage. The search system may consider them all, but the answer should use only the current, applicable evidence. A large similarity score cannot override the wrong scope.",
@@ -480,7 +480,7 @@
       "Keep the original text and source ID together. The answer below is an exact quote from that record.",
       "Ask a second question about paternity duration. No eligible record supplies enough matches, so the system returns insufficient evidence rather than a number."
     ],
-    "labTitle": "Python: Retrieve a Policy, Cite It, and Abstain When It Is Missing",
+    "labTitle": "7. Hands-On: Retrieve a Policy, Cite It, and Abstain When Evidence Is Missing",
     "setup": "Python 3, standard library only. The policy data is invented. Retrieval uses exact word overlap, and the answer is extractive; no LLM is called and no real HR advice is provided.",
     "code": "import re\n\ndocuments = [\n    {\"id\": \"CH-17\", \"region\": \"IN\", \"current\": True,\n     \"text\": \"Employees may carry up to 5 unused leave days.\"},\n    {\"id\": \"CH-08\", \"region\": \"UK\", \"current\": True,\n     \"text\": \"Employees may carry up to 8 unused leave days.\"},\n    {\"id\": \"CH-03\", \"region\": \"IN\", \"current\": False,\n     \"text\": \"Employees may carry up to 3 unused leave days.\"},\n    {\"id\": \"CH-42\", \"region\": \"IN\", \"current\": True,\n     \"text\": \"Meal allowances expire each month.\"},\n]\nregion = \"IN\"  # Trusted employee scope, not a model-supplied claim.\n\ndef words(text):\n    return set(re.findall(r\"[a-z]+\", text.lower()))\n\ndef answer(question):\n    candidates = [\n        doc for doc in documents\n        if doc[\"region\"] == region and doc[\"current\"]\n    ]\n    scored = [(len(words(question) & words(doc[\"text\"])), doc) for doc in candidates]\n    score, best = max(scored, key=lambda item: item[0], default=(0, None))\n    if score < 2:  # Toy relevance rule, not a universal threshold.\n        return \"Insufficient evidence in the approved sources.\"\n    return f'{best[\"text\"]} [{best[\"id\"]}]'\n\nprint(answer(\"carry unused leave\"))\nprint(answer(\"paternity duration\"))",
     "notes": [
@@ -512,7 +512,7 @@
     "output": "Employees may carry up to 5 unused leave days. [CH-17]\r\nInsufficient evidence in the approved sources."
   },
   "semantic-search-embeddings": {
-    "title": "Why Vector Direction Matters More Than an ID Number",
+    "title": "3. Why Vector Direction Captures Similarity Better Than an ID Number",
     "paragraphs": [
       "Imagine placing three support passages on a map. A query should be close to passages that help answer it, even when their wording differs. A search embedding model learns numerical representations for that purpose. The map is a useful analogy, but production embeddings usually have many coordinates, and the axes are not literal labels such as “computer” or “repair”.",
       "Cosine similarity measures direction rather than length. For q=[1,1], passage A=[1,0] has cosine 1/√2≈0.707. Passage B=[2,2] points in exactly the same direction as q, so its cosine is 1 even though it is twice as long. Passage C=[−1,1] has dot product zero with q and cosine zero. The following plot and program use those invented coordinates so the geometry can be reproduced.",
@@ -544,7 +544,7 @@
       "For A=[1,0], the dot product is 1 and denominator √2, giving about 0.707.",
       "For C=[−1,1], the dot product −1+1=0, so cosine is 0. Rank B, then A, then C."
     ],
-    "labTitle": "Python: Rank Passage Vectors by Cosine Similarity",
+    "labTitle": "5. Hands-On: Rank Passage Vectors by Cosine Similarity",
     "setup": "Python 3, standard library only. The 2-D vectors are invented to teach similarity, not extracted from a language model. The cosine calculation and ranking are fully executable.",
     "code": "from math import sqrt\n\nquery = [1.0, 1.0]\npassages = {\"A\": [1.0, 0.0], \"B\": [2.0, 2.0], \"C\": [-1.0, 1.0]}\n\ndef cosine(a, b):\n    if len(a) != len(b):\n        raise ValueError(\"Embedding dimensions differ.\")\n    norm_a = sqrt(sum(value * value for value in a))\n    norm_b = sqrt(sum(value * value for value in b))\n    if norm_a == 0 or norm_b == 0:\n        raise ValueError(\"Cosine is undefined for a zero vector.\")\n    return sum(x * y for x, y in zip(a, b)) / (norm_a * norm_b)\n\nranking = sorted(\n    ((name, cosine(query, vector)) for name, vector in passages.items()),\n    key=lambda item: item[1], reverse=True,\n)\nfor name, score in ranking:\n    print(f\"{name}: cosine={score:.3f}\")\nprint(\"B scaled by ten:\", f\"{cosine(query, [20.0, 20.0]):.3f}\")",
     "notes": [
@@ -576,7 +576,7 @@
     "output": "B: cosine=1.000\r\nA: cosine=0.707\r\nC: cosine=0.000\r\nB scaled by ten: 1.000"
   },
   "vector-databases": {
-    "title": "Store the Evidence and Its Access Rules Alongside the Vector",
+    "title": "3. Keep Evidence and Access Rules Attached to the Vector Record",
     "paragraphs": [
       "A nearest-neighbour index solves only part of a search problem. After finding a vector, your application still needs the passage it represents, the source version, and proof that the caller can read it. If these pieces become disconnected, the system can return stale text, cite the wrong record, or reveal another customer's information.",
       "Think of each vector record as a document envelope: ID, text, embedding, and metadata travel together. A metadata filter can enforce a predicate such as tenant equals the authenticated tenant. But the application must derive that tenant from trusted identity and apply the rule on every query; accepting a tenant field from a model-generated request is not access control.",
@@ -608,7 +608,7 @@
       "Calculate cosine only for the two eligible vectors. A1=[1,0] matches q=[1,0] better than A2=[0,1].",
       "Delete A1 and repeat the query. A2 is now the best eligible record; the foreign record must not reappear as a replacement."
     ],
-    "labTitle": "Python: Build a Filtered Vector-Record Store with SQLite",
+    "labTitle": "7. Hands-On: Build a Filtered Vector-Record Store with SQLite",
     "setup": "Python 3 includes sqlite3, json, and math. This uses an in-memory database, creates no external service, and demonstrates an exact scan rather than production ANN indexing.",
     "code": "import json\nimport sqlite3\nfrom math import sqrt\n\ndb = sqlite3.connect(\":memory:\")\ndb.execute(\"CREATE TABLE chunks (id TEXT PRIMARY KEY, tenant TEXT, version TEXT, text TEXT, vector TEXT)\")\nrows = [\n    (\"A1\", \"A\", \"e1\", \"Return policy for A\", [1.0, 0.0]),\n    (\"A2\", \"A\", \"e1\", \"Delivery policy for A\", [0.0, 1.0]),\n    (\"B1\", \"B\", \"e1\", \"Private policy for B\", [1.0, 0.0]),\n]\ndb.executemany(\"INSERT INTO chunks VALUES (?, ?, ?, ?, ?)\",\n               [(i, t, v, text, json.dumps(vec)) for i, t, v, text, vec in rows])\n\ndef search(tenant, query):\n    eligible = db.execute(\n        \"SELECT id, vector FROM chunks WHERE tenant=? AND version=?\",\n        (tenant, \"e1\"),\n    ).fetchall()\n    query_norm = sqrt(sum(x * x for x in query))\n    if not query_norm:\n        raise ValueError(\"Zero query vector\")\n    scores = []\n    for record_id, encoded in eligible:\n        vector = json.loads(encoded)\n        score = sum(a * b for a, b in zip(query, vector))\n        score /= query_norm * sqrt(sum(x * x for x in vector))\n        scores.append((record_id, round(score, 3)))\n    return sorted(scores, key=lambda row: (-row[1], row[0]))\n\nauthenticated_tenant = \"A\"\nprint(\"Before deletion:\", search(authenticated_tenant, [1.0, 0.0]))\ndb.execute(\"DELETE FROM chunks WHERE id=? AND tenant=?\", (\"A1\", authenticated_tenant))\nprint(\"After deletion:\", search(authenticated_tenant, [1.0, 0.0]))\ndb.close()",
     "notes": [
@@ -640,7 +640,7 @@
     "output": "Before deletion: [('A1', 1.0), ('A2', 0.0)]\r\nAfter deletion: [('A2', 0.0)]"
   },
   "advanced-rag": {
-    "title": "Follow One Relevant Passage Through the Retrieval Funnel",
+    "title": "6. Follow One Relevant Passage Through the Full Retrieval Funnel",
     "paragraphs": [
       "A RAG answer can fail even when the correct passage is in the database. It might be cut away from its heading during chunking, missed by retrieval, placed too low by reranking, or removed from the final prompt to fit a token budget. Record source IDs at every stage so you can find the first place evidence disappears.",
       "Dense and lexical retrieval scores often have different scales. Adding a cosine of 0.8 directly to a lexical score of 12 makes their relative influence arbitrary. Reciprocal rank fusion, or RRF, combines positions instead: a document near the top of either list earns a contribution. The constant c controls how strongly rank differences affect the fused score; it is not the number of results returned.",
@@ -672,7 +672,7 @@
       "Only A is in the relevant set {A,D}, so Recall@2=1/2=0.50.",
       "The supplied reranker scores put A and D first, raising this query's Recall@2 to 1.00. This does not prove that a generated answer will use both correctly."
     ],
-    "labTitle": "Python: Fuse Two Rankings and Measure a Reranking Change",
+    "labTitle": "7. Hands-On: Fuse Two Rankings and Measure a Reranking Change",
     "setup": "Python 3, standard library only. Rankings, relevance labels, and reranker scores are invented inputs. RRF and recall are calculated; no embedding or reranker model is executed.",
     "code": "from collections import defaultdict\n\ndense = [\"B\", \"C\", \"A\", \"D\"]\nlexical = [\"A\", \"B\", \"D\", \"C\"]\nscores = defaultdict(float)\nfor ranking in [dense, lexical]:\n    for rank, document in enumerate(ranking, start=1):\n        scores[document] += 1 / (60 + rank)\n\nfused = sorted(scores, key=lambda d: (-scores[d], d))\nreranker = {\"A\": 0.95, \"B\": 0.30, \"C\": 0.10, \"D\": 0.90}\nreranked = sorted(fused, key=lambda d: (-reranker[d], d))\nrelevant = {\"A\", \"D\"}\n\ndef recall(ranking, k):\n    return len(set(ranking[:k]) & relevant) / len(relevant)\n\nprint(\"Fused:\", fused)\nfor document in fused:\n    print(f\"{document}: RRF={scores[document]:.5f}\")\nprint(\"Reranked:\", reranked)\nprint(f\"Recall@2 before: {recall(fused, 2):.2f}\")\nprint(f\"Recall@2 after: {recall(reranked, 2):.2f}\")",
     "notes": [
@@ -704,7 +704,7 @@
     "output": "Fused: ['B', 'A', 'C', 'D']\r\nB: RRF=0.03252\r\nA: RRF=0.03227\r\nC: RRF=0.03175\r\nD: RRF=0.03150\r\nReranked: ['A', 'D', 'B', 'C']\r\nRecall@2 before: 0.50\r\nRecall@2 after: 1.00"
   },
   "llm-evaluation": {
-    "title": "Measure Success on the Task, Not on a Single Impressive Answer",
+    "title": "2. Measure Success on the Task, Not on a Single Impressive Answer",
     "paragraphs": [
       "Suppose you are choosing a model for a customer-support assistant. A fluent demo is not a test set. Collect representative requests, define what counts as correct, and include difficult cases: ambiguous questions, missing evidence, formatting failures, and requests that must be refused. Keep a held-out portion so repeated prompt tuning does not simply memorize the evaluation examples.",
       "Some measurements are soft preferences, while others are release gates. A slightly slower model might be worth its improved answer quality, unless the product has a hard latency limit. Likewise, a safety failure cannot be averaged away by many easy correct answers. Write those decisions before comparing candidates so the rules do not shift to favor a preferred model.",
@@ -736,7 +736,7 @@
       "A's p95 is 2.4 seconds, so it fails the 1.5-second gate even though its accuracy is higher.",
       "B's p95 is 1.2 seconds and its critical-failure count is zero, so it passes these illustrative gates."
     ],
-    "labTitle": "Python: Compare Two Candidates with Explicit Release Gates",
+    "labTitle": "7. Hands-On: Compare Two Candidates with Explicit Release Gates",
     "setup": "Python 3, standard library only. All outcomes and timings below are invented fixtures, not measured commercial-model benchmarks.",
     "code": "from math import ceil\n\ncandidates = {\n    \"A\": {\"correct\": [1, 1, 1, 1, 1, 1, 1, 0],\n          \"seconds\": [0.8, 0.9, 1.0, 1.0, 1.1, 1.2, 1.4, 2.4],\n          \"critical\": 0},\n    \"B\": {\"correct\": [1, 1, 1, 1, 1, 1, 0, 0],\n          \"seconds\": [0.5, 0.6, 0.7, 0.8, 0.8, 0.9, 1.0, 1.2],\n          \"critical\": 0},\n}\n\ndef percentile(values, fraction):\n    ordered = sorted(values)\n    return ordered[ceil(fraction * len(ordered)) - 1]\n\nfor name, results in candidates.items():\n    accuracy = sum(results[\"correct\"]) / len(results[\"correct\"])\n    p95 = percentile(results[\"seconds\"], 0.95)\n    eligible = accuracy >= 0.75 and p95 <= 1.5 and results[\"critical\"] == 0\n    print(f\"{name}: accuracy={accuracy:.3f}, p95={p95:.1f}s, eligible={eligible}\")",
     "notes": [
@@ -768,7 +768,7 @@
     "output": "A: accuracy=0.875, p95=2.4s, eligible=False\r\nB: accuracy=0.750, p95=1.2s, eligible=True"
   },
   "llm-hallucinations-safety": {
-    "title": "Check Each Claim Against What Its Source Actually Says",
+    "title": "3. Check Every Important Claim Against What Its Source Actually Says",
     "paragraphs": [
       "A citation is a pointer, not a certificate. Consider a source that says employees may carry up to five leave days. An answer saying “every employee is guaranteed five days” points to a real source but strengthens its meaning. Another answer can cite the same source while inventing a later expiry date. Checking only whether the source ID exists misses both problems.",
       "Break an answer into claims that can be reviewed separately. For each claim, identify the cited passage and compare the subject, scope, value, date, and qualification. Supported means the required evidence backs the statement. Partial support means some of the statement goes beyond the evidence. Contradicted means the evidence conflicts with it. Unsupported means the required evidence does not establish it; that does not necessarily prove the statement is false in the world.",
@@ -800,7 +800,7 @@
       "C3 states June 30 when the supplied source says March 31: contradicted.",
       "C4 states that the office closes Friday, but the evidence has no office-closing field: unsupported."
     ],
-    "labTitle": "Python: Audit Four Structured Claims Against One Evidence Record",
+    "labTitle": "4. Hands-On: Audit Four Structured Claims Against One Evidence Record",
     "setup": "Python 3, standard library only. These are invented policy facts, and claims are already structured by hand. This is a validation demonstration, not a natural-language fact checker.",
     "code": "evidence = {\n    \"S1\": {\n        \"carry_days\": {\"value\": 5, \"qualifier\": \"up_to\"},\n        \"expiry\": {\"value\": \"March 31\", \"qualifier\": \"exact\"},\n    }\n}\nclaims = [\n    (\"C1\", \"S1\", \"carry_days\", 5, \"up_to\"),\n    (\"C2\", \"S1\", \"carry_days\", 5, \"guaranteed\"),\n    (\"C3\", \"S1\", \"expiry\", \"June 30\", \"exact\"),\n    (\"C4\", \"S1\", \"office_closes\", \"Friday\", \"exact\"),\n]\n\ndef review(source_id, field, value, qualifier):\n    fact = evidence.get(source_id, {}).get(field)\n    if fact is None:\n        return \"UNSUPPORTED\", \"omit or seek evidence\"\n    if value != fact[\"value\"]:\n        return \"CONTRADICTED\", \"correct against the source\"\n    if qualifier != fact[\"qualifier\"]:\n        return \"PARTIAL\", \"preserve the qualification\"\n    return \"SUPPORTED\", \"state with citation\"\n\nfor claim_id, source_id, field, value, qualifier in claims:\n    status, action = review(source_id, field, value, qualifier)\n    print(f\"{claim_id}: {status} -> {action}\")",
     "notes": [
@@ -832,7 +832,7 @@
     "output": "C1: SUPPORTED -> state with citation\r\nC2: PARTIAL -> preserve the qualification\r\nC3: CONTRADICTED -> correct against the source\r\nC4: UNSUPPORTED -> omit or seek evidence"
   },
   "reasoning-models": {
-    "title": "Spend Additional Computation Only When You Can Use It",
+    "title": "3. Spend Additional Test-Time Compute Only When You Can Use It",
     "paragraphs": [
       "A difficult question can sometimes benefit from more inference work: generate another candidate, inspect a failure, run a verifier, or explore another branch. This is different from training more parameters. The saved model may be unchanged while the application spends more effort on the current request.",
       "Consider the equation 3x+2=11. Suppose a proposal mechanism offers x=2, x=3, and x=4 in that order. A verifier can substitute each candidate into the equation. The first produces 8, so it fails. The second produces 11, so it passes. If the task is simply to find one solution, stop there rather than spending the remaining budget on x=4. This is an observable search-and-check process, not a claim about a model's private reasoning.",
@@ -864,7 +864,7 @@
       "Check x=3: 3×3+2=11. Record success and stop.",
       "Report x=3, two checks used, and one remaining. If no candidate passed, report failure rather than selecting the most confident wrong proposal."
     ],
-    "labTitle": "Python: Use a Bounded Candidate-and-Verifier Loop",
+    "labTitle": "6. Hands-On: Run a Bounded Candidate-and-Verifier Loop",
     "setup": "Python 3, no extra packages. The proposals are a fixed list, not LLM output. The verifier evaluates simple arithmetic and does not execute generated code.",
     "code": "candidates = [2, 3, 4]\nbudget = 3\nselected = None\nused = 0\n\nfor candidate in candidates:\n    if used >= budget:\n        break\n    used += 1\n    observed = 3 * candidate + 2\n    passed = observed == 11\n    print(f\"attempt={used} x={candidate} value={observed} passed={passed}\")\n    if passed:\n        selected = candidate\n        break\n\nprint(\"Selected:\", selected if selected is not None else \"no verified answer\")\nprint(\"Checks used:\", used)\nprint(\"Checks remaining:\", budget - used)",
     "notes": [
@@ -896,7 +896,7 @@
     "output": "attempt=1 x=2 value=8 passed=False\r\nattempt=2 x=3 value=11 passed=True\r\nSelected: 3\r\nChecks used: 2\r\nChecks remaining: 1"
   },
   "efficient-llm-serving": {
-    "title": "Separate Prompt Processing, Token Generation, and Memory",
+    "title": "2. Separate Prompt Processing, Token Generation, and Memory",
     "paragraphs": [
       "When a user submits a long prompt, the server first processes the supplied tokens. This phase is called prefill. Once the first generated token appears, decoding continues one token at a time. The time to first token therefore includes work that later token intervals do not: queueing, request handling, and prompt processing can all affect it.",
       "A KV cache stores earlier attention keys and values so they do not need to be projected again for every later step. Attention still has to use the relevant cached states; caching does not make a long context free. Its memory grows with sequence length, active requests, layer count, KV-head count, head width, and element size. Grouped-query attention can use fewer KV heads than query heads, so do not blindly substitute the query-head count.",
@@ -928,7 +928,7 @@
       "For token arrival times [0.35,0.40,0.45,0.50] seconds after request start, TTFT is 0.35 seconds.",
       "There are three decode intervals of 0.05 seconds. The decode rate across those intervals is 3/0.15=20 tokens per second; total response time is 0.50 seconds."
     ],
-    "labTitle": "Python: Estimate KV Memory and Read a Token Timeline",
+    "labTitle": "7. Hands-On: Estimate KV-Cache Memory and Read a Token Timeline",
     "setup": "Python 3, standard library only. Architecture dimensions and timestamps are invented, not benchmark results. This program estimates raw storage and computes serving metrics.",
     "code": "layers, kv_heads, head_dimension = 4, 2, 8\nbytes_per_value, batch = 2, 1\n\ndef cache_bytes(tokens):\n    return 2 * layers * kv_heads * head_dimension * tokens * bytes_per_value * batch\n\nfor tokens in [128, 256]:\n    print(f\"{tokens} cached tokens: {cache_bytes(tokens) / 1024:.1f} KiB\")\n\narrivals = [0.35, 0.40, 0.45, 0.50]\nintervals = [b - a for a, b in zip(arrivals, arrivals[1:])]\ndecode_rate = (len(arrivals) - 1) / (arrivals[-1] - arrivals[0])\nprint(f\"TTFT: {arrivals[0]:.2f}s\")\nprint(\"Inter-token intervals:\", [round(x, 2) for x in intervals])\nprint(f\"Decode rate: {decode_rate:.1f} tokens/s\")\nprint(f\"Complete response: {arrivals[-1]:.2f}s\")\nfor bits in [16, 8, 4]:\n    raw_gb = 1_000_000_000 * bits / 8 / 1_000_000_000\n    print(f\"1B weights at {bits} bits: {raw_gb:.1f} GB raw\")",
     "notes": [
@@ -960,7 +960,7 @@
     "output": "128 cached tokens: 32.0 KiB\r\n256 cached tokens: 64.0 KiB\r\nTTFT: 0.35s\r\nInter-token intervals: [0.05, 0.05, 0.05]\r\nDecode rate: 20.0 tokens/s\r\nComplete response: 0.50s\r\n1B weights at 16 bits: 2.0 GB raw\r\n1B weights at 8 bits: 1.0 GB raw\r\n1B weights at 4 bits: 0.5 GB raw"
   },
   "llmops": {
-    "title": "Connect a User-Visible Answer to a Reproducible Release",
+    "title": "2. Connect Every User-Visible Answer to a Reproducible Release",
     "paragraphs": [
       "A model name is not enough to reproduce an answer. The prompt, retrieval index, embedding model, output schema, safety rules, and decoding configuration may all change behavior. A release manifest records their versions together so an unexpected result can be traced to the exact application configuration.",
       "A trace records what happened during a request: selected source IDs, stage durations, token counts, errors, and the release ID. Do not automatically store raw prompts or document text; those can contain private information. Keep only the evidence needed for diagnosis under the application's retention and access policy. Operational visibility should not create a second uncontrolled sensitive-data store.",
@@ -992,7 +992,7 @@
       "The stop rule selects the baseline release even though the other outcomes are successful.",
       "Report the selected release and failure count without logging user prompts. This is a local decision simulation, not a real deployment."
     ],
-    "labTitle": "Python: Make a Canary Decision from a Versioned Manifest",
+    "labTitle": "8. Hands-On: Make a Canary Decision from a Versioned Manifest",
     "setup": "Python 3, standard library only. The program reads in-memory fixtures and prints a release decision. It does not deploy, send traffic, or call any service.",
     "code": "import hashlib\nimport json\n\nbaseline = {\"model\": \"m1\", \"prompt\": \"p3\", \"index\": \"i8\", \"schema\": \"s2\"}\ncandidate = {\"model\": \"m1\", \"prompt\": \"p4\", \"index\": \"i8\", \"schema\": \"s2\"}\n\ndef release_id(manifest):\n    serialized = json.dumps(manifest, sort_keys=True).encode()\n    return hashlib.sha256(serialized).hexdigest()[:8]\n\nevents = [\n    {\"request_id\": \"R1\", \"critical\": False, \"latency_ms\": 800},\n    {\"request_id\": \"R2\", \"critical\": True, \"latency_ms\": 700},\n    {\"request_id\": \"R3\", \"critical\": False, \"latency_ms\": 850},\n]\nfailures = sum(event[\"critical\"] for event in events)\nrollback = failures > 0\nactive = baseline if rollback else candidate\nprint(\"Baseline ID:\", release_id(baseline))\nprint(\"Candidate ID:\", release_id(candidate))\nprint(\"Critical failures:\", failures)\nprint(\"Decision:\", \"ROLLBACK\" if rollback else \"CONTINUE OBSERVING\")\nprint(\"Active prompt:\", active[\"prompt\"])\nprint(\"Logged raw user text:\", any(\"prompt_text\" in e for e in events))",
     "notes": [
@@ -1024,4 +1024,3 @@
     "output": "Baseline ID: 4dc43156\r\nCandidate ID: 71f5daa5\r\nCritical failures: 1\r\nDecision: ROLLBACK\r\nActive prompt: p3\r\nLogged raw user text: False"
   }
 }
-
