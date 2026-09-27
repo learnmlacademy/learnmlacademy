@@ -7,8 +7,8 @@ import { SummaryCard } from "../../components/lesson/SummaryCard";
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
+    <section className="not-prose border-l-2 border-indigo-300 py-1 pl-5">
+      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Next question in the learning path</p>
       <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
@@ -19,7 +19,7 @@ function StableLatentDiffusion() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Why denoise a compressed image instead of every pixel?</h2>
+        <h2>1. Why Move Diffusion from Pixels into Latent Space</h2>
         <p className="text-lg">A 512×512 RGB image contains hundreds of thousands of scalar values. Repeating a neural-network denoising step directly over that full pixel space is expensive.</p>
         <p><strong>Latent diffusion</strong> first represents images in a smaller learned latent space, performs diffusion there, then decodes the final latent back to pixels.</p>
       </section>
@@ -27,7 +27,7 @@ function StableLatentDiffusion() {
       <GenAIIntuition topicId="stable-latent-diffusion" />
 
       <section className="space-y-4">
-        <h2>The compression advantage in numbers</h2>
+        <h2>3. Worked Example: Measuring the Compression Advantage</h2>
         <DataTable title="Pixel tensor versus latent tensor" headers={["Representation","Shape","Scalar values"]} rows={[
           ["Pixel image","[1, 3, 512, 512]","3×512×512 = 786,432"],
           ["Latent","[1, 4, 64, 64]","4×64×64 = 16,384"],
@@ -37,13 +37,13 @@ function StableLatentDiffusion() {
 
 
       <section className="space-y-4">
-        <h2>What starts pure text-to-image generation?</h2>
+        <h2>4. How Pure Text-to-Image Generation Starts</h2>
         <p>There is no source image to encode. The process normally begins from <strong>random latent noise</strong>, then iteratively denoises that latent under text guidance.</p>
         <p><strong>Cross-attention</strong> allows locations in the image latent to use relevant contextual information from prompt tokens. The text encoder does not paint pixels; it supplies representations used for conditioning.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Why can tiny details become soft?</h2>
+        <h2>5. The Trade-Off: Efficiency vs Fine Detail</h2>
         <p>Compression is the reason latent diffusion is efficient, but it can also lose fine pixel detail. Small text, thin lines, and tiny textures may be harder to preserve through the VAE representation.</p>
         <Callout role="tip" title="Image-to-image needs the encoder again"><p>If the workflow starts from an uploaded image, the VAE encoder maps those pixels into latent space before noise and denoising are applied.</p></Callout>
       </section>
@@ -68,7 +68,7 @@ function ControllingDiffusion() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>“Generate an image” is not enough when you need control</h2>
+        <h2>1. Why Diffusion Models Need Explicit Controls</h2>
         <p className="text-lg">Sometimes you want a new image but need to preserve a pose, edit only one region, keep most of a reference composition, or strengthen prompt adherence. Diffusion systems provide different controls for different goals.</p>
       </section>
 
@@ -83,12 +83,12 @@ function ControllingDiffusion() {
       ]}/>
 
       <section className="space-y-4">
-        <h2>Seed controls randomness, not style</h2>
+        <h2>3. Seeds: Reproduce Randomness, Not Style</h2>
         <p>A random seed initializes the random-number generator and therefore the starting latent noise. With matching model, software path, settings, and hardware behavior, reusing a seed helps reproduce the same stochastic start. The seed itself does not store a visual style.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Classifier-free guidance blends conditional and unconditional predictions</h2>
+        <h2>4. Classifier-Free Guidance: Strengthening the Prompt Direction</h2>
         <FormulaBlock expression="ε̂guided = ε̂uncond + s(ε̂cond - ε̂uncond)" explanation="s is the guidance scale. It pushes the denoising prediction away from the unconditional prediction toward the conditional direction." />
         <p>For ε̂uncond=0.2, ε̂cond=0.5, and s=3:</p>
         <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5 font-mono">0.2 + 3×(0.5−0.2) = 0.2 + 0.9 = <strong>1.1</strong></div>
@@ -96,7 +96,7 @@ function ControllingDiffusion() {
       </section>
 
       <section className="space-y-4">
-        <h2>Masks and structural controls solve different problems</h2>
+        <h2>5. Spatial and Structural Control: Masks, Pose, Edges, and More</h2>
         <p>Inpainting uses a mask to identify which image region may change. Libraries differ on whether white or black means “edit”, so if the opposite region changes, check the mask convention first.</p>
         <p>For an exact supplied pose, a pose-based ControlNet-style condition is a stronger starting point than a seed or extra negative prompting because the pose map directly represents the geometry you want to preserve.</p>
       </section>
@@ -121,7 +121,7 @@ function FineTuningImages() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>When prompting is not enough</h2>
+        <h2>1. When Prompting and Inference-Time Controls Are Not Enough</h2>
         <p className="text-lg">Prompts, seeds, masks, and guidance change how a pretrained model is used. <strong>Fine-tuning</strong> is different: it performs training-time adaptation so learned embeddings or parameter updates change.</p>
       </section>
 
@@ -134,19 +134,19 @@ function FineTuningImages() {
       ]}/>
 
       <section className="space-y-4">
-        <h2>LoRA in one tiny matrix</h2>
+        <h2>3. LoRA: Adapting a Model with a Low-Rank Update</h2>
         <p>Suppose the frozen base weight W is 4×4. A rank-1 LoRA update learns A with shape 1×4 and B with shape 4×1.</p>
         <FormulaBlock expression="A parameters = 1×4 = 4; B parameters = 4×1 = 4; total adapter parameters = 8" explanation="The original 16 parameters of W stay frozen in the simplified example." />
       </section>
 
       <section className="space-y-4">
-        <h2>Data variety matters more than memorizing one composition</h2>
+        <h2>4. Training Data: Learn the Subject Without Memorizing the Background</h2>
         <p>If every training photo of a product shows the same white table, the adaptation may bind that background to the product. Then the concept appears correctly only on that table.</p>
         <Callout role="warning" title="Hold validation prompts out of training"><p>Validation prompts should test unseen combinations and settings. If their failures feed adapter updates, they stop being independent evidence of generalization.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>Start with the lightest method that matches the need</h2>
+        <h2>5. Choosing the Lightest Adaptation Method That Fits</h2>
         <p>If one placeholder token only needs to represent a small concept, Textual Inversion can be a compact starting point. If you need a more expressive adaptation while keeping the base frozen, LoRA is often a stronger option. Full-model retraining is not the default answer.</p>
       </section>
 
@@ -170,7 +170,7 @@ function MultimodalLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What makes a system multimodal?</h2>
+        <h2>1. What Makes a System Multimodal</h2>
         <p className="text-lg">A multimodal system works with more than one data modality—such as text, image, audio, or video—within one task or representation pipeline.</p>
         <p>Multimodal does <strong>not</strong> automatically mean generative. An image+question system that only chooses one label from a fixed list is multimodal but not open-ended generation.</p>
       </section>
@@ -179,13 +179,13 @@ function MultimodalLesson() {
 
 
       <section className="space-y-4">
-        <h2>A tiny alignment calculation</h2>
+        <h2>3. Worked Example: Measuring Cross-Modal Alignment</h2>
         <p>Suppose normalized text vector t=[0.8,0.6] and image vector B=[-0.6,0.8]. Their dot product is:</p>
         <FormulaBlock expression="0.8×(-0.6) + 0.6×0.8 = -0.48 + 0.48 = 0.00" explanation="In this toy aligned space, the vectors provide no positive similarity signal." />
       </section>
 
       <section className="space-y-4">
-        <h2>Test whether each modality is actually being used</h2>
+        <h2>4. Verify That the Model Is Actually Using Each Modality</h2>
         <p>For visual question answering, keep the text question fixed and change only the image. If the answer barely changes even when visual evidence changes, the system may be relying on the question prior and ignoring the image.</p>
         <Callout role="warning" title="Fluent multimodal output can still hallucinate"><p>If an accessibility description says a ramp is present when no ramp is visible, treat that as an unsupported claim and compare it against localized visual evidence. Broad embedding similarity does not prove a specific object exists.</p></Callout>
       </section>
@@ -210,26 +210,26 @@ function TemporalMediaLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Images are spatial. Audio and video are spatial <em>and temporal</em>.</h2>
+        <h2>1. Why Time Makes Audio and Video Generation Harder</h2>
         <p className="text-lg">A good audio clip or video is not just a collection of individually plausible pieces. Timing, rhythm, identity, motion, and state must remain coherent across time.</p>
       </section>
 
       <GenAIIntuition topicId="audio-music-video-generation" />
 
       <section className="space-y-4">
-        <h2>Waveforms and spectrograms describe sound differently</h2>
+        <h2>3. Audio Representation: Waveforms vs Spectrograms</h2>
         <p>A waveform stores amplitude samples over time. For a 2-second mono clip sampled at 16,000 samples per second:</p>
         <FormulaBlock expression="16,000 samples/s × 2 s = 32,000 waveform values" explanation="The sample rate says how many amplitude measurements are stored each second." />
         <p>A <strong>spectrogram</strong> reorganizes sound so time runs horizontally, frequency vertically, and cell intensity represents energy.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Music can be represented symbolically or as audio</h2>
+        <h2>4. Music Representation: Symbolic Events vs Generated Audio</h2>
         <p>If a composer needs explicit control over notes, durations, instruments, and tempo, <strong>symbolic musical events</strong> are a natural representation. They still need a renderer, synthesizer, or performer to become a final waveform.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Video quality needs consistency across frames</h2>
+        <h2>5. Video Generation: Keeping Identity and Motion Consistent Across Frames</h2>
         <DataTable title="Two kinds of quality" headers={["Quality","Question"]} rows={[
           ["Frame quality","Does each individual frame look plausible?"],
           ["Temporal consistency","Does identity, object state, lighting, and motion remain coherent across frames?"],
@@ -238,7 +238,7 @@ function TemporalMediaLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Image-to-video has an extra constraint</h2>
+        <h2>6. Image-to-Video: Preserve Appearance While Creating Motion</h2>
         <p>Text-to-video begins from text guidance. Image-to-video also receives a reference frame, so the system must preserve its identity and composition while inventing plausible motion over time.</p>
       </section>
 
@@ -262,7 +262,7 @@ function SyntheticDataLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What is synthetic data?</h2>
+        <h2>1. What Synthetic Data Is—and What It Is Not</h2>
         <p className="text-lg">Synthetic data is created by rules, simulations, statistical models, or generative models instead of being a direct observation of every real example.</p>
         <p>It can help when real data is scarce, sensitive, expensive, or missing important scenarios—but it must be evaluated against the real task.</p>
       </section>
@@ -270,7 +270,7 @@ function SyntheticDataLesson() {
       <GenAIIntuition topicId="synthetic-data" />
 
       <section className="space-y-4">
-        <h2>Augmentation and full synthesis are not the same</h2>
+        <h2>3. Augmentation vs Full Synthesis</h2>
         <DataTable title="Two ways to create additional data" headers={["Method","Starting point","Example"]} rows={[
           ["Data augmentation","A real source example","Rotate a real image while preserving its label"],
           ["Fully synthetic generation","Rules, simulator, fitted distribution, or generative model","Generate a new artificial transaction record"],
@@ -278,14 +278,14 @@ function SyntheticDataLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Coverage can improve while fidelity gets worse</h2>
+        <h2>4. Coverage vs Fidelity: Improving One Can Hurt the Other</h2>
         <p>A real dataset has 100 cases: A=80 and B=20. A synthetic training set intentionally uses A=60 and B=40.</p>
         <FormulaBlock expression="B count: 40/20 = 2×; B share: 40% − 20% = +20 percentage points" explanation="The synthetic set doubles B coverage but no longer matches the real 80/20 class frequency." />
         <p>That may be useful for exposing a classifier to more B cases, but it would be misleading if someone treated the synthetic 60/40 balance as proof that the real population is 60/40.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Evaluate four dimensions separately</h2>
+        <h2>5. Evaluate Fidelity, Coverage, Privacy, and Utility Separately</h2>
         <DataTable title="Synthetic-data evidence" headers={["Dimension","Question"]} rows={[
           ["Fidelity","Does synthetic data preserve important real distributions and relationships?"],
           ["Coverage","Are rare cases, modes, and subgroups represented?"],
