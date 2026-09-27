@@ -7,8 +7,8 @@ import { SummaryCard } from "../../components/lesson/SummaryCard";
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
+    <section className="not-prose border-l-2 border-indigo-300 py-1 pl-5">
+      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Next question in the learning path</p>
       <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
@@ -32,7 +32,7 @@ function GenAIIntro() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What changes when AI can create something new?</h2>
+        <h2>1. From Prediction to Creation: What Changes?</h2>
         <p className="text-lg">A fraud model might answer <strong>“fraud probability = 0.82”</strong>. A search system might return an existing policy paragraph. A generative system does something different: it <strong>constructs a new candidate output</strong> such as text, an image, audio, code, video, or synthetic record.</p>
         <p><strong>Generative AI</strong> learns patterns from examples and uses those patterns—plus guidance supplied at use time—to create a new candidate.</p>
       </section>
@@ -41,7 +41,7 @@ function GenAIIntro() {
 
 
       <section className="space-y-4">
-        <h2>What can generative AI create?</h2>
+        <h2>3. What Generative AI Can Create</h2>
         <DataTable
           title="Common output types"
           headers={["Output","Example request","What still needs checking"]}
@@ -57,13 +57,13 @@ function GenAIIntro() {
       </section>
 
       <section className="space-y-4">
-        <h2>Prompting is not retraining</h2>
+        <h2>4. How Prompts Guide a Trained Model</h2>
         <p>If you change a prompt and the pretrained model gives a different answer, the normal situation is that the <strong>use-time condition changed while the saved model parameters stayed fixed</strong>. Training changes parameters; ordinary generation uses the trained parameters.</p>
         <Callout role="tip" title="Condition means guidance"><p>A prompt is one kind of condition. A class label, reference image, mask, audio clip, or partial sequence can also guide generation.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>When should you not generate?</h2>
+        <h2>5. When Generation Is Not the Right Tool</h2>
         <p>If a customer must see the <strong>exact current refund-policy paragraph</strong>, retrieval is the better starting point. Asking a generator to rewrite it creates unnecessary risk because a fluent paraphrase can change the policy.</p>
         <p>Generated output should be treated as a <strong>candidate</strong>. In important workflows, verify facts and policy before publishing or acting on it.</p>
       </section>
@@ -88,7 +88,7 @@ function GenerativeVsDiscriminative() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Two different learning goals</h2>
+        <h2>1. Two Learning Goals: Predicting a Target vs Modelling Data</h2>
         <p className="text-lg">Suppose an email contains the word <strong>“offer”</strong>. A discriminative model may ask: <strong>“Given this email, how likely is spam?”</strong> A generative model can instead learn how examples from different classes tend to occur and use that learned data process for sampling or derived predictions.</p>
         <p>The usual discriminative direction is <strong>p(y | x)</strong>: predict target y after observing input x.</p>
       </section>
@@ -107,7 +107,7 @@ function GenerativeVsDiscriminative() {
       />
 
       <section className="space-y-4">
-        <h2>A tiny conditional-probability example</h2>
+        <h2>3. Worked Example: Calculating P(Spam | Offer)</h2>
         <p>Suppose we have <strong>100 emails</strong>. Of those, <strong>40 are spam</strong>, <strong>36 contain “offer”</strong>, and <strong>30 are both spam and contain “offer”</strong>.</p>
         <DataTable
           title="Where each number comes from"
@@ -119,7 +119,7 @@ function GenerativeVsDiscriminative() {
       </section>
 
       <section className="space-y-4">
-        <h2>Generative and discriminative models can overlap</h2>
+        <h2>4. Where Generative and Discriminative Models Overlap</h2>
         <p>The families are not defined by “classification versus images”. A generative model can support classification by modelling class-related data quantities and deriving a class probability. A discriminative model can output a continuous number, as in regression.</p>
         <Callout role="tip" title="Use the simplest model that matches the real job"><p>If the product only needs a reliable house-price estimate, directly learning that prediction may be simpler than modelling every way a house description can occur.</p></Callout>
       </section>
@@ -144,7 +144,7 @@ function HowGenerativeModelsLearn() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What does “learn the data distribution” mean?</h2>
+        <h2>1. What It Means to Learn a Data Distribution</h2>
         <p className="text-lg">Imagine a tiny dataset of scene labels. If forests appear often, coasts sometimes, and cities less often, a generator can learn that some outcomes are more plausible than others.</p>
         <p>A <strong>distribution</strong> is a way of describing which values or combinations are more or less likely. A model does not need to store every training file as a searchable copy to learn such patterns.</p>
       </section>
@@ -152,7 +152,7 @@ function HowGenerativeModelsLearn() {
       <GenAIIntuition topicId="how-generative-models-learn" />
 
       <section className="space-y-4">
-        <h2>Sampling turns probabilities into one concrete choice</h2>
+        <h2>3. Sampling: Turning Probabilities into One Output</h2>
         <p>Suppose the learned probabilities are:</p>
         <DataTable title="Toy learned distribution" headers={["Category","Probability","Cumulative interval"]} rows={[
           ["Forest","0.50","[0.00, 0.50)"],
@@ -164,7 +164,7 @@ function HowGenerativeModelsLearn() {
       </section>
 
       <section className="space-y-4">
-        <h2>Conditioning changes which outputs are likely</h2>
+        <h2>4. Conditioning: Changing Which Outputs Are Likely</h2>
         <p>Now add the condition <strong>“sunset”</strong>. The model may have learned that sunset coast scenes are especially common, so the probabilities shift. Conditioning does not usually retrain the model; it guides the distribution used at generation time.</p>
         <DataTable title="Guidance changes the toy distribution" headers={["Setting","Forest","Coast","City"]} rows={[
           ["No condition","0.50","0.30","0.20"],
@@ -174,7 +174,7 @@ function HowGenerativeModelsLearn() {
       </section>
 
       <section className="space-y-4">
-        <h2>Training and generation are different phases</h2>
+        <h2>5. Training vs Generation: Learning First, Sampling Later</h2>
         <Steps items={[
           {title:"Training examples",body:"Developers provide data and an objective."},
           {title:"Prediction / reconstruction / discrimination / denoising objective",body:"The model is scored on what it should learn for its architecture."},
@@ -184,7 +184,7 @@ function HowGenerativeModelsLearn() {
       </section>
 
       <section className="space-y-4">
-        <h2>Different families generate in different ways</h2>
+        <h2>6. How Different Generative Model Families Produce Samples</h2>
         <DataTable title="Four mechanisms you will meet" headers={["Family","High-level generation idea"]} rows={[
           ["Autoregressive","Generate one part, then use it to help generate the next"],
           ["VAE / latent-variable","Sample a latent representation, then decode it"],
@@ -213,7 +213,7 @@ function VAELesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Why not encode every example into one exact hidden point?</h2>
+        <h2>1. Why a VAE Learns a Distribution Instead of One Latent Point</h2>
         <p className="text-lg">A normal autoencoder compresses an input into a latent representation and reconstructs it. A <strong>Variational Autoencoder (VAE)</strong> adds uncertainty: the encoder describes a <strong>distribution</strong> for each latent dimension instead of one fixed point.</p>
         <p>Training encourages a more organized latent space from which to sample, although useful reconstructions and realistic new samples still need to be checked.</p>
       </section>
@@ -222,7 +222,7 @@ function VAELesson() {
 
 
       <section className="space-y-4">
-        <h2>Reparameterization keeps randomness compatible with learning</h2>
+        <h2>3. Reparameterization: Sampling Without Breaking Learning</h2>
         <p>The encoder learns <strong>μ</strong> and variance-related values. Randomness comes from <strong>ε sampled from N(0,I)</strong>. Then the latent sample is calculated as:</p>
         <FormulaBlock expression="z = μ + σ ⊙ ε" explanation="μ and σ come from the encoder; ε is the random draw. This separates the source of randomness from the learned parameters." />
         <p>Example: μ = [0.5, -1.0], σ = [0.5, 2.0], ε = [0.4, -0.3].</p>
@@ -232,13 +232,13 @@ function VAELesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>The VAE balances reconstruction and latent regularity</h2>
+        <h2>4. The VAE Objective: Reconstruction vs Latent Regularity</h2>
         <p>One part of the loss asks the decoder to reconstruct the input well. A KL-divergence term encourages the encoded latent distributions to stay near a simple prior, often a standard normal distribution.</p>
         <p>In a β-VAE, increasing <strong>β above 1</strong> gives the KL regularization more weight. That can organize the latent space more strongly, but reconstruction detail may decrease.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Reconstruction and generation are different paths</h2>
+        <h2>5. Reconstruction vs Generation: Two Different Paths</h2>
         <DataTable title="Two ways through a VAE" headers={["Task","Path"]} rows={[
           ["Reconstruction","Input → encoder → sample near its learned latent distribution → decoder"],
           ["Generation","Sample z from the prior N(0,I) → decoder, with no original input required"],
@@ -246,7 +246,7 @@ function VAELesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Posterior collapse: when the decoder ignores z</h2>
+        <h2>6. Failure Mode: When the Decoder Ignores the Latent Variable</h2>
         <p>If the KL term falls near zero and changing z barely changes the output, the decoder may have learned to ignore the latent variable. This failure is called <strong>posterior collapse</strong>.</p>
       </section>
 
@@ -270,7 +270,7 @@ function GANLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Can a generator improve by competing with a critic?</h2>
+        <h2>1. The Core GAN Idea: A Generator Competes with a Discriminator</h2>
         <p className="text-lg">A <strong>Generative Adversarial Network (GAN)</strong> trains two neural networks together. The <strong>generator G</strong> turns random input z into fake samples. The <strong>discriminator D</strong> tries to tell real samples from generated ones.</p>
         <p>The generator improves because it receives a learning signal from how successfully the discriminator detects its fakes.</p>
       </section>
@@ -279,7 +279,7 @@ function GANLesson() {
 
 
       <section className="space-y-4">
-        <h2>Two update phases must stay separate</h2>
+        <h2>3. Alternating Training: Update the Discriminator, Then the Generator</h2>
         <Steps items={[
           {title:"Update the discriminator",body:"Show real samples and detached fake samples. Change only D so it gets better at classifying real versus fake."},
           {title:"Update the generator",body:"Generate fresh fake samples without detaching the generator path. Freeze or avoid updating D's parameters while gradients flow through D into G."},
@@ -288,13 +288,13 @@ function GANLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>A tiny discriminator-loss calculation</h2>
+        <h2>4. Worked Example: Calculating a Discriminator Loss</h2>
         <p>Suppose D(x)=0.90 for a real sample and D(G(z))=0.20 for a fake sample. A simple binary-cross-entropy discriminator loss is:</p>
         <FormulaBlock expression="-ln(0.90) - ln(1 - 0.20) = -ln(0.90) - ln(0.80) ≈ 0.105 + 0.223 = 0.328" explanation="The first term rewards calling the real sample real. The second rewards rejecting the fake sample." />
       </section>
 
       <section className="space-y-4">
-        <h2>Two important interpretations</h2>
+        <h2>5. How to Interpret GAN Scores and Common Failure Signals</h2>
         <DataTable title="What common observations mean" headers={["Observation","Likely meaning"]} rows={[
           ["Many different z values produce nearly the same sample","Mode collapse: the generator covers too little of the data distribution"],
           ["At idealized equilibrium D outputs around 0.5","Real and generated distributions are similar enough that D cannot reliably separate them"],
@@ -302,7 +302,7 @@ function GANLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Conditional GANs generate a requested class</h2>
+        <h2>6. Conditional GANs: Asking for a Specific Class</h2>
         <p>If the goal is “generate the digit 7”, provide the class label as extra information to both the generator and discriminator. The condition helps G create the requested class and helps D judge whether the sample matches it.</p>
       </section>
 
@@ -326,7 +326,7 @@ function DiffusionLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What if generation were learned as many small cleanup steps?</h2>
+        <h2>1. The Core Diffusion Idea: Learn to Reverse Noise</h2>
         <p className="text-lg">A diffusion model learns to reverse a gradual noising process. During training, we deliberately add known noise to real data. The model learns to predict that noise. During generation, we start from random noise and repeatedly apply learned denoising steps.</p>
       </section>
 
@@ -334,19 +334,19 @@ function DiffusionLesson() {
 
 
       <section className="space-y-4">
-        <h2>A one-value forward-noising example</h2>
+        <h2>3. Worked Example: Adding Noise to One Value</h2>
         <p>Let clean value x₀=0.80, cumulative signal factor ᾱₜ=0.64, and sampled noise ε=-0.50. Then √0.64=0.80 and √(1-0.64)=0.60.</p>
         <FormulaBlock expression="xₜ = √ᾱₜ x₀ + √(1-ᾱₜ) ε = 0.80×0.80 + 0.60×(-0.50) = 0.34" explanation="The noisy value 0.34 combines a scaled clean signal with scaled sampled noise." />
       </section>
 
       <section className="space-y-4">
-        <h2>ε and ε̂ are not the same thing</h2>
+        <h2>4. True Noise ε vs Predicted Noise ε̂</h2>
         <p><strong>ε</strong> is the actual random noise sampled during training, so we know it. <strong>ε̂</strong> is the model's prediction after seeing xₜ and timestep t. A common training objective compares those two values.</p>
         <FormulaBlock expression="L = mean((ε - ε̂θ(xₜ,t))²)" explanation="If the training loop compares ε̂ with the clean x₀ instead of the sampled ε, it is using the wrong target for this noise-prediction objective." />
       </section>
 
       <section className="space-y-4">
-        <h2>What does the scheduler do?</h2>
+        <h2>5. The Scheduler: Turning Predictions into Reverse Steps</h2>
         <p>The denoising network predicts noise-related information. The <strong>scheduler</strong> stores the timestep sequence and numerical reverse-update rule that turns the current sample into the next, usually less noisy sample.</p>
         <p>More reverse steps mean more model evaluations, which can increase quality in some settings but also increases latency and compute.</p>
       </section>
