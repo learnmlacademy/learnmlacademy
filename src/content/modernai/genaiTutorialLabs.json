@@ -1,16 +1,16 @@
 {
   "generative-ai-intro": {
-    "title": "Imagine designing a poster for a college festival",
+    "title": "2. First Intuition: Generating a College Festival Poster",
     "intro": [
       "Your team needs several poster ideas, a short invitation, and an announcement for the college website. A search engine can find existing posters; a classifier can identify whether a poster contains a face. A generative model can propose a new layout or draft new wording. This is useful when several answers could be acceptable, rather than when there is exactly one stored fact to retrieve.",
       "The word “new” means a newly produced output, not a guarantee of originality or accuracy. A model can reproduce familiar phrases and sometimes training examples. You supply a task and constraints, inspect its candidates, and decide which parts are usable. The application is a drafting partner; you still own the final communication."
     ],
-    "mechanismTitle": "How examples become a reusable model",
+    "mechanismTitle": "6. How Training Examples Become a Reusable Generator",
     "mechanism": [
       "During training, the system adjusts internal numbers called parameters so that its outputs better match patterns in examples. Later, it reuses those numbers to generate. A prompt such as “write a cheerful invitation” guides this use-time process; it normally does not change the saved parameters.",
       "We can see the idea without a large model. Train a tiny word-transition model on three invented invitations. It counts which word follows each word, then uses those counts to build a sentence. This is a genuine, very limited statistical text generator—not an LLM. Its limitations make the difference between learning a pattern and understanding a situation easy to inspect."
     ],
-    "labTitle": "Python: learn word transitions and generate an invitation",
+    "labTitle": "7. Hands-On: Build a Tiny Word Generator in Python",
     "setup": "Python 3, standard library only. No account, model download, or GPU. The three short training sentences below are invented. This example chooses the most frequent next word; ties follow their first occurrence.",
     "code": "from collections import Counter, defaultdict\n\nsentences = [\n    \"join our science fair today\",\n    \"join our science club today\",\n    \"visit our science fair today\",\n]\ncounts = defaultdict(Counter)\nfor sentence in sentences:\n    words = [\"<start>\"] + sentence.split() + [\"<end>\"]\n    for current, following in zip(words, words[1:]):\n        counts[current][following] += 1\n\nword, result = \"<start>\", []\nfor _ in range(12):  # Bound generation even if a cycle appears.\n    word = counts[word].most_common(1)[0][0]\n    if word == \"<end>\":\n        break\n    result.append(word)\n\nprint(\"After science:\", dict(counts[\"science\"]))\nprint(\"Draft:\", \" \".join(result))\nprint(\"Different from every training sentence:\",\n      \" \".join(result) not in sentences)",
     "notes": [
@@ -25,17 +25,17 @@
     "output": "After science: {'fair': 2, 'club': 1}\nDraft: join our science fair today\nDifferent from every training sentence: False"
   },
   "generative-vs-discriminative": {
-    "title": "Recognizing a fruit is not the same task as drawing one",
+    "title": "2. First Intuition: Recognizing a Fruit vs Generating One",
     "intro": [
       "Imagine a fruit shop with photographs of apples and oranges. A recognition system receives one photograph and returns a label. It needs features that separate the two fruits. A drawing system must also model how their shapes, colours, textures, and backgrounds fit together so that a new picture looks plausible.",
       "Call the observed information x and the target label y. The notation p(y | x) means “the probability of a label after seeing the input”. A generative model may model p(x), or p(x, y) when labels are included. Here p means probability; the comma means considering the input and label together. Not every generator calculates an explicit probability, but it still learns a process that produces samples."
     ],
-    "mechanismTitle": "Follow both routes to the same spam decision",
+    "mechanismTitle": "5. Putting Both Routes Together: The Same Spam Decision",
     "mechanism": [
       "The distinction concerns what a model learns, not simply what its user sees. A classifier can learn the spam decision directly. A generative classifier can learn how spam and non-spam messages tend to be formed, then derive the decision. Both can finish by predicting “spam”.",
       "In the email dataset above, there are 40 spam messages and 60 legitimate messages. Thirty spam messages contain “offer”; six legitimate messages contain it. The generative route combines each class frequency with its within-class “offer” frequency. Normalizing those two joint quantities produces the same conditional probability as directly counting 30 spam messages among 36 offer messages."
     ],
-    "labTitle": "Python: two routes to an 83.3% spam estimate",
+    "labTitle": "6. Hands-On: Reproduce the 83.3% Spam Estimate in Python",
     "setup": "Python 3, standard library only. These are counts from a constructed dataset, not measured spam-filter performance.",
     "code": "spam, legitimate = 40, 60\noffer_spam, offer_legitimate = 30, 6\ntotal = spam + legitimate\n\nprior_spam = spam / total\nprior_legitimate = legitimate / total\np_offer_given_spam = offer_spam / spam\np_offer_given_legitimate = offer_legitimate / legitimate\n\njoint_spam = prior_spam * p_offer_given_spam\njoint_legitimate = prior_legitimate * p_offer_given_legitimate\nderived = joint_spam / (joint_spam + joint_legitimate)\ndirect = offer_spam / (offer_spam + offer_legitimate)\n\nprint(f\"P(spam and offer): {joint_spam:.2f}\")\nprint(f\"P(legitimate and offer): {joint_legitimate:.2f}\")\nprint(f\"Generative route: {derived:.1%}\")\nprint(f\"Direct count: {direct:.1%}\")\nassert abs(derived - direct) < 1e-12",
     "notes": [
@@ -50,17 +50,17 @@
     "output": "P(spam and offer): 0.30\nP(legitimate and offer): 0.06\nGenerative route: 83.3%\nDirect count: 83.3%"
   },
   "how-generative-models-learn": {
-    "title": "A bag of scene cards makes “distribution” concrete",
+    "title": "2. First Intuition: A Bag of Scene Cards",
     "intro": [
       "Imagine ten scene cards: five forests, three coasts, and two cities. Draw a card without looking, then return it. Forests should appear often, but not every draw. This pattern of relative frequencies is a distribution. Learning a distribution means estimating a pattern like this from examples rather than choosing every output in advance.",
       "Real data has many interacting properties. A beach image includes water colour, horizon position, lighting, and objects. A model learns relationships among these properties, not merely a list of scene names. A latent representation is an internal numerical description that can capture some of those relationships; its individual coordinates need not correspond neatly to human concepts."
     ],
-    "mechanismTitle": "Separate the learned probabilities from the random draw",
+    "mechanismTitle": "7. Putting It Together: Learned Probabilities vs Random Sampling",
     "mechanism": [
       "A probability distribution says what can happen and how likely each outcome is. Sampling turns that description into one outcome. Divide the interval from zero to one into pieces with widths equal to the probabilities. A uniformly drawn number chooses whichever piece it falls in.",
       "Conditioning means supplying extra information before that choice. “At sunset” changes which scenes or colours should be likely. It is like selecting from a different bag, using the same model. The comparison below keeps the random draw fixed so you can attribute the changed result to the condition rather than to a different random start."
     ],
-    "labTitle": "Python: fit frequencies, then sample with and without guidance",
+    "labTitle": "8. Hands-On: Fit, Condition, and Sample a Tiny Distribution",
     "setup": "Python 3, standard library only. Training here is counting scene labels. The sunset probabilities are invented separately so the conditioning effect is visible.",
     "code": "from collections import Counter\n\nexamples = [\"forest\"] * 5 + [\"coast\"] * 3 + [\"city\"] * 2\ncounts = Counter(examples)\nlearned = {name: n / len(examples) for name, n in counts.items()}\nsunset = {\"forest\": 0.2, \"coast\": 0.7, \"city\": 0.1}\n\ndef sample(probabilities, draw):\n    assert 0 <= draw < 1\n    assert abs(sum(probabilities.values()) - 1) < 1e-9\n    cumulative = 0.0\n    for name, probability in probabilities.items():\n        cumulative += probability\n        if draw < cumulative:\n            return name\n\nprint(\"Learned:\", learned)\nfor draw in [0.35, 0.72, 0.95]:\n    print(f\"r={draw:.2f}: plain={sample(learned, draw)}, \"\n          f\"sunset={sample(sunset, draw)}\")",
     "notes": [
@@ -75,17 +75,17 @@
     "output": "Learned: {'forest': 0.5, 'coast': 0.3, 'city': 0.2}\nr=0.35: plain=forest, sunset=coast\nr=0.72: plain=coast, sunset=coast\nr=0.95: plain=city, sunset=city"
   },
   "vae": {
-    "title": "Compress a sketch, but leave room for variation",
+    "title": "2. First Intuition: Compressing a Sketch with Room for Variation",
     "intro": [
       "Suppose you want to create new handwritten digits. An ordinary autoencoder learns to compress a digit into a few numbers and reconstruct it. But choosing arbitrary numbers between its compressed examples may lead to poor outputs: nothing necessarily taught the decoder how to use those gaps.",
       "A VAE makes the compressed description probabilistic. For each input, its encoder predicts a centre and a spread. Sampling near that centre produces slightly different descriptions of the same input. A regularization objective encourages these distributions to resemble a simple reference distribution, making sampling more practical. This encourages useful organization; it does not guarantee every point decodes well."
     ],
-    "mechanismTitle": "Read the centre, spread, sample, and reconstruction separately",
+    "mechanismTitle": "7. Putting the VAE Together: Mean, Spread, Sample, Reconstruct",
     "mechanism": [
       "The mean μ specifies the centre. The standard deviation σ specifies the spread and must be positive. Epsilon ε is a random draw with mean zero and standard deviation one. Multiplying σ by ε scales that randomness; adding μ moves it to the correct centre. The symbol ⊙ means multiply corresponding coordinates.",
       "Reconstruction loss measures how different the decoded output is from the input. KL divergence measures how different the encoded distribution is from the reference prior. In the common Gaussian case, each coordinate contributes ½(μ² + σ² − 1 − log(σ²)). Summing the coordinates gives the KL term. The prior is usually chosen as a standard normal; it is not automatically learned in this basic VAE."
     ],
-    "labTitle": "Python: reproduce a latent sample and its KL penalty",
+    "labTitle": "8. Hands-On: Sample a Latent and Compute the KL Penalty",
     "setup": "Python 3, standard library only. This runs the VAE arithmetic on supplied encoder outputs; it is not a trained image generator.",
     "code": "import math\n\nmu = [0.5, -1.0]\nsigma = [0.5, 2.0]\nepsilon = [0.4, -0.3]  # Chosen draws for a traceable example.\nz = [m + s * e for m, s, e in zip(mu, sigma, epsilon)]\nkl = sum(0.5 * (m*m + s*s - 1 - math.log(s*s))\n         for m, s in zip(mu, sigma))\n\noriginal = [0.0, 1.0, 1.0, 0.0]\nreconstructed = [0.1, 0.8, 0.9, 0.2]  # Illustrative decoder output.\nmse = sum((a-b)**2 for a, b in zip(original, reconstructed)) / 4\nprint(\"Sample z:\", [round(v, 2) for v in z])\nprint(f\"KL penalty: {kl:.3f}\")\nprint(f\"Reconstruction MSE: {mse:.3f}\")\nfor beta in [0.1, 1.0]:\n    print(f\"beta={beta:.1f}: total={mse + beta*kl:.3f}\")",
     "notes": [
@@ -100,17 +100,17 @@
     "output": "Sample z: [0.7, -1.6]\nKL penalty: 1.750\nReconstruction MSE: 0.025\nbeta=0.1: total=0.200\nbeta=1.0: total=1.775"
   },
   "gans": {
-    "title": "A learner creates examples; another learner critiques them",
+    "title": "2. First Intuition: One Network Creates, the Other Critiques",
     "intro": [
       "Imagine a student practising sketches while a teacher compares them with a collection of real examples. The student receives feedback on the sketches and tries again. A GAN uses two neural networks for a similar feedback loop: a generator creates samples, and a discriminator learns to distinguish generated samples from real ones.",
       "The analogy has a limit: the discriminator is not a human judge of beauty or truth. It learns whatever clues distinguish the training examples from current generated examples. If the dataset contains shortcuts, such as a watermark, both networks can focus on the wrong thing. The quality of the data and the learning process matters."
     ],
-    "mechanismTitle": "Why two losses point in different directions",
+    "mechanismTitle": "7. Putting the Two GAN Objectives Together",
     "mechanism": [
       "Let D(x) be the discriminator’s estimated probability that sample x is real. For a real sample we want D(x) near one; for a generated sample we want it near zero. The discriminator loss penalizes both kinds of mistake. During the generator update, a common non-saturating loss is −log(D(G(z))): the generator wants its sample to receive a higher “real” score.",
       "The code below trains the smallest possible adversarial system. Real data consists of the number 2. The generator learns a number g; the discriminator is a sigmoid of w×x+b. Analytic derivatives replace a deep-learning library, so you can see which parameters change. This degenerate one-point distribution demonstrates alternating updates, not realistic image synthesis or diversity."
     ],
-    "labTitle": "Python: run a tiny adversarial training loop",
+    "labTitle": "8. Hands-On: Run a Tiny Adversarial Training Loop",
     "setup": "Python 3, standard library only. CPU training, no downloads. This scalar GAN is deliberately restricted to learning one target value.",
     "code": "import math\n\ndef sigmoid(x):\n    return 1 / (1 + math.exp(-x))\n\ng, w, b = -1.0, 0.5, 0.0\nrate = 0.05\nfor step in range(1001):\n    real_score = sigmoid(w * 2.0 + b)\n    fake_score = sigmoid(w * g + b)\n    if step in [0, 100, 500, 1000]:\n        print(f\"step={step:4d} generated={g:.3f} \"\n              f\"D(real)={real_score:.3f} D(fake)={fake_score:.3f}\")\n    if step == 1000:\n        break\n    # Discriminator update: g is held fixed.\n    dw = (real_score - 1) * 2.0 + fake_score * g\n    db = (real_score - 1) + fake_score\n    w -= rate * dw\n    b -= rate * db\n    # Generator update: use updated D, but do not update w or b.\n    fake_score = sigmoid(w * g + b)\n    dg = (fake_score - 1) * w\n    g -= rate * dg",
     "notes": [
@@ -125,17 +125,17 @@
     "output": "step=   0 generated=-1.000 D(real)=0.731 D(fake)=0.378\nstep= 100 generated=1.851 D(real)=0.574 D(fake)=0.543\nstep= 500 generated=1.463 D(real)=0.542 D(fake)=0.569\nstep=1000 generated=1.963 D(real)=0.501 D(fake)=0.502"
   },
   "diffusion-models": {
-    "title": "Learn to remove corruption before trying to invent an image",
+    "title": "2. First Intuition: Learn to Remove Corruption Before Generating",
     "intro": [
       "Think of a clean drawing gradually covered with speckles. Early on you can still see the outline; later it becomes almost impossible. Diffusion training creates many such corrupted examples and teaches a model how to estimate the corruption. The difficulty is controlled, so the model learns at several noise levels rather than only one.",
       "Generation reverses the idea: begin with noise and use many model-guided updates to form structure. The network does not simply reveal a hidden original image underneath the starting noise. Its learned patterns and any supplied condition influence which of many plausible outputs emerges."
     ],
-    "mechanismTitle": "Trace one noisy value before scaling up to an image",
+    "mechanismTitle": "6. Putting One Denoising Step Together",
     "mechanism": [
       "A timestep t identifies a noise level. The schedule determines how much clean signal and noise to mix at that level. The cumulative signal factor ᾱₜ lies between zero and one; its square root scales the clean value. The square root of 1−ᾱₜ scales the sampled noise.",
       "After seeing the noisy value and the timestep, a noise-prediction model estimates ε. An estimate of the clean value is x̂₀ = (xₜ − √(1−ᾱₜ) ε̂) / √ᾱₜ. This rearranges the forward-noising equation; it is not the complete multi-step reverse sampler. A scheduler still decides the next noise level and any additional randomness."
     ],
-    "labTitle": "Python: see how noise-prediction error affects reconstruction",
+    "labTitle": "7. Hands-On: See How Noise-Prediction Error Affects Reconstruction",
     "setup": "Python 3, standard library only. A one-value calculation with known noise, not a trained denoising network. The estimates below are chosen to isolate their effect.",
     "code": "import math\n\nclean = 0.80\nalpha_bar = 0.64\nnoise = -0.50\nsignal_scale = math.sqrt(alpha_bar)\nnoise_scale = math.sqrt(1 - alpha_bar)\nnoisy = signal_scale * clean + noise_scale * noise\nprint(f\"Noisy value: {noisy:.3f}\")\n\nfor estimated_noise in [-0.50, -0.40, -0.20]:\n    estimated_clean = (noisy - noise_scale * estimated_noise) / signal_scale\n    noise_mse = (noise - estimated_noise) ** 2\n    print(f\"noise estimate={estimated_noise:.2f}, \"\n          f\"clean estimate={estimated_clean:.3f}, \"\n          f\"noise MSE={noise_mse:.3f}\")",
     "notes": [
@@ -150,17 +150,17 @@
     "output": "Noisy value: 0.340\nnoise estimate=-0.50, clean estimate=0.800, noise MSE=0.000\nnoise estimate=-0.40, clean estimate=0.725, noise MSE=0.010\nnoise estimate=-0.20, clean estimate=0.575, noise MSE=0.090"
   },
   "stable-latent-diffusion": {
-    "title": "Why a smaller workspace makes repeated image generation practical",
+    "title": "2. First Intuition: Repeat the Work in a Smaller Representation",
     "intro": [
       "Imagine planning a mural with a small sketch before painting the full wall. A compact workspace can make repeated revisions cheaper. Latent diffusion uses an analogous idea: it performs the expensive repeated denoising in a compressed numerical representation, then turns the result into pixels.",
       "The compression is learned, not an ordinary resized thumbnail. A VAE encoder maps images into latent values, and its decoder reconstructs images from those values. A latent channel is a learned feature map, not necessarily red, green, or blue. The sketch analogy explains the size advantage but should not be mistaken for the actual encoding operation."
     ],
-    "mechanismTitle": "Follow the prompt branch and the image branch together",
+    "mechanismTitle": "6. Putting the Architecture Together: Text Path + Latent Image Path",
     "mechanism": [
       "In a common Stable Diffusion-style pipeline, the prompt is split into text pieces and a text encoder turns them into numerical representations. These guide a denoising network operating on the noisy latent. Cross-attention is a mechanism that lets latent locations use relevant text representations; it is not a separate image painted by the text encoder.",
       "The scheduler uses the denoiser prediction to update the latent, repeating for the chosen number of steps. The VAE decoder runs on the final latent to produce the image. Pure text-to-image generation starts from random latent noise; image-to-image also uses the encoder to obtain a starting latent from the supplied image. Architectures vary: a Transformer may replace a U-Net denoiser, and the example dimensions are not universal."
     ],
-    "labTitle": "Python: calculate representation size and memory",
+    "labTitle": "7. Hands-On: Calculate Tensor Size and Memory",
     "setup": "Python 3, standard library only. This is a tensor-size calculator, not a Stable Diffusion implementation. It estimates the storage for one tensor, excluding model weights, activations, workspace, and allocator overhead.",
     "code": "from math import prod\n\npixels = (1, 3, 512, 512)  # batch, channels, height, width\nlatent = (1, 4, 64, 64)\nbytes_per_value = 2  # Developer assumption: float16.\n\nfor name, shape in [(\"pixels\", pixels), (\"latent\", latent)]:\n    values = prod(shape)\n    mib = values * bytes_per_value / (1024 ** 2)\n    print(f\"{name}: shape={shape}, values={values:,}, MiB={mib:.5f}\")\n\nprint(f\"Spatial-location ratio: {(512*512)/(64*64):.0f}x\")\nprint(f\"Scalar-value ratio: {prod(pixels)/prod(latent):.0f}x\")",
     "notes": [
@@ -175,17 +175,17 @@
     "output": "pixels: shape=(1, 3, 512, 512), values=786,432, MiB=1.50000\nlatent: shape=(1, 4, 64, 64), values=16,384, MiB=0.03125\nSpatial-location ratio: 64x\nScalar-value ratio: 48x"
   },
   "controlling-diffusion-models": {
-    "title": "Ask for a change without losing what matters",
+    "title": "2. First Intuition: Change What You Want, Preserve What Matters",
     "intro": [
       "You have a product photo and want a different background, but the product must keep its shape. A longer text prompt alone may not reliably protect it. First decide what should stay fixed and what may change. A mask can specify a region; a pose or edge map can specify geometry; a reference image can provide a starting appearance.",
       "These controls answer different questions. The random seed chooses a starting random state. A prompt describes desired content. Guidance changes how strongly conditioning influences a denoising prediction. None of these is an absolute guarantee: inspect the resulting image against the actual constraint, especially at mask boundaries and fine details."
     ],
-    "mechanismTitle": "A mask controls location; guidance controls a direction",
+    "mechanismTitle": "6. Putting Control Together: Location vs Guidance Direction",
     "mechanism": [
       "Picture a mask as a grid aligned with the source image. In this lesson’s convention, one means “replace this position” and zero means “keep it”. Each output position chooses between the original and a candidate. A real inpainting pipeline denoises using surrounding context; our small example isolates only the final mask logic.",
       "Classifier-free guidance compares an unconditional noise prediction with a conditional one. Their difference is a direction toward the supplied condition, and the scale multiplies that difference. At scale zero the unconditional prediction remains; at scale one the conditional prediction remains. Larger values extrapolate beyond it and may introduce saturation or artifacts."
     ],
-    "labTitle": "Python: apply a mask and inspect guidance scales",
+    "labTitle": "7. Hands-On: Apply a Mask and Compare Guidance Scales",
     "setup": "Python 3, standard library only. These are toy grayscale values and scalar denoising predictions. This code composites given candidates; it does not synthesize an inpainted image.",
     "code": "source = [[1, 1, 1], [1, 9, 1], [1, 1, 1]]\ncandidate = [[4, 4, 4], [4, 2, 4], [4, 4, 4]]\nmask = [[0, 0, 0], [0, 1, 0], [0, 0, 0]]\nresult = [\n    [candidate[r][c] if mask[r][c] else source[r][c]\n     for c in range(3)] for r in range(3)\n]\nprint(\"Edited grid:\")\nfor row in result:\n    print(row)\nunconditional, conditional = 0.2, 0.5\nfor scale in [0, 1, 3]:\n    guided = unconditional + scale * (conditional - unconditional)\n    print(f\"scale={scale}: guided prediction={guided:.2f}\")",
     "notes": [
@@ -200,17 +200,17 @@
     "output": "Edited grid:\n[1, 1, 1]\n[1, 2, 1]\n[1, 1, 1]\nscale=0: guided prediction=0.20\nscale=1: guided prediction=0.50\nscale=3: guided prediction=1.10"
   },
   "finetuning-image-models": {
-    "title": "Teach a model a particular product, not just “a product”",
+    "title": "2. First Intuition: Teach the Model a Specific Subject or Style",
     "intro": [
       "A prompt can ask for a blue mug, but your company may need the same distinctive mug in many scenes. Fine-tuning uses example images to adapt learned values so that the model better represents that subject or style. It differs from supplying a reference at generation time: a training process produces reusable changed parameters or an adapter.",
       "Choose examples that separate the subject from accidental surroundings. Photograph the mug from different angles and against different backgrounds, with permission to use the images. If every example contains the same table, the model may learn “mug plus table” as one inseparable concept."
     ],
-    "mechanismTitle": "Understand what a low-rank adapter adds",
+    "mechanismTitle": "6. Putting LoRA into the Model Path",
     "mechanism": [
       "A weight matrix maps one set of numbers into another. Full fine-tuning changes that matrix directly. LoRA keeps the base matrix W fixed and learns a smaller update BA, where A compresses the input to r coordinates and B expands it again. The rank r is a developer-chosen capacity setting.",
       "For a 4×4 base and rank one, A has four numbers and B has four numbers. Their product is a 4×4 update, even though only eight values were learned. The effective operation is Wx + B(Ax), ignoring an optional scaling factor for clarity. The base still occupies memory; fewer trainable values is not the same as removing the original model."
     ],
-    "labTitle": "Python: follow one input through the LoRA side path",
+    "labTitle": "7. Hands-On: Follow One Input Through a LoRA Adapter",
     "setup": "Python 3, standard library only. Supplied adapter values illustrate matrix arithmetic after training; this is not an image fine-tuning run.",
     "code": "x = [1, 2, 0, -1]\nA = [0.1, 0.2, 0.0, -0.1]  # A has shape [1, 4].\nB = [1.0, 0.0, 0.5, -0.5]  # B has shape [4, 1].\nbase_output = x[:]  # Choose identity W for easy checking.\ncompressed = sum(a * v for a, v in zip(A, x))\nupdate = [b * compressed for b in B]\nadapted = [base + change for base, change in zip(base_output, update)]\n\nprint(f\"A times x: {compressed:.2f}\")\nprint(\"Adapter update:\", [round(v, 2) for v in update])\nprint(\"Adapted output:\", [round(v, 2) for v in adapted])\nprint(\"Base parameters:\", 4 * 4)\nprint(\"Trainable adapter parameters:\", len(A) + len(B))",
     "notes": [
@@ -225,17 +225,17 @@
     "output": "A times x: 0.60\nAdapter update: [0.6, 0.0, 0.3, -0.3]\nAdapted output: [1.6, 2.0, 0.3, -1.3]\nBase parameters: 16\nTrainable adapter parameters: 8"
   },
   "multimodal-ai": {
-    "title": "Read the picture and the question together",
+    "title": "2. First Intuition: Read the Image and the Question Together",
     "intro": [
       "A student uploads a photograph of a damaged bicycle and asks, “Which part needs attention?” The image carries evidence that the words alone do not contain. A useful system must connect that evidence with the question before generating an answer; simply producing fluent bicycle advice is not enough.",
       "A modality is a kind of information, such as text, an image, or sound. Different encoders convert these inputs into numerical representations. Alignment makes related representations comparable; fusion combines information so that a later prediction can depend on more than one input. These are related ideas, not interchangeable operations."
     ],
-    "mechanismTitle": "Similarity is a clue, not proof of a specific claim",
+    "mechanismTitle": "5. From Alignment to Evidence: Why Similarity Is Not Proof",
     "mechanism": [
       "Suppose a text encoder maps “a bicycle with a damaged wheel” to a vector—a short list of numbers. An image encoder maps each candidate image to a vector in a compatible space. Cosine similarity compares their directions, after accounting for their lengths. A larger value can help retrieve a related image.",
       "The two-coordinate example below is deliberately invented. Real embeddings have many coordinates with learned meanings. Even a high similarity score cannot prove that a particular spoke is broken. For specific visual claims, inspect the relevant region and allow uncertainty when the resolution or visibility is insufficient."
     ],
-    "labTitle": "Python: compare an image representation with a text representation",
+    "labTitle": "6. Hands-On: Compare Image and Text Representations",
     "setup": "Python 3, standard library only. These vectors are illustrative and are not embeddings produced by a trained model.",
     "code": "import math\n\ndef cosine(a, b):\n    dot = sum(x*y for x, y in zip(a, b))\n    norm_a = math.sqrt(sum(x*x for x in a))\n    norm_b = math.sqrt(sum(y*y for y in b))\n    if norm_a == 0 or norm_b == 0:\n        raise ValueError(\"A zero vector has no cosine direction.\")\n    return dot / (norm_a * norm_b)\n\ntext = [0.8, 0.6]\nimages = {\"A\": [0.6, 0.8], \"B\": [-0.6, 0.8], \"C\": [-0.8, -0.6]}\nscores = {name: cosine(text, vector) for name, vector in images.items()}\nfor name, score in scores.items():\n    print(f\"Image {name}: {score:.2f}\")\nprint(\"Top candidate:\", max(scores, key=scores.get))",
     "notes": [
@@ -250,17 +250,17 @@
     "output": "Image A: 0.96\nImage B: 0.00\nImage C: -1.00\nTop candidate: A"
   },
   "audio-music-video-generation": {
-    "title": "A good moment is not enough: sound and video must hold together",
+    "title": "2. First Intuition: Local Quality Is Not Enough—the Sequence Must Stay Coherent",
     "intro": [
       "Listen to an announcement that suddenly changes speaker halfway through, or watch a clip where a cup disappears between frames. Individual sounds or pictures may seem plausible, but the sequence fails. Temporal generation must preserve relationships across time as well as produce convincing local details.",
       "Sound is recorded as a sequence of amplitude measurements. The sample rate tells us how many measurements occur per second. Video is a sequence of images; its frame rate tells us how many images occur per second. Audio samples and video frames are different units, and their rates must not be confused."
     ],
-    "mechanismTitle": "From a waveform to speech, music, and motion",
+    "mechanismTitle": "7. Putting Temporal Media Together: Representation, Generation, and Continuity",
     "mechanism": [
       "A waveform plots amplitude against time. A spectrogram instead shows how energy at different frequencies changes over time: one axis is time, another is frequency, and colour indicates strength. Speech systems may generate acoustic representations and use a vocoder—a model converting those representations into sound—to produce the waveform.",
       "Symbolic music can describe notes, start times, and durations before a synthesizer renders them as audio. Video generation may share information across frames so that objects and camera motion remain consistent. Text-to-video starts from a description, while image-to-video must also preserve relevant appearance from the starting image. Consent is essential when reproducing identifiable voices or likenesses."
     ],
-    "labTitle": "Python: generate a tiny waveform and measure frame consistency",
+    "labTitle": "8. Hands-On: Generate a Tiny Waveform and Measure Frame Consistency",
     "setup": "Python 3, standard library only. This creates a mathematical tone, not neural speech or music. The frame positions are invented to demonstrate a consistency check.",
     "code": "import math\n\nsample_rate = 8000\nduration = 0.01\nfrequency = 1000\nsamples = [0.5 * math.sin(2 * math.pi * frequency * n / sample_rate)\n           for n in range(round(sample_rate * duration))]\nprint(\"Audio samples:\", len(samples))\nprint(\"First 8:\", [round(v, 3) for v in samples[:8]])\n\nsmooth_positions = [0, 1, 2, 3, 4]\njump_positions = [0, 1, 7, 3, 4]\nfor name, positions in [(\"smooth\", smooth_positions), (\"jump\", jump_positions)]:\n    changes = [abs(b-a) for a, b in zip(positions, positions[1:])]\n    print(f\"{name}: frame displacements={changes}, maximum={max(changes)}\")",
     "notes": [
@@ -275,17 +275,17 @@
     "output": "Audio samples: 80\nFirst 8: [0.0, 0.354, 0.5, 0.354, 0.0, -0.354, -0.5, -0.354]\nsmooth: frame displacements=[1, 1, 1, 1], maximum=1\njump: frame displacements=[1, 6, 4, 1], maximum=6"
   },
   "synthetic-data": {
-    "title": "Create useful practice cases without pretending they are observations",
+    "title": "2. First Intuition: Create Useful Cases Without Pretending They Are Real",
     "intro": [
       "A delivery company wants to test its system on rainy-day delays, but its dataset contains few rainy days. A simulator or generative model could produce additional practice cases. The aim is not merely to fill a spreadsheet: the generated records must preserve useful relationships and make the downstream system work better on real deliveries.",
       "Start by stating why each synthetic example is needed. Matching the population distribution and deliberately oversampling a rare case are different goals. A training dataset can intentionally emphasize rare events, while the real test set should still represent the environment in which performance will be judged."
     ],
-    "mechanismTitle": "Preserve relationships, not just separate column averages",
+    "mechanismTitle": "6. Preserve Relationships, Not Just Individual Column Statistics",
     "mechanism": [
       "Suppose larger orders normally cost more. Generating quantity and total price independently could create a ten-item order cheaper than a one-item order. In a rule-based simulator, encode the relationship explicitly. A learned generator would need to infer it from examples and would still require consistency checks.",
       "The exercise below uses only invented product prices and random choices. It creates new records without consulting personal data, then verifies their business arithmetic. This is a useful software-testing dataset but not evidence that the records match real buying behaviour. For model-training utility, compare against real-data baselines on an untouched real test set."
     ],
-    "labTitle": "Python: synthesize orders and validate the price relationship",
+    "labTitle": "7. Hands-On: Generate Orders and Validate Their Relationships",
     "setup": "Python 3, standard library only. All product names and prices are fictional. The seed makes this local simulation repeatable.",
     "code": "import random\n\nrng = random.Random(7)\nprices = {\"notebook\": 40, \"pen\": 10}\norders = []\nfor order_id in range(1, 6):\n    product = rng.choice(list(prices))\n    quantity = rng.randint(1, 3)\n    orders.append({\"id\": order_id, \"product\": product,\n                   \"quantity\": quantity, \"total\": prices[product] * quantity})\n\nfor order in orders:\n    print(order)\nvalid = all(o[\"total\"] == prices[o[\"product\"]] * o[\"quantity\"] for o in orders)\nprint(\"All totals valid:\", valid)\nprint(\"Unique product/quantity combinations:\",\n      len({(o[\"product\"], o[\"quantity\"]) for o in orders}))",
     "notes": [
@@ -300,17 +300,17 @@
     "output": "{'id': 1, 'product': 'pen', 'quantity': 1, 'total': 10}\n{'id': 2, 'product': 'pen', 'quantity': 3, 'total': 30}\n{'id': 3, 'product': 'notebook', 'quantity': 1, 'total': 40}\n{'id': 4, 'product': 'notebook', 'quantity': 2, 'total': 80}\n{'id': 5, 'product': 'notebook', 'quantity': 3, 'total': 120}\nAll totals valid: True\nUnique product/quantity combinations: 5"
   },
   "evaluating-generative-models": {
-    "title": "Evaluate the work the user needs, not the most impressive demo",
+    "title": "2. Start with the User Task, Not the Demo",
     "intro": [
       "Two image generators produce attractive pictures. Which should a shop use for catalogue drafts? A single favourite image cannot answer that question. The shop also needs accurate product colour, varied backgrounds, consistent response time, and a tolerable cost for images that an editor actually accepts.",
       "An evaluation set is a collection of representative requests held apart from tuning. A rubric states what counts as success on each request. For example, “the product colour matches the supplied reference” is more testable than “looks good”. Reviewers should assess candidates without model-name bias when possible, and disagreements should be examined rather than silently averaged away."
     ],
-    "mechanismTitle": "Build a report that can support a decision",
+    "mechanismTitle": "7. Turn Metrics into a Decision-Ready Evaluation Report",
     "mechanism": [
       "Measure quality, coverage, safety, latency, and cost separately. A hard gate is a requirement that must pass, such as no critical disclosures or a response-time limit. A preference score is useful only among candidates that satisfy those gates. Combining everything into a weighted average can hide an unacceptable failure behind several minor gains.",
       "The p95 latency is a high-end response-time statistic. In the nearest-rank convention used below, sort N observations and take position ceil(0.95×N). With ten observations, that is the slowest value. Different percentile methods can interpolate, so state the convention; a tiny sample gives a very uncertain estimate of production behaviour."
     ],
-    "labTitle": "Python: compute acceptance, p95 latency, and cost per accepted output",
+    "labTitle": "8. Hands-On: Calculate Acceptance, p95 Latency, and Cost per Accepted Output",
     "setup": "Python 3, standard library only. The observations are invented to teach measurement. Ten runs are not enough for a reliable release evaluation.",
     "code": "import math\n\nlatencies = [1.0, 1.2, 1.4, 1.5, 1.7, 1.8, 2.0, 2.2, 2.8, 4.5]\naccepted = [True, True, True, False, True, True, True, False, True, True]\ncost_per_attempt = 0.03\np95 = sorted(latencies)[math.ceil(0.95 * len(latencies)) - 1]\nacceptance = sum(accepted) / len(accepted)\ncost_per_accepted = len(accepted) * cost_per_attempt / sum(accepted)\npasses = acceptance >= 0.90 and p95 <= 3.0\n\nprint(f\"Acceptance: {acceptance:.0%}\")\nprint(f\"Nearest-rank p95: {p95:.1f} s\")\nprint(f\"Cost per accepted output: {cost_per_accepted:.4f}\")\nprint(\"Pass both gates:\", passes)",
     "notes": [
@@ -325,17 +325,17 @@
     "output": "Acceptance: 80%\nNearest-rank p95: 4.5 s\nCost per accepted output: 0.0375\nPass both gates: False"
   },
   "responsible-generative-ai": {
-    "title": "Make a risk concrete enough to prevent and investigate",
+    "title": "2. First Intuition: Turn Vague Risk into a Concrete Failure Scenario",
     "intro": [
       "A shop asks a model to draft product descriptions. One draft invents a safety certification; another includes a customer email copied from an inappropriate input. “Use AI carefully” does not tell the shop what to do. It needs named risks, approved sources, responsible reviewers, and a way to stop publication when checks fail.",
       "Separate a possibility from a measured outcome. A likelihood-and-impact score is a planning tool selected by a team, not a scientific probability of harm. It helps prioritize work, but some severe failures warrant a hard stop regardless of their score. This lesson discusses engineering controls, not legal advice or a compliance guarantee."
     ],
-    "mechanismTitle": "Turn each risk into a control, owner, and test",
+    "mechanismTitle": "6. Turn Each Risk into a Control, Owner, and Test",
     "mechanism": [
       "Prevention reduces the chance of a problem: approved input sources and access controls can keep sensitive records out of the request. Detection looks for a problem before or after generation: evidence checks and review can catch unsupported claims. Containment limits the consequence: drafts should not publish themselves. Recovery provides a correction and escalation path after a failure.",
       "The toy review queue below uses explicit scenario metadata so that the control flow is easy to see. A real system must obtain these signals from trustworthy checks and reviewers; a model saying “safe=true” is not independent verification. Record only the minimum information needed for investigation, with access and retention controls."
     ],
-    "labTitle": "Python: route draft scenarios to an appropriate review path",
+    "labTitle": "7. Hands-On: Route Scenarios to the Right Review Path",
     "setup": "Python 3, standard library only. Rule-based routing over constructed cases; not a content-safety classifier and not proof that unflagged content is safe.",
     "code": "cases = [\n    {\"id\": \"A\", \"private_data\": True, \"evidence\": True, \"high_impact\": False},\n    {\"id\": \"B\", \"private_data\": False, \"evidence\": False, \"high_impact\": False},\n    {\"id\": \"C\", \"private_data\": False, \"evidence\": True, \"high_impact\": True},\n    {\"id\": \"D\", \"private_data\": False, \"evidence\": True, \"high_impact\": False},\n]\n\ndef route(case):\n    if case[\"private_data\"]:\n        return \"BLOCK and escalate privacy review\"\n    if not case[\"evidence\"]:\n        return \"REQUEST supporting evidence\"\n    if case[\"high_impact\"]:\n        return \"REQUIRE specialist approval\"\n    return \"SEND draft to editor\"\n\nfor case in cases:\n    print(case[\"id\"], \"->\", route(case))\nassert all(route(case) != \"AUTO-PUBLISH\" for case in cases)",
     "notes": [
@@ -350,17 +350,17 @@
     "output": "A -> BLOCK and escalate privacy review\nB -> REQUEST supporting evidence\nC -> REQUIRE specialist approval\nD -> SEND draft to editor"
   },
   "choosing-generative-model": {
-    "title": "Write the acceptance test before picking a model",
+    "title": "2. Define the Acceptance Test Before Choosing a Model",
     "intro": [
       "A design team wants to replace image backgrounds while keeping products unchanged. Start with that job, not a leaderboard. The candidate must support the required editing workflow, operate in an approved environment, fit the team’s latency limit, and produce acceptable results on their actual products.",
       "A model family is only a starting shortlist. Two diffusion checkpoints can differ in their inputs, licences, memory requirements, and editing support. Likewise, an inexpensive hosted service may become costly if many attempts are rejected. The decision concerns the complete system under the intended workload."
     ],
-    "mechanismTitle": "Use a shortlist, then an experiment",
+    "mechanismTitle": "6. Shortlist First, Then Run a Controlled Experiment",
     "mechanism": [
       "First remove candidates that fail non-negotiable requirements. Then compare the remaining choices on the same prompts, cases, settings, and serving environment. Record versions and disclose differences you cannot control. Repeat important stochastic cases; otherwise one lucky sample can determine the winner.",
       "For eligible choices, cost per accepted result is often more meaningful than cost per request. If a request costs 0.04 and 80% of attempts are accepted, the long-run cost per acceptance is approximately 0.04/0.80 = 0.05. This assumes comparable attempt costs and a representative acceptance rate, not a promise about any provider."
     ],
-    "labTitle": "Python: filter candidates before comparing effective cost",
+    "labTitle": "7. Hands-On: Filter Candidates and Compare Effective Cost",
     "setup": "Python 3, standard library only. Fictional candidates and measurements; these are not recommendations for commercial models.",
     "code": "models = [\n    {\"name\": \"A\", \"mask\": False, \"approved\": True, \"p95\": 2.4, \"cost\": 0.01, \"accept\": 0.9},\n    {\"name\": \"B\", \"mask\": True, \"approved\": True, \"p95\": 3.6, \"cost\": 0.04, \"accept\": 0.8},\n    {\"name\": \"C\", \"mask\": True, \"approved\": True, \"p95\": 5.1, \"cost\": 0.02, \"accept\": 0.9},\n    {\"name\": \"D\", \"mask\": True, \"approved\": True, \"p95\": 3.2, \"cost\": 0.03, \"accept\": 0.5},\n]\neligible = [m for m in models\n            if m[\"mask\"] and m[\"approved\"] and m[\"p95\"] <= 4.0]\nfor model in eligible:\n    effective = model[\"cost\"] / model[\"accept\"]\n    print(f'{model[\"name\"]}: cost per accepted={effective:.3f}')\nwinner = min(eligible, key=lambda m: m[\"cost\"] / m[\"accept\"])\nprint(\"Eligible:\", [m[\"name\"] for m in eligible])\nprint(\"Lowest effective cost:\", winner[\"name\"])",
     "notes": [
@@ -375,17 +375,17 @@
     "output": "B: cost per accepted=0.050\nD: cost per accepted=0.060\nEligible: ['B', 'D']\nLowest effective cost: B"
   },
   "building-genai-apps": {
-    "title": "A meeting-summary assistant must do more than write nice sentences",
+    "title": "2. First Intuition: A Meeting Assistant Needs More Than Fluent Text",
     "intro": [
       "After a project meeting, a team wants decisions and action items. A model can draft a summary, but the application must ensure it used the right transcript, did not invent an owner, returned the required fields, and did not create tasks before someone approved them.",
       "Design the flow around an explicit contract. A schema describes the required structure, such as a list of decisions and a list of actions. An evidence rule describes what supports each value. A permission rule describes who may approve a consequential action. These contracts solve different problems and should be checked separately."
     ],
-    "mechanismTitle": "Keep the model boundary visible",
+    "mechanismTitle": "6. Keep the Model Boundary Visible: Validate Before You Act",
     "mechanism": [
       "Treat the model response as untrusted input. Parse it, validate field types, and then compare important claims against approved evidence. If required information is absent, return a useful clarification instead of filling the gap with a plausible guess. For arbitrary prose, evidence checking may require a reviewer or a more sophisticated retrieval-and-verification process.",
       "The program below isolates this application boundary. Three fixed strings stand in for model responses so every branch can be reproduced offline. Its narrow semantic check matches an owner/task pair against a structured meeting record. This is real validation code, not a real model call and not a general-purpose fact checker."
     ],
-    "labTitle": "Python: distinguish malformed structure from an unsupported action",
+    "labTitle": "7. Hands-On: Separate Malformed Output from Unsupported Actions",
     "setup": "Python 3, standard library only. No API key is needed because the model responses are test fixtures.",
     "code": "import json\n\napproved_actions = {(\"Asha\", \"send minutes\")}\nresponses = [\n    '{\"decisions\": \"ship Friday\", \"actions\": []}',\n    '{\"decisions\": [], \"actions\": [{\"owner\": \"Ravi\", \"task\": \"send minutes\"}]}',\n    '{\"decisions\": [], \"actions\": [{\"owner\": \"Asha\", \"task\": \"send minutes\"}]}',\n]\n\ndef validate(raw):\n    try:\n        data = json.loads(raw)\n    except json.JSONDecodeError:\n        return \"REJECT: invalid JSON\"\n    if not isinstance(data, dict):\n        return \"REJECT: object required\"\n    if not all(isinstance(data.get(k), list) for k in [\"decisions\", \"actions\"]):\n        return \"REJECT: required fields must be lists\"\n    for action in data[\"actions\"]:\n        if not isinstance(action, dict):\n            return \"REJECT: action must be an object\"\n        owner, task = action.get(\"owner\"), action.get(\"task\")\n        if not isinstance(owner, str) or not isinstance(task, str):\n            return \"REJECT: owner and task must be strings\"\n        if (owner, task) not in approved_actions:\n            return \"REVIEW: action lacks approved evidence\"\n    return \"DRAFT READY: request human approval\"\n\nfor response in responses:\n    print(validate(response))",
     "notes": [
@@ -400,17 +400,17 @@
     "output": "REJECT: required fields must be lists\nREVIEW: action lacks approved evidence\nDRAFT READY: request human approval"
   },
   "genai-deployment": {
-    "title": "Plan for the slow request, the duplicate request, and the failed request",
+    "title": "2. First Intuition: Plan for Slow, Duplicate, and Failed Requests",
     "intro": [
       "A classroom demo receives one request at a time. A deployed service may receive a burst during a product launch, a client retry after a timeout, or a model-provider outage. Deployment adds the controls that let the application respond predictably when conditions are no longer ideal.",
       "Separate the browser from trusted server work. The browser sends the user’s request; a server authenticates it, applies limits, accesses model credentials, and validates the response. Hosted inference outsources parts of model serving. Self-hosting gives your team more responsibility for hardware, runtime, access control, scaling, and recovery. Neither choice removes application-level checks."
     ],
-    "mechanismTitle": "A request ID helps distinguish retrying from doing new work",
+    "mechanismTitle": "8. Use Request IDs to Prevent Duplicate Work",
     "mechanism": [
       "An idempotency key identifies one intended operation so that repeating it does not unintentionally repeat its effect. The server must associate that key with the authenticated user and the request contents; otherwise one user or a different prompt could receive an unrelated cached result.",
       "The toy service below stores completed results in a dictionary and rejects reuse of a key with a different request. It is single-process and sequential. Production requires durable storage, atomic coordination for concurrent duplicates, expiration rules, and provider support where applicable. A local dictionary cannot prevent duplicate provider work after a crash or across several servers."
     ],
-    "labTitle": "Python: simulate a retry without repeating a completed generation",
+    "labTitle": "9. Hands-On: Simulate a Safe Retry",
     "setup": "Python 3, standard library only. The model call is a deterministic stand-in, so this tests request handling rather than generation quality.",
     "code": "cache = {}\nmodel_calls = 0\n\ndef generate(user, request_id, prompt):\n    global model_calls\n    key = (user, request_id)\n    if key in cache:\n        old_prompt, answer = cache[key]\n        if old_prompt != prompt:\n            raise ValueError(\"request ID reused for different input\")\n        return answer\n    model_calls += 1\n    answer = f\"Draft for: {prompt}\"\n    cache[key] = (prompt, answer)\n    return answer\n\nprint(generate(\"user-1\", \"req-7\", \"college invitation\"))\nprint(generate(\"user-1\", \"req-7\", \"college invitation\"))\nprint(\"Model calls:\", model_calls)\ntry:\n    generate(\"user-1\", \"req-7\", \"different task\")\nexcept ValueError as error:\n    print(\"Rejected:\", error)\nprint(\"Average in-flight estimate:\", 2 * 3)",
     "notes": [
