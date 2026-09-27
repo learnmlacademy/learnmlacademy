@@ -8,8 +8,8 @@ import { SummaryCard } from "../../components/lesson/SummaryCard";
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
+    <section className="not-prose border-l-2 border-indigo-300 py-1 pl-5">
+      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Next question in the learning path</p>
       <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
@@ -20,7 +20,7 @@ function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
   return (
     <div className="not-prose grid gap-3">
       {items.map((item,index)=>(
-        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 border-t border-slate-200 py-4 first:border-t-0">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">{index+1}</span>
           <div><h3 className="font-bold text-slate-900">{item.title}</h3><p className="mt-1 leading-relaxed text-slate-700">{item.body}</p></div>
         </div>
@@ -59,7 +59,7 @@ function RAGLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>What if the LLM simply does not know your information?</h2>
+        <h2>1. The RAG Problem: What If the LLM Does Not Know Your Information?</h2>
         <p className="text-lg">Imagine asking a general LLM: <strong>“According to our company's current HR manual, how many casual-leave days do I get?”</strong> The policy may be private, recently changed, or absent from the model's training data.</p>
         <p>Fine-tuning is not the natural first solution when the problem is missing current evidence. A simpler idea is: <strong>find the relevant approved information first, give it to the LLM with the question, then generate the answer.</strong></p>
         <p>That pattern is called <strong>Retrieval-Augmented Generation (RAG)</strong>.</p>
@@ -68,7 +68,7 @@ function RAGLesson() {
       <RAGPipelineFigure />
 
       <section className="space-y-4">
-        <h2>Two phases make the system work</h2>
+        <h2>2. RAG Has Two Phases: Index First, Retrieve at Question Time</h2>
         <DataTable
           title="Offline preparation versus online answering"
           headers={["Phase","What happens","When"]}
@@ -81,7 +81,7 @@ function RAGLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>A complete beginner example</h2>
+        <h2>3. Follow One Question Through a Complete RAG Pipeline</h2>
         <Steps items={[
           {title:"Question",body:"The employee asks: “How many casual-leave days do I get?”"},
           {title:"Retrieve",body:"The search layer finds a current HR-policy chunk that says eligible employees receive 12 casual-leave days per year."},
@@ -91,8 +91,10 @@ function RAGLesson() {
         ]}/>
       </section>
 
+      <LLMConceptExpansion topicId="rag" />
+
       <section className="space-y-4">
-        <h2>RAG has several failure boundaries</h2>
+        <h2>5. Where a RAG Pipeline Can Fail</h2>
         <DataTable
           title="Where a RAG answer can fail"
           headers={["Stage","Example failure","What to inspect"]}
@@ -107,14 +109,12 @@ function RAGLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>What should happen when the evidence is missing?</h2>
+        <h2>6. When Evidence Is Missing, Abstain Instead of Guessing</h2>
         <p>If no approved source contains enough evidence, the safer behavior is often to <strong>abstain, ask for clarification, or escalate</strong> according to the application's policy—not invent a plausible answer.</p>
         <Callout role="warning" title="RAG reduces one class of risk; it does not guarantee truth"><p>Retrieval can provide current or private evidence, but the wrong passage may be retrieved, old data may be indexed, or the generator may still misuse the evidence. Each stage needs evaluation.</p></Callout>
       </section>
 
-      <LLMConceptExpansion topicId="rag" />
       <LLMWorkedLab topicId="rag" />
-
       <Bridge question="The RAG idea is simple: retrieve relevant evidence. But how can retrieval find a passage even when the user's wording is different from the document?" to="/learn/semantic-search-embeddings" label="Semantic Search with Embeddings" />
 
       <SummaryCard items={[
@@ -149,7 +149,7 @@ function SemanticSearchLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Why exact keyword matching can miss the right answer</h2>
+        <h2>1. Why Keyword Matching Can Miss Relevant Meaning</h2>
         <p className="text-lg">A user writes <strong>“Why won't my computer turn on?”</strong> while the support document says <strong>“Laptop fails to power on.”</strong> The meaning is similar even though several words differ.</p>
         <p><strong>Semantic search</strong> represents queries and passages as vectors so the system can compare meaning-related numerical representations rather than requiring exact word overlap.</p>
       </section>
@@ -157,7 +157,7 @@ function SemanticSearchLesson() {
       <SemanticSearchFigure />
 
       <section className="space-y-4">
-        <h2>From text to searchable vectors</h2>
+        <h2>2. Turn Text into Searchable Embedding Vectors</h2>
         <Steps items={[
           {title:"Embed the corpus",body:"Use an embedding model to turn each passage into a vector and store it with its text and metadata."},
           {title:"Embed the query",body:"Use a compatible embedding model to turn the user's question into a vector in the same representation space."},
@@ -167,8 +167,10 @@ function SemanticSearchLesson() {
         <Callout role="warning" title="Do not mix unrelated embedding spaces"><p>If passages are indexed with embedding model A and new queries use an unrelated model B, vector distances may no longer be meaningful.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="semantic-search-embeddings" />
+
       <section className="space-y-4">
-        <h2>Cosine similarity — compare direction</h2>
+        <h2>4. Cosine Similarity: Compare Vector Direction</h2>
         <p>Cosine similarity compares the angle between two vectors after accounting for their magnitudes. A value near 1 means they point in a similar direction; 0 means roughly perpendicular; negative values point in opposing directions.</p>
         <FormulaBlock expression="cos(q,d) = (q · d) / (||q|| ||d||)" explanation="Dot product in the numerator measures alignment; the norms in the denominator remove the effect of overall vector length." />
         <p>For <strong>q = [1,1]</strong> and <strong>d = [1,0]</strong>:</p>
@@ -180,8 +182,10 @@ function SemanticSearchLesson() {
         <p>For <strong>dB = [2,2]</strong>, the direction is exactly the same as q, so cosine similarity is <strong>1.0</strong> even though dB has a larger magnitude.</p>
       </section>
 
+      <LLMWorkedLab topicId="semantic-search-embeddings" />
+
       <section className="space-y-4">
-        <h2>Semantic search is not always the only search you need</h2>
+        <h2>6. Combine Semantic Search with Other Retrieval Signals When Needed</h2>
         <p>Exact identifiers such as <code>INV-009381</code>, legal clause numbers, product codes, or names can be better handled by lexical matching. Many production systems therefore use <strong>hybrid retrieval</strong>: combine lexical signals with dense semantic similarity.</p>
         <DataTable
           title="Choose the signal that matches the query"
@@ -193,10 +197,6 @@ function SemanticSearchLesson() {
           ]}
         />
       </section>
-
-      <LLMConceptExpansion topicId="semantic-search-embeddings" />
-      <LLMWorkedLab topicId="semantic-search-embeddings" />
-
       <Bridge question="We can turn millions of passages into vectors. Where do we store those vectors, metadata, and permissions—and how do we search them efficiently?" to="/learn/vector-databases" label="Vector Databases" />
 
       <SummaryCard items={[
@@ -215,13 +215,13 @@ function VectorDatabaseLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Once you have vectors, how do you manage them?</h2>
+        <h2>1. From Embeddings to a Searchable Vector Store</h2>
         <p className="text-lg">A RAG system may need to search thousands or millions of passage embeddings and still keep track of the original text, document ID, date, tenant, and permissions.</p>
         <p>A <strong>vector database</strong> or vector-capable data store keeps vectors together with metadata and provides similarity-search capabilities. The embedding model creates the vector; the database stores and searches it.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>What is stored for one passage?</h2>
+        <h2>2. A Vector Record Must Keep Text, Vector, Source, and Metadata Together</h2>
         <DataTable
           title="Illustrative record"
           headers={["Field","Example","Why it matters"]}
@@ -235,8 +235,10 @@ function VectorDatabaseLesson() {
         />
       </section>
 
+      <LLMConceptExpansion topicId="vector-databases" />
+
       <section className="space-y-4">
-        <h2>Exact search versus approximate nearest neighbours</h2>
+        <h2>4. Exact Search vs Approximate Nearest-Neighbour Search</h2>
         <p>For a small collection, comparing the query with every eligible vector can be simple and completely exact. As collections grow, scanning everything may become too expensive.</p>
         <DataTable
           title="Search trade-off"
@@ -249,19 +251,17 @@ function VectorDatabaseLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Metadata filters are useful—but authorization is stronger</h2>
+        <h2>5. Metadata Filtering Helps; Authorization Must Still Be Enforced</h2>
         <p>A topic filter such as <code>department = "HR"</code> can improve relevance. It does not automatically prove that the current user is allowed to read every HR document.</p>
         <Callout role="mistake" title="Relevance filter ≠ access control"><p>Tenant isolation, document permissions, and user authorization must be enforced explicitly before retrieved text is exposed to the LLM or user.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>Do you always need a specialized vector database?</h2>
+        <h2>6. Decide Whether You Actually Need a Specialized Vector Database</h2>
         <p>No. If a team already uses PostgreSQL, has a moderate vector workload, and needs relational joins or transactional metadata, a vector extension in the existing database can be a sensible starting point. Specialized infrastructure becomes useful when measured scale, latency, indexing, or operational requirements justify it.</p>
       </section>
 
-      <LLMConceptExpansion topicId="vector-databases" />
       <LLMWorkedLab topicId="vector-databases" />
-
       <Bridge question="The vector store can return candidates. How do chunk boundaries, hybrid search, reranking, and retrieval metrics improve what reaches the LLM?" to="/learn/advanced-rag" label="Advanced RAG" />
 
       <SummaryCard items={[
@@ -280,13 +280,13 @@ function AdvancedRAGLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Basic RAG works. Why does retrieval still fail?</h2>
+        <h2>1. Why Basic RAG Still Misses Useful Evidence</h2>
         <p className="text-lg">A document may be split at the wrong place, an exact product code may be missed by semantic search, or a relevant passage may appear in the top 20 but be pushed out by a reranker.</p>
         <p>Advanced RAG is mostly about improving and measuring the path from <strong>source document → candidate passages → final context</strong>.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Chunking decides what unit can be retrieved</h2>
+        <h2>2. Chunking Defines the Unit Retrieval Can Find</h2>
         <p>If chunks are too large, one vector may represent several unrelated ideas and consume too much context. If chunks are too small, the answer may be split away from the surrounding explanation.</p>
         <DataTable
           title="Chunking choices"
@@ -300,12 +300,12 @@ function AdvancedRAGLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Hybrid retrieval uses more than one signal</h2>
+        <h2>3. Hybrid Retrieval Combines Lexical and Semantic Signals</h2>
         <p>A query such as <strong>“INV-009381 late-payment policy”</strong> contains both an exact identifier and a semantic description. Lexical search is strong for the code; dense retrieval is strong for related meaning. Hybrid retrieval combines both candidate sources.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Reranking asks a more expensive second question</h2>
+        <h2>4. Reranking Reorders a Shortlist with a Stronger Relevance Check</h2>
         <Steps items={[
           {title:"Retrieve broadly",body:"Use dense, lexical, or hybrid retrieval to get perhaps the top 20 candidates."},
           {title:"Rerank narrowly",body:"Apply a more precise scoring model to those candidates."},
@@ -316,7 +316,7 @@ function AdvancedRAGLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Measure retrieval separately from generation</h2>
+        <h2>5. Measure Retrieval Quality Before Blaming Generation</h2>
         <p>Suppose an evaluation query has <strong>2 known relevant chunks</strong>. If only <strong>1</strong> appears in the top 3 retrieved results:</p>
         <FormulaBlock expression="Recall@3 = relevant chunks retrieved in top 3 / all known relevant chunks = 1 / 2 = 0.50" explanation="Recall@k measures whether retrieval found the known relevant items. It does not prove the final generated answer is correct." />
         <p>If Recall@3 improves from 0.50 to 1.00 for that case, retrieval found both labelled relevant chunks in the top 3. Generation, citation support, latency, and safety still need separate evaluation.</p>
