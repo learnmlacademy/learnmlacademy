@@ -107,12 +107,12 @@ export function GenAIWorkedLab({ topicId }: { topicId: GenAITopic }) {
       <p>{lesson.setup}</p>
       <CodeBlock code={lesson.code} language="python" type="runnable" title="Complete Python example" caption="Copy into a .py file and run with Python 3. No third-party packages are required." />
       {lesson.output && <CodeBlock code={lesson.output} type="output" title="Output from running this example" caption="Captured from this exact code using Python 3.12. Values are from the teaching data above, not commercial-model benchmarks." />}
-      <h3 className="text-xl font-bold">Read the code and result together</h3>
+      <h3 className="text-xl font-bold">What This Run Shows</h3>
       <ol className="list-decimal space-y-3 pl-6">{lesson.notes.map(note=><li key={note}>{note}</li>)}</ol>
       <p>{lesson.meaning}</p>
       <Callout role="mistake" title="A mistake to avoid"><p>{lesson.mistake}</p></Callout>
-      <details className="not-prose rounded-xl border border-[var(--lma-border-default)] bg-[var(--lma-canvas)] p-5">
-        <summary className="cursor-pointer font-semibold text-[var(--lma-brand-text)]">Try one change: {lesson.tryIt}</summary>
+      <details className="not-prose border-y border-[var(--lma-border-default)] bg-[var(--lma-canvas)] px-1 py-4">
+        <summary className="cursor-pointer font-semibold text-[var(--lma-brand-text)]">Experiment: {lesson.tryIt}</summary>
         <p className="mt-4 leading-relaxed text-[var(--lma-text-secondary)]">{lesson.answer}</p>
       </details>
     </section>
