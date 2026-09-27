@@ -33,8 +33,8 @@ function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
-      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
+    <section className="not-prose border-l-2 border-indigo-300 py-1 pl-5">
+      <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Next question in the learning path</p>
       <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
@@ -98,7 +98,7 @@ function TokenizationEmbeddingsLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>How does a sentence get inside an LLM?</h2>
+        <h2>1. How Text Becomes Model Input</h2>
         <p className="text-lg">You type <strong>“I love machine learning!”</strong>. A person sees words and meaning. A neural network works with numbers. The missing bridge is: <strong>split the text into manageable pieces, identify those pieces, then turn them into learned numerical representations.</strong></p>
         <p>Those pieces are called <strong>tokens</strong>. A token may be a whole word, part of a word, punctuation, a byte-like unit, or a special symbol depending on the tokenizer used by the model.</p>
       </section>
@@ -106,13 +106,16 @@ function TokenizationEmbeddingsLesson() {
       <TextToVectorsFigure />
 
       <section className="space-y-4">
-        <h2>Step 1 — split text into tokens</h2>
+        <h2>2. Step 1: Split Text into Tokens</h2>
         <p>For teaching, we might imagine <strong>“playing!”</strong> becoming <code>play | ing | !</code>. A real tokenizer may split it differently. Tokenization is model-specific, so visible word count is not a reliable token count.</p>
         <Callout role="tip" title="Token does not mean word"><p>A 1,000-word document may use more or fewer than 1,000 tokens depending on language, punctuation, code, uncommon names, and the tokenizer itself.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="tokenization-embeddings" />
+      <LLMWorkedLab topicId="tokenization-embeddings" />
+
       <section className="space-y-4">
-        <h2>Step 2 — give each token an ID</h2>
+        <h2>5. Step 2: Map Each Token to an ID</h2>
         <p>A vocabulary assigns each token an integer ID. Think of the ID as a catalogue number. If one token has ID 4217 and another has ID 4218, that does <strong>not</strong> mean their meanings are close.</p>
         <DataTable
           title="Illustrative vocabulary lookup"
@@ -126,26 +129,26 @@ function TokenizationEmbeddingsLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Step 3 — turn IDs into learned vectors</h2>
+        <h2>6. Step 3: Turn Token IDs into Learned Embeddings</h2>
         <p>The model uses each ID to look up an <strong>embedding</strong>: a vector, or ordered list of learned numbers. Training adjusts these numbers so the model can represent useful patterns and relationships.</p>
         <p>A helpful mental model is a coordinate system. One point may end up closer to another because the model learned that they appear in related contexts. But the individual coordinates are not manually labelled “animal”, “positive”, or “technology”.</p>
         <Callout role="info" title="Two meanings of embedding"><p>This lesson is about token embeddings inside an LLM. Later, semantic search uses embeddings for whole queries and passages. The idea is related, but the purpose and model may differ.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>How does the model know order?</h2>
+        <h2>7. Add Position and Order Information</h2>
         <p>The same words in a different order can mean something different: <strong>“dog bites man”</strong> is not the same as <strong>“man bites dog.”</strong> LLMs therefore combine token information with <strong>positional information</strong> so the network can distinguish where pieces appear in the sequence.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Context window — the model's current worktable</h2>
+        <h2>8. The Context Window: The Model's Current Worktable</h2>
         <p>The <strong>context window</strong> is the finite amount of tokenized material the model can work with for a request. Instructions, conversation history, the current question, retrieved evidence, and room for the generated answer all consume that budget.</p>
         <ContextBudgetFigure />
         <p>The 1,600-token value is deliberately small and only for this worked example. Real model limits vary. The skill to learn is the budgeting: <strong>2,000 planned − 1,600 available = 400 tokens that must be removed or reallocated.</strong></p>
       </section>
 
       <section className="space-y-4">
-        <h2>Context is not long-term memory</h2>
+        <h2>9. Why Context Is Not Long-Term Memory</h2>
         <p>A context window is temporary working material for the current interaction. If an application remembers your preference next week, software outside the base model typically stored that information and inserted it into a later request.</p>
         <DataTable
           title="Do not confuse these"
@@ -159,10 +162,6 @@ function TokenizationEmbeddingsLesson() {
           ]}
         />
       </section>
-
-      <LLMConceptExpansion topicId="tokenization-embeddings" />
-      <LLMWorkedLab topicId="tokenization-embeddings" />
-
       <Bridge question="Now the model has numerical token representations. How can each token decide which other tokens matter?" to="/learn/transformers-attention" label="Transformer Architecture & Attention" />
 
       <SummaryCard items={[
@@ -203,7 +202,7 @@ function TransformersAttentionLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>How can one token use information from another?</h2>
+        <h2>1. The Attention Problem: How One Token Uses Other Tokens</h2>
         <p className="text-lg">Read: <strong>“The animal didn't cross the street because it was tired.”</strong> To interpret “it”, information from earlier words matters. Treating every position as equally useful would be wasteful.</p>
         <p><strong>Attention</strong> is a learned mechanism that lets each position assign different weights to other allowed positions and combine their information.</p>
       </section>
@@ -211,7 +210,7 @@ function TransformersAttentionLesson() {
       <AttentionSentenceFigure />
 
       <section className="space-y-4">
-        <h2>Query, Key and Value — without the mystery</h2>
+        <h2>2. Query, Key, and Value: The Three Roles in Attention</h2>
         <DataTable
           title="Q, K and V in plain English"
           headers={["Vector", "Beginner mental model", "Role"]}
@@ -224,8 +223,10 @@ function TransformersAttentionLesson() {
         <Callout role="warning" title="The analogy has limits"><p>Queries do not literally ask English questions, and Keys are not encryption keys. Q, K and V are learned numerical vectors.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="transformers-attention" />
+
       <section className="space-y-4">
-        <h2>From matching scores to attention weights</h2>
+        <h2>4. From Compatibility Scores to Attention Weights</h2>
         <Steps items={[
           { title: "Compare Query with Keys", body: "A dot product gives larger scores to stronger matches in the learned space." },
           { title: "Scale the scores", body: "Divide by √dₖ, where dₖ is the Key-vector dimension, to keep large dot products from making softmax excessively sharp." },
@@ -236,7 +237,7 @@ function TransformersAttentionLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>A tiny weighted-value calculation</h2>
+        <h2>5. Worked Example: Compute One Weighted Attention Output</h2>
         <p>Suppose one query produces attention weights <strong>0.731</strong> and <strong>0.269</strong> over two positions. Their Value vectors are <strong>[1, 0]</strong> and <strong>[0, 2]</strong>.</p>
         <div className="not-prose rounded-xl border border-slate-200 bg-slate-50 p-5 font-mono text-sm leading-7">
           <p>0.731 × [1, 0] = [0.731, 0]</p>
@@ -246,8 +247,10 @@ function TransformersAttentionLesson() {
         <p>The result is not a label. It is a new representation containing a weighted mixture of information from the two Value vectors.</p>
       </section>
 
+      <LLMWorkedLab topicId="transformers-attention" />
+
       <section className="space-y-4">
-        <h2>One attention operation is not the whole Transformer</h2>
+        <h2>7. From One Attention Head to a Transformer Block</h2>
         <DataTable
           title="Inside a Transformer block"
           headers={["Part", "Why it is there"]}
@@ -262,7 +265,7 @@ function TransformersAttentionLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Three common Transformer families</h2>
+        <h2>8. Three Common Transformer Architecture Families</h2>
         <DataTable
           title="Architecture family and typical use"
           headers={["Family", "Information flow", "Typical fit"]}
@@ -274,10 +277,6 @@ function TransformersAttentionLesson() {
         />
         <Callout role="mistake" title="Causal masking matters"><p>During decoder training, allowing a position to see the correct future token would leak the answer. A causal mask blocks that future visibility.</p></Callout>
       </section>
-
-      <LLMConceptExpansion topicId="transformers-attention" />
-      <LLMWorkedLab topicId="transformers-attention" />
-
       <Bridge question="The Transformer can now produce scores for possible next tokens. How does the system choose which token to actually generate?" to="/learn/text-generation-decoding" label="Text Generation & Decoding" />
 
       <SummaryCard items={[
@@ -296,10 +295,12 @@ function DecodingLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>The model has choices — how does it pick one?</h2>
+        <h2>1. From Model Scores to a Token Choice</h2>
         <p className="text-lg">Suppose the current text is <strong>“The weather is …”</strong>. The model may consider “sunny”, “cold”, “changing”, and thousands of other tokens. The neural network first produces a raw score for every vocabulary token.</p>
         <p>Those raw scores are called <strong>logits</strong>. A softmax operation converts them into a probability distribution that is easier to interpret and sample from.</p>
       </section>
+
+      <LLMConceptExpansion topicId="text-generation-decoding" />
 
       <DataTable
         title="One illustrative generation step"
@@ -312,12 +313,12 @@ function DecodingLesson() {
       />
 
       <section className="space-y-4">
-        <h2>Greedy decoding — always take the largest probability</h2>
+        <h2>3. Greedy Decoding: Always Choose the Most Likely Token</h2>
         <p>If the distribution is 66.5%, 24.5%, and 9.0%, greedy decoding selects <strong>sunny</strong>. It is simple and repeatable for a fixed model/input, but repeatedly taking only the top choice can make text rigid and does not make the answer factually verified.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Temperature — make the distribution sharper or flatter</h2>
+        <h2>4. Temperature: Make the Distribution Sharper or Flatter</h2>
         <p>Temperature changes the relative spread of candidate probabilities before sampling. Lower positive temperatures make high-scoring tokens dominate more strongly. Higher temperatures flatten the distribution so lower-ranked candidates become more viable.</p>
         <DataTable
           title="Same toy logits [2, 1, 0], two temperatures"
@@ -331,7 +332,7 @@ function DecodingLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Top-k and top-p — narrow the candidate pool</h2>
+        <h2>5. Top-k and Top-p: Narrow the Candidate Pool</h2>
         <DataTable
           title="Two common filters"
           headers={["Method", "Question it asks", "Example"]}
@@ -344,7 +345,7 @@ function DecodingLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Which decoding style fits the job?</h2>
+        <h2>6. Choose a Decoding Strategy for the Task</h2>
         <DataTable
           title="Start from the task, not from a fashionable setting"
           headers={["Task", "Reasonable starting direction", "What still matters"]}
@@ -357,9 +358,7 @@ function DecodingLesson() {
         <Callout role="warning" title="Decoding does not create truth"><p>Changing temperature, top-k, or top-p changes how a model chooses among its predicted continuations. It does not supply missing evidence or guarantee correctness.</p></Callout>
       </section>
 
-      <LLMConceptExpansion topicId="text-generation-decoding" />
       <LLMWorkedLab topicId="text-generation-decoding" />
-
       <Bridge question="We know how the model turns its internal scores into text. How should we write the request we give it so the task is clear and testable?" to="/learn/prompt-engineering" label="Prompt Engineering" />
 
       <SummaryCard items={[
@@ -396,14 +395,14 @@ function PromptEngineeringLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Why does one prompt work better than another?</h2>
+        <h2>1. Why Clear Task Definition Improves a Prompt</h2>
         <p className="text-lg"><strong>Weak:</strong> “Tell me about this.”</p>
         <p className="text-lg"><strong>Clearer:</strong> “Summarize the following article in five bullet points for a first-year college student. Keep each bullet under 20 words.”</p>
         <p>The second request is easier to follow because the task, audience, constraints, and desired shape of the answer are visible. <strong>Prompt engineering is the practice of making those instructions clear, testable, and appropriate for the job.</strong></p>
       </section>
 
       <section className="space-y-4">
-        <h2>A practical four-part prompt</h2>
+        <h2>2. Build a Prompt from Four Practical Parts</h2>
         <DataTable
           title="Prompt anatomy"
           headers={["Part", "Question it answers"]}
@@ -418,13 +417,13 @@ function PromptEngineeringLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Zero-shot, one-shot, and few-shot examples</h2>
+        <h2>3. Use Zero-Shot, One-Shot, and Few-Shot Examples</h2>
         <p><strong>Zero-shot</strong> means giving the instruction without examples. <strong>One-shot</strong> gives one example of the desired input/output pattern. <strong>Few-shot</strong> gives a small set of examples.</p>
         <Callout role="tip" title="Examples are specifications, not decorations"><p>If a formatting rule is hard to describe, one good example can make the desired pattern concrete. But examples can also conflict with written rules, so keep them consistent.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>Structured output gives shape — not truth</h2>
+        <h2>4. Structured Output Gives Shape, Not Truth</h2>
         <p>If software needs a list of objects such as <code>{'{name, due_date}'}</code>, define a schema and validate the output. A parser can prove that required fields and types are present. It cannot prove that a date is factually correct, authorized, or acceptable under business rules.</p>
         <Steps items={[
           { title: "Generate", body: "Ask for the defined structure." },
@@ -435,20 +434,20 @@ function PromptEngineeringLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Tool or function calling is a proposal, not permission</h2>
+        <h2>5. Tool Calling Is a Proposal, Not Permission</h2>
         <p>An LLM can propose a tool name and arguments, but application code should validate them before execution. If the model proposes <code>get_weather(city="Pune", unit="Kelvin")</code> and the schema allows only C or F, the application should reject or repair the arguments according to its policy.</p>
         <Callout role="warning" title="The model does not own authorization"><p>Tool schemas, permission checks, confirmation for high-impact actions, and business validation belong to application logic. Never treat a model-generated function call as automatically trusted.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="prompt-engineering" />
+
       <section className="space-y-4">
-        <h2>Debug prompts like software requirements</h2>
+        <h2>7. Debug Prompts Like Software Requirements</h2>
         <p>If two instructions conflict—such as “return only JSON” and “explain your reasoning in a paragraph”—first remove or reconcile the conflict and retest the same cases. Adding unrelated examples or immediately fine-tuning the model hides the real problem.</p>
         <p>A good prompt can improve how clearly the model understands the task. It cannot magically give the model a current private policy, a missing database record, or guaranteed facts.</p>
       </section>
 
-      <LLMConceptExpansion topicId="prompt-engineering" />
       <LLMWorkedLab topicId="prompt-engineering" />
-
       <Bridge question="Prompting changes the request but not the model's learned parameters. How were those parameters learned in the first place?" to="/learn/pretraining-finetuning" label="Pretraining & Fine-Tuning" />
 
       <SummaryCard items={[
@@ -482,7 +481,7 @@ function PretrainingFinetuningLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>Where do the model's parameters come from?</h2>
+        <h2>1. Where LLM Parameters Come From</h2>
         <p className="text-lg">In the introduction we used <strong>“The cat sat on the ____”</strong>. The model predicts the next token, compares its probability with the observed continuation, calculates an error, and adjusts its parameters.</p>
         <p><strong>Pretraining</strong> is this broad learning process repeated across a very large and varied corpus so the model develops general language and pattern-prediction capability.</p>
       </section>
@@ -490,7 +489,7 @@ function PretrainingFinetuningLesson() {
       <TrainingFlowFigure />
 
       <section className="space-y-4">
-        <h2>Training data is not just “more text”</h2>
+        <h2>2. Prepare Training Data Before Learning Begins</h2>
         <DataTable
           title="Why preparation matters"
           headers={["Concern", "Why it matters"]}
@@ -504,13 +503,13 @@ function PretrainingFinetuningLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>How next-token training examples are formed</h2>
+        <h2>3. Turn Text into Next-Token Training Examples</h2>
         <p>For a token sequence <strong>[t₁, t₂, t₃, t₄]</strong>, a causal language-model training view can use <strong>[t₁, t₂, t₃]</strong> as the available inputs while the targets are shifted one step to <strong>[t₂, t₃, t₄]</strong>. At each position, the target is the token that actually followed the available prefix.</p>
         <Callout role="tip" title="Same idea, many positions"><p>The model is not learning one final word per document. A long sequence supplies many next-token prediction targets.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>Loss answers: how much probability did we give the correct token?</h2>
+        <h2>4. Use Loss to Measure the Prediction Error</h2>
         <p>One common causal-language-model loss is negative log-likelihood. You do not need to memorize logarithms to understand the direction: assigning more probability to the observed next token gives a smaller loss.</p>
         <DataTable
           title="Tiny loss comparison"
@@ -522,8 +521,11 @@ function PretrainingFinetuningLesson() {
         />
       </section>
 
+      <LLMConceptExpansion topicId="pretraining-finetuning" />
+      <LLMWorkedLab topicId="pretraining-finetuning" />
+
       <section className="space-y-4">
-        <h2>Pretraining versus fine-tuning</h2>
+        <h2>7. Pretraining vs Fine-Tuning: Broad Learning vs Specialization</h2>
         <p>Think of <strong>pretraining as broad education</strong> and <strong>fine-tuning as additional specialist coaching</strong>. Fine-tuning starts from an already trained model and continues updating some or all parameters using a narrower dataset or objective.</p>
         <DataTable
           title="Two stages, different goals"
@@ -536,15 +538,11 @@ function PretrainingFinetuningLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Why training needs much more memory than the saved weights</h2>
+        <h2>8. Why Training Uses More Memory Than Saved Model Weights</h2>
         <p>A 1-billion-parameter model stored with 16-bit weights is roughly <strong>2 GB of raw weight values</strong> as a simple estimate. That does <strong>not</strong> mean 2 GB is enough to train it.</p>
         <p>Training may also need activations, gradients, optimizer state, temporary buffers, and communication overhead. The exact amount depends on the optimizer, precision, sequence length, batch size, checkpointing, hardware, and parallel strategy.</p>
         <Callout role="info" title="Why multiple GPUs may help"><p>If the complete model fits on each GPU and the goal is more batch throughput, <strong>data parallelism</strong> is a natural starting idea: replicas process different batches, then synchronize gradients. Other parallel strategies solve different constraints.</p></Callout>
       </section>
-
-      <LLMConceptExpansion topicId="pretraining-finetuning" />
-      <LLMWorkedLab topicId="pretraining-finetuning" />
-
       <Bridge question="Pretraining creates a broad language model. How do we teach it to follow instructions, reflect preferences, and specialize efficiently?" to="/learn/instruction-tuning-rlhf" label="SFT, RLHF & LoRA" />
 
       <SummaryCard items={[
@@ -563,13 +561,13 @@ function AlignmentLesson() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>A base model can continue text. How do we make it a useful assistant?</h2>
+        <h2>1. From Base Language Model to Useful Assistant</h2>
         <p className="text-lg">A pretrained model may be good at predicting text without reliably behaving like an instruction-following assistant. Post-training adds targeted examples and preference signals to shape how the model responds.</p>
         <p>Start with the simplest idea: show the model many pairs of <strong>instruction → desired response</strong> and continue training on them. This is <strong>supervised fine-tuning (SFT)</strong>.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>Supervised fine-tuning — teach by example</h2>
+        <h2>2. Supervised Fine-Tuning: Teach with Desired Responses</h2>
         <DataTable
           title="One tiny SFT example"
           headers={["Instruction", "Desired target response"]}
@@ -581,7 +579,7 @@ function AlignmentLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>Preference feedback — choose between responses</h2>
+        <h2>3. Preference Learning: Teach Which Responses Are Preferred</h2>
         <p>Sometimes there is more than one plausible answer. Evaluators can compare two candidates and indicate which better follows the desired criteria.</p>
         <DataTable
           title="Preference signal"
@@ -595,8 +593,10 @@ function AlignmentLesson() {
         <Callout role="warning" title="Alignment is not permanent truthfulness"><p>Post-training can improve instruction following and reduce some unwanted behaviors, but it does not eliminate hallucination, adversarial inputs, distribution shift, or the need for evaluation and system controls.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="instruction-tuning-rlhf" />
+
       <section className="space-y-4">
-        <h2>Why LoRA exists — specialize without updating every base weight</h2>
+        <h2>5. Why LoRA Exists: Specialize Without Updating Every Base Weight</h2>
         <p>Full fine-tuning can update an enormous number of parameters. <strong>LoRA</strong> (Low-Rank Adaptation) keeps the original weight matrix frozen and learns small additional low-rank matrices whose update is combined with the base model during use.</p>
         <FigureShell
           title="Base model stays frozen; a small learned adapter changes the effective transformation"
@@ -614,7 +614,7 @@ function AlignmentLesson() {
       </section>
 
       <section className="space-y-4">
-        <h2>A tiny LoRA parameter count</h2>
+        <h2>6. Worked Example: Count the Trainable LoRA Parameters</h2>
         <p>Suppose a base matrix is <strong>512 × 512</strong> and we choose LoRA rank <strong>8</strong>. One adapter matrix has <strong>512 × 8 = 4,096</strong> parameters and the other has <strong>8 × 512 = 4,096</strong>.</p>
         <div className="not-prose rounded-xl border border-emerald-200 bg-emerald-50 p-5 font-mono">
           4,096 + 4,096 = <strong>8,192 trainable adapter parameters</strong>
@@ -622,8 +622,10 @@ function AlignmentLesson() {
         <p>The original 512 × 512 base matrix remains frozen in standard LoRA adapter training. Updating W directly would violate that assumption.</p>
       </section>
 
+      <LLMWorkedLab topicId="instruction-tuning-rlhf" />
+
       <section className="space-y-4">
-        <h2>Prompting, RAG, or fine-tuning?</h2>
+        <h2>8. Choose Between Prompting, RAG, and Fine-Tuning</h2>
         <DataTable
           title="Match the intervention to the problem"
           headers={["Problem", "Good starting intervention", "Why"]}
@@ -635,10 +637,6 @@ function AlignmentLesson() {
         />
         <p>If the model already follows the desired style but simply lacks current private information, full fine-tuning is usually the wrong first tool. That is the problem RAG is designed to address.</p>
       </section>
-
-      <LLMConceptExpansion topicId="instruction-tuning-rlhf" />
-      <LLMWorkedLab topicId="instruction-tuning-rlhf" />
-
       <Bridge question="Fine-tuning can change behavior. But what if the model's behavior is fine and the missing piece is today's private or current information?" to="/learn/rag" label="Retrieval-Augmented Generation (RAG)" />
 
       <SummaryCard items={[
