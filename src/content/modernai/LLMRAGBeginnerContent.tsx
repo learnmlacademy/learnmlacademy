@@ -20,7 +20,7 @@ function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
   return (
     <div className="not-prose grid gap-3">
       {items.map((item,index)=>(
-        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 border-t border-slate-200 py-4 first:border-t-0">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">{index+1}</span>
           <div><h3 className="font-bold text-slate-900">{item.title}</h3><p className="mt-1 leading-relaxed text-slate-700">{item.body}</p></div>
         </div>
