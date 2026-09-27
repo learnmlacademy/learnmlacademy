@@ -1,5 +1,6 @@
 import { useId } from 'react';
 import { Link } from 'react-router-dom';
+import { LLMConceptExpansion, LLMWorkedLab } from './LLMTutorialExpansion';
 import { Callout } from '../../components/content/Callout';
 import { CodeBlock } from '../../components/content/CodeBlock';
 import { DataTable } from '../../components/content/DataTable';
@@ -211,6 +212,9 @@ show(text)`} caption="model, choose, END, append_token, and show are teaching pl
         </ul>
         <p>There is no error calculation or parameter adjustment in this code: it depicts using a trained model, not teaching one.</p>
       </section>
+
+      <LLMConceptExpansion topicId="llm-intro" />
+      <LLMWorkedLab topicId="llm-intro" />
 
       <section className="space-y-4">
         <h2>Pause and check the idea</h2>

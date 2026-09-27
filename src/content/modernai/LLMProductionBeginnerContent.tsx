@@ -1,3 +1,4 @@
+import { LLMConceptExpansion, LLMWorkedLab } from "./LLMTutorialExpansion";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
@@ -76,6 +77,9 @@ function EvaluationLesson() {
         />
       </section>
 
+      <LLMConceptExpansion topicId="llm-evaluation" />
+      <LLMWorkedLab topicId="llm-evaluation" />
+
       <Bridge question="Evaluation tells us whether the system works. What kinds of factual, security, and trust failures must we design controls around?" to="/learn/llm-hallucinations-safety" label="Hallucinations, Guardrails & Safety" />
 
       <SummaryCard items={[
@@ -129,6 +133,9 @@ function SafetyLesson() {
         <p>A prompt can express desired behavior, but it cannot replace evidence checks, authorization, schema validation, evaluation, logging, or monitoring. The useful question is: <strong>Where can this failure occur, and what independent control exists at that boundary?</strong></p>
       </section>
 
+      <LLMConceptExpansion topicId="llm-hallucinations-safety" />
+      <LLMWorkedLab topicId="llm-hallucinations-safety" />
+
       <Bridge question="Some models spend more computation before finalizing difficult answers. What does that change—and what can we actually verify from outside the model?" to="/learn/reasoning-models" label="Reasoning Models & Test-Time Compute" />
 
       <SummaryCard items={[
@@ -177,6 +184,9 @@ function ReasoningLesson() {
         <p>If generated code must satisfy unit tests, executing those tests in an appropriate controlled environment directly checks the property that matters. Simply asking the model to “think longer” is weaker than a deterministic external test.</p>
         <Callout role="tip" title="Design around observable behavior"><p>Do not assume every reasoning model exposes a full private chain-of-thought. Applications can evaluate final outputs, tool traces, test results, citations, or other permitted observables without depending on hidden internal reasoning text.</p></Callout>
       </section>
+
+      <LLMConceptExpansion topicId="reasoning-models" />
+      <LLMWorkedLab topicId="reasoning-models" />
 
       <Bridge question="More inference-time work can improve some tasks, but it also changes latency and cost. How do production systems make generation efficient enough to serve users?" to="/learn/efficient-llm-serving" label="Efficient LLM Serving" />
 
@@ -239,6 +249,9 @@ function ServingLesson() {
           ]}
         />
       </section>
+
+      <LLMConceptExpansion topicId="efficient-llm-serving" />
+      <LLMWorkedLab topicId="efficient-llm-serving" />
 
       <Bridge question="Serving optimization makes one model endpoint efficient. How do we version prompts, retrieval, models, observability, releases, retries, and rollback as one production LLM application?" to="/learn/llmops" label="LLMOps" />
 
@@ -317,6 +330,9 @@ function LLMOpsLesson() {
           ]}
         />
       </section>
+
+      <LLMConceptExpansion topicId="llmops" />
+      <LLMWorkedLab topicId="llmops" />
 
       <section className="space-y-4">
         <h2>Where the LLM curriculum hands off to Agentic AI</h2>

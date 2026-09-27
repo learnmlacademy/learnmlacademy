@@ -14,7 +14,7 @@ const tones: Record<Tone, string> = {
 };
 
 function Figure({ id, title, caption, children }: { id: LLMVisualId; title: string; caption: string; children: React.ReactNode }) {
-  return <FigureShell figureProps={{ "data-llm-visual": id }} title={title} caption={caption}>{children}</FigureShell>;
+  return <FigureShell className="@container/llm" figureProps={{ "data-llm-visual": id }} title={title} caption={caption}>{children}</FigureShell>;
 }
 
 function Node({ title, detail, tone = "indigo", badge }: { title: string; detail?: string; tone?: Tone; badge?: string }) {
@@ -31,8 +31,8 @@ function Arrow({ label, down = false, tone = "indigo" }: { label?: string; down?
   const color = tone === "rose" ? "text-rose-600" : tone === "emerald" ? "text-emerald-600" : "text-indigo-500";
   return (
     <div className={`flex shrink-0 items-center justify-center ${color}`} aria-hidden="true">
-      <span className={`${down ? "" : "md:hidden"} text-2xl font-black`}>↓</span>
-      {!down && <span className="hidden px-1 text-2xl font-black md:block">→</span>}
+      <span className={`${down ? "" : "@min-[800px]/llm:hidden"} text-2xl font-black`}>↓</span>
+      {!down && <span className="hidden px-1 text-2xl font-black @min-[800px]/llm:block">→</span>}
       {label && <span className="ml-1 text-[10px] font-bold text-slate-500">{label}</span>}
     </div>
   );
@@ -40,7 +40,7 @@ function Arrow({ label, down = false, tone = "indigo" }: { label?: string; down?
 
 function Flow({ nodes }: { nodes: Array<{ title: string; detail?: string; tone?: Tone; badge?: string }> }) {
   return (
-    <div className="flex flex-col items-stretch gap-2 md:flex-row md:items-center">
+    <div className="flex flex-col items-stretch gap-2 @min-[800px]/llm:flex-row @min-[800px]/llm:items-center">
       {nodes.map((node, index) => (
         <React.Fragment key={`${node.title}-${index}`}>
           <Node {...node} />
@@ -95,17 +95,17 @@ function TextToVectors() {
 function ContextBudget() {
   const parts: Array<[string, number, string]> = [["Instructions", 220, "bg-indigo-500"], ["Question", 180, "bg-cyan-500"], ["Evidence", 1100, "bg-emerald-500"], ["Output reserve", 500, "bg-amber-500"]];
   return <Figure id="context-budget" title="Several pieces compete for the same context budget" caption="This developer-chosen 1,600-token toy limit is smaller than the 2,000-token plan, so the request overflows by 400 tokens.">
-    <div className="hidden overflow-hidden rounded-xl border-2 border-slate-300 md:flex" aria-label="Planned context of 2000 tokens">
+    <div className="hidden overflow-hidden rounded-xl border-2 border-slate-300 @min-[800px]/llm:flex" aria-label="Planned context of 2000 tokens">
       {parts.map(([label, count, color]) => <div key={label} className={`${color} flex min-h-24 items-center justify-center p-2 text-center text-xs font-bold text-white`} style={{ width: `${count / 20}%` }}>{label}<br />{count}</div>)}
     </div>
-    <div className="space-y-2 md:hidden">{parts.map(([label, count, color]) => <div key={label} className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-slate-200 p-2"><span className="flex items-center gap-2 text-sm font-bold"><span className={`h-4 w-4 rounded ${color}`} />{label}</span><span className="font-mono text-sm">{count}</span></div>)}</div>
-    <div className="mt-3 grid gap-2 text-center text-xs font-bold sm:grid-cols-3"><span className="rounded-lg bg-slate-100 p-2">Planned: 2,000</span><span className="rounded-lg bg-amber-100 p-2 text-amber-950">Toy limit: 1,600</span><span className="rounded-lg bg-rose-100 p-2 text-rose-950">Overflow: 400</span></div>
+    <div className="space-y-2 @min-[800px]/llm:hidden">{parts.map(([label, count, color]) => <div key={label} className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-slate-200 p-2"><span className="flex items-center gap-2 text-sm font-bold"><span className={`h-4 w-4 rounded ${color}`} />{label}</span><span className="font-mono text-sm">{count}</span></div>)}</div>
+    <div className="mt-3 grid gap-2 text-center text-xs font-bold @min-[600px]/llm:grid-cols-3"><span className="rounded-lg bg-slate-100 p-2">Planned: 2,000</span><span className="rounded-lg bg-amber-100 p-2 text-amber-950">Toy limit: 1,600</span><span className="rounded-lg bg-rose-100 p-2 text-rose-950">Overflow: 400</span></div>
   </Figure>;
 }
 
 function AttentionLookup() {
   return <Figure id="attention-lookup" title="Attention is a learned weighted lookup" caption="Attention weights are learned computations that mix information; they are not a complete explanation of model reasoning.">
-    <div className="grid items-center gap-3 md:grid-cols-[1fr_auto_1.2fr_auto_1fr]">
+    <div className="grid items-center gap-3 @min-[800px]/llm:grid-cols-[1fr_auto_1.2fr_auto_1fr]">
       <Node title="Highlighted token" detail="Query Q: what information is useful here?" tone="indigo" /><Arrow />
       <div className="space-y-2"><Node title="Candidate keys" detail="Q·K scores → softmax" tone="cyan" /><div className="grid grid-cols-2 gap-2"><Node title="0.731 × V₁" detail="V₁=[1,0]" tone="emerald" /><Node title="0.269 × V₂" detail="V₂=[0,2]" tone="amber" /></div></div><Arrow />
       <Node title="Output vector" detail="[0.731, 0.538]" tone="emerald" />
@@ -120,7 +120,7 @@ function TransformerFamilies() {
     { title: "Encoder-decoder", detail: "source ↔ encoder ⇢ decoder → target", footer: "cross-attention joins source and target", tone: "emerald" as Tone },
   ];
   return <Figure id="transformer-families" title="Three Transformer information-flow families" caption="The arrows show which token information is permitted to flow in each architecture family.">
-    <div className="grid gap-3 lg:grid-cols-3">{lanes.map(lane => <div key={lane.title} className={`rounded-xl border-2 p-4 ${tones[lane.tone]}`}><p className="text-center text-sm font-extrabold">{lane.title}</p><div className="my-4 rounded-lg border border-current bg-white p-4 text-center font-mono text-sm font-bold">{lane.detail}</div><p className="text-center text-xs text-slate-600">{lane.footer}</p></div>)}</div>
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-3">{lanes.map(lane => <div key={lane.title} className={`rounded-xl border-2 p-4 ${tones[lane.tone]}`}><p className="text-center text-sm font-extrabold">{lane.title}</p><div className="my-4 rounded-lg border border-current bg-white p-4 text-center font-mono text-sm font-bold">{lane.detail}</div><p className="text-center text-xs text-slate-600">{lane.footer}</p></div>)}</div>
   </Figure>;
 }
 
@@ -129,13 +129,13 @@ function GenerationLoop() {
     <Flow nodes={[
       { title: "Current context", detail: "The model …", tone: "slate" }, { title: "Model logits", detail: "one score per candidate", tone: "indigo" }, { title: "Probabilities", detail: "normalized distribution", tone: "cyan" }, { title: "Decoding rule", detail: "choose or sample", tone: "amber" }, { title: "Selected token", detail: "append and repeat ↺", tone: "emerald" },
     ]} />
-    <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm font-bold text-slate-700 sm:flex-row"><span className="rounded-lg bg-slate-100 p-2">The model</span><span aria-hidden="true">→</span><span className="rounded-lg bg-indigo-50 p-2">The model learns</span><span aria-hidden="true">→</span><span className="rounded-lg bg-emerald-50 p-2">The model learns patterns</span></div>
+    <div className="mt-4 flex flex-col items-center justify-center gap-2 text-sm font-bold text-slate-700 @min-[600px]/llm:flex-row"><span className="rounded-lg bg-slate-100 p-2">The model</span><span aria-hidden="true">→</span><span className="rounded-lg bg-indigo-50 p-2">The model learns</span><span aria-hidden="true">→</span><span className="rounded-lg bg-emerald-50 p-2">The model learns patterns</span></div>
   </Figure>;
 }
 
 function DecodingControls() {
   return <Figure id="decoding-controls" title="Greedy, temperature, top-k and top-p change selection—not knowledge" caption="The bars use one illustrative candidate distribution; k and p are developer-chosen controls rather than universal recommendations.">
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid gap-3 @min-[600px]/llm:grid-cols-2 @min-[1000px]/llm:grid-cols-4">
       <ProbabilityBars title="Greedy / original" values={[["A",55,"indigo"],["B",25,"cyan"],["C",13,"emerald"],["D",7,"amber"]]} note="select highest: A" />
       <ProbabilityBars title="Higher temperature" values={[["A",40,"indigo"],["B",28,"cyan"],["C",19,"emerald"],["D",13,"amber"]]} note="flatter distribution" />
       <ProbabilityBars title="Top-k (k=2 toy)" values={[["A",69,"indigo"],["B",31,"cyan"],["C",0,"emerald"],["D",0,"amber"]]} note="exactly 2 retained" />
@@ -159,7 +159,7 @@ function DistributedStrategies() {
     ["Pipeline parallel", "GPU A: layers 1–N → GPU B: later layers", "layer groups are split"],
   ];
   return <Figure id="distributed-strategies" title="Data parallelism and model sharding solve different constraints" caption="This is a simplified conceptual comparison; real training systems can combine several strategies.">
-    <div className="grid gap-3 md:grid-cols-2">{items.map(([title, diagram, footer],i)=><div key={title} className={`rounded-xl border-2 p-4 ${tones[i===0?"cyan":i===1?"indigo":i===2?"amber":"emerald"]}`}><p className="font-extrabold">{title}</p><div className="my-3 whitespace-pre-line rounded-lg border border-current bg-white p-3 text-center font-mono text-xs font-bold leading-6">{diagram}</div><p className="text-xs text-slate-600">{footer}</p></div>)}</div>
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-2">{items.map(([title, diagram, footer],i)=><div key={title} className={`rounded-xl border-2 p-4 ${tones[i===0?"cyan":i===1?"indigo":i===2?"amber":"emerald"]}`}><p className="font-extrabold">{title}</p><div className="my-3 whitespace-pre-line rounded-lg border border-current bg-white p-3 text-center font-mono text-xs font-bold leading-6">{diagram}</div><p className="text-xs text-slate-600">{footer}</p></div>)}</div>
   </Figure>;
 }
 
@@ -173,7 +173,7 @@ function PostTrainingAlignment() {
 
 function LoraPath() {
   return <Figure id="lora-path" title="LoRA learns a small low-rank update beside a frozen matrix" caption="The frozen base path and trainable adapter path are added together; matching dimensions are required.">
-    <div className="grid gap-3 md:grid-cols-[0.7fr_auto_1.6fr_auto_0.8fr] md:items-center"><Node title="Input x" tone="slate" /><Arrow /><div className="space-y-3"><Node title="Frozen W path" detail="base matrix does not update" tone="slate" badge="fixed" /><div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center"><Node title="A: r × dᵢₙ" detail="trainable" tone="cyan" /><Arrow /><Node title="B: dₒᵤₜ × r" detail="scaled ΔW = BA" tone="indigo" /></div></div><Arrow /><Node title="Sum → output" detail="Wx + scaled BAx" tone="emerald" /></div>
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-[0.7fr_auto_1.6fr_auto_0.8fr] @min-[800px]/llm:items-center"><Node title="Input x" tone="slate" /><Arrow /><div className="space-y-3"><Node title="Frozen W path" detail="base matrix does not update" tone="slate" badge="fixed" /><div className="flex flex-col items-stretch gap-2 @min-[600px]/llm:flex-row @min-[600px]/llm:items-center"><Node title="A: r × dᵢₙ" detail="trainable" tone="cyan" /><Arrow /><Node title="B: dₒᵤₜ × r" detail="scaled ΔW = BA" tone="indigo" /></div></div><Arrow /><Node title="Sum → output" detail="Wx + scaled BAx" tone="emerald" /></div>
     <p className="mt-4 rounded-lg bg-indigo-50 p-3 text-center text-sm font-bold text-indigo-950">512×512 full matrix: 262,144 parameters · rank-8 A+B: 4,096 + 4,096 = 8,192 trainable parameters</p>
   </Figure>;
 }
@@ -189,7 +189,7 @@ function PrecisionMemory() {
   const bars = [["16-bit",100,"≈ 2 GB","bg-indigo-500"],["8-bit",50,"≈ 1 GB","bg-cyan-500"],["4-bit",25,"≈ 0.5 GB","bg-emerald-500"]] as const;
   return <Figure id="precision-memory" title="Lower bit width can reduce raw model storage—but runtime memory is larger" caption="Toy estimate for 1B parameters. Speedup still depends on kernels, hardware, runtime, and workload.">
     <div className="space-y-3">{bars.map(([label,width,value,color])=><div key={label} className="grid grid-cols-[3.5rem_1fr_4rem] items-center gap-3 text-xs font-bold"><span>{label}</span><span className="h-7 rounded bg-slate-100"><span className={`flex h-7 items-center justify-center rounded text-white ${color}`} style={{width:`${width}%`}}>{width}%</span></span><span>{value}</span></div>)}</div>
-    <div className="mt-4 grid gap-2 text-center text-xs font-semibold text-slate-700 sm:grid-cols-4"><span className="rounded-lg border p-2">+ KV cache</span><span className="rounded-lg border p-2">+ buffers</span><span className="rounded-lg border p-2">+ quantization metadata</span><span className="rounded-lg border p-2">+ runtime overhead</span></div>
+    <div className="mt-4 grid gap-2 text-center text-xs font-semibold text-slate-700 @min-[600px]/llm:grid-cols-4"><span className="rounded-lg border p-2">+ KV cache</span><span className="rounded-lg border p-2">+ buffers</span><span className="rounded-lg border p-2">+ quantization metadata</span><span className="rounded-lg border p-2">+ runtime overhead</span></div>
   </Figure>;
 }
 
@@ -202,19 +202,19 @@ function ToolBoundary() {
 
 function SemanticSearch() {
   return <Figure id="semantic-search" title="Semantic search uses one compatible embedding space for passages and the query" caption="The query can retrieve a paraphrase without exact word overlap; ranking still requires relevance, freshness, and authorization checks.">
-    <div className="grid gap-3 lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:items-center"><div className="space-y-2"><Node title="“Laptop won't start”" tone="slate" /><Node title="“Computer fails to power on”" tone="slate" /><Node title="“Change screen brightness”" tone="slate" /><p className="text-center text-xs font-bold text-slate-500">corpus passages</p></div><Arrow /><Node title="Compatible embedding model" detail="corpus and query → learned vectors" tone="cyan" badge="same space" /><Arrow /><div className="space-y-2"><Node title="Query" detail="“Why won't my computer turn on?”" tone="emerald" /><ol className="rounded-lg bg-emerald-50 p-3 text-sm text-slate-700"><li><b>1. B</b> — closest meaning</li><li><b>2. A</b> — related</li><li><b>3. C</b> — weaker</li></ol></div></div>
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-[1fr_auto_1fr_auto_1fr] @min-[800px]/llm:items-center"><div className="space-y-2"><Node title="“Laptop won't start”" tone="slate" /><Node title="“Computer fails to power on”" tone="slate" /><Node title="“Change screen brightness”" tone="slate" /><p className="text-center text-xs font-bold text-slate-500">corpus passages</p></div><Arrow /><Node title="Compatible embedding model" detail="corpus and query → learned vectors" tone="cyan" badge="same space" /><Arrow /><div className="space-y-2"><Node title="Query" detail="“Why won't my computer turn on?”" tone="emerald" /><ol className="rounded-lg bg-emerald-50 p-3 text-sm text-slate-700"><li><b>1. B</b> — closest meaning</li><li><b>2. A</b> — related</li><li><b>3. C</b> — weaker</li></ol></div></div>
   </Figure>;
 }
 
 function VectorRecord() {
   return <Figure id="vector-record" title="A vector database stores more than the vector" caption="The application applies authorization before returning records; a topic filter alone is not an access-control boundary.">
-    <div className="grid gap-4 lg:grid-cols-[0.7fr_auto_1.5fr_auto_0.8fr] lg:items-center"><Node title="Embedding model" detail="source text → vector" tone="cyan" /><Arrow /><div className="overflow-hidden rounded-xl border-2 border-indigo-300"><p className="bg-indigo-600 p-2 text-center text-sm font-extrabold text-white">Vector record</p>{[["ID","chunk-204"],["Source","text/reference"],["Embedding","[0.12, −0.08, …]"],["Metadata","product · language · tenant/access · embedding_version"]].map(([k,v])=><div key={k} className="grid grid-cols-[6rem_1fr] border-t border-indigo-200 bg-indigo-50 p-2 text-xs"><b>{k}</b><span>{v}</span></div>)}</div><Arrow /><Node title="Authorized query" detail="identity + scope surround retrieval" tone="emerald" badge="shield" /></div>
+    <div className="grid gap-4 @min-[800px]/llm:grid-cols-[0.7fr_auto_1.5fr_auto_0.8fr] @min-[800px]/llm:items-center"><Node title="Embedding model" detail="source text → vector" tone="cyan" /><Arrow /><div className="overflow-hidden rounded-xl border-2 border-indigo-300"><p className="bg-indigo-600 p-2 text-center text-sm font-extrabold text-white">Vector record</p>{[["ID","chunk-204"],["Source","text/reference"],["Embedding","[0.12, −0.08, …]"],["Metadata","product · language · tenant/access · embedding_version"]].map(([k,v])=><div key={k} className="grid grid-cols-[6rem_1fr] border-t border-indigo-200 bg-indigo-50 p-2 text-xs"><b>{k}</b><span>{v}</span></div>)}</div><Arrow /><Node title="Authorized query" detail="identity + scope surround retrieval" tone="emerald" badge="shield" /></div>
   </Figure>;
 }
 
 function ExactVsANN() {
   return <Figure id="exact-vs-ann" title="ANN reduces search work by accepting a recall trade-off" caption="Exact and approximate approaches should be compared on both latency and recall@k for the real collection.">
-    <div className="grid gap-4 md:grid-cols-2"><div className="rounded-xl border-2 border-cyan-300 bg-cyan-50 p-4"><p className="font-extrabold text-cyan-950">Exact scan</p><div className="my-3 text-center font-bold text-cyan-700" aria-hidden="true">query → ● ● ● ● ● → exact nearest</div><p className="text-xs text-slate-600">Compare every eligible vector. Simple and exact; often sufficient when the collection is small.</p></div><div className="rounded-xl border-2 border-indigo-300 bg-indigo-50 p-4"><p className="font-extrabold text-indigo-950">ANN index</p><div className="my-3 text-center font-bold text-indigo-700" aria-hidden="true">query → ●—●—● ⇢ candidate region</div><p className="text-xs text-slate-600">Navigate an HNSW-like graph or IVF-like cluster region. Fewer comparisons; some true neighbours may be missed.</p></div></div>
+    <div className="grid gap-4 @min-[800px]/llm:grid-cols-2"><div className="rounded-xl border-2 border-cyan-300 bg-cyan-50 p-4"><p className="font-extrabold text-cyan-950">Exact scan</p><div className="my-3 text-center font-bold text-cyan-700" aria-hidden="true">query → ● ● ● ● ● → exact nearest</div><p className="text-xs text-slate-600">Compare every eligible vector. Simple and exact; often sufficient when the collection is small.</p></div><div className="rounded-xl border-2 border-indigo-300 bg-indigo-50 p-4"><p className="font-extrabold text-indigo-950">ANN index</p><div className="my-3 text-center font-bold text-indigo-700" aria-hidden="true">query → ●—●—● ⇢ candidate region</div><p className="text-xs text-slate-600">Navigate an HNSW-like graph or IVF-like cluster region. Fewer comparisons; some true neighbours may be missed.</p></div></div>
     <p className="mt-3 rounded-lg bg-slate-900 p-2 text-center text-sm font-bold text-white">Measure latency AND recall@k</p>
   </Figure>;
 }
@@ -226,8 +226,8 @@ function RAGTwoPhases() {
 }
 
 function RAGEvidenceTrace() {
-  return <Figure id="rag-evidence-trace" title="RAG evidence trace: a citation must remain connected to accepted evidence" caption="The similar-sounding travel chunk and the wrong-region policy are rejected. If CH-17 is missing, the correct behavior is to report insufficient evidence rather than invent a number.">
-    <div className="grid gap-3 lg:grid-cols-[0.8fr_auto_1.6fr_auto_1.1fr] lg:items-center">
+  return <Figure id="rag-evidence-trace" title="RAG evidence trace: a citation must remain connected to accepted evidence" caption="The similar-sounding meal-allowance chunk and the wrong-region policy are rejected. If CH-17 is missing, the correct behavior is to report insufficient evidence rather than invent a number.">
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-[0.8fr_auto_1.6fr_auto_1.1fr] @min-[800px]/llm:items-center">
       <Node title="User query" detail="How many leave days can an India employee carry forward?" tone="slate" />
       <Arrow />
       <div className="space-y-2">
@@ -264,14 +264,14 @@ function ChunkingRetrievalTradeoff() {
     { title: "Too large", sample: "Leave + payroll + travel + expenses · 4 pages", consequence: "Useful text is diluted and consumes more context", tone: "amber" as Tone },
   ];
   return <Figure id="chunking-retrieval-tradeoff" title="Chunk boundaries change what retrieval can prove" caption="Chunk size and overlap are evaluation choices. The useful unit preserves the answer together with its scope; overlap can rescue boundary text but duplicates index and context content.">
-    <div className="grid gap-3 md:grid-cols-3">
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-3">
       {choices.map((choice) => <div key={choice.title} className={`rounded-xl border-2 p-4 ${tones[choice.tone]}`}>
         <p className="text-center text-sm font-extrabold">{choice.title}</p>
         <div className="my-3 rounded-lg border border-current bg-white p-3 text-center text-xs font-bold leading-relaxed">{choice.sample}</div>
         <p className="text-xs leading-relaxed text-slate-600">{choice.consequence}</p>
       </div>)}
     </div>
-    <div className="mt-4 grid gap-2 text-center text-xs font-bold sm:grid-cols-3">
+    <div className="mt-4 grid gap-2 text-center text-xs font-bold @min-[600px]/llm:grid-cols-3">
       <span className="rounded-lg bg-rose-100 p-2 text-rose-950">precision may rise · completeness falls</span>
       <span className="rounded-lg bg-emerald-100 p-2 text-emerald-950">balanced evidence unit</span>
       <span className="rounded-lg bg-amber-100 p-2 text-amber-950">surrounding context rises · noise/cost rise</span>
@@ -282,13 +282,13 @@ function ChunkingRetrievalTradeoff() {
 function EvaluationGates() {
   return <Figure id="evaluation-gates" title="The best model is the best eligible fit for the use case" caption="Hard requirements eliminate ineligible candidates before softer quality, cost, throughput, and convenience trade-offs are ranked.">
     <Flow nodes={[{title:"User job + failure cost",tone:"slate"},{title:"Fixed evaluation set",tone:"cyan"},{title:"Hard gates",detail:"license · residency · safety · p95 · schema/tools",tone:"rose"},{title:"Eligible candidates",detail:"only gate passers",tone:"amber"},{title:"Soft ranking",detail:"quality · cost · throughput · error slices",tone:"emerald"}]} />
-    <div className="mt-4 grid gap-3 sm:grid-cols-2"><Node title="Candidate A · ineligible" detail="quality 4.7 · p95 3.2s · structure 99.5%; fails p95≤2s" tone="rose" /><Node title="Candidate B · eligible" detail="quality 4.3 · p95 1.6s · structure 99.2%; passes all gates" tone="emerald" /></div>
+    <div className="mt-4 grid gap-3 @min-[600px]/llm:grid-cols-2"><Node title="Candidate A · ineligible" detail="quality 4.7 · p95 3.2s · structure 99.5%; fails p95≤2s" tone="rose" /><Node title="Candidate B · eligible" detail="quality 4.3 · p95 1.6s · structure 99.2%; passes all gates" tone="emerald" /></div>
   </Figure>;
 }
 
 function Guardrails() {
   return <Figure id="guardrails" title="No single guardrail owns the whole safety problem" caption="Untrusted retrieved text cannot grant tool permissions or data authority; independent controls operate at each boundary.">
-    <div className="rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50/40 p-4"><div className="mb-3 grid gap-2 text-center text-xs font-bold sm:grid-cols-2"><span className="rounded-lg bg-rose-100 p-2 text-rose-900">Before release: red-team + evaluation</span><span className="rounded-lg bg-amber-100 p-2 text-amber-900">After release: monitoring + incidents</span></div><Flow nodes={[{title:"Input/user",tone:"slate"},{title:"Input validation",detail:"classify data + trust",tone:"cyan"},{title:"LLM",detail:"trusted/untrusted context boundary",tone:"indigo"},{title:"Output checks",detail:"schema · evidence · policy",tone:"amber"},{title:"Tool authorization",detail:"least privilege",tone:"rose"},{title:"User / human review",tone:"emerald"}]} /></div>
+    <div className="rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50/40 p-4"><div className="mb-3 grid gap-2 text-center text-xs font-bold @min-[600px]/llm:grid-cols-2"><span className="rounded-lg bg-rose-100 p-2 text-rose-900">Before release: red-team + evaluation</span><span className="rounded-lg bg-amber-100 p-2 text-amber-900">After release: monitoring + incidents</span></div><Flow nodes={[{title:"Input/user",tone:"slate"},{title:"Input validation",detail:"classify data + trust",tone:"cyan"},{title:"LLM",detail:"trusted/untrusted context boundary",tone:"indigo"},{title:"Output checks",detail:"schema · evidence · policy",tone:"amber"},{title:"Tool authorization",detail:"least privilege",tone:"rose"},{title:"User / human review",tone:"emerald"}]} /></div>
   </Figure>;
 }
 
@@ -297,14 +297,14 @@ function ClaimEvidenceDecisionMap() {
     ["C1 · up to 5 days [S1]", "S1 says up to 5", "SUPPORTED", "State + cite", "emerald"],
     ["C2 · all 5 guaranteed [S1]", "S1 says may / up to", "PARTIAL", "Qualify", "amber"],
     ["C3 · valid to June 30 [S1]", "S1 says March 31", "CONTRADICTED", "Correct", "rose"],
-    ["C4 · office closes Friday [S2]", "S2 is allowance policy", "UNSUPPORTED", "Abstain / omit", "rose"],
+    ["C4 · office closes Friday [S1]", "S1 has no office-closing information", "UNSUPPORTED", "Abstain / omit", "rose"],
   ] as const;
-  return <Figure id="claim-evidence-decision-map" title="A real citation can still fail to support its claim" caption="Citation validity is checked claim by claim. Merely naming S1 or S2 is not enough: the cited text must actually support the attached statement.">
+  return <Figure id="claim-evidence-decision-map" title="A real citation can still fail to support its claim" caption="Citation validity is checked claim by claim. Merely naming S1 is not enough: the cited text must actually support the attached statement.">
     <div className="space-y-2">
-      <div className="hidden grid-cols-[1.25fr_1.25fr_0.8fr_0.8fr] gap-2 px-2 text-[10px] font-extrabold uppercase tracking-wide text-slate-500 sm:grid">
+      <div className="hidden grid-cols-[1.25fr_1.25fr_0.8fr_0.8fr] gap-2 px-2 text-[10px] font-extrabold uppercase tracking-wide text-slate-500 @min-[600px]/llm:grid">
         <span>Answer claim</span><span>Cited evidence</span><span>Support</span><span>Permitted action</span>
       </div>
-      {rows.map(([claim, evidence, status, action, tone]) => <div key={claim} className="grid gap-2 rounded-xl border border-slate-200 bg-white p-3 sm:grid-cols-[1.25fr_1.25fr_0.8fr_0.8fr] sm:items-center">
+      {rows.map(([claim, evidence, status, action, tone]) => <div key={claim} className="grid gap-2 rounded-xl border border-slate-200 bg-white p-3 @min-[600px]/llm:grid-cols-[1.25fr_1.25fr_0.8fr_0.8fr] @min-[600px]/llm:items-center">
         <p className="text-xs font-bold text-slate-900">{claim}</p>
         <p className="text-xs text-slate-600">{evidence}</p>
         <span className={`rounded-full border px-2 py-1 text-center text-[10px] font-extrabold ${tones[tone as Tone]}`}>{status}</span>
@@ -316,19 +316,19 @@ function ClaimEvidenceDecisionMap() {
 
 function TestTimeCompute() {
   return <Figure id="test-time-compute" title="Extra inference effort is a budget—not a correctness guarantee" caption="Commercial systems may implement these ideas differently; hidden internal reasoning is not assumed visible.">
-    <div className="grid gap-3 lg:grid-cols-[auto_1fr_auto] lg:items-center"><div className="rounded-lg bg-rose-50 p-3 text-center text-xs font-bold text-rose-900 lg:[writing-mode:vertical-rl]">latency / cost ↑</div><div className="grid gap-2 sm:grid-cols-5">{[["1","Single fast attempt"],["2","Longer deliberation"],["3","Multiple candidates"],["4","Vote / consensus"],["5","Verifier-guided adaptive search"]].map(([n,t],i)=><div key={n} className={`rounded-xl border-2 p-3 text-center ${tones[i<2?"cyan":i<4?"indigo":"emerald"]}`}><span className="mx-auto mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">{n}</span><p className="text-xs font-extrabold">{t}</p></div>)}</div><div className="rounded-lg bg-emerald-50 p-3 text-center text-xs font-bold text-emerald-900 lg:[writing-mode:vertical-rl]">quality potential: task-dependent, not guaranteed ↑</div></div>
+    <div className="grid gap-3 @min-[800px]/llm:grid-cols-[auto_1fr_auto] @min-[800px]/llm:items-center"><div className="rounded-lg bg-rose-50 p-3 text-center text-xs font-bold text-rose-900 @min-[800px]/llm:[writing-mode:vertical-rl]">latency / cost ↑</div><div className="grid gap-2 @min-[600px]/llm:grid-cols-5">{[["1","Single fast attempt"],["2","Longer deliberation"],["3","Multiple candidates"],["4","Vote / consensus"],["5","Verifier-guided adaptive search"]].map(([n,t],i)=><div key={n} className={`rounded-xl border-2 p-3 text-center ${tones[i<2?"cyan":i<4?"indigo":"emerald"]}`}><span className="mx-auto mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-slate-900 text-xs font-bold text-white">{n}</span><p className="text-xs font-extrabold">{t}</p></div>)}</div><div className="rounded-lg bg-emerald-50 p-3 text-center text-xs font-bold text-emerald-900 @min-[800px]/llm:[writing-mode:vertical-rl]">quality potential: task-dependent, not guaranteed ↑</div></div>
   </Figure>;
 }
 
 function LLMOpsLifecycle() {
   return <Figure id="llmops-lifecycle" title="A production answer is produced by a versioned system, not only a model" caption="Release controls and monitoring surround the request path; incidents become regression cases and bounded workflows lead into Agentic AI.">
-    <div className="rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50/40 p-4"><Flow nodes={[{title:"Authenticate + validate",tone:"slate"},{title:"Prompt + retrieval/tools",tone:"cyan"},{title:"Model",tone:"indigo"},{title:"Structured output",tone:"amber"},{title:"Evidence · business · safety checks",tone:"rose"},{title:"User / action",tone:"emerald"}]} /><div className="mt-4 grid gap-2 text-center text-[11px] font-bold text-slate-700 sm:grid-cols-2 lg:grid-cols-4"><span className="rounded-lg border bg-white p-2">version model · prompt · embeddings · index · schema</span><span className="rounded-lg border bg-white p-2">offline regression eval + online monitoring</span><span className="rounded-lg border bg-white p-2">rate · queue · timeout · retry · idempotency</span><span className="rounded-lg border bg-white p-2">shadow/canary · stop rules · rollback · incident feedback</span></div></div>
+    <div className="rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50/40 p-4"><Flow nodes={[{title:"Authenticate + validate",tone:"slate"},{title:"Prompt + retrieval/tools",tone:"cyan"},{title:"Model",tone:"indigo"},{title:"Structured output",tone:"amber"},{title:"Evidence · business · safety checks",tone:"rose"},{title:"User / action",tone:"emerald"}]} /><div className="mt-4 grid gap-2 text-center text-[11px] font-bold text-slate-700 @min-[600px]/llm:grid-cols-2 @min-[800px]/llm:grid-cols-4"><span className="rounded-lg border bg-white p-2">version model · prompt · embeddings · index · schema</span><span className="rounded-lg border bg-white p-2">offline regression eval + online monitoring</span><span className="rounded-lg border bg-white p-2">rate · queue · timeout · retry · idempotency</span><span className="rounded-lg border bg-white p-2">shadow/canary · stop rules · rollback · incident feedback</span></div></div>
     <p className="mt-3 rounded-lg bg-emerald-100 p-3 text-center text-sm font-bold text-emerald-950">bounded LLM workflow <span aria-hidden="true">→</span> Agentic AI next</p>
   </Figure>;
 }
 
 function CanaryReleaseRollback() {
-  return <Figure id="canary-release-rollback" title="A better average cannot override a hard release gate" caption="The candidate improves latency and cost, passes offline evaluation, and enters a 5% canary. One critical safety failure crosses the zero-tolerance stop condition, so traffic returns to the baseline.">
+  return <Figure id="canary-release-rollback" title="A better average cannot override a hard release gate" caption="These rollout metrics are illustrative, not program benchmarks. A candidate enters a 5% canary; one critical safety failure crosses the zero-tolerance stop condition despite improved latency and cost. The Python example below isolates that rollback decision.">
     <Flow nodes={[
       { title: "Candidate manifest", detail: "model · prompt · index · schema versions", tone: "slate" },
       { title: "Offline gates", detail: "quality · schema · safety · p95", tone: "cyan" },
@@ -336,7 +336,7 @@ function CanaryReleaseRollback() {
       { title: "Stop condition", detail: "critical safety failures > 0", tone: "rose" },
       { title: "Rollback", detail: "restore baseline + record regression", tone: "amber" },
     ]} />
-    <div className="mt-4 grid gap-2 sm:grid-cols-3">
+    <div className="mt-4 grid gap-2 @min-[600px]/llm:grid-cols-3">
       <Node title="p95: 1.8 → 1.6 s" detail="11.1% faster" tone="emerald" />
       <Node title="cost/success: $0.024 → $0.020" detail="16.7% lower" tone="emerald" />
       <Node title="critical safety: 0 → 1" detail="hard gate fails" tone="rose" />

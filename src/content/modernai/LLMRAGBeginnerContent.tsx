@@ -1,3 +1,4 @@
+import { LLMConceptExpansion, LLMWorkedLab } from "./LLMTutorialExpansion";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
@@ -111,6 +112,9 @@ function RAGLesson() {
         <Callout role="warning" title="RAG reduces one class of risk; it does not guarantee truth"><p>Retrieval can provide current or private evidence, but the wrong passage may be retrieved, old data may be indexed, or the generator may still misuse the evidence. Each stage needs evaluation.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="rag" />
+      <LLMWorkedLab topicId="rag" />
+
       <Bridge question="The RAG idea is simple: retrieve relevant evidence. But how can retrieval find a passage even when the user's wording is different from the document?" to="/learn/semantic-search-embeddings" label="Semantic Search with Embeddings" />
 
       <SummaryCard items={[
@@ -190,6 +194,9 @@ function SemanticSearchLesson() {
         />
       </section>
 
+      <LLMConceptExpansion topicId="semantic-search-embeddings" />
+      <LLMWorkedLab topicId="semantic-search-embeddings" />
+
       <Bridge question="We can turn millions of passages into vectors. Where do we store those vectors, metadata, and permissions—and how do we search them efficiently?" to="/learn/vector-databases" label="Vector Databases" />
 
       <SummaryCard items={[
@@ -252,6 +259,9 @@ function VectorDatabaseLesson() {
         <p>No. If a team already uses PostgreSQL, has a moderate vector workload, and needs relational joins or transactional metadata, a vector extension in the existing database can be a sensible starting point. Specialized infrastructure becomes useful when measured scale, latency, indexing, or operational requirements justify it.</p>
       </section>
 
+      <LLMConceptExpansion topicId="vector-databases" />
+      <LLMWorkedLab topicId="vector-databases" />
+
       <Bridge question="The vector store can return candidates. How do chunk boundaries, hybrid search, reranking, and retrieval metrics improve what reaches the LLM?" to="/learn/advanced-rag" label="Advanced RAG" />
 
       <SummaryCard items={[
@@ -311,6 +321,9 @@ function AdvancedRAGLesson() {
         <FormulaBlock expression="Recall@3 = relevant chunks retrieved in top 3 / all known relevant chunks = 1 / 2 = 0.50" explanation="Recall@k measures whether retrieval found the known relevant items. It does not prove the final generated answer is correct." />
         <p>If Recall@3 improves from 0.50 to 1.00 for that case, retrieval found both labelled relevant chunks in the top 3. Generation, citation support, latency, and safety still need separate evaluation.</p>
       </section>
+
+      <LLMConceptExpansion topicId="advanced-rag" />
+      <LLMWorkedLab topicId="advanced-rag" />
 
       <Bridge question="We can now measure retrieval quality. How do we evaluate the whole LLM application—including answer quality, latency, structure, safety, and product constraints?" to="/learn/llm-evaluation" label="LLM Evaluation" />
 

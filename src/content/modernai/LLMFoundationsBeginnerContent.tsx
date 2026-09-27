@@ -1,3 +1,4 @@
+import { LLMConceptExpansion, LLMWorkedLab } from "./LLMTutorialExpansion";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock } from "../../components/content/CodeBlock";
@@ -159,6 +160,9 @@ function TokenizationEmbeddingsLesson() {
         />
       </section>
 
+      <LLMConceptExpansion topicId="tokenization-embeddings" />
+      <LLMWorkedLab topicId="tokenization-embeddings" />
+
       <Bridge question="Now the model has numerical token representations. How can each token decide which other tokens matter?" to="/learn/transformers-attention" label="Transformer Architecture & Attention" />
 
       <SummaryCard items={[
@@ -271,6 +275,9 @@ function TransformersAttentionLesson() {
         <Callout role="mistake" title="Causal masking matters"><p>During decoder training, allowing a position to see the correct future token would leak the answer. A causal mask blocks that future visibility.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="transformers-attention" />
+      <LLMWorkedLab topicId="transformers-attention" />
+
       <Bridge question="The Transformer can now produce scores for possible next tokens. How does the system choose which token to actually generate?" to="/learn/text-generation-decoding" label="Text Generation & Decoding" />
 
       <SummaryCard items={[
@@ -349,6 +356,9 @@ function DecodingLesson() {
         />
         <Callout role="warning" title="Decoding does not create truth"><p>Changing temperature, top-k, or top-p changes how a model chooses among its predicted continuations. It does not supply missing evidence or guarantee correctness.</p></Callout>
       </section>
+
+      <LLMConceptExpansion topicId="text-generation-decoding" />
+      <LLMWorkedLab topicId="text-generation-decoding" />
 
       <Bridge question="We know how the model turns its internal scores into text. How should we write the request we give it so the task is clear and testable?" to="/learn/prompt-engineering" label="Prompt Engineering" />
 
@@ -435,6 +445,9 @@ function PromptEngineeringLesson() {
         <p>If two instructions conflict—such as “return only JSON” and “explain your reasoning in a paragraph”—first remove or reconcile the conflict and retest the same cases. Adding unrelated examples or immediately fine-tuning the model hides the real problem.</p>
         <p>A good prompt can improve how clearly the model understands the task. It cannot magically give the model a current private policy, a missing database record, or guaranteed facts.</p>
       </section>
+
+      <LLMConceptExpansion topicId="prompt-engineering" />
+      <LLMWorkedLab topicId="prompt-engineering" />
 
       <Bridge question="Prompting changes the request but not the model's learned parameters. How were those parameters learned in the first place?" to="/learn/pretraining-finetuning" label="Pretraining & Fine-Tuning" />
 
@@ -529,6 +542,9 @@ function PretrainingFinetuningLesson() {
         <Callout role="info" title="Why multiple GPUs may help"><p>If the complete model fits on each GPU and the goal is more batch throughput, <strong>data parallelism</strong> is a natural starting idea: replicas process different batches, then synchronize gradients. Other parallel strategies solve different constraints.</p></Callout>
       </section>
 
+      <LLMConceptExpansion topicId="pretraining-finetuning" />
+      <LLMWorkedLab topicId="pretraining-finetuning" />
+
       <Bridge question="Pretraining creates a broad language model. How do we teach it to follow instructions, reflect preferences, and specialize efficiently?" to="/learn/instruction-tuning-rlhf" label="SFT, RLHF & LoRA" />
 
       <SummaryCard items={[
@@ -619,6 +635,9 @@ function AlignmentLesson() {
         />
         <p>If the model already follows the desired style but simply lacks current private information, full fine-tuning is usually the wrong first tool. That is the problem RAG is designed to address.</p>
       </section>
+
+      <LLMConceptExpansion topicId="instruction-tuning-rlhf" />
+      <LLMWorkedLab topicId="instruction-tuning-rlhf" />
 
       <Bridge question="Fine-tuning can change behavior. But what if the model's behavior is fine and the missing piece is today's private or current information?" to="/learn/rag" label="Retrieval-Augmented Generation (RAG)" />
 

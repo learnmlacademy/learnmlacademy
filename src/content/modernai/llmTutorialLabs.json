@@ -1,0 +1,1027 @@
+{
+  "llm-intro": {
+    "title": "From Repeated Phrases to a Language Model",
+    "paragraphs": [
+      "Suppose a help desk has three short training messages: “please send receipt”, “please send details”, and “please send receipt”. A simple language model can count what follows “send”. It has seen receipt twice and details once, so its estimated probabilities are 2/3 and 1/3. No one wrote a rule saying receipt must follow send; the counts came from the examples.",
+      "This count-based model makes the idea of learning visible, but it only remembers one preceding word. It cannot distinguish “please send” from “do not send” if both end at send. A modern neural language model uses learned numerical representations and a much richer permitted context. The same broad job remains: assign probabilities to possible continuations.",
+      "Training and generation are different activities. Counting the training messages creates our model. Looking up those counts to choose a continuation uses the model without changing it. Adding a new message to the current prompt would not automatically update the saved counts. This distinction is essential when you later compare prompting, retrieval, and fine-tuning."
+    ],
+    "terms": [
+      [
+        "Corpus",
+        "The collection of training examples; here, three invented messages."
+      ],
+      [
+        "Bigram",
+        "A pair of adjacent tokens; this model conditions on one preceding token."
+      ],
+      [
+        "Conditional probability",
+        "A probability that depends on given context: receipt after send."
+      ],
+      [
+        "Parameters",
+        "Stored quantities used to predict; counts here, learned weights in a neural LLM."
+      ]
+    ],
+    "formula": "P(next | send) = count(send, next) / Σᵥ count(send, v)",
+    "formulaExplanation": "P means probability. The vertical bar means “given”. The sum in the denominator adds the counts of all continuations v observed after send. This is an unsmoothed empirical estimate, not a measure of factual truth.",
+    "steps": [
+      "Count the three transitions after send: receipt, details, receipt.",
+      "The total is 3. Divide receipt's count 2 by 3 to get 0.667; divide details' count 1 by 3 to get 0.333.",
+      "Choose receipt because it has the largest count, then inspect what follows receipt.",
+      "The training boundary marker <end> stops the loop. It is not printed as part of the answer."
+    ],
+    "labTitle": "Python: Train and Use a Tiny Count-Based Language Model",
+    "setup": "Run with Python 3; only the standard library is used. This is a real bigram model on three invented sentences, not a miniature Transformer or a useful general assistant.",
+    "code": "from collections import Counter, defaultdict\n\nmessages = [\n    \"please send receipt\",\n    \"please send details\",\n    \"please send receipt\",\n]\ncounts = defaultdict(Counter)\nfor message in messages:\n    tokens = [\"<start>\"] + message.split() + [\"<end>\"]\n    for previous, following in zip(tokens, tokens[1:]):\n        counts[previous][following] += 1\n\ntotal = sum(counts[\"send\"].values())\nfor token, count in counts[\"send\"].items():\n    print(f\"P({token} | send) = {count / total:.3f}\")\n\ncontext, generated = \"send\", [\"send\"]\nfor _ in range(6):\n    if context not in counts:\n        break\n    token = counts[context].most_common(1)[0][0]\n    if token == \"<end>\":\n        break\n    generated.append(token)\n    context = token\n\nprint(\"Continuation:\", \" \".join(generated))\nprint(\"Knows what follows refund:\", \"refund\" in counts)",
+    "notes": [
+      "zip(tokens, tokens[1:]) aligns every token with the token immediately after it; Counter records frequency.",
+      "The generation loop reads the learned table but never increments a count. The six-step limit is a developer-chosen safety bound.",
+      "False for refund exposes a coverage failure. This unsmoothed model cannot estimate an unseen context; it should not pretend that it can."
+    ],
+    "meaning": "The program produces a plausible continuation from observed frequency, not from a verified understanding of receipts. Larger neural models generalize beyond exact stored pairs, but fluent continuation still needs evaluation and evidence when correctness matters.",
+    "choices": [
+      [
+        "Need to illustrate next-token prediction",
+        "Use a tiny count model",
+        "Its limited context makes failure easy to inspect."
+      ],
+      [
+        "Need flexible text assistance",
+        "Use a suitable pretrained model",
+        "Evaluate it on your task; size alone is not enough."
+      ],
+      [
+        "Need the exact status of a receipt",
+        "Query an authorized record",
+        "A likely sentence is not a database lookup."
+      ]
+    ],
+    "limit": "The whitespace split is chosen only for this toy model. Production LLMs use their own tokenizers. Unseen transitions, grammar, long-range meaning, and factual accuracy are not solved by these counts.",
+    "experiment": "Add two copies of “please send details”. What changes?",
+    "answer": "Details now occurs 3 times after send and receipt 2 times. The probabilities become 0.600 and 0.400, and greedy selection changes to details.",
+    "output": "P(receipt | send) = 0.667\r\nP(details | send) = 0.333\r\nContinuation: send receipt\r\nKnows what follows refund: False"
+  },
+  "tokenization-embeddings": {
+    "title": "Why Subword Pieces Help with Unfamiliar Words",
+    "paragraphs": [
+      "A vocabulary containing every complete word would need separate entries for low, lower, lowest, and many names or spelling variants. At the opposite extreme, a character tokenizer can represent many words but produces longer sequences. Subword tokenization sits between these choices: common sequences become reusable pieces while less common words can be assembled from smaller units.",
+      "Byte-pair encoding, or BPE, learns merge operations from repeated adjacent pieces. In our deliberately small corpus, low appears three times, lower twice, and slow once. Counting across those repetitions makes l followed by o a frequent pair. Merging that pair produces lo; a later merge can combine lo with w. The merge order is part of the tokenizer, not something an LLM invents for each request.",
+      "After tokenization, IDs select rows from an embedding table. Selecting row 7 is an indexing operation, not multiplying a word by seven. If a sequence contains n tokens and each row has d coordinates, the lookup produces an n × d array. Positional information is then incorporated in an architecture-dependent way. Real tokenizers also handle spaces, Unicode, special tokens, and normalization; our short program isolates only the merging step."
+    ],
+    "terms": [
+      [
+        "Vocabulary",
+        "The set of pieces that can receive token IDs."
+      ],
+      [
+        "Merge rule",
+        "An ordered replacement of two adjacent pieces by one piece."
+      ],
+      [
+        "Embedding dimension d",
+        "How many learned numbers represent one token; chosen by the model architecture."
+      ],
+      [
+        "Sequence length n",
+        "The number of tokens produced for this input, not its visible word count."
+      ]
+    ],
+    "formula": "embedding lookup: n token IDs → matrix with shape n × d",
+    "formulaExplanation": "n is calculated by tokenizing the input. d is fixed by the model's embedding width. For four tokens and three coordinates per token, the output has shape 4 × 3, containing 12 numbers.",
+    "steps": [
+      "Start low as [l, o, w], lower as [l, o, w, e, r], and slow as [s, l, o, w].",
+      "Count adjacent pairs using word frequencies: (l,o) occurs 3 + 2 + 1 = 6 times.",
+      "Merge (l,o) into lo, recount, then merge (lo,w) into low.",
+      "Now lower contains [low,e,r]. Reusing low reduced this word from five pieces to three without making lower a vocabulary entry."
+    ],
+    "labTitle": "Python: Learn Two BPE Merge Rules",
+    "setup": "Python 3, standard library only. These character-based merges teach the BPE mechanism. They do not reproduce the tokenizer of any commercial or downloaded model.",
+    "code": "from collections import Counter\n\nfrequencies = {\"low\": 3, \"lower\": 2, \"slow\": 1}\npieces = {word: list(word) for word in frequencies}\n\nfor step in range(2):\n    pairs = Counter()\n    for word, tokens in pieces.items():\n        for pair in zip(tokens, tokens[1:]):\n            pairs[pair] += frequencies[word]\n    best = max(pairs, key=pairs.get)  # First encountered wins ties.\n    print(f\"Merge {step + 1}: {best} count={pairs[best]}\")\n    for word, tokens in pieces.items():\n        merged, i = [], 0\n        while i < len(tokens):\n            if tuple(tokens[i:i + 2]) == best:\n                merged.append(\"\".join(best))\n                i += 2\n            else:\n                merged.append(tokens[i])\n                i += 1\n        pieces[word] = merged\n\nfor word, tokens in pieces.items():\n    print(word, \"->\", tokens)\nprint(\"lower: 5 characters ->\", len(pieces[\"lower\"]), \"pieces\")",
+    "notes": [
+      "The frequencies are training data weights. A pair inside low contributes three observations because that word appears three times.",
+      "The while loop advances by two only after a merge; this avoids consuming the same character twice.",
+      "Recounting after every merge matters because the next candidates contain the newly formed piece."
+    ],
+    "meaning": "A learned tokenizer trades vocabulary size against sequence length. Fewer tokens can reduce context use, but token counts are meaningful only for the actual tokenizer. A different training corpus or merge order can split the same word differently.",
+    "choices": [
+      [
+        "Counting cost or context use",
+        "Use the actual model tokenizer",
+        "Character or word counts are only rough proxies."
+      ],
+      [
+        "Changing the tokenizer",
+        "Treat it as a model-compatibility change",
+        "Existing embedding rows expect the original vocabulary IDs."
+      ],
+      [
+        "Handling a long document",
+        "Select relevant passages before submission",
+        "Do not silently truncate the instructions or reserved answer space."
+      ]
+    ],
+    "limit": "This example omits byte encoding, special tokens, text normalization, and tokenizer training at scale. The embedding shape explanation is separate: merging pieces does not learn their numerical meanings.",
+    "experiment": "Run only one merge instead of two. How is lower represented?",
+    "answer": "It becomes ['lo', 'w', 'e', 'r']: four pieces. The second merge is what combines lo and w.",
+    "output": "Merge 1: ('l', 'o') count=6\r\nMerge 2: ('lo', 'w') count=6\r\nlow -> ['low']\r\nlower -> ['low', 'e', 'r']\r\nslow -> ['s', 'low']\r\nlower: 5 characters -> 3 pieces"
+  },
+  "transformers-attention": {
+    "title": "Following One Query Through an Attention Head",
+    "paragraphs": [
+      "Attention becomes less mysterious when you follow one token through the calculation. Suppose its query is [2,1]. Two earlier positions offer keys [1,0] and [0,1]. Comparing the query with each key produces scores 2 and 1. These are compatibility scores, not probabilities, and not labels such as “important word” assigned by a human.",
+      "The key width is two, so the scale factor is √2. After division, softmax turns [1.414,0.707] into weights of about [0.670,0.330]. The first position contributes more, but the second still contributes. With value vectors [1,0] and [0,2], the resulting vector is about [0.670,0.660]. Each coordinate is a weighted sum, not the selection of one whole word.",
+      "We have chosen these small Q, K, and V values so every operation can be checked. In a trained Transformer, projection matrices create them from token representations. Several heads can perform different projections; their outputs are combined and processed by further layers. A causal mask also restricts which positions are allowed to contribute. Even an excellent numerical match receives no weight if it is an unavailable future position."
+    ],
+    "terms": [
+      [
+        "Projection",
+        "A learned matrix transformation that creates a query, key, or value representation."
+      ],
+      [
+        "Dot product",
+        "Multiply corresponding coordinates and add: [2,1]·[1,0] = 2."
+      ],
+      [
+        "Softmax",
+        "Exponentiate scores and divide by their total to obtain weights that sum to one."
+      ],
+      [
+        "Causal mask",
+        "A restriction that prevents each position from using future tokens."
+      ]
+    ],
+    "formula": "scoresᵢ = (q · kᵢ) / √dₖ;  a = softmax(scores);  output = Σᵢ aᵢvᵢ",
+    "formulaExplanation": "q is one query; kᵢ and vᵢ are the key and value at allowed position i. dₖ = 2 is the key width. aᵢ is that position's normalized attention weight. Summation mixes matching coordinates of the value vectors.",
+    "steps": [
+      "Compute dot products: 2×1 + 1×0 = 2 and 2×0 + 1×1 = 1.",
+      "Scale by √2: scores become about 1.414 and 0.707.",
+      "Normalize exponentials: the weights become about 0.670 and 0.330 and sum to one.",
+      "Multiply and add values: 0.670×[1,0] + 0.330×[0,2] ≈ [0.670,0.660]."
+    ],
+    "labTitle": "Python: Calculate One Attention Output Without a Framework",
+    "setup": "Python 3, standard library only. This program calculates one head's weighted lookup, not a complete trained Transformer.",
+    "code": "from math import exp, sqrt\n\nquery = [2.0, 1.0]\nkeys = [[1.0, 0.0], [0.0, 1.0]]\nvalues = [[1.0, 0.0], [0.0, 2.0]]\nscores = [\n    sum(q * k for q, k in zip(query, key)) / sqrt(len(query))\n    for key in keys\n]\nshift = max(scores)\nexponentials = [exp(score - shift) for score in scores]\nweights = [value / sum(exponentials) for value in exponentials]\noutput = [\n    sum(weight * value[j] for weight, value in zip(weights, values))\n    for j in range(len(values[0]))\n]\n\nprint(\"Scaled scores:\", [round(x, 3) for x in scores])\nprint(\"Weights:\", [round(x, 3) for x in weights])\nprint(\"Weight sum:\", round(sum(weights), 3))\nprint(\"Mixed value:\", [round(x, 3) for x in output])\nprint(\"Causal visibility (row attends to column):\")\nfor row in range(3):\n    print([int(column <= row) for column in range(3)])",
+    "notes": [
+      "Subtracting the largest score before exp prevents unnecessarily large exponentials and leaves softmax probabilities unchanged.",
+      "The output loop runs over value coordinates. It sums contributions from positions, so the output width equals the value width.",
+      "The printed mask uses 1 for an allowed connection and 0 for a blocked future position. It illustrates visibility; those zeros are not raw softmax scores."
+    ],
+    "meaning": "A new representation is built from earlier representations. This is the information-sharing part of a Transformer, not a database query or a complete explanation of its answer. Feed-forward transformations, residual paths, normalization, and many stacked blocks still matter.",
+    "choices": [
+      [
+        "Need a representation of an entire provided input",
+        "Consider an encoder-style model",
+        "Bidirectional input visibility is useful when no future target is leaked."
+      ],
+      [
+        "Need left-to-right text generation",
+        "Use a causally trained decoder",
+        "Match its inference mask to its training assumptions."
+      ],
+      [
+        "Need source-to-target transformation",
+        "Consider encoder-decoder structure",
+        "Cross-attention provides access to the encoded source."
+      ]
+    ],
+    "limit": "These vectors are invented teaching inputs. Interpreting an attention weight as proof of a model's reasoning or causality is not justified.",
+    "experiment": "Replace both value vectors with [1,1]. What will the output be?",
+    "answer": "[1,1], regardless of these attention weights, because the weights sum to one. Attention can only mix the values it is given.",
+    "output": "Scaled scores: [1.414, 0.707]\r\nWeights: [0.67, 0.33]\r\nWeight sum: 1.0\r\nMixed value: [0.67, 0.66]\r\nCausal visibility (row attends to column):\r\n[1, 0, 0]\r\n[1, 1, 0]\r\n[1, 1, 1]"
+  },
+  "text-generation-decoding": {
+    "title": "From a Probability Distribution to an Actual Choice",
+    "paragraphs": [
+      "A probability distribution does not itself choose a token. Greedy decoding picks the largest probability. Sampling instead draws a token according to the probabilities. Temperature changes the distribution before that draw; top-k and top-p can remove candidates. Keeping these operations separate makes it easier to understand what each setting changes.",
+      "Use the lesson's logits [2,1,0]. At temperature 1, the probabilities are approximately [0.665,0.245,0.090]. For a top-p threshold of 0.80, the first candidate alone covers only 0.665, so include the second as well. Their combined mass is about 0.910, which crosses the threshold. Remove the third candidate and renormalize the survivors to [0.731,0.269]. The threshold is a minimum retained mass, not a rule requiring exactly 80%.",
+      "The operation repeats for every new token with a fresh distribution. A candidate removed at one step may return at another. End-of-sequence tokens and a maximum-new-token limit bound the process. When comparing decoding settings, keep the prompt and model fixed; otherwise you cannot tell whether a changed answer came from the model, the input, or the selection policy."
+    ],
+    "terms": [
+      [
+        "Logit",
+        "An unnormalized score; it can be negative and need not sum to one."
+      ],
+      [
+        "Temperature T",
+        "A positive scale used before softmax; smaller values concentrate probability."
+      ],
+      [
+        "Nucleus",
+        "The smallest descending-probability prefix whose mass reaches top-p."
+      ],
+      [
+        "Renormalization",
+        "Divide retained probabilities by their retained total so they sum to one again."
+      ]
+    ],
+    "formula": "pᵢ = exp(zᵢ/T) / Σⱼ exp(zⱼ/T);  retained p′ᵢ = pᵢ / Σ retained pⱼ",
+    "formulaExplanation": "zᵢ is a token logit and T > 0 is the chosen temperature. pᵢ is its original probability. p′ᵢ is used only for a retained candidate after filtering; removed candidates receive zero.",
+    "steps": [
+      "At T=1, convert logits [2,1,0] into probabilities [0.665,0.245,0.090].",
+      "Accumulate descending mass for top-p=0.80: 0.665 is insufficient; 0.665+0.245≈0.910 is sufficient.",
+      "Keep sunny and cold. Divide each probability by their combined mass to obtain [0.731,0.269].",
+      "Compare T=2 separately: a flatter distribution increases the chance of lower-ranked tokens, but supplies no new facts."
+    ],
+    "labTitle": "Python: Compare Temperature and Nucleus Filtering",
+    "setup": "Python 3, standard library only. The logits are chosen examples, not the output of a downloaded model. The code calculates probabilities deterministically, making the displayed output reproducible.",
+    "code": "from math import exp\n\ntokens = [\"sunny\", \"cold\", \"changing\"]\nlogits = [2.0, 1.0, 0.0]\n\ndef softmax(scores, temperature):\n    if temperature <= 0:\n        raise ValueError(\"Use greedy selection separately when T=0.\")\n    scaled = [score / temperature for score in scores]\n    weights = [exp(score - max(scaled)) for score in scaled]\n    return [weight / sum(weights) for weight in weights]\n\nfor temperature in [1.0, 2.0]:\n    probs = softmax(logits, temperature)\n    print(f\"T={temperature}:\", [round(p, 3) for p in probs])\n\nprobs = softmax(logits, 1.0)\nkept, mass = [], 0.0\nfor index in sorted(range(len(tokens)), key=lambda i: probs[i], reverse=True):\n    kept.append(index)\n    mass += probs[index]\n    if mass >= 0.80:\n        break\n\nprint(\"Top-p candidates:\", [tokens[i] for i in kept])\nprint(\"Renormalized:\", [round(probs[i] / mass, 3) for i in kept])\nprint(\"Greedy token:\", tokens[max(range(len(tokens)), key=lambda i: probs[i])])",
+    "notes": [
+      "The probabilities at each temperature sum to one before rounding. Printed rounded values may sum to 0.999 or 1.001.",
+      "The threshold-crossing candidate is retained. Excluding it would keep less probability mass than requested.",
+      "The final line shows greedy selection separately from the filter. To sample, draw from the retained candidates using the renormalized probabilities."
+    ],
+    "meaning": "The first candidate remains highest at both temperatures, because positive scaling preserves score order. What changes is sampling diversity. Use validation and evidence for correctness; do not use temperature as a truthfulness control.",
+    "choices": [
+      [
+        "Exact extraction or fixed schema",
+        "Begin with deterministic/constrained output",
+        "Still validate fields and facts."
+      ],
+      [
+        "Several alternative drafts",
+        "Sample with evaluated settings",
+        "Review the candidates rather than assuming diversity equals quality."
+      ],
+      [
+        "Reproducible experiment",
+        "Record model, prompt, settings, seed, and runtime",
+        "A seed alone does not guarantee identical output across systems."
+      ]
+    ],
+    "limit": "This program only controls selection from three supplied scores. It does not generate language, measure factuality, or implement a full decoding engine.",
+    "experiment": "Change the top-p threshold to 0.95 at T=1. Which candidates remain?",
+    "answer": "All three. The first two carry only about 0.910 of the mass, so the third must be included to reach 0.95.",
+    "output": "T=1.0: [0.665, 0.245, 0.09]\r\nT=2.0: [0.506, 0.307, 0.186]\r\nTop-p candidates: ['sunny', 'cold']\r\nRenormalized: [0.731, 0.269]\r\nGreedy token: sunny"
+  },
+  "prompt-engineering": {
+    "title": "Turning an Instruction into a Checkable Contract",
+    "paragraphs": [
+      "Imagine a support assistant that drafts a refund request for a staff member. “Handle this refund” is ambiguous: should it summarize the request, propose an amount, or actually move money? A better prompt asks for a proposal with named fields and explicitly says that application code decides whether an action is allowed. The difference is not politeness; it is a clear boundary between language generation and execution.",
+      "An output contract states the expected structure, allowed values, and handling of missing information. For example, an order ID must refer to an existing order; amount_cents must be an integer within its refundable balance; and the signed-in user must own that order. A JSON object can satisfy the first syntactic requirement while failing every business requirement. That is why validation happens after parsing.",
+      "Examples in a prompt should demonstrate both success and refusal. If every example succeeds, a model may be encouraged to fill missing details rather than admit uncertainty. Delimit quoted customer text and treat it as data. Delimiters improve clarity, but they do not enforce security: identity, access, allowed tools, and approval for consequential actions must be checked by trusted software."
+    ],
+    "terms": [
+      [
+        "Schema",
+        "A definition of required keys, types, and permitted shapes."
+      ],
+      [
+        "Semantic validation",
+        "Checking whether well-formed values make sense for the task."
+      ],
+      [
+        "Authorization",
+        "Checking whether this authenticated person is permitted to perform this action."
+      ],
+      [
+        "Tool proposal",
+        "A model-produced suggestion of a function and arguments; not execution or approval."
+      ]
+    ],
+    "formula": "execution eligibility = valid structure AND valid business values AND authorization",
+    "formulaExplanation": "AND means every condition must pass. A correct JSON format cannot compensate for another user's order, and a high model confidence score does not bypass a failed condition.",
+    "steps": [
+      "Parse the proposed JSON; reject missing fields, unknown fields, or incorrect types.",
+      "Look up the order in trusted application data, not in the model's description of the order.",
+      "Compare the authenticated user's ID and the available refundable balance with the proposal.",
+      "Return an eligibility result only. In a real refund workflow, any required human approval and idempotent execution would still follow."
+    ],
+    "labTitle": "Python: Validate Three Refund Proposals Without Executing Them",
+    "setup": "Python 3, standard library only. The three JSON strings are simulated model outputs and the orders are invented. This code performs checks only; it never makes a payment or calls an external service.",
+    "code": "import json\n\norders = {\n    \"A17\": {\"owner\": \"user-7\", \"refundable_cents\": 1500},\n    \"B22\": {\"owner\": \"user-9\", \"refundable_cents\": 2500},\n}\nauthenticated_user = \"user-7\"  # Supplied by trusted authentication.\n\ndef check(raw):\n    try:\n        proposal = json.loads(raw)\n    except json.JSONDecodeError:\n        return \"REJECT: invalid JSON\"\n    if not isinstance(proposal, dict) or set(proposal) != {\"order_id\", \"amount_cents\"}:\n        return \"REJECT: fields\"\n    if type(proposal[\"order_id\"]) is not str or type(proposal[\"amount_cents\"]) is not int:\n        return \"REJECT: types\"\n    order = orders.get(proposal[\"order_id\"])\n    if order is None or order[\"owner\"] != authenticated_user:\n        return \"REJECT: not authorized\"\n    if not 0 < proposal[\"amount_cents\"] <= order[\"refundable_cents\"]:\n        return \"REJECT: amount\"\n    return \"ELIGIBLE FOR APPROVAL: not executed\"\n\nproposals = [\n    '{\"order_id\":\"A17\",\"amount_cents\":1000}',\n    '{\"order_id\":\"A17\",\"amount_cents\":\"1000\"}',\n    '{\"order_id\":\"B22\",\"amount_cents\":1000}',\n]\nfor number, raw in enumerate(proposals, 1):\n    print(f\"Proposal {number}: {check(raw)}\")",
+    "notes": [
+      "json.loads checks syntax. The key-set and type checks apply the small schema; type(x) is int deliberately rejects Python booleans as money values.",
+      "authenticated_user is not read from generated JSON. A model cannot establish the caller's identity by claiming a user ID.",
+      "The positive result is eligibility for approval, not a receipt. Execution, confirmation, audit logging, and duplicate prevention belong to later trusted steps."
+    ],
+    "meaning": "All three proposals can be valid JSON, yet only one passes the stated contract. Prompting should make the intended format clear; trusted checks make the application's behavior dependable even when generation does not follow the prompt.",
+    "choices": [
+      [
+        "Unclear task or inconsistent format",
+        "Refine the prompt and examples",
+        "Test on the same cases to isolate the effect."
+      ],
+      [
+        "Well-formed but unsupported answer",
+        "Check evidence and required facts",
+        "A stricter JSON schema cannot establish truth."
+      ],
+      [
+        "Proposal changes real-world state",
+        "Authorize and obtain appropriate approval",
+        "Do not let the model grant itself permission."
+      ]
+    ],
+    "limit": "These checks cover one deliberately narrow contract. They are not a complete payment system or a universal JSON Schema validator, and they cannot determine the fairness of a refund request.",
+    "experiment": "Change the first amount to 1600. Why is the response rejected?",
+    "answer": "The order has only 1500 refundable cents. The structure and user identity still pass, but the business-value check fails.",
+    "output": "Proposal 1: ELIGIBLE FOR APPROVAL: not executed\r\nProposal 2: REJECT: types\r\nProposal 3: REJECT: not authorized"
+  },
+  "pretraining-finetuning": {
+    "title": "How Prediction Error Changes a Model",
+    "paragraphs": [
+      "A training example must give the model something to predict and an observed answer against which to compare it. For causal language modeling, the answer comes from the text itself: after the prefix “the door is”, the next token in the training sequence might be “open”. A training batch contains many such positions. The model assigns probabilities to the vocabulary; the loss penalizes low probability on the observed target.",
+      "To see the update without hiding it behind a framework, shrink the problem to three possible next tokens: open, closed, and locked. Suppose four training positions with the same toy context have targets open, open, open, closed. The empirical target frequencies are [0.75,0.25,0]. We start with three zero logits, which give equal probability 1/3. For this small softmax model, the gradient of mean cross-entropy with respect to each logit is predicted probability minus target frequency.",
+      "Subtracting a fraction of that gradient raises the score for open and lowers the score for locked. Repeating the process moves the probabilities toward the observed frequencies. A real LLM applies the chain rule through all its layers to update many shared weights; our program only trains three direct logits. Before any such update at scale, document provenance, cleaning, duplicate removal, data splits, and the token mixture shape what signal the optimizer receives."
+    ],
+    "terms": [
+      [
+        "Training target",
+        "The observed next token, taken from the data rather than guessed by the developer."
+      ],
+      [
+        "Cross-entropy",
+        "A loss that increases when the model assigns little probability to observed targets."
+      ],
+      [
+        "Gradient",
+        "The local sensitivity of the loss to a parameter; used to choose an update direction."
+      ],
+      [
+        "Learning rate η",
+        "A developer-chosen update scale, not a learned probability."
+      ]
+    ],
+    "formula": "L = −Σᵢ fᵢ ln(pᵢ);  ∂L/∂zᵢ = pᵢ − fᵢ;  zᵢ ← zᵢ − η(pᵢ − fᵢ)",
+    "formulaExplanation": "fᵢ is the target frequency for class i, pᵢ its softmax probability, and zᵢ its logit. ln is the natural logarithm. Here f=[0.75,0.25,0], η=0.5, and the frequencies sum to one. The derivative shown applies to this simple softmax cross-entropy model.",
+    "steps": [
+      "At initialization p=[1/3,1/3,1/3], so the mean loss is ln(3)≈1.099.",
+      "The first gradient is about [−0.417,0.083,0.333]. A negative gradient for open means raising its logit reduces the loss.",
+      "With learning rate 0.5, the updated logits are approximately [0.208,−0.042,−0.167].",
+      "Recalculate softmax and loss after each update. Falling training loss demonstrates fitting these examples; it does not demonstrate generalization."
+    ],
+    "labTitle": "Python: Run Eight Gradient Updates on a Tiny Language-Prediction Problem",
+    "setup": "Python 3, standard library only. This trains a three-logit categorical model with explicit gradients. It is not full LLM pretraining, but the loss and update arithmetic are real.",
+    "code": "from math import exp, log\n\ntarget_frequency = [0.75, 0.25, 0.0]\nlogits = [0.0, 0.0, 0.0]\nlearning_rate = 0.5\n\ndef probabilities(scores):\n    weights = [exp(value - max(scores)) for value in scores]\n    return [weight / sum(weights) for weight in weights]\n\nfor step in range(9):\n    p = probabilities(logits)\n    loss = -sum(f * log(prob) for f, prob in zip(target_frequency, p))\n    if step in [0, 1, 4, 8]:\n        print(f\"step={step} loss={loss:.3f} p={[round(x, 3) for x in p]}\")\n    if step < 8:\n        gradient = [prob - f for prob, f in zip(p, target_frequency)]\n        logits = [\n            value - learning_rate * grad\n            for value, grad in zip(logits, gradient)\n        ]\n\nprint(\"Most probable next token:\", [\"open\", \"closed\", \"locked\"][p.index(max(p))])",
+    "notes": [
+      "The loop prints step 0 before training and step 8 after eight updates; it does not perform an unreported ninth update.",
+      "All four targets are summarized by their frequencies. Mean loss weights each class by how often it appears.",
+      "The zero target frequency for locked does not make its probability immediately zero. Softmax remains positive for finite logits."
+    ],
+    "meaning": "The optimizer is moving probabilities in response to observed errors. It is not inserting a list of facts or verifying the meaning of “open”. Real training needs held-out loss, task evaluation, and careful data handling to determine whether fitting improves useful behavior.",
+    "choices": [
+      [
+        "Training loss falls but held-out loss rises",
+        "Inspect overfitting and data mismatch",
+        "Do not assume more updates are always beneficial."
+      ],
+      [
+        "Training loss does not change",
+        "Inspect gradients, learning rate, targets, and frozen parameters",
+        "Start with a small reproducible batch."
+      ],
+      [
+        "Need updated private facts",
+        "Consider retrieval before retraining",
+        "Changing weights is not a substitute for source freshness."
+      ]
+    ],
+    "limit": "The three logits share no representation across contexts, so this model cannot generalize language. Scaling claims or compute budgets for real LLMs cannot be inferred from its runtime.",
+    "experiment": "Replace the target frequencies with [0,1,0]. Which token should become most probable?",
+    "answer": "Closed. Its gradient initially becomes 1/3−1=−2/3, so the update increases its logit. The other two logits decrease.",
+    "output": "step=0 loss=1.099 p=[0.333, 0.333, 0.333]\r\nstep=1 loss=0.965 p=[0.406, 0.316, 0.279]\r\nstep=4 loss=0.767 p=[0.56, 0.265, 0.175]\r\nstep=8 loss=0.683 p=[0.655, 0.231, 0.114]\r\nMost probable next token: open"
+  },
+  "instruction-tuning-rlhf": {
+    "title": "Separate the Learning Goal from the Parameters You Train",
+    "paragraphs": [
+      "SFT, preference optimization, and LoRA answer different questions. Supervised fine-tuning specifies what good responses look like. Preference training specifies which response is preferred under a rubric. LoRA specifies an efficient parameterization of an update. You can use LoRA while performing SFT; they are not competing names for the same stage.",
+      "For SFT, a batch contains instructions and desired responses. The loss can be restricted to response tokens so the model learns to produce the target answer rather than being rewarded for repeating the prompt. Preference methods use comparisons; common RLHF pipelines fit a reward model and then optimize a policy, while direct preference methods use a different objective. Neither a fluent preferred answer nor a large reward automatically proves factual correctness.",
+      "LoRA keeps a base transformation W fixed and learns an additional path through two smaller matrices A and B. Rank r controls the width of this side path. It limits the form of the update, not the vocabulary size or output length. A scaling factor multiplies the adapter contribution before it is added to the frozen path. The following calculation shows precisely where those numbers meet."
+    ],
+    "terms": [
+      [
+        "Frozen base weights W",
+        "The original matrix, held unchanged in standard adapter training."
+      ],
+      [
+        "Low rank r",
+        "The chosen intermediate width of the adapter."
+      ],
+      [
+        "Adapter matrices A and B",
+        "Trainable matrices that project down and then back to the output width."
+      ],
+      [
+        "SFT versus LoRA",
+        "SFT describes a supervised training objective; LoRA describes which update parameters are learned."
+      ]
+    ],
+    "formula": "y = Wx + (α/r)B(Ax)",
+    "formulaExplanation": "x has d_in coordinates. W has shape d_out×d_in; A has r×d_in; B has d_out×r. α/r scales the adapter. Here d_in=3, d_out=2, r=1, and α=2, so both paths produce two coordinates that can be added.",
+    "steps": [
+      "With W=[[1,0,0],[0,1,0]] and x=[2,1,3], the frozen path Wx is [2,1].",
+      "A=[0.1,0,−0.1] gives Ax=0.2+0−0.3=−0.1.",
+      "B=[0.2,0.4]ᵀ converts −0.1 to [−0.02,−0.04]; scaling by 2 gives [−0.04,−0.08].",
+      "Add the two paths: [2,1]+[−0.04,−0.08]=[1.96,0.92]. W has not changed."
+    ],
+    "labTitle": "Python: Trace a Frozen Matrix and a LoRA Side Path",
+    "setup": "Python 3, standard library only. Adapter values are supplied teaching values, not trained here. The program demonstrates the forward transformation and parameter counts.",
+    "code": "def matvec(matrix, vector):\n    return [sum(a * b for a, b in zip(row, vector)) for row in matrix]\n\nx = [2.0, 1.0, 3.0]\nW = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]]\nA = [[0.1, 0.0, -0.1]]\nB = [[0.2], [0.4]]\nrank, alpha = 1, 2\nbefore = [row[:] for row in W]\n\nbase = matvec(W, x)\ncompressed = matvec(A, x)\ndelta = [alpha / rank * value for value in matvec(B, compressed)]\noutput = [a + b for a, b in zip(base, delta)]\n\nprint(\"Frozen path:\", base)\nprint(\"A x:\", [round(v, 3) for v in compressed])\nprint(\"Scaled adapter:\", [round(v, 3) for v in delta])\nprint(\"Combined output:\", [round(v, 3) for v in output])\nprint(\"Base unchanged:\", W == before)\nprint(\"512x512, rank 8 adapter parameters:\", 8 * 512 + 512 * 8)\nprint(\"Adapter/full matrix ratio:\", f\"{(8 * 512 + 512 * 8) / (512 * 512):.3%}\")",
+    "notes": [
+      "matvec multiplies each matrix row with the input vector. The inner dimensions must match; our fixed example supplies compatible shapes.",
+      "The copy of W is used only to demonstrate that the forward calculation does not alter the base weights.",
+      "The 3.125% count compares adapter matrices with one 512×512 matrix. It is not a percentage of an entire model's training memory."
+    ],
+    "meaning": "The adapter changes the effective output while preserving the base matrix. During actual training, gradients update the adapter parameters according to an objective such as SFT. Memory savings depend on more than parameter count, and adapter quality depends on data, rank, target layers, and evaluation.",
+    "choices": [
+      [
+        "Need a consistent response style",
+        "Try curated SFT examples",
+        "Evaluate unseen instructions, not only training examples."
+      ],
+      [
+        "Need to reflect response preferences",
+        "Use an explicit preference rubric and suitable objective",
+        "Watch for reward shortcuts and judge bias."
+      ],
+      [
+        "Have limited fine-tuning memory",
+        "Consider parameter-efficient adapters",
+        "Base weights still need to be loaded and forward computation still occurs."
+      ]
+    ],
+    "limit": "A rank-1 toy matrix illustrates the side path but says nothing about achievable LLM quality. This program does not implement backpropagation, reward modeling, or policy optimization.",
+    "experiment": "Set alpha to 0. What remains?",
+    "answer": "The adapter contribution becomes zero and the output returns to the frozen path [2,1]. This changes the scale, not the contents of W.",
+    "output": "Frozen path: [2.0, 1.0]\r\nA x: [-0.1]\r\nScaled adapter: [-0.04, -0.08]\r\nCombined output: [1.96, 0.92]\r\nBase unchanged: True\r\n512x512, rank 8 adapter parameters: 8192\r\nAdapter/full matrix ratio: 3.125%"
+  },
+  "rag": {
+    "title": "Build an Evidence Packet, Not Just a Search Result",
+    "paragraphs": [
+      "Finding a sentence containing “leave” is not enough to answer a leave-policy question. It may concern another country, a withdrawn policy, or meal allowances that use similar wording. A RAG application needs an evidence packet: the selected text together with its source ID, applicable scope, and version. These details let a reader inspect why a claim should apply to the question.",
+      "For a concrete example, an authenticated India employee asks how many unused leave days can be carried forward. Our invented corpus has a current India policy allowing up to five, a UK policy allowing eight, an older India policy allowing three, and a meal-allowance passage. The search system may consider them all, but the answer should use only the current, applicable evidence. A large similarity score cannot override the wrong scope.",
+      "The code below deliberately avoids a hidden paid model call. It runs a small lexical retriever, filters documents, and returns an exact evidence quote with its ID. This is the evidence-handling part of a RAG application, not neural generation. In a full system, that packet would be placed beside the question in the model request, and the generated claims would be checked against it before display."
+    ],
+    "terms": [
+      [
+        "Chunk",
+        "A retrievable passage; here, each record contains one complete policy statement."
+      ],
+      [
+        "Provenance",
+        "Information that connects a passage to its source and version."
+      ],
+      [
+        "Grounding",
+        "Whether an answer's claims are supported by the evidence it is meant to use."
+      ],
+      [
+        "Abstention",
+        "Explicitly declining to answer when the required evidence is missing."
+      ]
+    ],
+    "formula": "accepted evidence = authorized scope ∩ current sources ∩ relevant passages",
+    "formulaExplanation": "The intersection symbol means all conditions must hold. In this exercise region and current are simplified trusted metadata; production authorization needs user-specific permissions as well.",
+    "steps": [
+      "Apply the employee's trusted scope: UK text is excluded, and the superseded India policy is excluded.",
+      "Match question terms against the remaining source passages. The current leave policy matches carry, unused, and leave; the meal passage does not.",
+      "Keep the original text and source ID together. The answer below is an exact quote from that record.",
+      "Ask a second question about paternity duration. No eligible record supplies enough matches, so the system returns insufficient evidence rather than a number."
+    ],
+    "labTitle": "Python: Retrieve a Policy, Cite It, and Abstain When It Is Missing",
+    "setup": "Python 3, standard library only. The policy data is invented. Retrieval uses exact word overlap, and the answer is extractive; no LLM is called and no real HR advice is provided.",
+    "code": "import re\n\ndocuments = [\n    {\"id\": \"CH-17\", \"region\": \"IN\", \"current\": True,\n     \"text\": \"Employees may carry up to 5 unused leave days.\"},\n    {\"id\": \"CH-08\", \"region\": \"UK\", \"current\": True,\n     \"text\": \"Employees may carry up to 8 unused leave days.\"},\n    {\"id\": \"CH-03\", \"region\": \"IN\", \"current\": False,\n     \"text\": \"Employees may carry up to 3 unused leave days.\"},\n    {\"id\": \"CH-42\", \"region\": \"IN\", \"current\": True,\n     \"text\": \"Meal allowances expire each month.\"},\n]\nregion = \"IN\"  # Trusted employee scope, not a model-supplied claim.\n\ndef words(text):\n    return set(re.findall(r\"[a-z]+\", text.lower()))\n\ndef answer(question):\n    candidates = [\n        doc for doc in documents\n        if doc[\"region\"] == region and doc[\"current\"]\n    ]\n    scored = [(len(words(question) & words(doc[\"text\"])), doc) for doc in candidates]\n    score, best = max(scored, key=lambda item: item[0], default=(0, None))\n    if score < 2:  # Toy relevance rule, not a universal threshold.\n        return \"Insufficient evidence in the approved sources.\"\n    return f'{best[\"text\"]} [{best[\"id\"]}]'\n\nprint(answer(\"carry unused leave\"))\nprint(answer(\"paternity duration\"))",
+    "notes": [
+      "Filtering happens before text is returned. A more similar but ineligible record must not leak into the evidence packet.",
+      "The score counts distinct matching words, not semantic similarity. The minimum of two is an explicit toy decision rule.",
+      "The citation is attached by trusted code from the selected record. A source ID invented by a generator would not pass this provenance path."
+    ],
+    "meaning": "The current policy is returned with CH-17, while the missing topic receives an abstention. This demonstrates a useful boundary: the application knows what evidence it has, even though it does not know every answer. A production generator may paraphrase; it must preserve conditions such as “may” and “up to”.",
+    "choices": [
+      [
+        "Answer needs current private facts",
+        "Retrieve authorized, versioned sources",
+        "Keep scope and effective dates with the chunks."
+      ],
+      [
+        "Question is too vague",
+        "Ask for clarification before retrieving broadly",
+        "Do not mix incompatible regions or product versions."
+      ],
+      [
+        "No source supports the answer",
+        "Abstain or escalate",
+        "Fluent completion is not a replacement for evidence."
+      ]
+    ],
+    "limit": "Word overlap can miss paraphrases and accept misleading matches. The two-match threshold is not a reliable general abstention detector. A full RAG system needs tested retrieval, support checking, access control, and prompt-injection defenses.",
+    "experiment": "Mark CH-17 as no longer current. What should the first question return?",
+    "answer": "Insufficient evidence. The older India record must not silently become acceptable merely because the current record is missing.",
+    "output": "Employees may carry up to 5 unused leave days. [CH-17]\r\nInsufficient evidence in the approved sources."
+  },
+  "semantic-search-embeddings": {
+    "title": "Why Vector Direction Matters More Than an ID Number",
+    "paragraphs": [
+      "Imagine placing three support passages on a map. A query should be close to passages that help answer it, even when their wording differs. A search embedding model learns numerical representations for that purpose. The map is a useful analogy, but production embeddings usually have many coordinates, and the axes are not literal labels such as “computer” or “repair”.",
+      "Cosine similarity measures direction rather than length. For q=[1,1], passage A=[1,0] has cosine 1/√2≈0.707. Passage B=[2,2] points in exactly the same direction as q, so its cosine is 1 even though it is twice as long. Passage C=[−1,1] has dot product zero with q and cosine zero. The following plot and program use those invented coordinates so the geometry can be reproduced.",
+      "In a real pipeline, an embedding model replaces the hand-written vectors. Use the model's documented query/document encoders, preprocessing, and similarity measure. Compatible does not always mean identical text prefixes: some models are trained to represent queries and documents through different task-specific paths. Store the embedding model version with the index, and rebuild or migrate consistently when that representation changes."
+    ],
+    "terms": [
+      [
+        "Norm ||v||",
+        "The vector's length: square coordinates, add them, and take the square root."
+      ],
+      [
+        "Cosine similarity",
+        "Dot product divided by the two lengths; larger means more aligned under this measure."
+      ],
+      [
+        "Query encoder",
+        "The model path that represents a search request."
+      ],
+      [
+        "Retrieval relevance",
+        "Whether the passage actually helps answer the question; similarity is only one signal."
+      ]
+    ],
+    "formula": "cos(q,d) = Σⱼ qⱼdⱼ / (√Σⱼ qⱼ² × √Σⱼ dⱼ²)",
+    "formulaExplanation": "q is the query vector, d a passage vector, and j indexes coordinates. Nonzero norms are required. The formula ranges from −1 to 1; it is not a probability of correctness.",
+    "steps": [
+      "Compute q's norm: √(1²+1²)=√2.",
+      "For B=[2,2], the dot product is 4 and the norm product is √2×√8=4, giving similarity 1.",
+      "For A=[1,0], the dot product is 1 and denominator √2, giving about 0.707.",
+      "For C=[−1,1], the dot product −1+1=0, so cosine is 0. Rank B, then A, then C."
+    ],
+    "labTitle": "Python: Rank Passage Vectors by Cosine Similarity",
+    "setup": "Python 3, standard library only. The 2-D vectors are invented to teach similarity, not extracted from a language model. The cosine calculation and ranking are fully executable.",
+    "code": "from math import sqrt\n\nquery = [1.0, 1.0]\npassages = {\"A\": [1.0, 0.0], \"B\": [2.0, 2.0], \"C\": [-1.0, 1.0]}\n\ndef cosine(a, b):\n    if len(a) != len(b):\n        raise ValueError(\"Embedding dimensions differ.\")\n    norm_a = sqrt(sum(value * value for value in a))\n    norm_b = sqrt(sum(value * value for value in b))\n    if norm_a == 0 or norm_b == 0:\n        raise ValueError(\"Cosine is undefined for a zero vector.\")\n    return sum(x * y for x, y in zip(a, b)) / (norm_a * norm_b)\n\nranking = sorted(\n    ((name, cosine(query, vector)) for name, vector in passages.items()),\n    key=lambda item: item[1], reverse=True,\n)\nfor name, score in ranking:\n    print(f\"{name}: cosine={score:.3f}\")\nprint(\"B scaled by ten:\", f\"{cosine(query, [20.0, 20.0]):.3f}\")",
+    "notes": [
+      "The dimension and zero-vector checks catch invalid comparisons instead of returning a misleading score.",
+      "Sorting is descending because this is a similarity score. A distance metric would usually be sorted ascending.",
+      "Multiplying B by ten changes its norm but not its direction, so the final cosine remains one."
+    ],
+    "meaning": "B is closest under the chosen geometric measure. That is not evidence that it is current, authorized, or factually useful. In a real search evaluation, compare the ranked passages with human-labelled relevance, including exact IDs, abbreviations, negations, and domain-specific terms.",
+    "choices": [
+      [
+        "Question and answer use different wording",
+        "Try dense retrieval trained for the task",
+        "Check domain and language coverage."
+      ],
+      [
+        "Question contains an exact product or invoice ID",
+        "Add lexical or structured lookup",
+        "Semantic similarity may blur a one-character difference."
+      ],
+      [
+        "Upgrading the embedding model",
+        "Version and migrate the whole representation",
+        "Old passage vectors and new query vectors may be incompatible."
+      ]
+    ],
+    "limit": "The plot has two dimensions only for teaching. Do not read its axes as real semantic labels, and do not treat a cosine threshold as universally portable between models or datasets.",
+    "experiment": "Replace B=[2,2] with B=[−2,−2]. What is its cosine?",
+    "answer": "−1. It now points exactly opposite to q, so it falls below A and C under descending cosine ranking.",
+    "output": "B: cosine=1.000\r\nA: cosine=0.707\r\nC: cosine=0.000\r\nB scaled by ten: 1.000"
+  },
+  "vector-databases": {
+    "title": "Store the Evidence and Its Access Rules Alongside the Vector",
+    "paragraphs": [
+      "A nearest-neighbour index solves only part of a search problem. After finding a vector, your application still needs the passage it represents, the source version, and proof that the caller can read it. If these pieces become disconnected, the system can return stale text, cite the wrong record, or reveal another customer's information.",
+      "Think of each vector record as a document envelope: ID, text, embedding, and metadata travel together. A metadata filter can enforce a predicate such as tenant equals the authenticated tenant. But the application must derive that tenant from trusted identity and apply the rule on every query; accepting a tenant field from a model-generated request is not access control.",
+      "Our example uses SQLite in memory to demonstrate records, parameterized filtering, and exact vector scoring with no extra installation. It is not an ANN database. An exact scan is a useful small-corpus baseline against which you can measure an approximate index. HNSW navigates a graph of neighbours; IVF searches selected clusters. Both aim to avoid comparing every vector, with accuracy, latency, and memory trade-offs that must be measured."
+    ],
+    "terms": [
+      [
+        "Record ID",
+        "A stable identifier connecting a vector, text, and source metadata."
+      ],
+      [
+        "Tenant",
+        "An organization or customer boundary in a shared service."
+      ],
+      [
+        "ANN",
+        "Approximate nearest-neighbour search, which can miss some exact neighbours."
+      ],
+      [
+        "Embedding version",
+        "The representation contract used to create both stored and query vectors."
+      ]
+    ],
+    "formula": "ANN recall@k = |approximate top-k ∩ exact top-k| / k",
+    "formulaExplanation": "This measures overlap with an exact-search baseline under the same metric and eligibility filters. It is different from retrieval recall against human-labelled relevant documents. Here k must not exceed the number of eligible records being compared.",
+    "steps": [
+      "Create three records: two belong to tenant A and one to tenant B.",
+      "Filter by authenticated tenant A and embedding version e1 before returning or scoring text.",
+      "Calculate cosine only for the two eligible vectors. A1=[1,0] matches q=[1,0] better than A2=[0,1].",
+      "Delete A1 and repeat the query. A2 is now the best eligible record; the foreign record must not reappear as a replacement."
+    ],
+    "labTitle": "Python: Build a Filtered Vector-Record Store with SQLite",
+    "setup": "Python 3 includes sqlite3, json, and math. This uses an in-memory database, creates no external service, and demonstrates an exact scan rather than production ANN indexing.",
+    "code": "import json\nimport sqlite3\nfrom math import sqrt\n\ndb = sqlite3.connect(\":memory:\")\ndb.execute(\"CREATE TABLE chunks (id TEXT PRIMARY KEY, tenant TEXT, version TEXT, text TEXT, vector TEXT)\")\nrows = [\n    (\"A1\", \"A\", \"e1\", \"Return policy for A\", [1.0, 0.0]),\n    (\"A2\", \"A\", \"e1\", \"Delivery policy for A\", [0.0, 1.0]),\n    (\"B1\", \"B\", \"e1\", \"Private policy for B\", [1.0, 0.0]),\n]\ndb.executemany(\"INSERT INTO chunks VALUES (?, ?, ?, ?, ?)\",\n               [(i, t, v, text, json.dumps(vec)) for i, t, v, text, vec in rows])\n\ndef search(tenant, query):\n    eligible = db.execute(\n        \"SELECT id, vector FROM chunks WHERE tenant=? AND version=?\",\n        (tenant, \"e1\"),\n    ).fetchall()\n    query_norm = sqrt(sum(x * x for x in query))\n    if not query_norm:\n        raise ValueError(\"Zero query vector\")\n    scores = []\n    for record_id, encoded in eligible:\n        vector = json.loads(encoded)\n        score = sum(a * b for a, b in zip(query, vector))\n        score /= query_norm * sqrt(sum(x * x for x in vector))\n        scores.append((record_id, round(score, 3)))\n    return sorted(scores, key=lambda row: (-row[1], row[0]))\n\nauthenticated_tenant = \"A\"\nprint(\"Before deletion:\", search(authenticated_tenant, [1.0, 0.0]))\ndb.execute(\"DELETE FROM chunks WHERE id=? AND tenant=?\", (\"A1\", authenticated_tenant))\nprint(\"After deletion:\", search(authenticated_tenant, [1.0, 0.0]))\ndb.close()",
+    "notes": [
+      "SQL placeholders keep values separate from SQL syntax. This is a query-safety mechanism, not a substitute for deciding which tenant is authorized.",
+      "The stored embedding version is checked with the tenant. In a real database also validate dimensions and nonzero norms when inserting vectors.",
+      "Deletion is scoped to the tenant and visible on the next query in this connection. Distributed stores may require explicit freshness and consistency handling."
+    ],
+    "meaning": "Similarity is evaluated inside the allowed set. The program never returns B1 for tenant A, even though it has an excellent vector match. Correct isolation matters more than always returning a high-scoring result.",
+    "choices": [
+      [
+        "Small or moderate corpus with relational metadata",
+        "Start with an exact or vector-enabled existing store",
+        "Measure performance before introducing another service."
+      ],
+      [
+        "Large collection with strict latency needs",
+        "Benchmark an ANN index",
+        "Measure neighbour recall under the actual filters."
+      ],
+      [
+        "A document changes or is deleted",
+        "Update text, vectors, metadata, and caches consistently",
+        "An old embedding can otherwise keep stale evidence discoverable."
+      ]
+    ],
+    "limit": "The example has fixed 2-D vectors and one connection. It does not provide authentication, durability, backups, concurrent indexing, or production isolation by itself.",
+    "experiment": "Run the search with trusted tenant B instead. Which record is returned?",
+    "answer": "Only B1. Tenant A's records are excluded before similarity scoring.",
+    "output": "Before deletion: [('A1', 1.0), ('A2', 0.0)]\r\nAfter deletion: [('A2', 0.0)]"
+  },
+  "advanced-rag": {
+    "title": "Follow One Relevant Passage Through the Retrieval Funnel",
+    "paragraphs": [
+      "A RAG answer can fail even when the correct passage is in the database. It might be cut away from its heading during chunking, missed by retrieval, placed too low by reranking, or removed from the final prompt to fit a token budget. Record source IDs at every stage so you can find the first place evidence disappears.",
+      "Dense and lexical retrieval scores often have different scales. Adding a cosine of 0.8 directly to a lexical score of 12 makes their relative influence arbitrary. Reciprocal rank fusion, or RRF, combines positions instead: a document near the top of either list earns a contribution. The constant c controls how strongly rank differences affect the fused score; it is not the number of results returned.",
+      "After fusion, a cross-encoder reranker can inspect the query and a candidate passage together. This is more expensive than reusing independently computed embeddings, so apply it to a shortlist. The demonstration supplies reranker scores rather than downloading a model. This keeps the ranking arithmetic transparent, while clearly separating chosen teaching scores from real model outputs."
+    ],
+    "terms": [
+      [
+        "Chunk boundary",
+        "The cut that decides which surrounding conditions remain with a passage."
+      ],
+      [
+        "RRF",
+        "A method for combining ranked lists without requiring comparable score scales."
+      ],
+      [
+        "Cross-encoder",
+        "A model that jointly reads a query and a candidate to score their relevance."
+      ],
+      [
+        "Recall@k",
+        "The fraction of labelled relevant passages found among the top k results."
+      ]
+    ],
+    "formula": "RRF(d) = Σ lists 1 / (c + rank_list(d));  Recall@k = relevant retrieved / all labelled relevant",
+    "formulaExplanation": "d is a document, ranks start at 1, and c=60 is chosen for this exercise. A document absent from a list contributes zero for that list. Recall uses the labelled set {A,D}, not the fusion score.",
+    "steps": [
+      "Fuse dense order [B,C,A,D] and lexical order [A,B,D,C]. B receives 1/61+1/62≈0.03252.",
+      "A receives 1/63+1/61≈0.03227. The fused first two are B and A.",
+      "Only A is in the relevant set {A,D}, so Recall@2=1/2=0.50.",
+      "The supplied reranker scores put A and D first, raising this query's Recall@2 to 1.00. This does not prove that a generated answer will use both correctly."
+    ],
+    "labTitle": "Python: Fuse Two Rankings and Measure a Reranking Change",
+    "setup": "Python 3, standard library only. Rankings, relevance labels, and reranker scores are invented inputs. RRF and recall are calculated; no embedding or reranker model is executed.",
+    "code": "from collections import defaultdict\n\ndense = [\"B\", \"C\", \"A\", \"D\"]\nlexical = [\"A\", \"B\", \"D\", \"C\"]\nscores = defaultdict(float)\nfor ranking in [dense, lexical]:\n    for rank, document in enumerate(ranking, start=1):\n        scores[document] += 1 / (60 + rank)\n\nfused = sorted(scores, key=lambda d: (-scores[d], d))\nreranker = {\"A\": 0.95, \"B\": 0.30, \"C\": 0.10, \"D\": 0.90}\nreranked = sorted(fused, key=lambda d: (-reranker[d], d))\nrelevant = {\"A\", \"D\"}\n\ndef recall(ranking, k):\n    return len(set(ranking[:k]) & relevant) / len(relevant)\n\nprint(\"Fused:\", fused)\nfor document in fused:\n    print(f\"{document}: RRF={scores[document]:.5f}\")\nprint(\"Reranked:\", reranked)\nprint(f\"Recall@2 before: {recall(fused, 2):.2f}\")\nprint(f\"Recall@2 after: {recall(reranked, 2):.2f}\")",
+    "notes": [
+      "Using ranks avoids directly mixing incompatible raw score units. It does not make either retriever's candidates automatically relevant.",
+      "Reranking sees only retrieved candidates. If D never entered the shortlist, the reranker could not recover it.",
+      "The labelled relevant set is evaluation data. Do not pass those labels to a deployed retriever as if they were available for new questions."
+    ],
+    "meaning": "The useful improvement is not that a score got larger; it is that both required pieces of evidence now survive the top-two cutoff. Measure this across a representative test set, then separately measure answer support, citations, latency, and cost.",
+    "choices": [
+      [
+        "An answer loses its exception or date",
+        "Inspect chunk boundaries and parent context",
+        "Overlap adds duplication; it is not automatically the best fix."
+      ],
+      [
+        "Exact codes and paraphrases both matter",
+        "Combine lexical and dense candidates",
+        "Evaluate fusion instead of guessing score weights."
+      ],
+      [
+        "Evidence exists in candidates but not final context",
+        "Inspect reranking and budget selection",
+        "Changing the generation model cannot restore text it never receives."
+      ]
+    ],
+    "limit": "A single labelled query cannot establish overall retrieval quality. The reranker scores here are deliberately supplied, so the program tests pipeline logic rather than a trained reranker's accuracy.",
+    "experiment": "Remove D from both initial rankings. Can changing its reranker score recover it?",
+    "answer": "No. The reranker only sorts fused candidates. Improve candidate retrieval or chunking first, because the missing passage never reaches the second stage.",
+    "output": "Fused: ['B', 'A', 'C', 'D']\r\nB: RRF=0.03252\r\nA: RRF=0.03227\r\nC: RRF=0.03175\r\nD: RRF=0.03150\r\nReranked: ['A', 'D', 'B', 'C']\r\nRecall@2 before: 0.50\r\nRecall@2 after: 1.00"
+  },
+  "llm-evaluation": {
+    "title": "Measure Success on the Task, Not on a Single Impressive Answer",
+    "paragraphs": [
+      "Suppose you are choosing a model for a customer-support assistant. A fluent demo is not a test set. Collect representative requests, define what counts as correct, and include difficult cases: ambiguous questions, missing evidence, formatting failures, and requests that must be refused. Keep a held-out portion so repeated prompt tuning does not simply memorize the evaluation examples.",
+      "Some measurements are soft preferences, while others are release gates. A slightly slower model might be worth its improved answer quality, unless the product has a hard latency limit. Likewise, a safety failure cannot be averaged away by many easy correct answers. Write those decisions before comparing candidates so the rules do not shift to favor a preferred model.",
+      "A percentile describes a distribution, not an average. In a sorted sample, the nearest-rank p95 is the element at ceil(0.95×n). With only eight requests, that is the maximum. The calculation is exact for this small sample, but the sample is far too small to estimate production tail latency reliably. Repeat realistic workloads and inspect confidence and important user slices before making a release decision."
+    ],
+    "terms": [
+      [
+        "Test case",
+        "An input paired with an expected property or rubric."
+      ],
+      [
+        "Held-out set",
+        "Examples kept separate from prompt/model tuning."
+      ],
+      [
+        "p95 latency",
+        "A chosen percentile estimator of response time; here the nearest-rank estimator."
+      ],
+      [
+        "Release gate",
+        "A requirement that must pass before softer trade-offs are considered."
+      ]
+    ],
+    "formula": "accuracy = correct / tested;  nearest-rank p95 = sorted_latency[ceil(0.95n) − 1]",
+    "formulaExplanation": "n is the sample size. The −1 converts the one-based rank into a Python list index. The example's eligibility rule requires accuracy ≥0.75, p95≤1.5 seconds, and zero critical failures.",
+    "steps": [
+      "Candidate A answers 7 of 8 cases correctly: 7/8=0.875. Candidate B answers 6 of 8: 0.750.",
+      "For n=8, ceil(0.95×8)=8. Select the eighth sorted latency, not the mean.",
+      "A's p95 is 2.4 seconds, so it fails the 1.5-second gate even though its accuracy is higher.",
+      "B's p95 is 1.2 seconds and its critical-failure count is zero, so it passes these illustrative gates."
+    ],
+    "labTitle": "Python: Compare Two Candidates with Explicit Release Gates",
+    "setup": "Python 3, standard library only. All outcomes and timings below are invented fixtures, not measured commercial-model benchmarks.",
+    "code": "from math import ceil\n\ncandidates = {\n    \"A\": {\"correct\": [1, 1, 1, 1, 1, 1, 1, 0],\n          \"seconds\": [0.8, 0.9, 1.0, 1.0, 1.1, 1.2, 1.4, 2.4],\n          \"critical\": 0},\n    \"B\": {\"correct\": [1, 1, 1, 1, 1, 1, 0, 0],\n          \"seconds\": [0.5, 0.6, 0.7, 0.8, 0.8, 0.9, 1.0, 1.2],\n          \"critical\": 0},\n}\n\ndef percentile(values, fraction):\n    ordered = sorted(values)\n    return ordered[ceil(fraction * len(ordered)) - 1]\n\nfor name, results in candidates.items():\n    accuracy = sum(results[\"correct\"]) / len(results[\"correct\"])\n    p95 = percentile(results[\"seconds\"], 0.95)\n    eligible = accuracy >= 0.75 and p95 <= 1.5 and results[\"critical\"] == 0\n    print(f\"{name}: accuracy={accuracy:.3f}, p95={p95:.1f}s, eligible={eligible}\")",
+    "notes": [
+      "Correctness labels use 1 and 0 so their sum counts successes. Open-ended answers usually need a carefully defined rubric rather than exact string matching.",
+      "The latency list is sorted inside the function. Percentile definitions differ, so record the estimator when comparing reports.",
+      "All gates are combined with and. Eligibility does not mean the eight examples certify production safety."
+    ],
+    "meaning": "B is eligible under the stated rules; A is not. This is a constrained selection result, not proof that B is the universally better model. A different workload, latency budget, or quality requirement could change the decision.",
+    "choices": [
+      [
+        "Answers have one unambiguous target",
+        "Use exact or normalized task-specific checks",
+        "Avoid marking correct paraphrases wrong unnecessarily."
+      ],
+      [
+        "Answers need nuanced judgment",
+        "Use a written rubric and calibrated reviewers/judges",
+        "Model judges can have position and style bias."
+      ],
+      [
+        "Changing prompts or retrieval",
+        "Rerun the same regression suite",
+        "Record all versions so comparisons are attributable."
+      ]
+    ],
+    "limit": "Eight samples are useful for checking the metric code, not for estimating rare harms or stable p95 latency. Stratify tests, inspect failures, and use enough representative data.",
+    "experiment": "Give B one critical failure while leaving accuracy and latency unchanged. Does it remain eligible?",
+    "answer": "No. The zero-critical-failure gate fails. Faster responses do not offset that hard requirement.",
+    "output": "A: accuracy=0.875, p95=2.4s, eligible=False\r\nB: accuracy=0.750, p95=1.2s, eligible=True"
+  },
+  "llm-hallucinations-safety": {
+    "title": "Check Each Claim Against What Its Source Actually Says",
+    "paragraphs": [
+      "A citation is a pointer, not a certificate. Consider a source that says employees may carry up to five leave days. An answer saying “every employee is guaranteed five days” points to a real source but strengthens its meaning. Another answer can cite the same source while inventing a later expiry date. Checking only whether the source ID exists misses both problems.",
+      "Break an answer into claims that can be reviewed separately. For each claim, identify the cited passage and compare the subject, scope, value, date, and qualification. Supported means the required evidence backs the statement. Partial support means some of the statement goes beyond the evidence. Contradicted means the evidence conflicts with it. Unsupported means the required evidence does not establish it; that does not necessarily prove the statement is false in the world.",
+      "The program below uses structured fields so the checks are deterministic and understandable. Real text does not arrive neatly aligned into fields. Extracting claims and judging entailment require a separate evaluated process, often including human review for important cases. Keep this limitation explicit: a string-matching trick or a confident model judge is not a universal hallucination detector."
+    ],
+    "terms": [
+      [
+        "Supported",
+        "The cited evidence establishes the claim within the required scope."
+      ],
+      [
+        "Partial",
+        "The evidence supports a weaker or narrower statement than the answer makes."
+      ],
+      [
+        "Contradicted",
+        "The evidence states something incompatible with the claim."
+      ],
+      [
+        "Unsupported",
+        "No adequate support is available in the required evidence."
+      ]
+    ],
+    "formula": "claim review = source identity + matching scope + value check + qualification check",
+    "formulaExplanation": "These are separate checks, not numbers to average. A valid source ID cannot compensate for a wrong date, and matching a number is insufficient when the answer changes “up to” into “guaranteed”.",
+    "steps": [
+      "C1 preserves the value five and the qualification up to: supported.",
+      "C2 keeps five but changes up to into guaranteed: only partial support.",
+      "C3 states June 30 when the supplied source says March 31: contradicted.",
+      "C4 states that the office closes Friday, but the evidence has no office-closing field: unsupported."
+    ],
+    "labTitle": "Python: Audit Four Structured Claims Against One Evidence Record",
+    "setup": "Python 3, standard library only. These are invented policy facts, and claims are already structured by hand. This is a validation demonstration, not a natural-language fact checker.",
+    "code": "evidence = {\n    \"S1\": {\n        \"carry_days\": {\"value\": 5, \"qualifier\": \"up_to\"},\n        \"expiry\": {\"value\": \"March 31\", \"qualifier\": \"exact\"},\n    }\n}\nclaims = [\n    (\"C1\", \"S1\", \"carry_days\", 5, \"up_to\"),\n    (\"C2\", \"S1\", \"carry_days\", 5, \"guaranteed\"),\n    (\"C3\", \"S1\", \"expiry\", \"June 30\", \"exact\"),\n    (\"C4\", \"S1\", \"office_closes\", \"Friday\", \"exact\"),\n]\n\ndef review(source_id, field, value, qualifier):\n    fact = evidence.get(source_id, {}).get(field)\n    if fact is None:\n        return \"UNSUPPORTED\", \"omit or seek evidence\"\n    if value != fact[\"value\"]:\n        return \"CONTRADICTED\", \"correct against the source\"\n    if qualifier != fact[\"qualifier\"]:\n        return \"PARTIAL\", \"preserve the qualification\"\n    return \"SUPPORTED\", \"state with citation\"\n\nfor claim_id, source_id, field, value, qualifier in claims:\n    status, action = review(source_id, field, value, qualifier)\n    print(f\"{claim_id}: {status} -> {action}\")",
+    "notes": [
+      "Missing source IDs and missing fields fail to unsupported rather than being treated as true by default.",
+      "The value comparison is exact because the toy claims are structured. Real dates, units, paraphrases, and ranges need appropriate normalization and review.",
+      "The suggested action differs by outcome: qualifying a claim is not the same as correcting a contradiction or omitting an unsupported assertion."
+    ],
+    "meaning": "Three claims need intervention even though all name the real source S1. Grounding must be checked at claim level. Even fully supported claims can still be inappropriate if the source is stale, untrusted, or not authorized for this user.",
+    "choices": [
+      [
+        "Claim is only partly supported",
+        "Narrow its wording to the evidence",
+        "Do not strengthen may, some, or up to into guarantees."
+      ],
+      [
+        "Sources conflict or lack scope",
+        "Seek clarification or better evidence",
+        "Do not silently select whichever supports the draft."
+      ],
+      [
+        "Retrieved text contains commands",
+        "Treat them as untrusted data",
+        "Authorization and tool permissions remain outside the model."
+      ]
+    ],
+    "limit": "This program assumes trusted, current evidence and manually structured claims. It does not solve open-domain factuality, prompt injection, privacy, or human-impact risk. Those need independent controls.",
+    "experiment": "Change C1's source ID to an unknown ID. What should happen?",
+    "answer": "It becomes UNSUPPORTED. A correct-looking number is not sufficient when its stated provenance cannot be verified.",
+    "output": "C1: SUPPORTED -> state with citation\r\nC2: PARTIAL -> preserve the qualification\r\nC3: CONTRADICTED -> correct against the source\r\nC4: UNSUPPORTED -> omit or seek evidence"
+  },
+  "reasoning-models": {
+    "title": "Spend Additional Computation Only When You Can Use It",
+    "paragraphs": [
+      "A difficult question can sometimes benefit from more inference work: generate another candidate, inspect a failure, run a verifier, or explore another branch. This is different from training more parameters. The saved model may be unchanged while the application spends more effort on the current request.",
+      "Consider the equation 3x+2=11. Suppose a proposal mechanism offers x=2, x=3, and x=4 in that order. A verifier can substitute each candidate into the equation. The first produces 8, so it fails. The second produces 11, so it passes. If the task is simply to find one solution, stop there rather than spending the remaining budget on x=4. This is an observable search-and-check process, not a claim about a model's private reasoning.",
+      "Multiple candidates help only when the process can recognize a better answer. A verifier that rewards confident wording instead of correctness can choose the wrong result repeatedly. Some tasks have direct tests, such as checking an equation or executing approved unit tests in a sandbox. Others require incomplete rubrics or human judgment. The quality of the verification and the cost of extra attempts belong in the design."
+    ],
+    "terms": [
+      [
+        "Test-time compute",
+        "Computation spent while solving a request, after training."
+      ],
+      [
+        "Candidate",
+        "A proposed answer that has not yet been accepted."
+      ],
+      [
+        "Verifier",
+        "A process that checks a property the candidate must satisfy."
+      ],
+      [
+        "Budget",
+        "A bound on attempts, time, tokens, money, or tool use."
+      ]
+    ],
+    "formula": "attempt work = Σ work per checked candidate;  stop when verified OR budget exhausted",
+    "formulaExplanation": "The example counts attempts rather than tokens. The maximum is 3, but success on attempt 2 leaves one unused slot. Real systems also count verification overhead and may enforce several limits at once.",
+    "steps": [
+      "Start with three proposed values and a maximum of three checks.",
+      "Check x=2: 3×2+2=8, which is not 11. Record failure and continue.",
+      "Check x=3: 3×3+2=11. Record success and stop.",
+      "Report x=3, two checks used, and one remaining. If no candidate passed, report failure rather than selecting the most confident wrong proposal."
+    ],
+    "labTitle": "Python: Use a Bounded Candidate-and-Verifier Loop",
+    "setup": "Python 3, no extra packages. The proposals are a fixed list, not LLM output. The verifier evaluates simple arithmetic and does not execute generated code.",
+    "code": "candidates = [2, 3, 4]\nbudget = 3\nselected = None\nused = 0\n\nfor candidate in candidates:\n    if used >= budget:\n        break\n    used += 1\n    observed = 3 * candidate + 2\n    passed = observed == 11\n    print(f\"attempt={used} x={candidate} value={observed} passed={passed}\")\n    if passed:\n        selected = candidate\n        break\n\nprint(\"Selected:\", selected if selected is not None else \"no verified answer\")\nprint(\"Checks used:\", used)\nprint(\"Checks remaining:\", budget - used)",
+    "notes": [
+      "The budget is tested before each attempt and incremented exactly once per check.",
+      "The selection criterion is the equation, not a score supplied by the candidate.",
+      "Breaking after verified success prevents unnecessary work. The final failure path remains explicit when all attempts fail."
+    ],
+    "meaning": "Two attempts are useful here because the verifier can identify a valid solution. Extra attempts would add no value after success. For an uncertain task, compare quality versus total compute on representative cases rather than assuming “more reasoning” is always better.",
+    "choices": [
+      [
+        "Answer has an objective check",
+        "Use that check to select or reject candidates",
+        "Check that the test actually represents the full task."
+      ],
+      [
+        "Question lacks necessary external facts",
+        "Retrieve or ask for them",
+        "More internal effort cannot reveal a private missing record."
+      ],
+      [
+        "Simple task already meets quality needs",
+        "Use a smaller bounded strategy",
+        "Extra attempts increase latency and cost without guaranteed benefit."
+      ]
+    ],
+    "limit": "This is application-level verified search. It is not an implementation of a reasoning LLM, and it does not expose or reconstruct hidden chain-of-thought.",
+    "experiment": "Set the budget to 1. What is the correct final behavior?",
+    "answer": "The first candidate fails and the budget is exhausted. The program reports no verified answer; it must not return x=2 merely because it was the only candidate checked.",
+    "output": "attempt=1 x=2 value=8 passed=False\r\nattempt=2 x=3 value=11 passed=True\r\nSelected: 3\r\nChecks used: 2\r\nChecks remaining: 1"
+  },
+  "efficient-llm-serving": {
+    "title": "Separate Prompt Processing, Token Generation, and Memory",
+    "paragraphs": [
+      "When a user submits a long prompt, the server first processes the supplied tokens. This phase is called prefill. Once the first generated token appears, decoding continues one token at a time. The time to first token therefore includes work that later token intervals do not: queueing, request handling, and prompt processing can all affect it.",
+      "A KV cache stores earlier attention keys and values so they do not need to be projected again for every later step. Attention still has to use the relevant cached states; caching does not make a long context free. Its memory grows with sequence length, active requests, layer count, KV-head count, head width, and element size. Grouped-query attention can use fewer KV heads than query heads, so do not blindly substitute the query-head count.",
+      "For a deliberately small model, choose four layers, two KV heads, eight values per head, 128 cached tokens, two bytes per value, and one active sequence. Both keys and values must be stored. The result is 32 KiB. Doubling cached tokens doubles that idealized cache size to 64 KiB. Neither estimate includes weights, allocator padding, temporary buffers, or the rest of the serving runtime."
+    ],
+    "terms": [
+      [
+        "Prefill",
+        "Processing the existing prompt before autoregressive decoding continues."
+      ],
+      [
+        "TTFT",
+        "Time from sending a request to receiving its first token."
+      ],
+      [
+        "Inter-token latency",
+        "Time between consecutive received tokens."
+      ],
+      [
+        "KV heads",
+        "The heads whose key/value states are stored; this count can differ from query heads."
+      ]
+    ],
+    "formula": "KV bytes = 2 × layers × KV_heads × head_dimension × cached_tokens × bytes_per_value × batch",
+    "formulaExplanation": "The leading 2 counts keys and values. All dimensions are developer-chosen teaching values here. KiB means 1024 bytes; GB for the weight estimates elsewhere uses one billion bytes. Actual serving memory includes additional allocations.",
+    "steps": [
+      "Compute 2×4×2×8×128×2×1 = 32,768 bytes = 32 KiB.",
+      "Repeat for 256 cached tokens: 65,536 bytes = 64 KiB.",
+      "For token arrival times [0.35,0.40,0.45,0.50] seconds after request start, TTFT is 0.35 seconds.",
+      "There are three decode intervals of 0.05 seconds. The decode rate across those intervals is 3/0.15=20 tokens per second; total response time is 0.50 seconds."
+    ],
+    "labTitle": "Python: Estimate KV Memory and Read a Token Timeline",
+    "setup": "Python 3, standard library only. Architecture dimensions and timestamps are invented, not benchmark results. This program estimates raw storage and computes serving metrics.",
+    "code": "layers, kv_heads, head_dimension = 4, 2, 8\nbytes_per_value, batch = 2, 1\n\ndef cache_bytes(tokens):\n    return 2 * layers * kv_heads * head_dimension * tokens * bytes_per_value * batch\n\nfor tokens in [128, 256]:\n    print(f\"{tokens} cached tokens: {cache_bytes(tokens) / 1024:.1f} KiB\")\n\narrivals = [0.35, 0.40, 0.45, 0.50]\nintervals = [b - a for a, b in zip(arrivals, arrivals[1:])]\ndecode_rate = (len(arrivals) - 1) / (arrivals[-1] - arrivals[0])\nprint(f\"TTFT: {arrivals[0]:.2f}s\")\nprint(\"Inter-token intervals:\", [round(x, 2) for x in intervals])\nprint(f\"Decode rate: {decode_rate:.1f} tokens/s\")\nprint(f\"Complete response: {arrivals[-1]:.2f}s\")\nfor bits in [16, 8, 4]:\n    raw_gb = 1_000_000_000 * bits / 8 / 1_000_000_000\n    print(f\"1B weights at {bits} bits: {raw_gb:.1f} GB raw\")",
+    "notes": [
+      "The model-size fields are explicit inputs, so you can see exactly which assumptions produce the estimate.",
+      "There are four token arrivals but only three intervals after the first token. Dividing four by the decode interval would overstate this rate.",
+      "The raw 4-bit estimate excludes scales, zero points, packing, cache, and runtime buffers. It is not a GPU-memory requirement or a guaranteed speedup."
+    ],
+    "meaning": "A request can have slow startup but fast streaming, or fast startup but slow token generation. Measure both. Optimizations such as quantization, continuous batching, and prefix reuse solve different bottlenecks and should be evaluated under the actual workload.",
+    "choices": [
+      [
+        "TTFT is high",
+        "Inspect queueing, prompt size, and prefill",
+        "Faster decoding alone may not improve startup."
+      ],
+      [
+        "Memory grows with concurrent long requests",
+        "Inspect KV allocation and context policy",
+        "Raw weight memory is only part of the budget."
+      ],
+      [
+        "Throughput is low with many requests",
+        "Evaluate batching and scheduling",
+        "Higher aggregate throughput can increase individual waiting time."
+      ]
+    ],
+    "limit": "This is a dense-cache estimate, not a measurement of a particular runtime. Sliding-window attention, cache compression, paging, and hardware-specific kernels can change the actual allocation and speed.",
+    "experiment": "Double batch from 1 to 2 with the same sequence lengths. What changes?",
+    "answer": "The idealized KV estimate doubles because two sequences retain separate attention states. The formula alone does not predict how latency or throughput changes.",
+    "output": "128 cached tokens: 32.0 KiB\r\n256 cached tokens: 64.0 KiB\r\nTTFT: 0.35s\r\nInter-token intervals: [0.05, 0.05, 0.05]\r\nDecode rate: 20.0 tokens/s\r\nComplete response: 0.50s\r\n1B weights at 16 bits: 2.0 GB raw\r\n1B weights at 8 bits: 1.0 GB raw\r\n1B weights at 4 bits: 0.5 GB raw"
+  },
+  "llmops": {
+    "title": "Connect a User-Visible Answer to a Reproducible Release",
+    "paragraphs": [
+      "A model name is not enough to reproduce an answer. The prompt, retrieval index, embedding model, output schema, safety rules, and decoding configuration may all change behavior. A release manifest records their versions together so an unexpected result can be traced to the exact application configuration.",
+      "A trace records what happened during a request: selected source IDs, stage durations, token counts, errors, and the release ID. Do not automatically store raw prompts or document text; those can contain private information. Keep only the evidence needed for diagnosis under the application's retention and access policy. Operational visibility should not create a second uncontrolled sensitive-data store.",
+      "A release gate also needs an action. Suppose a candidate passes offline tests and enters a 5% canary. If a critical safety failure is observed, a predeclared stop rule can return traffic to the known-good manifest. Better average cost or speed does not erase that failure. The incident should become a regression case before the next candidate is considered."
+    ],
+    "terms": [
+      [
+        "Manifest",
+        "A versioned bundle describing the components of one release."
+      ],
+      [
+        "Trace",
+        "Observable request events and metadata used for diagnosis."
+      ],
+      [
+        "Canary",
+        "A limited exposure of a candidate to real traffic."
+      ],
+      [
+        "Rollback",
+        "Restoring a known-good release and its compatible dependencies."
+      ]
+    ],
+    "formula": "critical failures > 0 → stop canary → restore baseline manifest",
+    "formulaExplanation": "Zero critical failures is an illustrative hard stop rule. Real thresholds, sample sizes, observation windows, and escalation policies should be defined before release according to the application.",
+    "steps": [
+      "Create baseline and candidate manifests with explicit model, prompt, index, and schema versions.",
+      "Process three invented canary outcomes. The second contains a critical failure.",
+      "The stop rule selects the baseline release even though the other outcomes are successful.",
+      "Report the selected release and failure count without logging user prompts. This is a local decision simulation, not a real deployment."
+    ],
+    "labTitle": "Python: Make a Canary Decision from a Versioned Manifest",
+    "setup": "Python 3, standard library only. The program reads in-memory fixtures and prints a release decision. It does not deploy, send traffic, or call any service.",
+    "code": "import hashlib\nimport json\n\nbaseline = {\"model\": \"m1\", \"prompt\": \"p3\", \"index\": \"i8\", \"schema\": \"s2\"}\ncandidate = {\"model\": \"m1\", \"prompt\": \"p4\", \"index\": \"i8\", \"schema\": \"s2\"}\n\ndef release_id(manifest):\n    serialized = json.dumps(manifest, sort_keys=True).encode()\n    return hashlib.sha256(serialized).hexdigest()[:8]\n\nevents = [\n    {\"request_id\": \"R1\", \"critical\": False, \"latency_ms\": 800},\n    {\"request_id\": \"R2\", \"critical\": True, \"latency_ms\": 700},\n    {\"request_id\": \"R3\", \"critical\": False, \"latency_ms\": 850},\n]\nfailures = sum(event[\"critical\"] for event in events)\nrollback = failures > 0\nactive = baseline if rollback else candidate\nprint(\"Baseline ID:\", release_id(baseline))\nprint(\"Candidate ID:\", release_id(candidate))\nprint(\"Critical failures:\", failures)\nprint(\"Decision:\", \"ROLLBACK\" if rollback else \"CONTINUE OBSERVING\")\nprint(\"Active prompt:\", active[\"prompt\"])\nprint(\"Logged raw user text:\", any(\"prompt_text\" in e for e in events))",
+    "notes": [
+      "Sorting JSON keys makes the illustrative fingerprint independent of dictionary insertion order. An eight-character hash is a display convenience, not a security or collision-proof release identity.",
+      "The failure count is independent of latency. A faster unsafe request remains a release-blocking event.",
+      "The code returns the full baseline manifest, not only the previous prompt string. Real rollback must restore compatible components and handle in-flight work."
+    ],
+    "meaning": "Versioning makes the incident attributable; the stop rule makes the rollout controllable. Passing these three fixtures proves only that the decision code follows its rule. Production needs representative evaluation, monitored traffic, tested rollback, and explicit ownership of incidents.",
+    "choices": [
+      [
+        "A prompt edit changes answers",
+        "Version it and rerun regression cases",
+        "Treat prompts as application behavior, not harmless prose."
+      ],
+      [
+        "A transient timeout occurs",
+        "Use bounded classified retries",
+        "Side effects need idempotency; blind retries can duplicate work."
+      ],
+      [
+        "A canary crosses a stop condition",
+        "Pause or roll back under the runbook",
+        "Do not wait for an average metric to hide the failure."
+      ]
+    ],
+    "limit": "This is a release-decision simulation, not an observability platform. It does not implement traffic routing, concurrency, distributed tracing, storage security, or a production rollback mechanism.",
+    "experiment": "Set every critical flag to False. Should the code declare the application permanently safe?",
+    "answer": "No. It returns CONTINUE OBSERVING for this sample. Absence of observed failures in a tiny canary is not proof that rare or unseen failures cannot occur.",
+    "output": "Baseline ID: 4dc43156\r\nCandidate ID: 71f5daa5\r\nCritical failures: 1\r\nDecision: ROLLBACK\r\nActive prompt: p3\r\nLogged raw user text: False"
+  }
+}
+
