@@ -8,6 +8,7 @@ import { AlertTriangle, CheckCircle2, Lightbulb, Target } from "lucide-react";
 import { AgenticVisualFigure } from "../../components/diagrams/AgenticAIDiagrams";
 import { agenticLessonDetails, type AgenticTable } from "./agenticLessonDetails";
 import { agenticLessonEnhancements } from "./agenticLessonEnhancements";
+import { AgenticConceptExpansion, AgenticWorkedLab, type AgenticTutorialTopic } from "./AgenticTutorialExpansion";
 
 export type AgenticBaseLesson = {
   intro: string;
@@ -20,7 +21,7 @@ export type AgenticBaseLesson = {
   takeaway: string;
 };
 
-const runnableDocumentationAgent = `"""A tiny bounded documentation agent using only the Python standard library."""
+const runnableDocumentationAgent = String.raw`"""A tiny bounded documentation agent using only the Python standard library."""
 
 DOCS = [
     {
@@ -123,6 +124,7 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
       </section>
 
       <Callout role="tip" title="A familiar way to picture it"><p>{lesson.analogy}</p></Callout>
+      <AgenticConceptExpansion topicId={topicId as AgenticTutorialTopic} />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">How the Process Works</h2>
@@ -172,6 +174,8 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
           </ol>
         </section>
       )}
+
+      <AgenticWorkedLab topicId={topicId as AgenticTutorialTopic} />
 
       <Callout role="mistake" title="Common mistake"><p>{lesson.mistake}</p></Callout>
 
