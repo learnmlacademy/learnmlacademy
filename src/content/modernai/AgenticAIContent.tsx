@@ -1,10 +1,8 @@
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock } from "../../components/content/CodeBlock";
-import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 import { DataTable } from "../../components/content/DataTable";
-import React from "react";
-import { AlertTriangle, CheckCircle2, Lightbulb, Target } from "lucide-react";
+import { CheckCircle2, Target } from "lucide-react";
 import { AgenticVisualFigure } from "../../components/diagrams/AgenticAIDiagrams";
 import { agenticLessonDetails, type AgenticTable } from "./agenticLessonDetails";
 import { agenticLessonEnhancements } from "./agenticLessonEnhancements";
