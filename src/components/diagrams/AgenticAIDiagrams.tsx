@@ -37,7 +37,7 @@ function Flow({ children }: { children: ReactNode[] }) {
 
 function FigureFrame({ id, title, question, caption, children }: { id: AgenticVisualId; title: string; question: string; caption: string; children: ReactNode }) {
   return (
-    <figure data-agentic-visual={id} className="not-prose overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white shadow-sm">
+    <figure data-agentic-visual={id} className="not-prose overflow-hidden border-y border-slate-200 bg-white">
       <div className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Instructional figure</p>
         <h3 className="mt-1 text-lg font-extrabold leading-snug text-slate-950">{title}</h3>
