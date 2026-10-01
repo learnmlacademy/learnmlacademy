@@ -1,12 +1,16 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { createServer } from 'vite';
+
+// Match the production React build that will hydrate these pages.
+process.env.NODE_ENV = 'production';
 
 const BASE_URL = 'https://www.learnmlacademy.com';
 const DIST_DIR = path.resolve('dist');
 const TEMPLATE_PATH = path.join(DIST_DIR, 'index.html');
 
-function escapeHtml(value) {
+export function escapeHtml(value) {
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -15,11 +19,12 @@ function escapeHtml(value) {
 }
 
 function replaceHeadTag(html, regex, replacement) {
-  if (regex.test(html)) return html.replace(regex, replacement);
-  return html.replace('</head>', `    ${replacement}\n  </head>`);
+  // Restrict replacement to the head and remove duplicates, not just the first tag.
+  return html.replace(/<head>([\s\S]*?)<\/head>/i, (_, head) =>
+    `<head>${head.replace(new RegExp(regex.source, 'gi'), '')}    ${replacement}\n  </head>`);
 }
 
-function setPageMeta(html, { title, description, canonical, schema }) {
+function setPageMeta(html, { title, description, canonical, schema, category }) {
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   const safeCanonical = escapeHtml(canonical);
@@ -65,22 +70,33 @@ function setPageMeta(html, { title, description, canonical, schema }) {
     `<meta name="twitter:description" content="${safeDescription}" />`,
   );
 
+  if (schema) {
+    html = replaceHeadTag(html, /<meta\s+property="og:type"[^>]*>/i,
+      '<meta property="og:type" content="article" />');
+    html = replaceHeadTag(html, /<meta\s+property="og:site_name"[^>]*>/i,
+      '<meta property="og:site_name" content="Learn ML Academy" />');
+    html = replaceHeadTag(html, /<meta\s+property="article:section"[^>]*>/i,
+      `<meta property="article:section" content="${escapeHtml(category.replace(/^\d+\.\s*/, ''))}" />`);
+  }
+
   html = html.replace(/\s*<script[^>]+id="schema-topic"[^>]*>[\s\S]*?<\/script>/i, '');
   if (schema) {
     const safeSchema = schema.replaceAll('</script', '<\\/script');
     html = html.replace(
       '</head>',
-      `    <script id="schema-topic" type="application/ld+json">${safeSchema}</script>\n  </head>`,
+      () => `    <script id="schema-topic" type="application/ld+json">${safeSchema}</script>\n  </head>`,
     );
   }
 
   return html;
 }
 
-function outputPathForRoute(route) {
+export function outputPathForRoute(route) {
   if (route === '/') return TEMPLATE_PATH;
   const clean = route.replace(/^\/+|\/+$/g, '');
-  return path.join(DIST_DIR, clean, 'index.html');
+  // Vercel cleanUrls and Vite preview resolve /learn/id directly to /learn/id.html.
+  // This avoids depending on a trailing slash to resolve a directory index.
+  return path.join(DIST_DIR, `${clean}.html`);
 }
 
 const staticMeta = new Map([
@@ -118,20 +134,32 @@ const staticMeta = new Map([
   }],
 ]);
 
-const vite = await createServer({
-  server: { middlewareMode: true },
-  appType: 'custom',
-  logLevel: 'error',
-});
+export function createPrerenderServer() {
+  return createServer({
+    configLoader: 'runner',
+    mode: 'production',
+    server: { middlewareMode: true, hmr: false, watch: null },
+    optimizeDeps: { noDiscovery: true, include: [] },
+    plugins: [{
+      name: 'prerender-only',
+      configResolved(config) {
+        // React's plugin adds browser prebundles; this server only loads SSR modules.
+        config.optimizeDeps.include = [];
+      },
+    }],
+    // Resolve Router's ESM exports through Vite, as in the browser build.
+    ssr: {
+      noExternal: ['react-router', 'react-router-dom'],
+      resolve: { conditions: ['module', 'import', 'production'] },
+    },
+    appType: 'custom',
+    logLevel: 'error',
+  });
+}
 
-try {
-  const template = await fs.readFile(TEMPLATE_PATH, 'utf8');
-  if (!template.includes('<div id="root"></div>')) {
-    throw new Error('dist/index.html does not contain the expected empty root element.');
-  }
-
-  const [{ render }, { curriculum }, { blogPosts }, seo] = await Promise.all([
-    vite.ssrLoadModule('/prerender/entry-server.tsx'),
+// Both generation and verification use the curriculum, never a second lesson list.
+export async function loadPages(vite) {
+  const [{ curriculum }, { blogPosts }, seo] = await Promise.all([
     vite.ssrLoadModule('/src/data/curriculum.ts'),
     vite.ssrLoadModule('/src/data/blog.ts'),
     vite.ssrLoadModule('/src/utils/seo.ts'),
@@ -149,63 +177,66 @@ try {
     throw new Error(`Expected 167 canonical lesson routes, found ${topics.length}.`);
   }
 
-  const lessonRoutes = topics.map((topic) => `/learn/${topic.id}`);
-  const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
-  const routes = [
-    ...staticMeta.keys(),
-    ...lessonRoutes,
-    ...blogRoutes,
+  const pages = [
+    ...Array.from(staticMeta, ([route, meta]) => ({ route, ...meta, kind: 'static' })),
+    ...topics.map((topic) => {
+      const meta = seo.getSEOData(topic.id, topic.title);
+      return {
+        route: `/learn/${topic.id}`, ...meta, kind: 'lesson',
+        heading: topic.title, category: topic.category,
+        schema: seo.getLearningResourceSchema(topic.id, meta.title, meta.description, topic.category),
+      };
+    }),
+    ...blogPosts.map((post) => ({
+      route: `/blog/${post.slug}`, title: `${post.title} | ML Academy Blog`,
+      description: post.excerpt, heading: post.title, kind: 'blog',
+    })),
   ];
 
-  for (const route of routes) {
-    const appHtml = await render(route);
-    if (!appHtml || appHtml.length < 100) {
-      throw new Error(`Prerender returned unexpectedly little HTML for ${route}.`);
-    }
-
-    let html = template.replace(
-      '<div id="root"></div>',
-      `<div id="root">${appHtml}</div>`,
-    );
-
-    let meta = staticMeta.get(route);
-    let schema;
-
-    if (route.startsWith('/learn/')) {
-      const topicId = route.slice('/learn/'.length);
-      const topic = topics.find((item) => item.id === topicId);
-      if (!topic) throw new Error(`Missing curriculum data for ${route}.`);
-      meta = seo.getSEOData(topicId, topic.title);
-      schema = seo.getLearningResourceSchema(topicId, meta.title, meta.description);
-    } else if (route.startsWith('/blog/')) {
-      const slug = route.slice('/blog/'.length);
-      const post = blogPosts.find((item) => item.slug === slug);
-      if (!post) throw new Error(`Missing blog data for ${route}.`);
-      meta = {
-        title: `${post.title} | ML Academy Blog`,
-        description: post.excerpt,
-      };
-    }
-
-    if (!meta) {
-      throw new Error(`Missing metadata for ${route}.`);
-    }
-
-    const canonical = `${BASE_URL}${route === '/' ? '/' : route}`;
-    html = setPageMeta(html, {
-      ...meta,
-      canonical,
-      schema,
-    });
-
-    const outPath = outputPathForRoute(route);
-    await fs.mkdir(path.dirname(outPath), { recursive: true });
-    await fs.writeFile(outPath, html, 'utf8');
+  if (new Set(pages.map((page) => page.route)).size !== pages.length) {
+    throw new Error('Duplicate prerender routes.');
   }
+  return pages.map((page) => ({ ...page, canonical: `${BASE_URL}${page.route}` }));
+}
 
-  console.log(
-    `prerender: wrote ${routes.length} static HTML pages (${lessonRoutes.length} lessons, ${blogRoutes.length} blog posts, ${staticMeta.size} static pages).`,
-  );
-} finally {
-  await vite.close();
+async function prerender() {
+  const vite = await createPrerenderServer();
+  try {
+    const template = await fs.readFile(TEMPLATE_PATH, 'utf8');
+    if (!template.includes('<div id="root"></div>')) {
+      throw new Error('dist/index.html does not contain the expected empty root element. Run the Vite build first.');
+    }
+    const [{ render }, pages] = await Promise.all([
+      vite.ssrLoadModule('/prerender/entry-server.tsx'), loadPages(vite),
+    ]);
+
+    for (const page of pages) {
+      const { route } = page;
+      const appHtml = await render(route);
+      if (!appHtml || appHtml.length < 100) {
+        throw new Error(`Prerender returned unexpectedly little HTML for ${route}.`);
+      }
+
+      // A replacer function preserves literal $ sequences in lesson code/formulas.
+      let html = template.replace(
+        '<div id="root"></div>',
+        () => `<div id="root">${appHtml}</div>`,
+      );
+      html = setPageMeta(html, page);
+
+      const outPath = outputPathForRoute(route);
+      await fs.mkdir(path.dirname(outPath), { recursive: true });
+      await fs.writeFile(outPath, html, 'utf8');
+    }
+
+    console.log(
+      `prerender: wrote ${pages.length} static HTML pages (${pages.filter(page => page.kind === 'lesson').length} lessons, ${pages.filter(page => page.kind === 'blog').length} blog posts, ${staticMeta.size} static pages).`,
+    );
+  } finally {
+    await vite.close();
+  }
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await prerender();
 }
