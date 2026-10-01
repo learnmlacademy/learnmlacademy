@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
-import { GenAIIntuition, GenAIWorkedLab } from "./GenAITutorialExpansion";
+import { FigureShell } from "../../components/content/FigureShell";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 
@@ -9,14 +9,12 @@ function EvaluatingGenerativeModels() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>1. Why One Impressive Sample Is Not Enough</h2>
+        <h2>One beautiful sample does not prove a generator is good</h2>
         <p className="text-lg">Generative systems are stochastic: the same request can produce different outputs. Evaluation therefore needs a <strong>set of representative cases</strong>, repeated runs where variation matters, and several dimensions rather than one universal score.</p>
       </section>
 
-      <GenAIIntuition topicId="evaluating-generative-models" />
-
       <section className="space-y-4">
-        <h2>3. Evaluate Quality, Adherence, Diversity, Latency, Cost, and Safety Separately</h2>
+        <h2>Different metrics answer different questions</h2>
         <DataTable title="Separate the evidence" headers={["Dimension","Question","Example evidence"]} rows={[
           ["Fidelity / quality","Does the output look or sound plausible?","Human preference, artifact rate"],
           ["Prompt adherence","Did it follow the requested content or constraints?","Rubric-based review"],
@@ -28,13 +26,13 @@ function EvaluatingGenerativeModels() {
       </section>
 
       <section className="space-y-4">
-        <h2>4. FID: What It Measures—and What It Does Not</h2>
+        <h2>What does FID actually compare?</h2>
         <p><strong>Fréchet Inception Distance (FID)</strong> is a set-level image metric that compares the centers and spreads of feature representations from real and generated image collections. It is not a score for one exact image and it does not measure every quality dimension.</p>
         <Callout role="info" title="Treat metrics as instruments, not verdicts"><p>A lower FID may be useful evidence about feature distributions, but human usefulness, prompt adherence, artifacts, diversity, safety, and latency still need separate checks.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>5. Apply Hard Release Gates Before Soft Preferences</h2>
+        <h2>Hard release gates can outweigh a softer preference</h2>
         <DataTable title="Worked release example" headers={["Generator","Human preference","Artifact rate","p95 latency","Result"]} rows={[
           ["A","Higher","8%","4.2 s","Fails both hard gates"],
           ["B","Lower","3%","2.1 s","Passes both hard gates"],
@@ -43,12 +41,10 @@ function EvaluatingGenerativeModels() {
       </section>
 
       <section className="space-y-4">
-        <h2>6. Compare Models Under the Same Experimental Conditions</h2>
+        <h2>Compare systems on the same experiment</h2>
         <p>If two models use different prompts, preprocessing, case sets, or serving hardware, the observed differences mix model quality with pipeline differences. Use the same held-out workload and realistic settings when comparing candidates.</p>
         <p>For random generators, repeat important cases with recorded settings and report variation or pass rates instead of relying on one lucky output.</p>
       </section>
-
-      <GenAIWorkedLab topicId="evaluating-generative-models" />
 
       <SummaryCard items={[
         "Generative evaluation needs representative test cases and repeated runs when randomness matters.",
@@ -66,28 +62,26 @@ function ResponsibleGenerativeAI() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>1. Why Application Context Determines Generative-AI Risk</h2>
+        <h2>A model can be acceptable while the application is unsafe</h2>
         <p className="text-lg">Risk depends on the whole system: who uses it, what information it receives, what actions it can trigger, how errors affect people, and what review or recovery exists.</p>
         <p>A brainstorming assistant reviewed by an employee and an automated system that changes a person's eligibility record can use similar models but require very different controls.</p>
       </section>
 
-      <GenAIIntuition topicId="responsible-generative-ai" />
-
       <section className="space-y-4">
-        <h2>3. Define the Intended Use Before Designing Controls</h2>
+        <h2>Start with a specific intended use</h2>
         <p>“Use AI responsibly” is too vague to test. A better statement is:</p>
         <Callout role="tip" title="Testable intended use"><p><strong>Draft internal product descriptions from approved product data for trained staff to edit before publication.</strong></p></Callout>
         <p>That statement names the task, evidence source, users, and review level.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>4. Prioritize Risks with a Consistent Rubric</h2>
+        <h2>Prioritize risks consistently</h2>
         <p>A simple planning rubric can score <strong>likelihood × impact</strong>. If likelihood=3 and impact=4 on chosen 1–5 scales:</p>
         <FormulaBlock expression="priority score = 3 × 4 = 12" explanation="This score helps rank risks within the team's rubric. It is not a measured probability of harm." />
       </section>
 
       <section className="space-y-4">
-        <h2>5. Design Controls to Prevent, Detect, Contain, and Recover</h2>
+        <h2>Controls should prevent, detect, contain, and recover</h2>
         <DataTable title="Different controls do different jobs" headers={["Control","Example purpose"]} rows={[
           ["Access control","Keep private data away from unauthorized users/models"],
           ["Input/output validation","Block malformed or prohibited content"],
@@ -98,8 +92,6 @@ function ResponsibleGenerativeAI() {
         ]}/>
         <Callout role="warning" title="A disclaimer is not containment"><p>“AI can make mistakes” communicates uncertainty but does not prevent or recover from a private-data leak.</p></Callout>
       </section>
-
-      <GenAIWorkedLab topicId="responsible-generative-ai" />
 
       <SummaryCard items={[
         "Generative-AI risk depends on the entire application, not only the model.",
@@ -117,15 +109,18 @@ function ChoosingGenerativeModel() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>1. First Decide Whether You Need Generation at All</h2>
+        <h2>First question: do you need generation at all?</h2>
         <p className="text-lg">If exact retrieval, deterministic rules, a predictive model, or a template can complete the user job, open-ended generation may add cost and failure modes without adding value.</p>
       </section>
 
-      <GenAIIntuition topicId="choosing-generative-model" />
-
+      <FigureShell title="Select by constraints, not by model popularity" caption="Filter candidates by hard requirements first; compare quality, cost, and convenience only among eligible options." accessibleDescription="A funnel begins with the user job, then applies capability, data/privacy, latency, licensing, and deployment constraints before benchmarking eligible candidates.">
+        <div className="grid gap-3 md:grid-cols-5">
+          {["User job","Must-have capability","Privacy / data location","Latency / deployment","Benchmark eligible choices"].map((x)=> <div key={x} className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold">{x}</div>)}
+        </div>
+      </FigureShell>
 
       <section className="space-y-4">
-        <h2>3. Match the Problem to a Suitable Model Family</h2>
+        <h2>Family-level starting points</h2>
         <DataTable title="Choose a family from the generation problem" headers={["Need","Natural family to shortlist"]} rows={[
           ["High-fidelity image generation and editing","Diffusion"],
           ["Compact probabilistic latent representation","VAE"],
@@ -135,7 +130,7 @@ function ChoosingGenerativeModel() {
       </section>
 
       <section className="space-y-4">
-        <h2>4. Apply Hard Constraints Before Ranking Candidates</h2>
+        <h2>A controlled-editing selection example</h2>
         <p>Suppose the product requires <strong>mask editing</strong>, an acceptable usage licence, and <strong>p95 latency ≤4.0 s</strong>.</p>
         <DataTable title="Apply hard constraints first" headers={["Candidate","Mask editing","Use permitted","p95 latency","Eligible?"]} rows={[
           ["A","No","Yes","2.4 s","No — missing required capability"],
@@ -146,12 +141,10 @@ function ChoosingGenerativeModel() {
       </section>
 
       <section className="space-y-4">
-        <h2>5. Benchmark Eligible Models in the Intended Environment</h2>
+        <h2>Benchmark on the intended environment</h2>
         <p>If two checkpoints are tested on different hardware and different case sets, repeat the comparison on the same held-out workload and intended serving setup.</p>
         <Callout role="warning" title="Privacy constraints enter early"><p>If a hospital requires data to remain in an approved environment, treat that as a hard provider/deployment constraint before benchmarking—not as an optional preference after choosing a model.</p></Callout>
       </section>
-
-      <GenAIWorkedLab topicId="choosing-generative-model" />
 
       <SummaryCard items={[
         "Question whether generation is necessary before choosing a generative model.",
@@ -169,22 +162,25 @@ function BuildingGenerativeApplications() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>1. Why a Model Response Is Not Yet an Application</h2>
+        <h2>A model response is not yet an application</h2>
         <p className="text-lg">A production application must decide what inputs are allowed, what evidence to retrieve, how to shape the request, how to validate the output, what actions are permitted, and what happens when something is ambiguous or wrong.</p>
       </section>
 
-      <GenAIIntuition topicId="building-genai-apps" />
-
+      <FigureShell title="A reliable generative application wraps the model in deterministic controls" caption="The model creates a draft. The application owns evidence, validation, permissions, user flow, and failure handling." accessibleDescription="A pipeline shows input validation, optional retrieval, model generation, structure validation, semantic/business validation, then human review or safe action.">
+        <div className="grid gap-3 md:grid-cols-3 lg:grid-cols-6">
+          {["Validate input","Retrieve evidence","Generate draft","Check schema","Check meaning / permissions","Review or act"].map((x)=> <div key={x} className="rounded-xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold">{x}</div>)}
+        </div>
+      </FigureShell>
 
       <section className="space-y-4">
-        <h2>3. Validate Structure and Evidence Separately</h2>
+        <h2>Structure validation and factual validation are different</h2>
         <p>Suppose a meeting-summary schema requires <code>decisions</code> to be a list. If the model returns a string, that is an <strong>invalid structure</strong> failure.</p>
         <p>If the JSON shape is perfect but an action item names an owner not supported by the transcript, the structure passed while the <strong>meaning/evidence check failed</strong>.</p>
         <Callout role="tip" title="Schema success proves only shape"><p>Required fields and types being present does not prove the values are true, authorized, or allowed by business rules.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>4. Use Retrieval and Tools for Different Jobs</h2>
+        <h2>Retrieval and tools solve different needs</h2>
         <DataTable title="External capability" headers={["Need","Component"]} rows={[
           ["Find an approved project glossary or policy passage","Retrieval"],
           ["Calculate a value or perform an authorized action","Tool / function call"],
@@ -193,11 +189,9 @@ function BuildingGenerativeApplications() {
       </section>
 
       <section className="space-y-4">
-        <h2>5. Keep High-Impact Actions Behind Explicit Approval</h2>
+        <h2>Ambiguous high-impact outputs should not become automatic actions</h2>
         <p>If a contractual action item names an owner but the transcript is ambiguous, require participant confirmation or human review rather than silently converting the generated guess into an external action.</p>
       </section>
-
-      <GenAIWorkedLab topicId="building-genai-apps" />
 
       <SummaryCard items={[
         "A generative application wraps a model with input, evidence, validation, permission, user-flow, and failure-handling logic.",
@@ -215,14 +209,12 @@ function DeployingGenerativeApplications() {
   return (
     <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
-        <h2>1. From Working Demo to Production Service</h2>
+        <h2>Deployment turns a working demo into a service</h2>
         <p className="text-lg">A deployed generative application must stay secure, responsive, observable, affordable, and recoverable while real users send unpredictable traffic.</p>
       </section>
 
-      <GenAIIntuition topicId="genai-deployment" />
-
       <section className="space-y-4">
-        <h2>3. Hosted vs Self-Hosted Inference: A Measured Trade-Off</h2>
+        <h2>Hosted versus self-hosted is a measured trade-off</h2>
         <DataTable title="Questions to compare" headers={["Dimension","Hosted inference","Self-hosted inference"]} rows={[
           ["Operations","Provider manages much of model serving","Your team owns serving stack and capacity"],
           ["Control","Depends on provider features/contracts","More direct infrastructure/model control"],
@@ -233,31 +225,29 @@ function DeployingGenerativeApplications() {
       </section>
 
       <section className="space-y-4">
-        <h2>4. Keep Secrets Behind the Server Boundary</h2>
+        <h2>Secrets stay behind the server boundary</h2>
         <p>Hosted-model provider keys belong in a protected server-side secret manager or environment with scoped access and a rotation/revocation path. Do not ship them in browser JavaScript, prompts, or ordinary logs.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>5. Make Retries Safe and Idempotent</h2>
+        <h2>Retries can duplicate costly or side-effecting work</h2>
         <p>If a transient timeout causes the same billed generation to run twice, use a bounded retry policy and an <strong>idempotency key</strong> where the provider or downstream system supports it.</p>
         <Callout role="warning" title="Do not “fix” failures with unlimited retries"><p>Classify retryable errors, cap attempts, add backoff, and keep timeouts. Removing all bounds can amplify outages and cost.</p></Callout>
       </section>
 
       <section className="space-y-4">
-        <h2>6. Estimate Concurrency Before Planning Capacity</h2>
+        <h2>A simple concurrency planning estimate</h2>
         <p>If average traffic is 2 requests per second and average processing time is 3 seconds:</p>
         <FormulaBlock expression="average in-flight ≈ arrival rate × processing time = 2 × 3 = 6" explanation="Six is an average planning estimate, not a safe capacity ceiling. Bursts and tail latency require headroom and load testing." />
       </section>
 
       <section className="space-y-4">
-        <h2>7. Release New Model Versions Gradually</h2>
+        <h2>Release model versions gradually</h2>
         <p>After offline tests pass, a new version can receive a small canary slice of real traffic. Compare reliability, quality, safety, cost, and latency with the current version. Define stop conditions and test rollback before increasing exposure.</p>
       </section>
 
-      <GenAIWorkedLab topicId="genai-deployment" />
-
       <section className="space-y-4">
-        <h2>10. Where Generative AI Hands Off to Large Language Models</h2>
+        <h2>Where Generative AI hands off to Large Language Models</h2>
         <p>Generative AI is the broad family: it includes systems that create text, images, audio, video, synthetic data, and more. The next curriculum section zooms into one especially important branch—<strong>Large Language Models</strong>—so you can understand tokens, embeddings, Transformers, text generation, prompting, RAG, evaluation, serving, and LLMOps in a deliberate sequence.</p>
         <p>You do not need to relearn the deployment ideas from this lesson. The LLM section will reuse the same engineering mindset while going much deeper into how language models work and how text-focused applications are built.</p>
       </section>
@@ -274,12 +264,9 @@ function DeployingGenerativeApplications() {
   );
 }
 
+import { GenerativeAIBatchThreeContent } from "./GenerativeAIBatchThreeContent";
+
 export function GenAIBeginnerProductionContent() {
-  const { topicId = "" } = useParams<{ topicId: string }>();
-  if (topicId === "evaluating-generative-models") return <EvaluatingGenerativeModels />;
-  if (topicId === "responsible-generative-ai") return <ResponsibleGenerativeAI />;
-  if (topicId === "choosing-generative-model") return <ChoosingGenerativeModel />;
-  if (topicId === "building-genai-apps") return <BuildingGenerativeApplications />;
-  if (topicId === "genai-deployment") return <DeployingGenerativeApplications />;
-  return null;
+  return <GenerativeAIBatchThreeContent />;
 }
+

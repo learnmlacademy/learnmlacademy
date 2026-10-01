@@ -58,7 +58,7 @@ export function EvaluationPipelineDiagram() {
       caption="Choose only the quality dimensions that the user job actually needs. Automatic checks and human review produce complementary evidence before failures are sliced and a candidate is released, selected, or rejected."
       description="The use case and success criteria lead to a selected quality profile, a fixed evaluation set, and recorded candidate models or settings. Each candidate branches into automatic evaluation and human review. Their evidence reunites in failure and subgroup analysis, which leads to release, select, or reject. The quality profile lists fidelity, diversity, adherence, factuality, safety, latency, and cost as possible dimensions rather than mandatory universal metrics."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 610">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-green`} color="#059669" /></defs>
           <DiagramNode x={25} y={42} width={190} height={72} title="Use case" detail="user job + success criteria" tone="sky" />
@@ -87,7 +87,7 @@ export function EvaluationPipelineDiagram() {
           <Label x={500} y={590} color="#064e3b" size={13}>THE QUESTION IS “BEST FOR WHAT?” — NOT JUST “BEST MODEL”</Label>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 980">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-green-mobile`} color="#059669" /></defs>
           <DiagramNode x={50} y={28} width={200} height={62} title="Use case" detail="job + success criteria" tone="sky" />
@@ -126,7 +126,7 @@ export function EvaluationTradeoffDiagram() {
       caption="Bars are scaled within each row only; do not compare bar lengths across different metrics. A passes preference and adherence more strongly, while B has fewer artifacts, lower latency, and lower cost."
       description="Five paired metric rows compare hypothetical Generator A and B. Prompt adherence is 4.4 versus 4.0, where higher is better. Artifact rate is 8 percent versus 3 percent, where lower is better. Human preference is 62 percent versus 38 percent, where higher is better. P95 latency is 4.2 seconds versus 2.1 seconds, where lower is better. Cost per successful image is four cents versus two cents, where lower is better. Hard release gates require artifact rate at most 5 percent and p95 latency at most 3 seconds, so only B is eligible despite A winning other dimensions."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 510">
           <Label x={368} y={28} color="#0c4a6e" size={14}>GENERATOR A</Label>
           <Label x={755} y={28} color="#4c1d95" size={14}>GENERATOR B</Label>
@@ -147,21 +147,17 @@ export function EvaluationTradeoffDiagram() {
           <Label x={500} y={495} color="#334155" size={12}>NO SINGLE COMBINED SCORE · REQUIREMENTS AND PRIORITIES DETERMINE THE CHOICE</Label>
         </DiagramCanvas>
       </div>
-      <div className="space-y-3 @min-[800px]/genai:hidden">
+      <div className="space-y-3 lg:hidden">
         {[
-          ["Prompt adherence ↑", "A 4.4 / 5", "B 4.0 / 5", "A", "88%", "80%", "0–5"],
-          ["Artifact rate ↓", "A 8%", "B 3%", "B", "80%", "30%", "0–10%"],
-          ["Human preference ↑", "A 62%", "B 38%", "A", "62%", "38%", "0–100%"],
-          ["p95 latency ↓", "A 4.2 s", "B 2.1 s", "B", "84%", "42%", "0–5 seconds"],
-          ["Cost / successful image ↓", "A $0.04", "B $0.02", "B", "80%", "40%", "$0–$0.05"],
-        ].map(([metric, a, b, winner, aWidth, bWidth, scale]) => (
+          ["Prompt adherence ↑", "A 4.4 / 5", "B 4.0 / 5", "A"],
+          ["Artifact rate ↓", "A 8%", "B 3%", "B"],
+          ["Human preference ↑", "A 62%", "B 38%", "A"],
+          ["p95 latency ↓", "A 4.2 s", "B 2.1 s", "B"],
+          ["Cost / successful image ↓", "A $0.04", "B $0.02", "B"],
+        ].map(([metric, a, b, winner]) => (
           <div key={metric} className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <div className="flex items-center justify-between gap-3"><p className="text-sm font-extrabold text-slate-900">{metric}</p><span className="rounded-full bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-900">row winner: {winner}</span></div>
-            <div className="mt-2 space-y-2 text-sm font-bold">
-              <div className="grid grid-cols-[5.5rem_1fr] items-center gap-2 text-sky-900"><span>{a}</span><div className="h-4 overflow-hidden rounded bg-sky-100" aria-hidden="true"><div className="h-full rounded bg-sky-500" style={{ width: aWidth }} /></div></div>
-              <div className="grid grid-cols-[5.5rem_1fr] items-center gap-2 text-violet-900"><span>{b}</span><div className="h-4 overflow-hidden rounded bg-violet-100" aria-hidden="true"><div className="h-full rounded bg-violet-500" style={{ width: bWidth }} /></div></div>
-            </div>
-            <p className="mt-2 text-xs text-slate-600">Shared bar scale for this metric: {scale}</p>
+            <div className="mt-2 grid grid-cols-2 gap-2 text-center text-sm font-bold"><span className="rounded-lg border border-sky-400 bg-sky-50 p-2 text-sky-900">{a}</span><span className="rounded-lg border border-violet-400 bg-violet-50 p-2 text-violet-900">{b}</span></div>
           </div>
         ))}
         <div className="rounded-xl border-2 border-amber-500 bg-amber-50 p-4 text-center">
@@ -182,7 +178,7 @@ export function ResponsibleLifecycleDiagram() {
       caption="A limited release begins observation, not the end of safety work. Monitoring and incidents feed evidence back into controls and tests."
       description="An eight-stage loop moves from define intended use to identify risks, design controls, test and red-team, limited release, monitor, incident response, and improve. A visible feedback path returns improvement evidence to control design and testing. A small inset explains that likelihood times impact is a prioritization aid, not a probability."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 560">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /></defs>
           <Boundary x={18} y={38} width={964} height={470} label="RESPONSIBLE GENAI LIFECYCLE" tone="violet" />
@@ -211,7 +207,7 @@ export function ResponsibleLifecycleDiagram() {
           <Label x={500} y={542} color="#4c1d95" size={13}>RELEASE IS A CONTROLLED STAGE INSIDE THE LOOP</Label>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 960">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-rose-mobile`} color="#e11d48" /></defs>
           <Boundary x={8} y={28} width={284} height={850} label="RESPONSIBILITY LOOP" tone="violet" />
@@ -247,7 +243,7 @@ export function LayeredSafetyDiagram() {
       caption="The model sits inside a controlled path. Operational controls observe the whole application, while a disclaimer is only one user-experience control."
       description="Inside an operational boundary, user input passes through input controls, approved context and model, output controls, and then user experience or human review. The surrounding operational layer includes access control, privacy-aware logging, monitoring, and incident handling. A private-data risk is stopped by input or context controls, and an unsupported-claim risk is checked at output and human-review layers. A small disclaimer badge appears only at the user-experience layer."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 560">
           <defs><ArrowMarker id={arrow} /></defs>
           <Boundary x={18} y={42} width={964} height={450} label="OPERATIONAL LAYER · OBSERVES THE WHOLE APPLICATION" tone="rose" />
@@ -272,7 +268,7 @@ export function LayeredSafetyDiagram() {
           <Label x={500} y={532} color="#881337" size={13}>SAFE MODEL ≠ SAFE APPLICATION BY ITSELF</Label>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 910">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <Boundary x={8} y={28} width={284} height={800} label="OPERATIONS SURROUND THE PATH" tone="rose" />
@@ -307,7 +303,7 @@ export function GenerativeNeedDecisionDiagram() {
       caption="A generative model is only one branch. Exact lookup, prediction, and fixed policy logic often belong on the non-generative branch."
       description="A decision tree starts with what the user needs and asks whether the task requires new content. The no branch leads to retrieval, rules, classifier or regression, and templates. The yes branch identifies output modality, then quality and control constraints, then privacy and deployment constraints, and finally shortlists suitable model families."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 560">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /><ArrowMarker id={`${arrow}-green`} color="#059669" /></defs>
           <DiagramNode x={350} y={24} width={300} height={68} title="What does the user need?" detail="state the job and acceptable result" tone="sky" />
@@ -332,7 +328,7 @@ export function GenerativeNeedDecisionDiagram() {
           <Label x={500} y={540} color="#334155" size={13}>GENERATIVE AI IS A DECISION — NOT THE DEFAULT</Label>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 900">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-rose-mobile`} color="#e11d48" /><ArrowMarker id={`${arrow}-green-mobile`} color="#059669" /></defs>
           <DiagramNode x={42} y={25} width={216} height={64} title="What does the user need?" detail="define the result" tone="sky" />
@@ -369,7 +365,7 @@ export function ConstraintSelectionDiagram() {
       caption="The worked example’s three candidates pass through required mask editing, permitted use, and a p95 latency ceiling. Only eligible models should enter the shared quality-and-cost comparison."
       description="Candidate A, B, and C enter a series of hard gates. A drops out because it lacks mask editing. B and C pass the intended-use terms check. C drops out because its 5.1-second p95 latency exceeds the 4-second ceiling. B survives, enters the same evaluation set and comparison of quality, latency, cost, control, and safety, and becomes the measured winner."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 570">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-green`} color="#059669" /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /></defs>
           <Boundary x={22} y={45} width={180} height={420} label="CANDIDATES" tone="slate" />
@@ -399,7 +395,7 @@ export function ConstraintSelectionDiagram() {
           <Label x={500} y={540} color="#064e3b" size={12.5}>FAIL HARD CONSTRAINT → DO NOT TRADE IT AWAY WITH A SOFT SCORE</Label>
         </DiagramCanvas>
       </div>
-      <div className="space-y-3 @min-[800px]/genai:hidden">
+      <div className="space-y-3 lg:hidden">
         <div className="grid grid-cols-3 gap-2 text-center text-sm font-bold"><span className="rounded-lg border border-sky-400 bg-sky-50 p-2">A</span><span className="rounded-lg border border-violet-400 bg-violet-50 p-2">B</span><span className="rounded-lg border border-amber-400 bg-amber-50 p-2">C</span></div>
         {[
           ["Gate 1 · Mask editing required", "A drops: no", "B + C pass"],
@@ -423,7 +419,7 @@ export function ApplicationArchitectureDiagram() {
       caption="Deterministic application logic controls what reaches the model and what becomes visible to the user. Invalid or uncertain outputs leave the main path through retry, fallback, or human review."
       description="A nine-stage application architecture moves from user input to input validation, context or evidence assembly, request construction, generative model, structured output, schema validation, business and evidence validation, and user-visible result. The model is visually isolated inside a model boundary, while surrounding stages are application logic. Failed validation branches to bounded retry, safe fallback, or human review. Evaluation and feedback logging observe the result without requiring raw private content."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 650">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-green`} color="#059669" /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /></defs>
           <Boundary x={18} y={42} width={964} height={510} label="APPLICATION LOGIC" tone="sky" />
@@ -460,7 +456,7 @@ export function ApplicationArchitectureDiagram() {
           <Label x={500} y={630} color="#334155" size={12}>APPLICATION LOGIC DEFINES INPUTS, CONTRACTS, CHECKS, FALLBACKS, AND USER EXPERIENCE</Label>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 1210">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${arrow}-rose-mobile`} color="#e11d48" /></defs>
           <Boundary x={8} y={28} width={284} height={1000} label="APPLICATION LOGIC" tone="sky" />
@@ -503,7 +499,7 @@ export function OutputValidationDiagram() {
       caption="The valid meeting-summary draft has the required types and transcript evidence. The invalid draft fails both structure and evidence checks, so it cannot become a user result."
       description="Model output enters parse and validate, then branches. The valid miniature output contains a decisions list and an action item for Maya with evidence copied from the transcript; it passes schema and business evidence rules and becomes a usable reviewable result. The invalid miniature output uses a string where decisions should be a list and says Sam should book a venue using evidence absent from the transcript; it is rejected and routed to bounded retry, fallback, or human review."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 540">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-green`} color="#059669" /><ArrowMarker id={`${arrow}-rose`} color="#e11d48" /></defs>
           <DiagramNode x={35} y={205} width={150} height={72} title="Model output" detail="untrusted draft" tone="rose" />
@@ -530,7 +526,7 @@ export function OutputValidationDiagram() {
           <Label x={500} y={532} color="#334155" size={12}>VALID JSON CAN STILL CONTAIN AN UNSUPPORTED CLAIM</Label>
         </DiagramCanvas>
       </div>
-      <div className="space-y-3 @min-[800px]/genai:hidden">
+      <div className="space-y-3 lg:hidden">
         <div className="rounded-xl border-2 border-rose-400 bg-rose-50 p-3 text-center"><p className="font-extrabold text-rose-950">Model output · untrusted draft</p></div>
         <div className="text-center text-2xl text-slate-500" aria-hidden="true">↓</div>
         <div className="rounded-xl border-2 border-indigo-500 bg-indigo-50 p-3 text-center"><p className="font-extrabold text-indigo-950">Parse → schema → evidence rules</p></div>
@@ -552,7 +548,7 @@ export function HostedSelfHostedDiagram() {
       caption="Both paths begin behind the same application server. Hosted inference transfers more infrastructure operation to a provider; self-hosting gives the team more infrastructure control and responsibility."
       description="An application server branches to a hosted path through a provider API and provider-managed inference, and a self-hosted path through the organization's inference service, model runtime, and compute infrastructure. Side panels compare infrastructure control, scaling responsibility, privacy and data location, customization, maintenance, cost structure, and version control without claiming that either path is always safer or cheaper."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 590">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={`${arrow}-sky`} color="#0284c7" /><ArrowMarker id={`${arrow}-violet`} color="#7c3aed" /></defs>
           <DiagramNode x={365} y={24} width={270} height={70} title="Application server" detail="stable internal request contract" tone="sky" />
@@ -576,7 +572,7 @@ export function HostedSelfHostedDiagram() {
           <Label x={500} y={565} color="#881337" size={11.5}>HOSTED ≠ AUTOMATICALLY UNSAFE · SELF-HOSTED ≠ AUTOMATICALLY CHEAPER</Label>
         </DiagramCanvas>
       </div>
-      <div className="space-y-3 @min-[800px]/genai:hidden">
+      <div className="space-y-3 lg:hidden">
         <div className="rounded-xl border-2 border-indigo-500 bg-indigo-50 p-3 text-center"><p className="font-extrabold text-indigo-950">Application server</p><p className="text-xs text-slate-600">stable internal contract</p></div>
         <p className="text-center text-xs font-extrabold text-slate-500">BRANCHES TO</p>
         <div className="rounded-xl border-2 border-sky-500 bg-sky-50 p-4"><p className="text-center font-extrabold text-sky-950">HOSTED PATH</p><p className="mt-2 text-center text-sm font-bold">Provider API → managed inference</p><p className="mt-3 text-xs leading-6 text-slate-700">Provider manages more serving infrastructure.<br />Team still manages integration, policy, measurements, and contract choices.<br />Data location depends on provider region and terms.</p></div>
@@ -596,7 +592,7 @@ export function ProductionReliabilityDiagram() {
       caption="Keep the central request readable, then place traffic, call, performance, observability, and rollout mechanisms where they act. The concurrency equation is a planning estimate, not an autoscaling guarantee."
       description="A central production path moves from client to application server, validation and context, provider abstraction, model inference, and response. Before and around requests are authentication, secrets, rate limiting, and concurrency controls. Call reliability contains timeout, bounded retry, idempotency when supported, and fallback. Performance contains streaming, appropriate batching, and safe caching. Observability includes error rate, p50 and p95 latency, throughput, cost per successful task, and quality or safety regression. Deployment includes canary or shadow traffic, rollback, and version rollout. A small planning inset calculates two requests per second times three seconds as approximately six in-flight requests on average."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 690">
           <defs><ArrowMarker id={arrow} /></defs>
           <Boundary x={18} y={205} width={964} height={185} label="CENTRAL PRODUCTION REQUEST" tone="sky" />
@@ -624,7 +620,7 @@ export function ProductionReliabilityDiagram() {
           <text x="500" y="665" textAnchor="middle" fontSize="10.5" fill="#78350f">average estimate · not an autoscaling guarantee</text>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] space-y-3 @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] space-y-3 lg:hidden">
         <div className="rounded-xl border-2 border-sky-500 bg-sky-50 p-3 text-center"><p className="text-xs font-extrabold text-sky-950">BEFORE REQUEST</p><p className="mt-1 text-sm text-slate-700">auth · secrets · rate limit · concurrency</p></div>
         <div className="space-y-2 rounded-xl border-2 border-indigo-500 bg-indigo-50 p-3">
           <p className="text-center text-xs font-extrabold text-indigo-950">CENTRAL REQUEST PATH</p>

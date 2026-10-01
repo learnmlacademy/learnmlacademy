@@ -1,6 +1,5 @@
 import { useId } from 'react';
 import { Link } from 'react-router-dom';
-import { LLMConceptExpansion, LLMWorkedLab } from './LLMTutorialExpansion';
 import { Callout } from '../../components/content/Callout';
 import { CodeBlock } from '../../components/content/CodeBlock';
 import { DataTable } from '../../components/content/DataTable';
@@ -75,7 +74,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>1. Start with Autocomplete: Predict What Comes Next</h2>
+        <h2>Start with a familiar idea: autocomplete</h2>
         <p>If someone says <strong>“The sky is …”</strong>, you can suggest several continuations. “Blue,” “clear,” and “cloudy” sound natural. “Banana” is possible to type, but unusual in this sentence. A language model also ranks possible continuations, using patterns learned from text.</p>
         <p>It can assign each candidate a <strong>probability</strong>: a number expressing how likely that continuation is according to the model. A larger percentage makes a candidate more likely to be selected; it does not certify that a statement is true.</p>
         <DataTable title="Invented next-word probabilities after “The sky is”" minWidthClassName="min-w-0" headers={['Possible next word', 'Illustrative probability']} rows={[
@@ -87,10 +86,8 @@ export function LLMIntroProofContent() {
         <p>Real generation can also select among several likely alternatives instead of always taking the top candidate. That helps explain why the same request can receive differently worded replies.</p>
       </section>
 
-      <LLMConceptExpansion topicId="llm-intro" />
-
       <section className="space-y-4">
-        <h2>3. Tokens: The Pieces an LLM Predicts</h2>
+        <h2>The small pieces are called tokens</h2>
         <p>So far we used whole words to make the idea easy. Real LLMs usually work with pieces of text called <strong>tokens</strong>. A token can be a whole word, part of a word, or punctuation.</p>
         <div className="not-prose rounded-xl border border-[var(--lma-border-default)] bg-[var(--lma-canvas)] p-4">
           <p className="mb-3 font-semibold">One conceptual split of “playing!”</p>
@@ -103,7 +100,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>4. Why the Model Is Called “Large”</h2>
+        <h2>Why is it called “large”?</h2>
         <p>“Large” refers to the scale of the model and the resources used to teach it, not simply the length of its replies.</p>
         <ul className="list-disc space-y-3 pl-6">
           <li><strong>Large training datasets:</strong> huge collections of text provide examples of language, facts, styles, and relationships. The collection’s quality matters as well as its size.</li>
@@ -114,7 +111,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>5. How Training Changes the Model</h2>
+        <h2>How does an LLM learn from text?</h2>
         <p>Imagine a training sentence: <strong>“The cat sat on the mat.”</strong> Give the model the beginning, “The cat sat on the”, and ask it to predict the next piece. The text itself supplies the expected continuation: “mat”.</p>
         <ol className="list-decimal space-y-3 pl-6">
           <li><strong>Predict:</strong> suppose “chair” receives the highest score, while “mat” receives a low probability.</li>
@@ -127,14 +124,14 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>6. Training vs Generation: Two Different Jobs</h2>
+        <h2>Training and answering a user are different jobs</h2>
         <p>During training, the model’s parameters are adjusted. When you normally ask a trained model a question, those values stay fixed. The model uses them to generate a reply; this use of a trained model is called <strong>inference</strong>.</p>
         <TrainingAndUsing />
         <p>A follow-up message can change the next answer because it changes the text the model can read. That does not mean the model has retrained itself. An application may separately store a conversation or use feedback for later training; that is outside the ordinary generation loop.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>7. The LLM Is the Engine, Not the Whole Chatbot</h2>
+        <h2>The LLM is the engine, not the whole chatbot</h2>
         <p>A car needs more than an engine: it also needs controls, a body, and safety systems. Similarly, the LLM is one part of an AI application. The surrounding software decides what to send to the model and what to do with its answer.</p>
         <DataTable title="Model capability versus application support" headers={['Part', 'What it does']} rows={[
           ['LLM — the engine', 'Predicts possible next tokens and helps generate the reply.'],
@@ -148,7 +145,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>8. How the Prediction Idea Became Modern LLMs</h2>
+        <h2>A short history: the prediction idea grew more capable</h2>
         <p>Early approaches counted how often words appeared together. Short groups of consecutive words or tokens are called <strong>n-grams</strong>. A model relying on these counts can struggle when a phrase has never appeared in its examples.</p>
         <p>Neural language models instead learn numerical patterns shared across examples, so learning from one phrase can help with another. Later, <strong>Transformers</strong> introduced a neural-network design that uses attention—a way to connect relevant parts of the input text. Many modern LLMs build on this design with much larger training efforts.</p>
         <p className="rounded-xl bg-[var(--lma-canvas)] p-4 font-semibold">Word counts / n-grams → neural language models → Transformers → modern LLMs</p>
@@ -156,7 +153,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>9. What LLMs Can Do</h2>
+        <h2>What can you ask an LLM to do?</h2>
         <p>The same text-generation ability can serve different purposes when the request explains the task.</p>
         <DataTable title="Familiar tasks, concrete requests" headers={['Task', 'Example request']} rows={[
           ['Answer or explain', 'Explain gravity to a 10-year-old.'],
@@ -172,14 +169,14 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>10. Why Fluent Answers Can Still Be Wrong</h2>
+        <h2>Why can a convincing answer still be wrong?</h2>
         <p>Recall what the model is doing: generating a plausible continuation. That is not the same as looking up guaranteed truth. The model can produce an incorrect date, rely on stale information, invent a reference that looks real, or repeat biases found in its examples.</p>
         <Callout role="mistake" title="Fluency is not verification"><p>A confident tone describes how an answer sounds, not how well it is supported. If you need the exact current wording of a policy, consult the authoritative document instead of treating a generated paraphrase as the original.</p></Callout>
         <p>Later lessons introduce retrieval-augmented generation (RAG), which supplies retrieved source material; evaluation, which checks performance; and guardrails, which apply safeguards. These help manage errors, but none makes every answer automatically correct.</p>
       </section>
 
       <section className="space-y-4">
-        <h2>11. Worked Example: Generate One Sentence Step by Step</h2>
+        <h2>Worked example: build one sentence from beginning to end</h2>
         <p>Start with <strong>“Machine learning allows computers to”</strong>. The text available for the current prediction is called the <strong>context</strong>. Here, it initially contains only that sentence beginning.</p>
         <p>For a small teaching example, suppose each word below is a single token and punctuation is a separate token. Actual token splits depend on the model; the spaces needed to read the words are included when the text is assembled.</p>
         <DataTable title="First prediction — illustrative probabilities only" minWidthClassName="min-w-0" headers={['Candidate next token', 'Invented probability']} rows={[
@@ -192,7 +189,7 @@ export function LLMIntroProofContent() {
       </section>
 
       <section className="space-y-4">
-        <h2>12. The Generation Loop in Pseudocode</h2>
+        <h2>The same loop in a few lines of pseudocode</h2>
         <p>This is a conceptual sketch, not runnable Python or a real model API. It shows the order of actions without hiding the lesson inside a large library program.</p>
         <CodeBlock title="Conceptual generation loop" type="pseudocode" wrap code={`text = "The sky is"
 max_new_tokens = 20
@@ -215,9 +212,8 @@ show(text)`} caption="model, choose, END, append_token, and show are teaching pl
         <p>There is no error calculation or parameter adjustment in this code: it depicts using a trained model, not teaching one.</p>
       </section>
 
-      <LLMWorkedLab topicId="llm-intro" />
       <section className="space-y-4">
-        <h2>14. Check Your Understanding</h2>
+        <h2>Pause and check the idea</h2>
         <p>An LLM says, “The Eiffel Tower is in Paris.” Does that necessarily mean it looked the fact up in a trusted database?</p>
         <details className="rounded-xl border border-[var(--lma-border-default)] bg-[var(--lma-canvas)] p-4">
           <summary className="cursor-pointer font-semibold text-[var(--lma-brand-text)]">Reveal the explanation</summary>
@@ -226,7 +222,7 @@ show(text)`} caption="model, choose, END, append_token, and show are teaching pl
       </section>
 
       <section className="space-y-4">
-        <h2>15. Next: Turn Language Pieces into Numbers</h2>
+        <h2>Next: how do pieces of language become numbers?</h2>
         <p>We have repeatedly said that an LLM predicts the next token. But exactly how is text divided into tokens? And since neural networks work with numbers rather than raw words, how does language become numerical information?</p>
         <p>The next lesson, <Link to="/learn/tokenization-embeddings">Tokens, Embeddings &amp; Context Windows</Link>, connects those steps. It explains embeddings—the numerical representations of tokens—and the context window, the limit on how much text a model can work with at once.</p>
       </section>

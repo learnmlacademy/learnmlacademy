@@ -27,7 +27,7 @@ export function SidebarItem({
       onClick={onNavigate}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group relative flex items-center justify-between gap-2 rounded-md py-1.5 pl-3 pr-2 text-[13px] leading-snug transition-all duration-150',
+        'group relative flex items-center justify-between gap-2 rounded-md py-2 sm:py-1.5 min-h-[40px] sm:min-h-[32px] pl-3 pr-2 text-[13px] leading-snug transition-all duration-150',
         active
           ? 'bg-indigo-50/90 font-semibold text-indigo-700 shadow-2xs before:absolute before:bottom-1 before:left-0 before:top-1 before:w-[3px] before:rounded-full before:bg-indigo-600'
           : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900',

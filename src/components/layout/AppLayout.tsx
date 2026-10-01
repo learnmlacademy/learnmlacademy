@@ -35,6 +35,15 @@ export function AppLayout() {
     setDrawerOpen(true);
   };
 
+  useEffect(() => {
+    const handleOpenNav = (e: Event) => {
+      const customEvent = e as CustomEvent<{ focusSearch?: boolean }>;
+      openDrawer(Boolean(customEvent.detail?.focusSearch));
+    };
+    window.addEventListener('learnml:open-nav', handleOpenNav);
+    return () => window.removeEventListener('learnml:open-nav', handleOpenNav);
+  }, []);
+
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[var(--lma-canvas)] font-sans text-[var(--lma-text-primary)]">
       <a href="#main-scroll" className="lma-skip-link">
@@ -65,7 +74,7 @@ export function AppLayout() {
           className="lma-scrollbar relative flex min-w-0 flex-1 flex-col overflow-x-hidden overflow-y-auto bg-[var(--lma-canvas)]"
         >
           <div className="flex-1">
-            <Outlet />
+            <Outlet context={{ openDrawer, activeTopicId }} />
           </div>
           <SiteFooter />
         </main>

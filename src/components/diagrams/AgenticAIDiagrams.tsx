@@ -37,7 +37,7 @@ function Flow({ children }: { children: ReactNode[] }) {
 
 function FigureFrame({ id, title, question, caption, children }: { id: AgenticVisualId; title: string; question: string; caption: string; children: ReactNode }) {
   return (
-    <figure data-agentic-visual={id} className="not-prose overflow-hidden border-y border-slate-200 bg-white">
+    <figure data-agentic-visual={id} className="not-prose overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white shadow-sm">
       <div className="border-b border-slate-200 bg-white px-4 py-4 sm:px-6">
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Instructional figure</p>
         <h3 className="mt-1 text-lg font-extrabold leading-snug text-slate-950">{title}</h3>
@@ -137,7 +137,7 @@ function VisualBody({ id }: { id: AgenticVisualId }) {
     case "planning-react-reflection":
       return <LoopRing center="Stop on verified success, no progress, max steps, budget, or escalation" items={[{label:"Short plan",detail:"dependencies and success",tone:"slate"},{label:"Decide + act",detail:"one permitted action",tone:"violet"},{label:"Observe",detail:"record evidence",tone:"cyan"},{label:"Verify / reflect",detail:"pass, revise, or replan",tone:"amber"}]}/>;
     case "observable-react-trajectory":
-      return <div className="space-y-3"><div className="grid gap-2 sm:grid-cols-4"><Node label="1 · Search source A" detail="Observation: price found; warranty missing" tone="cyan"/><Node label="Verify: incomplete" detail="3 of 4 tool steps remain" tone="amber"/><Node label="2 · Search source B" detail="Observation: warranty = 2 years" tone="violet"/><Node label="Verify: pass → STOP" detail="all required fields supported" tone="emerald"/></div><div className="rounded-xl border-2 border-rose-300 bg-rose-50 p-3 text-center text-xs font-bold text-rose-950">If source A would be searched again with the same query: duplicate-action detector → NO PROGRESS → escalate or stop</div></div>;
+      return <div className="space-y-3"><div className="grid gap-2 sm:grid-cols-4"><Node label="1 · Search source A" detail="Observation: price found; warranty missing" tone="cyan"/><Node label="Verify: incomplete" detail="2 of 4 tool steps remain" tone="amber"/><Node label="2 · Search source B" detail="Observation: warranty = 2 years" tone="violet"/><Node label="Verify: pass → STOP" detail="all required fields supported" tone="emerald"/></div><div className="rounded-xl border-2 border-rose-300 bg-rose-50 p-3 text-center text-xs font-bold text-rose-950">If source A would be searched again with the same query: duplicate-action detector → NO PROGRESS → escalate or stop</div></div>;
     case "agent-state-graph":
       return <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr]"><Node label="START" detail="typed task state" tone="slate"/><Arrow/><Node label="Plan" detail="model-directed route" tone="violet"/><div className="hidden sm:block"><Arrow/></div><div className="col-span-3 grid gap-2 rounded-2xl border-2 border-dashed border-indigo-300 bg-indigo-50 p-3 sm:col-span-1"><Node label="Search" detail="tool node" tone="cyan"/><div className="grid grid-cols-2 gap-2"><Node label="More" detail="loop ↺" tone="amber"/><Node label="Enough" detail="write" tone="emerald"/></div><Node label="END" detail="complete / safe stop" tone="slate" rounded="rounded-full"/></div></div>;
     case "orchestration-patterns":

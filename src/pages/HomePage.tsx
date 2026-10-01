@@ -1,4 +1,4 @@
-import React, { useState, useEffect, type ComponentType } from 'react';
+import React, { useState, useEffect, useRef, type ComponentType } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -16,158 +16,134 @@ import {
   Search,
   BookOpen,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Check,
   Flame,
   Terminal,
   Layers,
   ArrowUpRight,
   GraduationCap,
+  Play,
+  ListFilter,
 } from 'lucide-react';
 import { WebsiteSchema } from '../components/SchemaMarkup';
 import { NewsletterSignup } from '../components/NewsletterSignup';
-import { curriculum } from '../data/curriculum';
+import { curriculum, type Category } from '../data/curriculum';
+import { useProgress } from '../context/ProgressContext';
 
-type JourneyStage = {
+type ChapterTrack = {
   id: string;
   number: string;
   title: string;
-  categoryTitle: string;
+  shortTitle?: string;
   tagline: string;
   description: string;
   route: string;
-  count: number;
   icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
-  highlights: { title: string; route: string; badge?: string }[];
+  categories: Category[];
   keyConcepts: string[];
 };
 
 const countLessons = (categoryId: string) =>
   curriculum.find(category => category.id === categoryId)?.subtopics.length ?? 0;
 
-const machineLearningCount = curriculum
-  .slice(0, 9)
-  .reduce((total, category) => total + category.subtopics.length, 0);
-
-const journeyStages: JourneyStage[] = [
+const chapterTracks: ChapterTrack[] = [
   {
-    id: 'foundations',
+    id: 'machine-learning',
     number: '01',
     title: 'Machine Learning',
-    categoryTitle: 'Foundations to Advanced Algorithms',
-    tagline: 'Math, Data Pipelines, Classifiers & Trees',
-    description: 'Master core algorithmic thinking: exploratory data analysis, regularized regression, tree ensembles, boosting, and rigorous evaluation.',
+    shortTitle: 'Machine Learning',
+    tagline: 'Math, Data Pipelines, Classifiers, Regressors, Trees & Ensembles',
+    description: 'Master core algorithmic thinking: exploratory data analysis, regularized regression, decision trees, random forests, boosting ensembles, unsupervised learning, and model evaluation.',
     route: '/learn/what-is-ml',
-    count: machineLearningCount,
     icon: Network,
-    highlights: [
-      { title: 'What is Machine Learning?', route: '/learn/what-is-ml', badge: 'Start Here' },
-      { title: 'Linear & Logistic Regression', route: '/learn/linear-regression', badge: 'Core' },
-      { title: 'Gradient Descent Optimization', route: '/learn/gradient-descent', badge: 'Math' },
-      { title: 'Decision Trees & Random Forest', route: '/learn/random-forest', badge: 'Ensemble' },
-      { title: 'Gradient Boosting & XGBoost', route: '/learn/xgboost', badge: 'Industry' },
-      { title: 'Classification Metrics & ROC/AUC', route: '/learn/classification-metrics', badge: 'Eval' },
-    ],
+    categories: curriculum.slice(0, 9),
     keyConcepts: ['Scikit-learn', 'Feature Engineering', 'Bias-Variance', 'Ensembles', 'Cross-Validation'],
   },
   {
     id: 'deep-learning',
     number: '02',
     title: 'Deep Learning',
-    categoryTitle: 'Neural Nets, Vision & Attention',
-    tagline: 'Backprop, CNNs, Attention & Vision',
-    description: 'Build neural intuition from ground zero: implement forward/backward passes in raw code, then scale to convolutions and self-attention.',
+    shortTitle: 'Deep Learning',
+    tagline: 'Backprop, CNNs, Attention, Vision & Transformers',
+    description: 'Build neural intuition from ground zero: implement forward/backward passes in raw code, then scale to convolutions, self-attention, vision transformers, and deployment.',
     route: '/learn/deep-learning-intro',
-    count: countLessons('deep-learning'),
     icon: BrainCircuit,
-    highlights: [
-      { title: 'Deep Learning Foundations', route: '/learn/deep-learning-intro', badge: 'Intuition' },
-      { title: 'Neural Networks from Scratch', route: '/learn/neural-network-from-scratch', badge: 'Code' },
-      { title: 'Backpropagation & Gradient Flow', route: '/learn/backpropagation', badge: 'Math' },
-      { title: 'CNNs for Computer Vision', route: '/learn/cnn', badge: 'Vision' },
-      { title: 'Transformers & Self-Attention', route: '/learn/transformers', badge: 'Essential' },
-      { title: 'Transfer Learning & Fine-Tuning', route: '/learn/transfer-learning', badge: 'PyTorch' },
-    ],
-    keyConcepts: ['PyTorch', 'Backpropagation', 'Self-Attention', 'Residual Nets', 'Embeddings'],
+    categories: curriculum.filter(category => category.id === 'deep-learning' || category.id === 'advanced-deep-learning'),
+    keyConcepts: ['PyTorch', 'Backpropagation', 'Self-Attention', 'Residual Nets', 'Vision Transformers'],
   },
   {
     id: 'generative-ai',
     number: '03',
     title: 'Generative AI',
-    categoryTitle: 'Diffusion, VAEs & Modern GenAI',
-    tagline: 'Latent Spaces, Diffusion & Synthesis',
-    description: 'Understand how models learn probability distributions: from Variational Autoencoders and GANs to modern score-based diffusion models.',
+    shortTitle: 'Generative AI',
+    tagline: 'Latent Spaces, VAEs, GANs & Diffusion Models',
+    description: 'Understand how models learn probability distributions: from Variational Autoencoders and GANs to modern score-based diffusion models and multimodal generation.',
     route: '/learn/generative-ai-intro',
-    count: countLessons('generative-ai'),
     icon: Sparkles,
-    highlights: [
-      { title: 'What is Generative AI?', route: '/learn/generative-ai-intro', badge: 'Foundations' },
-      { title: 'Variational Autoencoders (VAEs)', route: '/learn/vae', badge: 'Latents' },
-      { title: 'Generative Adversarial Nets (GANs)', route: '/learn/gans', badge: 'Adversarial' },
-      { title: 'Diffusion Models Explained', route: '/learn/diffusion-models', badge: 'Math' },
-      { title: 'Latent & Stable Diffusion', route: '/learn/stable-latent-diffusion', badge: 'Architecture' },
-      { title: 'Multimodal AI & Speech/Video', route: '/learn/multimodal-ai', badge: 'Multimodal' },
-    ],
-    keyConcepts: ['Latent Distributions', 'U-Net', 'Classifier-Free Guidance', 'Synthetic Data'],
+    categories: curriculum.filter(category => category.id === 'generative-ai'),
+    keyConcepts: ['Latent Distributions', 'U-Net', 'Diffusion Models', 'Classifier-Free Guidance', 'Multimodal'],
   },
   {
     id: 'large-language-models',
     number: '04',
     title: 'LLMs & RAG',
-    categoryTitle: 'Embeddings, Retrieval & Fine-Tuning',
-    tagline: 'Vector DBs, Advanced RAG & LoRA',
-    description: 'Master modern language models: tokenization, dense semantic retrieval, vector databases, chunking strategies, LoRA fine-tuning, and evaluation.',
+    shortTitle: 'LLMs & RAG',
+    tagline: 'Tokenization, Embeddings, Vector DBs, RAG & Fine-Tuning',
+    description: 'Master modern language models: dense semantic retrieval, vector databases, chunking strategies, LoRA fine-tuning, reasoning models, and evaluation.',
     route: '/learn/llm-intro',
-    count: countLessons('large-language-models'),
     icon: MessageSquareText,
-    highlights: [
-      { title: 'Large Language Models Explained', route: '/learn/llm-intro', badge: 'Beginner' },
-      { title: 'Tokens, Embeddings & Context', route: '/learn/tokenization-embeddings', badge: 'Core' },
-      { title: 'Retrieval-Augmented Generation (RAG)', route: '/learn/rag', badge: 'Must-Know' },
-      { title: 'Vector Databases & Similarity Search', route: '/learn/vector-databases', badge: 'Search' },
-      { title: 'Advanced RAG: Chunking & Rerank', route: '/learn/advanced-rag', badge: 'Production' },
-      { title: 'Fine-Tuning: SFT, LoRA & RLHF', route: '/learn/instruction-tuning-rlhf', badge: 'Training' },
-    ],
-    keyConcepts: ['Vector Search', 'Reranking', 'Hybrid Search', 'LoRA / QLoRA', 'RAG Triad Eval'],
+    categories: curriculum.filter(category => category.id === 'large-language-models'),
+    keyConcepts: ['Vector Search', 'Hybrid RAG', 'LoRA / QLoRA', 'Context Windows', 'RAG Evaluation'],
   },
   {
     id: 'agentic-ai',
     number: '05',
     title: 'Agentic AI',
-    categoryTitle: 'Autonomous Agents, Tools & Graphs',
-    tagline: 'Tool Calling, ReAct, Memory & MCP',
+    shortTitle: 'Agentic AI',
+    tagline: 'Tool Calling, ReAct, Memory, State Graphs & Multi-Agent',
     description: 'Transform passive language models into active problem solvers: reliable tool calling, state graphs, reflection loops, and multi-agent protocols.',
     route: '/learn/agentic-ai-intro',
-    count: countLessons('agentic-ai'),
     icon: Bot,
-    highlights: [
-      { title: 'What is Agentic AI? Workflows & Types', route: '/learn/agentic-ai-intro', badge: 'Architecture' },
-      { title: 'Tool Calling & Schema Design', route: '/learn/tool-calling', badge: 'Reliability' },
-      { title: 'Build a Simple AI Agent End-to-End', route: '/learn/building-ai-agent', badge: 'Hands-on' },
-      { title: 'Planning, ReAct & Reflection', route: '/learn/planning-reflection', badge: 'Reasoning' },
-      { title: 'Memory & Long-Term Persistence', route: '/learn/agent-memory', badge: 'State' },
-      { title: 'Multi-Agent Systems & MCP', route: '/learn/multi-agent-systems', badge: 'Orchestration' },
-    ],
-    keyConcepts: ['Function Calling', 'State Machines', 'Context Management', 'LangGraph / CrewAI'],
+    categories: curriculum.filter(category => category.id === 'agentic-ai'),
+    keyConcepts: ['Function Calling', 'State Machines', 'Context Management', 'LangGraph / CrewAI', 'MCP'],
   },
   {
     id: 'ai-engineering-mlops',
     number: '06',
     title: 'AI Engineering & MLOps',
-    categoryTitle: 'From Experiment to Production',
-    tagline: 'Pipelines, Drift, Serving & System Design',
+    shortTitle: 'AI Eng & MLOps',
+    tagline: 'Pipelines, Drift, Serving & ML System Design',
     description: 'Bridge research and scalable systems: online vs batch serving architectures, model registry workflows, drift detection, and ML system design.',
     route: '/learn/ai-engineering-mlops',
-    count: countLessons('ai-engineering-mlops'),
     icon: ServerCog,
-    highlights: [
-      { title: 'AI Engineering & MLOps Overview', route: '/learn/ai-engineering-mlops', badge: 'Roadmap' },
-      { title: 'Production Data & Feature Pipelines', route: '/learn/ml-data-feature-pipelines', badge: 'Data' },
-      { title: 'Batch & Online Serving Architectures', route: '/learn/batch-online-inference', badge: 'Serving' },
-      { title: 'CI/CD & Continuous Training', route: '/learn/ml-cicd-continuous-training', badge: 'Automation' },
-      { title: 'ML Monitoring & Data Drift', route: '/learn/ml-monitoring-drift', badge: 'Observability' },
-      { title: 'End-to-End ML System Design', route: '/learn/ml-system-design', badge: 'Interviews' },
-    ],
-    keyConcepts: ['Latency & Throughput', 'Feature Stores', 'Model Drift', 'System Design'],
+    categories: curriculum.filter(category => category.id === 'ai-engineering-mlops'),
+    keyConcepts: ['Latency & Throughput', 'Feature Stores', 'Model Drift', 'Continuous Training', 'System Design'],
+  },
+  {
+    id: 'projects',
+    number: '07',
+    title: 'Guided Projects',
+    shortTitle: 'Projects',
+    tagline: '8 End-to-End Production ML & AI Applications',
+    description: 'Build portfolio-grade code implementations with runnable notebooks, clean architectures, and interview-ready trade-off discussions.',
+    route: '/learn/project-customer-churn',
+    icon: FolderKanban,
+    categories: curriculum.filter(category => category.id === 'projects'),
+    keyConcepts: ['Customer Churn', 'Document Q&A RAG', 'Multi-Agent Research', 'Credit Risk', 'End-to-End ML'],
+  },
+  {
+    id: 'interview-preparation',
+    number: '08',
+    title: 'Career & Interviews',
+    shortTitle: 'Career & Prep',
+    tagline: 'Role Roadmaps, FAANG Q&A, Coding & System Design',
+    description: 'Land machine learning and AI roles: comprehensive roadmaps for MLE, AI Engineer, and Data Scientist, plus curated technical and system design questions.',
+    route: '/learn/ai-data-career-paths',
+    icon: BriefcaseBusiness,
+    categories: curriculum.filter(category => category.id === 'interview-preparation'),
+    keyConcepts: ['System Design', 'ML Interview Q&A', 'Role Roadmaps', 'FAANG Scenarios', 'Salary & Prep'],
   },
 ];
 
@@ -220,7 +196,77 @@ const careerTracks = [
 
 export function HomePage() {
   const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
+  const [syllabusView, setSyllabusView] = useState<'focused' | 'accordion'>('focused');
+  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({
+    'machine-learning': true,
+  });
+  const [expandedCurriculumModules, setExpandedCurriculumModules] = useState<Record<string, boolean>>({});
   const [searchFilter, setSearchFilter] = useState('');
+  const [inChapterFilter, setInChapterFilter] = useState('');
+  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('all');
+  const syllabusRef = useRef<HTMLDivElement>(null);
+  const { isCompleted } = useProgress();
+
+  const handleSelectTrack = (idx: number) => {
+    setSelectedTrackIndex(idx);
+    setInChapterFilter('');
+    setSelectedSubcategoryId('all');
+    const track = chapterTracks[idx];
+    if (track) {
+      setExpandedChapters(prev => ({ ...prev, [track.id]: true }));
+    }
+    if (window.innerWidth < 1024) {
+      setTimeout(() => {
+        syllabusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 60);
+    }
+  };
+
+  const toggleChapterExpanded = (trackId: string) => {
+    setExpandedChapters(prev => ({
+      ...prev,
+      [trackId]: !prev[trackId],
+    }));
+  };
+
+  const expandAllChapters = () => {
+    const allExpanded: Record<string, boolean> = {};
+    chapterTracks.forEach(t => {
+      allExpanded[t.id] = true;
+    });
+    setExpandedChapters(allExpanded);
+  };
+
+  const collapseAllChapters = () => {
+    setExpandedChapters({});
+  };
+
+  const toggleCurriculumModule = (catId: string) => {
+    setExpandedCurriculumModules(prev => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
+
+  const expandAllCurriculumModules = () => {
+    const allExp: Record<string, boolean> = {};
+    curriculum.forEach(c => {
+      allExp[c.id] = true;
+    });
+    setExpandedCurriculumModules(allExp);
+  };
+
+  const collapseAllCurriculumModules = () => {
+    setExpandedCurriculumModules({});
+  };
+
+  const activeTrack = chapterTracks[selectedTrackIndex] ?? chapterTracks[0];
+  const ActiveIcon = activeTrack.icon;
+
+  const allLessonsInTrack = activeTrack.categories.flatMap(cat => cat.subtopics);
+  const totalLessonsInTrack = allLessonsInTrack.length;
+  const completedInTrack = allLessonsInTrack.filter(lesson => isCompleted(lesson.id)).length;
+  const firstLesson = allLessonsInTrack[0];
 
   const tutorialCount = curriculum.reduce(
     (total, category) => total + category.subtopics.length,
@@ -245,9 +291,6 @@ export function HomePage() {
     }
     canonical.setAttribute('href', 'https://www.learnmlacademy.com');
   }, [tutorialCount]);
-
-  const activeStage = journeyStages[selectedTrackIndex];
-  const ActiveIcon = activeStage.icon;
 
   const filteredCurriculum = searchFilter.trim()
     ? curriculum
@@ -344,181 +387,581 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* THE MAIN SHOW: INTERACTIVE TRACK EXPLORER ABOVE THE FOLD */}
+      {/* THE MAIN SHOW: COMPLETE CHAPTER EXPLORER WITH ALL LESSONS */}
       <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
           
           {/* Section Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-wider text-indigo-600">Primary Curriculum Pathways</p>
-              <h2 className="text-lg sm:text-xl font-black text-slate-950">
-                Interactive Track Explorer — Pick Your Stage
-              </h2>
-            </div>
-            <span className="hidden sm:inline-flex text-xs font-medium text-slate-500">
-              Click any stage tab below to preview lessons & start learning immediately
-            </span>
-          </div>
-
-          {/* Large 6-Track Switcher Bar (The Star of the Show) */}
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6" role="tablist" aria-label="Learning Tracks">
-            {journeyStages.map((stage, idx) => {
-              const Icon = stage.icon;
-              const isSelected = selectedTrackIndex === idx;
-              return (
-                <button
-                  key={stage.id}
-                  role="tab"
-                  aria-selected={isSelected}
-                  type="button"
-                  onClick={() => setSelectedTrackIndex(idx)}
-                  className={`group relative flex flex-col justify-between rounded-xl border p-3.5 text-left transition-all ${
-                    isSelected
-                      ? 'border-indigo-600 bg-indigo-900 text-white shadow-md ring-2 ring-indigo-500/30'
-                      : 'border-slate-200 bg-slate-50/80 text-slate-800 hover:border-slate-300 hover:bg-white'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[11px] font-black ${isSelected ? 'text-indigo-300' : 'text-slate-400'}`}>
-                      {stage.number}
-                    </span>
-                    <Icon className={`h-4 w-4 ${isSelected ? 'text-indigo-300' : 'text-slate-500 group-hover:text-indigo-600'}`} aria-hidden={true} />
-                  </div>
-
-                  <div className="mt-2.5">
-                    <p className={`text-xs sm:text-sm font-black leading-tight ${isSelected ? 'text-white' : 'text-slate-900'}`}>
-                      {stage.title}
-                    </p>
-                    <p className={`mt-0.5 text-[11px] font-medium leading-snug truncate ${isSelected ? 'text-indigo-200' : 'text-slate-500'}`}>
-                      {stage.count} lessons
-                    </p>
-                  </div>
-
-                  {/* Active Indicator Arrow */}
-                  {isSelected && (
-                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 bg-indigo-900 border-r border-b border-indigo-600 rotate-45" aria-hidden="true" />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Deep Interactive Preview Box for Selected Track */}
-          <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-950 p-5 text-white shadow-sm sm:p-6">
-            <div className="grid gap-6 lg:grid-cols-12 lg:items-start">
-              
-              {/* Left Column: Track Identity & Synopsis (4 cols) */}
-              <div className="lg:col-span-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600/30 border border-indigo-500/40 text-indigo-400">
-                    <ActiveIcon className="h-5 w-5" aria-hidden={true} />
-                  </div>
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-400">Track {activeStage.number}</span>
-                    <h3 className="text-xl font-extrabold text-white leading-tight">{activeStage.title}</h3>
-                  </div>
-                </div>
-
-                <p className="mt-2 text-xs font-semibold text-indigo-300">
-                  {activeStage.tagline}
-                </p>
-
-                <p className="mt-2.5 text-xs text-slate-300 leading-relaxed">
-                  {activeStage.description}
-                </p>
-
-                {/* Key Concepts Tags */}
-                <div className="mt-4 pt-3 border-t border-slate-800">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Core Competencies</p>
-                  <div className="flex flex-wrap gap-1">
-                    {activeStage.keyConcepts.map(c => (
-                      <span key={c} className="rounded bg-slate-800/90 px-2 py-0.5 text-[10px] font-medium text-slate-300 border border-slate-700/50">
-                        {c}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-5">
-                  <Link
-                    to={activeStage.route}
-                    className="inline-flex h-9 w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-xs font-bold text-white shadow-xs hover:bg-indigo-500 transition"
-                  >
-                    Start {activeStage.title} ({activeStage.count} Tutorials) <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                  </Link>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-bold text-indigo-700 border border-indigo-200/60">
+                  Interactive Course Syllabus
+                </span>
+                <span className="text-xs text-slate-500 font-medium">
+                  {tutorialCount} Lessons across 8 Master Chapters
+                </span>
               </div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-950 mt-1">
+                Course Syllabus — Click Any Chapter to See All Lessons
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
+                Click any chapter to immediately reveal all of its lessons. Browse the complete course content right here on the home page.
+              </p>
+            </div>
 
-              {/* Right Column: Instant High-Priority Lessons Grid (8 cols) */}
-              <div className="lg:col-span-8 lg:border-l lg:border-slate-800 lg:pl-6">
-                <div className="flex items-center justify-between pb-2.5 border-b border-slate-800">
-                  <span className="text-xs font-bold text-slate-300">
-                    Selected Tutorials & Deep Dives in this Track
-                  </span>
-                  <Link
-                    to={activeStage.route}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 transition"
-                  >
-                    View all {activeStage.count} lessons <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                  </Link>
-                </div>
+            {/* View Mode Toggle: Focused Tabs vs All Chapters Accordion */}
+            <div className="inline-flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200/80 self-start md:self-auto shrink-0">
+              <button
+                type="button"
+                onClick={() => setSyllabusView('focused')}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                  syllabusView === 'focused'
+                    ? 'bg-white text-indigo-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Layers className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Chapter Explorer</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setSyllabusView('accordion')}
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
+                  syllabusView === 'accordion'
+                    ? 'bg-white text-indigo-700 shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <ListFilter className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>All Chapters Accordion</span>
+              </button>
+            </div>
+          </div>
 
-                {/* 2-Column Lesson Tiles for Immediate Jump */}
-                <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
-                  {activeStage.highlights.map((lesson) => (
-                    <Link
-                      key={lesson.route}
-                      to={lesson.route}
-                      className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/90 p-3 text-xs transition hover:border-indigo-500/50 hover:bg-slate-800/90 hover:shadow-xs"
+          {/* MODE 1: FOCUSED CHAPTER EXPLORER */}
+          {syllabusView === 'focused' ? (
+            <div>
+              {/* Large 8-Chapter Switcher Bar */}
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8" role="tablist" aria-label="Curriculum Chapters">
+                {chapterTracks.map((track, idx) => {
+                  const Icon = track.icon;
+                  const isSelected = selectedTrackIndex === idx;
+                  const count = track.categories.reduce((acc, cat) => acc + cat.subtopics.length, 0);
+
+                  return (
+                    <button
+                      key={track.id}
+                      role="tab"
+                      aria-selected={isSelected}
+                      type="button"
+                      onClick={() => handleSelectTrack(idx)}
+                      className={`group relative flex flex-col justify-between rounded-xl border p-3 text-left transition-all ${
+                        isSelected
+                          ? 'border-indigo-600 bg-indigo-600 text-white shadow-md ring-2 ring-indigo-500/20'
+                          : 'border-slate-200 bg-white text-slate-800 hover:border-indigo-300 hover:bg-slate-50'
+                      }`}
                     >
-                      <div className="min-w-0 pr-2">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          {lesson.badge && (
-                            <span className="rounded bg-indigo-950 px-1.5 py-0.5 text-[9px] font-bold text-indigo-300 border border-indigo-800/60">
-                              {lesson.badge}
-                            </span>
-                          )}
-                        </div>
-                        <p className="font-bold text-slate-100 group-hover:text-indigo-300 transition truncate">
-                          {lesson.title}
+                      <div className="flex items-center justify-between">
+                        <span className={`text-[11px] font-mono font-bold ${isSelected ? 'text-indigo-200' : 'text-slate-400'}`}>
+                          {track.number}
+                        </span>
+                        <Icon className={`h-4 w-4 ${isSelected ? 'text-white' : 'text-slate-500 group-hover:text-indigo-600'}`} aria-hidden={true} />
+                      </div>
+
+                      <div className="mt-2.5">
+                        <p className={`text-xs font-bold leading-tight ${isSelected ? 'text-white' : 'text-slate-900 group-hover:text-indigo-600'}`}>
+                          {track.shortTitle || track.title}
+                        </p>
+                        <p className={`mt-0.5 text-[11px] font-medium leading-snug truncate ${isSelected ? 'text-indigo-100' : 'text-slate-500'}`}>
+                          {count} lessons
                         </p>
                       </div>
-                      <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-400 group-hover:bg-indigo-600 group-hover:text-white transition">
-                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Footer Quick Bar inside track preview */}
-                <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2 pt-3 border-t border-slate-800/70 text-[11px] text-slate-400">
-                  <div className="flex items-center gap-3">
-                    <span className="flex items-center gap-1 text-slate-300">
-                      <Code2 className="h-3.5 w-3.5 text-indigo-400" aria-hidden="true" />
-                      Runnable Code
-                    </span>
-                    <span className="flex items-center gap-1 text-slate-300">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" aria-hidden="true" />
-                      Knowledge Checks
-                    </span>
-                    <span className="flex items-center gap-1 text-slate-300">
-                      <Terminal className="h-3.5 w-3.5 text-amber-400" aria-hidden="true" />
-                      Visual Intuition
-                    </span>
-                  </div>
-                  <Link
-                    to="/curriculum"
-                    className="font-bold text-indigo-400 hover:text-indigo-300 transition"
-                  >
-                    Compare with full curriculum →
-                  </Link>
-                </div>
-
+                    </button>
+                  );
+                })}
               </div>
 
+              {/* Full Interactive Syllabus Card for Selected Chapter */}
+              <div ref={syllabusRef} className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-7 shadow-xs">
+                {/* Chapter Header */}
+                <div className="border-b border-slate-100 pb-5 mb-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-100 px-3 py-0.5 text-xs font-bold text-indigo-700">
+                          <ActiveIcon className="h-3.5 w-3.5 text-indigo-600" aria-hidden={true} />
+                          <span>Chapter {activeTrack.number} · {activeTrack.title}</span>
+                        </span>
+                        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-600">
+                          {totalLessonsInTrack} Lessons
+                        </span>
+                        {completedInTrack > 0 && (
+                          <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
+                            {completedInTrack} Completed ({Math.round((completedInTrack / totalLessonsInTrack) * 100)}%)
+                          </span>
+                        )}
+                      </div>
+
+                      <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
+                        {activeTrack.title}
+                      </h3>
+                      <p className="mt-1 text-xs sm:text-sm font-semibold text-indigo-600">
+                        {activeTrack.tagline}
+                      </p>
+                      <p className="mt-1.5 text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
+                        {activeTrack.description}
+                      </p>
+
+                      {/* Competencies */}
+                      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1">Skills:</span>
+                        {activeTrack.keyConcepts.map(c => (
+                          <span key={c} className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 border border-slate-200/60">
+                            {c}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Start Button & Links */}
+                    <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-2.5 shrink-0">
+                      {firstLesson && (
+                        <Link
+                          to={`/learn/${firstLesson.id}`}
+                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
+                        >
+                          <Play className="h-3.5 w-3.5 fill-current" />
+                          <span>Start Lesson 1 ({firstLesson.title})</span>
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      )}
+                      <Link
+                        to="/curriculum"
+                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition"
+                      >
+                        View Full Interactive Curriculum →
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* In-Chapter Search & Filter Controls */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-5">
+                  <div>
+                    <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
+                      Complete Chapter Content ({totalLessonsInTrack} Lessons Displayed)
+                    </h4>
+                    <p className="text-xs text-slate-500">
+                      Showing every lesson in Chapter {activeTrack.number}. Click any lesson below to start reading.
+                    </p>
+                  </div>
+
+                  <div className="relative w-full sm:w-72">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                    <input
+                      type="text"
+                      value={inChapterFilter}
+                      onChange={(e) => setInChapterFilter(e.target.value)}
+                      placeholder={`Filter in Chapter ${activeTrack.number}...`}
+                      className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50 pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    />
+                    {inChapterFilter && (
+                      <button
+                        type="button"
+                        onClick={() => setInChapterFilter('')}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Subcategory Pills (if multiple categories) */}
+                {activeTrack.categories.length > 1 && (
+                  <div className="flex items-center gap-1.5 overflow-x-auto lma-scrollbar pb-3 mb-5 text-xs font-semibold">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSubcategoryId('all')}
+                      className={`rounded-lg px-3 py-1.5 whitespace-nowrap transition ${
+                        selectedSubcategoryId === 'all'
+                          ? 'bg-indigo-600 text-white font-bold shadow-xs'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      }`}
+                    >
+                      All Sections ({totalLessonsInTrack})
+                    </button>
+                    {activeTrack.categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setSelectedSubcategoryId(cat.id)}
+                        className={`rounded-lg px-3 py-1.5 whitespace-nowrap transition ${
+                          selectedSubcategoryId === cat.id
+                            ? 'bg-indigo-600 text-white font-bold shadow-xs'
+                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        }`}
+                      >
+                        {cat.title.replace(/^\d+\.\s*/, '')} ({cat.subtopics.length})
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* ALL LESSONS DISPLAYED */}
+                <div className="space-y-6">
+                  {activeTrack.categories.map((category) => {
+                    if (selectedSubcategoryId !== 'all' && category.id !== selectedSubcategoryId) {
+                      return null;
+                    }
+
+                    const matchingLessons = category.subtopics.filter(st =>
+                      !inChapterFilter.trim() ||
+                      st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
+                      (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
+                    );
+
+                    if (matchingLessons.length === 0) return null;
+
+                    return (
+                      <div key={category.id} className="space-y-3">
+                        {activeTrack.categories.length > 1 && (
+                          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
+                              <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                              {category.title}
+                            </span>
+                            <span className="text-[11px] font-semibold text-slate-400">
+                              {matchingLessons.length} {matchingLessons.length === 1 ? 'lesson' : 'lessons'}
+                            </span>
+                          </div>
+                        )}
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                          {matchingLessons.map((lesson) => {
+                            const globalIndex = allLessonsInTrack.findIndex(l => l.id === lesson.id);
+                            const completed = isCompleted(lesson.id);
+
+                            return (
+                              <Link
+                                key={lesson.id}
+                                to={`/learn/${lesson.id}`}
+                                className={`group flex items-center justify-between rounded-xl border p-3 text-xs transition-all ${
+                                  completed
+                                    ? 'border-emerald-200 bg-emerald-50/40 hover:bg-emerald-50 hover:border-emerald-300'
+                                    : 'border-slate-200 bg-slate-50/50 hover:border-indigo-400 hover:bg-indigo-50/30 hover:shadow-xs'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                  <span
+                                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[10px] font-bold ${
+                                      completed
+                                        ? 'bg-emerald-100 text-emerald-800'
+                                        : 'bg-white border border-slate-200 text-slate-500 group-hover:border-indigo-300 group-hover:text-indigo-600'
+                                    }`}
+                                  >
+                                    {String(globalIndex + 1).padStart(2, '0')}
+                                  </span>
+                                  <div className="min-w-0">
+                                    <p
+                                      className={`font-bold leading-snug line-clamp-2 ${
+                                        completed
+                                          ? 'text-emerald-950 group-hover:text-emerald-800'
+                                          : 'text-slate-800 group-hover:text-indigo-700'
+                                      }`}
+                                    >
+                                      {lesson.title}
+                                    </p>
+                                    {lesson.module && (
+                                      <p className="mt-0.5 text-[10px] font-medium text-slate-400 truncate">
+                                        {lesson.module}
+                                      </p>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="shrink-0 flex items-center ml-2">
+                                  {completed ? (
+                                    <CheckCircle2 className="h-4 w-4 text-emerald-600 fill-emerald-100" />
+                                  ) : (
+                                    <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition" />
+                                  )}
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+
+                  {/* Empty state if search found nothing */}
+                  {inChapterFilter.trim() && activeTrack.categories.every(cat =>
+                    cat.subtopics.filter(st =>
+                      st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
+                      (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
+                    ).length === 0
+                  ) && (
+                    <div className="py-8 text-center">
+                      <p className="text-sm font-semibold text-slate-700">
+                        No lessons found matching &quot;{inChapterFilter}&quot; in {activeTrack.title}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setInChapterFilter('')}
+                        className="mt-2 text-xs font-bold text-indigo-600 hover:underline"
+                      >
+                        Clear search and show all {totalLessonsInTrack} lessons
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            /* MODE 2: ALL CHAPTERS ACCORDION (Click any chapter to expand all its lessons in-place) */
+            <div className="space-y-4">
+              {/* Accordion Quick Controls */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-50 border border-slate-200/90 rounded-2xl p-4">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={expandAllChapters}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs"
+                  >
+                    <ChevronDown className="h-3.5 w-3.5 text-indigo-600" />
+                    <span>Expand All Chapters</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={collapseAllChapters}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs"
+                  >
+                    <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
+                    <span>Collapse All</span>
+                  </button>
+                </div>
+
+                <div className="relative w-full sm:w-72">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={inChapterFilter}
+                    onChange={(e) => setInChapterFilter(e.target.value)}
+                    placeholder="Search any lesson in all chapters..."
+                    className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  />
+                  {inChapterFilter && (
+                    <button
+                      type="button"
+                      onClick={() => setInChapterFilter('')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Chapter Accordion Cards */}
+              <div className="space-y-3">
+                {chapterTracks.map((track) => {
+                  const Icon = track.icon;
+                  const isExpanded = !!expandedChapters[track.id];
+                  const allLessons = track.categories.flatMap(cat => cat.subtopics);
+                  const completedLessons = allLessons.filter(l => isCompleted(l.id)).length;
+                  const matchingCount = inChapterFilter.trim()
+                    ? allLessons.filter(st =>
+                        st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
+                        (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
+                      ).length
+                    : allLessons.length;
+
+                  if (inChapterFilter.trim() && matchingCount === 0) {
+                    return null;
+                  }
+
+                  return (
+                    <div
+                      key={track.id}
+                      className={`overflow-hidden rounded-2xl border transition-all ${
+                        isExpanded
+                          ? 'border-indigo-200 bg-white shadow-xs'
+                          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
+                      }`}
+                    >
+                      {/* Clickable Chapter Header Button */}
+                      <button
+                        type="button"
+                        onClick={() => toggleChapterExpanded(track.id)}
+                        aria-expanded={isExpanded}
+                        className="w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      >
+                        <div className="flex items-center gap-3 sm:gap-4 min-w-0 pr-3">
+                          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold ${
+                            isExpanded
+                              ? 'bg-indigo-600 text-white shadow-xs'
+                              : 'bg-indigo-50 border border-indigo-100 text-indigo-700'
+                          }`}>
+                            <Icon className="h-5 w-5" aria-hidden={true} />
+                          </div>
+
+                          <div className="min-w-0">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-xs font-mono font-bold text-indigo-600">
+                                Chapter {track.number}
+                              </span>
+                              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600">
+                                {allLessons.length} Lessons
+                              </span>
+                              {completedLessons > 0 && (
+                                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                                  {completedLessons}/{allLessons.length} Completed
+                                </span>
+                              )}
+                            </div>
+                            <h3 className="text-base sm:text-lg font-black text-slate-950 truncate mt-0.5">
+                              {track.title}
+                            </h3>
+                            <p className="text-xs text-slate-500 truncate hidden sm:block">
+                              {track.tagline}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="hidden sm:inline text-xs font-semibold text-indigo-600">
+                            {isExpanded ? 'Hide Lessons' : 'Show All Lessons'}
+                          </span>
+                          <div className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-transform ${
+                            isExpanded
+                              ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600'
+                              : 'bg-white border-slate-200 text-slate-400 group-hover:text-slate-600'
+                          }`}>
+                            <ChevronDown className="h-4 w-4" aria-hidden={true} />
+                          </div>
+                        </div>
+                      </button>
+
+                      {/* Expanded Section with ALL Lessons */}
+                      {isExpanded && (
+                        <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-6 space-y-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white border border-slate-200/80 rounded-xl p-3.5">
+                            <div>
+                              <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                                {track.description}
+                              </p>
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {track.keyConcepts.map(c => (
+                                  <span key={c} className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700 border border-slate-200">
+                                    {c}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                            {allLessons[0] && (
+                              <Link
+                                to={`/learn/${allLessons[0].id}`}
+                                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
+                              >
+                                <Play className="h-3 w-3 fill-current" />
+                                <span>Start Chapter</span>
+                              </Link>
+                            )}
+                          </div>
+
+                          {/* List of categories and all lessons in this chapter */}
+                          <div className="space-y-5">
+                            {track.categories.map(category => {
+                              const matchingLessons = category.subtopics.filter(st =>
+                                !inChapterFilter.trim() ||
+                                st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
+                                (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
+                              );
+
+                              if (matchingLessons.length === 0) return null;
+
+                              return (
+                                <div key={category.id} className="space-y-2.5">
+                                  {track.categories.length > 1 && (
+                                    <div className="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
+                                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
+                                        <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                                        {category.title}
+                                      </span>
+                                      <span className="text-[11px] font-semibold text-slate-400">
+                                        {matchingLessons.length} {matchingLessons.length === 1 ? 'lesson' : 'lessons'}
+                                      </span>
+                                    </div>
+                                  )}
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                                    {matchingLessons.map(lesson => {
+                                      const globalIndex = allLessons.findIndex(l => l.id === lesson.id);
+                                      const completed = isCompleted(lesson.id);
+
+                                      return (
+                                        <Link
+                                          key={lesson.id}
+                                          to={`/learn/${lesson.id}`}
+                                          className={`group flex items-center justify-between rounded-xl border p-3 text-xs transition-all ${
+                                            completed
+                                              ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 hover:border-emerald-300'
+                                              : 'border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/30 hover:shadow-xs'
+                                          }`}
+                                        >
+                                          <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                                            <span
+                                              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[10px] font-bold ${
+                                                completed
+                                                  ? 'bg-emerald-100 text-emerald-800'
+                                                  : 'bg-slate-100 border border-slate-200 text-slate-500 group-hover:border-indigo-300 group-hover:text-indigo-600'
+                                              }`}
+                                            >
+                                              {String(globalIndex + 1).padStart(2, '0')}
+                                            </span>
+                                            <div className="min-w-0">
+                                              <p
+                                                className={`font-bold leading-snug line-clamp-2 ${
+                                                  completed
+                                                    ? 'text-emerald-950 group-hover:text-emerald-800'
+                                                    : 'text-slate-800 group-hover:text-indigo-700'
+                                                }`}
+                                              >
+                                                {lesson.title}
+                                              </p>
+                                              {lesson.module && (
+                                                <p className="mt-0.5 text-[10px] font-medium text-slate-400 truncate">
+                                                  {lesson.module}
+                                                </p>
+                                              )}
+                                            </div>
+                                          </div>
+
+                                          <div className="shrink-0 flex items-center ml-2">
+                                            {completed ? (
+                                              <CheckCircle2 className="h-4 w-4 text-emerald-600 fill-emerald-100" />
+                                            ) : (
+                                              <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition" />
+                                            )}
+                                          </div>
+                                        </Link>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
         </div>
       </section>
@@ -670,56 +1113,165 @@ export function HomePage() {
       {/* ALL 16 CURRICULUM MODULES OVERVIEW */}
       <section className="border-t border-slate-200 bg-slate-100/60 py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between mb-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div>
               <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-950">
-                Complete Curriculum Breakdown (16 Core Modules)
+                Complete Curriculum Breakdown (All 16 Chapters & Lessons)
               </h2>
               <p className="text-xs text-slate-600">
-                Browse every section from foundational linear algebra to autonomous multi-agent systems.
+                Click any chapter card below to expand and view all of its lessons directly on this page.
               </p>
             </div>
-            <Link
-              to="/curriculum"
-              className="text-xs font-bold text-indigo-600 hover:text-indigo-800"
-            >
-              Full Interactive Curriculum Guide →
-            </Link>
+            
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={expandAllCurriculumModules}
+                className="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-300 px-2.5 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
+              >
+                <ChevronDown className="h-3.5 w-3.5 text-indigo-600" />
+                <span>Expand All 16 Chapters</span>
+              </button>
+              <button
+                type="button"
+                onClick={collapseAllCurriculumModules}
+                className="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-300 px-2.5 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
+              >
+                <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
+                <span>Collapse All</span>
+              </button>
+              <Link
+                to="/curriculum"
+                className="text-xs font-bold text-indigo-600 hover:text-indigo-800 ml-1"
+              >
+                Interactive Guide →
+              </Link>
+            </div>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {curriculum.map((cat, catIdx) => (
-              <div key={cat.id} className="rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600">
-                    Module {catIdx + 1}
-                  </span>
-                  <span className="text-[10px] font-semibold text-slate-400">
-                    {cat.subtopics.length} topics
-                  </span>
+          <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4 items-start">
+            {curriculum.map((cat, catIdx) => {
+              const isExpanded = !!expandedCurriculumModules[cat.id];
+              const completedLessons = cat.subtopics.filter(st => isCompleted(st.id)).length;
+
+              return (
+                <div
+                  key={cat.id}
+                  className={`rounded-xl border transition-all ${
+                    isExpanded
+                      ? 'border-indigo-300 bg-white shadow-xs col-span-1 sm:col-span-2 lg:col-span-2'
+                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
+                  }`}
+                >
+                  {/* Card Header (Click to toggle all lessons) */}
+                  <button
+                    type="button"
+                    onClick={() => toggleCurriculumModule(cat.id)}
+                    aria-expanded={isExpanded}
+                    className="w-full p-3.5 text-left flex items-start justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xl"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
+                          Chapter {catIdx + 1}
+                        </span>
+                        <span className="text-[10px] font-semibold text-slate-400">
+                          {cat.subtopics.length} lessons
+                        </span>
+                        {completedLessons > 0 && (
+                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                            {completedLessons}/{cat.subtopics.length} done
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {cat.title}
+                      </h3>
+                    </div>
+
+                    <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition-transform ${
+                      isExpanded
+                        ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600'
+                        : 'bg-slate-50 border-slate-200 text-slate-400'
+                    }`}>
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </div>
+                  </button>
+
+                  {/* Lessons List: Expanded Shows ALL Lessons, Collapsed Shows Summary with Expand Button */}
+                  <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100">
+                    {isExpanded ? (
+                      <div className="space-y-1.5 pt-2">
+                        <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+                          <span className="text-[11px] font-bold text-indigo-700">
+                            All {cat.subtopics.length} Lessons in this Chapter:
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => toggleCurriculumModule(cat.id)}
+                            className="text-[10px] font-bold text-slate-400 hover:text-slate-700"
+                          >
+                            Hide lessons ↑
+                          </button>
+                        </div>
+                        <ul className="space-y-1 max-h-96 overflow-y-auto lma-scrollbar pr-1">
+                          {cat.subtopics.map((st, idx) => {
+                            const completed = isCompleted(st.id);
+                            return (
+                              <li key={st.id}>
+                                <Link
+                                  to={`/learn/${st.id}`}
+                                  className={`flex items-center justify-between gap-2 rounded-lg p-1.5 text-xs transition ${
+                                    completed
+                                      ? 'bg-emerald-50/50 text-emerald-950 hover:bg-emerald-100/50'
+                                      : 'hover:bg-indigo-50/70 hover:text-indigo-900 text-slate-700'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0 w-4">
+                                      {idx + 1}.
+                                    </span>
+                                    <span className="font-medium truncate">{st.title}</span>
+                                  </div>
+                                  <div className="shrink-0 flex items-center">
+                                    {completed ? (
+                                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                                    ) : (
+                                      <ArrowRight className="h-3 w-3 text-slate-300" />
+                                    )}
+                                  </div>
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    ) : (
+                      <div className="space-y-1">
+                        <ul className="space-y-1 text-[11px] text-slate-600">
+                          {cat.subtopics.slice(0, 3).map(st => (
+                            <li key={st.id} className="truncate">
+                              <Link to={`/learn/${st.id}`} className="hover:text-indigo-600 transition flex items-center gap-1">
+                                <span className="text-slate-300">·</span>
+                                <span className="truncate">{st.title}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                        <button
+                          type="button"
+                          onClick={() => toggleCurriculumModule(cat.id)}
+                          className="pt-1.5 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 w-full text-left"
+                        >
+                          <span>Show all {cat.subtopics.length} lessons</span>
+                          <ChevronDown className="h-3 w-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <p className="text-xs font-bold text-slate-900 line-clamp-1 mb-2">
-                  {cat.title}
-                </p>
-                <ul className="space-y-1 text-[11px] text-slate-600">
-                  {cat.subtopics.slice(0, 2).map(st => (
-                    <li key={st.id} className="truncate">
-                      <Link to={`/learn/${st.id}`} className="hover:text-indigo-600 transition flex items-center gap-1">
-                        <span className="text-slate-300">·</span>
-                        <span className="truncate">{st.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                  {cat.subtopics.length > 2 && (
-                    <li className="pt-0.5">
-                      <Link to={`/learn/${cat.subtopics[0].id}`} className="text-[10px] font-bold text-indigo-600 hover:underline">
-                        +{cat.subtopics.length - 2} more lessons →
-                      </Link>
-                    </li>
-                  )}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

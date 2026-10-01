@@ -4,6 +4,7 @@ import type { LearningNavigationGroup } from '../../data/learningNavigation';
 import { getGroupLessonCount, getLessonNumber } from '../../data/learningNavigation';
 import { cn } from '../layout/classNames';
 import { SidebarItem } from './SidebarItem';
+import { useProgress } from '../../context/ProgressContext';
 
 type NavigationGroupProps = {
   key?: React.Key;
@@ -23,6 +24,12 @@ export function NavigationGroup({
   onNavigate,
 }: NavigationGroupProps) {
   const count = getGroupLessonCount(group);
+  const { isCompleted } = useProgress();
+
+  const completedInGroup = group.categories.reduce((acc, cat) => {
+    return acc + cat.subtopics.filter(t => isCompleted(t.id)).length;
+  }, 0);
+
   const isActive = group.categories.some(category =>
     category.subtopics.some(topic => topic.id === activeTopicId),
   );
@@ -68,10 +75,14 @@ export function NavigationGroup({
         <span
           className={cn(
             'ml-2 shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums',
-            isActive ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-500',
+            completedInGroup > 0
+              ? 'bg-emerald-100 text-emerald-800'
+              : isActive
+              ? 'bg-indigo-100 text-indigo-700'
+              : 'bg-slate-100 text-slate-500',
           )}
         >
-          {count}
+          {completedInGroup > 0 ? `${completedInGroup}/${count}` : count}
         </span>
       </button>
 
@@ -93,7 +104,7 @@ export function NavigationGroup({
                   <button
                     type="button"
                     onClick={() => toggleCategory(category.id)}
-                    className="flex w-full items-center justify-between px-1.5 py-1 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition"
+                    className="flex w-full items-center justify-between px-1.5 py-2 sm:py-1 min-h-[36px] sm:min-h-0 text-left text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-800 transition"
                   >
                     <span className="truncate">
                       {category.title.replace(/^\d+\.\s*/, '')}
@@ -124,6 +135,7 @@ export function NavigationGroup({
                           title={topic.title}
                           lessonNumber={getLessonNumber(group, topic)}
                           active={topic.id === activeTopicId}
+                          completed={isCompleted(topic.id)}
                           onNavigate={onNavigate}
                         />
                       </React.Fragment>

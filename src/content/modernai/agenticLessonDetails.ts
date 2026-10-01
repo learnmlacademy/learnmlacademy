@@ -243,9 +243,9 @@ export const agenticLessonDetails: Record<string, AgenticLessonDetail> = {
         title: "Observable trajectory for a product brief",
         headers: ["Step", "Current goal", "Validated action", "Observation", "Verifier", "Budget left", "Next decision"],
         rows: [
-          ["1", "Find price and warranty", "search_catalog(source A, model X)", "Price = $640; warranty field absent", "Incomplete: 1 required field missing", "3 of 4 tool steps", "Use a different approved source"],
-          ["2", "Fill the warranty gap", "search_warranty_registry(source B, model X)", "Warranty = 2 years; record W-92", "Pass: both fields have evidence", "2 of 4 tool steps", "Stop and write supported brief"],
-          ["No-progress alternative after step 1", "Warranty still missing", "Duplicate detector rejects the same source A query before execution", "No new evidence would be produced", "Fail: repeated ineffective action", "3 of 4 tool steps; rejected proposal consumes no tool call", "Stop or escalate instead of looping"],
+          ["1", "Find price and warranty", "search_catalog(source A, model X)", "Price = $640; warranty field absent", "Incomplete: 1 required field missing", "2 of 4 tool steps", "Use a different approved source"],
+          ["2", "Fill the warranty gap", "search_warranty_registry(source B, model X)", "Warranty = 2 years; record W-92", "Pass: both fields have evidence", "1 of 4 tool steps", "Stop and write supported brief"],
+          ["No-progress branch", "Warranty still missing", "Duplicate detector sees the same source A query", "No new evidence would be produced", "Fail: repeated ineffective action", "1 of 4 tool steps", "Stop or escalate instead of looping"],
         ],
       },
     ],
@@ -255,7 +255,7 @@ export const agenticLessonDetails: Record<string, AgenticLessonDetail> = {
       steps: [
         "Step 1 searches approved source A. Its catalog entry supplies the $640 price but no warranty. The verifier compares the observation with the two required fields and reports one gap.",
         "Step 2 changes action rather than repeating the failed search: it queries approved warranty source B. Record W-92 supplies a two-year warranty, so the verifier now finds both claims supported.",
-        "The agent stops with two steps still available because success—not budget exhaustion—is the correct terminal condition. If it proposed the identical source A query after step 1 instead of searching source B, a no-progress rule would reject that duplicate before execution and stop or escalate the run.",
+        "The agent stops with one step still available because success—not budget exhaustion—is the correct terminal condition. If it proposed the identical source A query again, a no-progress rule would stop or escalate the run.",
       ],
       result: "The useful reasoning evidence is the change in validated action after a named evidence gap, followed by a verifier pass and explicit stop reason. More looping would add cost without improving the answer.",
     },
@@ -340,7 +340,7 @@ export const agenticLessonDetails: Record<string, AgenticLessonDetail> = {
         "Revalidate: the runtime reloads version 3, re-authenticates requester U-17, confirms reviewer F-09's current authority, detects the expired approval and changed quote, and refuses to execute the old proposal.",
         "Resume: reviewer F-09 approves the revised amount as A-62. The payment executes with the original logical key PAY-204; receipt P-880 is recorded and any retry returns that receipt instead of paying twice.",
       ],
-      result: "Durability preserves progress, not stale permission. Version 4 records the fresh quote, revised approval, one execution attempt, and receipt. Preventing duplicate side effects additionally depends on the payment service's idempotency and reconciliation contract; a checkpoint alone cannot guarantee exactly-once execution.",
+      result: "Durability preserves progress, not stale permission. Version 4 records the fresh quote, revised approval, one execution attempt, and receipt, making the eventual side effect auditable and exactly-once from the workflow's perspective.",
     },
   },
 

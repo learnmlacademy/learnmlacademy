@@ -26,7 +26,7 @@ export function GenAIFigure({ title, caption, description, children }: GenAIFigu
 
   return (
     <figure
-      className="@container/genai not-prose overflow-hidden border-y border-slate-200 bg-white py-5"
+      className="not-prose overflow-hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"
       aria-labelledby={titleId}
       aria-describedby={`${captionId} ${descriptionId}`}
     >
@@ -101,8 +101,8 @@ export function DiagramNode({
       />
       {badge && (
         <>
-          <rect x={x + width - 58} y={y - 14} width="49" height="18" rx="9" fill="#ffffff" stroke={colors.stroke} />
-          <text x={x + width - 33.5} y={y - 1} textAnchor="middle" fontSize="11.5" fontWeight="700" fill={colors.text}>{badge}</text>
+          <rect x={x + width - 58} y={y + 7} width="49" height="18" rx="9" fill="#ffffff" stroke={colors.stroke} />
+          <text x={x + width - 33.5} y={y + 20} textAnchor="middle" fontSize="11.5" fontWeight="700" fill={colors.text}>{badge}</text>
         </>
       )}
       <text x={x + width / 2} y={titleY} textAnchor="middle" fontSize="15" fontWeight="700" fill={colors.text}>
@@ -224,11 +224,11 @@ export function TrainingGenerationLifecycleFigure() {
   const marker = "genai-lifecycle-arrow";
   return (
     <GenAIFigure
-      title="Training changes the model; generation uses it"
+      title="Figure 1 — Training changes the model; generation uses it"
       caption="Follow the upper lane first: loss sends an update back into training, so the parameters change. In the lower lane, the saved generator is reused with its parameters fixed."
       description="Two connected lanes. Training sends examples into training, measures loss, feeds an update back, and saves a learned generator. Generation sends a condition and random seed into the same learned generator, whose parameters are fixed, to produce a candidate output."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 940 500">
           <defs><ArrowMarker id={marker} /></defs>
           <Boundary x={20} y={45} width={900} height={190} label="TRAINING · PARAMETERS CHANGE" tone="sky" />
@@ -251,7 +251,7 @@ export function TrainingGenerationLifecycleFigure() {
           <Connector d="M805 177 V270 C805 275 470 270 470 340" markerId={marker} label="same saved model" labelX={638} labelY={263} dashed />
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 770">
           <defs><ArrowMarker id={`${marker}-mobile`} /></defs>
           <Boundary x={8} y={28} width={284} height={392} label="TRAINING · PARAMETERS CHANGE" tone="sky" />
@@ -270,7 +270,7 @@ export function TrainingGenerationLifecycleFigure() {
           <Connector d="M150 558 V590" markerId={`${marker}-mobile`} />
           <Connector d="M150 648 V680" markerId={`${marker}-mobile`} />
           <path d="M240 364 C285 364 285 619 245 619" fill="none" stroke="#7c3aed" strokeWidth="2.5" strokeDasharray="7 6" />
-          <text x="150" y="450" textAnchor="middle" fontSize="13" fontWeight="700" fill="#4c1d95">SAME SAVED MODEL ↓</text>
+          <text x="273" y="484" transform="rotate(90 273 484)" textAnchor="middle" fontSize="13" fontWeight="700" fill="#4c1d95">SAME SAVED MODEL</text>
         </DiagramCanvas>
       </div>
       <Legend items={[{ tone: "sky", label: "observed data" }, { tone: "violet", label: "learned model" }, { tone: "amber", label: "condition/randomness" }, { tone: "emerald", label: "candidate output" }, { tone: "rose", label: "error feedback" }]} />
@@ -282,11 +282,11 @@ export function RetrievalPredictionGenerationFigure() {
   const marker = "three-systems-arrow";
   return (
     <GenAIFigure
-      title="One request, three different system behaviours"
+      title="Figure 2 — One request, three different system behaviours"
       caption="Retrieval returns an item that already exists, prediction assigns a label or score, and generation constructs a new candidate from a condition and a starting signal."
       description="The shared request Show me a product image visibly branches into retrieval through a database to a stored image, prediction through a classifier to a label and probability, and generation through a model supplied with condition and noise to a newly constructed image."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 940 570">
           <defs><ArrowMarker id={marker} tone="slate" /></defs>
           <DiagramNode x={315} y={20} width={310} height={66} title={'“Show me a product image”'} detail="same request" tone="sky" />
@@ -316,7 +316,7 @@ export function RetrievalPredictionGenerationFigure() {
           <Connector d="M785 385 V410" markerId={marker} tone="slate" />
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <div className="rounded-xl border-2 border-sky-400 bg-sky-50 p-3 text-center font-bold text-sky-950">“Show me a product image”</div>
         <p className="my-2 text-center text-xs font-bold uppercase tracking-wide text-slate-500">the same request branches to</p>
         <div className="relative ml-3 space-y-3 border-l-2 border-slate-500 pl-5">
@@ -375,7 +375,7 @@ export function GenerativeDiscriminativePathsFigure() {
       caption="Circles and squares mean the same classes on both sides. The discriminative path learns the boundary needed to predict y from x; the generative path learns where each class tends to occur, which supports sampling a new x or comparing p(x | y) values for classification."
       description="A paired diagram uses blue circles and amber squares for the same two classes. The discriminative side draws a visible decision boundary and continues to p of y given x and a predicted class. The generative side draws two class distributions, samples a new x, and also shows that an observed x can be classified by comparing p of x given each y."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 540">
           <defs><ArrowMarker id={marker} tone="slate" /></defs>
           <Boundary x={15} y={35} width={475} height={470} label="DISCRIMINATIVE · LEARN TO SEPARATE" tone="sky" />
@@ -399,7 +399,7 @@ export function GenerativeDiscriminativePathsFigure() {
           <Connector d="M705 400 H775" markerId={marker} label="classify" labelX={740} labelY={387} tone="slate" />
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] space-y-5 @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] space-y-5 lg:hidden">
         <div className="rounded-xl border-2 border-sky-300 bg-sky-50/60 p-3">
           <p className="text-center text-xs font-extrabold tracking-wide text-sky-950">DISCRIMINATIVE · LEARN TO SEPARATE</p>
           <DiagramCanvas viewBox="0 0 280 390">
@@ -452,7 +452,7 @@ export function ProbabilityMapFigure() {
       caption="A joint probability uses one cell, a marginal probability totals across a row or column, and a conditional probability renormalizes only inside the chosen condition. The values match the 100-email worked example below."
       description="A two by two count grid has spam rows of 30 offer and 10 no offer, legitimate rows of 6 offer and 54 no offer, row totals 40 and 60, column totals 36 and 64, and grand total 100. The joint spam and offer cell is 30. The offer marginal is 36, the spam marginal is 40, and within the spam row p of offer given spam is 30 divided by 40 or 0.75."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 900 520">
           <text x="390" y="24" textAnchor="middle" fontSize="14" fontWeight="800" fill="#0f172a">OBSERVED INPUT x</text>
           <text x="315" y="53" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0c4a6e">contains “offer”</text>
@@ -481,13 +481,13 @@ export function ProbabilityMapFigure() {
           <text x="570" y="485" textAnchor="middle" fontSize="13" fontWeight="700" fill="#334155">The conditional bar totals 1.00, not 100 emails.</text>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 545">
           <text x="175" y="18" textAnchor="middle" fontSize="14" fontWeight="800" fill="#0f172a">INPUT x</text>
           <text x="110" y="40" textAnchor="middle" fontSize="12.5" fontWeight="700" fill="#0c4a6e">has “offer”</text>
           <text x="200" y="40" textAnchor="middle" fontSize="12.5" fontWeight="700" fill="#0c4a6e">no “offer”</text>
           <text x="267" y="40" textAnchor="middle" fontSize="12" fontWeight="700" fill="#334155">total</text>
-          <text x="8" y="18" fontSize="11" fontWeight="800" fill="#0f172a">CLASS y</text>
+          <text x="13" y="155" transform="rotate(-90 13 155)" textAnchor="middle" fontSize="13" fontWeight="800" fill="#0f172a">TARGET y</text>
           <text x="70" y="91" textAnchor="end" fontSize="13" fontWeight="700" fill="#334155">spam</text>
           <text x="70" y="156" textAnchor="end" fontSize="12" fontWeight="700" fill="#334155">legitimate</text>
           <text x="70" y="221" textAnchor="end" fontSize="12" fontWeight="700" fill="#334155">total</text>
@@ -525,7 +525,7 @@ export function LearningGenerationModesFigure() {
       caption="Training measures an error and sends a parameter update back to the learned representation. Generation starts from a condition plus sampled randomness and reuses the same trained model without updating it."
       description="The training lane sends a dataset into a learned representation or distribution, produces a reconstruction, measures loss, and feeds a parameter update back into the model. A dotted bridge leads to the generation lane, where a condition and sampled latent value or noise enter the same trained model with fixed parameters to produce a new sample."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 980 530">
           <defs><ArrowMarker id={marker} /></defs>
           <Boundary x={15} y={45} width={950} height={210} label="LEARNING MODE · FIT THE PARAMETERS" tone="sky" />
@@ -549,7 +549,7 @@ export function LearningGenerationModesFigure() {
           <Connector d="M325 183 V280 C325 292 490 292 490 350" markerId={marker} label="reuse learned parameters" labelX={420} labelY={282} dashed />
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 820">
           <defs><ArrowMarker id={`${marker}-mobile`} /></defs>
           <Boundary x={8} y={30} width={284} height={435} label="LEARNING MODE · FIT PARAMETERS" tone="sky" />
@@ -568,7 +568,7 @@ export function LearningGenerationModesFigure() {
           <Connector d="M150 605 V640" markerId={`${marker}-mobile`} />
           <Connector d="M150 705 V740" markerId={`${marker}-mobile`} />
           <path d="M245 182 C285 182 285 672 245 672" fill="none" stroke="#7c3aed" strokeWidth="2.5" strokeDasharray="7 6" />
-          <text x="150" y="490" textAnchor="middle" fontSize="12" fontWeight="700" fill="#4c1d95">REUSE LEARNED PARAMETERS ↓</text>
+          <text x="275" y="485" transform="rotate(90 275 485)" textAnchor="middle" fontSize="13" fontWeight="700" fill="#4c1d95">REUSE LEARNED PARAMETERS</text>
         </DiagramCanvas>
       </div>
       <Legend items={[{ tone: "sky", label: "observed dataset" }, { tone: "violet", label: "learned representation/model" }, { tone: "amber", label: "condition and sampled randomness" }, { tone: "rose", label: "loss/update feedback" }, { tone: "emerald", label: "model output" }]} />
@@ -584,7 +584,7 @@ export function LatentRepresentationFigure() {
       caption="Nearby points represent examples with similar learned features. A sampled point between known examples can decode into a related new example."
       description="A two-dimensional latent space contains nearby green forest examples, blue coast examples, and amber city examples. Horizontal movement means more water-like and vertical movement means brighter or more open. A sampled latent point z near the coast cluster follows a curved decoding arrow to a newly constructed coast scene."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 780 350">
           <defs><ArrowMarker id={marker} /></defs>
           <rect x="20" y="34" width="470" height="270" rx="18" fill="#ffffff" stroke="#c4b5fd" strokeWidth="2" />
@@ -607,7 +607,7 @@ export function LatentRepresentationFigure() {
           <text x="668" y="296" textAnchor="middle" fontSize="15" fontWeight="700" fill="#155e75">decoded new coast scene</text>
         </DiagramCanvas>
       </div>
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 540">
           <defs><ArrowMarker id={`${marker}-mobile`} /></defs>
           <rect x="12" y="16" width="276" height="340" rx="16" fill="#ffffff" stroke="#c4b5fd" strokeWidth="2" />

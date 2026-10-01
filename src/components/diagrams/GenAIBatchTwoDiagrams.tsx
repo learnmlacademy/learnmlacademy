@@ -108,7 +108,7 @@ export function VAEArchitectureDiagram() {
       caption="Blue marks observed data, violet marks learned network outputs, amber marks sampled randomness, and green marks values calculated from them. Follow the arrows to see exactly where z comes from."
       description="An input x enters a learned encoder. The encoder produces learned mean mu and log-variance. Independent epsilon is sampled from a standard normal distribution. Mean, log-variance, and epsilon enter the reparameterization calculation z equals mu plus exp of one half log-variance times epsilon. The calculated latent z enters a learned decoder, which produces reconstruction x hat."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 420">
           <defs><ArrowMarker id={arrow} /></defs>
           <Boundary x={18} y={45} width={420} height={285} label="ENCODER · LEARNED DISTRIBUTION" tone="sky" />
@@ -143,7 +143,7 @@ export function VAEArchitectureDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 790">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <Boundary x={10} y={30} width={280} height={290} label="ENCODER · LEARNED OUTPUTS" tone="sky" />
@@ -189,7 +189,7 @@ export function VAELatentSamplingDiagram() {
       caption="Generation does not encode an existing input first. It samples a latent point from the prior and decodes it; nearby latent points tend to produce related outputs."
       description="A standard-normal prior supplies a sampled latent point to an organized two-dimensional latent space. Nearby round, softly squared, and square regions are connected by an interpolation path. A learned decoder maps three nearby latent points to smoothly changing generated shapes, demonstrating why a VAE is generative rather than only compressive."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 430">
           <defs><ArrowMarker id={arrow} /></defs>
           <DiagramNode x={28} y={145} width={150} height={78} title="Prior N(0, I)" detail="sample z" tone="amber" />
@@ -216,7 +216,7 @@ export function VAELatentSamplingDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 690">
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <DiagramNode x={70} y={18} width={160} height={62} title="Prior N(0, I)" detail="sample latent z" tone="amber" />
@@ -258,7 +258,7 @@ export function GANGameDiagram() {
       caption="The generator never sees a real-or-fake label directly. Its learning signal comes from the discriminator's score on G(z)."
       description="Sampled random z enters the learned generator and becomes a fake sample. A real sample from the dataset and the fake sample both enter the same discriminator. The discriminator produces a high example real score and a low example fake score. A dashed feedback path carries the fake-score learning signal toward the generator."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 430">
           <defs><ArrowMarker id={arrow} /><ArrowMarker id={slateArrow} color="#64748b" /></defs>
           <Boundary x={20} y={42} width={960} height={320} label="THE ADVERSARIAL GAME" tone="violet" />
@@ -285,7 +285,7 @@ export function GANGameDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 760">
           <defs><ArrowMarker id={`${arrow}-mobile`} /><ArrowMarker id={`${slateArrow}-mobile`} color="#64748b" /></defs>
           <Boundary x={10} y={30} width={280} height={700} label="GENERATOR–DISCRIMINATOR GAME" tone="violet" />
@@ -328,7 +328,7 @@ export function GANAlternatingUpdatesDiagram() {
       caption="Detach is used only in the discriminator step: it keeps the fake values but cuts their gradient connection to G. In the generator step, gradients must pass through the fixed discriminator back into G."
       description="The discriminator step sends real x with target one and a detached fake with target zero into the discriminator; only discriminator parameters update and a stop symbol marks the detached gradient. The generator step sends fresh z through the generator and fixed discriminator with target one; a dashed gradient path passes backward through the discriminator and fake sample to update only the generator."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 570">
           <defs><ArrowMarker id={forward} color="#64748b" /><ArrowMarker id={gradient} color="#e11d48" /></defs>
           <Boundary x={20} y={42} width={960} height={220} label="STEP 1 · TRAIN THE DISCRIMINATOR" tone="sky" />
@@ -364,7 +364,7 @@ export function GANAlternatingUpdatesDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 930">
           <defs><ArrowMarker id={`${forward}-mobile`} color="#64748b" /><ArrowMarker id={`${gradient}-mobile`} color="#e11d48" /></defs>
           <Boundary x={10} y={30} width={280} height={400} label="STEP 1 · UPDATE D ONLY" tone="sky" />
@@ -413,7 +413,7 @@ export function DiffusionNoisingDenoisingDiagram() {
       caption="The upper path is a fixed training process. The lower path is the learned generation path: it begins at random xT and constructs a candidate x₀ rather than recovering a hidden original."
       description="Four visual tiles show a clean circle x zero becoming progressively noisier at x one, x t, and x T along right-pointing forward arrows. A second row begins with noise x T and follows left-pointing reverse arrows through less noisy stages to an x zero candidate. Forward arrows say add scheduled noise; reverse arrows say predict and remove noise."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 500">
           <defs><ArrowMarker id={forward} color="#0284c7" /><ArrowMarker id={reverse} color="#7c3aed" /></defs>
           <Boundary x={20} y={42} width={960} height={190} label="FORWARD PROCESS · FIXED NOISING SCHEDULE" tone="sky" />
@@ -436,7 +436,7 @@ export function DiffusionNoisingDenoisingDiagram() {
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 560">
           <defs><ArrowMarker id={`${forward}-mobile`} color="#0284c7" /><ArrowMarker id={`${reverse}-mobile`} color="#7c3aed" /></defs>
           <Boundary x={7} y={35} width={286} height={210} label="FORWARD · ADD NOISE" tone="sky" />
@@ -475,7 +475,7 @@ export function DiffusionTrainingGenerationDiagram() {
       caption="During training, ε is known because we sampled it. During generation, the parameters stay fixed and an optional condition may guide—not define—the repeated reverse steps."
       description="In the training lane, clean sample x zero, sampled timestep t, and sampled noise epsilon converge to calculate noisy x t. The denoiser predicts epsilon hat, the loss compares epsilon hat with the known epsilon, and a backward arrow updates model parameters. In the generation lane, sampled starting noise x T and an optional condition enter a repeated denoiser and scheduler loop with fixed parameters, producing a final x zero candidate."
     >
-      <div className="hidden @min-[800px]/genai:block">
+      <div className="hidden lg:block">
         <DiagramCanvas viewBox="0 0 1000 610">
           <defs><ArrowMarker id={forward} color="#64748b" /><ArrowMarker id={gradient} color="#e11d48" /></defs>
           <Boundary x={18} y={42} width={964} height={270} label="TRAINING · PARAMETERS CHANGE" tone="sky" />
@@ -500,14 +500,14 @@ export function DiffusionTrainingGenerationDiagram() {
           <DiagramNode x={425} y={422} width={210} height={92} title="Denoiser + scheduler" detail="repeat T → … → 0" tone="violet" badge="FIXED" />
           <DiagramNode x={805} y={432} width={150} height={72} title="Final x₀" detail="generated candidate" tone="emerald" />
           <Connector d="M177 468 H425" markerId={forward} tone="slate" label="start reverse loop" labelX={301} labelY={454} />
-          <Connector d="M360 424 C392 424 392 448 425 448" markerId={forward} tone="slate" dashed label="optional guidance" labelX={362} labelY={384} />
+          <Connector d="M360 424 C392 424 392 448 425 448" markerId={forward} tone="slate" dashed label="optional guidance" labelX={392} labelY={410} />
           <Connector d="M635 468 H805" markerId={forward} tone="slate" label="less noise each step" labelX={720} labelY={454} />
           <path d="M590 514 C655 565 405 565 470 514" fill="none" stroke="#7c3aed" strokeWidth="2.5" strokeDasharray="7 6" markerEnd={`url(#${forward})`} />
           <text x="530" y="558" textAnchor="middle" fontSize="12.5" fontWeight="800" fill="#4c1d95">predict noise → scheduler steps → repeat</text>
         </DiagramCanvas>
       </div>
 
-      <div className="mx-auto max-w-[420px] @min-[800px]/genai:hidden">
+      <div className="mx-auto max-w-[420px] lg:hidden">
         <DiagramCanvas viewBox="0 0 300 1060">
           <defs><ArrowMarker id={`${forward}-mobile`} color="#64748b" /><ArrowMarker id={`${gradient}-mobile`} color="#e11d48" /></defs>
           <Boundary x={8} y={30} width={284} height={540} label="TRAINING · PARAMETERS CHANGE" tone="sky" />

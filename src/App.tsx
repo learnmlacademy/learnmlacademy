@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { HomePage } from './pages/HomePage';
+import { ProgressProvider } from './context/ProgressContext';
 
 const TopicPage = lazy(() => import('./pages/TopicPage').then(module => ({ default: module.TopicPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then(module => ({ default: module.AboutPage })));
@@ -37,20 +38,22 @@ function DeferredRoute({ children }: { children: React.ReactNode }) {
 
 export function AppRoutes() {
   return (
-    <Routes>
-      <Route path="/" element={<AppLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="learn/:topicId" element={<DeferredRoute><TopicPage /></DeferredRoute>} />
-        <Route path="curriculum" element={<DeferredRoute><CurriculumPage /></DeferredRoute>} />
-        <Route path="about" element={<DeferredRoute><AboutPage /></DeferredRoute>} />
-        <Route path="blog" element={<DeferredRoute><BlogPage /></DeferredRoute>} />
-        <Route path="blog/:slug" element={<DeferredRoute><BlogPostPage /></DeferredRoute>} />
-        <Route path="cheatsheet" element={<DeferredRoute><CheatsheetPage /></DeferredRoute>} />
-        <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
-        <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
-        <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
-      </Route>
-    </Routes>
+    <ProgressProvider>
+      <Routes>
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="learn/:topicId" element={<DeferredRoute><TopicPage /></DeferredRoute>} />
+          <Route path="curriculum" element={<DeferredRoute><CurriculumPage /></DeferredRoute>} />
+          <Route path="about" element={<DeferredRoute><AboutPage /></DeferredRoute>} />
+          <Route path="blog" element={<DeferredRoute><BlogPage /></DeferredRoute>} />
+          <Route path="blog/:slug" element={<DeferredRoute><BlogPostPage /></DeferredRoute>} />
+          <Route path="cheatsheet" element={<DeferredRoute><CheatsheetPage /></DeferredRoute>} />
+          <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
+          <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
+          <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
+        </Route>
+      </Routes>
+    </ProgressProvider>
   );
 }
 

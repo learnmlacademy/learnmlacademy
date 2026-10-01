@@ -34,26 +34,14 @@
 
 .lesson-body :where(h2) {
   scroll-margin-top: 6rem;
-  margin-top: 3.25rem;
-  letter-spacing: -0.025em;
 }
 
 .lesson-body :where(h3) {
   scroll-margin-top: 6rem;
-  margin-top: 2rem;
-  letter-spacing: -0.015em;
 }
 
 .lesson-body :where(p, li) {
-  line-height: 1.76;
-}
-
-.lesson-body :where(p) {
-  text-wrap: pretty;
-}
-
-.lesson-body :where(h2, h3) {
-  text-wrap: balance;
+  line-height: 1.72;
 }
 
 .lesson-body :where(pre) {
@@ -91,15 +79,18 @@
 /* Wide teaching figures can break out of the reading column, but never beyond
    the actual content area at the current responsive breakpoint. */
 .lesson-wide {
-  width: min(67.5rem, calc(100vw - 2rem));
-  max-width: none;
-  margin-left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  transform: none;
 }
 
 @media (min-width: 640px) {
   .lesson-wide {
     width: min(67.5rem, calc(100vw - 3rem));
+    max-width: none;
+    margin-left: 50%;
+    transform: translateX(-50%);
   }
 }
 

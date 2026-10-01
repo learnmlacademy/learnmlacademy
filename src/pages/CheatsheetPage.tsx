@@ -2,6 +2,23 @@ import React from 'react';
 import { Download, CheckCircle2, Award } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 
+const colorMap: Record<string, string> = {
+  indigo: 'bg-indigo-100 text-indigo-700',
+  blue: 'bg-blue-100 text-blue-700',
+  violet: 'bg-violet-100 text-violet-700',
+  emerald: 'bg-emerald-100 text-emerald-700',
+  teal: 'bg-teal-100 text-teal-700',
+  amber: 'bg-amber-100 text-amber-700',
+  orange: 'bg-orange-100 text-orange-700',
+  rose: 'bg-rose-100 text-rose-700',
+  pink: 'bg-pink-100 text-pink-700',
+  red: 'bg-red-100 text-red-700',
+  cyan: 'bg-cyan-100 text-cyan-700',
+  purple: 'bg-purple-100 text-purple-700',
+  lime: 'bg-lime-100 text-lime-700',
+  yellow: 'bg-amber-100 text-amber-800',
+};
+
 export function CheatsheetPage() {
   const sections = [
     { num: "01", title: "Foundations of ML", count: 10, color: "indigo" },
@@ -67,7 +84,7 @@ export function CheatsheetPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {sections.map((s) => (
               <div key={s.num} className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                <span className={`w-9 h-9 rounded-lg bg-${s.color}-100 text-${s.color}-600 flex items-center justify-center text-xs font-black flex-shrink-0`}>{s.num}</span>
+                <span className={`w-9 h-9 rounded-lg ${colorMap[s.color] || 'bg-indigo-100 text-indigo-700'} flex items-center justify-center text-xs font-black flex-shrink-0`}>{s.num}</span>
                 <div>
                   <p className="font-semibold text-slate-800 text-sm leading-tight">{s.title}</p>
                   <p className="text-slate-400 text-xs">{s.count} questions</p>

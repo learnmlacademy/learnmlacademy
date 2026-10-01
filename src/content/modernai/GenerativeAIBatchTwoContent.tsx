@@ -26,6 +26,14 @@ import {
   SyntheticDataPipelineDiagram,
   SyntheticDistributionDiagram,
 } from "../../components/diagrams/GenAIBatchFourDiagrams";
+import {
+  LatentVsPixelSpaceChart,
+  CFGScaleTradeoffChart,
+  FineTuningTradeoffChart,
+  AudioVideoComputeScalingChart,
+  TSTRBenchmarkChart,
+} from "../../components/diagrams/GenAIInteractiveCharts";
+
 
 type Tone = "indigo" | "violet" | "emerald" | "amber" | "rose" | "sky";
 
@@ -141,6 +149,30 @@ function StableLatentDiffusion() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Latent Diffusion & Stable Diffusion in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Pixel-space diffusion is like sculpting a statue out of individual grains of sand: calculating 50 denoising steps across 786,000 RGB pixels melts ordinary GPUs. <strong>Latent diffusion</strong> uses a VAE encoder to compress the image $64\times$ spatially into a compact latent blueprint. The heavy U-Net works only in this tiny space, and once complete, the VAE decoder blows it back up into a stunning, full-resolution photograph!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "VAE Compression", "Compresses 512x512 pixels down to 64x64 latent"],
+            ["2", "CLIP Conditioning", "Encodes prompt tokens into semantic embeddings"],
+            ["3", "Latent Denoising", "U-Net cross-attention clears noise efficiently"],
+            ["4", "VAE Upscale", "Decodes clean latent back into full RGB pixels"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <LatentVsPixelSpaceChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">From diffusion to latent diffusion</h2>
         <Lead>
@@ -286,6 +318,30 @@ function ControllingDiffusionModels() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Controlling Diffusion Models in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Standard text prompts can be vague—asking for "a warrior on a cliff" might yield unpredictable poses, lighting, or compositions. Diffusion controls give you a master control board: <strong>CFG Scale</strong> turns up prompt intensity, <strong>ControlNet</strong> enforces human skeleton poses or architectural wireframes, and <strong>Inpainting</strong> lets you paint over a small mask to swap an outfit while keeping the face perfectly intact!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Unconditioned Signal", "Model predicts generic plausible image"],
+            ["2", "Conditioned Signal", "Model predicts prompt-aligned features"],
+            ["3", "CFG Guidance Scale", "Pushes difference vector: ε_u + w(ε_c - ε_u)"],
+            ["4", "Structural Adapters", "ControlNet locks poses, edges, and depth maps"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <CFGScaleTradeoffChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Control without retraining the model</h2>
         <Lead>
@@ -488,6 +544,30 @@ function FineTuningImageModels() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Fine-Tuning Image Models in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Imagine teaching a celebrity photographer your company’s unique new water bottle. You don't retrain their entire brain from scratch (which costs millions). Instead, with <strong>LoRA</strong> (Low-Rank Adaptation), you hand them a tiny, pocket-sized notebook describing only the new bottle’s contours. Their existing artistic genius remains intact, while they seamlessly integrate your brand with 99% less memory and tiny 15 MB file sizes!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Freeze Base", "Keep 1B+ base parameters completely static"],
+            ["2", "Low-Rank Matrices", "Inject tiny trainable pairs: W = W₀ + (B × A)"],
+            ["3", "Adapter Training", "Optimize only ~0.2% of weights on few images"],
+            ["4", "Modular Swap", "Save lightweight 15MB adapter files to swap at will"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <FineTuningTradeoffChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">When generation controls are no longer enough</h2>
         <Lead>
@@ -641,6 +721,28 @@ function MultimodalGenerativeAI() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Multimodal Generative AI in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Humans don't experience reality through text alone—we see, hear, read, and gesture simultaneously. <strong>Multimodal AI</strong> connects disparate sensory streams into a shared mathematical understanding. An image encoder (like a ViT) translates pixels into tokens, while an audio encoder processes waveforms; both are projected into the same latent space as text, allowing an AI to inspect a diagram, listen to a spoken question, and generate a written solution or voice reply!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Sensory Encoders", "ViT for vision, Whisper/HuBERT for audio"],
+            ["2", "Cross-Modal Projection", "Aligns embeddings into a shared vector space"],
+            ["3", "Attention Fusion", "Allows text tokens to attend directly to image patches"],
+            ["4", "Unified Generation", "Synthesizes answers across text, image, or audio"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">One system, more than one kind of information</h2>
         <Lead>
@@ -794,6 +896,30 @@ function MultimodalGenerativeAI() {
 function TemporalMediaGeneration() {
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Audio, Speech, Music & Video Generation in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Generating still images is about spatial harmony (where eyes and noses sit). Generating audio and video introduces a tyrannical second dimension: <strong>Time</strong>. A speech synthesizer must preserve accent, breath, and emotion across words without robotic pitch glitches. A video model must ensure an actor's shirt doesn't morph from blue to plaid three frames later. Factorized spatial-temporal attention anchors consistency frame-by-frame and beat-by-beat!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Spectral Encoding", "Transforms 1D waveforms into 2D Mel-Spectrograms"],
+            ["2", "Temporal Attention", "Tracks consistency across video frames & audio bars"],
+            ["3", "Factorized 2D+1D", "Saves >90% compute compared to full 3D attention"],
+            ["4", "Neural Vocoders", "HiFi-GAN & decoders render studio-grade waveform/frames"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-violet-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <AudioVideoComputeScalingChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A picture occupies space; media also unfolds in time</h2>
         <Lead>
@@ -957,6 +1083,30 @@ function SyntheticDataGeneration() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Synthetic Data Generation in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Imagine training an autonomous vehicle for extreme snow blizzards when 99% of your driving logs were recorded on sunny highways. You cannot wait for rare fatal accidents to happen. <strong>Synthetic data</strong> uses physics engines, diffusion models, or tabular transformers (like CTGAN) to intentionally generate thousands of edge-case scenarios while mathematically safeguarding patient and user privacy with differential privacy!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Learn Real Schemas", "Model joint column distributions and correlations"],
+            ["2", "Rebalance Rare Cases", "Oversample rare fraud or minority medical conditions"],
+            ["3", "Privacy Guarantees", "Inject differential privacy (ε, δ) to prevent memorization"],
+            ["4", "TSTR Validation", "Train on Synthetic, evaluate strictly on Real test set"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <TSTRBenchmarkChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Synthetic data is designed evidence</h2>
         <Lead>

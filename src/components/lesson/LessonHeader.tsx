@@ -11,6 +11,7 @@ import {
   Compass,
   Sparkles,
 } from 'lucide-react';
+import { useProgress } from '../../context/ProgressContext';
 
 type LessonHeaderProps = {
   title: string;
@@ -47,6 +48,8 @@ export function LessonHeader({
   const cleanCategory = category.replace(/^\d+\.\s*/, '');
   const diffLevel = getDifficultyLevel(category, difficulty);
   const [copied, setCopied] = useState(false);
+  const { isCompleted, toggleCompleted } = useProgress();
+  const completed = topicId ? isCompleted(topicId) : false;
 
   const difficultyColors = {
     Beginner: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
@@ -104,45 +107,68 @@ export function LessonHeader({
         </ol>
       </nav>
 
-      {/* Meta Badges Row */}
-      <div className="flex flex-wrap items-center gap-2.5 text-xs">
-        {/* Difficulty Badge */}
-        <span
-          className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 font-bold uppercase tracking-wider text-[11px] ${difficultyColors[diffLevel]}`}
-        >
-          <Compass className="h-3 w-3" />
-          {diffLevel}
-        </span>
+      {/* Meta Badges Row & Quick Actions */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 text-xs">
+        <div className="flex flex-wrap items-center gap-2 text-slate-500">
+          {/* Difficulty Badge */}
+          <span
+            className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 font-bold uppercase tracking-wider text-[11px] ${difficultyColors[diffLevel]}`}
+          >
+            <Compass className="h-3 w-3" />
+            {diffLevel}
+          </span>
 
-        {/* Read Time */}
-        <span className="inline-flex items-center gap-1 text-slate-500 font-medium">
-          <Clock className="h-3.5 w-3.5 text-slate-400" />
-          <span>{readTimeMinutes} min read</span>
-        </span>
+          <span className="text-slate-300" aria-hidden="true">·</span>
 
-        <span className="text-slate-300" aria-hidden="true">·</span>
+          {/* Read Time */}
+          <span className="inline-flex items-center gap-1 font-medium">
+            <Clock className="h-3.5 w-3.5 text-slate-400" />
+            <span>{readTimeMinutes} min read</span>
+          </span>
 
-        {/* Freshness / Update Date */}
-        <span className="inline-flex items-center gap-1 text-slate-500 font-medium">
-          <Calendar className="h-3.5 w-3.5 text-slate-400" />
-          <span>Updated March 2026</span>
-        </span>
+          <span className="text-slate-300 hidden sm:inline" aria-hidden="true">·</span>
 
-        <span className="text-slate-300" aria-hidden="true">·</span>
+          {/* Freshness / Update Date */}
+          <span className="hidden sm:inline-flex items-center gap-1 font-medium">
+            <Calendar className="h-3.5 w-3.5 text-slate-400" />
+            <span>Updated March 2026</span>
+          </span>
 
-        {/* Interactive Tag */}
-        <span className="inline-flex items-center gap-1 text-indigo-600 font-semibold">
-          <BookOpen className="h-3.5 w-3.5" />
-          <span>Open-Access Tutorial</span>
-        </span>
+          <span className="text-slate-300 hidden md:inline" aria-hidden="true">·</span>
 
-        {/* Quick Social Share Action in header */}
-        <div className="ml-auto hidden sm:flex items-center gap-1.5 text-slate-500">
+          {/* Interactive Tag */}
+          <span className="hidden md:inline-flex items-center gap-1 text-indigo-600 font-semibold">
+            <BookOpen className="h-3.5 w-3.5" />
+            <span>Open-Access Tutorial</span>
+          </span>
+        </div>
+
+        {/* Quick Actions: Complete toggle + Social Share */}
+        <div className="flex items-center gap-2 shrink-0">
+          {topicId && (
+            <button
+              type="button"
+              onClick={() => toggleCompleted(topicId)}
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs font-bold transition-all shadow-2xs ${
+                completed
+                  ? 'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 hover:border-emerald-400'
+                  : 'border-slate-200 bg-white text-slate-700 hover:border-emerald-300 hover:text-emerald-700 hover:bg-emerald-50/40'
+              }`}
+            >
+              <CheckCircle2
+                className={`h-3.5 w-3.5 ${
+                  completed ? 'text-emerald-600 fill-emerald-100' : 'text-slate-400'
+                }`}
+              />
+              <span>{completed ? 'Completed' : 'Mark as Complete'}</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={handleCopyLink}
             title="Copy lesson link"
-            className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 hover:border-indigo-300 hover:text-indigo-600 transition"
+            className="hidden sm:inline-flex items-center gap-1 rounded-md border border-slate-200 bg-white px-2 py-1 text-[11px] font-semibold text-slate-600 hover:border-indigo-300 hover:text-indigo-600 transition"
           >
             {copied ? (
               <>

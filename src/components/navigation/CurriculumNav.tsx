@@ -4,23 +4,27 @@ import {
   learningNavigationGroups,
 } from '../../data/learningNavigation';
 import { NavigationGroup } from './NavigationGroup';
-import { Search, Compass, ChevronsUpDown, BookOpen } from 'lucide-react';
+import { Search, Compass, ChevronsUpDown, BookOpen, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useProgress } from '../../context/ProgressContext';
 
 type CurriculumNavProps = {
   activeTopicId?: string;
   onNavigate?: () => void;
   label?: string;
+  hideSearch?: boolean;
 };
 
 export function CurriculumNav({
   activeTopicId,
   onNavigate,
   label = 'Curriculum',
+  hideSearch = false,
 }: CurriculumNavProps) {
   const activeGroup = getActiveNavigationGroup(activeTopicId);
   const [expandedGroup, setExpandedGroup] = useState(activeGroup?.id ?? 'machine-learning');
   const [filterQuery, setFilterQuery] = useState('');
+  const { isCompleted } = useProgress();
 
   // Auto-expand group when active topic changes
   useEffect(() => {
@@ -40,50 +44,52 @@ export function CurriculumNav({
   return (
     <nav aria-label={label} className="flex h-full flex-col text-slate-800">
       {/* Search Header */}
-      <div className="sticky top-0 z-10 bg-white pb-3 pt-1">
-        <div className="relative">
-          <Search
-            className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400"
-            aria-hidden="true"
-          />
-          <input
-            type="text"
-            value={filterQuery}
-            onChange={e => setFilterQuery(e.target.value)}
-            placeholder="Quick search lessons..."
-            className="h-8 w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          />
-          {filterQuery && (
-            <button
-              type="button"
-              onClick={() => setFilterQuery('')}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-slate-400 hover:text-slate-700"
-            >
-              ✕
-            </button>
-          )}
-        </div>
+      {!hideSearch && (
+        <div className="sticky top-0 z-10 bg-white pb-3 pt-1">
+          <div className="relative">
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              value={filterQuery}
+              onChange={e => setFilterQuery(e.target.value)}
+              placeholder="Quick search lessons..."
+              className="h-8 w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            />
+            {filterQuery && (
+              <button
+                type="button"
+                onClick={() => setFilterQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-slate-400 hover:text-slate-700"
+              >
+                ✕
+              </button>
+            )}
+          </div>
 
-        {/* Quick Links inside Docs Sidebar */}
-        <div className="mt-2.5 flex items-center justify-between border-b border-slate-100 pb-2 px-1 text-[11px] font-medium text-slate-500">
-          <Link
-            to="/curriculum"
-            onClick={onNavigate}
-            className="flex items-center gap-1 hover:text-indigo-600 transition"
-          >
-            <BookOpen className="h-3 w-3" aria-hidden="true" />
-            <span>Full Index</span>
-          </Link>
-          <span className="text-slate-300">·</span>
-          <Link
-            to="/cheatsheet"
-            onClick={onNavigate}
-            className="text-indigo-600 hover:text-indigo-800 font-semibold transition"
-          >
-            Cheatsheet PDF
-          </Link>
+          {/* Quick Links inside Docs Sidebar */}
+          <div className="mt-2.5 flex items-center justify-between border-b border-slate-100 pb-2 px-1 text-[11px] font-medium text-slate-500">
+            <Link
+              to="/curriculum"
+              onClick={onNavigate}
+              className="flex items-center gap-1 hover:text-indigo-600 transition"
+            >
+              <BookOpen className="h-3 w-3" aria-hidden="true" />
+              <span>Full Index</span>
+            </Link>
+            <span className="text-slate-300">·</span>
+            <Link
+              to="/cheatsheet"
+              onClick={onNavigate}
+              className="text-indigo-600 hover:text-indigo-800 font-semibold transition"
+            >
+              Cheatsheet PDF
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Filter View or Nested Hierarchy */}
       <div className="flex-1 space-y-1 overflow-y-auto pr-1">
@@ -102,13 +108,16 @@ export function CurriculumNav({
                   key={topic.id}
                   to={`/learn/${topic.id}`}
                   onClick={onNavigate}
-                  className={`block rounded-md px-2.5 py-1.5 text-xs transition ${
+                  className={`flex items-center justify-between gap-2 rounded-md px-2.5 py-1.5 text-xs transition ${
                     topic.id === activeTopicId
                       ? 'bg-indigo-50 font-semibold text-indigo-700'
                       : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
-                  {topic.title}
+                  <span className="truncate">{topic.title}</span>
+                  {isCompleted(topic.id) && (
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-emerald-600" />
+                  )}
                 </Link>
               ))
             )}

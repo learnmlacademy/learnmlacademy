@@ -21,6 +21,13 @@ import {
   ProductionReliabilityDiagram,
   ResponsibleLifecycleDiagram,
 } from "../../components/diagrams/GenAIFinalBatchDiagrams";
+import {
+  FIDConvergenceChart,
+  LayeredSafetyFunnelChart,
+  GenerativeModelFamilyRadarChart,
+  EndToEndLatencyChart,
+} from "../../components/diagrams/GenAIInteractiveCharts";
+
 
 type Tone = "indigo" | "violet" | "emerald" | "amber" | "rose" | "sky";
 
@@ -103,6 +110,30 @@ function EvaluatingGenerativeModels() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Evaluating Generative Models in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Evaluating a classification model is simple: is the email spam or not? Evaluating generative AI is much harder: there is no single "correct" response to a prompt. Instead, we measure multiple dimensions: <strong>FID</strong> (Fréchet Inception Distance) measures whether generated images match real statistical distributions, <strong>CLIP Score</strong> measures prompt adherence, and <strong>Human Preference</strong> ranks creative appeal!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Perceptual Fidelity", "FID & IS measure realism and sharpness"],
+            ["2", "Prompt Alignment", "CLIP & semantic similarity score intent match"],
+            ["3", "Coverage & Diversity", "Verifies the model doesn't suffer mode collapse"],
+            ["4", "Human & LLM Judges", "Paired side-by-side preference tournaments"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <FIDConvergenceChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">What does “good” mean when many answers are possible?</h2>
         <Lead>
@@ -274,6 +305,30 @@ function EvaluatingGenerativeModels() {
 function ResponsibleGenerativeAI() {
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Responsible Generative AI in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Slapping a disclaimer like "AI may make mistakes" beneath a chatbot is not a safety architecture. Real safety is built like an airport security system in multiple distinct layers: post-training alignment (RLHF), automated input filters to catch prompt injections, provenance watermarking (like SynthID and C2PA) to identify synthetic media, and real-time output guardrails to block harmful or confidential leakage!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Alignment Tuning", "RLHF & Constitutional AI reduce base toxicity"],
+            ["2", "Input Gateways", "Blocks prompt injections, jailbreaks, and PII"],
+            ["3", "Watermarking", "Cryptographic C2PA metadata & SynthID watermarks"],
+            ["4", "Output Audits", "Real-time safety classifiers verify generated content"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-rose-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <LayeredSafetyFunnelChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Responsibility belongs to the whole system</h2>
         <Lead>
@@ -411,6 +466,30 @@ function ChoosingGenerativeModel() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Choosing the Right Generative Model in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          There is no "best" generative model—every family represents a fundamental engineering compromise. If you need instantaneous 60 FPS real-time generation, pick a <strong>GAN</strong> or <strong>Consistency Model</strong>. If you need maximum photorealism and prompt nuance, pick <strong>Latent Diffusion</strong>. If you need clean mathematical interpolation, pick a <strong>VAE</strong>. And if a problem can be solved with a simple SQL lookup, don't generate at all!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Do You Need To Generate?", "Verify retrieval or deterministic ML isn't better"],
+            ["2", "Quality vs Speed", "Milliseconds for games/audio vs seconds for studio art"],
+            ["3", "Compute & Footprint", "Consumer phone vs 8x H100 dedicated datacenter node"],
+            ["4", "Controllability", "Fine spatial geometry (ControlNet) vs free creativity"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <GenerativeModelFamilyRadarChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Model selection starts before the model list</h2>
         <Lead>
@@ -585,6 +664,30 @@ function BuildingGenerativeAIApplications() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Building Generative AI Applications in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Calling a model API from a Jupyter notebook is a demonstration; building a production application is software engineering. A real application surrounds the raw model with safety airlocks: caching identical requests to slash cloud bills, validating input schemas, grounding drafts in trusted enterprise databases (RAG), and treating raw model output as an unverified draft that must pass strict Pydantic JSON parsing before reaching any human user!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Input Gate & Cache", "Sanitizes prompts and returns cache hits in 15ms"],
+            ["2", "Grounding / Context", "Injects verified facts, documentation, or tools"],
+            ["3", "Structured Gen", "Enforces rigid JSON schema adherence"],
+            ["4", "Output Validation", "Verifies citations, evidence, and business constraints"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <EndToEndLatencyChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A model produces content; an application completes a job</h2>
         <Lead>
@@ -722,6 +825,28 @@ function DeployingGenerativeAIApplications() {
 
   return (
     <div className="space-y-10">
+      {/* In Simple Words */}
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+        <p className="font-bold text-slate-900 mb-2 text-base">Deploying Generative AI Applications in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Deploying generative models is fundamentally different from deploying microservices. LLMs and diffusion models are GPU-memory bound: an inference server must manage dynamic KV-caches across thousands of concurrent tokens. High-performance runtimes (like <strong>vLLM</strong> or <strong>Triton</strong>) use continuous batching, PagedAttention, and FP8 quantization to boost serving throughput by $10\times$ while holding p99 latency under tight SLAs!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "Serving Engine", "vLLM / Triton with continuous batching & PagedAttention"],
+            ["2", "Weight Optimization", "FP8 / INT4 quantization reduces VRAM footprint by 50%"],
+            ["3", "Capacity Planning", "Little's Law: L = λ × W models concurrency & queues"],
+            ["4", "Canary Deployment", "Shadow evaluation, gradual traffic ramp, instant rollback"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Deployment turns a working workflow into a dependable service</h2>
         <Lead>
