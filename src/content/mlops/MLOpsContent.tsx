@@ -1,11 +1,12 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { CheckCircle2 } from "lucide-react";
 import { MLOpsFigure, type MLOpsVisualId } from "../../components/diagrams/MLOpsDiagrams";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock, type CodeBlockType } from "../../components/content/CodeBlock";
 import { DataTable } from "../../components/content/DataTable";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
+import { mlopsReadingFlow } from "./mlopsReadingFlow";
+import "../textbook.css";
 
 type Row = string[];
 type CodeKind = "RUNNABLE PYTHON" | "CONCEPTUAL PSEUDOCODE" | "ILLUSTRATIVE CONFIGURATION" | "ILLUSTRATIVE INFRASTRUCTURE FRAGMENT";
@@ -164,7 +165,9 @@ function Table({ title, headers, rows }: { key?: React.Key; title: string; heade
   return <DataTable title={title} caption={title} headers={headers} rows={rows} />;
 }
 
-function Cards({ items }: { items: string[] }) { return <div className="not-prose grid gap-3 md:grid-cols-2">{items.map(item=><div key={item} className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600"/><span className="text-sm leading-relaxed text-slate-700">{item}</span></div>)}</div>; }
+function TeachingList({ items }: { items: string[] }) {
+  return <ul className="list-disc space-y-3 pl-5">{items.map(item => <li key={item}>{item}</li>)}</ul>;
+}
 
 function CodeBlock({ title, kind, explanation, value }: { key?: React.Key; title: string; kind: CodeKind; explanation: string; value: string }) {
   const type: CodeBlockType = kind === "RUNNABLE PYTHON"
@@ -178,21 +181,38 @@ function CodeBlock({ title, kind, explanation, value }: { key?: React.Key; title
 export function MLOpsContent() {
   const { topicId = "" } = useParams<{ topicId: string }>();
   const lesson = lessons[topicId];
-  if (!lesson) return null;
-  const firstVisuals = lesson.visuals.slice(0, 2);
-  const remainingVisuals = lesson.visuals.slice(2);
-  return <div className="space-y-12" data-mlops-lesson={topicId}>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Why This Topic Exists</h2><div className="space-y-4">{lesson.opening.map(p=><p key={p} className="text-lg leading-relaxed text-slate-700">{p}</p>)}</div></section>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">What You Will Be Able to Explain</h2><Cards items={lesson.objectives}/></section>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Terms Before the Architecture</h2><p className="mb-5 leading-relaxed text-slate-700">These terms name different responsibilities. Read the meaning before following them through the diagrams and worked example.</p><Table title="Core vocabulary" headers={["Term", "Meaning in this lesson"]} rows={lesson.terms}/></section>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">{lesson.conceptsTitle}</h2><div className="space-y-4">{lesson.concepts.map(p=><p key={p} className="leading-relaxed text-slate-700">{p}</p>)}</div>{firstVisuals.map(id=><MLOpsFigure key={id} id={id}/>)}</section>
-    <section><h2 className="mb-5 text-2xl font-bold text-indigo-800">Compare the Design Choices</h2><div className="space-y-7">{lesson.tables.map(table=><Table key={table.title} {...table}/>)}</div></section>
-    <section data-mlops-worked-example><h2 className="mb-4 text-2xl font-bold text-indigo-800">Worked Example: {lesson.example.title}</h2><div className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50/50 p-5 sm:p-6"><p className="font-semibold leading-relaxed text-slate-800"><strong className="text-indigo-900">Given: </strong>{lesson.example.given}</p><ol className="mt-5 space-y-3">{lesson.example.steps.map((step,index)=><li key={step} className="grid grid-cols-[2rem_minmax(0,1fr)] gap-3"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-sm font-bold text-white">{index+1}</span><span className="pt-1 text-sm leading-relaxed text-slate-700">{step}</span></li>)}</ol><p className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 leading-relaxed text-slate-700"><strong className="text-emerald-900">Result and interpretation: </strong>{lesson.example.result}</p></div></section>
-    {remainingVisuals.length>0&&<section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Use the Evidence to Make the Next Decision</h2><p className="leading-relaxed text-slate-700">The following figures turn the example into an operational decision. Follow every branch and note which state is recorded before work continues.</p>{remainingVisuals.map(id=><MLOpsFigure key={id} id={id}/>)}</section>}
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Practical Implementation</h2><p className="mb-6 leading-relaxed text-slate-700">The label above each block states what it is. Runnable Python can be executed as shown with the standard library; pseudocode and configuration communicate architecture and require adaptation to a real platform.</p><div className="space-y-8">{lesson.code.map(block=><CodeBlock key={block.title} {...block}/>)}</div></section>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Production Decisions to Make Explicit</h2><Cards items={lesson.decisions}/><Callout role="tip" className="mt-5"><p>A tool or platform can automate a chosen policy, but it cannot decide the correct latency, freshness, quality, risk, ownership, or fallback policy for your product.</p></Callout></section>
+  const reading = mlopsReadingFlow[topicId];
+  if (!lesson || !reading) return null;
+  return <div className="textbook-lesson space-y-10" data-mlops-lesson={topicId}>
+    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.introduction}</h2><div className="space-y-4">{lesson.opening.map(p=><p key={p} className="text-lg leading-relaxed text-slate-700">{p}</p>)}</div></section>
+    <section className="tutorial-objectives"><h2 className="mb-4 text-xl font-bold text-slate-900">What You Will Be Able to Explain</h2><TeachingList items={lesson.objectives}/></section>
+    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.vocabulary}</h2><p className="mb-5 leading-relaxed text-slate-700">These terms name different responsibilities. Read the meaning before following them through the diagrams and worked example.</p><Table title="Core vocabulary" headers={["Term", "Meaning in this lesson"]} rows={lesson.terms}/></section>
+    <section className="space-y-6">
+      <h2 className="mb-4 text-2xl font-bold text-indigo-800">{lesson.conceptsTitle}</h2>
+      {reading.blocks.map(block => {
+        if (block === "worked") return <section key={block} data-mlops-worked-example>
+          <h2 className="mb-4 text-2xl font-bold text-indigo-800">Worked Example: {lesson.example.title}</h2>
+          <p><strong>Given: </strong>{lesson.example.given}</p>
+          <ol className="tutorial-steps">{lesson.example.steps.map(step => <li key={step}>{step}</li>)}</ol>
+          <p className="tutorial-result"><strong>Result and interpretation: </strong>{lesson.example.result}</p>
+        </section>;
+        if (block === "decision-bridge") return <p key={block} className="tutorial-transition">The following figures turn the example into an operational decision. Follow every branch and note which state is recorded before work continues.</p>;
+        const [kind, position] = block.split(":");
+        const index = Number(position);
+        const content = kind === "visual" ? <MLOpsFigure id={lesson.visuals[index]}/>
+          : kind === "table" ? <Table {...lesson.tables[index]}/>
+            : <p className="leading-relaxed text-slate-700">{lesson.concepts[index]}</p>;
+        const heading = reading.headings?.[block];
+        return <React.Fragment key={block}>
+          {heading && <h3 className="mt-8 text-xl font-bold text-slate-900">{heading}</h3>}
+          {content}
+        </React.Fragment>;
+      })}
+    </section>
+    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.implementation}</h2><p className="mb-6 leading-relaxed text-slate-700">The label above each block states what it is. Runnable Python can be executed as shown with the standard library; pseudocode and configuration communicate architecture and require adaptation to a real platform.</p><div className="space-y-8">{lesson.code.map(block=><CodeBlock key={block.title} {...block}/>)}</div></section>
+    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.decisions}</h2><TeachingList items={lesson.decisions}/><Callout role="tip" className="mt-5"><p>A tool or platform can automate a chosen policy, but it cannot decide the correct latency, freshness, quality, risk, ownership, or fallback policy for your product.</p></Callout></section>
     <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Failure Analysis and Recovery</h2><Table title="Observed failure → likely cause → controlled response" headers={["Observed failure", "Likely cause", "Response"]} rows={lesson.failures}/><Callout role="mistake" className="mt-5"><p>Do not hide missing evidence behind a fluent prediction. Stop, degrade, retry, roll back, or request review according to a pre-approved policy and record the reason.</p></Callout></section>
-    <section><h2 className="mb-4 text-2xl font-bold text-indigo-800">Connect to Earlier Lessons</h2><div className="not-prose grid gap-3 md:grid-cols-3">{lesson.links.map(([label,route,detail])=><Link key={route} to={route} className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 hover:bg-indigo-100"><strong className="block text-sm text-indigo-900">{label}</strong><span className="mt-1 block text-xs leading-relaxed text-slate-600">{detail}</span></Link>)}</div></section>
+    <section className="tutorial-bridge"><h2 className="mb-4 text-2xl font-bold text-indigo-800">Connect to Earlier Lessons</h2><ul className="list-disc space-y-4 pl-5">{lesson.links.map(([label,route,detail])=><li key={route}><Link to={route} className="font-semibold text-indigo-800 underline underline-offset-4">{label}</Link><p>{detail}</p></li>)}</ul></section>
     <div data-mlops-summary><SummaryCard items={lesson.summary} className="mt-0" /></div>
   </div>;
 }

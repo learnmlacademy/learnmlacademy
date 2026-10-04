@@ -1,0 +1,82 @@
+/* Opt-in reading layout for the four modern-AI paths only. Teaching figures,
+   interactive charts, formulas, code, tables and the shared lesson shell keep
+   their own layout; prose is never hidden or rearranged with CSS. */
+.textbook-lesson {
+  min-width: 0;
+  color: var(--lma-text-secondary);
+  font-size: 1.0625rem;
+  line-height: 1.85;
+}
+
+.textbook-lesson > :first-child { margin-top: 0; }
+
+.textbook-lesson .tutorial-overview,
+.textbook-lesson .tutorial-explanation {
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  color: inherit;
+}
+
+.textbook-lesson .tutorial-overview { margin-block: 1.5rem 2rem; }
+.textbook-lesson .tutorial-overview > p { font-size: inherit; line-height: 1.85; }
+
+.textbook-lesson .tutorial-prose-group {
+  display: block;
+  margin-block: 1.5rem;
+}
+
+.textbook-lesson .tutorial-prose-group > .tutorial-explanation + .tutorial-explanation {
+  margin-top: 1.5rem;
+}
+
+.textbook-lesson .tutorial-explanation > :where(p, ul, ol) {
+  font-size: inherit;
+  line-height: 1.85;
+}
+
+.textbook-lesson .tutorial-explanation > h3 {
+  margin-block: 0 0.5rem;
+  color: var(--lma-text-primary);
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.textbook-lesson .tutorial-steps {
+  list-style: decimal;
+  padding-left: 1.6rem;
+  margin-block: 1.25rem;
+}
+
+.textbook-lesson .tutorial-steps > li { padding-left: 0.35rem; margin-block: 1rem; }
+.textbook-lesson .tutorial-steps > li::marker { color: var(--lma-brand-text); font-weight: 700; }
+.textbook-lesson .tutorial-steps h3 { margin: 0 0 0.35rem; font-size: 1.125rem; }
+.textbook-lesson .tutorial-steps p { margin: 0; }
+
+.textbook-lesson .tutorial-objectives {
+  border-left: 2px solid var(--lma-border-default);
+  padding-left: 1.25rem;
+  margin-block: 1.75rem;
+}
+
+.textbook-lesson .tutorial-result {
+  margin-top: 1.25rem;
+  border-left: 3px solid var(--lma-brand-text);
+  padding-left: 1rem;
+}
+
+.textbook-lesson .tutorial-bridge {
+  margin-block: 2rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--lma-border-default);
+  border-bottom: 1px solid var(--lma-border-default);
+}
+
+.textbook-lesson .tutorial-transition { margin-block: 1.5rem 1rem; }
+
+@media (max-width: 640px) {
+  .textbook-lesson { font-size: 1rem; line-height: 1.8; }
+  .textbook-lesson .tutorial-steps { padding-left: 1.3rem; }
+}

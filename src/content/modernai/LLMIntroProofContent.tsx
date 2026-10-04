@@ -1,3 +1,4 @@
+import "../textbook.css";
 import { useId } from 'react';
 import { Link } from 'react-router-dom';
 import { Callout } from '../../components/content/Callout';
@@ -66,7 +67,7 @@ const workedSteps = [
 
 export function LLMIntroProofContent() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <p className="text-lg">You type <strong>“Explain gravity to a 10-year-old.”</strong> into an AI chatbot. A few moments later, an explanation appears, perhaps beginning: “Gravity is a force that pulls things toward each other.” How did the AI decide what words to write?</p>
         <p>Underneath the chatbot is a model called a <strong>Large Language Model</strong>, usually shortened to <strong>LLM</strong>. An LLM learns patterns from huge amounts of text and uses those patterns to predict what text should come next.</p>
@@ -187,6 +188,8 @@ export function LLMIntroProofContent() {
         <p>In the table, “…” hides the unchanged beginning only to keep the rows readable; the model still receives it. Each row involves a fresh prediction. Later choices are illustrative selections, not calculations from the first row’s percentages.</p>
         <p>After adding the full stop, this example ends: <strong>“Machine learning allows computers to learn patterns from data.”</strong> In an application, generation stops when an end signal or configured limit is reached; a full stop alone need not end a reply. Repeated next-token prediction is also called <strong>autoregressive generation</strong>: each addition helps determine the following one.</p>
       </section>
+
+      <p className="tutorial-transition">Read the rows as successive states of the same sentence. The output of one row becomes the input to the next; the displayed choices illustrate the process rather than promise what a particular model will generate.</p>
 
       <section className="space-y-4">
         <h2>The same loop in a few lines of pseudocode</h2>

@@ -1,3 +1,4 @@
+import "../textbook.css";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock } from "../../components/content/CodeBlock";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
@@ -106,9 +107,27 @@ function WhatIsGenerativeAI() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* 1. In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">What changes when a system can create?</h2>
+        <Lead>
+          Many machine-learning systems choose a label or estimate a number. Generative AI has a different
+          goal: it constructs a new candidate—such as a paragraph, picture, sound, video clip, program, or
+          structured record—using patterns learned from examples.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          “New” does not mean unrelated to training data. The result is shaped by learned patterns and by the
+          request given at use time. Generative models are not simply retrieval systems, but memorization or
+          near-verbatim reproduction can occur and must be checked.
+        </p>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          This overview explains what generation is, how it differs from retrieval and ordinary prediction,
+          what a pretrained model does at a high level, and where the major model families fit. Lesson 3
+          develops distributions, latent spaces, sampling, and conditioning in detail.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Generative AI in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Traditional AI acts like an evaluator or grader—it labels an image, detects spam, or predicts a house price. Generative AI acts like an author or artist—it learns the underlying patterns and structure across millions of examples, then constructs completely new candidate text, imagery, audio, code, or records that fit your use-time prompt.
@@ -129,27 +148,6 @@ function WhatIsGenerativeAI() {
         </div>
       </div>
 
-      <MarketComputeExplosionChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">What changes when a system can create?</h2>
-        <Lead>
-          Many machine-learning systems choose a label or estimate a number. Generative AI has a different
-          goal: it constructs a new candidate—such as a paragraph, picture, sound, video clip, program, or
-          structured record—using patterns learned from examples.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          “New” does not mean unrelated to training data. The result is shaped by learned patterns and by the
-          request given at use time. Generative models are not simply retrieval systems, but memorization or
-          near-verbatim reproduction can occur and must be checked.
-        </p>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          This overview explains what generation is, how it differs from retrieval and ordinary prediction,
-          what a pretrained model does at a high level, and where the major model families fit. Lesson 3
-          develops distributions, latent spaces, sampling, and conditioning in detail.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">What can Generative AI produce?</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -168,8 +166,6 @@ function WhatIsGenerativeAI() {
           </table>
         </div>
       </section>
-
-      <TrainingGenerationLifecycleFigure />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Three systems that can look similar from the outside</h2>
@@ -196,16 +192,16 @@ function WhatIsGenerativeAI() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Prompt, condition, and starting signal</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-3">
-          <div className={"rounded-xl border p-5 " + toneClasses.amber}>
+        <div className="not-prose grid gap-4 md:grid-cols-3 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.amber)}>
             <h3 className="font-bold">Prompt</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">Instructions or context, usually written as text, supplied at use time.</p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">Condition</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">Any information that guides the output: a prompt, class, image, mask, audio clip, or partial sequence.</p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">Starting signal</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">The initial input to generation, such as random noise, a first token, a latent vector, or a partly completed artifact.</p>
           </div>
@@ -214,15 +210,15 @@ function WhatIsGenerativeAI() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Training a model versus using one</h2>
-        <div className="not-prose grid gap-5 md:grid-cols-2">
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+        <div className="not-prose grid gap-5 md:grid-cols-2 tutorial-prose-group">
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5 tutorial-explanation">
             <h3 className="font-bold text-indigo-950">Training</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Developers supply examples and a learning objective. An optimizer repeatedly changes model
               parameters. This can require large datasets, specialized hardware, and long-running jobs.
             </p>
           </div>
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 tutorial-explanation">
             <h3 className="font-bold text-emerald-950">Using a pretrained model</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               The saved parameters normally remain fixed. A user or application supplies a condition and the
@@ -232,13 +228,15 @@ function WhatIsGenerativeAI() {
         </div>
       </section>
 
+      <TrainingGenerationLifecycleFigure />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A map of four major model families</h2>
         <p className="leading-relaxed text-slate-700">
           These labels describe different generation mechanisms. They are orientation points here, not
           complete lessons.
         </p>
-        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2">
+        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2 tutorial-prose-group">
           <Link to="/learn/llm-intro" className={"rounded-xl border p-5 transition hover:shadow-md " + toneClasses.sky}>
             <h3 className="font-bold">Autoregressive</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">Creates one part at a time and uses earlier parts to help choose the next, as in next-token text generation.</p>
@@ -280,6 +278,8 @@ function WhatIsGenerativeAI() {
         </div>
       </section>
 
+      <MarketComputeExplosionChart />
+
       <Warning title="Generation is not automatic truth or automatic originality">
         <p>
           Check important claims against trusted evidence. Test for bias and unsafe outputs. Protect private
@@ -318,9 +318,23 @@ function GenerativeVsDiscriminative() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Two useful goals, not two competing buzzwords</h2>
+        <Lead>
+          A discriminative model learns the rule needed to predict a target from an observed input. A
+          generative model learns enough about how data occurs to represent or create possible samples. The
+          best choice depends on the job: deciding, estimating, creating, filling missing information, or
+          combining several of those tasks.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Discriminative does not mean “classification only.” A discriminative regression model can map a
+          house description to a continuous price. Generative does not mean “images only.” A generator may
+          produce text, audio, rows, sequences, or other data.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Generative vs Discriminative in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Think of a detective vs an artist: A <strong>discriminative model</strong> acts like a detective—given a handwritten note (x), it determines whether it belongs to Suspect A or Suspect B ($P(y|x)$). A <strong>generative model</strong> acts like a master artist—it studies Suspect A’s handwriting style so thoroughly that it can forge brand-new sentences in that exact style ($P(x|y)$)!
@@ -337,31 +351,14 @@ function GenerativeVsDiscriminative() {
         </div>
       </div>
 
-      <GenerativeVsDiscriminativeBoundaryChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Two useful goals, not two competing buzzwords</h2>
-        <Lead>
-          A discriminative model learns the rule needed to predict a target from an observed input. A
-          generative model learns enough about how data occurs to represent or create possible samples. The
-          best choice depends on the job: deciding, estimating, creating, filling missing information, or
-          combining several of those tasks.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Discriminative does not mean “classification only.” A discriminative regression model can map a
-          house description to a continuous price. Generative does not mean “images only.” A generator may
-          produce text, audio, rows, sequences, or other data.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Read the probability notation one piece at a time</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}><h3 className="font-bold">x — the input or observed data</h3><p className="mt-2 text-sm text-slate-700">Example: whether an email contains the word “offer,” plus its other measured features.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.amber}><h3 className="font-bold">y — the target</h3><p className="mt-2 text-sm text-slate-700">Example: spam or legitimate. For regression, y could instead be a number such as price.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.indigo}><h3 className="font-bold">p(y | x) — target given input</h3><p className="mt-2 text-sm text-slate-700">After observing x, how likely is each y? This is the usual discriminative direction.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">p(x) and p(x, y) — data and joint patterns</h3><p className="mt-2 text-sm text-slate-700">p(x) describes inputs. p(x, y) describes inputs and targets occurring together.</p></div>
-          <div className={"rounded-xl border p-5 md:col-span-2 " + toneClasses.emerald}><h3 className="font-bold">p(x | y) — input given a target</h3><p className="mt-2 text-sm text-slate-700">Within a chosen class y, how likely is an input pattern x? A class-conditional generator can use this direction to create an example belonging to y.</p></div>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}><h3 className="font-bold">x — the input or observed data</h3><p className="mt-2 text-sm text-slate-700">Example: whether an email contains the word “offer,” plus its other measured features.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.amber)}><h3 className="font-bold">y — the target</h3><p className="mt-2 text-sm text-slate-700">Example: spam or legitimate. For regression, y could instead be a number such as price.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.indigo)}><h3 className="font-bold">p(y | x) — target given input</h3><p className="mt-2 text-sm text-slate-700">After observing x, how likely is each y? This is the usual discriminative direction.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">p(x) and p(x, y) — data and joint patterns</h3><p className="mt-2 text-sm text-slate-700">p(x) describes inputs. p(x, y) describes inputs and targets occurring together.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 md:col-span-2 " + toneClasses.emerald)}><h3 className="font-bold">p(x | y) — input given a target</h3><p className="mt-2 text-sm text-slate-700">Within a chosen class y, how likely is an input pattern x? A class-conditional generator can use this direction to create an example belonging to y.</p></div>
         </div>
       </section>
 
@@ -410,7 +407,7 @@ function GenerativeVsDiscriminative() {
             ["4. p(x | y) = 30 / 40 = 0.75", "Among the 40 spam emails, 30 contain “offer.” This describes x inside the spam class."],
             ["5. p(y | x) = 30 / 36 = 0.833", "Among the 36 emails containing “offer,” 30 are spam. The discriminative prediction is therefore about 83.3% spam for this one-feature example."],
           ].map(([heading, body]) => (
-            <div key={heading} className="rounded-xl border border-slate-200 bg-white p-4">
+            <div key={heading} className="rounded-xl border border-slate-200 bg-white p-4 tutorial-explanation">
               <h3 className="font-bold text-slate-900">{heading}</h3>
               <p className="mt-1 text-sm leading-relaxed text-slate-700">{body}</p>
             </div>
@@ -428,6 +425,8 @@ function GenerativeVsDiscriminative() {
         description="This self-contained Python calculation uses only the four counts shown in the table. Each division matches one numbered step above."
         code={probabilityCode}
       />
+
+      <GenerativeVsDiscriminativeBoundaryChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Comparison and decision guide</h2>
@@ -478,9 +477,18 @@ print("Unconditional sample:", choose_category(r, unconditional))     # forest
 print("Sunset condition sample:", choose_category(r, sunset_condition))  # coast`;
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="text-2xl font-bold text-indigo-800 mb-4">How can a model create something it has never stored?</h2>
+        <Lead>
+          A generative model studies many examples and adjusts its internal parameters so that common structures become more likely than implausible ones. During generation, it uses those learned patterns plus a starting signal—often a random value, a prompt, a class label, an image, or an unfinished sequence—to construct a new sample.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          By the end of this lesson, you will be able to explain what a learned data distribution means, what a latent representation stores, why randomness creates variety, how conditioning gives control, and why training and generation are separate processes.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">How Generative Models Learn in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Imagine a master musician who has listened to thousands of jazz songs. They haven’t memorized every note by rote; instead, they have learned the <em>probability space</em> of jazz—which chord progressions usually follow one another, where surprises sound pleasant, and how tempo shapes emotion. When given a theme (condition) and a burst of spontaneous improvisation (random seed), they compose a fresh, original solo!
@@ -500,18 +508,6 @@ print("Sunset condition sample:", choose_category(r, sunset_condition))  # coast
           ))}
         </div>
       </div>
-
-      <InteractiveSamplingSimulator />
-
-      <section>
-        <h2 className="text-2xl font-bold text-indigo-800 mb-4">How can a model create something it has never stored?</h2>
-        <Lead>
-          A generative model studies many examples and adjusts its internal parameters so that common structures become more likely than implausible ones. During generation, it uses those learned patterns plus a starting signal—often a random value, a prompt, a class label, an image, or an unfinished sequence—to construct a new sample.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          By the end of this lesson, you will be able to explain what a learned data distribution means, what a latent representation stores, why randomness creates variety, how conditioning gives control, and why training and generation are separate processes.
-        </p>
-      </section>
 
       <LearningGenerationModesFigure />
 
@@ -561,18 +557,18 @@ print("Sunset condition sample:", choose_category(r, sunset_condition))  # coast
 
       <section>
         <h2 className="text-2xl font-bold text-indigo-800 mb-4">Randomness, sampling, and conditioning</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+        <div className="not-prose grid gap-4 md:grid-cols-3 tutorial-prose-group">
+          <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 tutorial-explanation">
             <Dice5 className="h-7 w-7 text-amber-700" />
             <h3 className="mt-3 font-bold text-amber-950">Randomness supplies variety</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">A random number, noise vector, or random token choice lets repeated runs reach different plausible regions instead of returning one fixed result.</p>
           </div>
-          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5">
+          <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-5 tutorial-explanation">
             <BrainCircuit className="h-7 w-7 text-indigo-700" />
             <h3 className="mt-3 font-bold text-indigo-950">Sampling makes a choice</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">Sampling uses the learned probabilities to select a next token, latent point, category, or denoising path.</p>
           </div>
-          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5">
+          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5 tutorial-explanation">
             <SlidersHorizontal className="h-7 w-7 text-violet-700" />
             <h3 className="mt-3 font-bold text-violet-950">Conditioning supplies direction</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">A prompt, class, reference image, mask, or other signal changes which outputs are likely without removing all variety.</p>
@@ -593,13 +589,13 @@ print("Sunset condition sample:", choose_category(r, sunset_condition))  # coast
             </tbody>
           </table>
         </div>
-        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
+        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className="rounded-xl border border-slate-200 bg-white p-5 tutorial-explanation">
             <h3 className="font-bold text-slate-900">Without a condition</h3>
             <p className="mt-3 text-sm text-slate-700">Intervals: forest [0.00, 0.50), coast [0.50, 0.80), city [0.80, 1.00).</p>
             <p className="mt-2 text-sm text-slate-700">Because 0.35 lies in [0.00, 0.50), the calculated choice is <strong>forest</strong>.</p>
           </div>
-          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5">
+          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5 tutorial-explanation">
             <h3 className="font-bold text-violet-950">Conditioned on “sunset”</h3>
             <p className="mt-3 text-sm text-slate-700">Intervals: forest [0.00, 0.20), coast [0.20, 0.90), city [0.90, 1.00).</p>
             <p className="mt-2 text-sm text-slate-700">The same 0.35 now lies in [0.20, 0.90), so the calculated choice becomes <strong>coast</strong>.</p>
@@ -614,16 +610,18 @@ print("Sunset condition sample:", choose_category(r, sunset_condition))  # coast
         label="Python 3"
       />
 
+      <InteractiveSamplingSimulator />
+
       <section>
         <h2 className="text-2xl font-bold text-indigo-800 mb-4">What can go wrong?</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
           {[
             ["The data distribution is incomplete", "A model trained mostly on daylight photographs will not automatically learn reliable night scenes."],
             ["Likelihood is not truth", "A plausible sentence or image can still contain a factual, physical, or social error."],
             ["Conditioning is influence, not a guarantee", "A prompt can guide the distribution without forcing every detail to appear correctly."],
             ["Novel-looking output may still be too similar", "Duplicates, small datasets, and overfitting can cause memorization or privacy leakage."],
           ].map(([title, body]) => (
-            <div key={title} className="rounded-xl border border-rose-200 bg-rose-50 p-5">
+            <div key={title} className="rounded-xl border border-rose-200 bg-rose-50 p-5 tutorial-explanation">
               <div className="flex gap-3"><AlertTriangle className="h-5 w-5 shrink-0 text-rose-600" /><div><h3 className="font-bold text-rose-950">{title}</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">{body}</p></div></div>
             </div>
           ))}
@@ -686,9 +684,26 @@ function VAEContent() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">The prerequisite—and the new question</h2>
+        <Lead>
+          An ordinary autoencoder learns to compress an input and reconstruct it. Review{" "}
+          <Link to="/learn/autoencoders" className="font-semibold text-indigo-700">
+            Autoencoders and Their Variants
+          </Link>{" "}
+          first if encoder, bottleneck, decoder, or reconstruction is unfamiliar. This lesson asks the next
+          question: how can we organize that bottleneck so that sampling a new point produces a meaningful new
+          output?
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          A Variational Autoencoder, or VAE, makes the encoder describe a probability distribution instead of
+          assigning each input one fixed latent point. It then samples from that distribution during training
+          and encourages all input distributions to fit into an organized shared latent space.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Variational Autoencoders (VAEs) in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Standard autoencoders compress images into single fixed points in space, creating empty "gaps" where invalid garbage sits. A VAE instead maps each input to a smooth <em>cloud of probability</em> (defined by mean $\mu$ and spread $\sigma$). Because every region of this cloud blends seamlessly into its neighbors, picking any random point produces a crisp, realistic new sample!
@@ -709,26 +724,6 @@ function VAEContent() {
         </div>
       </div>
 
-      <VAELossAndLatentChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">The prerequisite—and the new question</h2>
-        <Lead>
-          An ordinary autoencoder learns to compress an input and reconstruct it. Review{" "}
-          <Link to="/learn/autoencoders" className="font-semibold text-indigo-700">
-            Autoencoders and Their Variants
-          </Link>{" "}
-          first if encoder, bottleneck, decoder, or reconstruction is unfamiliar. This lesson asks the next
-          question: how can we organize that bottleneck so that sampling a new point produces a meaningful new
-          output?
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          A Variational Autoencoder, or VAE, makes the encoder describe a probability distribution instead of
-          assigning each input one fixed latent point. It then samples from that distribution during training
-          and encourages all input distributions to fit into an organized shared latent space.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Deterministic autoencoder versus VAE</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -748,11 +743,11 @@ function VAEContent() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">The four values in reparameterization</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">μ (mu): learned centre</h3><p className="mt-2 text-sm text-slate-700">The encoder calculates one mean for each latent dimension and each input.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">log σ²: learned log-variance</h3><p className="mt-2 text-sm text-slate-700">The encoder outputs log-variance because it can be any real number; exponentiation converts it to positive variance.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.amber}><h3 className="font-bold">ε (epsilon): sampled noise</h3><p className="mt-2 text-sm text-slate-700">The framework draws ε from a standard normal distribution. It is random and is not a learned parameter.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.emerald}><h3 className="font-bold">z: calculated latent sample</h3><p className="mt-2 text-sm text-slate-700">z combines the learned centre and spread with ε. The decoder receives z.</p></div>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">μ (mu): learned centre</h3><p className="mt-2 text-sm text-slate-700">The encoder calculates one mean for each latent dimension and each input.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">log σ²: learned log-variance</h3><p className="mt-2 text-sm text-slate-700">The encoder outputs log-variance because it can be any real number; exponentiation converts it to positive variance.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.amber)}><h3 className="font-bold">ε (epsilon): sampled noise</h3><p className="mt-2 text-sm text-slate-700">The framework draws ε from a standard normal distribution. It is random and is not a learned parameter.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.emerald)}><h3 className="font-bold">z: calculated latent sample</h3><p className="mt-2 text-sm text-slate-700">z combines the learned centre and spread with ε. The decoder receives z.</p></div>
         </div>
       </section>
 
@@ -832,12 +827,14 @@ function VAEContent() {
         </Formula>
       </section>
 
+      <VAELossAndLatentChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Reconstruction, generation, and interpolation</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-3">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}><h3 className="font-bold">Reconstruction</h3><p className="mt-2 text-sm text-slate-700">Encode an existing x, sample near its μ, and decode. The result should resemble that input.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.emerald}><h3 className="font-bold">Generation</h3><p className="mt-2 text-sm text-slate-700">Sample z directly from the prior N(0, I) and decode it. No input example is encoded first.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">Interpolation</h3><p className="mt-2 text-sm text-slate-700">Move gradually between two latent points and decode the intermediate points to observe smooth feature changes.</p></div>
+        <div className="not-prose grid gap-4 md:grid-cols-3 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}><h3 className="font-bold">Reconstruction</h3><p className="mt-2 text-sm text-slate-700">Encode an existing x, sample near its μ, and decode. The result should resemble that input.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.emerald)}><h3 className="font-bold">Generation</h3><p className="mt-2 text-sm text-slate-700">Sample z directly from the prior N(0, I) and decode it. No input example is encoded first.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">Interpolation</h3><p className="mt-2 text-sm text-slate-700">Move gradually between two latent points and decode the intermediate points to observe smooth feature changes.</p></div>
         </div>
       </section>
 
@@ -918,9 +915,22 @@ function GANContent() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A generator improves because another network challenges it</h2>
+        <Lead>
+          A Generative Adversarial Network, or GAN, trains two neural networks with opposing jobs. The
+          generator converts random input into fake samples. The discriminator receives real and fake samples
+          and estimates whether each one came from the real dataset.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Neither network receives a ready-made rule for drawing a face, shoe, or waveform. The discriminator’s
+          changing feedback becomes the generator’s learning signal. This is why GAN training is an
+          alternating game rather than one ordinary prediction update.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Generative Adversarial Networks (GANs) in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Imagine an art counterfeiter (the <strong>Generator</strong>) attempting to paint a masterpiece, and a detective (the <strong>Discriminator</strong>) inspecting paintings to catch fakes. At first, both are clumsy. But as the detective learns to spot tiny flaws, the counterfeiter is forced to become extraordinarily skilled. Eventually, the counterfeiter’s work becomes so convincing that the detective cannot tell real from fake!
@@ -941,29 +951,13 @@ function GANContent() {
         </div>
       </div>
 
-      <GANTrainingDynamicsChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A generator improves because another network challenges it</h2>
-        <Lead>
-          A Generative Adversarial Network, or GAN, trains two neural networks with opposing jobs. The
-          generator converts random input into fake samples. The discriminator receives real and fake samples
-          and estimates whether each one came from the real dataset.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Neither network receives a ready-made rule for drawing a face, shoe, or waveform. The discriminator’s
-          changing feedback becomes the generator’s learning signal. This is why GAN training is an
-          alternating game rather than one ordinary prediction update.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Terms to identify before following the loop</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.amber}><h3 className="font-bold">z — random latent or noise vector</h3><p className="mt-2 text-sm text-slate-700">Sampled from a developer-chosen distribution. It gives the generator different starting points.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">G(z) — generated sample</h3><p className="mt-2 text-sm text-slate-700">Calculated by the generator using z and its learned parameters.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}><h3 className="font-bold">x — real sample</h3><p className="mt-2 text-sm text-slate-700">Drawn from the training dataset. The discriminator label 1 is supplied by the training procedure.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.indigo}><h3 className="font-bold">D(sample) — probability of real</h3><p className="mt-2 text-sm text-slate-700">A learned number between 0 and 1. A value near 1 means D currently believes the sample is real.</p></div>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.amber)}><h3 className="font-bold">z — random latent or noise vector</h3><p className="mt-2 text-sm text-slate-700">Sampled from a developer-chosen distribution. It gives the generator different starting points.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">G(z) — generated sample</h3><p className="mt-2 text-sm text-slate-700">Calculated by the generator using z and its learned parameters.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}><h3 className="font-bold">x — real sample</h3><p className="mt-2 text-sm text-slate-700">Drawn from the training dataset. The discriminator label 1 is supplied by the training procedure.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.indigo)}><h3 className="font-bold">D(sample) — probability of real</h3><p className="mt-2 text-sm text-slate-700">A learned number between 0 and 1. A value near 1 means D currently believes the sample is real.</p></div>
         </div>
       </section>
 
@@ -999,14 +993,14 @@ function GANContent() {
             </tbody>
           </table>
         </div>
-        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-sky-200 bg-sky-50 p-5">
+        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className="rounded-xl border border-sky-200 bg-sky-50 p-5 tutorial-explanation">
             <h3 className="font-bold text-sky-950">Discriminator phase</h3>
             <p className="mt-2 font-mono text-sm text-slate-900">L_D = -ln(0.90) - ln(1 - 0.20)</p>
             <p className="mt-1 font-mono text-sm text-slate-900">= 0.105 + 0.223 = 0.328</p>
             <p className="mt-3 text-sm text-slate-700">The small loss reflects two mostly correct decisions.</p>
           </div>
-          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5">
+          <div className="rounded-xl border border-violet-200 bg-violet-50 p-5 tutorial-explanation">
             <h3 className="font-bold text-violet-950">Generator phase</h3>
             <p className="mt-2 text-sm text-slate-700">Suppose a fresh pass gives D(G(z)) = 0.30.</p>
             <p className="mt-1 font-mono text-sm text-slate-900">L_G = -ln(0.30) = 1.204</p>
@@ -1026,7 +1020,7 @@ function GANContent() {
             ["5. Update G", "Clear G gradients. Evaluate D(fake) without detaching, use target 1, backpropagate L_G through D into G, and step only G’s optimizer."],
             ["6. Repeat and monitor", "Use fresh batches and noise. Track losses, D probabilities, sample quality, and sample diversity rather than trusting one loss number."],
           ].map(([heading, body]) => (
-            <div key={heading} className="rounded-xl border border-slate-200 bg-white p-4">
+            <div key={heading} className="rounded-xl border border-slate-200 bg-white p-4 tutorial-explanation">
               <h3 className="font-bold text-slate-900">{heading}</h3>
               <p className="mt-1 text-sm leading-relaxed text-slate-700">{body}</p>
             </div>
@@ -1042,6 +1036,8 @@ function GANContent() {
         code={ganCode}
         label="Python · requires PyTorch"
       />
+
+      <GANTrainingDynamicsChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Equilibrium, conditioning, and later variants</h2>
@@ -1128,9 +1124,23 @@ function DiffusionContent() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Learning to generate by learning to remove noise</h2>
+        <Lead>
+          A diffusion model turns a difficult generation problem into many smaller denoising problems. During
+          training, we deliberately corrupt real samples with known Gaussian noise. A neural network learns to
+          predict that noise at different corruption levels. During generation, we begin with random noise and
+          repeatedly use those predictions to move toward a structured sample.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Text prompts are optional conditioning, not a defining property of every diffusion model. An
+          unconditional model can learn to generate without text. Lesson 7 explains how latent diffusion and
+          Stable Diffusion add text encoders, latent representations, and other architecture choices.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Diffusion Models in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Imagine taking a high-definition photograph of a cat and gradually sprinkling fine sand (Gaussian noise) over it across 1000 tiny steps until it is nothing but chaotic static. During training, a neural network learns how to sweep away a tiny pinch of sand for any given step. To generate a brand-new image, you simply start with pure random static and sweep away the sand step-by-step—and a breathtaking, unique image materializes out of the void!
@@ -1150,23 +1160,6 @@ function DiffusionContent() {
           ))}
         </div>
       </div>
-
-      <DiffusionNoiseScheduleChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Learning to generate by learning to remove noise</h2>
-        <Lead>
-          A diffusion model turns a difficult generation problem into many smaller denoising problems. During
-          training, we deliberately corrupt real samples with known Gaussian noise. A neural network learns to
-          predict that noise at different corruption levels. During generation, we begin with random noise and
-          repeatedly use those predictions to move toward a structured sample.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Text prompts are optional conditioning, not a defining property of every diffusion model. An
-          unconditional model can learn to generate without text. Lesson 7 explains how latent diffusion and
-          Stable Diffusion add text encoders, latent representations, and other architecture choices.
-        </p>
-      </section>
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Symbols and where they come from</h2>
@@ -1228,6 +1221,15 @@ function DiffusionContent() {
         </div>
       </section>
 
+      <CodeBlock
+        title="Reproduce the forward-noising calculation"
+        description="This runnable PyTorch function implements the direct noising equation and reproduces xₜ ≈ 0.34 from the worked example."
+        code={forwardCode}
+        label="Python · requires PyTorch"
+      />
+
+      <DiffusionNoiseScheduleChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">The noise-prediction objective</h2>
         <Formula title="A common DDPM training loss" expression="L_noise = mean((ε - ε̂θ(xₜ, t))²)">
@@ -1266,13 +1268,6 @@ function DiffusionContent() {
       </section>
 
       <CodeBlock
-        title="Reproduce the forward-noising calculation"
-        description="This runnable PyTorch function implements the direct noising equation and reproduces xₜ ≈ 0.34 from the worked example."
-        code={forwardCode}
-        label="Python · requires PyTorch"
-      />
-
-      <CodeBlock
         title="Training phase"
         description="This is PyTorch-style pseudocode because the model architecture, data loader, timestep sampler, and schedule object depend on the application. Every line corresponds to the training half of Figure 2."
         code={trainingPseudo}
@@ -1288,9 +1283,9 @@ function DiffusionContent() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Unconditional and conditional diffusion</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.indigo}><h3 className="font-bold">Unconditional</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">The denoiser receives xₜ and t. Generation samples from the overall learned data distribution.</p></div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}><h3 className="font-bold">Conditional</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">The denoiser also receives a class, text embedding, image, mask, or other condition that guides which outputs are likely.</p></div>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.indigo)}><h3 className="font-bold">Unconditional</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">The denoiser receives xₜ and t. Generation samples from the overall learned data distribution.</p></div>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}><h3 className="font-bold">Conditional</h3><p className="mt-2 text-sm leading-relaxed text-slate-700">The denoiser also receives a class, text embedding, image, mask, or other condition that guides which outputs are likely.</p></div>
         </div>
       </section>
 

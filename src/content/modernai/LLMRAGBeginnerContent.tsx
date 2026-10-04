@@ -1,3 +1,5 @@
+import "../textbook.css";
+import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
@@ -7,25 +9,16 @@ import { SummaryCard } from "../../components/lesson/SummaryCard";
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
+    <section className="tutorial-bridge">
       <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
-      <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
+      <p className="mt-2 leading-relaxed text-slate-700">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
   );
 }
 
 function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
-  return (
-    <div className="not-prose grid gap-3">
-      {items.map((item,index)=>(
-        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">{index+1}</span>
-          <div><h3 className="font-bold text-slate-900">{item.title}</h3><p className="mt-1 leading-relaxed text-slate-700">{item.body}</p></div>
-        </div>
-      ))}
-    </div>
-  );
+  return <ol className="tutorial-steps">{items.map((item) => <li key={item.title}><h3 className="font-bold text-slate-900">{item.title}</h3><p className="leading-relaxed text-slate-700">{item.body}</p></li>)}</ol>;
 }
 
 function RAGPipelineFigure() {
@@ -56,7 +49,7 @@ function RAGPipelineFigure() {
 
 function RAGLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>What if the LLM simply does not know your information?</h2>
         <p className="text-lg">Imagine asking a general LLM: <strong>“According to our company's current HR manual, how many casual-leave days do I get?”</strong> The policy may be private, recently changed, or absent from the model's training data.</p>
@@ -89,6 +82,8 @@ function RAGLesson() {
           {title:"Validate and show source",body:"The application checks that the cited source ID really came from retrieval and presents the answer with traceable evidence."},
         ]}/>
       </section>
+
+      <section className="space-y-4"><h2>Follow a source all the way into a citation</h2><p>The previous example asked about the annual leave allowance. Here is a separate carry-forward question: how many unused days may an India employee carry into the next year? Similar words alone are not enough to choose the source.</p><p>CH-17 is the relevant India policy and supports five days. CH-42 discusses a different allowance, while CH-08 belongs to the wrong region. Only the accepted passage and its source ID should support the final claim. If that passage is unavailable, the application no longer has evidence for the number.</p><LLMVisualFigure id="rag-evidence-trace" /></section>
 
       <section className="space-y-4">
         <h2>RAG has several failure boundaries</h2>
@@ -143,14 +138,12 @@ function SemanticSearchFigure() {
 
 function SemanticSearchLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Why exact keyword matching can miss the right answer</h2>
         <p className="text-lg">A user writes <strong>“Why won't my computer turn on?”</strong> while the support document says <strong>“Laptop fails to power on.”</strong> The meaning is similar even though several words differ.</p>
         <p><strong>Semantic search</strong> represents queries and passages as vectors so the system can compare meaning-related numerical representations rather than requiring exact word overlap.</p>
       </section>
-
-      <SemanticSearchFigure />
 
       <section className="space-y-4">
         <h2>From text to searchable vectors</h2>
@@ -162,6 +155,8 @@ function SemanticSearchLesson() {
         ]}/>
         <Callout role="warning" title="Do not mix unrelated embedding spaces"><p>If passages are indexed with embedding model A and new queries use an unrelated model B, vector distances may no longer be meaningful.</p></Callout>
       </section>
+
+      <SemanticSearchFigure />
 
       <section className="space-y-4">
         <h2>Cosine similarity — compare direction</h2>
@@ -175,6 +170,8 @@ function SemanticSearchLesson() {
         </div>
         <p>For <strong>dB = [2,2]</strong>, the direction is exactly the same as q, so cosine similarity is <strong>1.0</strong> even though dB has a larger magnitude.</p>
       </section>
+
+      <p className="tutorial-transition">The arithmetic measures similarity between representations; it does not prove that a passage answers the question. Inspect the returned text and its conditions as well as its score before using it as evidence.</p>
 
       <section className="space-y-4">
         <h2>Semantic search is not always the only search you need</h2>
@@ -206,7 +203,7 @@ function SemanticSearchLesson() {
 
 function VectorDatabaseLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Once you have vectors, how do you manage them?</h2>
         <p className="text-lg">A RAG system may need to search thousands or millions of passage embeddings and still keep track of the original text, document ID, date, tenant, and permissions.</p>
@@ -228,6 +225,8 @@ function VectorDatabaseLesson() {
         />
       </section>
 
+      <p className="tutorial-transition">Follow the record rather than only its vector. The identifier connects a search hit back to source text; metadata lets the application keep the result within the appropriate version and scope.</p><LLMVisualFigure id="vector-record" />
+
       <section className="space-y-4">
         <h2>Exact search versus approximate nearest neighbours</h2>
         <p>For a small collection, comparing the query with every eligible vector can be simple and completely exact. As collections grow, scanning everything may become too expensive.</p>
@@ -240,6 +239,8 @@ function VectorDatabaseLesson() {
           ]}
         />
       </section>
+
+      <LLMVisualFigure id="exact-vs-ann" />
 
       <section className="space-y-4">
         <h2>Metadata filters are useful—but authorization is stronger</h2>
@@ -268,7 +269,7 @@ function VectorDatabaseLesson() {
 
 function AdvancedRAGLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Basic RAG works. Why does retrieval still fail?</h2>
         <p className="text-lg">A document may be split at the wrong place, an exact product code may be missed by semantic search, or a relevant passage may appear in the top 20 but be pushed out by a reranker.</p>
@@ -289,6 +290,8 @@ function AdvancedRAGLesson() {
         />
       </section>
 
+      <LLMVisualFigure id="chunking-retrieval-tradeoff" />
+
       <section className="space-y-4">
         <h2>Hybrid retrieval uses more than one signal</h2>
         <p>A query such as <strong>“INV-009381 late-payment policy”</strong> contains both an exact identifier and a semantic description. Lexical search is strong for the code; dense retrieval is strong for related meaning. Hybrid retrieval combines both candidate sources.</p>
@@ -304,6 +307,8 @@ function AdvancedRAGLesson() {
         ]}/>
         <Callout role="warning" title="Debug the first stage that fails"><p>If the relevant chunk is in the top 20 but disappears after reranking, retrieval succeeded. Inspect reranker scores, features, and ordering before blaming the embedding model.</p></Callout>
       </section>
+
+      <p className="tutorial-transition">This separate illustrative pipeline uses two candidate lists of up to 20 results and then selects five context passages. These are tunable example counts, not recommended defaults. Read the narrowing path as a sequence of decisions about which evidence deserves the limited context space.</p><LLMVisualFigure id="retrieval-reranking" />
 
       <section className="space-y-4">
         <h2>Measure retrieval separately from generation</h2>

@@ -1,3 +1,5 @@
+import "../textbook.css";
+import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
@@ -7,9 +9,9 @@ import { SummaryCard } from "../../components/lesson/SummaryCard";
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
+    <section className="tutorial-bridge">
       <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
-      <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
+      <p className="mt-2 leading-relaxed text-slate-700">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
   );
@@ -17,7 +19,7 @@ function Bridge({ question, to, label }: { question: string; to: string; label: 
 
 function EvaluationLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>What does “good” mean for an LLM application?</h2>
         <p className="text-lg">A model can score well on a public benchmark and still be wrong for your product. A support assistant may care about grounded answers, latency, structure, privacy, and cost. A coding assistant may care about unit-test success.</p>
@@ -54,6 +56,8 @@ function EvaluationLesson() {
         <p>If requirements are <strong>quality ≥ 4</strong>, <strong>p95 ≤ 2 s</strong>, and <strong>schema ≥ 99%</strong>, Candidate B is eligible while A is not. A higher quality score does not erase a hard latency failure.</p>
         <Callout role="warning" title="The same logic applies to legal or product constraints"><p>If a model cannot meet a required data-residency rule, it can be ineligible even if it tops a public benchmark.</p></Callout>
       </section>
+
+      <p className="tutorial-transition">Apply eligibility checks before comparing preferences. In the figure, candidate A has a higher quality score but fails the latency requirement; a higher average cannot cancel that failure.</p><LLMVisualFigure id="evaluation-gates" />
 
       <section className="space-y-4">
         <h2>LLM-as-a-judge can help—but it is not ground truth</h2>
@@ -92,7 +96,7 @@ function EvaluationLesson() {
 
 function SafetyLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Fluent text can still cross a trust boundary</h2>
         <p className="text-lg">An LLM may produce a sentence that sounds confident but is unsupported by the evidence your application requires. That is one common form of <strong>hallucination</strong> in grounded applications.</p>
@@ -112,6 +116,8 @@ function SafetyLesson() {
           ]}
         />
       </section>
+
+      <section className="space-y-4"><h2>Check each claim against what its source actually says</h2><p>Suppose source S1 permits carrying forward up to five days until March 31, subject to its conditions. Source S2 concerns allowances. The following four claims use those sources differently, even though all display a citation.</p><p>“Up to five” stays within S1. “All five guaranteed” is stronger than the evidence and needs qualification. “Until June 30” contradicts the date and must be corrected. An office-closure claim cannot be supported by an unrelated allowance policy and should be omitted or reported as unverified.</p><LLMVisualFigure id="claim-evidence-decision-map" /></section>
 
       <section className="space-y-4">
         <h2>Prompt injection is a trust-boundary attack</h2>
@@ -145,7 +151,7 @@ function SafetyLesson() {
 
 function ReasoningLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>What does “more reasoning” mean operationally?</h2>
         <p className="text-lg">For some difficult tasks, a system can allocate more computation at <strong>inference time</strong> before or while producing the final answer. This is often called <strong>test-time compute</strong>.</p>
@@ -157,6 +163,8 @@ function ReasoningLesson() {
         <p>Suppose a normal strategy generates one 800-token candidate. A simplified best-of-four strategy generates four candidates of 800 tokens each before selecting one:</p>
         <FormulaBlock expression="4 × 800 = 3,200 generated tokens" explanation="That is four times the basic generation volume before adding verifier or selection overhead." />
       </section>
+
+      <p className="tutorial-transition">The four candidates are extra attempts at the same task, not four training examples. A separate selection or verification step must decide which attempt is useful. The options below illustrate different ways to spend an inference budget, not a mandatory five-step pipeline.</p><LLMVisualFigure id="test-time-compute" />
 
       <section className="space-y-4">
         <h2>More compute is not automatically better</h2>
@@ -194,7 +202,7 @@ function ReasoningLesson() {
 
 function ServingLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Why can generation feel slow and expensive?</h2>
         <p className="text-lg">An autoregressive LLM generates one token after another. Each new token depends on the existing sequence, so serving has to manage model memory, repeated attention work, batching, hardware utilization, and user latency.</p>
@@ -206,12 +214,16 @@ function ServingLesson() {
         <Callout role="info" title="Trade-off"><p>KV caching reduces repeated compute but consumes memory that grows with active sequences and context length.</p></Callout>
       </section>
 
+      <LLMVisualFigure id="kv-cache" />
+
       <section className="space-y-4">
         <h2>Quantization — use fewer bits for weights</h2>
         <p>If a 1-billion-parameter model uses an idealized 8-bit representation, that is roughly one byte per parameter:</p>
         <FormulaBlock expression="1,000,000,000 parameters × 1 byte ≈ 1 GB raw weight storage" explanation="This is a teaching estimate for raw weights only. Runtime memory also includes caches, activations/buffers, framework overhead, and other state." />
         <p>Lower bit width can reduce memory, but <strong>4-bit does not automatically mean faster</strong>. Actual latency depends on hardware support, kernels, runtime implementation, batch size, and workload.</p>
       </section>
+
+      <p className="tutorial-transition">Compare the raw-weight bars while keeping the additional runtime allocations in view. Reducing the weight representation does not remove the cache or the work needed to serve each request.</p><LLMVisualFigure id="precision-memory" />
 
       <section className="space-y-4">
         <h2>Two latency measures answer different questions</h2>
@@ -256,7 +268,7 @@ function ServingLesson() {
 
 function LLMOpsLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>A production LLM application is more than a model name</h2>
         <p className="text-lg">If someone says “we used Model X”, you still cannot reproduce the application. Behavior may also depend on prompt versions, decoding settings, retrieval indexes, embedding models, tool schemas, safety rules, and runtime configuration.</p>
@@ -278,6 +290,8 @@ function LLMOpsLesson() {
           ]}
         />
       </section>
+
+      <p className="tutorial-transition">Use the manifest to connect a particular answer to the system that produced it. The following request path shows why changing retrieval, validation or a tool can change behavior even when the generation model stays the same.</p><LLMVisualFigure id="llmops-lifecycle" />
 
       <section className="space-y-4">
         <h2>Offline evaluation and online observability do different jobs</h2>
@@ -317,6 +331,8 @@ function LLMOpsLesson() {
           ]}
         />
       </section>
+
+      <LLMVisualFigure id="canary-release-rollback" />
 
       <section className="space-y-4">
         <h2>Where the LLM curriculum hands off to Agentic AI</h2>

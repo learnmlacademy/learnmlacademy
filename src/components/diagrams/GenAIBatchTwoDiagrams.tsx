@@ -148,11 +148,11 @@ export function VAEArchitectureDiagram() {
           <defs><ArrowMarker id={`${arrow}-mobile`} /></defs>
           <Boundary x={10} y={30} width={280} height={290} label="ENCODER · LEARNED OUTPUTS" tone="sky" />
           <DiagramNode x={75} y={58} width={150} height={56} title="Input x" detail="observed data" tone="sky" />
-          <DiagramNode x={75} y={142} width={150} height={64} title="Encoder" detail="learned network" tone="violet" badge="MODEL" />
+          <DiagramNode x={75} y={142} width={150} height={88} title="Encoder" detail="learned network" tone="violet" badge="MODEL" />
           <DiagramNode x={24} y={244} width={112} height={56} title="μ" detail="learned centre" tone="violet" />
           <DiagramNode x={164} y={244} width={112} height={56} title="log σ²" detail="learned spread" tone="violet" />
           <Connector d="M150 114 V142" markerId={`${arrow}-mobile`} />
-          <path d="M150 206 V222 H80 V244 M150 222 H220 V244" fill="none" stroke="#7c3aed" strokeWidth="2.5" />
+          <path d="M150 230 V236 H80 V244 M150 236 H220 V244" fill="none" stroke="#7c3aed" strokeWidth="2.5" />
           <path d="M73 236 l7 8 l7 -8 z M213 236 l7 8 l7 -8 z" fill="#7c3aed" />
 
           <Boundary x={10} y={365} width={280} height={220} label="REPARAMETERIZATION" tone="amber" />

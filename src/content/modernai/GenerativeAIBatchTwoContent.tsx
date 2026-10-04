@@ -1,3 +1,4 @@
+import "../textbook.css";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock } from "../../components/content/CodeBlock";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
@@ -148,31 +149,7 @@ function StableLatentDiffusion() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
-        <p className="font-bold text-slate-900 mb-2 text-base">Latent Diffusion & Stable Diffusion in Simple Words</p>
-        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
-          Pixel-space diffusion is like sculpting a statue out of individual grains of sand: calculating 50 denoising steps across 786,000 RGB pixels melts ordinary GPUs. <strong>Latent diffusion</strong> uses a VAE encoder to compress the image $64\times$ spatially into a compact latent blueprint. The heavy U-Net works only in this tiny space, and once complete, the VAE decoder blows it back up into a stunning, full-resolution photograph!
-        </p>
-        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
-          {[
-            ["1", "VAE Compression", "Compresses 512x512 pixels down to 64x64 latent"],
-            ["2", "CLIP Conditioning", "Encodes prompt tokens into semantic embeddings"],
-            ["3", "Latent Denoising", "U-Net cross-attention clears noise efficiently"],
-            ["4", "VAE Upscale", "Decodes clean latent back into full RGB pixels"],
-          ].map(([step, title, note]) => (
-            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
-              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
-              <p className="font-bold text-slate-800 text-xs">{title}</p>
-              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <LatentVsPixelSpaceChart />
-
+    <div className="textbook-lesson space-y-10">
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">From diffusion to latent diffusion</h2>
         <Lead>
@@ -193,7 +170,26 @@ function StableLatentDiffusion() {
         </p>
       </section>
 
-      <PixelVsLatentDiffusionDiagram />
+      <div className="tutorial-overview">
+        <p className="font-bold text-slate-900 mb-2 text-base">Latent Diffusion & Stable Diffusion in Simple Words</p>
+        <p className="text-slate-700 mb-4 text-sm leading-relaxed">
+          Pixel-space diffusion is like sculpting a statue out of individual grains of sand: calculating 50 denoising steps across 786,000 RGB pixels melts ordinary GPUs. <strong>Latent diffusion</strong> uses a VAE encoder to compress the image $64\times$ spatially into a compact latent blueprint. The heavy U-Net works only in this tiny space, and once complete, the VAE decoder blows it back up into a stunning, full-resolution photograph!
+        </p>
+        <div className="grid sm:grid-cols-4 gap-3 text-center text-sm">
+          {[
+            ["1", "VAE Compression", "Compresses 512x512 pixels down to 64x64 latent"],
+            ["2", "CLIP Conditioning", "Encodes prompt tokens into semantic embeddings"],
+            ["3", "Latent Denoising", "U-Net cross-attention clears noise efficiently"],
+            ["4", "VAE Upscale", "Decodes clean latent back into full RGB pixels"],
+          ].map(([step, title, note]) => (
+            <div key={step} className="border border-slate-200 rounded-lg p-3 bg-slate-50/70">
+              <div className="w-7 h-7 mx-auto mb-2 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">{step}</div>
+              <p className="font-bold text-slate-800 text-xs">{title}</p>
+              <p className="text-slate-600 mt-1 text-[11px] leading-tight">{note}</p>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A traceable size example</h2>
@@ -220,6 +216,10 @@ function StableLatentDiffusion() {
         </Formula>
       </section>
 
+      <PixelVsLatentDiffusionDiagram />
+
+      <LatentVsPixelSpaceChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">How the text and image paths meet</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -244,15 +244,15 @@ function StableLatentDiffusion() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Training and pure text-to-image inference are not the same path</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">During training</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               A real training image is data-supplied. The VAE encoder compresses it into a latent, sampled noise
               and a sampled timestep create a noisy training input, and the U-Net learns from its prediction error.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">During pure text-to-image inference</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               There is no starting image to encode. The process normally begins with randomly sampled latent
@@ -317,9 +317,24 @@ function ControllingDiffusionModels() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Control without retraining the model</h2>
+        <Lead>
+          A text prompt gives a diffusion model a goal, but many tasks need more precise control: repeat this
+          random starting point, preserve this photograph, change only the jacket, or follow this pose. These
+          are <strong>inference-time controls</strong>. They change the information or settings used while a
+          pretrained model generates; they do not teach the base model new parameters.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          The controls in this lesson answer different questions. Guidance scale controls how strongly text
+          steers the denoising prediction. A seed controls the initial random latent. Image-to-image and
+          inpainting provide pixels to preserve or edit. ControlNet-style conditioning provides a spatial
+          structure such as edges, depth, or pose. The next lesson covers training-time adaptation.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Controlling Diffusion Models in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Standard text prompts can be vague—asking for "a warrior on a cliff" might yield unpredictable poses, lighting, or compositions. Diffusion controls give you a master control board: <strong>CFG Scale</strong> turns up prompt intensity, <strong>ControlNet</strong> enforces human skeleton poses or architectural wireframes, and <strong>Inpainting</strong> lets you paint over a small mask to swap an outfit while keeping the face perfectly intact!
@@ -339,24 +354,6 @@ function ControllingDiffusionModels() {
           ))}
         </div>
       </div>
-
-      <CFGScaleTradeoffChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Control without retraining the model</h2>
-        <Lead>
-          A text prompt gives a diffusion model a goal, but many tasks need more precise control: repeat this
-          random starting point, preserve this photograph, change only the jacket, or follow this pose. These
-          are <strong>inference-time controls</strong>. They change the information or settings used while a
-          pretrained model generates; they do not teach the base model new parameters.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          The controls in this lesson answer different questions. Guidance scale controls how strongly text
-          steers the denoising prediction. A seed controls the initial random latent. Image-to-image and
-          inpainting provide pixels to preserve or edit. ControlNet-style conditioning provides a spatial
-          structure such as edges, depth, or pose. The next lesson covers training-time adaptation.
-        </p>
-      </section>
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Classifier-free guidance: compare two predictions</h2>
@@ -410,10 +407,12 @@ function ControllingDiffusionModels() {
         label="Python 3 · runnable without extra packages"
       />
 
+      <CFGScaleTradeoffChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Controls that change the sampling process</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.amber}>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.amber)}>
             <h3 className="font-bold">Negative prompt</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               In many pipelines it replaces the empty text used for the negative or unconditional branch. CFG
@@ -421,7 +420,7 @@ function ControllingDiffusionModels() {
               perfect inverse command and cannot guarantee that an unwanted feature disappears.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">Random seed</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               A seed is a user- or developer-chosen integer used to initialize the random-number generator. With
@@ -429,7 +428,7 @@ function ControllingDiffusionModels() {
               starting latent; it is not a visual style value.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">Inference steps</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               This chosen count controls how many scheduler updates are performed. More steps cost more U-Net
@@ -437,7 +436,7 @@ function ControllingDiffusionModels() {
               and model.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.indigo}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.indigo)}>
             <h3 className="font-bold">Scheduler</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               The scheduler defines the timestep sequence and numerical update rule. Changing it can alter the
@@ -446,8 +445,6 @@ function ControllingDiffusionModels() {
           </div>
         </div>
       </section>
-
-      <DiffusionControlMethodsDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Starting from an image</h2>
@@ -477,6 +474,8 @@ function ControllingDiffusionModels() {
           not contain the final texture; it constrains where the generated content should go.
         </p>
       </section>
+
+      <DiffusionControlMethodsDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Which control should you choose?</h2>
@@ -543,9 +542,24 @@ function FineTuningImageModels() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">When generation controls are no longer enough</h2>
+        <Lead>
+          Lesson 8 changed prompts, seeds, masks, guidance, and structural inputs while the pretrained model
+          stayed fixed. This lesson is different: <strong>training-time adaptation</strong> changes learned
+          embeddings or learned parameter updates so the model can represent a subject, visual concept, or style
+          it does not reliably produce through prompting alone.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Start with prompting and inference-time control because they require no training data or new weights.
+          Adapt only when a repeated, well-defined gap remains—for example, a product with a distinctive shape
+          must appear consistently across new scenes. Adaptation is not a substitute for clearer prompts, a
+          better base model, or structural control.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Fine-Tuning Image Models in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Imagine teaching a celebrity photographer your company’s unique new water bottle. You don't retrain their entire brain from scratch (which costs millions). Instead, with <strong>LoRA</strong> (Low-Rank Adaptation), you hand them a tiny, pocket-sized notebook describing only the new bottle’s contours. Their existing artistic genius remains intact, while they seamlessly integrate your brand with 99% less memory and tiny 15 MB file sizes!
@@ -565,24 +579,6 @@ function FineTuningImageModels() {
           ))}
         </div>
       </div>
-
-      <FineTuningTradeoffChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">When generation controls are no longer enough</h2>
-        <Lead>
-          Lesson 8 changed prompts, seeds, masks, guidance, and structural inputs while the pretrained model
-          stayed fixed. This lesson is different: <strong>training-time adaptation</strong> changes learned
-          embeddings or learned parameter updates so the model can represent a subject, visual concept, or style
-          it does not reliably produce through prompting alone.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Start with prompting and inference-time control because they require no training data or new weights.
-          Adapt only when a repeated, well-defined gap remains—for example, a product with a distinctive shape
-          must appear consistently across new scenes. Adaptation is not a substitute for clearer prompts, a
-          better base model, or structural control.
-        </p>
-      </section>
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">The dataset teaches what the method will learn</h2>
@@ -683,6 +679,8 @@ function FineTuningImageModels() {
         </div>
       </section>
 
+      <FineTuningTradeoffChart />
+
       <Warning title="Watch for learning the wrong thing">
         <p>
           Exact training-scene copies, loss of prompt flexibility, an identity appearing when not requested, or a
@@ -720,9 +718,23 @@ function MultimodalGenerativeAI() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">One system, more than one kind of information</h2>
+        <Lead>
+          A <strong>modality</strong> is a form in which information is represented: text, image, audio, video,
+          sensor readings, and structured records are different modalities. A multimodal system connects two or
+          more of them so evidence in one form can affect interpretation or generation in another.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          “Multimodal” does not automatically mean “generative.” A system that selects an answer label from an
+          image is multimodal understanding. A system that writes a new answer, caption, soundtrack, or edited
+          image is also performing generation. The distinction depends on the output operation, not merely on
+          how many input types are present.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Multimodal Generative AI in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Humans don't experience reality through text alone—we see, hear, read, and gesture simultaneously. <strong>Multimodal AI</strong> connects disparate sensory streams into a shared mathematical understanding. An image encoder (like a ViT) translates pixels into tokens, while an audio encoder processes waveforms; both are projected into the same latent space as text, allowing an AI to inspect a diagram, listen to a spoken question, and generate a written solution or voice reply!
@@ -742,23 +754,6 @@ function MultimodalGenerativeAI() {
           ))}
         </div>
       </div>
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">One system, more than one kind of information</h2>
-        <Lead>
-          A <strong>modality</strong> is a form in which information is represented: text, image, audio, video,
-          sensor readings, and structured records are different modalities. A multimodal system connects two or
-          more of them so evidence in one form can affect interpretation or generation in another.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          “Multimodal” does not automatically mean “generative.” A system that selects an answer label from an
-          image is multimodal understanding. A system that writes a new answer, caption, soundtrack, or edited
-          image is also performing generation. The distinction depends on the output operation, not merely on
-          how many input types are present.
-        </p>
-      </section>
-
-      <MultimodalRepresentationDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Understanding and generation are related, not identical</h2>
@@ -781,8 +776,8 @@ function MultimodalGenerativeAI() {
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">What the internal words mean</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">Encoder and representation</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               An encoder converts raw input into learned numerical features. An image encoder may turn patches
@@ -790,7 +785,7 @@ function MultimodalGenerativeAI() {
               numerical description—not a human-readable caption by itself.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">Alignment and shared spaces</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Alignment training encourages related items, such as a dog image and the words “a dog,” to have
@@ -798,7 +793,7 @@ function MultimodalGenerativeAI() {
               spaces with learned projection layers.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.indigo}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.indigo)}>
             <h3 className="font-bold">Fusion and cross-attention</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Fusion combines modality features. With cross-attention, a representation in one stream asks
@@ -806,7 +801,7 @@ function MultimodalGenerativeAI() {
               that support the answer.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.emerald}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.emerald)}>
             <h3 className="font-bold">Modality-specific decoder</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               The output mechanism matches the destination. A language decoder predicts text tokens; an image
@@ -815,6 +810,8 @@ function MultimodalGenerativeAI() {
           </div>
         </div>
       </section>
+
+      <MultimodalRepresentationDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Worked alignment example</h2>
@@ -895,9 +892,22 @@ function MultimodalGenerativeAI() {
 
 function TemporalMediaGeneration() {
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A picture occupies space; media also unfolds in time</h2>
+        <Lead>
+          A still image can be judged one frame at a time. Speech, sound, music, and video are sequences: changing
+          their order or timing changes their meaning. A media generator must therefore create plausible content
+          now while preserving rhythm, identity, motion, and structure across later moments.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Local quality is not enough. A clear speech sound can still form an unnatural sentence; a beautiful
+          video frame can still flicker when placed beside the next frame; a pleasant musical bar can still lead
+          nowhere. Temporal generation combines short-range detail with long-range consistency.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Audio, Speech, Music & Video Generation in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Generating still images is about spatial harmony (where eyes and noses sit). Generating audio and video introduces a tyrannical second dimension: <strong>Time</strong>. A speech synthesizer must preserve accent, breath, and emotion across words without robotic pitch glitches. A video model must ensure an actor's shirt doesn't morph from blue to plaid three frames later. Factorized spatial-temporal attention anchors consistency frame-by-frame and beat-by-beat!
@@ -917,22 +927,6 @@ function TemporalMediaGeneration() {
           ))}
         </div>
       </div>
-
-      <AudioVideoComputeScalingChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A picture occupies space; media also unfolds in time</h2>
-        <Lead>
-          A still image can be judged one frame at a time. Speech, sound, music, and video are sequences: changing
-          their order or timing changes their meaning. A media generator must therefore create plausible content
-          now while preserving rhythm, identity, motion, and structure across later moments.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Local quality is not enough. A clear speech sound can still form an unnatural sentence; a beautiful
-          video frame can still flicker when placed beside the next frame; a pleasant musical bar can still lead
-          nowhere. Temporal generation combines short-range detail with long-range consistency.
-        </p>
-      </section>
 
       <Figure
         title="Figure 1 — Spatial coherence versus temporal coherence"
@@ -1031,6 +1025,8 @@ function TemporalMediaGeneration() {
         </p>
       </section>
 
+      <AudioVideoComputeScalingChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Compare the three media families</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -1082,9 +1078,23 @@ function SyntheticDataGeneration() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Synthetic data is designed evidence</h2>
+        <Lead>
+          <strong>Synthetic data</strong> consists of records, images, text, audio, or other examples produced by
+          rules, simulations, statistical models, or generative models instead of directly observing each example
+          in the real world. It is useful only when its design and evaluation match the decision the data will support.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Teams create synthetic data to exercise rare situations, test software before real records are
+          available, balance training cases, reduce exposure of sensitive records, or explore controlled
+          scenarios. None of those goals guarantees realism, privacy, or usefulness. Synthetic-data work is both
+          generative modelling and data engineering: schemas, labels, constraints, coverage, lineage, and tests matter.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Synthetic Data Generation in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Imagine training an autonomous vehicle for extreme snow blizzards when 99% of your driving logs were recorded on sunny highways. You cannot wait for rare fatal accidents to happen. <strong>Synthetic data</strong> uses physics engines, diffusion models, or tabular transformers (like CTGAN) to intentionally generate thousands of edge-case scenarios while mathematically safeguarding patient and user privacy with differential privacy!
@@ -1105,34 +1115,17 @@ function SyntheticDataGeneration() {
         </div>
       </div>
 
-      <TSTRBenchmarkChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Synthetic data is designed evidence</h2>
-        <Lead>
-          <strong>Synthetic data</strong> consists of records, images, text, audio, or other examples produced by
-          rules, simulations, statistical models, or generative models instead of directly observing each example
-          in the real world. It is useful only when its design and evaluation match the decision the data will support.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Teams create synthetic data to exercise rare situations, test software before real records are
-          available, balance training cases, reduce exposure of sensitive records, or explore controlled
-          scenarios. None of those goals guarantees realism, privacy, or usefulness. Synthetic-data work is both
-          generative modelling and data engineering: schemas, labels, constraints, coverage, lineage, and tests matter.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Augmentation and a fully synthetic dataset are not the same</h2>
-        <div className="not-prose grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+        <div className="not-prose grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">Data augmentation</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Starts from a real example and applies a validity-preserving change: crop an image, add appropriate
               noise, or paraphrase text while keeping its label. The synthetic item remains tied to a source example.
             </p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">Fully synthetic generation</h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-700">
               Constructs a record or sample from a rule, simulator, fitted distribution, or generative model. It
@@ -1171,13 +1164,13 @@ function SyntheticDataGeneration() {
           data-supplied counts. A developer creates a 100-row synthetic set with <strong>A = 60</strong> and
           <strong>B = 40</strong> to expose a classifier to more B cases. These are chosen generation targets.
         </p>
-        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2">
-          <div className={"rounded-xl border p-5 " + toneClasses.sky}>
+        <div className="not-prose mt-5 grid gap-4 md:grid-cols-2 tutorial-prose-group">
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.sky)}>
             <h3 className="font-bold">Real proportions</h3>
             <p className="mt-2 font-mono text-sm text-slate-800">A: 80 ÷ 100 = 0.80 = 80%</p>
             <p className="mt-2 font-mono text-sm text-slate-800">B: 20 ÷ 100 = 0.20 = 20%</p>
           </div>
-          <div className={"rounded-xl border p-5 " + toneClasses.violet}>
+          <div className={"tutorial-explanation " + ("rounded-xl border p-5 " + toneClasses.violet)}>
             <h3 className="font-bold">Synthetic proportions</h3>
             <p className="mt-2 font-mono text-sm text-slate-800">A: 60 ÷ 100 = 0.60 = 60%</p>
             <p className="mt-2 font-mono text-sm text-slate-800">B: 40 ÷ 100 = 0.40 = 40%</p>
@@ -1231,6 +1224,8 @@ function SyntheticDataGeneration() {
           generator preserves assumptions from its source data or simulator, not future reality.
         </p>
       </section>
+
+      <TSTRBenchmarkChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Realistic does not mean private</h2>

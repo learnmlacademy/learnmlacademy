@@ -1,3 +1,4 @@
+import "../textbook.css";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock } from "../../components/content/CodeBlock";
 import { FormulaBlock } from "../../components/content/FormulaBlock";
@@ -109,9 +110,23 @@ function EvaluatingGenerativeModels() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">What does “good” mean when many answers are possible?</h2>
+        <Lead>
+          A classifier can be checked against a known label. A generator is different: ten useful summaries or
+          images may all look different, so there is often no single exact answer to compare with. Evaluation
+          begins by defining the qualities that matter for the real user job, then measuring those qualities
+          separately.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          An attractive image may ignore the prompt. A fluent answer may invent a fact. A strong model may be too
+          slow or expensive for the product. These are different failures, and one impressive score cannot make
+          the others disappear.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Evaluating Generative Models in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Evaluating a classification model is simple: is the email spam or not? Evaluating generative AI is much harder: there is no single "correct" response to a prompt. Instead, we measure multiple dimensions: <strong>FID</strong> (Fréchet Inception Distance) measures whether generated images match real statistical distributions, <strong>CLIP Score</strong> measures prompt adherence, and <strong>Human Preference</strong> ranks creative appeal!
@@ -132,23 +147,6 @@ function EvaluatingGenerativeModels() {
         </div>
       </div>
 
-      <FIDConvergenceChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">What does “good” mean when many answers are possible?</h2>
-        <Lead>
-          A classifier can be checked against a known label. A generator is different: ten useful summaries or
-          images may all look different, so there is often no single exact answer to compare with. Evaluation
-          begins by defining the qualities that matter for the real user job, then measuring those qualities
-          separately.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          An attractive image may ignore the prompt. A fluent answer may invent a fact. A strong model may be too
-          slow or expensive for the product. These are different failures, and one impressive score cannot make
-          the others disappear.
-        </p>
-      </section>
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Build a quality profile, not a single scoreboard number</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -168,8 +166,6 @@ function EvaluatingGenerativeModels() {
         </div>
       </section>
 
-      <EvaluationPipelineDiagram />
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Design the test set before comparing models</h2>
         <p className="leading-relaxed text-slate-700">
@@ -183,6 +179,8 @@ function EvaluatingGenerativeModels() {
           seeds or settings. One lucky sample does not describe a distribution of possible outputs.
         </p>
       </section>
+
+      <EvaluationPipelineDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">What FID, KID, and CLIP-like scores actually say</h2>
@@ -220,6 +218,8 @@ function EvaluatingGenerativeModels() {
           </p>
         </Formula>
       </section>
+
+      <FIDConvergenceChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Human review answers questions that proxies miss</h2>
@@ -304,9 +304,24 @@ function EvaluatingGenerativeModels() {
 
 function ResponsibleGenerativeAI() {
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Responsibility belongs to the whole system</h2>
+        <Lead>
+          Responsible Generative AI means engineering a system so its intended benefits are clear, foreseeable
+          harms are controlled, failures are detected, and people can respond when something goes wrong. A warning
+          under a text box is not a safety system.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          <strong>Model risk</strong> comes from the model itself—for example, memorized data or biased generations.
+          <strong>Application risk</strong> also depends on who may use it, what context is supplied, what actions the
+          output can trigger, and whether anyone reviews a high-impact decision. A model that is acceptable for
+          brainstorming may be unacceptable when its answer automatically changes a medical, financial, or legal
+          record.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Responsible Generative AI in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Slapping a disclaimer like "AI may make mistakes" beneath a chatbot is not a safety architecture. Real safety is built like an airport security system in multiple distinct layers: post-training alignment (RLHF), automated input filters to catch prompt injections, provenance watermarking (like SynthID and C2PA) to identify synthetic media, and real-time output guardrails to block harmful or confidential leakage!
@@ -327,26 +342,6 @@ function ResponsibleGenerativeAI() {
         </div>
       </div>
 
-      <LayeredSafetyFunnelChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Responsibility belongs to the whole system</h2>
-        <Lead>
-          Responsible Generative AI means engineering a system so its intended benefits are clear, foreseeable
-          harms are controlled, failures are detected, and people can respond when something goes wrong. A warning
-          under a text box is not a safety system.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          <strong>Model risk</strong> comes from the model itself—for example, memorized data or biased generations.
-          <strong>Application risk</strong> also depends on who may use it, what context is supplied, what actions the
-          output can trigger, and whether anyone reviews a high-impact decision. A model that is acceptable for
-          brainstorming may be unacceptable when its answer automatically changes a medical, financial, or legal
-          record.
-        </p>
-      </section>
-
-      <ResponsibleLifecycleDiagram />
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Begin with intended and prohibited use</h2>
         <p className="leading-relaxed text-slate-700">
@@ -362,6 +357,8 @@ function ResponsibleGenerativeAI() {
           presenting a technical control as a legal conclusion.
         </p>
       </section>
+
+      <ResponsibleLifecycleDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A small risk-priority calculation</h2>
@@ -393,6 +390,8 @@ function ResponsibleGenerativeAI() {
       </section>
 
       <LayeredSafetyDiagram />
+
+      <LayeredSafetyFunnelChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">From risk to control and fallback</h2>
@@ -465,9 +464,23 @@ function ChoosingGenerativeModel() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Model selection starts before the model list</h2>
+        <Lead>
+          Choosing the right generative model is a sequence of decisions: first ask whether the product must create
+          new content, then choose a suitable model family, and only then compare specific checkpoints or providers
+          on the same evidence. “Largest” and “newest” are not requirements.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          A support page that must return an exact stored policy may need retrieval, not generation. A fraud flag
+          may need a classifier. A fixed confirmation email may need a template. Use a generator when variation,
+          synthesis, transformation, or open-ended creation is part of the user job—and when its uncertainty can be
+          managed.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Choosing the Right Generative Model in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           There is no "best" generative model—every family represents a fundamental engineering compromise. If you need instantaneous 60 FPS real-time generation, pick a <strong>GAN</strong> or <strong>Consistency Model</strong>. If you need maximum photorealism and prompt nuance, pick <strong>Latent Diffusion</strong>. If you need clean mathematical interpolation, pick a <strong>VAE</strong>. And if a problem can be solved with a simple SQL lookup, don't generate at all!
@@ -488,25 +501,6 @@ function ChoosingGenerativeModel() {
         </div>
       </div>
 
-      <GenerativeModelFamilyRadarChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Model selection starts before the model list</h2>
-        <Lead>
-          Choosing the right generative model is a sequence of decisions: first ask whether the product must create
-          new content, then choose a suitable model family, and only then compare specific checkpoints or providers
-          on the same evidence. “Largest” and “newest” are not requirements.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          A support page that must return an exact stored policy may need retrieval, not generation. A fraud flag
-          may need a classifier. A fixed confirmation email may need a template. Use a generator when variation,
-          synthesis, transformation, or open-ended creation is part of the user job—and when its uncertainty can be
-          managed.
-        </p>
-      </section>
-
-      <GenerativeNeedDecisionDiagram />
-
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Three decisions that should not be mixed together</h2>
         <div className="not-prose grid gap-4 md:grid-cols-3">
@@ -515,6 +509,8 @@ function ChoosingGenerativeModel() {
           <FlowBox title="3. Which implementation?" detail="Benchmark the actual checkpoint, settings, provider, and hardware you could deploy." tone="emerald" />
         </div>
       </section>
+
+      <GenerativeNeedDecisionDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A family-level shortlist</h2>
@@ -535,6 +531,8 @@ function ChoosingGenerativeModel() {
           implementation—not the family name—must pass the real evaluation.
         </p>
       </section>
+
+      <GenerativeModelFamilyRadarChart />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Write a selection brief before benchmarking</h2>
@@ -663,9 +661,23 @@ function BuildingGenerativeAIApplications() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A model produces content; an application completes a job</h2>
+        <Lead>
+          A generative model accepts a request and returns an output. A useful application must also decide what
+          input is allowed, which evidence belongs in the request, what output shape is acceptable, how claims are
+          checked, what the user sees, and what happens when any step fails. In short: <strong>model ≠ application</strong>.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          We will use a meeting-summary application throughout. Its narrow job is to turn an approved transcript
+          into decisions and action items that a participant can review. A simple baseline might be keyword search
+          plus copied sentences. The generator should be kept only if the evaluated workflow improves on that
+          baseline without creating unacceptable unsupported actions.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Building Generative AI Applications in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Calling a model API from a Jupyter notebook is a demonstration; building a production application is software engineering. A real application surrounds the raw model with safety airlocks: caching identical requests to slash cloud bills, validating input schemas, grounding drafts in trusted enterprise databases (RAG), and treating raw model output as an unverified draft that must pass strict Pydantic JSON parsing before reaching any human user!
@@ -685,25 +697,6 @@ function BuildingGenerativeAIApplications() {
           ))}
         </div>
       </div>
-
-      <EndToEndLatencyChart />
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">A model produces content; an application completes a job</h2>
-        <Lead>
-          A generative model accepts a request and returns an output. A useful application must also decide what
-          input is allowed, which evidence belongs in the request, what output shape is acceptable, how claims are
-          checked, what the user sees, and what happens when any step fails. In short: <strong>model ≠ application</strong>.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          We will use a meeting-summary application throughout. Its narrow job is to turn an approved transcript
-          into decisions and action items that a participant can review. A simple baseline might be keyword search
-          plus copied sentences. The generator should be kept only if the evaluated workflow improves on that
-          baseline without creating unacceptable unsupported actions.
-        </p>
-      </section>
-
-      <ApplicationArchitectureDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Define success before designing prompts</h2>
@@ -730,6 +723,8 @@ function BuildingGenerativeAIApplications() {
           </table>
         </div>
       </section>
+
+      <ApplicationArchitectureDiagram />
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Structure first, then validate meaning</h2>
@@ -762,6 +757,8 @@ function BuildingGenerativeAIApplications() {
         label="Conceptual pseudocode · not directly runnable"
       />
 
+      <EndToEndLatencyChart />
+
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Plan failure behavior before the happy path ships</h2>
         <div className="not-prose overflow-x-auto rounded-xl border border-slate-200">
@@ -783,7 +780,7 @@ function BuildingGenerativeAIApplications() {
         </p>
       </section>
 
-      <div className="not-prose rounded-xl border border-sky-200 bg-sky-50 p-5">
+      <div className="not-prose rounded-xl border border-sky-200 bg-sky-50 p-5 tutorial-explanation">
         <h3 className="font-bold text-sky-950">Keep the lesson boundary clear</h3>
         <p className="mt-2 leading-relaxed text-slate-700">
           <strong>This lesson owns workflow and application logic:</strong> validation, context, request design,
@@ -824,9 +821,23 @@ function DeployingGenerativeAIApplications() {
   ].join("\n");
 
   return (
-    <div className="space-y-10">
-      {/* In Simple Words */}
-      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 shadow-sm not-prose">
+    <div className="textbook-lesson space-y-10">
+      <section>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Deployment turns a working workflow into a dependable service</h2>
+        <Lead>
+          A prototype proves that a request can produce an output. Production deployment must keep that workflow
+          available, secure, observable, affordable, and recoverable while real traffic and model versions change.
+          The first architectural choice is often whether inference runs behind a hosted API or on infrastructure
+          your team operates.
+        </Lead>
+        <p className="mt-4 leading-relaxed text-slate-700">
+          Neither choice is universally cheaper, faster, more private, or safer. Compare the actual provider,
+          region, model, hardware, workload, contract, and operating capability. Preserve a stable application
+          interface so this choice can change without rewriting every product feature.
+        </p>
+      </section>
+
+      <div className="tutorial-overview">
         <p className="font-bold text-slate-900 mb-2 text-base">Deploying Generative AI Applications in Simple Words</p>
         <p className="text-slate-700 mb-4 text-sm leading-relaxed">
           Deploying generative models is fundamentally different from deploying microservices. LLMs and diffusion models are GPU-memory bound: an inference server must manage dynamic KV-caches across thousands of concurrent tokens. High-performance runtimes (like <strong>vLLM</strong> or <strong>Triton</strong>) use continuous batching, PagedAttention, and FP8 quantization to boost serving throughput by $10\times$ while holding p99 latency under tight SLAs!
@@ -846,21 +857,6 @@ function DeployingGenerativeAIApplications() {
           ))}
         </div>
       </div>
-
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Deployment turns a working workflow into a dependable service</h2>
-        <Lead>
-          A prototype proves that a request can produce an output. Production deployment must keep that workflow
-          available, secure, observable, affordable, and recoverable while real traffic and model versions change.
-          The first architectural choice is often whether inference runs behind a hosted API or on infrastructure
-          your team operates.
-        </Lead>
-        <p className="mt-4 leading-relaxed text-slate-700">
-          Neither choice is universally cheaper, faster, more private, or safer. Compare the actual provider,
-          region, model, hardware, workload, contract, and operating capability. Preserve a stable application
-          interface so this choice can change without rewriting every product feature.
-        </p>
-      </section>
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">Hosted API or self-hosted open model?</h2>

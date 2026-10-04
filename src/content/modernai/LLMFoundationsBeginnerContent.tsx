@@ -1,3 +1,5 @@
+import "../textbook.css";
+import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock } from "../../components/content/CodeBlock";
@@ -15,26 +17,14 @@ type FoundationTopicId =
   | "instruction-tuning-rlhf";
 
 function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
-  return (
-    <div className="not-prose grid gap-3">
-      {items.map((item, index) => (
-        <div key={item.title} className="grid grid-cols-[2rem_1fr] gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">{index + 1}</span>
-          <div>
-            <h3 className="font-bold text-slate-900">{item.title}</h3>
-            <p className="mt-1 leading-relaxed text-slate-700">{item.body}</p>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
+  return <ol className="tutorial-steps">{items.map((item) => <li key={item.title}><h3 className="font-bold text-slate-900">{item.title}</h3><p className="leading-relaxed text-slate-700">{item.body}</p></li>)}</ol>;
 }
 
 function Bridge({ question, to, label }: { question: string; to: string; label: string }) {
   return (
-    <section className="not-prose rounded-2xl border border-indigo-200 bg-indigo-50 p-5">
+    <section className="tutorial-bridge">
       <p className="text-sm font-semibold uppercase tracking-wide text-indigo-700">Why the next lesson matters</p>
-      <p className="mt-2 text-lg font-bold leading-relaxed text-indigo-950">{question}</p>
+      <p className="mt-2 leading-relaxed text-slate-700">{question}</p>
       <Link to={to} className="mt-3 inline-flex font-semibold text-indigo-700 hover:underline">{label} →</Link>
     </section>
   );
@@ -95,14 +85,12 @@ function ContextBudgetFigure() {
 
 function TokenizationEmbeddingsLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>How does a sentence get inside an LLM?</h2>
         <p className="text-lg">You type <strong>“I love machine learning!”</strong>. A person sees words and meaning. A neural network works with numbers. The missing bridge is: <strong>split the text into manageable pieces, identify those pieces, then turn them into learned numerical representations.</strong></p>
         <p>Those pieces are called <strong>tokens</strong>. A token may be a whole word, part of a word, punctuation, a byte-like unit, or a special symbol depending on the tokenizer used by the model.</p>
       </section>
-
-      <TextToVectorsFigure />
 
       <section className="space-y-4">
         <h2>Step 1 — split text into tokens</h2>
@@ -130,6 +118,10 @@ function TokenizationEmbeddingsLesson() {
         <p>A helpful mental model is a coordinate system. One point may end up closer to another because the model learned that they appear in related contexts. But the individual coordinates are not manually labelled “animal”, “positive”, or “technology”.</p>
         <Callout role="info" title="Two meanings of embedding"><p>This lesson is about token embeddings inside an LLM. Later, semantic search uses embeddings for whole queries and passages. The idea is related, but the purpose and model may differ.</p></Callout>
       </section>
+
+      <p className="tutorial-transition">Now follow one piece of text through the complete conversion below. Splitting, indexing and looking up a vector are three different operations: the next stage uses the result of the previous stage.</p>
+
+      <TextToVectorsFigure />
 
       <section className="space-y-4">
         <h2>How does the model know order?</h2>
@@ -197,7 +189,7 @@ function AttentionSentenceFigure() {
 
 function TransformersAttentionLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>How can one token use information from another?</h2>
         <p className="text-lg">Read: <strong>“The animal didn't cross the street because it was tired.”</strong> To interpret “it”, information from earlier words matters. Treating every position as equally useful would be wasteful.</p>
@@ -241,6 +233,8 @@ function TransformersAttentionLesson() {
         </div>
         <p>The result is not a label. It is a new representation containing a weighted mixture of information from the two Value vectors.</p>
       </section>
+
+      <p className="tutorial-transition">The weighted result is a new representation for a token, not the final generated word. The surrounding Transformer layers process that representation further; the architecture comparison below explains which positions are allowed to exchange information.</p>
 
       <section className="space-y-4">
         <h2>One attention operation is not the whole Transformer</h2>
@@ -287,7 +281,7 @@ function TransformersAttentionLesson() {
 
 function DecodingLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>The model has choices — how does it pick one?</h2>
         <p className="text-lg">Suppose the current text is <strong>“The weather is …”</strong>. The model may consider “sunny”, “cold”, “changing”, and thousands of other tokens. The neural network first produces a raw score for every vocabulary token.</p>
@@ -303,6 +297,8 @@ function DecodingLesson() {
           ["changing", "0.0", "9.0%"],
         ]}
       />
+
+      <p className="tutorial-transition">Treat the table as one instant in generation. A decoding rule selects from these candidates; after a token is appended, the model computes a new distribution for the longer context.</p><LLMVisualFigure id="generation-loop" />
 
       <section className="space-y-4">
         <h2>Greedy decoding — always take the largest probability</h2>
@@ -384,7 +380,7 @@ function PromptEngineeringLesson() {
   ].join("\n");
 
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Why does one prompt work better than another?</h2>
         <p className="text-lg"><strong>Weak:</strong> “Tell me about this.”</p>
@@ -406,6 +402,8 @@ function PromptEngineeringLesson() {
         />
         <CodeBlock title="A structured prompt" type="conceptual" code={promptCode} caption="The tags are just a clear delimiter convention; they are not magic syntax." />
       </section>
+
+      <p className="tutorial-transition">Read this prompt as an application contract: the task says what to do, the context supplies relevant information, the constraints limit acceptable behavior, and the output contract makes the result easier to check. None of those instructions substitutes for checking the result.</p>
 
       <section className="space-y-4">
         <h2>Zero-shot, one-shot, and few-shot examples</h2>
@@ -429,6 +427,8 @@ function PromptEngineeringLesson() {
         <p>An LLM can propose a tool name and arguments, but application code should validate them before execution. If the model proposes <code>get_weather(city="Pune", unit="Kelvin")</code> and the schema allows only C or F, the application should reject or repair the arguments according to its policy.</p>
         <Callout role="warning" title="The model does not own authorization"><p>Tool schemas, permission checks, confirmation for high-impact actions, and business validation belong to application logic. Never treat a model-generated function call as automatically trusted.</p></Callout>
       </section>
+
+      <LLMVisualFigure id="tool-boundary" />
 
       <section className="space-y-4">
         <h2>Debug prompts like software requirements</h2>
@@ -467,14 +467,12 @@ function TrainingFlowFigure() {
 
 function PretrainingFinetuningLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>Where do the model's parameters come from?</h2>
         <p className="text-lg">In the introduction we used <strong>“The cat sat on the ____”</strong>. The model predicts the next token, compares its probability with the observed continuation, calculates an error, and adjusts its parameters.</p>
         <p><strong>Pretraining</strong> is this broad learning process repeated across a very large and varied corpus so the model develops general language and pattern-prediction capability.</p>
       </section>
-
-      <TrainingFlowFigure />
 
       <section className="space-y-4">
         <h2>Training data is not just “more text”</h2>
@@ -508,6 +506,10 @@ function PretrainingFinetuningLesson() {
           ]}
         />
       </section>
+
+      <p className="tutorial-transition">The loss now connects the data preparation to learning: the observed next token supplies the target, the model supplies a probability, and the training loop uses the resulting error to update parameters. Follow those responsibilities through the diagram.</p>
+
+      <TrainingFlowFigure />
 
       <section className="space-y-4">
         <h2>Pretraining versus fine-tuning</h2>
@@ -545,7 +547,7 @@ function PretrainingFinetuningLesson() {
 
 function AlignmentLesson() {
   return (
-    <div className="space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
+    <div className="textbook-lesson space-y-9 text-[var(--lma-text-secondary)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[var(--lma-brand-text)] [&_p]:leading-relaxed">
       <section className="space-y-4">
         <h2>A base model can continue text. How do we make it a useful assistant?</h2>
         <p className="text-lg">A pretrained model may be good at predicting text without reliably behaving like an instruction-following assistant. Post-training adds targeted examples and preference signals to shape how the model responds.</p>
@@ -579,6 +581,8 @@ function AlignmentLesson() {
         <Callout role="warning" title="Alignment is not permanent truthfulness"><p>Post-training can improve instruction following and reduce some unwanted behaviors, but it does not eliminate hallucination, adversarial inputs, distribution shift, or the need for evaluation and system controls.</p></Callout>
       </section>
 
+      <p className="tutorial-transition">Demonstrations and comparisons supply different training signals. The branches below show alternatives for using preferences; they are not steps that every application must run in sequence.</p><LLMVisualFigure id="post-training-alignment" />
+
       <section className="space-y-4">
         <h2>Why LoRA exists — specialize without updating every base weight</h2>
         <p>Full fine-tuning can update an enormous number of parameters. <strong>LoRA</strong> (Low-Rank Adaptation) keeps the original weight matrix frozen and learns small additional low-rank matrices whose update is combined with the base model during use.</p>
@@ -605,6 +609,8 @@ function AlignmentLesson() {
         </div>
         <p>The original 512 × 512 base matrix remains frozen in standard LoRA adapter training. Updating W directly would violate that assumption.</p>
       </section>
+
+      <p className="tutorial-transition">The parameter count describes the adapter matrices, not a second full copy of the base model. Keep the frozen and trainable paths separate when reading the figure.</p><LLMVisualFigure id="lora-path" />
 
       <section className="space-y-4">
         <h2>Prompting, RAG, or fine-tuning?</h2>

@@ -1,13 +1,13 @@
 import { Callout } from "../../components/content/Callout";
 import { CodeBlock as SharedCodeBlock } from "../../components/content/CodeBlock";
-import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 import { DataTable } from "../../components/content/DataTable";
 import React from "react";
-import { AlertTriangle, CheckCircle2, Lightbulb, Target } from "lucide-react";
 import { AgenticVisualFigure } from "../../components/diagrams/AgenticAIDiagrams";
 import { agenticLessonDetails, type AgenticTable } from "./agenticLessonDetails";
 import { agenticLessonEnhancements } from "./agenticLessonEnhancements";
+import { agenticReadingFlow } from "./agenticReadingFlow";
+import "../textbook.css";
 
 export type AgenticBaseLesson = {
   intro: string;
@@ -106,53 +106,49 @@ function CodeExample({ topicId, code, label, note }: { topicId: string; code: st
 export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson: AgenticBaseLesson }) {
   const enhancement = agenticLessonEnhancements[topicId];
   const detail = agenticLessonDetails[topicId];
-  if (!enhancement || !detail) return null;
+  const reading = agenticReadingFlow[topicId];
+  if (!enhancement || !detail || !reading) return null;
 
   return (
-    <div className="space-y-10" data-agentic-lesson={topicId}>
-      <section className="not-prose rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white p-6">
-        <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-indigo-900"><Target className="h-5 w-5" />What You Will Learn</h2>
-        <div className="grid gap-3 md:grid-cols-2">
-          {detail.objectives.map((objective) => <div key={objective} className="flex items-start gap-3 text-sm text-slate-700"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600" /><span>{objective}</span></div>)}
-        </div>
-      </section>
-
+    <div className="textbook-lesson space-y-10" data-agentic-lesson={topicId}>
       <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">Understand the Core Idea</h2>
+        <h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.introduction}</h2>
         <p className="text-lg leading-relaxed text-slate-700">{lesson.intro}</p>
       </section>
 
       <Callout role="tip" title="A familiar way to picture it"><p>{lesson.analogy}</p></Callout>
 
-      <section>
-        <h2 className="mb-4 text-2xl font-bold text-indigo-800">How the Process Works</h2>
-        <div className="not-prose grid gap-3">
-          {lesson.steps.map((step, index) => <div key={step} className="grid grid-cols-[2rem_1fr] gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"><span className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-600 font-bold text-white">{index + 1}</span><p className="pt-1 leading-relaxed text-slate-700">{step}</p></div>)}
-        </div>
+      <section className="tutorial-objectives">
+        <h2 className="mb-3 text-xl font-bold text-slate-900">What You Will Learn</h2>
+        <ul className="list-disc space-y-2 pl-5">{detail.objectives.map((objective) => <li key={objective}>{objective}</li>)}</ul>
       </section>
 
-      <div className="space-y-6">{enhancement.visuals.map((visualId) => <div key={visualId}><AgenticVisualFigure id={visualId} /></div>)}</div>
-
-      {detail.sections.map((section) => (
-        <section key={section.title}>
+      {reading.blocks.map((block) => {
+        if (block === "process") return <section key={block}>
+          <h2 className="mb-4 text-2xl font-bold text-indigo-800">{reading.process}</h2>
+          <ol className="tutorial-steps">{lesson.steps.map((step) => <li key={step}><p>{step}</p></li>)}</ol>
+        </section>;
+        if (block === "worked") {
+          const example = detail.workedExample;
+          if (!example) return null;
+          return <section key={block} data-agentic-worked-example>
+            <h2 className="mb-4 text-2xl font-bold text-indigo-800">Worked Example: {example.title}</h2>
+            <p className="leading-relaxed text-slate-700">{example.setup}</p>
+            <ol className="tutorial-steps">{example.steps.map((step) => <li key={step}>{step}</li>)}</ol>
+            <p className="tutorial-result"><strong>What the result means: </strong>{example.result}</p>
+          </section>;
+        }
+        const [kind, position] = block.split(":");
+        const index = Number(position);
+        if (kind === "visual") return <React.Fragment key={block}><AgenticVisualFigure id={enhancement.visuals[index]} /></React.Fragment>;
+        if (kind === "table") return <React.Fragment key={block}><LessonTable table={detail.tables[index]} /></React.Fragment>;
+        const section = detail.sections[index];
+        return <section key={block}>
           <h2 className="mb-4 text-2xl font-bold text-indigo-800">{section.title}</h2>
           <div className="space-y-3">{section.paragraphs.map((paragraph) => <p key={paragraph} className="leading-relaxed text-slate-700">{paragraph}</p>)}</div>
           {section.bullets && <ul className="mt-4 list-disc space-y-2 pl-6 text-slate-700">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
-        </section>
-      ))}
-
-      <div className="space-y-6">{detail.tables.map((table) => <div key={table.title}><LessonTable table={table} /></div>)}</div>
-
-      {detail.workedExample && (
-        <section data-agentic-worked-example>
-          <h2 className="mb-4 text-2xl font-bold text-indigo-800">Worked Example: {detail.workedExample.title}</h2>
-          <p className="leading-relaxed text-slate-700">{detail.workedExample.setup}</p>
-          <ol className="mt-4 space-y-3 pl-0">
-            {detail.workedExample.steps.map((step, index) => <li key={step} className="not-prose grid grid-cols-[2rem_1fr] gap-3 rounded-xl bg-slate-50 p-4 text-slate-700"><span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-900 font-bold text-white">{index + 1}</span><span className="pt-1 leading-relaxed">{step}</span></li>)}
-          </ol>
-          <div className="not-prose mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-slate-700"><strong className="text-emerald-900">What the result means: </strong>{detail.workedExample.result}</div>
-        </section>
-      )}
+        </section>;
+      })}
 
       <section>
         <h2 className="mb-4 text-2xl font-bold text-indigo-800">A Realistic Example: {lesson.exampleTitle}</h2>
@@ -162,7 +158,7 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
       <CodeExample topicId={topicId} code={lesson.code} label={enhancement.codeLabel} note={enhancement.codeNote} />
 
       {topicId === "building-ai-agent" && (
-        <section className="not-prose rounded-2xl border border-violet-200 bg-violet-50 p-5 sm:p-6">
+        <section className="tutorial-explanation">
           <h2 className="text-xl font-extrabold text-violet-950">Practice the End-to-End Agent</h2>
           <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm leading-relaxed text-slate-700">
             <li>Run both supplied questions and match each printed trace to the architecture figure.</li>
