@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { AppLayout } from './components/layout/AppLayout';
 import { HomePage } from './pages/HomePage';
 import { ProgressProvider } from './context/ProgressContext';
@@ -60,6 +61,7 @@ export function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
+      <GoogleAnalytics />
       <AppRoutes />
     </BrowserRouter>
   );
