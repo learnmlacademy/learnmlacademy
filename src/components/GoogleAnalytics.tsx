@@ -28,8 +28,8 @@ function ensureGtagQueue() {
   window.dataLayer = window.dataLayer || [];
 
   if (!window.gtag) {
-    window.gtag = (...args: unknown[]) => {
-      window.dataLayer.push(args);
+    window.gtag = function gtag(..._args: unknown[]) {
+      window.dataLayer.push(arguments);
     };
   }
 }
@@ -82,6 +82,7 @@ export function GoogleAnalytics() {
 
     const timer = window.setTimeout(() => {
       window.gtag?.('event', 'page_view', {
+        send_to: GA_MEASUREMENT_ID,
         page_path: `${location.pathname}${location.search}`,
         page_location: window.location.href,
         page_title: document.title,
