@@ -50,8 +50,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 3. Data & Preprocessing
     "eda": {
-      title: "Exploratory Data Analysis (EDA) in Machine Learning",
-      description: "Learn how to perform Exploratory Data Analysis (EDA) to understand data distributions, spot outliers, and prepare for ML modeling."
+      title: "EDA in Machine Learning: Step-by-Step Exploratory Data Analysis with Python",
+      description: "Learn EDA in ML step by step with a simple student example, summary statistics, missing values, duplicates, univariate, bivariate and multivariate analysis, visualizations, and Python."
     },
     "handling-missing-data": {
       title: "Handling Missing Data in Machine Learning | Imputation Methods",
@@ -190,8 +190,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 7. Model Evaluation
     "train-test-split": {
-      title: "Train-Test Split & Validation Sets | ML Workflow essentials",
-      description: "Understand why splitting your dataset into training, validation, and testing sets is crucial to prevent data leakage and evaluate models properly."
+      title: "Train-Test Split in Machine Learning: Ratios, Validation & Python",
+      description: "Learn train-test split with a simple 10-student example, common split ratios, validation sets, stratified, grouped and time-aware splitting, data leakage prevention, and scikit-learn code."
     },
     "cross-validation": {
       title: "K-Fold Cross-Validation Explained | Robust ML Evaluation",
