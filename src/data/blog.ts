@@ -48,7 +48,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "overfitting-underfitting-guide",
     title: "Overfitting vs Underfitting: How to Diagnose and Fix Both",
-    excerpt: "Every ML model fails in one of two ways: it memorises the training data, or it never learns at all. Learn to spot each problem with learning curves and apply the right fix — regularisation, dropout, early stopping, and more.",
+    excerpt: "Learn to diagnose overfitting and underfitting with learning curves, then fix them using regularisation, dropout, early stopping, and other techniques.",
     category: "Fundamentals",
     readTime: 8,
     date: "2026-05-10",
@@ -57,7 +57,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "feature-engineering-tips",
     title: "6 Feature Engineering Techniques That Improve Any ML Model",
-    excerpt: "Data beats algorithms. Learn the practical feature engineering tricks used by Kaggle grandmasters — missing value indicators, cyclical date encoding, target encoding, interaction features, and more.",
+    excerpt: "Learn six practical feature engineering techniques for stronger ML models, including missing-value indicators, date encoding, target encoding, and interactions.",
     category: "Data Science",
     readTime: 10,
     date: "2026-05-05",
@@ -66,7 +66,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "xgboost-vs-random-forest",
     title: "XGBoost vs Random Forest: Which Should You Choose?",
-    excerpt: "Both are powerful tree ensemble methods, but they work in completely different ways. This practical guide with code examples explains when to use each — and how to tune them properly.",
+    excerpt: "Compare XGBoost and Random Forest, understand how they differ, when to use each model, and how to tune them effectively with practical code examples.",
     category: "Algorithms",
     readTime: 11,
     date: "2026-04-28",
@@ -75,7 +75,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "what-is-rag",
     title: "What is RAG (Retrieval-Augmented Generation) and How Does It Work?",
-    excerpt: "RAG gives language models the ability to look things up before answering — combining LLM reasoning with a live, updatable knowledge base. Learn the architecture, build it in Python, and understand when to use it and when not to.",
+    excerpt: "Learn how RAG combines LLMs with external knowledge, how its retrieval architecture works, how to build it in Python, and when to use it.",
     category: "Generative AI",
     readTime: 14,
     date: "2026-07-03",
