@@ -14,7 +14,7 @@ import {
 export function GradientBoostingContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Gradient Boosting</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Gradient Boosting</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md">
         Gradient Boosting builds a strong model <strong>one small correction at a time</strong>. Each new learner is added to improve what the current ensemble is still getting wrong.
