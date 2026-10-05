@@ -5,7 +5,7 @@ export function AprioriContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Apriori Algorithm</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Apriori Algorithm</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Apriori is a classic algorithm for <strong>frequent itemset mining</strong>. It looks through transaction-style data and finds groups of items that occur together often enough to pass a minimum-support threshold.
