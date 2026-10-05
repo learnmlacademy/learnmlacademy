@@ -100,7 +100,7 @@ function XIcon(props: React.ComponentProps<"svg">) {
 export function ClassificationIntroContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Classification</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Classification</h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
         Classification is used when the goal is to predict discrete categories or labels instead of continuous numeric values.</p>
