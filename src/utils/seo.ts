@@ -1,3 +1,33 @@
+const META_DESCRIPTION_MAX_LENGTH = 155;
+
+export const fitMetaDescription = (description: string): string => {
+  const normalized = description.replace(/\s+/g, " ").trim();
+
+  if (normalized.length <= META_DESCRIPTION_MAX_LENGTH) {
+    return normalized;
+  }
+
+  const limit = META_DESCRIPTION_MAX_LENGTH - 1;
+  const candidate = normalized.slice(0, limit);
+  const sentenceEnd = Math.max(
+    candidate.lastIndexOf("."),
+    candidate.lastIndexOf("!"),
+    candidate.lastIndexOf("?")
+  );
+
+  // Prefer a complete sentence when it still gives searchers enough context.
+  if (sentenceEnd >= 100) {
+    return candidate.slice(0, sentenceEnd + 1);
+  }
+
+  const lastSpace = candidate.lastIndexOf(" ");
+  const wordSafe = (lastSpace > 0 ? candidate.slice(0, lastSpace) : candidate)
+    .replace(/[,:;\-–—]+$/, "")
+    .trim();
+
+  return `${wordSafe}.`;
+};
+
 export const getSEOData = (topicId: string, defaultTitle: string): { title: string; description: string } => {
   const seoData: Record<string, { title: string; description: string }> = {
     // 1. Foundations
@@ -695,9 +725,14 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     }
   };
 
-  return seoData[topicId] || {
+  const selected = seoData[topicId] || {
     title: `${defaultTitle} Tutorial | ML Academy`,
     description: `Learn the central ideas behind ${defaultTitle}, what its main components do, how they connect in practice, and where the approach can fail.`
+  };
+
+  return {
+    ...selected,
+    description: fitMetaDescription(selected.description)
   };
 };
 
