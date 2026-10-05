@@ -7,23 +7,43 @@ export const fitMetaDescription = (description: string): string => {
     return normalized;
   }
 
-  const limit = META_DESCRIPTION_MAX_LENGTH - 1;
-  const candidate = normalized.slice(0, limit);
+  const candidate = normalized.slice(0, META_DESCRIPTION_MAX_LENGTH - 1);
+
+  // Prefer a complete sentence when it is long enough to remain useful.
   const sentenceEnd = Math.max(
     candidate.lastIndexOf("."),
     candidate.lastIndexOf("!"),
     candidate.lastIndexOf("?")
   );
-
-  // Prefer a complete sentence when it still gives searchers enough context.
-  if (sentenceEnd >= 100) {
+  if (sentenceEnd >= 120) {
     return candidate.slice(0, sentenceEnd + 1);
   }
 
+  // Otherwise finish at a natural clause boundary near the limit.
+  const phraseEnd = Math.max(
+    candidate.lastIndexOf(","),
+    candidate.lastIndexOf(";"),
+    candidate.lastIndexOf(":"),
+    candidate.lastIndexOf("—"),
+    candidate.lastIndexOf("–")
+  );
+  if (phraseEnd >= 125) {
+    return `${candidate
+      .slice(0, phraseEnd)
+      .replace(/[,:;\-–—]+$/, "")
+      .trim()}.`;
+  }
+
+  // Last resort: cut only at a word boundary and remove dangling connector words.
   const lastSpace = candidate.lastIndexOf(" ");
-  const wordSafe = (lastSpace > 0 ? candidate.slice(0, lastSpace) : candidate)
+  let wordSafe = (lastSpace > 0 ? candidate.slice(0, lastSpace) : candidate)
     .replace(/[,:;\-–—]+$/, "")
     .trim();
+
+  const danglingWord = /\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)$/i;
+  while (danglingWord.test(wordSafe)) {
+    wordSafe = wordSafe.replace(/\s+\S+$/, "").trim();
+  }
 
   return `${wordSafe}.`;
 };
@@ -81,7 +101,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     // 3. Data & Preprocessing
     "eda": {
       title: "EDA in Machine Learning: Step-by-Step Exploratory Data Analysis with Python",
-      description: "Learn EDA in ML step by step with a simple student example, summary statistics, missing values, duplicates, univariate, bivariate and multivariate analysis, visualizations, and Python."
+      description: "Learn EDA step by step with summary statistics, missing-value checks, duplicates, univariate and multivariate analysis, visualizations, and Python."
     },
     "handling-missing-data": {
       title: "Handling Missing Data in Machine Learning | Imputation Methods",
@@ -221,7 +241,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     // 7. Model Evaluation
     "train-test-split": {
       title: "Train-Test Split in Machine Learning: Ratios, Validation & Python",
-      description: "Learn train-test split with a simple 10-student example, common split ratios, validation sets, stratified, grouped and time-aware splitting, data leakage prevention, and scikit-learn code."
+      description: "Learn train-test split ratios, validation sets, stratified and time-aware splitting, data leakage prevention, and scikit-learn code."
     },
     "cross-validation": {
       title: "K-Fold Cross-Validation Explained | Robust ML Evaluation",
@@ -387,7 +407,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "evaluating-generative-models": {
       title: "Evaluating Generative Models | Metrics, Human Review and Trade-offs",
-      description: "Learn how to evaluate generative models across quality, diversity, adherence, factuality, safety, latency, and cost using fixed test sets, FID, KID, alignment metrics, and human review."
+      description: "Learn to evaluate generative models for quality, diversity, factuality, safety, latency, and cost using fixed tests, metrics, and human review."
     },
     "responsible-generative-ai": {
       title: "Responsible Generative AI | Risks, Controls and Monitoring",
@@ -399,7 +419,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "building-genai-apps": {
       title: "Building Generative AI Applications | Validation and Workflow Design",
-      description: "Build reliable Generative AI applications with narrow goals, structured outputs, schema and evidence validation, deterministic rules, fallbacks, human review, and evaluation harnesses."
+      description: "Build reliable Generative AI apps with narrow goals, structured outputs, validation, fallbacks, human review, deterministic rules, and evaluation."
     },
     "genai-deployment": {
       title: "Deploying Generative AI Applications | APIs, Serving and Reliability",
@@ -447,11 +467,11 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "ai-engineering-mlops": {
       title: "AI Engineering & MLOps: From Notebook to Production",
-      description: "Learn how validated data, feature pipelines, experiment lineage, model registries, serving, monitoring, feedback and governance turn a notebook model into a reliable production AI system."
+      description: "Learn how data pipelines, experiment lineage, registries, serving, monitoring, feedback, and governance turn ML models into reliable production systems."
     },
     "ml-data-feature-pipelines": {
       title: "Production Data, Feature & ML Pipelines",
-      description: "Build reliable batch and streaming data pipelines with schema contracts, point-in-time features, offline and online serving, orchestration, backfills and training-serving consistency."
+      description: "Build reliable batch and streaming ML pipelines with schema contracts, point-in-time features, orchestration, backfills, and training-serving consistency."
     },
     "experiment-tracking-model-registry": {
       title: "Experiment Tracking, Reproducibility, Lineage & Model Registry",
