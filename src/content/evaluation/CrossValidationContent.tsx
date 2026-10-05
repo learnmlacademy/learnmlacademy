@@ -23,7 +23,7 @@ export function CrossValidationContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cross-Validation</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cross-Validation</h2>
 
         <p className="text-lg leading-relaxed mb-5 text-slate-800">
           Cross-validation evaluates a model on several different held-out parts of the available training data. Instead of trusting one lucky or unlucky split, we rotate which observations are used for validation and summarize the results.

@@ -5,7 +5,7 @@ export function TSNEContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">t-Distributed Stochastic Neighbor Embedding (t-SNE)</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">t-Distributed Stochastic Neighbor Embedding (t-SNE)</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           <strong>t-SNE</strong> is a non-linear dimensionality-reduction method used mainly to <strong>visualize high-dimensional data</strong> in two or three dimensions.

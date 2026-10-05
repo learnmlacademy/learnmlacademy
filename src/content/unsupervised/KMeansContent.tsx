@@ -24,7 +24,7 @@ export function KMeansContent() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">K-Means Clustering</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">K-Means Clustering</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
         K-Means Clustering is an unsupervised learning algorithm that groups similar data points into <strong>K clusters</strong> without needing class labels.

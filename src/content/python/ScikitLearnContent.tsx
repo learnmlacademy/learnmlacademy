@@ -29,7 +29,7 @@ const SectionHeader = ({ icon, title, subtitle }: { icon: string; title: string;
 export function ScikitLearnContent() {
   return (
     <div className="prose prose-slate max-w-none">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Scikit-Learn: The Complete ML Toolkit</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Scikit-Learn: The Complete ML Toolkit</h2>
       <p className="text-xl text-slate-600 leading-relaxed mb-2">
         Scikit-learn is one of the most widely used machine-learning libraries in Python. It provides a clean, consistent API for common stages of the ML workflow — from preprocessing and model training to evaluation and hyperparameter tuning. Once you understand its basic pattern, trying a different algorithm often requires only a small code change.
       </p>

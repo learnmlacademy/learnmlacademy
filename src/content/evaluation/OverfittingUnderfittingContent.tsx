@@ -39,7 +39,7 @@ export function OverfittingUnderfittingContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Underfitting and Overfitting</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Underfitting and Overfitting</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Machine Learning models are built to learn patterns from data and make predictions on unseen examples. The goal is not simply to score well on the examples used for training, but to learn relationships that remain useful on new data.

@@ -93,7 +93,7 @@ function BeginnerSetupTable() {
 export function PythonForMLContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">Python for Machine Learning</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">Python for Machine Learning</h2>
       <p className="text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
         Python is one of the most widely used languages for Machine Learning. This tutorial focuses on the Python concepts you actually need to begin working with ML data and models.
       </p>

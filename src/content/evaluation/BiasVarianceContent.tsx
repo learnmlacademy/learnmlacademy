@@ -78,7 +78,7 @@ const highVarianceData = [
 export function BiasVarianceContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Bias-Variance Tradeoff</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Bias-Variance Tradeoff</h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
         The Bias-Variance Tradeoff is a core idea in machine learning. It helps us understand why a model can be too simple, too sensitive to its training data, or balanced enough to work well on new data.

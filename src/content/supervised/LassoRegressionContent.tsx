@@ -50,7 +50,7 @@ const coefData = [
 export function LassoRegressionContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Lasso Regression</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Lasso Regression</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-lg shadow-sm">
         Lasso Regression is a regularization technique used to improve prediction accuracy and implicitly perform feature selection.</p>

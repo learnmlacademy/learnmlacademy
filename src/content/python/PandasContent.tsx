@@ -29,7 +29,7 @@ const SectionHeader = ({ icon, title, subtitle }: { icon: string; title: string;
 export function PandasContent() {
   return (
     <div className="prose prose-slate max-w-none">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Pandas for Machine Learning</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">Pandas for Machine Learning</h2>
       <p className="text-xl text-slate-600 leading-relaxed mb-2">
         Pandas is the go-to library for loading, exploring, cleaning, and transforming tabular data before feeding it into ML models. If NumPy is the engine, Pandas is the workshop where raw data gets shaped into model-ready form.
       </p>

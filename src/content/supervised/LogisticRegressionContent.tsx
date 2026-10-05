@@ -57,7 +57,7 @@ function XIcon(props: React.ComponentProps<"svg">) {
 export function LogisticRegressionContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Logistic Regression</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Logistic Regression</h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
         Logistic Regression is a classification algorithm used to predict categorical outcomes.</p>

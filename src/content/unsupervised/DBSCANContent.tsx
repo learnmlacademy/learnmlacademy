@@ -5,7 +5,7 @@ export function DBSCANContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">DBSCAN Clustering Guide</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">DBSCAN Clustering Guide</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           DBSCAN stands for <strong>Density-Based Spatial Clustering of Applications with Noise</strong>. It is an unsupervised clustering algorithm that looks for <strong>dense neighborhoods of points</strong> and can leave sufficiently isolated points outside the clusters as noise.

@@ -70,7 +70,7 @@ const studyData = [
 export function PolynomialRegressionContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Polynomial Regression</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Polynomial Regression</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-lg shadow-sm">
         Polynomial Regression is a form of Regression used when the relationship between variables is nonlinear. Instead of fitting a straight line, it bends the line to fit the curves of the dataset.</p>

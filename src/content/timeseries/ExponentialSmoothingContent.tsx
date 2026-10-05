@@ -11,9 +11,9 @@ import {
 export function ExponentialSmoothingContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6">
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6">
         Exponential Smoothing for Time Series Forecasting
-      </h1>
+      </h2>
 
       <p className="text-xl text-slate-700 mb-8 leading-relaxed">
         Exponential smoothing is a family of forecasting methods that updates its view of a time series as new observations arrive. The basic idea is simple: recent information usually receives more weight, while older information fades gradually rather than being dropped suddenly.

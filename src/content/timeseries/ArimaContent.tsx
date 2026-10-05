@@ -12,9 +12,9 @@ export function ArimaContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           ARIMA (AutoRegressive Integrated Moving Average)
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           ARIMA is a classical statistical model for forecasting a time series from its own history. Unlike a normal table where row order may not matter, time-series observations arrive in sequence, so yesterday, last week, or last month can contain useful information about what comes next.

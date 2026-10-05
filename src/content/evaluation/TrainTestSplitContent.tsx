@@ -5,7 +5,7 @@ export function TrainTestSplitContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train/Test Split in Machine Learning</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train/Test Split in Machine Learning</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Train/Test Split is one of the most fundamental ideas in Machine Learning. We use one part of the available data to <strong>train</strong> a model and keep another part aside to check how well the trained model performs on data it did not use for fitting.

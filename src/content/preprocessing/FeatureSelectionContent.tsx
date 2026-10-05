@@ -49,7 +49,7 @@ function CodeBlock({
 export function FeatureSelectionContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Selection & Extraction</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Selection & Extraction</h2>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
         Feature Selection and Feature Extraction help us reduce or reorganize

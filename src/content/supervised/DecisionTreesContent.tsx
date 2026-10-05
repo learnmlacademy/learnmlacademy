@@ -36,7 +36,7 @@ import { DecisionTreeDiagram } from "../../components/diagrams/MLDiagrams";
 export function DecisionTreesContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Decision Tree</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Decision Tree</h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-700 font-medium">
         Decision Trees are algorithms that work by repeatedly asking questions about the data and splitting it into smaller groups until a final prediction is made.

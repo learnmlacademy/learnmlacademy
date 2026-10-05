@@ -12,7 +12,7 @@ import {
 export function BaggingContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Bagging (Bootstrap Aggregating)</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Bagging (Bootstrap Aggregating)</h2>
       
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
         <strong>Bagging</strong> means <strong>Bootstrap Aggregating</strong>: train several versions of a model on different random samples of the training data, then combine their predictions.

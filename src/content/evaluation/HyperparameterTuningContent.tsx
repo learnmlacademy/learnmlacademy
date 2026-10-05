@@ -15,7 +15,7 @@ export function HyperparameterTuningContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Hyperparameter Tuning</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Hyperparameter Tuning</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           A Machine Learning algorithm can behave very differently depending on the settings we choose for it. A Decision Tree can be shallow or deep. KNN can use 1 neighbor or 15 neighbors. A Neural Network can learn with a small or large learning rate. These user-controlled settings are called <strong>hyperparameters</strong>.

@@ -8,7 +8,7 @@ import {
 export function NaiveBayesContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Naive Bayes Classifier</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Naive Bayes Classifier</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-md shadow-sm">
         Naive Bayes is a probabilistic classifier based on applying Bayes’ Theorem with a strong (naive) conditional-independence assumption between features given the class.</p>

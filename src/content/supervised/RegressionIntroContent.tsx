@@ -9,7 +9,7 @@ export function RegressionIntroContent() {
     <>
       {/* 1. Introduction */}
       
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Regression Algorithms Overview</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Regression Algorithms Overview</h2>
         <p className="lead text-xl text-slate-700 border-l-4 border-indigo-500 pl-5 py-3 bg-slate-50 rounded-r-xl shadow-sm leading-relaxed mb-6">
           <strong>Regression</strong> is a supervised learning technique used to <em>predict continuous numerical values</em> based on historical data.</p>
         <div className="flex flex-wrap gap-2 mb-4">

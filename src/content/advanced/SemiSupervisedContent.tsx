@@ -14,9 +14,9 @@ import {
 export function SemiSupervisedContent() {
   return (
     <div id="semi-supervised-learning-guide">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
         Semi-Supervised Learning
-      </h1>
+      </h2>
 
       <p className="text-lg leading-relaxed mb-4 text-slate-800">
         Suppose you have <strong>10,000 photos</strong>, but a human has labelled only

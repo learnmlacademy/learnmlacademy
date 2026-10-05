@@ -14,6 +14,7 @@
 export type BlogPost = {
   slug: string;
   title: string;
+  seoTitle?: string;
   excerpt: string;
   category: string;
   readTime: number;   // minutes
@@ -26,6 +27,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "top-ml-algorithms-explained",
     title: "Top 10 Machine Learning Algorithms Every Data Scientist Should Know",
+    seoTitle: "Top 10 Machine Learning Algorithms | Python Guide",
     excerpt: "A practical guide to the most important ML algorithms — what they do, when to use them, and how they compare. Includes Python code for each.",
     category: "Algorithms",
     readTime: 12,
@@ -36,6 +38,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "ml-interview-prep-guide",
     title: "Complete ML Interview Preparation Guide for FAANG Companies",
+    seoTitle: "ML Interview Preparation Guide | Questions & Strategy",
     excerpt: "Everything you need to ace ML engineer interviews at Google, Amazon, Meta and Microsoft — from theory questions to system design.",
     category: "Career",
     readTime: 15,
@@ -48,6 +51,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "overfitting-underfitting-guide",
     title: "Overfitting vs Underfitting: How to Diagnose and Fix Both",
+    seoTitle: "Overfitting vs Underfitting | Diagnosis & Fixes",
     excerpt: "Learn to diagnose overfitting and underfitting with learning curves, then fix them using regularisation, dropout, early stopping, and other techniques.",
     category: "Fundamentals",
     readTime: 8,
@@ -57,6 +61,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "feature-engineering-tips",
     title: "6 Feature Engineering Techniques That Improve Any ML Model",
+    seoTitle: "Feature Engineering Techniques for Better ML Models",
     excerpt: "Learn six practical feature engineering techniques for stronger ML models, including missing-value indicators, date encoding, target encoding, and interactions.",
     category: "Data Science",
     readTime: 10,
@@ -75,6 +80,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "what-is-rag",
     title: "What is RAG (Retrieval-Augmented Generation) and How Does It Work?",
+    seoTitle: "What Is RAG? Retrieval-Augmented Generation Explained",
     excerpt: "Learn how RAG combines LLMs with external knowledge, how its retrieval architecture works, how to build it in Python, and when to use it.",
     category: "Generative AI",
     readTime: 14,
