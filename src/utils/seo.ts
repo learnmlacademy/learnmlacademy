@@ -100,7 +100,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 3. Data & Preprocessing
     "eda": {
-      title: "EDA in Machine Learning: Step-by-Step Exploratory Data Analysis with Python",
+      title: "Exploratory Data Analysis (EDA) in ML | Python Guide",
       description: "Learn EDA step by step with summary statistics, missing-value checks, duplicates, univariate and multivariate analysis, visualizations, and Python."
     },
     "handling-missing-data": {
@@ -125,7 +125,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "feature-selection": {
       title: "Feature Selection & Extraction Methods | ML Academy",
-      description: "Discover how to reduce dimensionality and select the most important variables for your ML models to prevent overfitting."
+      description: "Learn feature selection and extraction methods that reduce dimensionality, remove weak inputs, prevent overfitting, and improve ML model efficiency."
     },
     "data-visualization": {
       title: "Data Visualization for Machine Learning | Matplotlib & Seaborn",
@@ -159,7 +159,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "classification-intro": {
       title: "Classification Algorithms Overview | ML Categorization",
-      description: "An introduction to classification tasks in Machine Learning. Learn how algorithms categorize data into distinct classes."
+      description: "Learn classification in Machine Learning, how models assign data to classes, common algorithms, evaluation basics, and when classification is the right choice."
     },
     "logistic-regression": {
       title: "Logistic Regression in Machine Learning | Binary Classification",
@@ -201,7 +201,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "gradient-boosting": {
       title: "Gradient Boosting Machines (GBM) Explained | ML Ensemble",
-      description: "Understand Gradient Boosting Machines and how they optimize arbitrary loss functions using gradient descent on residuals."
+      description: "Learn how Gradient Boosting builds trees sequentially to correct residual errors, optimize loss, reduce bias, and improve predictive performance."
     },
     "xgboost": {
       title: "XGBoost Algorithm Deep Dive | Extreme Gradient Boosting",
