@@ -5,7 +5,7 @@ export function AssociationRulesContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Association Rule Learning in Data Mining</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Association Rule Learning in Data Mining</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Association Rule Learning is a descriptive pattern-mining technique used to discover items or events that tend to occur together in transactional data.
