@@ -188,8 +188,11 @@ export async function loadPages(vite) {
       };
     }),
     ...blogPosts.map((post) => ({
-      route: `/blog/${post.slug}`, title: `${post.title} | ML Academy Blog`,
-      description: post.excerpt, heading: post.title, kind: 'blog',
+      route: `/blog/${post.slug}`,
+      title: post.seoTitle ?? `${post.title} | ML Academy Blog`,
+      description: seo.fitMetaDescription(post.excerpt),
+      heading: post.title,
+      kind: 'blog',
     })),
   ];
 
