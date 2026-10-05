@@ -32,9 +32,9 @@ export function PCAContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           Principal Component Analysis (PCA)
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
           Principal Component Analysis (PCA) is a <strong>linear dimensionality-reduction technique</strong>. It transforms many original features into a smaller set of new features called <strong>principal components</strong>.
