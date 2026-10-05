@@ -21,9 +21,9 @@ export function GridRandomSearchContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           Grid Search and Random Search
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           A Machine Learning model can behave very differently when we change settings such as tree depth,
