@@ -20,7 +20,7 @@ export function KNNContent() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">K-Nearest Neighbors</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">K-Nearest Neighbors</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-md shadow-sm">
         K-Nearest Neighbors (KNN) is an algorithm used for both classification and regression tasks. Unlike many algorithms, it does not build a complex internal model but relies directly on the distance between data points to make predictions.</p>
