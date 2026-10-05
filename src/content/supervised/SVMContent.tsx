@@ -38,7 +38,7 @@ export function SVMContent() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Support Vector Machine</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Support Vector Machine</h2>
       
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">Support Vector Machine (SVM) is a supervised machine learning algorithm used for classification and regression tasks.</p>
 
