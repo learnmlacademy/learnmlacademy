@@ -10,9 +10,9 @@ export function MovingAverageContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           Moving Average in Time Series: SMA, EMA, WMA and MA(q)
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Time-series data often moves up and down from one period to the next. A <strong>moving average</strong> helps us smooth some of those short-term fluctuations so that the broader pattern is easier to see.
