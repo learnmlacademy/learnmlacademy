@@ -22,7 +22,7 @@ import {
 export function BoostingContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Boosting</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Boosting</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
         Boosting is an ensemble-learning idea in which models are built <strong>sequentially</strong>. Each new model is trained using information about what the current ensemble is still getting wrong, and the models are combined into one final predictor.
