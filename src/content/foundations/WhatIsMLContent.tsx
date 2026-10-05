@@ -7,8 +7,31 @@ import { MLWorkflowDiagram } from "../../components/diagrams/MLDiagrams";
 export function WhatIsMLContent() {
   return (
     <>
+      <h2 className="text-2xl font-bold mt-2 mb-4 text-indigo-800 border-b pb-2">
+        What Is Machine Learning? A Simple Definition
+      </h2>
+      <p className="text-lg leading-relaxed mb-4">
+        <strong>Machine learning (ML)</strong> is a branch of artificial intelligence
+        in which computer models learn patterns from data and use those patterns to
+        make predictions or decisions on new data. Instead of relying only on rules
+        written by a programmer, the system learns from examples.
+      </p>
+      <p className="text-lg leading-relaxed mb-6">
+        In simple words: <strong>give a machine examples, let it learn a pattern,
+        then use the learned pattern on something it has not seen before.</strong>
+        That is the basic idea behind machine learning.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-8 not-prose">
+        <div className="rounded-lg border border-slate-200 bg-white p-4 text-center"><p className="font-bold text-slate-900">1. Data</p><p className="text-sm text-slate-600 mt-1">Past examples</p></div>
+        <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-4 text-center"><p className="font-bold text-indigo-900">2. Learn</p><p className="text-sm text-slate-600 mt-1">Find useful patterns</p></div>
+        <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 text-center"><p className="font-bold text-violet-900">3. Model</p><p className="text-sm text-slate-600 mt-1">Store what was learned</p></div>
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center"><p className="font-bold text-emerald-900">4. Predict</p><p className="text-sm text-slate-600 mt-1">Handle new data</p></div>
+      </div>
       <p className="text-lg leading-relaxed mb-8">
-        In traditional programming, developers write fixed rules to solve problems. For instance, if you want a program to calculate taxes, you write the exact formulas into the code. However, in Machine Learning, you provide the computer with examples of data and their corresponding outcomes, allowing it to learn the underlying patterns and use those patterns to make predictions or decisions on new, unseen data.
+        In traditional programming, developers write fixed rules to solve problems.
+        For instance, if you want a program to calculate taxes, you write the exact
+        formulas into the code. In Machine Learning, the computer instead learns
+        useful patterns from training data and applies them to new examples.
       </p>
       <SimpleProgrammingVsMLDiagram />
 
@@ -99,6 +122,19 @@ export function WhatIsMLContent() {
           <strong>Important:</strong> Real ML models learn from much more data and usually consider many features, not just study hours. This tiny example is only meant to show the basic idea of <em>learning from examples and predicting something new</em>.
         </p>
       </div>
+
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
+        Main Types of Machine Learning
+      </h2>
+      <p className="text-lg leading-relaxed mb-6">
+        Beginners usually meet three major learning styles first. The difference is mainly in what feedback or structure the model receives while learning.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10 not-prose">
+        <a href="/learn/supervised-learning-intro" className="block rounded-xl border border-blue-200 bg-blue-50 p-5 hover:shadow-sm"><p className="font-bold text-blue-900 mb-2">Supervised Learning</p><p className="text-sm text-slate-700">Learn from labeled examples where the correct answer is known, such as predicting a price or classifying an email as spam.</p></a>
+        <a href="/learn/unsupervised-learning-intro" className="block rounded-xl border border-violet-200 bg-violet-50 p-5 hover:shadow-sm"><p className="font-bold text-violet-900 mb-2">Unsupervised Learning</p><p className="text-sm text-slate-700">Find structure in unlabeled data, such as grouping similar customers or reducing many variables into a smaller representation.</p></a>
+        <a href="/learn/reinforcement-learning-intro" className="block rounded-xl border border-emerald-200 bg-emerald-50 p-5 hover:shadow-sm"><p className="font-bold text-emerald-900 mb-2">Reinforcement Learning</p><p className="text-sm text-slate-700">Learn through actions and feedback, where an agent receives rewards or penalties while trying to improve its decisions.</p></a>
+      </div>
+      <p className="text-base text-slate-700 mb-8">For a fuller comparison, see <a href="/learn/types-of-ml" className="text-indigo-700 hover:underline">Types of Machine Learning</a>.</p>
 
       <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
         Real-Life Examples of Machine Learning
@@ -221,6 +257,19 @@ export function WhatIsMLContent() {
         </div>
       </div>
       
+      <h2 className="text-2xl font-bold mt-12 mb-6 text-indigo-800 border-b pb-2">
+        Machine Learning for Beginners: What to Learn Next
+      </h2>
+      <p className="text-lg leading-relaxed mb-5">
+        If you are learning machine learning from the beginning, start with the basic learning types, then build enough Python and scikit-learn knowledge to train small models yourself. After that, move into preprocessing, evaluation, and individual algorithms.
+      </p>
+      <div className="flex flex-wrap gap-3 mb-10 not-prose">
+        <a href="/learn/types-of-ml" className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-indigo-700 hover:underline">Types of ML</a>
+        <a href="/learn/python-for-ml" className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-indigo-700 hover:underline">Python for ML</a>
+        <a href="/learn/scikit-learn-essentials" className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-indigo-700 hover:underline">Scikit-learn Essentials</a>
+        <a href="/learn/ml-lifecycle" className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-indigo-700 hover:underline">ML Life Cycle</a>
+      </div>
+
       <h2 className="text-2xl font-bold mt-10 mb-6 text-slate-800 border-b pb-2">Final Summary</h2>
       <p className="text-lg leading-relaxed mb-4">
         Machine Learning is a transformative technology that enables computers to learn from experience and make intelligent decisions using data. It has become an essential pillar of modern software engineering because it can solve highly complex, non-linear problems that traditional rule-based programming cannot handle.

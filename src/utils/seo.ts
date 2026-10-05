@@ -52,8 +52,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
   const seoData: Record<string, { title: string; description: string }> = {
     // 1. Foundations
     "what-is-ml": {
-      title: "What is Machine Learning? Complete Beginner Guide | ML Academy",
-      description: "Learn the basics of Machine Learning, how it works, and its real-world applications in this comprehensive beginner's guide with python examples."
+      title: "What Is Machine Learning? Definition, Types & Examples",
+      description: "Machine learning is a branch of AI that learns patterns from data. Understand the definition, types, examples and basic workflow in this beginner guide."
     },
     "types-of-ml": {
       title: "Types of Machine Learning: Supervised, Unsupervised & RL",
