@@ -29,7 +29,7 @@ export function AdaBoostContent() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">AdaBoost</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">AdaBoost</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
         <strong>AdaBoost (Adaptive Boosting)</strong> builds several simple classifiers one after another. After each round, training examples that were misclassified receive more attention in the next round.
