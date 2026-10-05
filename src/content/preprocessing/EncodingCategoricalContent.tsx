@@ -48,7 +48,7 @@ function CodeBlock({
 export function EncodingCategoricalContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Encoding Categorical Data</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Encoding Categorical Data</h2>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-emerald-500 pl-4 py-1 bg-slate-50">
         Many Machine Learning algorithms expect numerical input. If a dataset
