@@ -3,7 +3,7 @@ import React from 'react';
 export function MultiArmedBanditsContent() {
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Multi-Armed Bandits — Complete Guide</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-2">Multi-Armed Bandits — Complete Guide</h2>
       <p className="text-lg text-slate-500 mb-6">The exploration vs exploitation dilemma — with real Python code, visual diagrams, and line-by-line explanations</p>
 
       {/* ── INTRO ── */}
