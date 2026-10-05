@@ -15,9 +15,9 @@ import {
 export function OnlineLearningContent() {
   return (
     <div id="online-learning-guide">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
         Online Learning
-      </h1>
+      </h2>
 
       <div className="bg-gradient-to-br from-indigo-50 via-white to-emerald-50 border border-indigo-200 rounded-2xl p-6 md:p-8 mb-8 not-prose">
         <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">What if your data never stops?</p>
