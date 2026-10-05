@@ -29,7 +29,7 @@ const SectionHeader = ({ icon, title, subtitle }: { icon: string; title: string;
 export function NumpyContent() {
   return (
     <div className="prose prose-slate max-w-none">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">NumPy for Machine Learning</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">NumPy for Machine Learning</h2>
       <p className="text-xl text-slate-600 leading-relaxed mb-2">
         NumPy (<strong>Num</strong>erical <strong>Py</strong>thon) is one of the most important numerical libraries in the Python ML ecosystem. pandas and scikit-learn work closely with NumPy arrays, while frameworks such as TensorFlow and PyTorch use their own tensor objects with similar array-based ideas. Learning NumPy gives you a strong foundation for understanding how numerical data is represented and processed in ML.
       </p>
