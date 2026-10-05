@@ -17,7 +17,7 @@ export function CostFunctionsContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cost Functions</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Cost Functions</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           A Machine Learning model often needs a numerical way to answer one simple question:
