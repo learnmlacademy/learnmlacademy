@@ -3,7 +3,7 @@ import React from 'react';
 export function ForecastingBasicsContent() {
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-2">Forecasting Basics — Complete Guide</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-2">Forecasting Basics — Complete Guide</h2>
       <p className="text-lg text-slate-500 mb-6">
         Learn the forecasting workflow: understand time patterns, define the horizon, build simple baselines, evaluate on future periods, and only then add model complexity.
       </p>
