@@ -7,7 +7,7 @@ import {
 export function HierarchicalContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Hierarchical Clustering</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Hierarchical Clustering</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-3 bg-slate-50 rounded-r-md shadow-sm">
         Hierarchical Clustering is an <strong>unsupervised learning</strong> method that builds a tree of nested groups from similarities or distances between data points.
