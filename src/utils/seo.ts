@@ -120,8 +120,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Understand why feature scaling matters in ML. Compare Min-Max Normalization and Z-score Standardization with Python examples."
     },
     "feature-engineering": {
-      title: "Feature Engineering Techniques for Better ML Models",
-      description: "Learn how to extract and create new impactful features from raw data to drastically improve Machine Learning model accuracy."
+      title: "Feature Engineering in Machine Learning | Techniques & Examples",
+      description: "Learn feature engineering in machine learning with practical techniques for missing values, encoding, scaling, interactions, dates, text and feature creation."
     },
     "feature-selection": {
       title: "Feature Selection and Feature Extraction in Machine Learning",
