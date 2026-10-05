@@ -39,7 +39,7 @@ export function LinearRegressionContent() {
       
       {/* 1. Introduction */}
       <div className="mb-10">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Linear Regression</h1>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Linear Regression</h2>
         
         <p className="text-lg leading-relaxed mb-4">
           Linear Regression helps us understand relationships between variables and predict continuous numerical values such as prices, sales, temperatures, scores, and demand forecasts.</p>
