@@ -15,9 +15,9 @@ export function ConfusionMatrixContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           Confusion Matrix in Machine Learning
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           A confusion matrix is a table for understanding the mistakes made by a classification model. Instead of only asking <strong>"How many predictions were correct?"</strong>, it asks a more useful question: <strong>"Which classes were confused with which other classes?"</strong>
