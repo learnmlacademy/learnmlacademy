@@ -122,15 +122,15 @@ const staticMeta = new Map([
   }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
-    description: 'Read the ML Academy privacy policy.',
+    description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
   }],
   ['/terms', {
     title: 'Terms of Service | ML Academy',
-    description: 'Read the ML Academy terms of service.',
+    description: 'Read the ML Academy terms of service for details about website use, educational content, user responsibilities, and important service conditions.',
   }],
   ['/disclaimer', {
     title: 'Disclaimer | ML Academy',
-    description: 'Read the ML Academy disclaimer.',
+    description: 'Read the ML Academy disclaimer for important information about educational content, accuracy, external links, and limits of website information.',
   }],
 ]);
 
