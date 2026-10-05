@@ -19,9 +19,9 @@ const learningCurveData = [
 export function ReinforcementLearningAdvContent() {
   return (
     <div id="reinforcement-learning-guide">
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
         Reinforcement Learning
-      </h1>
+      </h2>
 
       <div className="bg-gradient-to-br from-indigo-50 to-white border border-indigo-200 rounded-2xl p-6 md:p-8 mb-8 not-prose">
         <p className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">Start with a question</p>
