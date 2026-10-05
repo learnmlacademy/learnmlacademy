@@ -14,9 +14,9 @@ export function RocAucContent() {
   return (
     <>
       <div id="introduction">
-        <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">
           ROC-AUC in Machine Learning
-        </h1>
+        </h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           A classifier often produces a <strong>score</strong> for each example: for instance, a fraud probability of 0.82 or a decision score from an SVM. A threshold then turns that score into a final class such as Fraud / Not Fraud.
