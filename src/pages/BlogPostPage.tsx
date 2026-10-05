@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { blogPosts } from '../data/blog';
+import { fitMetaDescription } from '../utils/seo';
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 import { TopMLAlgorithmsContent } from '../content/blog/top-ml-algorithms-explained';
@@ -34,7 +35,7 @@ export function BlogPostPage() {
     if (post) {
       document.title = `${post.title} | ML Academy Blog`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute('content', post.excerpt);
+      if (metaDesc) metaDesc.setAttribute('content', fitMetaDescription(post.excerpt));
       window.scrollTo(0, 0);
     }
   }, [post]);
