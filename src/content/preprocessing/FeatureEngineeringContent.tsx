@@ -43,14 +43,22 @@ function CodeBlock({
 export function FeatureEngineeringContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Engineering</h2>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Engineering in Machine Learning</h2>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
-        Feature Engineering is the process of using domain knowledge to extract features from raw data to improve the performance of machine learning algorithms.</p>
+        <strong>Feature engineering</strong> is the process of creating, transforming,
+        and selecting useful input features from raw data so a Machine Learning model
+        can learn patterns more effectively.</p>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
         Feature Engineering in Simple Words
       </h2>
+      <p>
+        Common feature engineering techniques include handling missing values,
+        encoding categorical variables, scaling numeric features, creating ratios
+        and interactions, extracting date-time information, transforming skewed
+        values, and representing text numerically.
+      </p>
       <p>
         In many structured-data Machine Learning projects, the model learns from the columns we give it. Feature Engineering means
         <strong> turning raw columns into more useful clues</strong> that make the pattern easier to learn.
@@ -104,7 +112,7 @@ export function FeatureEngineeringContent() {
       </div>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
-        What is Feature Engineering?
+        What Is Feature Engineering in Machine Learning?
       </h2>
       <p>
         Feature Engineering is the process of creating new input variables,
