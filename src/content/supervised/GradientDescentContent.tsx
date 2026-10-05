@@ -6,7 +6,7 @@ import { GradientDescentDiagram } from '../../components/diagrams/MLDiagrams';
 export function GradientDescentContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Gradient Descent</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Gradient Descent</h2>
       
       <p className="text-lg leading-relaxed mb-4">
         Gradient Descent is an optimization algorithm that helps models learn patterns from data by minimizing prediction errors through iterative parameter updates.</p>
