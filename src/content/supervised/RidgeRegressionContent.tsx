@@ -49,7 +49,7 @@ const tradeoffData = [
 export function RidgeRegressionContent() {
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Ridge Regression</h1>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Ridge Regression</h2>
 
       <p className="lead text-xl text-slate-700 mb-8 border-l-4 border-indigo-500 pl-4 py-2 bg-slate-50 rounded-r-lg shadow-sm">
         Ridge Regression is Linear Regression with an <strong>L2 penalty</strong>. It discourages very large coefficients, which can reduce variance and make the model more stable when predictors are strongly correlated.
