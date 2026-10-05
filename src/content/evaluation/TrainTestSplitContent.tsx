@@ -5,14 +5,35 @@ export function TrainTestSplitContent() {
   return (
     <>
       <div id="introduction">
-        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train/Test Split in Machine Learning</h2>
+        <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Train Test Split in Machine Learning</h2>
 
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
-          Train/Test Split is one of the most fundamental ideas in Machine Learning. We use one part of the available data to <strong>train</strong> a model and keep another part aside to check how well the trained model performs on data it did not use for fitting.
+          A <strong>train test split</strong> divides a dataset into two parts: a
+          training set used to fit the model and a test set used to evaluate how
+          well the model performs on unseen data. In Python, this is commonly done
+          with <code>sklearn.model_selection.train_test_split()</code>.
         </p>
 
+        <div className="bg-slate-900 text-slate-100 rounded-xl p-5 mb-8 not-prose overflow-x-auto">
+          <p className="font-bold mb-3 text-white">Quick sklearn train_test_split example — 80/20 split</p>
+          <pre className="text-sm font-mono whitespace-pre"><code>{`from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    stratify=y
+)`}</code></pre>
+          <p className="text-sm text-slate-300 mt-3 mb-0">
+            Here, 80% of the rows go to training and 20% go to testing.
+            <code className="mx-1">random_state=42</code> makes the split reproducible,
+            while <code>stratify=y</code> helps preserve class proportions for classification.
+          </p>
+        </div>
+
         <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-6 mb-8">
-          <h2 className="text-2xl font-bold text-indigo-900 mb-4">Train/Test Split in Simple Words</h2>
+          <h2 className="text-2xl font-bold text-indigo-900 mb-4">Train Test Split in Simple Words</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
             <div className="bg-white border border-indigo-100 rounded-lg p-4">
               <p className="font-bold text-slate-900">1. Start with data</p>
@@ -39,7 +60,7 @@ export function TrainTestSplitContent() {
           </p>
         </div>
 
-        <h2 className="text-3xl font-bold text-slate-800 mb-4 mt-10">Why Train/Test Split Is Necessary</h2>
+        <h2 className="text-3xl font-bold text-slate-800 mb-4 mt-10">Why Train Test Split Is Necessary</h2>
         <p className="text-lg leading-relaxed mb-4 text-slate-800">
           Suppose a student practices using one set of questions and is then evaluated using different questions. A high score on the unseen questions gives stronger evidence that the student learned the concept rather than only remembering the practice answers.
         </p>
@@ -242,11 +263,11 @@ scaler.transform(X_test)`}
 
       <div id="applications-and-code">
         <h2 className="text-3xl font-bold text-indigo-800 mb-6 flex items-center">
-          <Code className="mr-3 text-indigo-600" /> Python Implementation (scikit-learn)
+          <Code className="mr-3 text-indigo-600" /> sklearn train_test_split in Python
         </h2>
 
         <p className="text-lg leading-relaxed mb-6 text-slate-800">
-          Scikit-learn provides <code className="bg-slate-100 px-1 font-mono rounded text-red-600">train_test_split()</code> in <code className="bg-slate-100 px-1 font-mono rounded text-red-600">sklearn.model_selection</code>. It can split aligned arrays such as <code>X</code> and <code>y</code> in one call.
+          Scikit-learn provides <code className="bg-slate-100 px-1 font-mono rounded text-red-600">train_test_split()</code> in <code className="bg-slate-100 px-1 font-mono rounded text-red-600">sklearn.model_selection</code>. The main arguments beginners usually need are <code>test_size</code>, <code>random_state</code>, and, for many classification problems, <code>stratify</code>.
         </p>
 
         <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 border-l-4 border-l-indigo-500">

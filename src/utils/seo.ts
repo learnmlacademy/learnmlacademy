@@ -240,8 +240,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // 7. Model Evaluation
     "train-test-split": {
-      title: "Train-Test Split in Machine Learning: Ratios, Validation & Python",
-      description: "Learn train-test split ratios, validation sets, stratified and time-aware splitting, data leakage prevention, and scikit-learn code."
+      title: "Train Test Split in Machine Learning | sklearn & Python",
+      description: "Learn train test split in machine learning with an 80/20 example and Python using sklearn train_test_split, test_size, random_state and stratify."
     },
     "cross-validation": {
       title: "K-Fold Cross-Validation Explained | Robust ML Evaluation",
