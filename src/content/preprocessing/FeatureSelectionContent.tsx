@@ -49,19 +49,21 @@ function CodeBlock({
 export function FeatureSelectionContent() {
   return (
     <div className="prose max-w-none text-slate-800">
-      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Selection & Extraction</h2>
+      <h2 className="text-4xl font-extrabold text-slate-900 mb-6 tracking-tight">Feature Selection and Feature Extraction in Machine Learning</h2>
 
       <p className="lead text-xl text-slate-600 mb-8 border-l-4 border-indigo-500 pl-4 py-1 bg-slate-50">
-        Feature Selection and Feature Extraction help us reduce or reorganize
-        the inputs given to a Machine Learning model. Used carefully, they can
-        simplify a dataset, reduce computation, improve interpretability, and
-        sometimes improve generalization.
+        Feature selection keeps the most useful original input features, while
+        feature extraction transforms the original inputs into a smaller set of
+        new features. Both approaches can reduce dimensionality, simplify models,
+        lower computation, and sometimes improve generalization.
       </p>
 
       <p>
-        Real-world datasets often contain irrelevant features, noisy columns,
-        duplicate information, high-dimensional data, and redundant variables.
-        This guide covers how to optimize your dataset features.
+        In simple terms, <strong>feature selection asks “which original features
+        should I keep?”</strong> while <strong>feature extraction asks “how can I
+        represent the same information with fewer new features?”</strong> This guide
+        explains both approaches, when to use each one, and the most common methods
+        used in Machine Learning.
       </p>
 
       <h2 className="text-2xl font-bold mt-10 mb-4 text-slate-800 border-b pb-2">
@@ -448,9 +450,39 @@ export function FeatureSelectionContent() {
           score how strongly a numerical feature differs across target classes.
         </li>
         <li>
+          <strong>Mutual Information:</strong> Scores how much knowing a feature
+          reduces uncertainty about the target. It can capture some non-linear
+          relationships that simple correlation may miss.
+        </li>
+        <li>
           <strong>Variance Threshold:</strong> Remove low-variance features.
         </li>
       </ul>
+
+      <CodeBlock
+        title="select_k_best.py"
+        code={`from sklearn.datasets import make_classification
+from sklearn.feature_selection import SelectKBest, mutual_info_classif
+
+X, y = make_classification(
+    n_samples=200,
+    n_features=10,
+    n_informative=5,
+    random_state=42
+)
+
+selector = SelectKBest(score_func=mutual_info_classif, k=5)
+X_selected = selector.fit_transform(X, y)
+
+print("Original shape:", X.shape)
+print("Selected shape:", X_selected.shape)
+print("Selected columns:", selector.get_support(indices=True))`}
+        output={`Original shape: (200, 10)
+Selected shape: (200, 5)
+Selected columns: [0 2 4 6 9]
+
+# The exact selected indexes can vary because mutual information is estimated.`}
+      />
 
       <CodeBlock
         title="variance_threshold.py"
@@ -797,7 +829,7 @@ Total captured (%): 99.06`}
       </div>
 
       <h2 className="text-2xl font-bold mt-12 mb-4 text-slate-800 border-b pb-2">
-        Feature Selection vs Feature Extraction
+        Feature Selection vs Feature Extraction in Machine Learning
       </h2>
 
       <p className="mb-4">
@@ -957,6 +989,15 @@ Total captured (%): 99.06`}
         Common Questions
       </h2>
       <div className="space-y-4">
+        <div>
+          <h3 className="text-lg font-bold mb-1">What is the difference between feature selection and feature extraction?</h3>
+          <p>
+            Feature selection keeps a subset of the original features, so their
+            names and meanings remain unchanged. Feature extraction creates new
+            features by transforming or combining the originals, as PCA does with
+            principal components.
+          </p>
+        </div>
         <div>
           <h3 className="text-lg font-bold mb-1">Does feature selection always improve accuracy?</h3>
           <p>

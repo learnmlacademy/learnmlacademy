@@ -124,8 +124,8 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how to extract and create new impactful features from raw data to drastically improve Machine Learning model accuracy."
     },
     "feature-selection": {
-      title: "Feature Selection & Extraction Methods | ML Academy",
-      description: "Learn feature selection and extraction methods that reduce dimensionality, remove weak inputs, prevent overfitting, and improve ML model efficiency."
+      title: "Feature Selection and Feature Extraction in Machine Learning",
+      description: "Learn feature selection and feature extraction in machine learning, compare their differences, and explore filter, wrapper, embedded, PCA and RFE methods."
     },
     "data-visualization": {
       title: "Data Visualization for Machine Learning | Matplotlib & Seaborn",
