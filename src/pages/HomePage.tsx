@@ -5,6 +5,7 @@ import {
   Bot,
   BrainCircuit,
   BriefcaseBusiness,
+  BookOpen,
   CheckCircle2,
   Code2,
   Database,
@@ -19,6 +20,7 @@ import {
 import { WebsiteSchema } from '../components/SchemaMarkup';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 import { curriculum } from '../data/curriculum';
+import { blogPosts } from '../data/blog';
 import { useProgress } from '../context/ProgressContext';
 
 type TrackCard = {
@@ -154,6 +156,10 @@ const interviewLinks = [
   { label: 'ML system design interviews', route: '/learn/ml-ai-system-design-interview' },
 ];
 
+const homepageBlogPosts = [...blogPosts]
+  .sort((a, b) => b.date.localeCompare(a.date))
+  .slice(0, 3);
+
 const allLessons = curriculum.flatMap(category =>
   category.subtopics.map(lesson => ({
     ...lesson,
@@ -234,12 +240,12 @@ export function HomePage() {
       {/* Search-first hero */}
       <section className="relative overflow-hidden border-b border-slate-800 bg-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(14,165,233,0.18),transparent_32%),radial-gradient(circle_at_68%_75%,rgba(99,102,241,0.15),transparent_28%)]" />
-        <div className="pointer-events-none absolute right-[-4rem] top-[-3rem] hidden h-[20rem] w-[20rem] rounded-full border border-cyan-300/15 lg:block">
+        <div className="pointer-events-none absolute right-[-3rem] top-[-2.5rem] hidden h-[15rem] w-[15rem] rounded-full border border-cyan-300/15 lg:block">
           <div className="absolute inset-10 rounded-full border border-indigo-300/15" />
           <div className="absolute inset-20 rounded-full border border-sky-300/15" />
           <div className="absolute inset-0 grid place-items-center">
-            <div className="grid h-28 w-28 place-items-center rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_60px_rgba(56,189,248,0.10)]">
-              <Network className="h-12 w-12 text-cyan-300/70" aria-hidden="true" />
+            <div className="grid h-20 w-20 place-items-center rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_45px_rgba(56,189,248,0.10)]">
+              <Network className="h-9 w-9 text-cyan-300/70" aria-hidden="true" />
             </div>
           </div>
           <span className="absolute left-14 top-24 h-2 w-2 rounded-full bg-cyan-300/70" />
@@ -247,24 +253,23 @@ export function HomePage() {
           <span className="absolute right-16 top-36 h-2 w-2 rounded-full bg-sky-300/70" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
+        <div className="relative mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-5">
           <div className="max-w-3xl">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-bold text-slate-300">
+            <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-2.5 py-0.5 text-[11px] font-bold text-slate-300">
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
               <span>{tutorialCount} free lessons from ML foundations to production AI</span>
             </div>
 
-            <h1 className="max-w-2xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl lg:leading-[1.05]">
-              What do you want to
-              <span className="block text-cyan-400">learn today?</span>
+            <h1 className="max-w-4xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-[42px] lg:leading-tight">
+              What do you want to <span className="text-cyan-400">learn today?</span>
             </h1>
 
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
+            <p className="mt-2 max-w-3xl text-sm leading-5 text-slate-300 sm:text-[15px]">
               Search practical tutorials across Machine Learning, Deep Learning, Generative AI,
               LLMs, RAG, Agentic AI and production AI engineering.
             </p>
 
-            <form onSubmit={handleSearchSubmit} className="relative mt-4 max-w-3xl">
+            <form onSubmit={handleSearchSubmit} className="relative mt-3 max-w-3xl">
               <Search
                 className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
                 aria-hidden="true"
@@ -275,18 +280,18 @@ export function HomePage() {
                 onChange={event => setSearchQuery(event.target.value)}
                 placeholder="Search tutorials — e.g. RAG, Linear Regression, AI Agents..."
                 aria-label="Search tutorials"
-                className="h-12 w-full rounded-xl border border-white/10 bg-white pl-12 pr-14 text-sm font-medium text-slate-900 shadow-2xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 sm:text-base"
+                className="h-11 w-full rounded-xl border border-white/10 bg-white pl-11 pr-12 text-sm font-medium text-slate-900 shadow-xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15"
               />
               <button
                 type="submit"
                 aria-label="Open first search result"
-                className="absolute right-1.5 top-1.5 grid h-9 w-9 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+                className="absolute right-1.5 top-1.5 grid h-8 w-8 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
               >
                 <Search className="h-4.5 w-4.5" aria-hidden="true" />
               </button>
 
               {searchQuery.trim() && (
-                <div className="absolute left-0 right-0 top-[3.6rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
+                <div className="absolute left-0 right-0 top-[3.2rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
                   {searchResults.length === 0 ? (
                     <p className="px-3 py-4 text-sm text-slate-500">
                       No lessons found for &quot;{searchQuery}&quot;.
@@ -318,13 +323,13 @@ export function HomePage() {
               )}
             </form>
 
-            <div className="mt-3 flex flex-wrap items-center gap-2">
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
               <span className="mr-1 text-xs font-semibold text-slate-400">Popular searches:</span>
               {popularTopics.map(topic => (
                 <Link
                   key={topic.route}
                   to={topic.route}
-                  className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:border-cyan-400/60 hover:bg-slate-800 hover:text-white"
+                  className="rounded-full border border-slate-700 bg-slate-900/80 px-2.5 py-1 text-[11px] font-semibold text-slate-300 transition hover:border-cyan-400/60 hover:bg-slate-800 hover:text-white"
                 >
                   {topic.label}
                 </Link>
@@ -335,12 +340,12 @@ export function HomePage() {
       </section>
 
       {/* Browse by topic */}
-      <section className="bg-white py-10 sm:py-12">
+      <section className="bg-white py-5 sm:py-6">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Explore the curriculum</p>
-              <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+              <h2 className="mt-0.5 text-xl font-black tracking-tight text-slate-950 sm:text-2xl">
                 Browse by topic
               </h2>
             </div>
@@ -353,7 +358,7 @@ export function HomePage() {
             </Link>
           </div>
 
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
             {tracks.map(track => {
               const Icon = track.icon;
               const count = lessonCountFor(track.categoryIds);
@@ -362,17 +367,17 @@ export function HomePage() {
                 <Link
                   key={track.title}
                   to={track.route}
-                  className={`group rounded-2xl border bg-gradient-to-br p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${track.panelClass}`}
+                  className={`group rounded-xl border bg-gradient-to-br p-3.5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${track.panelClass}`}
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div className={`grid h-11 w-11 place-items-center rounded-xl ${track.iconClass}`}>
-                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    <div className={`grid h-9 w-9 place-items-center rounded-lg ${track.iconClass}`}>
+                      <Icon className="h-4.5 w-4.5" aria-hidden="true" />
                     </div>
                     <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-blue-600" aria-hidden="true" />
                   </div>
-                  <h3 className="mt-4 text-lg font-black text-slate-950">{track.title}</h3>
-                  <p className="mt-1 text-xs font-bold text-slate-500">{count} lessons</p>
-                  <p className="mt-3 text-sm leading-6 text-slate-600">{track.description}</p>
+                  <h3 className="mt-2.5 text-sm font-black text-slate-950">{track.title}</h3>
+                  <p className="mt-0.5 text-[11px] font-bold text-slate-500">{count} lessons</p>
+                  <p className="mt-2 text-xs leading-5 text-slate-600">{track.description}</p>
                 </Link>
               );
             })}
@@ -474,6 +479,66 @@ export function HomePage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Blog */}
+      <section className="border-y border-slate-200 bg-white py-9 sm:py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">From the blog</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                Practical ML & AI articles
+              </h2>
+              <p className="mt-1 max-w-2xl text-sm text-slate-600">
+                Deeper guides, comparisons and career articles that complement the lesson curriculum.
+              </p>
+            </div>
+            <Link
+              to="/blog"
+              className="hidden items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-800 sm:inline-flex"
+            >
+              View all articles
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {homepageBlogPosts.map(post => (
+              <Link
+                key={post.slug}
+                to={`/blog/${post.slug}`}
+                className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-5 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-white hover:shadow-lg"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-bold text-emerald-800">
+                    <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                    {post.category}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-400">{post.readTime} min read</span>
+                </div>
+                <h3 className="mt-4 text-base font-black leading-snug text-slate-950 transition group-hover:text-emerald-700">
+                  {post.title}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">
+                  {post.excerpt}
+                </p>
+                <div className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-blue-600">
+                  Read article
+                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden="true" />
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            to="/blog"
+            className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-800 sm:hidden"
+          >
+            View all articles
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </div>
       </section>
 
