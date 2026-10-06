@@ -125,7 +125,7 @@ const MLOpsContent = lazy(() => import("../content/mlops/MLOpsContent").then(m =
 const CareerInterviewContent = lazy(() => import("../content/interview/CareerInterviewContent").then(m => ({ default: m.CareerInterviewContent })));
 
 import { AffiliateRecommendation } from "../components/AffiliateRecommendation";
-import { NewsletterSignup } from "../components/NewsletterSignup";
+import { NewsletterSignup, type HandbookKey } from "../components/NewsletterSignup";
 import { LessonShell } from "../components/lesson/LessonShell";
 
 // We will dynamically render content based on ID.
@@ -443,6 +443,53 @@ const topicAliases: Record<string, string> = {
   "agent-trajectory-evaluation": "agent-evaluation-safety",
 };
 
+const topicHandbookOverrides: Partial<Record<string, HandbookKey>> = {
+  "project-image-classification": "deep-learning",
+  "project-genai-app": "generative-ai",
+  "project-rag-document-qa": "llm-rag",
+  "project-ai-agent": "agentic-ai",
+  "project-multi-agent-research": "agentic-ai",
+
+  "ai-data-career-paths": "behavioral",
+  "ml-engineer-roadmap": "ml",
+  "ai-engineer-roadmap": "system-design",
+  "genai-llm-engineer-roadmap": "llm-rag",
+  "data-scientist-roadmap": "ml",
+  "interview-preparation-strategy": "behavioral",
+  "ml-interview-questions": "ml",
+  "deep-learning-interview-questions": "deep-learning",
+  "genai-llm-rag-interview": "llm-rag",
+  "agentic-ai-interview": "agentic-ai",
+  "python-ai-ml-interview": "python",
+  "sql-ai-data-interview": "sql",
+  "ml-ai-system-design-interview": "system-design",
+  "mlops-production-interview": "mlops",
+  "behavioral-project-interview": "behavioral",
+};
+
+function getHandbookForLesson(topicId: string, categoryId: string): HandbookKey {
+  const override = topicHandbookOverrides[topicId];
+  if (override) return override;
+
+  switch (categoryId) {
+    case "python-ml-libs":
+      return "python";
+    case "deep-learning":
+    case "advanced-deep-learning":
+      return "deep-learning";
+    case "generative-ai":
+      return "generative-ai";
+    case "large-language-models":
+      return "llm-rag";
+    case "agentic-ai":
+      return "agentic-ai";
+    case "ai-engineering-mlops":
+      return "mlops";
+    default:
+      return "ml";
+  }
+}
+
 
 export function TopicPage() {
   const { topicId } = useParams<{ topicId: string }>();
@@ -524,6 +571,7 @@ export function TopicPage() {
 
   const { subtopic, category } = topicData;
   const { prev, next } = getTopicNavigation(topicId);
+  const handbook = getHandbookForLesson(topicId, category.id);
 
   // Content Registry - map IDs to their React components
   
@@ -633,7 +681,7 @@ export function TopicPage() {
         <>
           {renderQuiz()}
           {renderStandardContinueLearning("continue-learning-heading")}
-          <NewsletterSignup />
+          <NewsletterSignup handbook={handbook} />
           <AffiliateRecommendation />
         </>
       ) : (
@@ -641,7 +689,7 @@ export function TopicPage() {
           <LegacyLessonSummary topicId={topicId} />
           {renderQuiz()}
           {renderStandardContinueLearning(`continue-learning-${topicId}`)}
-          <NewsletterSignup />
+          <NewsletterSignup handbook={handbook} />
           <AffiliateRecommendation />
         </>
       )}
