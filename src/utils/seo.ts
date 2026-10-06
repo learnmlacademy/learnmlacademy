@@ -518,44 +518,44 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Follow a realistic Data Scientist learning path through Python, SQL, statistics, EDA, experiments, ML, forecasting, communication, projects and interviews."
     },
     "interview-preparation-strategy": {
-      title: "How AI & ML Interviews Work | Preparation Strategy",
-      description: "Understand modern AI/ML interview rounds, translate job descriptions into a preparation matrix, practice concise answers and use flexible study-planning frameworks."
+      title: "AI & ML Interview Preparation Guide 2026 | Big Tech",
+      description: "Prepare for 2026 AI and ML interviews with current Google, Meta, Amazon, Apple and Netflix-style signals across coding, SQL, ML theory, system design and behavioral rounds."
     },
     "ml-interview-questions": {
-      title: "Machine Learning Interview Questions | ML, Statistics & Evaluation",
-      description: "Prepare high-value ML interview answers covering statistics, leakage, bias and variance, algorithms, model evaluation, numerical metrics and production diagnosis."
+      title: "Machine Learning Interview Questions 2026 | FAANG Prep",
+      description: "Practice 20+ detailed ML interview questions with answers and examples on statistics, leakage, imbalance, calibration, metrics, experiments, algorithms and production diagnosis."
     },
     "deep-learning-interview-questions": {
-      title: "Deep Learning Interview Questions | Training & Architectures",
-      description: "Practice deep-learning interview reasoning with forward and backward passes, gradients, activations, optimizers, convolution shapes, Transformers and debugging."
+      title: "Deep Learning Interview Questions 2026 | Detailed Answers",
+      description: "Practice deep learning interview questions with detailed answers on backpropagation, CNNs, Transformers, self-attention, KV cache, mixed precision, optimization and debugging."
     },
     "genai-llm-rag-interview": {
-      title: "Generative AI, LLM & RAG Interview Questions",
-      description: "Prepare for LLM and RAG interviews with substantial questions on tokens, decoding, prompting, retrieval, citations, evaluation, safety, latency and cost."
+      title: "LLM & RAG Interview Questions 2026 | GenAI Answers",
+      description: "Prepare for LLM and RAG interviews with detailed answers on Transformers, embeddings, hybrid retrieval, reranking, prompt injection, evaluation, serving, safety and LLMOps."
     },
     "agentic-ai-interview": {
-      title: "Agentic AI Interview Questions | Tools, State & Safety",
-      description: "Practice agentic AI interview scenarios covering workflows, tool authorization, memory, state, planning, MCP, multi-agent systems, safety and evaluation."
+      title: "Agentic AI Interview Questions 2026 | Agents & MCP",
+      description: "Practice detailed Agentic AI interview questions on tool calling, memory, planning, MCP, durable execution, multi-agent systems, prompt injection, evaluation and production safety."
     },
     "python-ai-ml-interview": {
-      title: "Python Coding for AI & ML Interviews | Solved Problems",
-      description: "Solve practical Python interview exercises for AI and data roles with assumptions, reasoning, runnable code, complexity, edge cases and follow-ups."
+      title: "Python Coding Interview Questions for ML Engineers 2026",
+      description: "Solve 15 Python interview problems for ML and AI roles with runnable code, complexity and edge cases, including heaps, graphs, trees, sliding windows and data tasks."
     },
     "sql-ai-data-interview": {
-      title: "SQL for AI & Data Interviews | Solved Query Problems",
-      description: "Practice SQL interview problems using joins, CTEs, aggregation, CASE, window functions, ranking, deduplication, rolling metrics and funnel analysis."
+      title: "SQL Interview Questions for Data & AI Roles 2026",
+      description: "Practice 16 solved SQL interview questions covering joins, CTEs, window functions, retention, experiments, funnels, sessionization, rolling metrics and model evaluation."
     },
     "ml-ai-system-design-interview": {
-      title: "ML System Design Interview Guide | Architecture & Trade-offs",
-      description: "Use a reusable ML/AI system-design framework across fraud, recommendations, churn, forecasting, RAG, LLM serving, moderation and agentic workflows."
+      title: "Machine Learning System Design Interview Guide 2026",
+      description: "Practice 16 ML and AI system-design cases covering recommendations, ranking, search, ads, fraud, RAG, GPU inference, feature stores, experiment tracking and agentic systems."
     },
     "mlops-production-interview": {
-      title: "MLOps & Production ML Interview Scenarios | Debugging Guide",
-      description: "Diagnose training-serving skew, stale features, schema changes, leakage, registry mismatch, latency, drift, failed gates, canaries and production cost."
+      title: "MLOps Interview Questions 2026 | Production ML Scenarios",
+      description: "Practice 17 production ML and MLOps debugging scenarios covering skew, drift, backfills, latency, GPU OOM, embedding migrations, canaries, LLM regressions and agent failures."
     },
     "behavioral-project-interview": {
-      title: "AI/ML Project, Resume & Behavioral Interview Guide",
-      description: "Explain AI/ML projects credibly, write evidence-rich resume bullets and prepare honest behavioral answers using STAR plus rationale, trade-offs and learning."
+      title: "AI/ML Behavioral Interview Questions 2026 | STAR Guide",
+      description: "Prepare current big-tech behavioral and project-deep-dive questions with STAR frameworks for stakeholder conflict, failure, deadlines, ownership, impact and ML/AI project decisions."
     },
 
     // Explicit metadata for redesigned Deep Learning and Modern AI lessons
