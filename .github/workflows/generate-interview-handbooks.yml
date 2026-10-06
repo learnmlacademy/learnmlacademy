@@ -46,6 +46,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else
-            git commit -m "[handbook-pdf-build] Generate interview handbook PDFs [skip ci]"
+            git commit -m "[handbook-pdf-build] Generate interview handbook PDFs"
             git push origin HEAD:integrate-interview-handbooks
           fi
