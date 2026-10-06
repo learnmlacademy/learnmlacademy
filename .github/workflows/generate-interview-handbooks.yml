@@ -1,0 +1,51 @@
+name: Generate interview handbook PDFs
+
+on:
+  push:
+    branches:
+      - integrate-interview-handbooks
+    paths:
+      - scripts/pdf_sources_encoded/READY
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: "!contains(github.event.head_commit.message, '[handbook-pdf-build]')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: integrate-interview-handbooks
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PDF renderer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-liberation libpango-1.0-0 libpangoft2-1.0-0
+          python -m pip install --upgrade pip
+          python -m pip install "weasyprint==68.0"
+
+      - name: Generate handbook PDFs
+        run: python scripts/generate_interview_handbooks.py
+
+      - name: Commit generated PDFs
+        run: |
+          rm -f scripts/pdf_sources_encoded/READY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add private scripts/pdf_sources_encoded/READY
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+          else
+            git commit -m "[handbook-pdf-build] Generate interview handbook PDFs [skip ci]"
+            git push origin HEAD:integrate-interview-handbooks
+          fi
