@@ -6,6 +6,11 @@ import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, Download } from 'lucide-re
 import { NewsletterSignup } from '../components/NewsletterSignup';
 import { TopMLAlgorithmsContent } from '../content/blog/top-ml-algorithms-explained';
 import { MLInterviewPrepContent } from '../content/blog/ml-interview-prep-guide';
+import { DeepLearningInterviewPrepContent } from '../content/blog/deep-learning-interview-prep-guide';
+import { GenerativeAIInterviewPrepContent } from '../content/blog/generative-ai-interview-prep-guide';
+import { LLMRAGInterviewPrepContent } from '../content/blog/llm-rag-interview-prep-guide';
+import { AgenticAIInterviewPrepContent } from '../content/blog/agentic-ai-interview-prep-guide';
+import { AIEngineeringMLOpsInterviewPrepContent } from '../content/blog/ai-engineering-mlops-interview-prep-guide';
 import { BlogContent_overfitting_underfitting_guide } from '../content/blog/overfitting-underfitting-guide';
 import { BlogContent_feature_engineering_tips } from '../content/blog/feature-engineering-tips';
 import { BlogContent_xgboost_vs_random_forest } from '../content/blog/xgboost-vs-random-forest';
@@ -21,6 +26,11 @@ import { BlogContent_what_is_rag } from '../content/blog/what-is-rag';
 const contentMap: Record<string, React.ReactNode> = {
   'top-ml-algorithms-explained': <TopMLAlgorithmsContent />,
   'ml-interview-prep-guide': <MLInterviewPrepContent />,
+  'deep-learning-interview-prep-guide': <DeepLearningInterviewPrepContent />,
+  'generative-ai-interview-prep-guide': <GenerativeAIInterviewPrepContent />,
+  'llm-rag-interview-prep-guide': <LLMRAGInterviewPrepContent />,
+  'agentic-ai-interview-prep-guide': <AgenticAIInterviewPrepContent />,
+  'ai-engineering-mlops-interview-prep-guide': <AIEngineeringMLOpsInterviewPrepContent />,
   'overfitting-underfitting-guide': <BlogContent_overfitting_underfitting_guide />,
   'feature-engineering-tips': <BlogContent_feature_engineering_tips />,
   'xgboost-vs-random-forest': <BlogContent_xgboost_vs_random_forest />,
@@ -83,8 +93,8 @@ export function BlogPostPage() {
         </div>
       </header>
 
-      {/* PDF download banner for interview post */}
-      {slug === 'ml-interview-prep-guide' && (
+      {/* PDF download banner for interview preparation posts */}
+      {slug.includes('interview-prep-guide') && (
         <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 mb-8 flex items-center justify-between gap-4 flex-wrap">
           <div>
             <p className="text-white font-bold text-lg">Free: ML Interview Cheatsheet PDF</p>
