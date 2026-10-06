@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, type ComponentType } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState, type ComponentType } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowRight,
   Bot,
@@ -7,1277 +7,575 @@ import {
   BriefcaseBusiness,
   CheckCircle2,
   Code2,
+  Database,
   FolderKanban,
-  Lightbulb,
+  GraduationCap,
   MessageSquareText,
   Network,
+  Search,
   ServerCog,
   Sparkles,
-  Search,
-  BookOpen,
-  ChevronRight,
-  ChevronDown,
-  ChevronUp,
-  Check,
-  Flame,
-  Terminal,
-  Layers,
-  ArrowUpRight,
-  GraduationCap,
-  Play,
-  ListFilter,
 } from 'lucide-react';
 import { WebsiteSchema } from '../components/SchemaMarkup';
 import { NewsletterSignup } from '../components/NewsletterSignup';
-import { curriculum, type Category } from '../data/curriculum';
+import { curriculum } from '../data/curriculum';
 import { useProgress } from '../context/ProgressContext';
 
-type ChapterTrack = {
-  id: string;
-  number: string;
+type TrackCard = {
   title: string;
-  shortTitle?: string;
-  tagline: string;
   description: string;
   route: string;
   icon: ComponentType<{ className?: string; 'aria-hidden'?: boolean }>;
-  categories: Category[];
-  keyConcepts: string[];
+  categoryIds: string[];
+  iconClass: string;
+  panelClass: string;
 };
 
-const countLessons = (categoryId: string) =>
-  curriculum.find(category => category.id === categoryId)?.subtopics.length ?? 0;
+const lessonCountFor = (categoryIds: string[]) =>
+  curriculum
+    .filter(category => categoryIds.includes(category.id))
+    .reduce((total, category) => total + category.subtopics.length, 0);
 
-const chapterTracks: ChapterTrack[] = [
+const tracks: TrackCard[] = [
   {
-    id: 'machine-learning',
-    number: '01',
     title: 'Machine Learning',
-    shortTitle: 'Machine Learning',
-    tagline: 'Math, Data Pipelines, Classifiers, Regressors, Trees & Ensembles',
-    description: 'Master core algorithmic thinking: exploratory data analysis, regularized regression, decision trees, random forests, boosting ensembles, unsupervised learning, and model evaluation.',
+    description: 'Foundations, data preparation, classical algorithms, evaluation and forecasting.',
     route: '/learn/what-is-ml',
     icon: Network,
-    categories: curriculum.slice(0, 9),
-    keyConcepts: ['Scikit-learn', 'Feature Engineering', 'Bias-Variance', 'Ensembles', 'Cross-Validation'],
+    categoryIds: [
+      'foundations',
+      'python-ml-libs',
+      'data-preprocessing',
+      'supervised-learning',
+      'ensemble-learning',
+      'unsupervised-learning',
+      'model-evaluation',
+      'time-series',
+      'advanced-paradigms',
+    ],
+    iconClass: 'bg-sky-100 text-sky-700',
+    panelClass: 'from-sky-50 to-blue-50/40 border-sky-100',
   },
   {
-    id: 'deep-learning',
-    number: '02',
     title: 'Deep Learning',
-    shortTitle: 'Deep Learning',
-    tagline: 'Backprop, CNNs, Attention, Vision & Transformers',
-    description: 'Build neural intuition from ground zero: implement forward/backward passes in raw code, then scale to convolutions, self-attention, vision transformers, and deployment.',
+    description: 'Neural networks, backpropagation, CNNs, transformers, vision and advanced models.',
     route: '/learn/deep-learning-intro',
     icon: BrainCircuit,
-    categories: curriculum.filter(category => category.id === 'deep-learning' || category.id === 'advanced-deep-learning'),
-    keyConcepts: ['PyTorch', 'Backpropagation', 'Self-Attention', 'Residual Nets', 'Vision Transformers'],
+    categoryIds: ['deep-learning', 'advanced-deep-learning'],
+    iconClass: 'bg-violet-100 text-violet-700',
+    panelClass: 'from-violet-50 to-purple-50/40 border-violet-100',
   },
   {
-    id: 'generative-ai',
-    number: '03',
     title: 'Generative AI',
-    shortTitle: 'Generative AI',
-    tagline: 'Latent Spaces, VAEs, GANs & Diffusion Models',
-    description: 'Understand how models learn probability distributions: from Variational Autoencoders and GANs to modern score-based diffusion models and multimodal generation.',
+    description: 'VAEs, GANs, diffusion, multimodal generation, evaluation and deployment.',
     route: '/learn/generative-ai-intro',
     icon: Sparkles,
-    categories: curriculum.filter(category => category.id === 'generative-ai'),
-    keyConcepts: ['Latent Distributions', 'U-Net', 'Diffusion Models', 'Classifier-Free Guidance', 'Multimodal'],
+    categoryIds: ['generative-ai'],
+    iconClass: 'bg-rose-100 text-rose-700',
+    panelClass: 'from-rose-50 to-pink-50/40 border-rose-100',
   },
   {
-    id: 'large-language-models',
-    number: '04',
     title: 'LLMs & RAG',
-    shortTitle: 'LLMs & RAG',
-    tagline: 'Tokenization, Embeddings, Vector DBs, RAG & Fine-Tuning',
-    description: 'Master modern language models: dense semantic retrieval, vector databases, chunking strategies, LoRA fine-tuning, reasoning models, and evaluation.',
+    description: 'Tokenization, transformers, embeddings, vector databases, RAG and LLMOps.',
     route: '/learn/llm-intro',
     icon: MessageSquareText,
-    categories: curriculum.filter(category => category.id === 'large-language-models'),
-    keyConcepts: ['Vector Search', 'Hybrid RAG', 'LoRA / QLoRA', 'Context Windows', 'RAG Evaluation'],
+    categoryIds: ['large-language-models'],
+    iconClass: 'bg-emerald-100 text-emerald-700',
+    panelClass: 'from-emerald-50 to-teal-50/40 border-emerald-100',
   },
   {
-    id: 'agentic-ai',
-    number: '05',
     title: 'Agentic AI',
-    shortTitle: 'Agentic AI',
-    tagline: 'Tool Calling, ReAct, Memory, State Graphs & Multi-Agent',
-    description: 'Transform passive language models into active problem solvers: reliable tool calling, state graphs, reflection loops, and multi-agent protocols.',
+    description: 'Tool calling, memory, planning, MCP, multi-agent systems, safety and deployment.',
     route: '/learn/agentic-ai-intro',
     icon: Bot,
-    categories: curriculum.filter(category => category.id === 'agentic-ai'),
-    keyConcepts: ['Function Calling', 'State Machines', 'Context Management', 'LangGraph / CrewAI', 'MCP'],
+    categoryIds: ['agentic-ai'],
+    iconClass: 'bg-amber-100 text-amber-700',
+    panelClass: 'from-amber-50 to-orange-50/40 border-amber-100',
   },
   {
-    id: 'ai-engineering-mlops',
-    number: '06',
-    title: 'AI Engineering & MLOps',
-    shortTitle: 'AI Eng & MLOps',
-    tagline: 'Pipelines, Drift, Serving & ML System Design',
-    description: 'Bridge research and scalable systems: online vs batch serving architectures, model registry workflows, drift detection, and ML system design.',
+    title: 'AI Engineering',
+    description: 'Production pipelines, serving, monitoring, reliability, CI/CD and system design.',
     route: '/learn/ai-engineering-mlops',
     icon: ServerCog,
-    categories: curriculum.filter(category => category.id === 'ai-engineering-mlops'),
-    keyConcepts: ['Latency & Throughput', 'Feature Stores', 'Model Drift', 'Continuous Training', 'System Design'],
-  },
-  {
-    id: 'projects',
-    number: '07',
-    title: 'Guided Projects',
-    shortTitle: 'Projects',
-    tagline: '8 End-to-End Production ML & AI Applications',
-    description: 'Build portfolio-grade code implementations with runnable notebooks, clean architectures, and interview-ready trade-off discussions.',
-    route: '/learn/project-customer-churn',
-    icon: FolderKanban,
-    categories: curriculum.filter(category => category.id === 'projects'),
-    keyConcepts: ['Customer Churn', 'Document Q&A RAG', 'Multi-Agent Research', 'Credit Risk', 'End-to-End ML'],
-  },
-  {
-    id: 'interview-preparation',
-    number: '08',
-    title: 'Career & Interviews',
-    shortTitle: 'Career & Prep',
-    tagline: 'Role Roadmaps, FAANG Q&A, Coding & System Design',
-    description: 'Land machine learning and AI roles: comprehensive roadmaps for MLE, AI Engineer, and Data Scientist, plus curated technical and system design questions.',
-    route: '/learn/ai-data-career-paths',
-    icon: BriefcaseBusiness,
-    categories: curriculum.filter(category => category.id === 'interview-preparation'),
-    keyConcepts: ['System Design', 'ML Interview Q&A', 'Role Roadmaps', 'FAANG Scenarios', 'Salary & Prep'],
+    categoryIds: ['ai-engineering-mlops'],
+    iconClass: 'bg-indigo-100 text-indigo-700',
+    panelClass: 'from-indigo-50 to-blue-50/40 border-indigo-100',
   },
 ];
 
-const featuredProjects = [
+const popularTopics = [
+  { label: 'Gradient Descent', route: '/learn/gradient-descent' },
+  { label: 'RAG', route: '/learn/rag' },
+  { label: 'Transformers', route: '/learn/transformers-attention' },
+  { label: 'AI Agents', route: '/learn/agentic-ai-intro' },
+  { label: 'MCP', route: '/learn/model-context-protocol' },
+  { label: 'Vector Databases', route: '/learn/vector-databases' },
+];
+
+const recommendedLessons = [
   {
-    title: 'Customer Churn Prediction',
-    category: 'End-to-End ML',
-    description: 'Production pipeline with feature engineering, XGBoost, and model evaluation.',
-    route: '/learn/project-customer-churn',
-    difficulty: 'Beginner / Intermediate',
+    title: 'Linear Regression Step by Step',
+    description: 'Build intuition for the line of best fit, loss and a complete Python workflow.',
+    route: '/learn/linear-regression',
+    level: 'Beginner',
+    time: '12 min',
+    icon: Network,
   },
   {
-    title: 'Document Q&A System with RAG',
-    category: 'LLM & Search',
-    description: 'Semantic vector retrieval, chunking strategies, and grounded answer synthesis.',
-    route: '/learn/project-rag-document-qa',
-    difficulty: 'Intermediate',
+    title: 'Neural Networks Explained',
+    description: 'Understand neurons, layers, activations and how a network learns from data.',
+    route: '/learn/neural-networks',
+    level: 'Intermediate',
+    time: '18 min',
+    icon: BrainCircuit,
   },
   {
-    title: 'Autonomous AI Research Agent',
-    category: 'Agentic AI',
-    description: 'Multi-agent orchestration with live search tools, state machine, and synthesis.',
-    route: '/learn/project-multi-agent-research',
-    difficulty: 'Advanced',
+    title: 'Retrieval-Augmented Generation (RAG)',
+    description: 'Learn retrieval, grounding, embeddings and the complete RAG information flow.',
+    route: '/learn/rag',
+    level: 'Intermediate',
+    time: '20 min',
+    icon: Database,
+  },
+  {
+    title: 'What Is an AI Agent?',
+    description: 'Connect tools, planning, memory and decisions into an agentic workflow.',
+    route: '/learn/agentic-ai-intro',
+    level: 'Beginner',
+    time: '15 min',
+    icon: Bot,
   },
 ];
 
-const careerTracks = [
-  {
-    title: 'Machine Learning Engineer',
-    route: '/learn/ml-engineer-roadmap',
-    desc: 'Algorithms, feature pipelines, scikit-learn, and production modeling.',
-  },
-  {
-    title: 'AI / LLM Engineer',
-    route: '/learn/genai-llm-engineer-roadmap',
-    desc: 'RAG systems, embeddings, prompt engineering, and evaluation.',
-  },
-  {
-    title: 'Data Scientist',
-    route: '/learn/data-scientist-roadmap',
-    desc: 'Statistical inference, EDA, business insights, and predictive modeling.',
-  },
-  {
-    title: 'System Design & Interview Prep',
-    route: '/learn/ml-ai-system-design-interview',
-    desc: 'Scalable architecture questions, failure recovery, and trade-offs.',
-  },
+const interviewLinks = [
+  { label: 'ML interview questions', route: '/learn/ml-interview-questions' },
+  { label: 'Python & SQL interview prep', route: '/learn/python-ai-ml-interview' },
+  { label: 'LLM & RAG interview questions', route: '/learn/genai-llm-rag-interview' },
+  { label: 'ML system design interviews', route: '/learn/ml-ai-system-design-interview' },
 ];
+
+const allLessons = curriculum.flatMap(category =>
+  category.subtopics.map(lesson => ({
+    ...lesson,
+    categoryTitle: category.title.replace(/^\d+\.\s*/, ''),
+    route: `/learn/${lesson.id}`,
+  })),
+);
 
 export function HomePage() {
-  const [selectedTrackIndex, setSelectedTrackIndex] = useState(0);
-  const [syllabusView, setSyllabusView] = useState<'focused' | 'accordion'>('focused');
-  const [expandedChapters, setExpandedChapters] = useState<Record<string, boolean>>({
-    'machine-learning': true,
-  });
-  const [expandedCurriculumModules, setExpandedCurriculumModules] = useState<Record<string, boolean>>({});
-  const [searchFilter, setSearchFilter] = useState('');
-  const [inChapterFilter, setInChapterFilter] = useState('');
-  const [selectedSubcategoryId, setSelectedSubcategoryId] = useState<string>('all');
-  const syllabusRef = useRef<HTMLDivElement>(null);
-  const { isCompleted } = useProgress();
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const {
+    completedCount,
+    progressPercentage,
+    totalLessonsCount,
+    isCompleted,
+    getNextIncompleteTopic,
+  } = useProgress();
 
-  const handleSelectTrack = (idx: number) => {
-    setSelectedTrackIndex(idx);
-    setInChapterFilter('');
-    setSelectedSubcategoryId('all');
-    const track = chapterTracks[idx];
-    if (track) {
-      setExpandedChapters(prev => ({ ...prev, [track.id]: true }));
-    }
-    if (window.innerWidth < 1024) {
-      setTimeout(() => {
-        syllabusRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 60);
-    }
-  };
+  const tutorialCount = allLessons.length;
+  const projectCount =
+    curriculum.find(category => category.id === 'projects')?.subtopics.length ?? 0;
 
-  const toggleChapterExpanded = (trackId: string) => {
-    setExpandedChapters(prev => ({
-      ...prev,
-      [trackId]: !prev[trackId],
-    }));
-  };
+  const searchResults = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return [];
 
-  const expandAllChapters = () => {
-    const allExpanded: Record<string, boolean> = {};
-    chapterTracks.forEach(t => {
-      allExpanded[t.id] = true;
-    });
-    setExpandedChapters(allExpanded);
-  };
+    return allLessons
+      .filter(lesson =>
+        lesson.title.toLowerCase().includes(query) ||
+        lesson.categoryTitle.toLowerCase().includes(query) ||
+        lesson.module?.toLowerCase().includes(query),
+      )
+      .slice(0, 8);
+  }, [searchQuery]);
 
-  const collapseAllChapters = () => {
-    setExpandedChapters({});
-  };
-
-  const toggleCurriculumModule = (catId: string) => {
-    setExpandedCurriculumModules(prev => ({
-      ...prev,
-      [catId]: !prev[catId],
-    }));
-  };
-
-  const expandAllCurriculumModules = () => {
-    const allExp: Record<string, boolean> = {};
-    curriculum.forEach(c => {
-      allExp[c.id] = true;
-    });
-    setExpandedCurriculumModules(allExp);
-  };
-
-  const collapseAllCurriculumModules = () => {
-    setExpandedCurriculumModules({});
-  };
-
-  const activeTrack = chapterTracks[selectedTrackIndex] ?? chapterTracks[0];
-  const ActiveIcon = activeTrack.icon;
-
-  const allLessonsInTrack = activeTrack.categories.flatMap(cat => cat.subtopics);
-  const totalLessonsInTrack = allLessonsInTrack.length;
-  const completedInTrack = allLessonsInTrack.filter(lesson => isCompleted(lesson.id)).length;
-  const firstLesson = allLessonsInTrack[0];
-
-  const tutorialCount = curriculum.reduce(
-    (total, category) => total + category.subtopics.length,
-    0,
-  );
-  const projectCount = countLessons('projects');
+  const nextIncomplete = getNextIncompleteTopic();
 
   useEffect(() => {
-    document.title = 'Learn ML Academy — Machine Learning to Agentic AI Curriculum';
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute(
-        'content',
-        `Free AI tutorials with a structured curriculum, 260+ code examples, and interview preparation. ${tutorialCount} topics across Machine Learning, Deep Learning, Generative AI, LLMs, and Agentic AI.`,
-      );
-    }
+    const title = 'ML Academy — Learn Machine Learning from Zero to Expert';
+    const description =
+      'Free machine learning tutorials covering Machine Learning, Deep Learning, Generative AI, LLMs, RAG and Agentic AI with worked examples and quizzes.';
+
+    document.title = title;
+
+    const setMeta = (selector: string, attribute: string, value: string) => {
+      const element = document.querySelector(selector);
+      if (element) element.setAttribute(attribute, value);
+    };
+
+    setMeta('meta[name="description"]', 'content', description);
+    setMeta('meta[property="og:title"]', 'content', title);
+    setMeta('meta[property="og:description"]', 'content', description);
+    setMeta('meta[name="twitter:title"]', 'content', title);
+    setMeta('meta[name="twitter:description"]', 'content', description);
+
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) {
       canonical = document.createElement('link');
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://www.learnmlacademy.com');
-  }, [tutorialCount]);
+    canonical.setAttribute('href', 'https://www.learnmlacademy.com/');
+  }, []);
 
-  const filteredCurriculum = searchFilter.trim()
-    ? curriculum
-        .map(category => ({
-          ...category,
-          subtopics: category.subtopics.filter(st =>
-            st.title.toLowerCase().includes(searchFilter.toLowerCase()),
-          ),
-        }))
-        .filter(category => category.subtopics.length > 0)
-    : [];
+  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (searchResults[0]) {
+      navigate(searchResults[0].route);
+      setSearchQuery('');
+    }
+  };
 
   return (
-    <div className="bg-slate-50 min-h-screen">
+    <div className="min-h-screen bg-slate-50">
       <WebsiteSchema />
 
-      {/* CLEAN HERO HEADER & SEARCH */}
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h1 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
-                Machine Learning & AI Engineering Curriculum
-              </h1>
-              <p className="mt-1 text-sm text-slate-600">
-                Intuitive explanations, runnable code snippets, and end-to-end production systems.
-              </p>
-            </div>
-
-            {/* Quick Actions & Live Topic Search */}
-            <div className="flex items-center gap-2.5">
-              <div className="relative w-full sm:w-72">
-                <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" aria-hidden="true" />
-                <input
-                  type="text"
-                  value={searchFilter}
-                  onChange={(e) => setSearchFilter(e.target.value)}
-                  placeholder="Search any topic (e.g. RAG, CNN)..."
-                  className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 pl-8 pr-3 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                />
-                {searchFilter && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchFilter('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[11px] font-semibold text-slate-400 hover:text-slate-700"
-                  >
-                    Clear
-                  </button>
-                )}
-                {/* Dropdown search results */}
-                {searchFilter.trim() && (
-                  <div className="absolute right-0 top-10 z-40 max-h-64 w-80 overflow-y-auto rounded-lg border border-slate-200 bg-white p-2 shadow-xl">
-                    {filteredCurriculum.length === 0 ? (
-                      <p className="p-2 text-xs text-slate-500">No lessons matching &quot;{searchFilter}&quot;</p>
-                    ) : (
-                      <div className="space-y-1.5">
-                        {filteredCurriculum.map(cat => (
-                          <div key={cat.id} className="text-xs">
-                            <p className="px-2 py-0.5 font-bold text-indigo-700">{cat.title}</p>
-                            <div className="space-y-0.5">
-                              {cat.subtopics.map(st => (
-                                <Link
-                                  key={st.id}
-                                  to={`/learn/${st.id}`}
-                                  className="flex items-center justify-between rounded px-2 py-1 text-xs font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-900"
-                                >
-                                  <span>{st.title}</span>
-                                  <ArrowRight className="h-3 w-3 text-slate-400" aria-hidden="true" />
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <Link
-                to="/curriculum"
-                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg border border-slate-300 bg-white px-3.5 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400 transition"
-              >
-                Curriculum Index
-              </Link>
-              <Link
-                to="/cheatsheet"
-                className="inline-flex h-9 shrink-0 items-center justify-center rounded-lg bg-indigo-600 px-3.5 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
-              >
-                Interview PDF
-              </Link>
+      {/* Search-first hero */}
+      <section className="relative overflow-hidden border-b border-slate-800 bg-slate-950">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(14,165,233,0.18),transparent_32%),radial-gradient(circle_at_68%_75%,rgba(99,102,241,0.15),transparent_28%)]" />
+        <div className="pointer-events-none absolute right-[-7rem] top-[-5rem] hidden h-[28rem] w-[28rem] rounded-full border border-cyan-300/15 lg:block">
+          <div className="absolute inset-10 rounded-full border border-indigo-300/15" />
+          <div className="absolute inset-20 rounded-full border border-sky-300/15" />
+          <div className="absolute inset-0 grid place-items-center">
+            <div className="grid h-40 w-40 place-items-center rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_80px_rgba(56,189,248,0.10)]">
+              <Network className="h-16 w-16 text-cyan-300/70" aria-hidden="true" />
             </div>
           </div>
+          <span className="absolute left-14 top-24 h-2 w-2 rounded-full bg-cyan-300/70" />
+          <span className="absolute bottom-24 left-20 h-2.5 w-2.5 rounded-full bg-indigo-300/70" />
+          <span className="absolute right-16 top-36 h-2 w-2 rounded-full bg-sky-300/70" />
         </div>
-      </section>
 
-      {/* THE MAIN SHOW: COMPLETE CHAPTER EXPLORER WITH ALL LESSONS */}
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-          
-          {/* Section Header */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-bold text-indigo-700 border border-indigo-200/60">
-                  Interactive Course Syllabus
-                </span>
-                <span className="text-xs text-slate-500 font-medium">
-                  {tutorialCount} Lessons across 8 Master Chapters
-                </span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-950 mt-1">
-                Course Syllabus — Click Any Chapter to See All Lessons
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                Click any chapter to immediately reveal all of its lessons. Browse the complete course content right here on the home page.
-              </p>
+        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+          <div className="max-w-3xl">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-bold text-slate-300">
+              <Sparkles className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
+              <span>{tutorialCount} free lessons from ML foundations to production AI</span>
             </div>
 
-            {/* View Mode Toggle: Focused Tabs vs All Chapters Accordion */}
-            <div className="inline-flex items-center rounded-xl bg-slate-100 p-1 border border-slate-200/80 self-start md:self-auto shrink-0">
+            <h1 className="max-w-2xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+              What do you want to
+              <span className="block text-cyan-400">learn today?</span>
+            </h1>
+
+            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+              Search practical tutorials across Machine Learning, Deep Learning, Generative AI,
+              LLMs, RAG, Agentic AI and production AI engineering.
+            </p>
+
+            <form onSubmit={handleSearchSubmit} className="relative mt-8 max-w-3xl">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                aria-hidden="true"
+              />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={event => setSearchQuery(event.target.value)}
+                placeholder="Search tutorials — e.g. RAG, Linear Regression, AI Agents..."
+                aria-label="Search tutorials"
+                className="h-14 w-full rounded-xl border border-white/10 bg-white pl-12 pr-16 text-sm font-medium text-slate-900 shadow-2xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 sm:text-base"
+              />
               <button
-                type="button"
-                onClick={() => setSyllabusView('focused')}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
-                  syllabusView === 'focused'
-                    ? 'bg-white text-indigo-700 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
+                type="submit"
+                aria-label="Open first search result"
+                className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
               >
-                <Layers className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Chapter Explorer</span>
+                <Search className="h-4.5 w-4.5" aria-hidden="true" />
               </button>
-              <button
-                type="button"
-                onClick={() => setSyllabusView('accordion')}
-                className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
-                  syllabusView === 'accordion'
-                    ? 'bg-white text-indigo-700 shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <ListFilter className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>All Chapters Accordion</span>
-              </button>
-            </div>
-          </div>
 
-          {/* MODE 1: FOCUSED CHAPTER EXPLORER */}
-          {syllabusView === 'focused' ? (
-            <div>
-              {/* Large 8-Chapter Switcher Bar */}
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8" role="tablist" aria-label="Curriculum Chapters">
-                {chapterTracks.map((track, idx) => {
-                  const Icon = track.icon;
-                  const isSelected = selectedTrackIndex === idx;
-                  const count = track.categories.reduce((acc, cat) => acc + cat.subtopics.length, 0);
-
-                  return (
-                    <button
-                      key={track.id}
-                      role="tab"
-                      aria-selected={isSelected}
-                      type="button"
-                      onClick={() => handleSelectTrack(idx)}
-                      className={`group relative flex flex-col justify-between rounded-xl border p-3 text-left transition-all ${
-                        isSelected
-                          ? 'border-indigo-600 bg-indigo-600 text-white shadow-md ring-2 ring-indigo-500/20'
-                          : 'border-slate-200 bg-white text-slate-800 hover:border-indigo-300 hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className={`text-[11px] font-mono font-bold ${isSelected ? 'text-indigo-200' : 'text-slate-400'}`}>
-                          {track.number}
-                        </span>
-                        <Icon className={`h-4 w-4 ${isSelected ? 'text-white' : 'text-slate-500 group-hover:text-indigo-600'}`} aria-hidden={true} />
-                      </div>
-
-                      <div className="mt-2.5">
-                        <p className={`text-xs font-bold leading-tight ${isSelected ? 'text-white' : 'text-slate-900 group-hover:text-indigo-600'}`}>
-                          {track.shortTitle || track.title}
-                        </p>
-                        <p className={`mt-0.5 text-[11px] font-medium leading-snug truncate ${isSelected ? 'text-indigo-100' : 'text-slate-500'}`}>
-                          {count} lessons
-                        </p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Full Interactive Syllabus Card for Selected Chapter */}
-              <div ref={syllabusRef} className="mt-6 rounded-2xl border border-slate-200/90 bg-white p-5 sm:p-7 shadow-xs">
-                {/* Chapter Header */}
-                <div className="border-b border-slate-100 pb-5 mb-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2 mb-2">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-100 px-3 py-0.5 text-xs font-bold text-indigo-700">
-                          <ActiveIcon className="h-3.5 w-3.5 text-indigo-600" aria-hidden={true} />
-                          <span>Chapter {activeTrack.number} · {activeTrack.title}</span>
-                        </span>
-                        <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-bold text-slate-600">
-                          {totalLessonsInTrack} Lessons
-                        </span>
-                        {completedInTrack > 0 && (
-                          <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
-                            {completedInTrack} Completed ({Math.round((completedInTrack / totalLessonsInTrack) * 100)}%)
-                          </span>
-                        )}
-                      </div>
-
-                      <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
-                        {activeTrack.title}
-                      </h3>
-                      <p className="mt-1 text-xs sm:text-sm font-semibold text-indigo-600">
-                        {activeTrack.tagline}
-                      </p>
-                      <p className="mt-1.5 text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl">
-                        {activeTrack.description}
-                      </p>
-
-                      {/* Competencies */}
-                      <div className="mt-3 flex flex-wrap items-center gap-1.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 mr-1">Skills:</span>
-                        {activeTrack.keyConcepts.map(c => (
-                          <span key={c} className="rounded bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-700 border border-slate-200/60">
-                            {c}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Start Button & Links */}
-                    <div className="flex flex-col sm:flex-row lg:flex-col items-start lg:items-end gap-2.5 shrink-0">
-                      {firstLesson && (
-                        <Link
-                          to={`/learn/${firstLesson.id}`}
-                          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
-                        >
-                          <Play className="h-3.5 w-3.5 fill-current" />
-                          <span>Start Lesson 1 ({firstLesson.title})</span>
-                          <ArrowRight className="h-3.5 w-3.5" />
-                        </Link>
-                      )}
-                      <Link
-                        to="/curriculum"
-                        className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition"
-                      >
-                        View Full Interactive Curriculum →
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-
-                {/* In-Chapter Search & Filter Controls */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-5">
-                  <div>
-                    <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
-                      Complete Chapter Content ({totalLessonsInTrack} Lessons Displayed)
-                    </h4>
-                    <p className="text-xs text-slate-500">
-                      Showing every lesson in Chapter {activeTrack.number}. Click any lesson below to start reading.
+              {searchQuery.trim() && (
+                <div className="absolute left-0 right-0 top-[4.1rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
+                  {searchResults.length === 0 ? (
+                    <p className="px-3 py-4 text-sm text-slate-500">
+                      No lessons found for &quot;{searchQuery}&quot;.
                     </p>
-                  </div>
-
-                  <div className="relative w-full sm:w-72">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-                    <input
-                      type="text"
-                      value={inChapterFilter}
-                      onChange={(e) => setInChapterFilter(e.target.value)}
-                      placeholder={`Filter in Chapter ${activeTrack.number}...`}
-                      className="h-9 w-full rounded-xl border border-slate-200 bg-slate-50 pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                    />
-                    {inChapterFilter && (
-                      <button
-                        type="button"
-                        onClick={() => setInChapterFilter('')}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
-                      >
-                        ✕
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                {/* Subcategory Pills (if multiple categories) */}
-                {activeTrack.categories.length > 1 && (
-                  <div className="flex items-center gap-1.5 overflow-x-auto lma-scrollbar pb-3 mb-5 text-xs font-semibold">
-                    <button
-                      type="button"
-                      onClick={() => setSelectedSubcategoryId('all')}
-                      className={`rounded-lg px-3 py-1.5 whitespace-nowrap transition ${
-                        selectedSubcategoryId === 'all'
-                          ? 'bg-indigo-600 text-white font-bold shadow-xs'
-                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                      }`}
-                    >
-                      All Sections ({totalLessonsInTrack})
-                    </button>
-                    {activeTrack.categories.map(cat => (
-                      <button
-                        key={cat.id}
-                        type="button"
-                        onClick={() => setSelectedSubcategoryId(cat.id)}
-                        className={`rounded-lg px-3 py-1.5 whitespace-nowrap transition ${
-                          selectedSubcategoryId === cat.id
-                            ? 'bg-indigo-600 text-white font-bold shadow-xs'
-                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                        }`}
-                      >
-                        {cat.title.replace(/^\d+\.\s*/, '')} ({cat.subtopics.length})
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* ALL LESSONS DISPLAYED */}
-                <div className="space-y-6">
-                  {activeTrack.categories.map((category) => {
-                    if (selectedSubcategoryId !== 'all' && category.id !== selectedSubcategoryId) {
-                      return null;
-                    }
-
-                    const matchingLessons = category.subtopics.filter(st =>
-                      !inChapterFilter.trim() ||
-                      st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
-                      (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
-                    );
-
-                    if (matchingLessons.length === 0) return null;
-
-                    return (
-                      <div key={category.id} className="space-y-3">
-                        {activeTrack.categories.length > 1 && (
-                          <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                            <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
-                              <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
-                              {category.title}
-                            </span>
-                            <span className="text-[11px] font-semibold text-slate-400">
-                              {matchingLessons.length} {matchingLessons.length === 1 ? 'lesson' : 'lessons'}
-                            </span>
-                          </div>
-                        )}
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                          {matchingLessons.map((lesson) => {
-                            const globalIndex = allLessonsInTrack.findIndex(l => l.id === lesson.id);
-                            const completed = isCompleted(lesson.id);
-
-                            return (
-                              <Link
-                                key={lesson.id}
-                                to={`/learn/${lesson.id}`}
-                                className={`group flex items-center justify-between rounded-xl border p-3 text-xs transition-all ${
-                                  completed
-                                    ? 'border-emerald-200 bg-emerald-50/40 hover:bg-emerald-50 hover:border-emerald-300'
-                                    : 'border-slate-200 bg-slate-50/50 hover:border-indigo-400 hover:bg-indigo-50/30 hover:shadow-xs'
-                                }`}
-                              >
-                                <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                                  <span
-                                    className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[10px] font-bold ${
-                                      completed
-                                        ? 'bg-emerald-100 text-emerald-800'
-                                        : 'bg-white border border-slate-200 text-slate-500 group-hover:border-indigo-300 group-hover:text-indigo-600'
-                                    }`}
-                                  >
-                                    {String(globalIndex + 1).padStart(2, '0')}
-                                  </span>
-                                  <div className="min-w-0">
-                                    <p
-                                      className={`font-bold leading-snug line-clamp-2 ${
-                                        completed
-                                          ? 'text-emerald-950 group-hover:text-emerald-800'
-                                          : 'text-slate-800 group-hover:text-indigo-700'
-                                      }`}
-                                    >
-                                      {lesson.title}
-                                    </p>
-                                    {lesson.module && (
-                                      <p className="mt-0.5 text-[10px] font-medium text-slate-400 truncate">
-                                        {lesson.module}
-                                      </p>
-                                    )}
-                                  </div>
-                                </div>
-
-                                <div className="shrink-0 flex items-center ml-2">
-                                  {completed ? (
-                                    <CheckCircle2 className="h-4 w-4 text-emerald-600 fill-emerald-100" />
-                                  ) : (
-                                    <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition" />
-                                  )}
-                                </div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {/* Empty state if search found nothing */}
-                  {inChapterFilter.trim() && activeTrack.categories.every(cat =>
-                    cat.subtopics.filter(st =>
-                      st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
-                      (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
-                    ).length === 0
-                  ) && (
-                    <div className="py-8 text-center">
-                      <p className="text-sm font-semibold text-slate-700">
-                        No lessons found matching &quot;{inChapterFilter}&quot; in {activeTrack.title}
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => setInChapterFilter('')}
-                        className="mt-2 text-xs font-bold text-indigo-600 hover:underline"
-                      >
-                        Clear search and show all {totalLessonsInTrack} lessons
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* MODE 2: ALL CHAPTERS ACCORDION (Click any chapter to expand all its lessons in-place) */
-            <div className="space-y-4">
-              {/* Accordion Quick Controls */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-50 border border-slate-200/90 rounded-2xl p-4">
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={expandAllChapters}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs"
-                  >
-                    <ChevronDown className="h-3.5 w-3.5 text-indigo-600" />
-                    <span>Expand All Chapters</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={collapseAllChapters}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-slate-300 px-3 py-1.5 text-xs font-bold text-slate-700 hover:bg-slate-100 transition shadow-xs"
-                  >
-                    <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
-                    <span>Collapse All</span>
-                  </button>
-                </div>
-
-                <div className="relative w-full sm:w-72">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-                  <input
-                    type="text"
-                    value={inChapterFilter}
-                    onChange={(e) => setInChapterFilter(e.target.value)}
-                    placeholder="Search any lesson in all chapters..."
-                    className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-8 pr-7 text-xs text-slate-900 placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                  {inChapterFilter && (
-                    <button
-                      type="button"
-                      onClick={() => setInChapterFilter('')}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-700"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Chapter Accordion Cards */}
-              <div className="space-y-3">
-                {chapterTracks.map((track) => {
-                  const Icon = track.icon;
-                  const isExpanded = !!expandedChapters[track.id];
-                  const allLessons = track.categories.flatMap(cat => cat.subtopics);
-                  const completedLessons = allLessons.filter(l => isCompleted(l.id)).length;
-                  const matchingCount = inChapterFilter.trim()
-                    ? allLessons.filter(st =>
-                        st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
-                        (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
-                      ).length
-                    : allLessons.length;
-
-                  if (inChapterFilter.trim() && matchingCount === 0) {
-                    return null;
-                  }
-
-                  return (
-                    <div
-                      key={track.id}
-                      className={`overflow-hidden rounded-2xl border transition-all ${
-                        isExpanded
-                          ? 'border-indigo-200 bg-white shadow-xs'
-                          : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
-                      }`}
-                    >
-                      {/* Clickable Chapter Header Button */}
-                      <button
-                        type="button"
-                        onClick={() => toggleChapterExpanded(track.id)}
-                        aria-expanded={isExpanded}
-                        className="w-full p-4 sm:p-5 flex items-center justify-between text-left transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      >
-                        <div className="flex items-center gap-3 sm:gap-4 min-w-0 pr-3">
-                          <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-bold ${
-                            isExpanded
-                              ? 'bg-indigo-600 text-white shadow-xs'
-                              : 'bg-indigo-50 border border-indigo-100 text-indigo-700'
-                          }`}>
-                            <Icon className="h-5 w-5" aria-hidden={true} />
-                          </div>
-
-                          <div className="min-w-0">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <span className="text-xs font-mono font-bold text-indigo-600">
-                                Chapter {track.number}
-                              </span>
-                              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600">
-                                {allLessons.length} Lessons
-                              </span>
-                              {completedLessons > 0 && (
-                                <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
-                                  {completedLessons}/{allLessons.length} Completed
-                                </span>
-                              )}
-                            </div>
-                            <h3 className="text-base sm:text-lg font-black text-slate-950 truncate mt-0.5">
-                              {track.title}
-                            </h3>
-                            <p className="text-xs text-slate-500 truncate hidden sm:block">
-                              {track.tagline}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 shrink-0">
-                          <span className="hidden sm:inline text-xs font-semibold text-indigo-600">
-                            {isExpanded ? 'Hide Lessons' : 'Show All Lessons'}
-                          </span>
-                          <div className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-transform ${
-                            isExpanded
-                              ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600'
-                              : 'bg-white border-slate-200 text-slate-400 group-hover:text-slate-600'
-                          }`}>
-                            <ChevronDown className="h-4 w-4" aria-hidden={true} />
-                          </div>
-                        </div>
-                      </button>
-
-                      {/* Expanded Section with ALL Lessons */}
-                      {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-6 space-y-6">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-white border border-slate-200/80 rounded-xl p-3.5">
-                            <div>
-                              <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
-                                {track.description}
+                  ) : (
+                    <ul className="max-h-80 overflow-y-auto">
+                      {searchResults.map(result => (
+                        <li key={result.id}>
+                          <Link
+                            to={result.route}
+                            onClick={() => setSearchQuery('')}
+                            className="group flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 transition hover:bg-slate-50"
+                          >
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-bold text-slate-900 group-hover:text-blue-700">
+                                {result.title}
                               </p>
-                              <div className="mt-2 flex flex-wrap gap-1.5">
-                                {track.keyConcepts.map(c => (
-                                  <span key={c} className="rounded bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-700 border border-slate-200">
-                                    {c}
-                                  </span>
-                                ))}
-                              </div>
+                              <p className="mt-0.5 text-xs text-slate-500">
+                                {result.categoryTitle}
+                              </p>
                             </div>
-                            {allLessons[0] && (
-                              <Link
-                                to={`/learn/${allLessons[0].id}`}
-                                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-indigo-700 transition"
-                              >
-                                <Play className="h-3 w-3 fill-current" />
-                                <span>Start Chapter</span>
-                              </Link>
-                            )}
-                          </div>
+                            <ArrowRight className="h-4 w-4 shrink-0 text-slate-300 group-hover:text-blue-600" aria-hidden="true" />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            </form>
 
-                          {/* List of categories and all lessons in this chapter */}
-                          <div className="space-y-5">
-                            {track.categories.map(category => {
-                              const matchingLessons = category.subtopics.filter(st =>
-                                !inChapterFilter.trim() ||
-                                st.title.toLowerCase().includes(inChapterFilter.toLowerCase()) ||
-                                (st.module && st.module.toLowerCase().includes(inChapterFilter.toLowerCase()))
-                              );
-
-                              if (matchingLessons.length === 0) return null;
-
-                              return (
-                                <div key={category.id} className="space-y-2.5">
-                                  {track.categories.length > 1 && (
-                                    <div className="flex items-center justify-between border-b border-slate-200/80 pb-1.5">
-                                      <span className="text-xs font-bold uppercase tracking-wider text-indigo-700 flex items-center gap-1.5">
-                                        <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
-                                        {category.title}
-                                      </span>
-                                      <span className="text-[11px] font-semibold text-slate-400">
-                                        {matchingLessons.length} {matchingLessons.length === 1 ? 'lesson' : 'lessons'}
-                                      </span>
-                                    </div>
-                                  )}
-
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-                                    {matchingLessons.map(lesson => {
-                                      const globalIndex = allLessons.findIndex(l => l.id === lesson.id);
-                                      const completed = isCompleted(lesson.id);
-
-                                      return (
-                                        <Link
-                                          key={lesson.id}
-                                          to={`/learn/${lesson.id}`}
-                                          className={`group flex items-center justify-between rounded-xl border p-3 text-xs transition-all ${
-                                            completed
-                                              ? 'border-emerald-200 bg-emerald-50/50 hover:bg-emerald-50 hover:border-emerald-300'
-                                              : 'border-slate-200 bg-white hover:border-indigo-400 hover:bg-indigo-50/30 hover:shadow-xs'
-                                          }`}
-                                        >
-                                          <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                                            <span
-                                              className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md font-mono text-[10px] font-bold ${
-                                                completed
-                                                  ? 'bg-emerald-100 text-emerald-800'
-                                                  : 'bg-slate-100 border border-slate-200 text-slate-500 group-hover:border-indigo-300 group-hover:text-indigo-600'
-                                              }`}
-                                            >
-                                              {String(globalIndex + 1).padStart(2, '0')}
-                                            </span>
-                                            <div className="min-w-0">
-                                              <p
-                                                className={`font-bold leading-snug line-clamp-2 ${
-                                                  completed
-                                                    ? 'text-emerald-950 group-hover:text-emerald-800'
-                                                    : 'text-slate-800 group-hover:text-indigo-700'
-                                                }`}
-                                              >
-                                                {lesson.title}
-                                              </p>
-                                              {lesson.module && (
-                                                <p className="mt-0.5 text-[10px] font-medium text-slate-400 truncate">
-                                                  {lesson.module}
-                                                </p>
-                                              )}
-                                            </div>
-                                          </div>
-
-                                          <div className="shrink-0 flex items-center ml-2">
-                                            {completed ? (
-                                              <CheckCircle2 className="h-4 w-4 text-emerald-600 fill-emerald-100" />
-                                            ) : (
-                                              <ArrowRight className="h-3.5 w-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition" />
-                                            )}
-                                          </div>
-                                        </Link>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-        </div>
-      </section>
-
-      {/* VALUE STRIP */}
-      <section className="border-b border-slate-200 bg-white py-4">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <div className="flex items-center gap-2.5">
-              <Lightbulb className="h-4 w-4 text-indigo-600 shrink-0" aria-hidden="true" />
-              <div>
-                <p className="text-xs font-bold text-slate-900 leading-tight">Intuitive First</p>
-                <p className="text-[11px] text-slate-500">Visual analogies before dense proofs</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <Code2 className="h-4 w-4 text-indigo-600 shrink-0" aria-hidden="true" />
-              <div>
-                <p className="text-xs font-bold text-slate-900 leading-tight">260+ Python Examples</p>
-                <p className="text-[11px] text-slate-500">Clean, copyable, scikit-learn & PyTorch</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <CheckCircle2 className="h-4 w-4 text-indigo-600 shrink-0" aria-hidden="true" />
-              <div>
-                <p className="text-xs font-bold text-slate-900 leading-tight">Quizzes & Checks</p>
-                <p className="text-[11px] text-slate-500">Validate intuition immediately</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <ServerCog className="h-4 w-4 text-indigo-600 shrink-0" aria-hidden="true" />
-              <div>
-                <p className="text-xs font-bold text-slate-900 leading-tight">Production AI & MLOps</p>
-                <p className="text-[11px] text-slate-500">System design, drift & serving</p>
-              </div>
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              <span className="mr-1 text-xs font-semibold text-slate-400">Popular searches:</span>
+              {popularTopics.map(topic => (
+                <Link
+                  key={topic.route}
+                  to={topic.route}
+                  className="rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-xs font-semibold text-slate-300 transition hover:border-cyan-400/60 hover:bg-slate-800 hover:text-white"
+                >
+                  {topic.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* GUIDED PROJECTS & CAREER ROADMAPS */}
-      <section className="py-8 sm:py-10">
+      {/* Browse by topic */}
+      <section className="bg-white py-10 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-12">
-            
-            {/* Guided Projects (7 cols) */}
-            <div className="lg:col-span-7">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <FolderKanban className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-                    <h2 className="text-base sm:text-lg font-bold text-slate-950">Guided Portfolio Projects</h2>
-                  </div>
-                  <p className="text-xs text-slate-500 mt-0.5">End-to-end code implementations ready to run and discuss in interviews.</p>
-                </div>
-                <Link
-                  to="/learn/project-customer-churn"
-                  className="text-xs font-bold text-indigo-600 hover:underline"
-                >
-                  All {projectCount} projects →
-                </Link>
-              </div>
-
-              <div className="space-y-2.5">
-                {featuredProjects.map(project => (
-                  <Link
-                    key={project.route}
-                    to={project.route}
-                    className="group block rounded-xl border border-slate-200 bg-white p-3.5 transition hover:border-indigo-300 hover:shadow-xs"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                          <span className="text-indigo-700 font-bold">{project.category}</span>
-                          <span aria-hidden="true">·</span>
-                          <span>{project.difficulty}</span>
-                        </div>
-                        <h3 className="mt-1 text-sm font-bold text-slate-950 group-hover:text-indigo-600 transition">
-                          {project.title}
-                        </h3>
-                        <p className="mt-0.5 text-xs text-slate-600">
-                          {project.description}
-                        </p>
-                      </div>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:translate-x-1 group-hover:text-indigo-600 transition mt-1" aria-hidden="true" />
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Career Roadmaps & Interview Prep (5 cols) */}
-            <div className="lg:col-span-5">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <BriefcaseBusiness className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-                    <h2 className="text-base sm:text-lg font-bold text-slate-950">Career Roadmaps & Prep</h2>
-                  </div>
-                  <p className="text-xs text-slate-500 mt-0.5">Role roadmaps, interview questions, and system design.</p>
-                </div>
-                <Link
-                  to="/learn/ai-data-career-paths"
-                  className="text-xs font-bold text-indigo-600 hover:underline"
-                >
-                  View all →
-                </Link>
-              </div>
-
-              <div className="grid gap-2">
-                {careerTracks.map(track => (
-                  <Link
-                    key={track.route}
-                    to={track.route}
-                    className="group flex flex-col justify-center rounded-lg border border-slate-200 bg-white p-3 transition hover:border-indigo-300 hover:shadow-xs"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-900 group-hover:text-indigo-700 transition">
-                        {track.title}
-                      </span>
-                      <ChevronRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 group-hover:text-indigo-600 transition" aria-hidden="true" />
-                    </div>
-                    <span className="mt-0.5 text-[11px] text-slate-500 leading-snug">
-                      {track.desc}
-                    </span>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Free PDF Box */}
-              <div className="mt-3.5 rounded-xl border border-indigo-100 bg-indigo-50/70 p-3.5 flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs font-bold text-indigo-950">ML Interview Cheatsheet (PDF)</p>
-                  <p className="text-[11px] text-indigo-700">8-page instant reference with formulas, code & trade-offs.</p>
-                </div>
-                <Link
-                  to="/cheatsheet"
-                  className="shrink-0 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-700 transition"
-                >
-                  Download
-                </Link>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ALL 16 CURRICULUM MODULES OVERVIEW */}
-      <section className="border-t border-slate-200 bg-slate-100/60 py-8 sm:py-10">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-6">
+          <div className="flex items-end justify-between gap-4">
             <div>
-              <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-950">
-                Complete Curriculum Breakdown (All 16 Chapters & Lessons)
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Explore the curriculum</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                Browse by topic
               </h2>
-              <p className="text-xs text-slate-600">
-                Click any chapter card below to expand and view all of its lessons directly on this page.
-              </p>
             </div>
-            
-            <div className="flex flex-wrap items-center gap-2">
-              <button
-                type="button"
-                onClick={expandAllCurriculumModules}
-                className="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-300 px-2.5 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
-              >
-                <ChevronDown className="h-3.5 w-3.5 text-indigo-600" />
-                <span>Expand All 16 Chapters</span>
-              </button>
-              <button
-                type="button"
-                onClick={collapseAllCurriculumModules}
-                className="inline-flex items-center gap-1 rounded-lg bg-white border border-slate-300 px-2.5 py-1 text-xs font-bold text-slate-700 hover:bg-slate-50 transition shadow-2xs"
-              >
-                <ChevronUp className="h-3.5 w-3.5 text-slate-500" />
-                <span>Collapse All</span>
-              </button>
-              <Link
-                to="/curriculum"
-                className="text-xs font-bold text-indigo-600 hover:text-indigo-800 ml-1"
-              >
-                Interactive Guide →
-              </Link>
-            </div>
+            <Link
+              to="/curriculum"
+              className="hidden items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-800 sm:inline-flex"
+            >
+              View full curriculum
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
           </div>
 
-          <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-4 items-start">
-            {curriculum.map((cat, catIdx) => {
-              const isExpanded = !!expandedCurriculumModules[cat.id];
-              const completedLessons = cat.subtopics.filter(st => isCompleted(st.id)).length;
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {tracks.map(track => {
+              const Icon = track.icon;
+              const count = lessonCountFor(track.categoryIds);
 
               return (
-                <div
-                  key={cat.id}
-                  className={`rounded-xl border transition-all ${
-                    isExpanded
-                      ? 'border-indigo-300 bg-white shadow-xs col-span-1 sm:col-span-2 lg:col-span-2'
-                      : 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-2xs'
-                  }`}
+                <Link
+                  key={track.title}
+                  to={track.route}
+                  className={`group rounded-2xl border bg-gradient-to-br p-5 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg ${track.panelClass}`}
                 >
-                  {/* Card Header (Click to toggle all lessons) */}
-                  <button
-                    type="button"
-                    onClick={() => toggleCurriculumModule(cat.id)}
-                    aria-expanded={isExpanded}
-                    className="w-full p-3.5 text-left flex items-start justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xl"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-[10px] font-mono font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-100">
-                          Chapter {catIdx + 1}
-                        </span>
-                        <span className="text-[10px] font-semibold text-slate-400">
-                          {cat.subtopics.length} lessons
-                        </span>
-                        {completedLessons > 0 && (
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
-                            {completedLessons}/{cat.subtopics.length} done
-                          </span>
-                        )}
-                      </div>
-                      <h3 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
-                        {cat.title}
-                      </h3>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className={`grid h-11 w-11 place-items-center rounded-xl ${track.iconClass}`}>
+                      <Icon className="h-5 w-5" aria-hidden="true" />
                     </div>
+                    <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-blue-600" aria-hidden="true" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-black text-slate-950">{track.title}</h3>
+                  <p className="mt-1 text-xs font-bold text-slate-500">{count} lessons</p>
+                  <p className="mt-3 text-sm leading-6 text-slate-600">{track.description}</p>
+                </Link>
+              );
+            })}
+          </div>
 
-                    <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md border transition-transform ${
-                      isExpanded
-                        ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600'
-                        : 'bg-slate-50 border-slate-200 text-slate-400'
-                    }`}>
-                      <ChevronDown className="h-3.5 w-3.5" />
+          <Link
+            to="/curriculum"
+            className="mt-5 inline-flex items-center gap-1 text-sm font-bold text-blue-600 hover:text-blue-800 sm:hidden"
+          >
+            View full curriculum
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Continue learning */}
+      {completedCount > 0 && nextIncomplete && (
+        <section className="border-y border-slate-200 bg-slate-50 py-6">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-4 rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex min-w-0 items-start gap-4">
+                <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-emerald-700">Continue learning</p>
+                  <h2 className="mt-1 text-lg font-black text-slate-950">{nextIncomplete.title}</h2>
+                  <p className="mt-1 text-sm text-slate-500">
+                    {completedCount} of {totalLessonsCount} lessons completed · {progressPercentage}% progress
+                  </p>
+                </div>
+              </div>
+              <Link
+                to={`/learn/${nextIncomplete.id}`}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 text-sm font-bold text-white transition hover:bg-emerald-700"
+              >
+                Continue lesson
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Recommended */}
+      <section className="bg-slate-50 py-10 sm:py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Start with a strong lesson</p>
+              <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+                Recommended for you
+              </h2>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs font-semibold text-slate-500">
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm">Machine Learning</span>
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm">Deep Learning</span>
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm">LLMs & RAG</span>
+              <span className="rounded-full bg-white px-3 py-1.5 shadow-sm">Agentic AI</span>
+            </div>
+          </div>
+
+          <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {recommendedLessons.map(lesson => {
+              const Icon = lesson.icon;
+              const topicId = lesson.route.split('/').pop() ?? '';
+              const completed = isCompleted(topicId);
+
+              return (
+                <Link
+                  key={lesson.route}
+                  to={lesson.route}
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-lg"
+                >
+                  <div className="relative grid h-36 place-items-center overflow-hidden border-b border-slate-100 bg-gradient-to-br from-slate-50 via-blue-50/50 to-indigo-50">
+                    <div className="absolute left-6 top-5 h-16 w-16 rounded-full border border-blue-200/70" />
+                    <div className="absolute bottom-4 right-7 h-12 w-12 rounded-xl border border-indigo-200/70 rotate-12" />
+                    <div className="grid h-16 w-16 place-items-center rounded-2xl border border-white bg-white/90 text-blue-700 shadow-lg">
+                      <Icon className="h-8 w-8" aria-hidden="true" />
                     </div>
-                  </button>
-
-                  {/* Lessons List: Expanded Shows ALL Lessons, Collapsed Shows Summary with Expand Button */}
-                  <div className="px-3.5 pb-3.5 pt-1 border-t border-slate-100">
-                    {isExpanded ? (
-                      <div className="space-y-1.5 pt-2">
-                        <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-                          <span className="text-[11px] font-bold text-indigo-700">
-                            All {cat.subtopics.length} Lessons in this Chapter:
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => toggleCurriculumModule(cat.id)}
-                            className="text-[10px] font-bold text-slate-400 hover:text-slate-700"
-                          >
-                            Hide lessons ↑
-                          </button>
-                        </div>
-                        <ul className="space-y-1 max-h-96 overflow-y-auto lma-scrollbar pr-1">
-                          {cat.subtopics.map((st, idx) => {
-                            const completed = isCompleted(st.id);
-                            return (
-                              <li key={st.id}>
-                                <Link
-                                  to={`/learn/${st.id}`}
-                                  className={`flex items-center justify-between gap-2 rounded-lg p-1.5 text-xs transition ${
-                                    completed
-                                      ? 'bg-emerald-50/50 text-emerald-950 hover:bg-emerald-100/50'
-                                      : 'hover:bg-indigo-50/70 hover:text-indigo-900 text-slate-700'
-                                  }`}
-                                >
-                                  <div className="flex items-center gap-2 min-w-0">
-                                    <span className="text-[10px] font-mono font-bold text-slate-400 shrink-0 w-4">
-                                      {idx + 1}.
-                                    </span>
-                                    <span className="font-medium truncate">{st.title}</span>
-                                  </div>
-                                  <div className="shrink-0 flex items-center">
-                                    {completed ? (
-                                      <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                                    ) : (
-                                      <ArrowRight className="h-3 w-3 text-slate-300" />
-                                    )}
-                                  </div>
-                                </Link>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    ) : (
-                      <div className="space-y-1">
-                        <ul className="space-y-1 text-[11px] text-slate-600">
-                          {cat.subtopics.slice(0, 3).map(st => (
-                            <li key={st.id} className="truncate">
-                              <Link to={`/learn/${st.id}`} className="hover:text-indigo-600 transition flex items-center gap-1">
-                                <span className="text-slate-300">·</span>
-                                <span className="truncate">{st.title}</span>
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                        <button
-                          type="button"
-                          onClick={() => toggleCurriculumModule(cat.id)}
-                          className="pt-1.5 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-1 w-full text-left"
-                        >
-                          <span>Show all {cat.subtopics.length} lessons</span>
-                          <ChevronDown className="h-3 w-3" />
-                        </button>
-                      </div>
+                    {completed && (
+                      <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-bold text-emerald-800">
+                        <CheckCircle2 className="h-3 w-3" aria-hidden="true" />
+                        Completed
+                      </span>
                     )}
                   </div>
-                </div>
+                  <div className="p-4">
+                    <h3 className="text-sm font-black leading-snug text-slate-950 group-hover:text-blue-700">
+                      {lesson.title}
+                    </h3>
+                    <p className="mt-2 text-xs leading-5 text-slate-500">{lesson.description}</p>
+                    <div className="mt-4 flex items-center gap-2 text-[10px] font-bold">
+                      <span className="rounded-full bg-slate-100 px-2 py-1 text-slate-600">{lesson.level}</span>
+                      <span className="text-slate-400">{lesson.time}</span>
+                    </div>
+                  </div>
+                </Link>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* Newsletter Signup at Bottom */}
-      <section className="border-t border-slate-200 bg-white py-8">
+      {/* Interview prep */}
+      <section className="bg-white py-10 sm:py-12">
+        <div className="mx-auto grid max-w-7xl gap-5 px-4 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:p-7">
+            <div className="flex items-start gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-700">
+                <GraduationCap className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-violet-700">Career preparation</p>
+                <h2 className="mt-1 text-2xl font-black text-slate-950">Preparing for an interview?</h2>
+                <p className="mt-2 max-w-xl text-sm leading-6 text-slate-600">
+                  Practice ML, Python, SQL, LLM/RAG and system-design questions with dedicated interview lessons.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+              {interviewLinks.map(item => (
+                <Link
+                  key={item.route}
+                  to={item.route}
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-700 transition hover:border-violet-200 hover:text-violet-700"
+                >
+                  <span>{item.label}</span>
+                  <ArrowRight className="h-4 w-4 shrink-0 text-slate-300" aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-between rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-6 sm:p-7">
+            <div>
+              <div className="grid h-12 w-12 place-items-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-200">
+                <BriefcaseBusiness className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <h2 className="mt-5 text-2xl font-black text-slate-950">Free ML Interview Cheatsheet</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                Keep essential ML concepts, formulas, evaluation ideas and interview trade-offs in one practical PDF.
+              </p>
+            </div>
+            <Link
+              to="/cheatsheet"
+              className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700"
+            >
+              Get the free PDF
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Project + stats strip */}
+      <section className="border-y border-slate-200 bg-slate-950 py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-500/15 text-blue-300">
+                <Code2 className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-white">{tutorialCount}</p>
+                <p className="text-xs font-semibold text-slate-400">Free lessons</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-500/15 text-amber-300">
+                <FolderKanban className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-white">{projectCount}</p>
+                <p className="text-xs font-semibold text-slate-400">Hands-on projects</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-violet-500/15 text-violet-300">
+                <GraduationCap className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div>
+                <p className="text-2xl font-black text-white">{curriculum.length}</p>
+                <p className="text-xs font-semibold text-slate-400">Curriculum modules</p>
+              </div>
+            </div>
+            <Link
+              to="/learn/project-customer-churn"
+              className="group flex items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 transition hover:border-blue-500/60 hover:bg-slate-800"
+            >
+              <div>
+                <p className="text-sm font-black text-white">Build something real</p>
+                <p className="mt-1 text-xs text-slate-400">Explore end-to-end ML & AI projects</p>
+              </div>
+              <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition group-hover:translate-x-1 group-hover:text-blue-300" aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="bg-white py-8">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <NewsletterSignup />
         </div>
