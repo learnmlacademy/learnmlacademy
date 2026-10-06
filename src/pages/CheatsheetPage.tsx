@@ -141,7 +141,7 @@ export function CheatsheetPage() {
       {/* Newsletter — email gate before download */}
       <section id="get-pdf" className="py-16 px-4 scroll-mt-20">
         <div className="max-w-3xl mx-auto">
-          <NewsletterSignup />
+          <NewsletterSignup handbook="ml" />
         </div>
       </section>
     </div>
