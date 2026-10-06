@@ -4,6 +4,7 @@ import { blogPosts } from '../data/blog';
 import { fitMetaDescription } from '../utils/seo';
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
+import { getInterviewHandbookForBlog } from '../data/interviewHandbooks';
 import { TopMLAlgorithmsContent } from '../content/blog/top-ml-algorithms-explained';
 import { MLInterviewPrepContent } from '../content/blog/ml-interview-prep-guide';
 import { DeepLearningInterviewPrepContent } from '../content/blog/deep-learning-interview-prep-guide';
@@ -63,6 +64,7 @@ export function BlogPostPage() {
     'Data Science': 'bg-violet-100 text-violet-700',
   };
   const catColor = categoryColors[post.category] || 'bg-slate-100 text-slate-700';
+  const handbook = getInterviewHandbookForBlog(slug);
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -97,13 +99,13 @@ export function BlogPostPage() {
       {slug.includes('interview-prep-guide') && (
         <div className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl p-6 mb-8 flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <p className="text-white font-bold text-lg">Free: ML Interview Cheatsheet PDF</p>
-            <p className="text-indigo-200 text-sm">100 questions with detailed answers — enter your email to download</p>
+            <p className="text-white font-bold text-lg">Free: {handbook.shortTitle} PDF</p>
+            <p className="text-indigo-200 text-sm">Detailed explanations, examples, diagrams and interview-ready answers</p>
           </div>
-          <Link to="/cheatsheet"
+          <a href="#get-pdf"
             className="flex items-center gap-2 bg-white text-indigo-700 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-indigo-50 transition-colors flex-shrink-0">
             <Download className="w-4 h-4"/> Get Free PDF
-          </Link>
+          </a>
         </div>
       )}
 
@@ -118,9 +120,9 @@ export function BlogPostPage() {
         )}
       </article>
 
-      {/* Newsletter */}
-      <div className="mt-12">
-        <NewsletterSignup />
+      {/* Newsletter / matching interview handbook */}
+      <div id="get-pdf" className="mt-12 scroll-mt-24">
+        <NewsletterSignup {...handbook} />
       </div>
 
       {/* Post navigation */}
