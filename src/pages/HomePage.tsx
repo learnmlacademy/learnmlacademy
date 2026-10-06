@@ -234,12 +234,12 @@ export function HomePage() {
       {/* Search-first hero */}
       <section className="relative overflow-hidden border-b border-slate-800 bg-slate-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_30%,rgba(14,165,233,0.18),transparent_32%),radial-gradient(circle_at_68%_75%,rgba(99,102,241,0.15),transparent_28%)]" />
-        <div className="pointer-events-none absolute right-[-7rem] top-[-5rem] hidden h-[28rem] w-[28rem] rounded-full border border-cyan-300/15 lg:block">
+        <div className="pointer-events-none absolute right-[-4rem] top-[-3rem] hidden h-[20rem] w-[20rem] rounded-full border border-cyan-300/15 lg:block">
           <div className="absolute inset-10 rounded-full border border-indigo-300/15" />
           <div className="absolute inset-20 rounded-full border border-sky-300/15" />
           <div className="absolute inset-0 grid place-items-center">
-            <div className="grid h-40 w-40 place-items-center rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_80px_rgba(56,189,248,0.10)]">
-              <Network className="h-16 w-16 text-cyan-300/70" aria-hidden="true" />
+            <div className="grid h-28 w-28 place-items-center rounded-full border border-cyan-300/20 bg-cyan-400/5 shadow-[0_0_60px_rgba(56,189,248,0.10)]">
+              <Network className="h-12 w-12 text-cyan-300/70" aria-hidden="true" />
             </div>
           </div>
           <span className="absolute left-14 top-24 h-2 w-2 rounded-full bg-cyan-300/70" />
@@ -247,24 +247,24 @@ export function HomePage() {
           <span className="absolute right-16 top-36 h-2 w-2 rounded-full bg-sky-300/70" />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-7 lg:px-8 lg:py-8">
           <div className="max-w-3xl">
             <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1 text-xs font-bold text-slate-300">
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
               <span>{tutorialCount} free lessons from ML foundations to production AI</span>
             </div>
 
-            <h1 className="max-w-2xl text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="max-w-2xl text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl lg:leading-[1.05]">
               What do you want to
               <span className="block text-cyan-400">learn today?</span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300 sm:text-lg">
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
               Search practical tutorials across Machine Learning, Deep Learning, Generative AI,
               LLMs, RAG, Agentic AI and production AI engineering.
             </p>
 
-            <form onSubmit={handleSearchSubmit} className="relative mt-8 max-w-3xl">
+            <form onSubmit={handleSearchSubmit} className="relative mt-4 max-w-3xl">
               <Search
                 className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
                 aria-hidden="true"
@@ -275,18 +275,18 @@ export function HomePage() {
                 onChange={event => setSearchQuery(event.target.value)}
                 placeholder="Search tutorials — e.g. RAG, Linear Regression, AI Agents..."
                 aria-label="Search tutorials"
-                className="h-14 w-full rounded-xl border border-white/10 bg-white pl-12 pr-16 text-sm font-medium text-slate-900 shadow-2xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 sm:text-base"
+                className="h-12 w-full rounded-xl border border-white/10 bg-white pl-12 pr-14 text-sm font-medium text-slate-900 shadow-2xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15 sm:text-base"
               />
               <button
                 type="submit"
                 aria-label="Open first search result"
-                className="absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
+                className="absolute right-1.5 top-1.5 grid h-9 w-9 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
               >
                 <Search className="h-4.5 w-4.5" aria-hidden="true" />
               </button>
 
               {searchQuery.trim() && (
-                <div className="absolute left-0 right-0 top-[4.1rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
+                <div className="absolute left-0 right-0 top-[3.6rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
                   {searchResults.length === 0 ? (
                     <p className="px-3 py-4 text-sm text-slate-500">
                       No lessons found for &quot;{searchQuery}&quot;.
@@ -318,7 +318,7 @@ export function HomePage() {
               )}
             </form>
 
-            <div className="mt-5 flex flex-wrap items-center gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <span className="mr-1 text-xs font-semibold text-slate-400">Popular searches:</span>
               {popularTopics.map(topic => (
                 <Link
