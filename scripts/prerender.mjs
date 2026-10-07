@@ -120,6 +120,14 @@ const staticMeta = new Map([
     title: 'Free ML Interview Cheatsheet | ML Academy',
     description: 'Get the free ML Academy interview cheatsheet with practical questions and answers covering core ML, evaluation, deep learning and system design.',
   }],
+  ['/projects', {
+    title: 'Hands-On ML & AI Project Handbooks | LearnMLAcademy',
+    description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
+  }],
+  ['/projects/titanic-survival', {
+    title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
+    description: 'Build the classic Titanic machine-learning project from an empty folder to a working prediction app with Python, Pandas, Scikit-learn, Gradio and GitHub.',
+  }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
     description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
