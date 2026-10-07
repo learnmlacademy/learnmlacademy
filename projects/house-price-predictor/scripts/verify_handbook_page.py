@@ -57,8 +57,29 @@ def verify_page(page, viewport_name: str) -> dict:
             raise AssertionError(f"{viewport_name}: required handbook content missing: {phrase}")
 
     images = page.locator('main img[src^="/project-handbooks/house-price/"]')
-    if images.count() < 3:
-        raise AssertionError(f"{viewport_name}: expected at least three real evidence images.")
+    expected_images = {
+        "/project-handbooks/house-price/vscode-requirements.png",
+        "/project-handbooks/house-price/vscode-download-data.png",
+        "/project-handbooks/house-price/vscode-training-code.png",
+        "/project-handbooks/house-price/vscode-model-comparison.png",
+        "/project-handbooks/house-price/vscode-final-metrics.png",
+        "/project-handbooks/house-price/actual_vs_predicted.png",
+        "/project-handbooks/house-price/vscode-app-code.png",
+        "/project-handbooks/house-price/streamlit-house-price-app.png",
+        "/project-handbooks/house-price/streamlit-house-price-prediction.png",
+        "/project-handbooks/house-price/vscode-test-code.png",
+        "/project-handbooks/house-price/vscode-project-workspace.png",
+    }
+    actual_sources = set(images.evaluate_all("imgs => imgs.map(img => img.getAttribute('src'))"))
+    missing_images = sorted(expected_images.difference(actual_sources))
+    if missing_images:
+        raise AssertionError(
+            f"{viewport_name}: handbook is missing required real evidence images: {missing_images}"
+        )
+    if images.count() < len(expected_images):
+        raise AssertionError(
+            f"{viewport_name}: expected at least {len(expected_images)} real evidence images."
+        )
 
     for index in range(images.count()):
         image_locator = images.nth(index)
