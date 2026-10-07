@@ -51,6 +51,13 @@ def verify_page(page, viewport_name: str) -> dict:
         "streamlit run app.py",
         "Common problems and fixes",
         "Complete-project checkpoint",
+        "How the complete system fits together",
+        "Understand the training file before you run it",
+        "How the application code works",
+        "Now change the project yourself",
+        "How to explain this project in an interview",
+        "What would change for a real production system?",
+        "Implementation mastery check",
     ]
     for phrase in required_text:
         if phrase not in body_text:
