@@ -120,6 +120,22 @@ jobs:
           cd ../..
           npm run build
 
+      - name: Start built website preview
+        run: |
+          cd ../..
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/house-price-site-preview.log 2>&1 &
+          echo $! > /tmp/house-price-site-preview.pid
+
+      - name: Verify handbook on desktop and mobile
+        run: python scripts/verify_handbook_page.py
+
+      - name: Stop built website preview
+        if: always()
+        run: |
+          if [ -f /tmp/house-price-site-preview.pid ]; then
+            kill $(cat /tmp/house-price-site-preview.pid) || true
+          fi
+
       - name: Upload real training outputs
         if: always()
         uses: actions/upload-artifact@v4
