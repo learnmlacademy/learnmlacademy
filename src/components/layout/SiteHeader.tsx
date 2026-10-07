@@ -14,7 +14,7 @@ type SiteHeaderProps = {
 
 const primaryLinks = [
   { to: '/curriculum', label: 'Learn' },
-  { to: '/learn/project-customer-churn', label: 'Projects' },
+  { to: '/projects', label: 'Projects' },
   { to: '/learn/ai-data-career-paths', label: 'Career' },
   { to: '/blog', label: 'Blog' },
 ];
