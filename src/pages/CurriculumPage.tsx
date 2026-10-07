@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { curriculum } from '../data/curriculum';
-import { BookOpen, CheckCircle2, Circle, Check } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle2, Circle, Hammer, Wrench } from 'lucide-react';
 import { useProgress } from '../context/ProgressContext';
 import { CurriculumProgressCard, FilterStatus } from '../components/curriculum/CurriculumProgressCard';
+import { projectPortfolio } from '../data/projectPortfolio';
 
 export function CurriculumPage() {
   const tutorialCount = curriculum.reduce((total, category) => total + category.subtopics.length, 0);
@@ -48,6 +49,58 @@ export function CurriculumPage() {
       {/* Curriculum Categories Grid */}
       <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
         {curriculum.map((category) => {
+          if (category.id === 'projects') {
+            return (
+              <div
+                key={category.id}
+                className="flex flex-col overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 via-white to-violet-50 shadow-sm"
+              >
+                <div className="border-b border-indigo-100 bg-indigo-950 p-5 sm:p-6">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-11 w-11 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
+                      <Hammer className="h-5 w-5" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.14em] text-indigo-300">Hands-on learning</p>
+                      <h2 className="mt-1 text-xl font-black text-white">14. Project Handbooks</h2>
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-indigo-100">
+                    {projectPortfolio.length} recognizable projects built from an empty folder to a working application.
+                  </p>
+                </div>
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <div className="flex items-start gap-3 rounded-xl border border-indigo-100 bg-white p-4">
+                    <Wrench className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600" aria-hidden="true" />
+                    <div>
+                      <p className="text-sm font-black text-slate-900">Every project shows the exact tools first</p>
+                      <p className="mt-1 text-xs leading-5 text-slate-600">
+                        Python, libraries, IDE, notebook, model, UI, deployment and supporting tools are listed before the learner starts.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {projectPortfolio.slice(0, 6).map(project => (
+                      <span key={project.id} className="rounded-lg bg-indigo-50 px-2.5 py-1.5 text-xs font-bold text-indigo-800">
+                        {project.shortTitle}
+                      </span>
+                    ))}
+                    <span className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-bold text-slate-600">
+                      +{projectPortfolio.length - 6} more
+                    </span>
+                  </div>
+                  <Link
+                    to="/projects"
+                    className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-black text-white transition hover:bg-indigo-700"
+                  >
+                    Explore all project handbooks
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              </div>
+            );
+          }
+
           const catProgress = getCategoryProgress(category.id);
           const filteredSubtopics = category.subtopics.filter((topic) => {
             const completed = isCompleted(topic.id);
