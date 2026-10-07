@@ -9,10 +9,18 @@ on:
       - parallel/house-price-handbook
     paths:
       - "projects/house-price-predictor/**"
+      - "src/**"
+      - "public/project-handbooks/house-price/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
       - ".github/workflows/house-price-project-verify.yml"
   pull_request:
     paths:
       - "projects/house-price-predictor/**"
+      - "src/**"
+      - "public/project-handbooks/house-price/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
       - ".github/workflows/house-price-project-verify.yml"
 
 jobs:
@@ -89,6 +97,28 @@ jobs:
             git commit -m "House price project: store verified screenshots [skip ci]"
             git push origin HEAD:parallel/house-price-handbook
           fi
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install website dependencies
+        run: |
+          cd ../..
+          npm ci
+
+      - name: TypeScript validation
+        run: |
+          cd ../..
+          npm run lint
+
+      - name: Build and prerender website
+        run: |
+          cd ../..
+          npm run build
 
       - name: Upload real training outputs
         if: always()
