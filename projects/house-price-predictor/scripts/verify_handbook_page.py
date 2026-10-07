@@ -56,7 +56,20 @@ def verify_page(page, viewport_name: str) -> dict:
         if phrase not in body_text:
             raise AssertionError(f"{viewport_name}: required handbook content missing: {phrase}")
 
-    image_results = page.locator("main img").evaluate_all(
+    images = page.locator("main img")
+    if images.count() < 3:
+        raise AssertionError(f"{viewport_name}: expected at least three real evidence images.")
+
+    for index in range(images.count()):
+        image_locator = images.nth(index)
+        image_locator.scroll_into_view_if_needed()
+        page.wait_for_function(
+            "(img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0",
+            arg=image_locator.element_handle(),
+            timeout=10000,
+        )
+
+    image_results = images.evaluate_all(
         """imgs => imgs.map(img => ({
           src: img.getAttribute('src'),
           complete: img.complete,
@@ -65,8 +78,6 @@ def verify_page(page, viewport_name: str) -> dict:
           alt: img.getAttribute('alt')
         }))"""
     )
-    if len(image_results) < 3:
-        raise AssertionError(f"{viewport_name}: expected at least three real evidence images.")
     for image in image_results:
         if not image["complete"] or image["naturalWidth"] <= 0 or image["naturalHeight"] <= 0:
             raise AssertionError(f"{viewport_name}: image failed to load: {image['src']}")
