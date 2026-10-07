@@ -82,7 +82,7 @@ export function ProjectsPage() {
                   </span>
                   {project.status === 'ready' ? (
                     <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-[11px] font-black text-emerald-800">
-                      HANDBOOK READY
+                      HANDBOOK V1 READY
                     </span>
                   ) : (
                     <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-black text-amber-900">
@@ -131,7 +131,7 @@ export function ProjectsPage() {
                       to={`/projects/${project.id}`}
                       className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 text-sm font-black text-white transition hover:bg-indigo-700"
                     >
-                      Start the complete handbook
+                      Start the handbook
                       <ArrowRight className="h-4 w-4" aria-hidden="true" />
                     </Link>
                   ) : (
