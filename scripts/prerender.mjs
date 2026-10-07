@@ -128,6 +128,10 @@ const staticMeta = new Map([
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
     description: 'Build the classic Titanic machine-learning project from an empty folder to a working prediction app with Python, Pandas, Scikit-learn, Gradio and GitHub.',
   }],
+  ['/projects/house-price', {
+    title: 'House Price Predictor Project Handbook | LearnMLAcademy',
+    description: 'Build a house price predictor from an empty Windows folder to a tested Streamlit app using Ames Housing, Python, scikit-learn and XGBoost.',
+  }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
     description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
