@@ -2,6 +2,7 @@ import React, { useEffect, lazy, Suspense, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
 import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
+import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
 import { GenericContent } from "../content/GenericContent";
 import { QuizSection } from "../components/QuizSection";
@@ -633,7 +634,7 @@ export function TopicPage() {
         <>
           {renderQuiz()}
           {renderStandardContinueLearning("continue-learning-heading")}
-          <NewsletterSignup />
+          <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
           <AffiliateRecommendation />
         </>
       ) : (
@@ -641,7 +642,7 @@ export function TopicPage() {
           <LegacyLessonSummary topicId={topicId} />
           {renderQuiz()}
           {renderStandardContinueLearning(`continue-learning-${topicId}`)}
-          <NewsletterSignup />
+          <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
           <AffiliateRecommendation />
         </>
       )}

@@ -4,6 +4,65 @@ import path from "node:path";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_LIST_ID = 2;
 
+const GUIDES = {
+  ml: {
+    filename: "ML_Interview_Cheatsheet.pdf",
+    downloadName: "ML_Interview_Cheatsheet.pdf",
+    source: "LearnMLAcademy | ML Interview Cheatsheet",
+  },
+  "deep-learning": {
+    filename: "Deep_Learning_Interview_Handbook_2026.pdf",
+    downloadName: "Deep_Learning_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | Deep Learning Interview Handbook",
+  },
+  "generative-ai": {
+    filename: "Generative_AI_Interview_Handbook_2026.pdf",
+    downloadName: "Generative_AI_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | Generative AI Interview Handbook",
+  },
+  "llm-rag": {
+    filename: "LLM_RAG_Interview_Handbook_2026.pdf",
+    downloadName: "LLM_RAG_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | LLM RAG Interview Handbook",
+  },
+  "agentic-ai": {
+    filename: "Agentic_AI_Interview_Handbook_2026.pdf",
+    downloadName: "Agentic_AI_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | Agentic AI Interview Handbook",
+  },
+  python: {
+    filename: "Python_for_ML_AI_Interviews_2026.pdf",
+    downloadName: "Python_for_ML_AI_Interviews_2026.pdf",
+    source: "LearnMLAcademy | Python ML AI Interviews",
+  },
+  sql: {
+    filename: "SQL_for_Data_AI_Interviews_2026.pdf",
+    downloadName: "SQL_for_Data_AI_Interviews_2026.pdf",
+    source: "LearnMLAcademy | SQL Data AI Interviews",
+  },
+  "system-design": {
+    filename: "ML_AI_System_Design_Interview_Handbook_2026.pdf",
+    downloadName: "ML_AI_System_Design_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | ML AI System Design Interview Handbook",
+  },
+  mlops: {
+    filename: "MLOps_Production_AI_Interview_Handbook_2026.pdf",
+    downloadName: "MLOps_Production_AI_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | MLOps Production AI Interview Handbook",
+  },
+  behavioral: {
+    filename: "Behavioral_Project_Interview_Handbook_2026.pdf",
+    downloadName: "Behavioral_Project_Interview_Handbook_2026.pdf",
+    source: "LearnMLAcademy | Behavioral Project Interview Handbook",
+  },
+} as const;
+
+type GuideId = keyof typeof GUIDES;
+
+function resolveGuide(value: unknown): GuideId {
+  return typeof value === "string" && value in GUIDES ? (value as GuideId) : "ml";
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -28,6 +87,9 @@ export default async function handler(req: any, res: any) {
     return res.status(500).json({ error: "Newsletter configuration is invalid." });
   }
 
+  const guideId = resolveGuide(req.body?.guide);
+  const guide = GUIDES[guideId];
+
   try {
     const brevoResponse = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
@@ -41,7 +103,7 @@ export default async function handler(req: any, res: any) {
         listIds: [listId],
         updateEnabled: true,
         attributes: {
-          SOURCE: "ML Academy Interview Cheatsheet",
+          SOURCE: guide.source,
         },
       }),
     });
@@ -50,14 +112,17 @@ export default async function handler(req: any, res: any) {
       return res.status(502).json({ error: "We could not save your signup. Please try again." });
     }
 
-    const pdfPath = path.join(process.cwd(), "private", "ML_Interview_Cheatsheet.pdf");
+    const pdfPath = path.join(process.cwd(), "private", guide.filename);
     const pdf = await readFile(pdfPath);
 
     res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", 'attachment; filename="ML_Interview_Cheatsheet.pdf"');
+    res.setHeader("Content-Disposition", `attachment; filename="${guide.downloadName}"`);
     res.setHeader("Cache-Control", "private, no-store");
     return res.status(200).send(pdf);
-  } catch {
+  } catch (error: any) {
+    if (error?.code === "ENOENT") {
+      return res.status(503).json({ error: "This PDF is temporarily unavailable. Please try again shortly." });
+    }
     return res.status(500).json({ error: "Something went wrong. Please try again." });
   }
 }

@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Mail, Download, CheckCircle, Loader } from 'lucide-react';
+import type { InterviewHandbookId } from '../data/interviewHandbooks';
 
-export function NewsletterSignup() {
+type NewsletterSignupProps = {
+  guideId?: InterviewHandbookId;
+  title?: string;
+  description?: string;
+  filename?: string;
+};
+
+export function NewsletterSignup({
+  guideId = 'ml',
+  title = 'Free Download: ML Interview Cheatsheet',
+  description = '100 essential Machine Learning interview questions and answers covering foundations, algorithms, evaluation, deep learning, Python, system design and interview strategy.',
+  filename = 'ML_Interview_Cheatsheet.pdf',
+}: NewsletterSignupProps) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
@@ -13,10 +26,19 @@ export function NewsletterSignup() {
     };
   }, [downloadUrl]);
 
+  useEffect(() => {
+    setStatus('idle');
+    setErrorMsg('');
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+      setDownloadUrl('');
+    }
+  }, [guideId]);
+
   const startDownload = (url: string) => {
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'ML_Interview_Cheatsheet.pdf';
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -38,7 +60,7 @@ export function NewsletterSignup() {
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ email: trimmed }),
+        body: JSON.stringify({ email: trimmed, guide: guideId }),
       });
 
       if (!response.ok) {
@@ -74,12 +96,12 @@ export function NewsletterSignup() {
         <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">You're all set! 🎉</h3>
         <p className="text-slate-600 mb-6 max-w-md mx-auto">
-          Your email was saved and the PDF download has started.
+          Your email was saved and your {title.replace('Free Download: ', '')} download has started.
         </p>
         {downloadUrl && (
           <a
             href={downloadUrl}
-            download="ML_Interview_Cheatsheet.pdf"
+            download={filename}
             className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-colors"
           >
             <Download className="w-4 h-4" />
@@ -98,13 +120,9 @@ export function NewsletterSignup() {
         </div>
 
         <div className="flex-1">
-          <h3 className="text-xl font-bold text-slate-900 mb-1">
-            Free Download: ML Interview Cheatsheet
-          </h3>
+          <h3 className="text-xl font-bold text-slate-900 mb-1">{title}</h3>
           <p className="text-slate-500 text-sm leading-relaxed">
-            A practical ML interview question-and-answer pack covering core algorithms,
-            evaluation, Python, deep learning, system design and interview strategy.
-            Enter your email to download it instantly.
+            {description} Enter your email to download it instantly.
           </p>
         </div>
 
