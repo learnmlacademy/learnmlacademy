@@ -27,8 +27,8 @@ def load_artifacts():
 def build_model_row(raw_values: dict) -> pd.DataFrame:
     row = pd.DataFrame([raw_values])
 
-    row["house_age_at_sale"] = row["yr_sold"] - row["year_built"]
-    row["years_since_remodel"] = row["yr_sold"] - row["year_remod_add"]
+    row["house_age_at_sale"] = row["year_sold"] - row["year_built"]
+    row["years_since_remodel"] = row["year_sold"] - row["year_remod_add"]
     row["total_bathrooms"] = row["full_bath"] + (0.5 * row["half_bath"])
 
     model_columns = [
@@ -36,7 +36,7 @@ def build_model_row(raw_values: dict) -> pd.DataFrame:
         "garage_cars",
         "garage_area",
         "total_bsmt_sf",
-        "bedroom_abvgr",
+        "bedroom_abv_gr",
         "fireplaces",
         "lot_area",
         "house_age_at_sale",
@@ -124,7 +124,7 @@ with col1:
         "Bedrooms above ground",
         min_value=0,
         max_value=8,
-        value=int(round(defaults["bedroom_abvgr"]["median"])),
+        value=int(round(defaults["bedroom_abv_gr"]["median"])),
         step=1,
     )
 
@@ -168,7 +168,7 @@ with col2:
         "Year sold",
         min_value=2006,
         max_value=2010,
-        value=int(round(defaults["yr_sold"]["median"])),
+        value=int(round(defaults["year_sold"]["median"])),
         step=1,
     )
 
@@ -184,11 +184,11 @@ raw_values = {
     "total_bsmt_sf": float(total_bsmt_sf),
     "full_bath": float(full_bath),
     "half_bath": float(half_bath),
-    "bedroom_abvgr": float(bedrooms),
+    "bedroom_abv_gr": float(bedrooms),
     "fireplaces": float(fireplaces),
     "year_built": float(year_built),
     "year_remod_add": float(year_remodeled),
-    "yr_sold": float(year_sold),
+    "year_sold": float(year_sold),
     "lot_area": float(lot_area),
     "neighborhood": neighborhood,
     "house_style": house_style,
