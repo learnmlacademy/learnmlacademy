@@ -151,11 +151,11 @@ export function MobileNavDrawer({
               )}
             </Link>
             <Link
-              to="/learn/project-customer-churn"
+              to="/projects"
               onClick={onClose}
               className={cn(
                 'flex items-center gap-1.5 rounded-lg px-2.5 py-2.5 transition',
-                location.pathname.includes('project-')
+                location.pathname.startsWith('/projects')
                   ? 'bg-indigo-600 text-white font-bold shadow-xs'
                   : 'bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700'
               )}

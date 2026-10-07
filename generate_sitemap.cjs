@@ -15,6 +15,8 @@ const staticPages = [
   { url: '/curriculum', priority: '0.8', changefreq: 'weekly' },
   { url: '/blog', priority: '0.7', changefreq: 'weekly' },
   { url: '/cheatsheet', priority: '0.7', changefreq: 'monthly' },
+  { url: '/projects', priority: '0.9', changefreq: 'weekly' },
+  { url: '/projects/titanic-survival', priority: '0.8', changefreq: 'monthly' },
   { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { url: '/terms', priority: '0.3', changefreq: 'yearly' },
   { url: '/disclaimer', priority: '0.3', changefreq: 'yearly' },

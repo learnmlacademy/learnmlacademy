@@ -22,20 +22,20 @@ export const learningNavigationGroups: LearningNavigationGroup[] = [
   { id: 'generative-ai', title: 'Generative AI', categories: curriculum.filter(category => category.id === 'generative-ai') },
   { id: 'large-language-models', title: 'Large Language Models', shortTitle: 'LLMs & RAG', categories: curriculum.filter(category => category.id === 'large-language-models') },
   { id: 'agentic-ai', title: 'Agentic AI', categories: curriculum.filter(category => category.id === 'agentic-ai') },
-  { id: 'projects', title: 'Projects', categories: curriculum.filter(category => category.id === 'projects') },
   { id: 'ai-engineering-mlops', title: 'AI Engineering & MLOps', categories: curriculum.filter(category => category.id === 'ai-engineering-mlops') },
   { id: 'interview-preparation', title: 'Career & Interview Preparation', shortTitle: 'Career & Interviews', categories: curriculum.filter(category => category.id === 'interview-preparation') },
 ];
 
-export const searchableLessons: SearchableLesson[] = curriculum.flatMap(category =>
-  category.subtopics.map(topic => ({
+export const searchableLessons: SearchableLesson[] = curriculum
+  .filter(category => category.id !== 'projects')
+  .flatMap(category => category.subtopics.map(topic => ({
     id: topic.id,
     title: topic.title,
     categoryId: category.id,
     categoryTitle: category.title.replace(/^\d+\.\s*/, ''),
     module: topic.module,
-  })),
-);
+  })));
+
 
 export function getActiveNavigationGroup(topicId?: string) {
   if (!topicId) return undefined;
