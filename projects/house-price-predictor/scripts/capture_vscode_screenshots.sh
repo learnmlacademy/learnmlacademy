@@ -55,9 +55,6 @@ if [ -z "$WINDOW_ID" ]; then
   exit 1
 fi
 
-xdotool windowmove "$WINDOW_ID" 0 0
-xdotool windowsize "$WINDOW_ID" 1600 1000
-xdotool windowactivate --sync "$WINDOW_ID"
 sleep 3
 
 capture_file() {
@@ -71,9 +68,7 @@ capture_file() {
     --extensions-dir "$EXTENSIONS_DIR" \
     --reuse-window "$PROJECT_ROOT/$relative_path"
 
-  sleep 2
-  xdotool windowactivate --sync "$WINDOW_ID"
-  sleep 1
+  sleep 3
   import -display :99 -window "$WINDOW_ID" "$OUTPUTS_DIR/$output_name"
   echo "Captured real Visual Studio Code screenshot: $output_name"
 }
