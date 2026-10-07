@@ -4,11 +4,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   ClipboardCheck,
-  Code2,
-  Download,
-  FolderTree,
-  PlayCircle,
-  TerminalSquare,
   Wrench,
 } from 'lucide-react';
 import { CodeBlock } from '../components/content/CodeBlock';
