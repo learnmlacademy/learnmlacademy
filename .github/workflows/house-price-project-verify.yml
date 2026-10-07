@@ -80,6 +80,9 @@ jobs:
       - name: Capture real Streamlit screenshots
         run: python scripts/capture_app_screenshot.py
 
+      - name: Capture real Visual Studio Code screenshots
+        run: bash scripts/capture_vscode_screenshots.sh
+
       - name: Store verified visual evidence on the branch
         if: success()
         run: |
@@ -87,6 +90,7 @@ jobs:
           cp outputs/streamlit-house-price-app.png ../../public/project-handbooks/house-price/
           cp outputs/streamlit-house-price-prediction.png ../../public/project-handbooks/house-price/
           cp outputs/actual_vs_predicted.png ../../public/project-handbooks/house-price/
+          cp outputs/vscode-*.png ../../public/project-handbooks/house-price/
           cd ../..
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
