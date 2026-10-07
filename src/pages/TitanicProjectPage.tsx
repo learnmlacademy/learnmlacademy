@@ -259,7 +259,7 @@ export function TitanicProjectPage() {
             All project handbooks
           </Link>
           <div className="mt-5 flex flex-wrap gap-2">
-            <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-black text-slate-950">COMPLETE HANDBOOK</span>
+            <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-black text-slate-950">HANDBOOK V1 · SCREENSHOTS NEXT</span>
             <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">{project.level}</span>
             <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">{project.buildTime}</span>
           </div>
