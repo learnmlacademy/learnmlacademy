@@ -13,6 +13,7 @@ const BlogPostPage = lazy(() => import('./pages/BlogPostPage').then(module => ({
 const CheatsheetPage = lazy(() => import('./pages/CheatsheetPage').then(module => ({ default: module.CheatsheetPage })));
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(module => ({ default: module.ProjectsPage })));
 const TitanicProjectPage = lazy(() => import('./pages/TitanicProjectPage').then(module => ({ default: module.TitanicProjectPage })));
+const HousePriceProjectPage = lazy(() => import('./pages/HousePriceProjectPage').then(module => ({ default: module.HousePriceProjectPage })));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage').then(module => ({ default: module.PrivacyPolicyPage })));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage').then(module => ({ default: module.TermsOfServicePage })));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage').then(module => ({ default: module.DisclaimerPage })));
@@ -53,6 +54,7 @@ export function AppRoutes() {
           <Route path="cheatsheet" element={<DeferredRoute><CheatsheetPage /></DeferredRoute>} />
           <Route path="projects" element={<DeferredRoute><ProjectsPage /></DeferredRoute>} />
           <Route path="projects/titanic-survival" element={<DeferredRoute><TitanicProjectPage /></DeferredRoute>} />
+          <Route path="projects/house-price" element={<DeferredRoute><HousePriceProjectPage /></DeferredRoute>} />
           <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
           <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
           <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
