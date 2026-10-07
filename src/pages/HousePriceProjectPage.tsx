@@ -269,6 +269,38 @@ export function HousePriceProjectPage() {
           </p>
         </section>
 
+
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
+          <h2 className="text-xl font-black text-slate-950">How the complete system fits together</h2>
+          <p className="mt-3 text-sm leading-7 text-slate-700">
+            Before touching the code, understand the journey. The project has two connected halves: <strong>training</strong>,
+            where we learn a model from historical sales, and <strong>inference</strong>, where the saved model receives one
+            new property and returns an estimated price.
+          </p>
+          <div className="mt-5 grid gap-3 lg:grid-cols-2">
+            <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
+              <p className="font-black text-indigo-950">Training path</p>
+              <p className="mt-2 text-sm leading-7 text-indigo-950">
+                OpenML → <code>download_data.py</code> → Ames dataset → <code>train_model.py</code> → feature engineering →
+                preprocessing → 5-fold model comparison → XGBoost tuning → untouched holdout evaluation →
+                <code>house_price_pipeline.joblib</code> + metrics + chart.
+              </p>
+            </div>
+            <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4">
+              <p className="font-black text-cyan-950">Prediction path</p>
+              <p className="mt-2 text-sm leading-7 text-cyan-950">
+                User enters property details in Streamlit → <code>app.py</code> builds the same feature shape →
+                saved pipeline applies the preprocessing learned during training → XGBoost predicts →
+                the browser displays the estimated historical sale price.
+              </p>
+            </div>
+          </div>
+          <p className="mt-4 text-sm leading-7 text-slate-700">
+            The important design idea is that the app does <strong>not</strong> retrain the model. Training happens once,
+            the fitted pipeline is saved, and the application only loads that artifact for prediction.
+          </p>
+        </section>
+
         <Step number={1} title="Install Python on Windows" check="PowerShell prints a Python version when you type python --version.">
           <p>
             Open Chrome, Edge or another browser. Go to the official{' '}
@@ -460,6 +492,36 @@ export function HousePriceProjectPage() {
           </p>
           <CodeBlock code={trainingCode} language="python" title="src/train_model.py — complete verified training program" type="runnable" />
 
+          <div className="rounded-xl border border-violet-200 bg-violet-50 p-4">
+            <p className="font-black text-violet-950">Understand the training file before you run it</p>
+            <div className="mt-3 overflow-x-auto rounded-lg border border-violet-200 bg-white">
+              <table className="min-w-full text-left text-sm">
+                <thead className="bg-violet-100 text-violet-950">
+                  <tr><th className="px-3 py-2">Code block</th><th className="px-3 py-2">What it does</th><th className="px-3 py-2">Why it exists</th></tr>
+                </thead>
+                <tbody className="divide-y divide-violet-100">
+                  {[
+                    ['normalize_columns()', 'Makes dataset column names predictable Python-friendly names.', 'The downloaded dataset may use mixed naming styles; the rest of the code needs one stable convention.'],
+                    ['build_model_frame()', 'Selects raw features, converts numeric types and creates house age, remodel age and total bathrooms.', 'This turns raw sales data into the exact inputs the models are allowed to learn from.'],
+                    ['make_preprocessor()', 'Imputes missing values, scales numeric inputs for linear models and one-hot encodes categories.', 'Models cannot safely consume missing/categorical values directly, and preprocessing must remain inside the pipeline to avoid leakage.'],
+                    ['candidate_models()', 'Creates Linear Regression, Ridge, Lasso, Random Forest and XGBoost pipelines.', 'We compare several model families instead of assuming the fanciest algorithm will win.'],
+                    ['compare_models()', 'Runs 5-fold cross-validation and records RMSE, MAE and R².', 'A model should win from repeated training-only validation, not from looking at the final test set.'],
+                    ['tuning_grid()', 'Defines a small set of hyperparameter combinations for the winning family.', 'Tuning happens only after model-family selection and only on training data.'],
+                    ['train_test_split()', 'Locks away 20% as the final holdout.', 'This gives one final exam the model has not been optimized against.'],
+                    ['joblib.dump()', 'Saves the whole fitted preprocessing + model pipeline.', 'The browser app must use exactly the transformations that were learned during training.'],
+                  ].map(([name, what, why]) => (
+                    <tr key={name}>
+                      <td className="px-3 py-3 font-mono text-xs text-violet-900">{name}</td>
+                      <td className="px-3 py-3 text-slate-700">{what}</td>
+                      <td className="px-3 py-3 text-slate-700">{why}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
           <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <img
               src="/project-handbooks/house-price/vscode-training-code.png"
@@ -597,6 +659,18 @@ export function HousePriceProjectPage() {
           </p>
           <CodeBlock code={appCode} language="python" title="app.py — complete Streamlit application" type="runnable" />
 
+          <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4">
+            <p className="font-black text-cyan-950">How the application code works</p>
+            <div className="mt-3 space-y-3 text-sm leading-7 text-cyan-950">
+              <p><strong>1. load_artifacts()</strong> loads the saved pipeline and metadata. If training has not created them, the app stops with a useful message rather than producing a fake prediction.</p>
+              <p><strong>2. Streamlit input widgets</strong> collect the same raw property information used by the training project: area, garage, bathrooms, years, neighborhood and quality fields.</p>
+              <p><strong>3. build_model_row()</strong> recreates only the deterministic engineered features—house age, years since remodel and total bathrooms—and orders the columns exactly as the saved pipeline expects.</p>
+              <p><strong>4. model.predict()</strong> sends that one-row DataFrame through the saved preprocessing steps and then through XGBoost. The app itself does not refit imputation, encoding, scaling or the model.</p>
+              <p><strong>5. st.metric()</strong> displays the prediction. The warning below it reminds the learner that the Ames dataset contains historical prices and is not a current professional appraisal.</p>
+            </div>
+          </div>
+
+
           <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
             <img
               src="/project-handbooks/house-price/vscode-app-code.png"
@@ -725,6 +799,97 @@ export function HousePriceProjectPage() {
             <p><strong>App opens but prediction fails after you changed features:</strong> the app inputs must match the columns the saved pipeline expects. Retrain and update the app together.</p>
           </div>
         </section>
+
+
+        <section className="rounded-2xl border border-fuchsia-200 bg-fuchsia-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-fuchsia-950">Now change the project yourself</h2>
+          <p className="mt-3 text-sm leading-7 text-fuchsia-950">
+            Copying the finished code proves you can reproduce the build. The exercises below prove you understand it.
+            Make one change at a time, rerun training, and compare the result with the verified baseline above.
+          </p>
+          <div className="mt-4 space-y-4 text-sm leading-7 text-fuchsia-950">
+            <div className="rounded-xl border border-fuchsia-200 bg-white p-4">
+              <p className="font-black">Exercise 1 — Remove one useful feature</p>
+              <p className="mt-1">Temporarily remove <code>garage_cars</code> from the raw/model feature lists, retrain, and compare CV RMSE. The goal is not to force a worse score; it is to see that features are choices whose value can be tested.</p>
+            </div>
+            <div className="rounded-xl border border-fuchsia-200 bg-white p-4">
+              <p className="font-black">Exercise 2 — Change the XGBoost search</p>
+              <p className="mt-1">Add <code>max_depth = 4</code> to the tuning grid. Rerun and inspect the best parameters and CV RMSE. A larger search is not automatically better; you are testing whether extra complexity helps validation performance.</p>
+            </div>
+            <div className="rounded-xl border border-fuchsia-200 bg-white p-4">
+              <p className="font-black">Exercise 3 — Trace one prediction end to end</p>
+              <p className="mt-1">Choose one set of values in Streamlit. Identify which raw fields enter <code>build_model_row()</code>, which three engineered values are created, and where the saved pipeline receives the final row.</p>
+            </div>
+            <div className="rounded-xl border border-fuchsia-200 bg-white p-4">
+              <p className="font-black">Exercise 4 — Break it on purpose</p>
+              <p className="mt-1">Rename <code>models/house_price_pipeline.joblib</code> temporarily and run the app. Read the error, restore the filename, and rerun. This teaches you how the application depends on the trained artifact.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-blue-950">How to explain this project in an interview</h2>
+          <div className="mt-4 space-y-4 text-sm leading-7 text-blue-950">
+            {[
+              ['Why did you use a scikit-learn Pipeline?', 'To keep imputation, encoding/scaling and the estimator together so every validation fold learns preprocessing only from its training portion, and so inference uses the exact fitted transformations.'],
+              ['Why did you keep a holdout set?', 'Cross-validation was used to compare and tune models. The holdout stayed untouched so the final reported result came from data that did not influence those decisions.'],
+              ['Why was RMSE the primary selection metric?', 'House-price errors are measured in dollars, and RMSE gives larger mistakes more weight. We also report MAE and R² so one metric does not tell the whole story.'],
+              ['Why did XGBoost win?', 'It produced the lowest mean 5-fold CV RMSE among the five candidate model families in this verified run. It was selected by validation evidence, not by brand or popularity.'],
+              ['How did you avoid training-serving mismatch?', 'The whole fitted preprocessing + model pipeline was saved with Joblib. The Streamlit app loads that artifact instead of rebuilding preprocessing separately.'],
+              ['What is the biggest limitation?', 'The data describes historical sales in Ames, Iowa. The model is not adjusted to today’s dollars, other cities or changing market conditions, so it is an educational estimator rather than a real appraisal product.'],
+            ].map(([question, answer]) => (
+              <div key={question} className="rounded-xl border border-blue-200 bg-white p-4">
+                <p className="font-black">{question}</p>
+                <p className="mt-1">{answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-orange-200 bg-orange-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-orange-950">What would change for a real production system?</h2>
+          <p className="mt-3 text-sm leading-7 text-orange-950">
+            A notebook-quality score is not enough for a production appraisal product. Before real use you would need fresher
+            geographically relevant sales data, stronger data-quality checks, inflation/market-time treatment, outlier analysis,
+            fairness and subgroup checks, monitored prediction/error drift, versioned model releases, automated retraining rules,
+            authentication and logging, and a clear human-review process for high-value decisions.
+          </p>
+          <p className="mt-3 text-sm leading-7 text-orange-950">
+            Streamlit is perfect for learning and demos. A production service might instead expose the model through an API,
+            validate requests with a schema, store model/version metadata with each prediction and place a separate web or mobile
+            interface in front of that API.
+          </p>
+        </section>
+
+        <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-emerald-950">Implementation mastery check</h2>
+          <p className="mt-3 text-sm leading-7 text-emerald-950">
+            Do not call the project finished just because the app opens. You should be able to answer these without looking at the code.
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {[
+              'What exactly is the prediction target?',
+              'Which inputs are numeric and which are categorical?',
+              'Which three features do we engineer and how?',
+              'Why is preprocessing kept inside the pipeline?',
+              'What would data leakage look like in this project?',
+              'Why do we compare models with cross-validation?',
+              'Why is the holdout used only after selection/tuning?',
+              'What do MAE, RMSE and R² each tell you?',
+              'Why was XGBoost selected in this run?',
+              'What exactly is stored in house_price_pipeline.joblib?',
+              'How does app.py transform one user form submission into a model input?',
+              'Why can the same saved pipeline accept a new neighborhood category safely?',
+              'How would you debug a missing model-file error?',
+              'What would you change before using this outside historical Ames data?',
+            ].map(item => (
+              <div key={item} className="rounded-xl border border-emerald-200 bg-white p-3 text-sm leading-6 text-emerald-950">
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
 
         <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
           <h2 className="flex items-center gap-2 text-xl font-black text-slate-950">
