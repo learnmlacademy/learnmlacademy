@@ -18,7 +18,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { WebsiteSchema } from '../components/SchemaMarkup';
-import { NewsletterSignup } from '../components/NewsletterSignup';
+import { InterviewHandbookShowcase } from '../components/InterviewHandbookShowcase';
 import { curriculum } from '../data/curriculum';
 import { blogPosts } from '../data/blog';
 import { useProgress } from '../context/ProgressContext';
@@ -254,6 +254,26 @@ export function HomePage() {
         </div>
 
         <div className="relative mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-5">
+          <a
+            href="#free-interview-handbooks"
+            className="absolute right-8 top-1/2 hidden w-[300px] -translate-y-1/2 rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-500/20 to-indigo-500/15 p-4 shadow-2xl backdrop-blur transition hover:-translate-y-[52%] hover:border-cyan-300/50 lg:block"
+          >
+            <div className="inline-flex items-center gap-2 rounded-full bg-amber-300 px-2.5 py-1 text-[10px] font-black tracking-wide text-slate-950">
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              NEW · 10 FREE PDFs
+            </div>
+            <h2 className="mt-3 text-lg font-black leading-tight text-white">
+              ML & AI Interview Handbooks
+            </h2>
+            <p className="mt-2 text-xs leading-5 text-slate-300">
+              ML, Deep Learning, GenAI, LLM & RAG, Agentic AI, Python, SQL, System Design, MLOps and Behavioral.
+            </p>
+            <div className="mt-3 inline-flex items-center gap-1 text-xs font-black text-cyan-300">
+              Browse & download
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </div>
+          </a>
+
           <div className="max-w-3xl">
             <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-slate-700 bg-slate-900/80 px-2.5 py-0.5 text-[11px] font-bold text-slate-300">
               <Sparkles className="h-3.5 w-3.5 text-cyan-300" aria-hidden="true" />
@@ -335,9 +355,20 @@ export function HomePage() {
                 </Link>
               ))}
             </div>
+
+            <a
+              href="#free-interview-handbooks"
+              className="mt-3 inline-flex items-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-xs font-black text-violet-200 lg:hidden"
+            >
+              <GraduationCap className="h-4 w-4" aria-hidden="true" />
+              Explore 10 free interview handbook PDFs
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
           </div>
         </div>
       </section>
+
+      <InterviewHandbookShowcase />
 
       {/* Browse by topic */}
       <section className="bg-white py-5 sm:py-6">
@@ -578,18 +609,18 @@ export function HomePage() {
               <div className="grid h-12 w-12 place-items-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-200">
                 <BriefcaseBusiness className="h-6 w-6" aria-hidden="true" />
               </div>
-              <h2 className="mt-5 text-2xl font-black text-slate-950">Free ML Interview Cheatsheet</h2>
+              <h2 className="mt-5 text-2xl font-black text-slate-950">10 Free Interview Handbooks</h2>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Keep essential ML concepts, formulas, evaluation ideas and interview trade-offs in one practical PDF.
+                Download detailed PDFs for Machine Learning, Deep Learning, Generative AI, LLM & RAG, Agentic AI, Python, SQL, System Design, MLOps and Behavioral interviews.
               </p>
             </div>
-            <Link
-              to="/cheatsheet"
+            <a
+              href="#free-interview-handbooks"
               className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700"
             >
-              Get the free PDF
+              Explore all free PDFs
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -639,12 +670,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="bg-white py-8">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-          <NewsletterSignup />
-        </div>
-      </section>
     </div>
   );
 }
