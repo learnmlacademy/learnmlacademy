@@ -21,6 +21,7 @@ import { WebsiteSchema } from '../components/SchemaMarkup';
 import { InterviewHandbookShowcase } from '../components/InterviewHandbookShowcase';
 import { curriculum } from '../data/curriculum';
 import { blogPosts } from '../data/blog';
+import { projectPortfolio } from '../data/projectPortfolio';
 import { useProgress } from '../context/ProgressContext';
 
 type TrackCard = {
@@ -180,8 +181,7 @@ export function HomePage() {
   } = useProgress();
 
   const tutorialCount = allLessons.length;
-  const projectCount =
-    curriculum.find(category => category.id === 'projects')?.subtopics.length ?? 0;
+  const projectCount = projectPortfolio.length;
 
   const searchResults = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -644,7 +644,7 @@ export function HomePage() {
               </div>
               <div>
                 <p className="text-2xl font-black text-white">{projectCount}</p>
-                <p className="text-xs font-semibold text-slate-400">Hands-on projects</p>
+                <p className="text-xs font-semibold text-slate-400">Project handbooks</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -657,12 +657,12 @@ export function HomePage() {
               </div>
             </div>
             <Link
-              to="/learn/project-customer-churn"
+              to="/projects"
               className="group flex items-center justify-between gap-3 rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 transition hover:border-blue-500/60 hover:bg-slate-800"
             >
               <div>
                 <p className="text-sm font-black text-white">Build something real</p>
-                <p className="mt-1 text-xs text-slate-400">Explore end-to-end ML & AI projects</p>
+                <p className="mt-1 text-xs text-slate-400">Explore step-by-step ML & AI project handbooks</p>
               </div>
               <ArrowRight className="h-4 w-4 shrink-0 text-slate-500 transition group-hover:translate-x-1 group-hover:text-blue-300" aria-hidden="true" />
             </Link>
