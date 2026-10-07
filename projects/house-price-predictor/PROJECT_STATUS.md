@@ -22,9 +22,9 @@ The work sequence is:
 - [x] Checkpoint 3 — inspect actual model comparison, tune/fix methodology if necessary, rerun until clean
 - [x] Checkpoint 4 — verify saved model reload and Streamlit application
 - [x] Checkpoint 5 — capture real screenshots/output evidence
-- [ ] Checkpoint 6 — write absolute-beginner website handbook with visible complete code
-- [ ] Checkpoint 7 — integrate `/projects/house-price`, prerendering, sitemap, project catalog status, SEO
-- [ ] Checkpoint 8 — mobile/accessibility/beginner audit, lint/build/CI, PR
+- [x] Checkpoint 6 — absolute-beginner website handbook written with visible complete code, real outputs, real screenshots, troubleshooting and completion checklist
+- [x] Checkpoint 7 — `/projects/house-price` route, prerendering, sitemap, project catalog status and SEO integrated on the isolated branch
+- [x] Checkpoint 8 — desktop/mobile handbook verification, TypeScript validation, production build/prerender, project CI and evidence checks passed; PR prepared for parallel review/merge
 
 ## Dataset decision
 
@@ -119,3 +119,14 @@ The successful CI run produced:
 - `actual_vs_predicted.png`
 
 These screenshots must be used as the source of truth for the handbook.
+
+
+## Parallel-work state
+
+This project is intentionally isolated on `parallel/house-price-handbook` so Titanic/Codex work can continue independently.
+
+Current branch state:
+- all eight project checkpoints are complete
+- the branch is based on current `main` and is kept separate to minimize conflicts with Titanic work
+- latest full verification run `37653352539` passed every step, including Python training, Streamlit health check, real screenshot capture, TypeScript validation, production build/prerender and desktop/mobile handbook verification
+- next repository action is PR review/merge coordination; merge order should be chosen to avoid unnecessary conflicts with any active Titanic branch touching `src/App.tsx`, `src/data/projectPortfolio.ts`, `scripts/prerender.mjs` or `generate_sitemap.cjs`
