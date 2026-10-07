@@ -361,6 +361,16 @@ export function HousePriceProjectPage() {
             <code>requirements.txt</code>. Paste the complete content below and press <strong>Ctrl+S</strong> to save.
           </p>
           <CodeBlock code={requirementsCode} language="text" title="requirements.txt" type="config" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-requirements.png"
+              alt="Real Visual Studio Code window showing the verified requirements.txt file for the House Price Predictor project"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">Real screenshot captured from the project in Visual Studio Code. Your desktop VS Code may use a different theme, but the filename and contents should match.</figcaption>
+          </figure>
           <p>Return to the terminal and run:</p>
           <CodeBlock code={installCommands} language="powershell" title="Install the project dependencies" type="runnable" />
           <p>
@@ -383,6 +393,16 @@ export function HousePriceProjectPage() {
             In the project root create a file named <code>download_data.py</code>. Paste all of this code, then save it:
           </p>
           <CodeBlock code={downloadDataCode} language="python" title="download_data.py" type="runnable" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-download-data.png"
+              alt="Real Visual Studio Code window showing download_data.py in the verified House Price Predictor project"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">This is the actual downloader file used by the verified build. Use the Copy button above rather than typing the program by hand.</figcaption>
+          </figure>
           <p>Run it from the project root:</p>
           <CodeBlock code={'python download_data.py'} language="powershell" title="Download the real dataset" type="runnable" />
           <CodeBlock
@@ -439,6 +459,16 @@ export function HousePriceProjectPage() {
             use the Copy button, paste it into the file, and save.
           </p>
           <CodeBlock code={trainingCode} language="python" title="src/train_model.py — complete verified training program" type="runnable" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-training-code.png"
+              alt="Real Visual Studio Code window showing src/train_model.py from the House Price Predictor project"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">Real project file opened in Visual Studio Code after the verified build. The complete copyable source is shown above.</figcaption>
+          </figure>
         </Step>
 
         <Step number={10} title="See what the preprocessing pipeline is doing" check="You understand that imputation, scaling and encoding are learned using training folds rather than the final test set.">
@@ -482,6 +512,16 @@ export function HousePriceProjectPage() {
           <CodeBlock code={'python src/train_model.py'} language="powershell" title="Train the project" type="runnable" />
           <p>The verified build produced this training-only cross-validation comparison:</p>
           <CodeBlock code={modelComparison} language="text" title="Real 5-fold CV result" type="output" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-model-comparison.png"
+              alt="Real Visual Studio Code window showing the generated model_comparison.csv from the verified training run"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">The file was produced by the real five-model cross-validation run. It is evidence from the executable project, not an illustrative table.</figcaption>
+          </figure>
           <p>
             XGBoost had the lowest mean CV RMSE, so it became the model to tune. Notice that we did <strong>not</strong>
             inspect the final holdout test scores to choose the winner.
@@ -512,6 +552,16 @@ export function HousePriceProjectPage() {
             title="Real verified holdout output"
             type="output"
           />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-final-metrics.png"
+              alt="Real Visual Studio Code window showing final_metrics.json from the verified House Price Predictor holdout evaluation"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">The generated metrics file records the selected model, tuned settings, final holdout metrics, row counts and random seed from the verified run.</figcaption>
+          </figure>
           <p>
             <strong>MAE $15,670</strong> means the absolute prediction error is about $15,670 on average in this test set.
             <strong>RMSE $23,792</strong> penalizes larger errors more strongly. <strong>R² 0.929</strong> means the model
@@ -546,6 +596,16 @@ export function HousePriceProjectPage() {
             the complete verified application:
           </p>
           <CodeBlock code={appCode} language="python" title="app.py — complete Streamlit application" type="runnable" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-app-code.png"
+              alt="Real Visual Studio Code window showing app.py for the verified Streamlit House Price Predictor"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">Real application source opened in Visual Studio Code. The complete copyable code is directly above this screenshot.</figcaption>
+          </figure>
           <p>
             The app loads the saved preprocessing-and-model pipeline. This is important: it does not try to recreate
             preprocessing rules separately at prediction time.
@@ -584,6 +644,16 @@ export function HousePriceProjectPage() {
             <code>tests/test_app.py</code> and paste:
           </p>
           <CodeBlock code={testCode} language="python" title="tests/test_app.py" type="runnable" />
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-test-code.png"
+              alt="Real Visual Studio Code window showing tests/test_app.py for the House Price Predictor"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">The smoke test shown here is the same test executed by the verified project workflow.</figcaption>
+          </figure>
           <p>Then run:</p>
           <CodeBlock code={'pytest -q'} language="powershell" title="Run the smoke test" type="runnable" />
           <CodeBlock code={'.                                                                        [100%]\n1 passed'} language="text" title="Verified test result" type="output" />
@@ -610,6 +680,16 @@ export function HousePriceProjectPage() {
             ├── download_data.py<br />
             └── requirements.txt
           </div>
+
+          <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+            <img
+              src="/project-handbooks/house-price/vscode-project-workspace.png"
+              alt="Real Visual Studio Code workspace for the completed House Price Predictor project"
+              className="w-full rounded-lg border border-slate-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-slate-600">Final verified project workspace in Visual Studio Code. Generated data, model and output folders appear only after their earlier commands have run successfully.</figcaption>
+          </figure>
           <p>
             Files in <code>data</code>, <code>models</code> and <code>outputs</code> are generated from the reproducible
             source project. The Python source and dependency file are the important things to preserve in version control.
