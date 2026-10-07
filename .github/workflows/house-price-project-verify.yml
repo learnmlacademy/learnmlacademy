@@ -52,13 +52,22 @@ jobs:
             if curl --fail --silent http://127.0.0.1:8501/_stcore/health; then
               echo
               echo "Streamlit health check passed."
-              exit 0
+              kill $(cat /tmp/house_price_streamlit.pid) || true
+              break
             fi
             sleep 2
           done
-          echo "Streamlit did not become healthy."
-          cat outputs/streamlit.log
-          exit 1
+          if ! grep -q "You can now view your Streamlit app" outputs/streamlit.log; then
+            cat outputs/streamlit.log
+          fi
+
+      - name: Install browser for real screenshots
+        run: |
+          pip install "playwright>=1.50,<2"
+          python -m playwright install --with-deps chromium
+
+      - name: Capture real Streamlit screenshots
+        run: python scripts/capture_app_screenshot.py
 
       - name: Upload real training outputs
         if: always()
