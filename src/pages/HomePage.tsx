@@ -161,12 +161,19 @@ const homepageBlogPosts = [...blogPosts]
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 3);
 
-const allLessons = curriculum.flatMap(category =>
-  category.subtopics.map(lesson => ({
-    ...lesson,
-    categoryTitle: category.title.replace(/^\d+\.\s*/, ''),
-    route: `/learn/${lesson.id}`,
-  })),
+const allLessons = curriculum
+  .filter(category => category.id !== 'projects')
+  .flatMap(category =>
+    category.subtopics.map(lesson => ({
+      ...lesson,
+      categoryTitle: category.title.replace(/^\d+\.\s*/, ''),
+      route: `/learn/${lesson.id}`,
+    })),
+  );
+
+const curriculumLessonCount = curriculum.reduce(
+  (total, category) => total + category.subtopics.length,
+  0,
 );
 
 export function HomePage() {
@@ -180,7 +187,7 @@ export function HomePage() {
     getNextIncompleteTopic,
   } = useProgress();
 
-  const tutorialCount = allLessons.length;
+  const tutorialCount = curriculumLessonCount;
   const projectCount = projectPortfolio.length;
 
   const searchResults = useMemo(() => {
