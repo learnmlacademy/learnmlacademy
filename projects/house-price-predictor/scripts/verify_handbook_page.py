@@ -56,7 +56,7 @@ def verify_page(page, viewport_name: str) -> dict:
         if phrase not in body_text:
             raise AssertionError(f"{viewport_name}: required handbook content missing: {phrase}")
 
-    images = page.locator("main img")
+    images = page.locator('main img[src^="/project-handbooks/house-price/"]')
     if images.count() < 3:
         raise AssertionError(f"{viewport_name}: expected at least three real evidence images.")
 
