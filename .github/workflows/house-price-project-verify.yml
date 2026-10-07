@@ -1,0 +1,72 @@
+name: Verify House Price Project
+
+on:
+  push:
+    branches:
+      - parallel/house-price-handbook
+    paths:
+      - "projects/house-price-predictor/**"
+      - ".github/workflows/house-price-project-verify.yml"
+  pull_request:
+    paths:
+      - "projects/house-price-predictor/**"
+      - ".github/workflows/house-price-project-verify.yml"
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/house-price-predictor
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: projects/house-price-predictor/requirements.txt
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Download official Ames Housing data
+        run: python download_data.py
+
+      - name: Train, compare, tune and save model
+        run: python src/train_model.py
+
+      - name: Run Streamlit app test
+        run: pytest -q
+
+      - name: Start Streamlit and verify HTTP response
+        run: |
+          streamlit run app.py --server.headless true --server.port 8501 > outputs/streamlit.log 2>&1 &
+          echo $! > /tmp/house_price_streamlit.pid
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health; then
+              echo
+              echo "Streamlit health check passed."
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "Streamlit did not become healthy."
+          cat outputs/streamlit.log
+          exit 1
+
+      - name: Upload real training outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: house-price-project-evidence
+          path: |
+            projects/house-price-predictor/models/
+            projects/house-price-predictor/outputs/
+          if-no-files-found: warn
+          retention-days: 14
