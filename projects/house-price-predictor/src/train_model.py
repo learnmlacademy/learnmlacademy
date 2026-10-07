@@ -32,11 +32,11 @@ RAW_NUMERIC_FEATURES = [
     "total_bsmt_sf",
     "full_bath",
     "half_bath",
-    "bedroom_abvgr",
+    "bedroom_abv_gr",
     "fireplaces",
     "year_built",
     "year_remod_add",
-    "yr_sold",
+    "year_sold",
     "lot_area",
 ]
 RAW_CATEGORICAL_FEATURES = [
@@ -50,7 +50,7 @@ MODEL_NUMERIC_FEATURES = [
     "garage_cars",
     "garage_area",
     "total_bsmt_sf",
-    "bedroom_abvgr",
+    "bedroom_abv_gr",
     "fireplaces",
     "lot_area",
     "house_age_at_sale",
@@ -93,8 +93,8 @@ def build_model_frame(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     for column in RAW_CATEGORICAL_FEATURES:
         working[column] = working[column].astype("object")
 
-    working["house_age_at_sale"] = working["yr_sold"] - working["year_built"]
-    working["years_since_remodel"] = working["yr_sold"] - working["year_remod_add"]
+    working["house_age_at_sale"] = working["year_sold"] - working["year_built"]
+    working["years_since_remodel"] = working["year_sold"] - working["year_remod_add"]
     working["total_bathrooms"] = working["full_bath"] + (0.5 * working["half_bath"])
 
     features = working[MODEL_NUMERIC_FEATURES + MODEL_CATEGORICAL_FEATURES]
