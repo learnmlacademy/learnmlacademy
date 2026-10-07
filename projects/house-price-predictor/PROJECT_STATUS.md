@@ -18,10 +18,10 @@ The work sequence is:
 
 - [x] Checkpoint 0 — isolated parallel branch created
 - [x] Checkpoint 1 — project folder, dependency file, official dataset downloader, training pipeline, Streamlit app, and app smoke test created
-- [ ] Checkpoint 2 — execute the complete ML training workflow in CI and capture real metrics/artifacts
-- [ ] Checkpoint 3 — inspect actual model comparison, tune/fix methodology if necessary, rerun until clean
-- [ ] Checkpoint 4 — verify saved model reload and Streamlit application
-- [ ] Checkpoint 5 — capture real screenshots/output evidence
+- [x] Checkpoint 2 — execute the complete ML training workflow in CI and capture real metrics/artifacts
+- [x] Checkpoint 3 — inspect actual model comparison, tune/fix methodology if necessary, rerun until clean
+- [x] Checkpoint 4 — verify saved model reload and Streamlit application
+- [x] Checkpoint 5 — capture real screenshots/output evidence
 - [ ] Checkpoint 6 — write absolute-beginner website handbook with visible complete code
 - [ ] Checkpoint 7 — integrate `/projects/house-price`, prerendering, sitemap, project catalog status, SEO
 - [ ] Checkpoint 8 — mobile/accessibility/beginner audit, lint/build/CI, PR
@@ -65,3 +65,57 @@ The app must clearly state that Ames data is historical and the result is an edu
 Only screenshots captured from the real project are allowed. No generated UI screenshots and no fabricated model results.
 
 If a Windows-only installer screen cannot be reproduced in the available execution environment, provide exact verified text instructions rather than a fake screenshot.
+
+
+## Verified execution evidence
+
+Latest successful GitHub Actions run: `37650476988`
+
+The workflow completed all executable checks successfully:
+- downloaded the official OpenML Ames Housing dataset: 2,930 rows, 81 columns
+- trained and compared all five candidate models
+- selected the winner using 5-fold cross-validation on training data only
+- tuned the selected model on training data only
+- evaluated the final model once on the untouched holdout set
+- saved and reloaded the fitted pipeline
+- passed the Streamlit application test
+- passed a live Streamlit health check
+- captured real Streamlit screenshots with Chromium
+
+### Real 5-fold cross-validation results
+
+| Model | Mean CV RMSE | Mean CV MAE | Mean CV R² |
+| --- | ---: | ---: | ---: |
+| XGBoost | $26,575 | $16,867 | 0.874 |
+| Random Forest | $27,585 | $17,438 | 0.867 |
+| Ridge | $31,214 | $19,154 | 0.825 |
+| Linear Regression | $31,251 | $18,887 | 0.824 |
+| Lasso | $31,562 | $19,432 | 0.820 |
+
+Winner: **XGBoost**
+
+Best tuning result:
+- `learning_rate = 0.06`
+- `max_depth = 3`
+- `n_estimators = 450`
+- best CV RMSE after tuning: **$26,542**
+
+### Final untouched holdout result
+
+- MAE: **$15,670**
+- RMSE: **$23,792**
+- R²: **0.929**
+- training rows: **2,344**
+- test rows: **586**
+- reload-check prediction: **$153,563**
+
+These figures are real execution output. Do not replace them with illustrative numbers unless the project code or dataset changes and the workflow is rerun.
+
+### Real screenshots captured
+
+The successful CI run produced:
+- `streamlit-house-price-app.png`
+- `streamlit-house-price-prediction.png`
+- `actual_vs_predicted.png`
+
+These screenshots must be used as the source of truth for the handbook.
