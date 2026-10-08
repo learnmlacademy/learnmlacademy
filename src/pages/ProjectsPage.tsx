@@ -106,7 +106,7 @@ export function ProjectsPage() {
                 <div className="mt-5">
                   <div className="flex items-center gap-2 text-sm font-black text-slate-900">
                     <Wrench className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-                    Tools you will use
+                    Tools You Will Use
                   </div>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {project.tools.map(tool => (
@@ -120,9 +120,9 @@ export function ProjectsPage() {
                 <div className="mt-5">
                   <div className="flex items-center gap-2 text-sm font-black text-slate-900">
                     <Layers3 className="h-4 w-4 text-indigo-600" aria-hidden="true" />
-                    Chapters covered
+                    {project.topics ? 'Topics Covered' : 'Chapters covered'}
                   </div>
-                  <p className="mt-2 text-xs leading-5 text-slate-500">{project.chapters.join(' · ')}</p>
+                  <p className="mt-2 text-xs leading-5 text-slate-500">{(project.topics ?? project.chapters).join(' · ')}</p>
                 </div>
 
                 <div className="mt-6">

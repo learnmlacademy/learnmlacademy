@@ -6,6 +6,7 @@ export type ProjectPortfolioItem = {
   build: string;
   tools: string[];
   chapters: string[];
+  topics?: string[];
   level: "Beginner" | "Intermediate" | "Advanced";
   buildTime: string;
   status: "ready" | "next";
@@ -18,10 +19,11 @@ export const projectPortfolio: ProjectPortfolioItem[] = [
     shortTitle: "Titanic Survival Predictor",
     description: "A classic hands-on classification project rebuilt as a complete beginner-friendly handbook from raw CSV to a working prediction app.",
     build: "A web app that takes passenger details and predicts survival probability while comparing multiple classification models.",
-    tools: ["Python", "VS Code", "JupyterLab", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "Logistic Regression", "Random Forest", "Gradio", "Git", "GitHub"],
+    tools: ["Python", "VS Code", "JupyterLab", "Pandas", "NumPy", "Matplotlib", "Scikit-learn", "Joblib", "Streamlit", "Git", "GitHub", "Kaggle"],
     chapters: ["Python", "EDA", "Missing Data", "Encoding", "Scaling", "Classification", "Model Evaluation", "Cross-Validation", "Feature Engineering", "Deployment"],
+    topics: ["Exploratory Data Analysis (EDA)", "Missing Data", "Categorical Encoding", "Feature Scaling", "Logistic Regression", "K-Nearest Neighbors", "Support Vector Machine", "Decision Tree", "Random Forest", "Preprocessing Pipelines", "Cross-Validation", "Hyperparameter Tuning", "Accuracy", "Precision", "Recall", "F1 Score", "Confusion Matrix", "Model Persistence (Save and Load)"],
     level: "Beginner",
-    buildTime: "4-6 hours",
+    buildTime: "Self-paced • save checkpoints",
     status: "ready",
   },
   {
