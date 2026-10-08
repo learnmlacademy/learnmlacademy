@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - parallel/titanic-quality-review
+      - enhance/project-pedagogy-visuals
     paths:
       - "projects/titanic-survival-predictor/**"
       - "public/project-handbooks/titanic/**"
@@ -104,6 +105,7 @@ jobs:
         run: |
           mkdir -p public/project-handbooks/titanic
           cp projects/titanic-survival-predictor/outputs/training_class_rates.png public/project-handbooks/titanic/
+          cp projects/titanic-survival-predictor/outputs/survival_by_sex_class.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/model_comparison.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/
@@ -142,7 +144,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/titanic-quality-review'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/parallel/titanic-quality-review' || github.ref == 'refs/heads/enhance/project-pedagogy-visuals')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -154,8 +156,9 @@ jobs:
             # The test/build process may rewrite tracked generated files such as outputs or sitemap.
             # Reset all uncommitted tracked changes to this evidence commit before rebasing.
             git restore .
-            git pull --rebase origin parallel/titanic-quality-review
-            git push origin HEAD:parallel/titanic-quality-review
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            git pull --rebase origin "$BRANCH"
+            git push origin "HEAD:$BRANCH"
           fi
 
       - name: Stop preview processes
