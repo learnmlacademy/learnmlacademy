@@ -267,6 +267,27 @@ def build_metadata(
     }
 
 
+
+def save_training_eda(X_train: pd.DataFrame, y_train: pd.Series) -> None:
+    """Create a training-only chart that makes the regression problem intuitive."""
+    area = X_train["gr_liv_area"].astype(float)
+    price = y_train.astype(float)
+
+    slope, intercept = np.polyfit(area, price, 1)
+    x_line = np.linspace(float(area.min()), float(area.max()), 200)
+    y_line = slope * x_line + intercept
+
+    fig, ax = plt.subplots(figsize=(8, 5.5))
+    ax.scatter(area, price, alpha=0.35)
+    ax.plot(x_line, y_line, linewidth=2)
+    ax.set_xlabel("Above-ground living area (square feet)")
+    ax.set_ylabel("Historical sale price ($)")
+    ax.set_title("Training-only pattern: living area vs sale price")
+    fig.tight_layout()
+    fig.savefig(OUTPUTS_DIR / "living_area_vs_sale_price.png", dpi=160)
+    plt.close(fig)
+
+
 def main() -> None:
     if not DATA_PATH.exists():
         raise FileNotFoundError(
@@ -285,6 +306,8 @@ def main() -> None:
         test_size=0.20,
         random_state=RANDOM_STATE,
     )
+
+    save_training_eda(X_train, y_train)
 
     models = candidate_models()
     comparison = compare_models(models, X_train, y_train)
