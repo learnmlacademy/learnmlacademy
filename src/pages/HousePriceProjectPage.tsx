@@ -37,9 +37,9 @@ const runCommands = String.raw`python download_data.py
 python src/train_model.py
 streamlit run app.py`;
 
-const gitIgnoreCode = ".venv/\\n__pycache__/\\n.pytest_cache/\\ndata/*.parquet\\ndata/*.csv\\nmodels/*.joblib\\nmodels/*.json\\noutputs/*.csv\\noutputs/*.json\\noutputs/*.png";
+const gitIgnoreCode = ".venv/\n__pycache__/\n.pytest_cache/\ndata/*.parquet\ndata/*.csv\nmodels/*.joblib\nmodels/*.json\noutputs/*.csv\noutputs/*.json\noutputs/*.png";
 
-const readmeCode = "# House Price Predictor\\n\\nA complete regression project using the Ames Housing dataset.\\n\\n## What it does\\nThe project compares five regression model families, tunes the best one using training-only cross-validation, evaluates it once on an untouched holdout set, saves the complete preprocessing + model pipeline, and serves predictions through Streamlit.\\n\\n## Tools\\nPython, Pandas, NumPy, scikit-learn, XGBoost, Joblib, Matplotlib, Streamlit, Pytest\\n\\n## Run\\n```powershell\\npython download_data.py\\npython src/train_model.py\\npytest -q\\nstreamlit run app.py\\n```\\n\\n## Verified reference result\\n- Winner: XGBoost\\n- Holdout MAE: $15,670\\n- Holdout RMSE: $23,792\\n- Holdout R²: 0.929\\n\\n## Important limitation\\nThis is an educational model trained on historical Ames, Iowa sales. It is not a current professional property appraisal.";
+const readmeCode = "# House Price Predictor\n\nA complete regression project using the Ames Housing dataset.\n\n## What it does\nThe project compares five regression model families, tunes the best one using training-only cross-validation, evaluates it once on an untouched holdout set, saves the complete preprocessing + model pipeline, and serves predictions through Streamlit.\n\n## Tools\nPython, Pandas, NumPy, scikit-learn, XGBoost, Joblib, Matplotlib, Streamlit, Pytest\n\n## Run\n```powershell\npython download_data.py\npython src/train_model.py\npytest -q\nstreamlit run app.py\n```\n\n## Verified reference result\n- Winner: XGBoost\n- Holdout MAE: $15,670\n- Holdout RMSE: $23,792\n- Holdout R²: 0.929\n\n## Important limitation\nThis is an educational model trained on historical Ames, Iowa sales. It is not a current professional property appraisal.";
 
 const gitCommands = String.raw`git init
 git add .
