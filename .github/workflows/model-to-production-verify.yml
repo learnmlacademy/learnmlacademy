@@ -1,0 +1,105 @@
+name: Model to production engineering
+on:
+  push:
+    branches: [feat/model-to-production-engineering]
+    paths:
+      - 'projects/model-to-production/**'
+      - '.github/workflows/model-to-production-verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: model-to-production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  engineering:
+    if: github.ref == 'refs/heads/feat/model-to-production-engineering'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+        working-directory: projects/model-to-production
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
+        with:
+          python-version: '3.13.16'
+          cache: pip
+          cache-dependency-path: projects/model-to-production/requirements.txt
+      - name: Install pinned environment
+        run: |
+          mkdir -p reports
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip check
+          python -m pip freeze > reports/dependencies.txt
+      - name: Download and verify pinned public data
+        run: python -m scripts.prepare_data
+      - name: Train and reload two real versions
+        run: |
+          python -m src.train --version v1 | tee reports/train-v1.log
+          python -m src.train --version v2 --c 0.5 | tee reports/train-v2.log
+      - name: Build reference statistics and exercise drift detection
+        run: |
+          python -m scripts.prepare_drift --version v1 | tee reports/drift-v1.log
+          python -m scripts.prepare_drift --version v2 | tee reports/drift-v2.log
+          python -m src.drift --version v1 --batch data/normal_batch.csv
+          python -m src.drift --version v1 --batch data/shifted_batch.csv
+      - name: All unit and real ASGI integration tests
+        run: python -m pytest -q --junitxml=reports/pytest.xml
+      - name: Prove API version switching and rollback
+        run: |
+          python -m scripts.verify_versions
+          python -m scripts.final_checks
+      - name: Build Docker image without deploying it
+        run: docker build --tag churn-service:ci .
+      - name: Run real container and verify HTTP endpoints
+        run: |
+          docker run -d --name churn-ci --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1:8000:8000 churn-service:ci
+          python -m scripts.smoke_http --version v1
+          test "$(docker exec churn-ci id -u)" = '10001'
+          for attempt in $(seq 1 20); do
+            status=$(docker inspect --format='{{.State.Health.Status}}' churn-ci)
+            if [ "$status" = healthy ]; then break; fi
+            sleep 2
+          done
+          test "$status" = healthy
+          printf 'Docker image built; non-root container, health check and real HTTP tests passed.\n' > reports/docker-status.txt
+      - name: Capture container logs and clean up this job's container
+        if: always()
+        run: |
+          docker logs churn-ci > reports/container.log 2>&1 || true
+          docker rm -f churn-ci >/dev/null 2>&1 || true
+      - name: Upload engineering results only
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: model-to-production-${{ github.run_id }}-${{ github.run_attempt }}
+          path: projects/model-to-production/reports/
+          if-no-files-found: warn
+          retention-days: 14
+
+  repository-checks:
+    if: github.ref == 'refs/heads/feat/model-to-production-engineering'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npx vite build --configLoader runner

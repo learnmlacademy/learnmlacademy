@@ -102,3 +102,19 @@ will be used instead. No Docker success is claimed yet.
 - Full suite: 46 passed, one documented HTTPX adapter deprecation warning.
 - Both generated model directories and their metadata/reference files coexist
   locally. Main project config remains v1; verification uses disposable configs.
+
+## Checkpoint E — implementation, execution pending
+
+- Docker base pinned to official Python 3.13.16 slim-bookworm manifest
+  sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641.
+  Public Docker Hub tag metadata verified on 8 October 2026.
+- Runtime copies only approved API/loader files, model versions and config.
+  Non-root UID 10001, read-only runtime example, loopback-bound host port and
+  an application health check. No image registry push or deployment configured.
+- CI downloads the pinned public dataset without secrets, trains both versions,
+  executes all tests, drift/switch/rollback checks, builds Docker and runs a real
+  HTTP smoke test against that container. Artifacts exclude raw data/models.
+- Local Docker is unavailable. Build/runtime success will be recorded only after
+  the actual GitHub Actions run completes.
+- Pre-CI review caught Linux private-directory permissions inherited from atomic
+  training publication; Docker copies model folders with runtime-user ownership.

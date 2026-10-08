@@ -113,3 +113,42 @@ provides a genuinely different model. It is not selected by repeatedly testing
 the holdout and is not claimed to outperform v1. Both artifacts coexist.
 The verification command uses a disposable config and actual FastAPI TestClient
 requests to prove v1 → v2 → v1 and identical predictions after rollback.
+
+## Docker (no deployment required)
+
+Install Docker separately if it is not available. Train v1/v2 and prepare their
+reference files using the commands above before building. Prefer artifacts
+produced by CI in the matching Linux environment for a Linux container.
+
+```powershell
+docker build -t churn-service:local .
+docker run --rm --name churn-local --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges -p 127.0.0.1:8000:8000 churn-service:local
+```
+
+Stop any local Uvicorn already using port 8000 first. Run the same curl commands
+from another terminal. The container runs as UID 10001 and has a /health-based
+health check. It has no raw data, secrets or training scripts. No registry push,
+cloud deployment or public port exposure is performed.
+
+Config/model.json is copied into the image. After switching it on the host,
+rebuild the image and restart the container; editing a host file alone does not
+change a running container. The loader requires the exact recorded Python and
+model-library versions. Treat model.joblib plus its metadata as trusted code.
+
+## Continuous integration and engineering checks
+
+The isolated feature branch triggers `Model to production engineering` in
+GitHub Actions. It performs download, training, Pytest, drift checks, switching,
+Docker build and real container HTTP checks. A second job runs the repository's
+required TypeScript and Vite checks without deploying.
+
+```powershell
+python -m scripts.final_checks
+python -m scripts.smoke_http --version v1
+```
+
+The smoke command requires the running container; final_checks does not.
+CI artifacts contain metrics/logs/JUnit results, not raw CSVs or model binaries.
+See BUILD_RECORD.md and PROJECT_STATUS.md for measured completion status.
+This small service still needs authentication, TLS, rate limits, operational
+monitoring and business validation before actual public production use.
