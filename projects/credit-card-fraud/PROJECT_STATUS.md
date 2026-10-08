@@ -13,12 +13,12 @@
 - [x] saved model bundle
 - [x] Streamlit fraud-review demo
 - [x] automated tests
-- [ ] first clean CI run after test fix
+- [x] first clean CI run after test fix
 - [x] record exact dataset SHA256
-- [ ] learner handbook page
-- [ ] real screenshots
-- [ ] desktop/mobile website verification
-- [ ] final acceptance audit
+- [x] learner handbook page
+- [x] real screenshots
+- [x] desktop/mobile website verification
+- [x] final acceptance audit
 
 ## First executed engineering result
 
@@ -41,3 +41,19 @@ Run 37775714245 completed the full training stage successfully before one test a
 - confusion matrix: [[42641, 7], [19, 55]]
 
 The failed assertion was not a model failure: OpenML exposes `Class` as a pandas categorical column in the raw parquet. The test has been corrected to cast the target before summing.
+
+## Final verified gate
+
+GitHub Actions run **37776917207 — SUCCESS**.
+
+Verified end to end:
+- fingerprinted OpenML download
+- complete training and model comparison
+- 9 automated tests passed
+- live Streamlit app started
+- 3 genuine application screenshots captured
+- 5 generated ML figures published
+- TypeScript validation passed
+- production build and prerender passed
+- desktop and 390px-mobile handbook verification passed
+- no horizontal overflow
