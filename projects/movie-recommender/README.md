@@ -28,9 +28,14 @@ Raw downloaded data and generated model artifacts are kept out of Git.
 
 ## Why the collaborative matrix is sparse
 
-The movie-user matrix has 1,682 × 943 possible cells, but only 100,000 observed ratings. Most user/movie pairs are therefore empty. The build records both density and sparsity so the handbook can explain why sparse matrices matter.
+The movie-user matrix has 1,682 × 943 possible cells, but only 100,000 observed ratings. The verified build records:
 
-## Verified workflow
+- density: 6.3047%
+- sparsity: 93.6953%
+
+Sparse CSR storage avoids allocating ordinary dense values for most missing user/movie interactions.
+
+## Run locally
 
 From this directory:
 
@@ -41,6 +46,25 @@ pytest -q
 python -m streamlit run app.py
 ```
 
-The GitHub Actions workflow repeats the data download, artifact build, automated tests, Streamlit startup and Playwright screenshot capture in a clean environment.
+## Verified quality gate
 
-This branch remains a working build until the full beginner handbook, public evidence, website integration and final quality gate are complete.
+GitHub Actions run **37755384707** passed:
+
+- official dataset download
+- recommender build
+- 10 Pytest checks
+- Streamlit health
+- genuine Playwright screenshots
+- TypeScript validation
+- website production build/prerender
+- desktop handbook verification
+- mobile handbook verification
+- horizontal-overflow checks
+
+The learner-facing handbook is integrated at:
+
+`/projects/movie-recommender`
+
+## Important limitation
+
+The app ranks movies related to a selected movie. It is an educational demonstration of popularity, content-based, item-item collaborative and hybrid recommendation. A real production recommender would add rigorous held-out ranking evaluation, user-level personalization, richer/learned features, freshness, online experimentation and production serving infrastructure.

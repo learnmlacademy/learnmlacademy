@@ -85,7 +85,7 @@ export const projectPortfolio: ProjectPortfolioItem[] = [
     topics: ["Popularity Ranking", "MovieLens 100K", "Multi-Hot Genre Vectors", "Cosine Similarity", "Sparse CSR Matrices", "Item-Item Collaborative Filtering", "Nearest Neighbors", "Hybrid Ranking", "Cold Start", "Recommendation Evaluation", "Joblib Persistence", "Streamlit", "Pytest"],
     level: "Intermediate",
     buildTime: "5-7 hours",
-    status: "next",
+    status: "ready",
   },
   {
     id: "disaster-tweets",
