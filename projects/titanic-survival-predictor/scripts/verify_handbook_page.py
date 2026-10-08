@@ -48,6 +48,12 @@ REQUIRED_IMAGES = {
     "/project-handbooks/titanic/titanic-app-form.png",
     "/project-handbooks/titanic/titanic-prediction-survived.png",
     "/project-handbooks/titanic/titanic-prediction-not-survived.png",
+    "/project-handbooks/titanic/vscode-training-code.png",
+    "/project-handbooks/titanic/vscode-model-comparison.png",
+    "/project-handbooks/titanic/vscode-tuning-results.png",
+    "/project-handbooks/titanic/vscode-final-metrics.png",
+    "/project-handbooks/titanic/vscode-example-predictions.png",
+    "/project-handbooks/titanic/vscode-project-workspace.png",
 }
 
 
