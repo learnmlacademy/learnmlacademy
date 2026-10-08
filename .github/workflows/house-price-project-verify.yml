@@ -85,10 +85,11 @@ jobs:
         run: python scripts/capture_app_screenshot.py
 
       - name: Capture real Visual Studio Code screenshots
+        if: github.event_name == 'push'
         run: bash scripts/capture_vscode_screenshots.sh
 
       - name: Store verified visual evidence in working tree
-        if: success()
+        if: github.event_name == 'push' && success()
         run: |
           mkdir -p ../../public/project-handbooks/house-price
           cp outputs/streamlit-house-price-app.png ../../public/project-handbooks/house-price/
