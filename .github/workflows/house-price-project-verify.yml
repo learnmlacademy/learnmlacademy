@@ -11,6 +11,7 @@ on:
   push:
     branches:
       - parallel/house-price-handbook
+      - enhance/project-pedagogy-visuals
     paths:
       - "projects/house-price-predictor/**"
       - "src/**"
@@ -95,6 +96,7 @@ jobs:
           cp outputs/streamlit-house-price-app.png ../../public/project-handbooks/house-price/
           cp outputs/streamlit-house-price-prediction.png ../../public/project-handbooks/house-price/
           cp outputs/actual_vs_predicted.png ../../public/project-handbooks/house-price/
+          cp outputs/living_area_vs_sale_price.png ../../public/project-handbooks/house-price/
           cp outputs/vscode-*.png ../../public/project-handbooks/house-price/
 
       - name: Set up Node
@@ -129,7 +131,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified visual evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/house-price-handbook'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/parallel/house-price-handbook' || github.ref == 'refs/heads/enhance/project-pedagogy-visuals')
         run: |
           cd ../..
           git config user.name "github-actions[bot]"
@@ -142,8 +144,9 @@ jobs:
             # Training/build steps may rewrite tracked generated files. Keep only the
             # evidence commit before rebasing onto any concurrent branch update.
             git restore .
-            git pull --rebase origin parallel/house-price-handbook
-            git push origin HEAD:parallel/house-price-handbook
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            git pull --rebase origin "$BRANCH"
+            git push origin "HEAD:$BRANCH"
           fi
 
       - name: Stop built website preview
