@@ -34,3 +34,24 @@ Do not merge until:
 7. production build/prerender passes,
 8. desktop and mobile handbook verification passes,
 9. PR remains reviewable with no raw CSV, Joblib model, secrets, caches or build output committed.
+
+
+## Final verification result
+
+GitHub Actions run `37739719255` passed the complete gate:
+
+- fingerprinted verification dataset download
+- full five-model training/comparison/tuning/final evaluation
+- provenance and exact metric checks
+- model/data tests and Streamlit tests
+- live Streamlit health check
+- genuine browser screenshot capture
+- real chart/evidence publication
+- TypeScript validation
+- production build and prerender
+- built-site preview
+- desktop and mobile handbook content/evidence/overflow verification
+
+The generated app screenshots were visually inspected after the run. The pre-prediction form is fully rendered, and the two contrasting examples show real **Survived** and **Did Not Survive** outputs from the saved pipeline.
+
+**Acceptance: PASS for draft review. Do not merge without explicit user approval.**
