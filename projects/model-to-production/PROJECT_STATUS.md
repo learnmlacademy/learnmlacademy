@@ -1,0 +1,21 @@
+# Engineering checkpoints
+
+- [x] branch safely created and pushed
+- [x] dataset
+- [x] training pipeline
+- [x] model artifact
+- [x] metadata
+- [ ] model versioning
+- [ ] model loader
+- [ ] FastAPI
+- [ ] validation
+- [x] unit tests (initial training checks; full coverage checkpoint C)
+- [ ] API integration tests
+- [ ] logging
+- [ ] latency
+- [ ] drift
+- [ ] v2 version
+- [ ] rollback
+- [ ] Docker
+- [ ] CI
+- [ ] final engineering audit
