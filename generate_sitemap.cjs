@@ -20,6 +20,7 @@ const staticPages = [
   { url: '/projects/house-price', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/movie-recommender', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/credit-card-fraud', priority: '0.8', changefreq: 'monthly' },
+  { url: '/projects/model-to-production', priority: '0.8', changefreq: 'monthly' },
   { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { url: '/terms', priority: '0.3', changefreq: 'yearly' },
   { url: '/disclaimer', priority: '0.3', changefreq: 'yearly' },
