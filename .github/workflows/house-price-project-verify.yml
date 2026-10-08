@@ -11,7 +11,6 @@ on:
   push:
     branches:
       - parallel/house-price-handbook
-      - enhance/project-screenshot-coverage
     paths:
       - "projects/house-price-predictor/**"
       - "src/**"
@@ -133,7 +132,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified visual evidence to review branch
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/parallel/house-price-handbook' || github.ref == 'refs/heads/enhance/project-screenshot-coverage')
+        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/house-price-handbook'
         run: |
           cd ../..
           git config user.name "github-actions[bot]"
@@ -146,9 +145,8 @@ jobs:
             # Training/build steps may rewrite tracked generated files. Keep only the
             # evidence commit before rebasing onto any concurrent branch update.
             git restore .
-            BRANCH="${GITHUB_REF#refs/heads/}"
-            git pull --rebase origin "$BRANCH"
-            git push origin "HEAD:$BRANCH"
+            git pull --rebase origin parallel/house-price-handbook
+            git push origin HEAD:parallel/house-price-handbook
           fi
 
       - name: Stop built website preview
