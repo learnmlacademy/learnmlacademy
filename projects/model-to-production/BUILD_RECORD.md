@@ -68,3 +68,20 @@ will be used instead. No Docker success is claimed yet.
   serialization, network and startup loading.
 - Pinned Starlette emits a deprecation warning for its supported HTTPX TestClient
   adapter; tests pass. No local listener was needed for these integration tests.
+
+## Checkpoint C — executed
+
+- 44 Pytest cases passed, including bad checksums, unsafe version names,
+  invalid metadata rejected before unpickling, failed artifact publication,
+  no-fit inference, redacted logs/errors and malformed drift batches.
+- Initial bounded noninteractive test process exited without a usable report;
+  one retry with visible output and bytecode writes disabled passed in 4.50s.
+- Structured JSON logging added without raw records. Validation responses omit
+  input values; unexpected inference errors return a generic 500 and safe log.
+- Training-only reference statistics saved for 5,634 rows. Normal 1,000-row
+  batch: all eight features OK. Shifted MonthlyCharges: 2.5993635 training
+  standard deviations of mean shift, DRIFT DETECTED. Contract total variation:
+  0.4494143, WARNING. Other features OK.
+- Drift thresholds: numeric mean shift >=0.5 training std or missing-rate
+  change >=0.10; category total variation >=0.15. These are educational
+  heuristics, not hypothesis tests or automated retraining authority.

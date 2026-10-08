@@ -60,3 +60,28 @@ The returned latency measures dataframe construction, fitted preprocessing,
 probability prediction and class selection. It excludes request validation,
 network time, startup model loading and response serialization. It is not an
 end-to-end latency benchmark. Probabilities are estimates, not guarantees.
+
+## Feature drift and structured logs
+
+```powershell
+python -m scripts.prepare_drift --version v1
+python -m src.drift --version v1 --batch data/normal_batch.csv
+python -m src.drift --version v1 --batch data/shifted_batch.csv
+```
+
+The first command saves reference.json beside v1 using only the training split,
+then creates two deterministic 1,000-row educational batches. Normal should be
+all OK; shifted should flag MonthlyCharges and Contract. It does not retrain.
+
+Numeric mean shift is divided by training standard deviation; 0.5 or more flags
+drift. A missing-rate change of 0.10 also flags drift. Category total-variation
+distance is half the summed absolute proportion differences; 0.15 or more warns.
+These are explicit teaching thresholds, not statistically calibrated alarms.
+Mean checks can miss changes that preserve the mean, batches under 50 rows are
+rejected, and covariate shift is not evidence of reduced predictive performance.
+Investigate data quality and collect fresh labels before deciding to retrain.
+
+The API writes JSON events for startup, inference success/failure and validation
+rejections. Logs include model version and measured inference latency, never
+request bodies or customer feature values. Validation responses retain useful
+field locations/messages without echoing input values.

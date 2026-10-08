@@ -9,11 +9,11 @@
 - [x] model loader
 - [x] FastAPI
 - [x] validation
-- [x] unit tests (initial training checks; full coverage checkpoint C)
+- [x] unit tests
 - [x] API integration tests
-- [ ] logging
+- [x] logging
 - [x] latency
-- [ ] drift
+- [x] drift
 - [ ] v2 version
 - [ ] rollback
 - [ ] Docker
