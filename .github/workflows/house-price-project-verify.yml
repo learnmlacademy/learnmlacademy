@@ -1,5 +1,9 @@
 name: Verify House Price Project
 
+concurrency:
+  group: house-price-quality-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -83,7 +87,7 @@ jobs:
       - name: Capture real Visual Studio Code screenshots
         run: bash scripts/capture_vscode_screenshots.sh
 
-      - name: Store verified visual evidence on the branch
+      - name: Store verified visual evidence in working tree
         if: success()
         run: |
           mkdir -p ../../public/project-handbooks/house-price
@@ -91,16 +95,6 @@ jobs:
           cp outputs/streamlit-house-price-prediction.png ../../public/project-handbooks/house-price/
           cp outputs/actual_vs_predicted.png ../../public/project-handbooks/house-price/
           cp outputs/vscode-*.png ../../public/project-handbooks/house-price/
-          cd ../..
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/project-handbooks/house-price/
-          if git diff --cached --quiet; then
-            echo "Verified screenshots are already current."
-          else
-            git commit -m "House price project: store verified screenshots [skip ci]"
-            git push origin HEAD:parallel/house-price-handbook
-          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -132,6 +126,24 @@ jobs:
 
       - name: Verify handbook on desktop and mobile
         run: python scripts/verify_handbook_page.py
+
+      - name: Commit verified visual evidence to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/house-price-handbook'
+        run: |
+          cd ../..
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/house-price/
+          if git diff --cached --quiet; then
+            echo "Verified screenshots are already current."
+          else
+            git commit -m "House price project: store verified screenshots [skip ci]"
+            # Training/build steps may rewrite tracked generated files. Keep only the
+            # evidence commit before rebasing onto any concurrent branch update.
+            git restore .
+            git pull --rebase origin parallel/house-price-handbook
+            git push origin HEAD:parallel/house-price-handbook
+          fi
 
       - name: Stop built website preview
         if: always()
