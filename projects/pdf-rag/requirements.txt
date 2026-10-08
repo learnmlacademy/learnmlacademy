@@ -1,0 +1,9 @@
+PyMuPDF==1.26.7
+numpy==2.3.5
+scikit-learn==1.8.0
+scipy==1.17.0
+streamlit==1.51.0
+openai==2.6.1
+pytest==9.0.2
+reportlab==4.4.9
+playwright==1.58.0
