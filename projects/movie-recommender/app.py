@@ -31,7 +31,7 @@ def load_artifacts(modified_ns: int):
 
 
 artifacts = load_artifacts(MODEL_PATH.stat().st_mtime_ns)
-movies = artifacts["movies"].sort_values("title")
+movies = artifacts["movies"].sort_values(["title", "movie_id"]).reset_index(drop=True)
 
 method_label = st.radio(
     "Recommendation method",
@@ -44,13 +44,24 @@ if method_label == "Popular movies":
     popular = core.popularity_recommendations(artifacts, top_n=10).copy()
     popular["weighted_score"] = popular["weighted_score"].round(3)
     st.dataframe(popular, hide_index=True, use_container_width=True)
-    st.info("Popularity is a fallback: it does not personalize to a chosen movie.")
+    st.info(
+        "Popularity is our cold-start fallback. It is useful when we do not yet "
+        "have enough information to calculate a meaningful similarity."
+    )
 else:
-    titles = movies["title"].tolist()
-    default_title = "Toy Story (1995)"
-    default_index = titles.index(default_title) if default_title in titles else 0
-    title = st.selectbox("Choose a movie you like", titles, index=default_index)
-    selected = movies.loc[movies["title"] == title].iloc[0]
+    choices = list(zip(movies["movie_id"].astype(int), movies["title"]))
+    default_choice = next(
+        (choice for choice in choices if choice[1] == "Toy Story (1995)"),
+        choices[0],
+    )
+    selected_choice = st.selectbox(
+        "Choose a movie you like",
+        choices,
+        index=choices.index(default_choice),
+        format_func=lambda choice: f"{choice[1]}  •  MovieLens ID {choice[0]}",
+    )
+    selected_id, selected_title = selected_choice
+
     method = {
         "Hybrid": "hybrid",
         "Content-based": "content",
@@ -59,18 +70,18 @@ else:
     top_n = st.slider("How many recommendations?", min_value=5, max_value=15, value=10)
 
     if st.button("Recommend movies", type="primary"):
-        recommendations = core.recommend(
+        recommendations = core.recommend_or_fallback(
             artifacts,
-            int(selected["movie_id"]),
+            int(selected_id),
             method=method,
             top_n=top_n,
         )
-        st.subheader(f"Because you chose: {title}")
+        st.subheader(f"Because you chose: {selected_title}")
         st.dataframe(recommendations, hide_index=True, use_container_width=True)
         if method == "content":
-            st.caption("Content-based: similar movie genres.")
+            st.caption("Content-based: compare multi-hot genre vectors with cosine similarity.")
         elif method == "collaborative":
-            st.caption("Collaborative: movies with similar rating patterns across users.")
+            st.caption("Collaborative: compare sparse movie-by-user rating patterns.")
         else:
             st.caption("Hybrid: 45% genre similarity + 55% audience-rating similarity.")
 
