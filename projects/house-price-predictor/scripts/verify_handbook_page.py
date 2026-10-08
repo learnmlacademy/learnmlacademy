@@ -58,6 +58,8 @@ def verify_page(page, viewport_name: str) -> dict:
         "How to explain this project in an interview",
         "What would change for a real production system?",
         "Implementation mastery check",
+        ".gitignore — copy this exactly",
+        "README.md — project explanation",
     ]
     for phrase in required_text:
         if phrase not in body_text:
