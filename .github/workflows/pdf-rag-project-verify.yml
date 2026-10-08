@@ -1,0 +1,111 @@
+name: PDF RAG Project Verify
+
+on:
+  push:
+    branches: [feat/pdf-rag-handbook-visuals]
+    paths:
+      - "projects/pdf-rag/**"
+      - "src/pages/PdfRagProjectPage.tsx"
+      - "src/data/pdfRagSourceCode.ts"
+      - "src/components/projects/PdfRagConceptVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/pdf-rag-project-verify.yml"
+  pull_request:
+    paths:
+      - "projects/pdf-rag/**"
+      - "src/pages/PdfRagProjectPage.tsx"
+      - "src/data/pdfRagSourceCode.ts"
+      - "src/components/projects/PdfRagConceptVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/pdf-rag-project-verify.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/pdf-rag/requirements.txt
+      - name: Install PDF RAG dependencies
+        working-directory: projects/pdf-rag
+        run: |
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip check
+      - name: Generate original teaching PDF
+        working-directory: projects/pdf-rag
+        run: python scripts/make_sample_pdf.py
+      - name: Test PDF engine and source safety
+        working-directory: projects/pdf-rag
+        run: python -m pytest -q
+      - name: Verify persisted index and true page attribution
+        working-directory: projects/pdf-rag
+        run: |
+          python scripts/index_and_ask.py | tee /tmp/pdf-rag-answer.txt
+          grep "'Campus_Travel_Policy.pdf', 3" /tmp/pdf-rag-answer.txt
+      - name: Install Chromium for real screenshots
+        run: python -m playwright install --with-deps chromium
+      - name: Start Streamlit app
+        working-directory: projects/pdf-rag
+        run: |
+          nohup python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 >/tmp/pdf-rag-app.log 2>&1 &
+          for i in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/pdf-rag-app.log
+          exit 1
+      - name: Capture real Streamlit desktop and mobile screenshots
+        working-directory: projects/pdf-rag
+        run: python scripts/capture_screenshots.py
+      - name: Stage verified screenshot evidence
+        run: |
+          mkdir -p public/project-handbooks/pdf-rag
+          cp projects/pdf-rag/outputs/screenshots/*.png public/project-handbooks/pdf-rag/
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install website dependencies
+        run: npm ci
+      - name: Type-check
+        run: npm run lint
+      - name: Build, prerender and verify the project catalog
+        run: npm run build
+      - name: Verify Project 10 page was rendered with complete code
+        run: |
+          test -s dist/projects/pdf-rag.html
+          grep -q "Chat With Your PDFs" dist/projects/pdf-rag.html
+          grep -q "Campus Travel Policy" dist/projects/pdf-rag.html
+          grep -q "projects/pdf-rag/src/rag.py" dist/projects/pdf-rag.html
+          test -s dist/sitemap.xml
+          grep -q "https://www.learnmlacademy.com/projects/pdf-rag" dist/sitemap.xml
+          test -s dist/project-handbooks/pdf-rag/pdf-rag-app-desktop-answer.png
+          test -s dist/project-handbooks/pdf-rag/pdf-rag-app-mobile-answer.png
+      - name: Commit verified visual evidence to feature branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/pdf-rag-handbook-visuals'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/pdf-rag/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: add real PDF RAG app evidence [skip ci]"
+            git push
+          fi
