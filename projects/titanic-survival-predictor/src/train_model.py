@@ -184,6 +184,31 @@ def save_and_reload(pipeline):
     print(examples.to_string(index=False))
 
 
+
+def save_training_eda(X_train, y_train):
+    """Save a training-only visual that makes the classification problem intuitive."""
+    frame = X_train.copy()
+    frame["Survived"] = y_train.to_numpy()
+
+    labels = []
+    rates = []
+    for sex in ["female", "male"]:
+        for pclass in [1, 2, 3]:
+            group = frame[(frame["Sex"] == sex) & (frame["Pclass"] == pclass)]
+            labels.append(f"{sex.title()}\\nClass {pclass}")
+            rates.append(float(group["Survived"].mean() * 100))
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+    bars = ax.bar(labels, rates)
+    ax.set_ylim(0, 100)
+    ax.set_ylabel("Survival rate in training rows (%)")
+    ax.set_title("Training-only survival pattern by sex and ticket class")
+    ax.bar_label(bars, labels=[f"{value:.1f}%" for value in rates], padding=3)
+    fig.tight_layout()
+    fig.savefig(ROOT / "outputs" / "survival_by_sex_class.png", dpi=160)
+    plt.close(fig)
+
+
 # handbook: run
 def main():
     X_train, X_test, y_train, y_test = load_and_split()
@@ -193,6 +218,7 @@ def main():
     print(f'Prepared training shape: {prepared.shape}')
     print('Candidates:', ', '.join(make_candidates()))
     (ROOT / 'outputs').mkdir(exist_ok=True)
+    save_training_eda(X_train, y_train)
     comparison = compare_models(X_train, y_train)
     name = comparison.iloc[0]['model']
     search = tune_winner(name, X_train, y_train)
