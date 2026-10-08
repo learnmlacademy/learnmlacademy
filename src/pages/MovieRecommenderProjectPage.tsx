@@ -611,10 +611,50 @@ export function MovieRecommenderProjectPage() {
           </p>
           <img
             src="/project-handbooks/movie-recommender/movie-recommender-results.png"
-            alt="Real Streamlit recommendation results for Iron Country from the verified application"
+            alt="Real Streamlit hybrid recommendation results for Iron Country from the verified application"
             className="w-full rounded-xl border border-slate-200 bg-white"
             loading="lazy"
           />
+          <p>
+            Now switch methods without changing the seed movie. Seeing the output change makes the evidence source tangible:
+            content-based ranking uses movie attributes, collaborative ranking uses audience behaviour, and popularity ignores the
+            selected movie entirely.
+          </p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <img
+                src="/project-handbooks/movie-recommender/movie-recommender-content-results.png"
+                alt="Real Streamlit content-based recommendation results for Iron Country"
+                className="w-full rounded-lg border border-slate-200 bg-white"
+                loading="lazy"
+              />
+              <figcaption className="mt-2 text-xs leading-5 text-slate-600">
+                <strong>Content-based:</strong> recommendations are driven only by genre and release-decade similarity.
+              </figcaption>
+            </figure>
+            <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <img
+                src="/project-handbooks/movie-recommender/movie-recommender-collaborative-results.png"
+                alt="Real Streamlit collaborative recommendation results for Iron Country"
+                className="w-full rounded-lg border border-slate-200 bg-white"
+                loading="lazy"
+              />
+              <figcaption className="mt-2 text-xs leading-5 text-slate-600">
+                <strong>Collaborative:</strong> recommendations come from similarity between sparse user-rating patterns.
+              </figcaption>
+            </figure>
+          </div>
+          <figure className="rounded-xl border border-emerald-200 bg-emerald-50 p-3">
+            <img
+              src="/project-handbooks/movie-recommender/movie-recommender-popular-results.png"
+              alt="Real Streamlit popular-movies fallback table from the verified recommendation application"
+              className="w-full rounded-lg border border-emerald-200 bg-white"
+              loading="lazy"
+            />
+            <figcaption className="mt-2 text-xs leading-5 text-emerald-900">
+              <strong>Popularity baseline:</strong> this is the non-personalized fallback used when similarity evidence is unavailable.
+            </figcaption>
+          </figure>
         </Step>
 
         <Step

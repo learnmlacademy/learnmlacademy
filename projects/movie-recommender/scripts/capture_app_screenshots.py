@@ -31,6 +31,36 @@ def main() -> None:
             path=OUTPUT / "movie-recommender-results.png",
             full_page=True,
         )
+
+        page.locator("label").filter(has_text="Content-based").click()
+        page.get_by_role("button", name="Recommend movies").click()
+        page.get_by_text(
+            "Content-based: compare genre + release-decade labels with cosine similarity."
+        ).wait_for()
+        page.wait_for_timeout(500)
+        page.screenshot(
+            path=OUTPUT / "movie-recommender-content-results.png",
+            full_page=True,
+        )
+
+        page.locator("label").filter(has_text="Collaborative").click()
+        page.get_by_role("button", name="Recommend movies").click()
+        page.get_by_text(
+            "Collaborative: compare sparse movie-by-user rating patterns."
+        ).wait_for()
+        page.wait_for_timeout(500)
+        page.screenshot(
+            path=OUTPUT / "movie-recommender-collaborative-results.png",
+            full_page=True,
+        )
+
+        page.locator("label").filter(has_text="Popular movies").click()
+        page.get_by_text("Popular starting points").wait_for()
+        page.wait_for_timeout(500)
+        page.screenshot(
+            path=OUTPUT / "movie-recommender-popular-results.png",
+            full_page=True,
+        )
         browser.close()
 
     print("Captured genuine Movie Recommender Streamlit screenshots.")

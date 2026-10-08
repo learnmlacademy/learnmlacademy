@@ -100,6 +100,11 @@ jobs:
         working-directory: projects/titanic-survival-predictor
         run: python scripts/capture_streamlit_screenshots.py
 
+      - name: Capture real Visual Studio Code screenshots
+        if: github.event_name == 'push'
+        working-directory: projects/titanic-survival-predictor
+        run: bash scripts/capture_vscode_screenshots.sh
+
       - name: Store verified handbook evidence in working tree
         run: |
           mkdir -p public/project-handbooks/titanic
@@ -108,6 +113,11 @@ jobs:
           cp projects/titanic-survival-predictor/outputs/model_comparison.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/
+          if compgen -G "projects/titanic-survival-predictor/outputs/vscode-*.png" > /dev/null; then
+            cp projects/titanic-survival-predictor/outputs/vscode-*.png public/project-handbooks/titanic/
+          else
+            echo "VS Code screenshots were not recaptured on this event; using committed verified evidence."
+          fi
 
       - name: Set up Node
         uses: actions/setup-node@v4

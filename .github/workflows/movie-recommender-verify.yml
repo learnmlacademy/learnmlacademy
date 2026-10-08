@@ -97,8 +97,7 @@ jobs:
         run: |
           mkdir -p ../../public/project-handbooks/movie-recommender
           cp outputs/rating_distribution.png ../../public/project-handbooks/movie-recommender/
-          cp outputs/screenshots/movie-recommender-form.png ../../public/project-handbooks/movie-recommender/
-          cp outputs/screenshots/movie-recommender-results.png ../../public/project-handbooks/movie-recommender/
+          cp outputs/screenshots/*.png ../../public/project-handbooks/movie-recommender/
 
       - name: Set up Node
         uses: actions/setup-node@v4

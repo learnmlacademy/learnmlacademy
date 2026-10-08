@@ -56,10 +56,31 @@ def main() -> None:
                 full_page=True,
             )
 
+            page.get_by_text("About the trained model", exact=True).click()
+            page.wait_for_timeout(500)
+            page.screenshot(
+                path=OUTPUTS_DIR / "streamlit-house-price-model-details.png",
+                full_page=True,
+            )
+            page.get_by_text("About the trained model", exact=True).click()
+            page.wait_for_timeout(300)
+
             page.get_by_role("button", name="Estimate sale price").click()
             page.wait_for_timeout(1500)
             page.screenshot(
                 path=OUTPUTS_DIR / "streamlit-house-price-prediction.png",
+                full_page=True,
+            )
+
+            page.get_by_role("spinbutton", name="Year built").fill("2000")
+            page.get_by_role("spinbutton", name="Year last remodeled").fill("1990")
+            page.get_by_role("button", name="Estimate sale price").click()
+            page.get_by_text(
+                "The remodel year cannot be earlier than the build year."
+            ).wait_for()
+            page.wait_for_timeout(400)
+            page.screenshot(
+                path=OUTPUTS_DIR / "streamlit-house-price-validation-warning.png",
                 full_page=True,
             )
             browser.close()

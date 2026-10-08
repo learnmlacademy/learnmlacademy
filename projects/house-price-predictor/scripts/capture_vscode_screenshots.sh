@@ -102,6 +102,8 @@ capture_file "download_data.py" "vscode-download-data.png"
 capture_file "src/train_model.py" "vscode-training-code.png"
 capture_file "outputs/model_comparison.csv" "vscode-model-comparison.png"
 capture_file "outputs/final_metrics.json" "vscode-final-metrics.png"
+capture_file "outputs/prediction_examples.csv" "vscode-prediction-examples.png"
+capture_file "models/app_metadata.json" "vscode-app-metadata.png"
 capture_file "app.py" "vscode-app-code.png"
 capture_file "tests/test_app.py" "vscode-test-code.png"
 

@@ -82,6 +82,10 @@ def verify_page(page, viewport_name: str) -> dict:
         "/project-handbooks/house-price/streamlit-house-price-prediction.png",
         "/project-handbooks/house-price/vscode-test-code.png",
         "/project-handbooks/house-price/vscode-project-workspace.png",
+        "/project-handbooks/house-price/vscode-prediction-examples.png",
+        "/project-handbooks/house-price/vscode-app-metadata.png",
+        "/project-handbooks/house-price/streamlit-house-price-model-details.png",
+        "/project-handbooks/house-price/streamlit-house-price-validation-warning.png",
     }
     actual_sources = set(images.evaluate_all("imgs => imgs.map(img => img.getAttribute('src'))"))
     missing_images = sorted(expected_images.difference(actual_sources))
