@@ -69,3 +69,42 @@ python -m scripts.build_index --pdf-dir data/pdfs --name demo
 Deletion removes only that named index, not the input PDFs. It is not secure
 erasure. Alternatively build with a new --name; overwriting an index is refused.
 CLI PDF input is restricted to this project's data directory; no symlink files.
+
+## Run the actual app
+
+```powershell
+python -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501
+```
+
+Open http://127.0.0.1:8501. Upload PDFs, click Build Index, ask a question and
+expand Retrieved evidence. Source filename, page, chunk ID and cosine score
+remain visible. Remote mode additionally requires the explicit consent checkbox;
+local mode remains the default even when environment variables are set.
+
+Each browser session owns its in-memory collection. Uploaded PDFs are not saved
+by application code, and no document/index/result cache is shared across users.
+Changing uploads invalidates the old answer/index. Clear documents and index
+resets the uploader and session collection; this is not guaranteed secure memory
+erasure. Embedding weights alone are reused process-wide.
+
+PDF extraction runs in a child process with a 20-second timeout. Linux also
+limits parser CPU/address space; Windows has no equivalent hard memory cap here.
+File/page/text/decompressed-stream limits mitigate abuse but are not a complete
+sandbox. Do not expose this unauthenticated educational app publicly or accept
+hostile documents. Multi-column/table extraction, scans, multilingual queries,
+conflicting evidence and comprehensive summaries remain limitations.
+
+## Reproduce engineering evidence
+
+```powershell
+python -m scripts.engineering_evidence
+python -m playwright install chromium
+# With Streamlit already running and synthetic data/pdfs created:
+python -m scripts.capture_app
+```
+
+These scripts use only original synthetic fixtures. Reports include a chunk-count
+table, six real retrieval examples, cosine scores, abstention and genuine app
+screenshots. Do not run the capture script against a session containing private
+documents. The GitHub Actions workflow creates fixtures afresh, tests the full
+flow and uploads reports; it does not deploy or commit screenshots.

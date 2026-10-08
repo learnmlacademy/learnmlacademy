@@ -53,3 +53,21 @@ Vector search, app and CI are not yet verified.
   https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create
   https://developers.openai.com/api/docs/guides/structured-outputs
   Remote adapter tested with MockTransport only; no paid LLM call performed.
+
+## Checkpoint C — app/CI implementation and local evidence
+
+- The two explicit deletion tests passed; 51 core tests now cover safe named
+  index deletion as well as extraction/retrieval/provider behavior.
+- Evidence script executed 6 known queries, expected first page 6/6; cosine
+  scores 0.4835, 0.6573, 0.6120, 0.7200, 0.5777, 0.7707 respectively in
+  the query order above. Chunk settings 32/8 produced 12 chunks; 80/16 and
+  160/32 each produced 6 chunks. Tables/JSON are ignored local reports.
+- Original six fixture pages were rendered and visually checked with Poppler.
+- Streamlit stores only each session's uploads/index/results in memory; only
+  embedding weights are shared. Source text is rendered as plain text, not HTML
+  or active Markdown. Remote mode requires explicit selection and consent.
+- Full local run: 52 passed, Streamlit AppTest timed out at 20 seconds. One
+  bounded retry at 30 seconds also timed out. No further local browser/server
+  retries: CI will exercise AppTest and real Streamlit independently.
+- Python source syntax and workflow structure checks passed. CI pending; no
+  Streamlit runtime or screenshot success is claimed yet.

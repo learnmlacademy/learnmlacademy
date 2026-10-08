@@ -12,7 +12,10 @@
 - [x] citation integrity
 - [x] unsupported-question handling
 - [ ] Streamlit
-- [ ] privacy
+- [x] privacy
 - [ ] tests
 - [ ] CI
 - [ ] final engineering audit
+
+Local verification currently passes 52 tests. Streamlit AppTest timed out on
+Windows twice; CI will run the complete suite and real browser flow independently.
