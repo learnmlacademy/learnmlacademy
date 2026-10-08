@@ -21,10 +21,13 @@ def main() -> None:
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1440, "height": 1100})
         page.goto(APP_URL, wait_until="networkidle")
+        predict_button = page.get_by_role("button", name="Predict survival")
+        predict_button.wait_for(state="visible", timeout=30000)
+        page.wait_for_timeout(500)
 
         page.screenshot(path=OUTPUTS / "titanic-app-form.png", full_page=True)
 
-        page.get_by_role("button", name="Predict survival").click()
+        predict_button.click()
         page.wait_for_timeout(1200)
         page.screenshot(path=OUTPUTS / "titanic-prediction-survived.png", full_page=True)
 
