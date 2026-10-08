@@ -1,0 +1,106 @@
+name: AI Research Assistant Verify
+
+on:
+  push:
+    branches: [feat/ai-research-assistant-handbook]
+    paths:
+      - "projects/ai-research-assistant/**"
+      - "src/pages/AIResearchAssistantProjectPage.tsx"
+      - "src/data/aiResearchSourceCode.ts"
+      - "src/components/projects/ResearchAgentConceptVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/ai-research-assistant-verify.yml"
+  pull_request:
+    paths:
+      - "projects/ai-research-assistant/**"
+      - "src/pages/AIResearchAssistantProjectPage.tsx"
+      - "src/data/aiResearchSourceCode.ts"
+      - "src/components/projects/ResearchAgentConceptVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/ai-research-assistant-verify.yml"
+
+permissions:
+  contents: write
+concurrency:
+  group: ai-research-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/ai-research-assistant/requirements.txt
+      - name: Install Python libraries
+        working-directory: projects/ai-research-assistant
+        run: |
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip check
+      - name: Run deterministic research tests
+        working-directory: projects/ai-research-assistant
+        run: python -m pytest -q
+      - name: Confirm cited classroom demonstration
+        working-directory: projects/ai-research-assistant
+        run: |
+          python demo.py | tee /tmp/research-brief.txt
+          grep -q "DEMO-1" /tmp/research-brief.txt
+          grep -q "not independent" /tmp/research-brief.txt
+          grep -q "VERIFY:" /tmp/research-brief.txt
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium
+      - name: Start Streamlit application
+        working-directory: projects/ai-research-assistant
+        run: |
+          nohup python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 >/tmp/research-app.log 2>&1 &
+          for i in {1..45}; do
+            if curl -fsS http://127.0.0.1:8501/_stcore/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/research-app.log
+          exit 1
+      - name: Capture real desktop and mobile app screenshots
+        working-directory: projects/ai-research-assistant
+        run: python scripts/capture_screenshots.py
+      - name: Stage genuine app evidence
+        run: |
+          mkdir -p public/project-handbooks/ai-research-assistant
+          cp projects/ai-research-assistant/outputs/screenshots/*.png public/project-handbooks/ai-research-assistant/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install website modules
+        run: npm ci
+      - name: TypeScript lint
+        run: npm run lint
+      - name: Build prerender and validate all portfolio entries
+        run: npm run build
+      - name: Verify published project 11 HTML and captured imagery
+        run: |
+          test -s dist/projects/ai-research-assistant.html
+          grep -q "Perplexity-Style" dist/projects/ai-research-assistant.html
+          grep -q "projects/ai-research-assistant/src/research.py" dist/projects/ai-research-assistant.html
+          grep -q "https://www.learnmlacademy.com/projects/ai-research-assistant" dist/sitemap.xml
+          test -s dist/project-handbooks/ai-research-assistant/research-desktop-result.png
+          test -s dist/project-handbooks/ai-research-assistant/research-mobile-result.png
+      - name: Commit verified screenshots to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/ai-research-assistant-handbook'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/ai-research-assistant/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: record real research app images [skip ci]"
+            git push
+          fi
