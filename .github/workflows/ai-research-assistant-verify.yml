@@ -10,6 +10,7 @@ on:
       - "src/components/projects/ResearchAgentConceptVisuals.tsx"
       - "src/App.tsx"
       - "src/data/projectPortfolio.ts"
+      - "scripts/verify-ai-research-source.mjs"
       - "scripts/prerender.mjs"
       - "generate_sitemap.cjs"
       - ".github/workflows/ai-research-assistant-verify.yml"
@@ -82,6 +83,8 @@ jobs:
           cache: npm
       - name: Install website modules
         run: npm ci
+      - name: Verify displayed code matches actual project files
+        run: node scripts/verify-ai-research-source.mjs
       - name: TypeScript lint
         run: npm run lint
       - name: Build prerender and validate all portfolio entries

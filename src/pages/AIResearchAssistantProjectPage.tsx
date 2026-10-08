@@ -45,6 +45,7 @@ const allFiles: Array<[string, string]> = [
   ['projects/ai-research-assistant/app.py', 'python'],
   ['projects/ai-research-assistant/tests/test_research.py', 'python'],
   ['projects/ai-research-assistant/scripts/capture_screenshots.py', 'python'],
+  ['scripts/verify-ai-research-source.mjs', 'javascript'],
   ['.github/workflows/ai-research-assistant-verify.yml', 'yaml'],
 ];
 
