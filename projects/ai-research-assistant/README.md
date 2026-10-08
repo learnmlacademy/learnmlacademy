@@ -18,6 +18,7 @@ Your city council asks **“Do urban trees cool cities, and what limits their be
 6. Run `python demo.py`. Check the source markers DEMO-1/2/3, quotes and the complete PLAN → REPORT trace.
 7. Run `python -m streamlit run app.py`, then open the printed localhost address, usually http://localhost:8501.
 8. Keep Classroom mode enabled and click Run research. Read the Plan, Cited research brief, Original evidence and Agent trace tabs. Download the Markdown brief or JSON evidence if needed.
+10. Optional AI synthesis: configure `OPENAI_API_KEY` in your terminal environment, restart Streamlit, tick the explicit evidence-sharing consent and press Generate optional AI synthesis. This step sends the question and cited excerpts to OpenAI, may incur charges, and still needs human claim checking.
 9. Switch to Wikipedia mode only for public, nonsensitive topics. This requires access to the public Wikipedia API and can fail because of rate limits or network policy.
 
 ## Files you can copy
