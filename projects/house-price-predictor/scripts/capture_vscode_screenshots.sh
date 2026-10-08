@@ -55,7 +55,18 @@ if [ -z "$WINDOW_ID" ]; then
   exit 1
 fi
 
+# New VS Code installs may display a Copilot sign-in onboarding modal.
+# Close it explicitly so screenshots show the actual learner files rather than a welcome dialog.
 sleep 3
+xdotool key --window "$WINDOW_ID" Escape 2>/dev/null || true
+sleep 1
+
+eval "$(xdotool getwindowgeometry --shell "$WINDOW_ID")"
+CLICK_X=$((WIDTH * 75 / 100))
+CLICK_Y=$((HEIGHT * 78 / 100))
+xdotool mousemove --window "$WINDOW_ID" "$CLICK_X" "$CLICK_Y" click 1 2>/dev/null || true
+xdotool key --window "$WINDOW_ID" Escape 2>/dev/null || true
+sleep 2
 
 capture_file() {
   local relative_path="$1"
@@ -69,8 +80,20 @@ capture_file() {
     --reuse-window "$PROJECT_ROOT/$relative_path"
 
   sleep 3
+  xdotool key --window "$WINDOW_ID" Escape 2>/dev/null || true
+  sleep 1
+
+  local expected_name
+  expected_name="$(basename "$relative_path")"
+  local window_name
+  window_name="$(xdotool getwindowname "$WINDOW_ID" 2>/dev/null || true)"
+  if [[ "$window_name" != *"$expected_name"* ]]; then
+    echo "VS Code did not visibly open $expected_name. Window title: $window_name" >&2
+    exit 1
+  fi
+
   import -display :99 -window "$WINDOW_ID" "$OUTPUTS_DIR/$output_name"
-  echo "Captured real Visual Studio Code screenshot: $output_name"
+  echo "Captured real Visual Studio Code screenshot: $output_name ($window_name)"
 }
 
 # Capture the real project workspace and the exact files learners create/use.
