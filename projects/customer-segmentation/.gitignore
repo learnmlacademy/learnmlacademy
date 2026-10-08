@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+.pytest_cache/
+data/online-retail.zip
+data/Online Retail.xlsx
+models/*.joblib
+outputs/screenshots/
+*.log
