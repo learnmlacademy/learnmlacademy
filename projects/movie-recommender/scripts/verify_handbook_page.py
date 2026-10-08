@@ -46,7 +46,9 @@ def verify_page(page, viewport_name: str) -> dict:
             )
 
     required_text = [
+        "The practical problem: a user liked one movie—what should we show next?",
         "Why this project uses synthetic movie ratings",
+        "Assemble the complete recommender engine",
         "CC0",
         "9,000 synthetic ratings",
         "1,100 users",
