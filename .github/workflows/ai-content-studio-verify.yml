@@ -1,0 +1,107 @@
+name: AI Content Studio Verify
+
+on:
+  push:
+    branches: [feat/ai-content-studio-handbook]
+    paths:
+      - "projects/ai-content-studio/**"
+      - "src/pages/AIContentCreatorProjectPage.tsx"
+      - "src/data/aiContentStudioSourceCode.ts"
+      - "src/components/projects/AIContentStudioVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/verify-ai-content-source.mjs"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/ai-content-studio-verify.yml"
+  pull_request:
+    paths:
+      - "projects/ai-content-studio/**"
+      - "src/pages/AIContentCreatorProjectPage.tsx"
+      - "src/data/aiContentStudioSourceCode.ts"
+      - "src/components/projects/AIContentStudioVisuals.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/verify-ai-content-source.mjs"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/ai-content-studio-verify.yml"
+permissions:
+  contents: write
+concurrency:
+  group: ai-content-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/ai-content-studio/requirements.txt
+      - name: Install Python libraries
+        working-directory: projects/ai-content-studio
+        run: |
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip check
+      - name: Run model and prompt-safety unit tests
+        working-directory: projects/ai-content-studio
+        run: python -m pytest -q
+      - name: Verify honest offline preview
+        working-directory: projects/ai-content-studio
+        run: |
+          python demo.py | tee /tmp/content-studio-demo.txt
+          grep -q "SOURCE MODE: Template demo" /tmp/content-studio-demo.txt
+          grep -q "Human" /tmp/content-studio-demo.txt || grep -q "human_fact_checked" /tmp/content-studio-demo.txt
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+      - name: Start Streamlit
+        working-directory: projects/ai-content-studio
+        run: |
+          nohup python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 >/tmp/content-studio.log 2>&1 &
+          for i in {1..45}; do
+            if curl -fsS http://127.0.0.1:8501/_stcore/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/content-studio.log
+          exit 1
+      - name: Capture genuine desktop and mobile screenshots
+        working-directory: projects/ai-content-studio
+        run: python scripts/capture_screenshots.py
+      - name: Stage real app evidence
+        run: |
+          mkdir -p public/project-handbooks/ai-content-creator
+          cp projects/ai-content-studio/outputs/screenshots/*.png public/project-handbooks/ai-content-creator/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install website
+        run: npm ci
+      - name: Verify exact copyable source parity
+        run: node scripts/verify-ai-content-source.mjs
+      - name: TypeScript lint
+        run: npm run lint
+      - name: Build, prerender and check complete portfolio
+        run: npm run build
+      - name: Verify Project 9 public handbook build
+        run: |
+          test -s dist/projects/ai-content-creator.html
+          grep -q "ChatGPT-Style AI Content Creator" dist/projects/ai-content-creator.html
+          grep -q "projects/ai-content-studio/src/studio.py" dist/projects/ai-content-creator.html
+          grep -q "https://www.learnmlacademy.com/projects/ai-content-creator" dist/sitemap.xml
+          test -s dist/project-handbooks/ai-content-creator/content-studio-desktop-result.png
+          test -s dist/project-handbooks/ai-content-creator/content-studio-mobile-result.png
+      - name: Commit screenshot assets to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/ai-content-studio-handbook'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/ai-content-creator/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: verified Content Studio app evidence [skip ci]"
+            git push
+          fi
