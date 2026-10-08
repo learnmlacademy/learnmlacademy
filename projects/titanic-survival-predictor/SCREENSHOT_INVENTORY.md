@@ -11,6 +11,12 @@ Every visual below must come from the real project or the real source page used 
 | `public/project-handbooks/titanic/titanic-app-form.png` | Streamlit app | The real running app renders before prediction |
 | `public/project-handbooks/titanic/titanic-prediction-survived.png` | Inference example A | The real app can produce the Survived class from the saved pipeline |
 | `public/project-handbooks/titanic/titanic-prediction-not-survived.png` | Inference example B | A contrasting input produces the opposite class through the same saved pipeline |
+| `public/project-handbooks/titanic/vscode-training-code.png` | Training program | The complete verified `src/train_model.py` exists in the correct project folder |
+| `public/project-handbooks/titanic/vscode-model-comparison.png` | Model comparison | The real generated `model_comparison.csv` contains the five cross-validation rows |
+| `public/project-handbooks/titanic/vscode-tuning-results.png` | Hyperparameter tuning | The real `GridSearchCV` output file contains the tried settings and scores |
+| `public/project-handbooks/titanic/vscode-final-metrics.png` | Final evaluation | The real `metrics.json` records the holdout metrics, confusion matrix and provenance |
+| `public/project-handbooks/titanic/vscode-example-predictions.png` | Save/reload | The real `example_predictions.csv` proves inference after serialization |
+| `public/project-handbooks/titanic/vscode-project-workspace.png` | Final folder | The real completed project workspace is visible in VS Code |
 
 ## Evidence rules
 
