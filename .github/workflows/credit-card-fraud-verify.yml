@@ -1,0 +1,80 @@
+name: Credit Card Fraud Verify
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - parallel/credit-card-fraud-handbook
+    paths:
+      - "projects/credit-card-fraud/**"
+      - "src/pages/CreditCardFraudProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/credit-card-fraud/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/credit-card-fraud-verify.yml"
+  pull_request:
+    paths:
+      - "projects/credit-card-fraud/**"
+      - "src/pages/CreditCardFraudProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/credit-card-fraud/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/credit-card-fraud-verify.yml"
+
+concurrency:
+  group: credit-card-fraud-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: projects/credit-card-fraud/requirements.txt
+
+      - name: Install project dependencies
+        working-directory: projects/credit-card-fraud
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip check
+
+      - name: Download and validate OpenML fraud data
+        working-directory: projects/credit-card-fraud
+        run: python download_data.py
+
+      - name: Train, compare, tune threshold and evaluate
+        working-directory: projects/credit-card-fraud
+        env:
+          MPLBACKEND: Agg
+        run: python src/train_model.py
+
+      - name: Run fraud project tests
+        working-directory: projects/credit-card-fraud
+        run: pytest -q
+
+      - name: Upload engineering evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: credit-card-fraud-engineering
+          path: |
+            projects/credit-card-fraud/models/
+            projects/credit-card-fraud/outputs/
+          if-no-files-found: warn
+          retention-days: 14
