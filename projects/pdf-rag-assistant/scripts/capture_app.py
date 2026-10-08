@@ -27,9 +27,25 @@ def main():
         expect(page.get_by_text("[S1] policy.pdf | Page 1", exact=False)).to_be_visible()
         page.get_by_text("Retrieved evidence", exact=True).click()
         expect(page.get_by_text("Top semantic candidates after reranking.", exact=False)).to_be_visible()
-        page.screenshot(path=str(reports / "02-answer-citations-evidence.png"), full_page=True)
-        page.set_viewport_size({"width": 461, "height": 1000})
-        page.screenshot(path=str(reports / "03-answer-mobile.png"), full_page=True)
+        # Streamlit scrolls inside its app container; full_page alone is only a viewport.
+        # Wait for the genuine disclosure animation, then frame the answer/evidence.
+        page.wait_for_function("() => document.querySelector('[data-testid=stExpander]').getBoundingClientRect().height > 400")
+        page.wait_for_timeout(350)
+        for width, height, filename in [(1280, 1600, "02-answer-citations-evidence.png"),
+                                        (461, 2100, "03-answer-mobile.png")]:
+            page.set_viewport_size({"width": width, "height": height})
+            page.get_by_role("heading", name="Answer", exact=True).evaluate("""element => {
+                element.scrollIntoView({block: 'start'});
+                for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+                    if (parent.scrollHeight > parent.clientHeight && /auto|scroll/.test(getComputedStyle(parent).overflowY)) {
+                        parent.scrollTop -= 80; break;
+                    }
+                }
+            }""")
+            page.wait_for_timeout(200)
+            box = page.get_by_test_id("stExpander").bounding_box()
+            assert box and box["height"] > 400 and box["y"] + box["height"] <= height, "Evidence must fit in capture"
+            page.screenshot(path=str(reports / filename))
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth + 1")
         # Separate real browser session must start with no document/index/result.
         isolated = browser.new_context(viewport={"width": 1280, "height": 1000})

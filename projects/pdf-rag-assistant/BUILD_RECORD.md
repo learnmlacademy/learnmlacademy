@@ -71,3 +71,18 @@ Vector search, app and CI are not yet verified.
   retries: CI will exercise AppTest and real Streamlit independently.
 - Python source syntax and workflow structure checks passed. CI pending; no
   Streamlit runtime or screenshot success is claimed yet.
+
+## First CI execution and screenshot review
+
+- Run 37823277934 at commit 3a893f243ad8090b7496a70392d12b2ddc7027c5:
+  https://github.com/learnmlacademy/learnmlacademy/actions/runs/37823277934
+- Both jobs passed. Python suite: 53/53 passed in 7.39 seconds, including AppTest.
+  npm run lint and Vite build passed. No unrelated dependency changes.
+- Real Chromium uploaded both PDFs, built the index, asked the refund question,
+  displayed policy.pdf page 1 and inspected retrieved evidence. Separate browser
+  sessions did not share sources; clearing one preserved the other. No pageerrors.
+- The real screenshots were downloaded and visually inspected. The first capture
+  script photographed the disclosure animation too early; its desktop image did
+  not show the evidence body, and mobile cut it off. This is a capture defect,
+  not a claimed complete visual pass. The capture script now waits for expansion
+  and checks that the entire panel fits inside the actual browser viewport.
