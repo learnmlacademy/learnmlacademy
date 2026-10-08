@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - parallel/titanic-quality-review
+      - enhance/project-screenshot-coverage
     paths:
       - "projects/titanic-survival-predictor/**"
       - "public/project-handbooks/titanic/**"
@@ -100,6 +101,11 @@ jobs:
         working-directory: projects/titanic-survival-predictor
         run: python scripts/capture_streamlit_screenshots.py
 
+      - name: Capture real Visual Studio Code screenshots
+        if: github.event_name == 'push'
+        working-directory: projects/titanic-survival-predictor
+        run: bash scripts/capture_vscode_screenshots.sh
+
       - name: Store verified handbook evidence in working tree
         run: |
           mkdir -p public/project-handbooks/titanic
@@ -108,6 +114,7 @@ jobs:
           cp projects/titanic-survival-predictor/outputs/model_comparison.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/
+          cp projects/titanic-survival-predictor/outputs/vscode-*.png public/project-handbooks/titanic/
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -143,7 +150,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/titanic-quality-review'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/parallel/titanic-quality-review' || github.ref == 'refs/heads/enhance/project-screenshot-coverage')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -155,8 +162,9 @@ jobs:
             # The test/build process may rewrite tracked generated files such as outputs or sitemap.
             # Reset all uncommitted tracked changes to this evidence commit before rebasing.
             git restore .
-            git pull --rebase origin parallel/titanic-quality-review
-            git push origin HEAD:parallel/titanic-quality-review
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            git pull --rebase origin "$BRANCH"
+            git push origin "HEAD:$BRANCH"
           fi
 
       - name: Stop preview processes
