@@ -57,4 +57,18 @@ Required:
 - desktop/mobile verification
 - no horizontal overflow
 
-**Current acceptance: NOT READY — awaiting fresh CC0 migration verification.**
+## Verified gate
+
+GitHub Actions run **37757264271 — SUCCESS**.
+
+- 12 tests passed
+- 8,291 latest user/movie interactions
+- density 2.8990%
+- sparsity 97.1010%
+- genuine Streamlit screenshots captured
+- TypeScript validation passed
+- production build/prerender passed
+- desktop and mobile verification passed
+- no horizontal overflow
+
+**Current acceptance: PASS — ready for PR review.**

@@ -27,11 +27,26 @@ The switch was intentional: the previously tested MovieLens 100K data has redist
 
 Repeated user/movie ratings are reduced to the latest interaction before constructing the matrix.
 
-## Current verification state
+## Verified CC0 build
 
-The earlier MovieLens implementation passed its complete quality gate, but that evidence does **not** automatically certify the new CC0 implementation.
+GitHub Actions run **37757264271** passed the complete quality gate on the CC0 implementation.
 
-The CC0 migration must pass a fresh clean GitHub Actions run before this project is marked ready again.
+Verified results:
+
+- CSV SHA256: `b9e41047db97680f0043a8bdcb18fd5cb25d8f4a6209d5ef536f0ba9b457af52`
+- 9,000 raw rating rows
+- 1,100 users
+- 260 movie IDs
+- 8,291 latest user/movie interactions
+- rating density: 0.0289895105
+- rating sparsity: 0.9710104895
+- 12 automated tests passed
+- Streamlit started and genuine browser screenshots were captured
+- TypeScript validation passed
+- production build/prerender passed
+- 190 static HTML pages prerendered
+- desktop and 390px-mobile handbook verification passed
+- no horizontal overflow was detected
 
 ## Quality checkpoints
 
@@ -45,12 +60,13 @@ The CC0 migration must pass a fresh clean GitHub Actions run before this project
 - [x] app adapted to synthetic titles/IDs
 - [x] tests rewritten
 - [x] handbook rewritten with synthetic-data limitations
-- [ ] fresh Python tests pass
-- [ ] fresh Streamlit/browser screenshots pass
-- [ ] fresh TypeScript/build/prerender pass
-- [ ] fresh desktop/mobile handbook verification passes
-- [ ] final acceptance audit
-- [ ] PR ready for merge review
+- [x] fresh Python tests pass
+- [x] fresh Streamlit/browser screenshots pass
+- [x] fresh TypeScript/build/prerender pass
+- [x] fresh desktop/mobile handbook verification passes
+- [x] final acceptance audit
+- [x] draft PR ready for review
+- [ ] merge only after explicit approval
 
 ## Important teaching boundary
 

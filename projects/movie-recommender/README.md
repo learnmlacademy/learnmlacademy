@@ -20,6 +20,7 @@ The project uses Datanemics **Movie ratings**:
 - 260 movie IDs
 - rating range 0.5–5.0
 - CC0 1.0 public domain
+- verified CSV SHA256: `b9e41047db97680f0043a8bdcb18fd5cb25d8f4a6209d5ef536f0ba9b457af52`
 
 Dataset page: https://datanemics.com/datasets/movie-ratings/
 
@@ -54,3 +55,16 @@ content similarity + collaborative similarity
 ## Important limitation
 
 The data is synthetic and the system is deliberately small. A production recommender would require real consented interaction data, rigorous held-out ranking evaluation, user personalization, richer/learned features, freshness and exposure controls, online experimentation, low-latency serving and monitoring.
+
+## Verified build
+
+GitHub Actions run **37757264271** passed the full project + website gate:
+
+- 8,291 latest user/movie interactions
+- 12 Pytest checks passed
+- rating matrix density 2.8990%
+- rating matrix sparsity 97.1010%
+- Streamlit health and real browser screenshots passed
+- TypeScript validation passed
+- production build/prerender passed
+- desktop/mobile handbook verification passed

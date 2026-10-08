@@ -18,6 +18,7 @@ LICENSE = "CC0 1.0 public domain"
 EXPECTED_ROWS = 9_000
 EXPECTED_USERS = 1_100
 EXPECTED_MOVIES = 260
+EXPECTED_SHA256 = "b9e41047db97680f0043a8bdcb18fd5cb25d8f4a6209d5ef536f0ba9b457af52"
 EXPECTED_COLUMNS = [
     "user_id",
     "movie_id",
@@ -48,6 +49,12 @@ def main() -> None:
 
     raw = download_bytes()
     sha256 = hashlib.sha256(raw).hexdigest()
+    if sha256 != EXPECTED_SHA256:
+        raise RuntimeError(
+            "Downloaded CSV fingerprint changed: "
+            f"{sha256}; expected {EXPECTED_SHA256}. "
+            "Do not continue until the dataset change is reviewed."
+        )
     DATA_PATH.write_bytes(raw)
 
     frame = pd.read_csv(DATA_PATH)
