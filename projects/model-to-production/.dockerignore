@@ -1,0 +1,14 @@
+# Deny everything except explicit runtime inputs.
+**
+!requirements.txt
+!api/
+!api/*.py
+!src/
+!src/*.py
+!config/
+!config/model.json
+!models/
+!models/v*/
+!models/v*/model.joblib
+!models/v*/metadata.json
+!models/v*/reference.json
