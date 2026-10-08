@@ -1,0 +1,173 @@
+name: Model to Production Handbook Verify
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - feat/model-to-production-handbook
+    paths:
+      - "projects/model-to-production/**"
+      - "src/pages/ModelToProductionProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/model-to-production/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/model-to-production-handbook-verify.yml"
+  pull_request:
+    paths:
+      - "projects/model-to-production/**"
+      - "src/pages/ModelToProductionProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/model-to-production/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/model-to-production-handbook-verify.yml"
+
+concurrency:
+  group: model-to-production-handbook-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13.16"
+          cache: pip
+          cache-dependency-path: projects/model-to-production/requirements.txt
+
+      - name: Install project and handbook dependencies
+        working-directory: projects/model-to-production
+        run: |
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip install "matplotlib==3.11.2" "playwright>=1.50,<2"
+          python -m pip check
+
+      - name: Download verified IBM churn data
+        working-directory: projects/model-to-production
+        run: python -m scripts.prepare_data
+
+      - name: Train v1 and v2
+        working-directory: projects/model-to-production
+        run: |
+          python -m src.train --version v1
+          python -m src.train --version v2 --c 0.5
+
+      - name: Prepare drift evidence
+        working-directory: projects/model-to-production
+        run: |
+          python -m scripts.prepare_drift --version v1
+          python -m scripts.prepare_drift --version v2
+          python -m src.drift --version v1 --batch data/normal_batch.csv
+          python -m src.drift --version v1 --batch data/shifted_batch.csv
+
+      - name: Run all engineering tests
+        working-directory: projects/model-to-production
+        run: python -m pytest -q
+
+      - name: Generate real handbook figures
+        working-directory: projects/model-to-production
+        env:
+          MPLBACKEND: Agg
+        run: python -m scripts.build_handbook_figures
+
+      - name: Install Chromium
+        working-directory: projects/model-to-production
+        run: python -m playwright install --with-deps chromium
+
+      - name: Start FastAPI
+        working-directory: projects/model-to-production
+        run: |
+          nohup python -m uvicorn api.main:app --host 127.0.0.1 --port 8000 >/tmp/model-prod-api.log 2>&1 &
+          echo $! >/tmp/model-prod-api.pid
+          for i in {1..45}; do
+            if curl --fail --silent http://127.0.0.1:8000/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/model-prod-api.log
+          exit 1
+
+      - name: Capture real API screenshots
+        working-directory: projects/model-to-production
+        run: python -m scripts.capture_api_screenshots
+
+      - name: Store verified visual evidence in working tree
+        run: |
+          mkdir -p public/project-handbooks/model-to-production
+          cp projects/model-to-production/outputs/version_metrics.png public/project-handbooks/model-to-production/
+          cp projects/model-to-production/outputs/v1_confusion_matrix.png public/project-handbooks/model-to-production/
+          cp projects/model-to-production/outputs/drift_evidence.png public/project-handbooks/model-to-production/
+          cp projects/model-to-production/outputs/screenshots/*.png public/project-handbooks/model-to-production/
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install website dependencies
+        run: npm ci
+
+      - name: TypeScript validation
+        run: npm run lint
+
+      - name: Build and prerender website
+        run: npm run build
+
+      - name: Start built website preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/model-prod-site.log 2>&1 &
+          echo $! >/tmp/model-prod-site.pid
+
+      - name: Verify handbook on desktop and mobile
+        working-directory: projects/model-to-production
+        run: python -m scripts.verify_handbook_page
+
+      - name: Commit verified visual evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/model-to-production-handbook' && success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/model-to-production/
+          if git diff --cached --quiet; then
+            echo "Verified screenshots are already current."
+          else
+            git commit -m "Project 12: store verified handbook evidence [skip ci]"
+            git restore .
+            git pull --rebase origin feat/model-to-production-handbook
+            git push origin HEAD:feat/model-to-production-handbook
+          fi
+
+      - name: Stop processes
+        if: always()
+        run: |
+          if [ -f /tmp/model-prod-api.pid ]; then kill $(cat /tmp/model-prod-api.pid) || true; fi
+          if [ -f /tmp/model-prod-site.pid ]; then kill $(cat /tmp/model-prod-site.pid) || true; fi
+
+      - name: Upload handbook evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-to-production-handbook-evidence
+          path: |
+            projects/model-to-production/outputs/
+            projects/model-to-production/reports/
+          if-no-files-found: warn
+          retention-days: 14
