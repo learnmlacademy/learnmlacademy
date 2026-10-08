@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 
@@ -8,7 +9,10 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUTS = ROOT / "outputs"
 NOTEBOOK = ROOT / "notebooks" / "01_titanic_exploration.ipynb"
+DATA = ROOT / "data" / "train.csv"
+MODEL = ROOT / "models" / "titanic_pipeline.joblib"
 
+EXPECTED_SHA256 = "4a437fde05fe5264e1701a7387ac6fb75393772ba38bb2c9c566405af5af4bd7"
 EXPECTED_MODELS = {
     "Logistic Regression",
     "K-Nearest Neighbors",
@@ -22,16 +26,18 @@ def main() -> None:
     metrics_path = OUTPUTS / "metrics.json"
     comparison_path = OUTPUTS / "model_comparison.csv"
 
-    if not metrics_path.is_file():
-        raise AssertionError("Missing committed reference outputs/metrics.json")
-    if not comparison_path.is_file():
-        raise AssertionError("Missing committed reference outputs/model_comparison.csv")
-    if not NOTEBOOK.is_file():
-        raise AssertionError("Missing executed Titanic exploration notebook")
+    for path in (metrics_path, comparison_path, NOTEBOOK, DATA, MODEL):
+        if not path.is_file():
+            raise AssertionError(f"Missing verification artifact: {path}")
+
+    digest = hashlib.sha256(DATA.read_bytes()).hexdigest()
+    if digest != EXPECTED_SHA256:
+        raise AssertionError(f"Unexpected Titanic verification dataset fingerprint: {digest}")
 
     report = json.loads(metrics_path.read_text(encoding="utf-8"))
     comparison = pd.read_csv(comparison_path)
 
+    assert report["data_sha256"] == EXPECTED_SHA256
     assert report["training_rows"] == 712
     assert report["test_rows"] == 179
     assert report["training_rows"] + report["test_rows"] == 891
@@ -67,15 +73,7 @@ def main() -> None:
         if errors:
             raise AssertionError(f"Notebook code cell {index} contains an execution error")
 
-    forbidden = [
-        ROOT / "data" / "train.csv",
-        ROOT / "models" / "titanic_pipeline.joblib",
-    ]
-    for path in forbidden:
-        if path.exists():
-            raise AssertionError(f"Generated/private runtime artifact should not be committed: {path}")
-
-    print("Titanic committed provenance/reference checks passed.")
+    print("Titanic runtime provenance, notebook, model comparison and final metrics checks passed.")
 
 
 if __name__ == "__main__":
