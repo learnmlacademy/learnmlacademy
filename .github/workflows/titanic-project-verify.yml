@@ -107,23 +107,6 @@ jobs:
           cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/
 
-      - name: Commit verified evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/titanic-quality-review'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add public/project-handbooks/titanic
-          if git diff --cached --quiet; then
-            echo "Verified evidence unchanged."
-          else
-            git commit -m "Titanic: store verified handbook evidence [skip ci]"
-            # Training intentionally rewrites tracked reference outputs in the runner.
-            # Restore those files before rebasing; only verified public evidence is committed.
-            git restore projects/titanic-survival-predictor/outputs || true
-            git pull --rebase origin parallel/titanic-quality-review
-            git push origin HEAD:parallel/titanic-quality-review
-          fi
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -156,6 +139,21 @@ jobs:
       - name: Verify handbook on desktop and mobile
         working-directory: projects/titanic-survival-predictor
         run: python scripts/verify_handbook_page.py
+
+      - name: Commit verified evidence to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/titanic-quality-review'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/titanic
+          if git diff --cached --quiet; then
+            echo "Verified evidence unchanged."
+          else
+            git commit -m "Titanic: store verified handbook evidence [skip ci]"
+            git restore projects/titanic-survival-predictor/outputs || true
+            git pull --rebase origin parallel/titanic-quality-review
+            git push origin HEAD:parallel/titanic-quality-review
+          fi
 
       - name: Stop preview processes
         if: always()
