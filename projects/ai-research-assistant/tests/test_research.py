@@ -105,3 +105,36 @@ def test_report_export_and_source_fingerprints():
     assert "generated_at_utc" in data and "PLAN:" in data and "VERIFY:" in data
     assert len(source_fingerprint(state.sources[0])) == 16
     assert "urban" in keywords("Urban trees in the city")
+
+
+def test_optional_ai_synthesis_requires_real_source_citations():
+    from src.research import ai_synthesis
+    state = run_research("Do urban trees cool cities, and what limits their benefits?")
+    client = Mock()
+    cited = state.verified_notes[0].source_id
+    client.chat.completions.create.return_value.choices = [
+        Mock(message=Mock(content=f"The document mentions shade [{cited}]."))
+    ]
+    answer = ai_synthesis(state, client)
+    assert "AI-generated interpretation" in answer
+    assert f"[{cited}]" in answer
+    sent = client.chat.completions.create.call_args.kwargs["messages"]
+    assert "UNTRUSTED DATA" in sent[0]["content"]
+    assert state.question in sent[1]["content"]
+    client.chat.completions.create.return_value.choices = [
+        Mock(message=Mock(content="Invented result [FAKE-99]."))
+    ]
+    with pytest.raises(ResearchError, match="valid source"):
+        ai_synthesis(state, client)
+    client.chat.completions.create.return_value.choices = [
+        Mock(message=Mock(content="Uncited conclusion."))
+    ]
+    with pytest.raises(ResearchError, match="valid source"):
+        ai_synthesis(state, client)
+
+
+def test_optional_ai_refuses_insufficient_evidence():
+    from src.research import ai_synthesis
+    state = run_research("What lunar rocket fuel is used by kangaroos?")
+    with pytest.raises(ResearchError, match="No verified evidence"):
+        ai_synthesis(state, Mock())
