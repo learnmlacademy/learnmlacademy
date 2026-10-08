@@ -46,7 +46,10 @@ if method_label == "Popular movies":
     st.dataframe(popular, hide_index=True, use_container_width=True)
     st.info("Popularity is a fallback: it does not personalize to a chosen movie.")
 else:
-    title = st.selectbox("Choose a movie you like", movies["title"].tolist())
+    titles = movies["title"].tolist()
+    default_title = "Toy Story (1995)"
+    default_index = titles.index(default_title) if default_title in titles else 0
+    title = st.selectbox("Choose a movie you like", titles, index=default_index)
     selected = movies.loc[movies["title"] == title].iloc[0]
     method = {
         "Hybrid": "hybrid",
