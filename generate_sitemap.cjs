@@ -19,6 +19,7 @@ const staticPages = [
   { url: '/projects/titanic-survival', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/house-price', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/movie-recommender', priority: '0.8', changefreq: 'monthly' },
+  { url: '/projects/credit-card-fraud', priority: '0.8', changefreq: 'monthly' },
   { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { url: '/terms', priority: '0.3', changefreq: 'yearly' },
   { url: '/disclaimer', priority: '0.3', changefreq: 'yearly' },
