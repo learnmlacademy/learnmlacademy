@@ -28,6 +28,10 @@ on:
       - "generate_sitemap.cjs"
       - ".github/workflows/titanic-project-verify.yml"
 
+concurrency:
+  group: titanic-quality-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -113,7 +117,8 @@ jobs:
             echo "Verified evidence unchanged."
           else
             git commit -m "Titanic: store verified handbook evidence [skip ci]"
-            git push
+            git pull --rebase origin parallel/titanic-quality-review
+            git push origin HEAD:parallel/titanic-quality-review
           fi
 
       - name: Set up Node
