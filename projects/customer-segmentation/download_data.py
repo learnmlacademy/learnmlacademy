@@ -28,7 +28,7 @@ EXPECTED_COLUMNS = [
     "Country",
 ]
 # Pin this after the first clean CI download. Until then the script prints the observed hash.
-EXPECTED_ZIP_SHA256 = None
+EXPECTED_ZIP_SHA256 = "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b"
 
 
 def download_bytes(url: str) -> bytes:
