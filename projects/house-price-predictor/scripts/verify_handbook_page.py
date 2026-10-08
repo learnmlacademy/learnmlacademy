@@ -55,7 +55,7 @@ def verify_page(page, viewport_name: str) -> dict:
         "Common problems and fixes",
         "Complete-project checkpoint",
         "How the complete system fits together",
-        "Understand the training file before you run it",
+        "Build the training program in five logical pieces",
         "How the application code works",
         "Now change the project yourself",
         "How to explain this project in an interview",
