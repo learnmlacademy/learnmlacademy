@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.pytest_cache/
+data/creditcard.parquet
+models/*.joblib
+outputs/screenshots/
+*.log
