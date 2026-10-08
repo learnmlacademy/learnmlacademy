@@ -32,7 +32,7 @@ def main() -> None:
             full_page=True,
         )
 
-        page.get_by_role("radio", name="Content-based").click()
+        page.locator("label").filter(has_text="Content-based").click()
         page.get_by_role("button", name="Recommend movies").click()
         page.get_by_text(
             "Content-based: compare genre + release-decade labels with cosine similarity."
@@ -43,7 +43,7 @@ def main() -> None:
             full_page=True,
         )
 
-        page.get_by_role("radio", name="Collaborative").click()
+        page.locator("label").filter(has_text="Collaborative").click()
         page.get_by_role("button", name="Recommend movies").click()
         page.get_by_text(
             "Collaborative: compare sparse movie-by-user rating patterns."
@@ -54,7 +54,7 @@ def main() -> None:
             full_page=True,
         )
 
-        page.get_by_role("radio", name="Popular movies").click()
+        page.locator("label").filter(has_text="Popular movies").click()
         page.get_by_text("Popular starting points").wait_for()
         page.wait_for_timeout(500)
         page.screenshot(
