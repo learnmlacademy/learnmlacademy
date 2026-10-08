@@ -6,6 +6,8 @@ export type CodeBlockType = 'runnable' | 'conceptual' | 'pseudocode' | 'output' 
 
 type CodeBlockProps = {
   code: string;
+  /** Optional presentation only; copying always uses the exact code string. */
+  highlightedContent?: ReactNode;
   language?: string;
   title?: string;
   caption?: ReactNode;
@@ -25,6 +27,7 @@ const typeLabels: Record<CodeBlockType, string> = {
 
 export function CodeBlock({
   code,
+  highlightedContent,
   language,
   title,
   caption,
@@ -74,7 +77,7 @@ export function CodeBlock({
         </button>
       </div>
       <pre className={cn('lma-scrollbar m-0 max-w-full overflow-x-auto p-4 text-[0.8125rem] leading-6 text-[var(--lma-text-inverse)] sm:p-5 sm:text-sm', wrap && 'whitespace-pre-wrap break-words')}>
-        <code>{code}</code>
+        <code>{highlightedContent ?? code}</code>
       </pre>
       {caption && <figcaption className="border-t border-[var(--lma-code-border)] bg-[var(--lma-surface-inverse)] px-4 py-3 text-xs leading-relaxed text-[var(--lma-code-muted)] sm:px-5">{caption}</figcaption>}
       <span className="sr-only" role="status" aria-live="polite">{copyState === 'copied' ? 'Code copied to clipboard.' : copyState === 'error' ? 'Code could not be copied.' : ''}</span>

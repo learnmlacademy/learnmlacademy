@@ -1,0 +1,40 @@
+{
+  "python": "3.13.16",
+  "scikit_learn": "1.9.1",
+  "data_sha256": "4a437fde05fe5264e1701a7387ac6fb75393772ba38bb2c9c566405af5af4bd7",
+  "features": [
+    "Pclass",
+    "Sex",
+    "Age",
+    "SibSp",
+    "Parch",
+    "Fare",
+    "Embarked"
+  ],
+  "seed": 42,
+  "training_rows": 712,
+  "test_rows": 179,
+  "selected_model": "Random Forest",
+  "best_params": {
+    "model__max_depth": null,
+    "model__min_samples_leaf": 2
+  },
+  "best_cv_f1": 0.746342360864495,
+  "test_metrics": {
+    "accuracy": 0.8100558659217877,
+    "precision": 0.8181818181818182,
+    "recall": 0.6521739130434783,
+    "f1": 0.7258064516129032
+  },
+  "confusion_matrix": [
+    [
+      100,
+      10
+    ],
+    [
+      24,
+      45
+    ]
+  ],
+  "majority_baseline_test_accuracy": 0.6145251396648045
+}
