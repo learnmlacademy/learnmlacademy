@@ -107,3 +107,90 @@ random passenger split optimistic; this is a first-project baseline.
 
 Only load a joblib file you made or trust: loading one can execute code. Do not
 upload raw passenger data, virtual environments, passwords or model files to Git.
+
+
+## System architecture
+
+Training path:
+
+```text
+Kaggle train.csv
+    -> notebook inspection
+    -> 80/20 stratified split
+    -> preprocessing inside Pipeline
+    -> 5-fold comparison of 5 classifier families
+    -> Random Forest tuning on training rows only
+    -> one final 179-row holdout evaluation
+    -> models/titanic_pipeline.joblib
+```
+
+Prediction path:
+
+```text
+Streamlit form
+    -> one row with 7 raw fields
+    -> saved preprocessing + Random Forest pipeline
+    -> predicted class + model score
+    -> browser result
+```
+
+The app never calls `fit()`. It only loads the trusted trained pipeline.
+
+## What you should understand after building it
+
+You should be able to explain:
+
+- the difference between a feature and the `Survived` target
+- why the final test set is separated before preprocessing
+- why numeric missing values use a training median
+- why categorical values need encoding
+- why scaling matters more to Logistic Regression, KNN and SVM than to tree models
+- how five-fold stratified cross-validation compares model families
+- why mean F1 is the selection metric in this baseline
+- why Random Forest won even though SVM had slightly higher mean CV accuracy
+- how the final confusion counts produce accuracy, precision, recall and F1
+- what is stored inside the Joblib pipeline
+- how one Streamlit form submission reaches `pipeline.predict()`
+- why the model is a historical teaching classifier rather than a causal or safety system
+
+## Verified reference result
+
+| Result | Value |
+| --- | ---: |
+| Training rows | 712 |
+| Final holdout rows | 179 |
+| Selected model | Random Forest |
+| Best training-only CV F1 | 0.7463 |
+| Holdout accuracy | 81.01% |
+| Holdout precision | 81.82% |
+| Holdout recall | 65.22% |
+| Holdout F1 | 0.7258 |
+| Confusion matrix | [[100, 10], [24, 45]] |
+
+The majority-class baseline holdout accuracy was 61.45%.
+
+## Practice changes
+
+Do not stop at reproducing the reference project. Try at least two:
+
+1. Select the winner by recall instead of F1 and explain what changes.
+2. Add `FamilySize = SibSp + Parch + 1` as an optional feature-engineering experiment. Compare using cross-validation only; do not use the holdout to decide whether to keep it.
+3. Remove numeric scaling temporarily and compare how distance/linear models behave relative to trees.
+4. Rename the local Joblib file temporarily, run the app, read the recovery message, restore it and retry.
+
+## Interview talking points
+
+Be prepared to justify:
+
+- Pipeline-based leakage prevention
+- stratified splitting
+- training-only cross-validation and tuning
+- F1 as the selection metric
+- why Random Forest was selected from measured evidence
+- why the final holdout was evaluated only after selection
+- how serialization prevents preprocessing/inference mismatch
+- the limitations of this split and historical dataset
+
+## Production boundary
+
+A real classification service would need stronger group-aware validation, a formal data contract, probability calibration if scores are consumed as probabilities, threshold selection tied to costs, drift monitoring, versioned models, authentication, logging, rollback and human review for consequential use.
