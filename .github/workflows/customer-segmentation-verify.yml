@@ -1,0 +1,102 @@
+name: Customer Segmentation Engineering Verify
+
+on:
+  push:
+    branches:
+      - feat/customer-segmentation-handbook
+    paths:
+      - "projects/customer-segmentation/**"
+      - ".github/workflows/customer-segmentation-verify.yml"
+  pull_request:
+    paths:
+      - "projects/customer-segmentation/**"
+      - "src/pages/CustomerSegmentationProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/customer-segmentation/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/customer-segmentation-verify.yml"
+
+concurrency:
+  group: customer-segmentation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: projects/customer-segmentation/requirements.txt
+
+      - name: Install project dependencies
+        working-directory: projects/customer-segmentation
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip check
+
+      - name: Download and validate UCI Online Retail
+        working-directory: projects/customer-segmentation
+        run: python download_data.py
+
+      - name: Build customer segments
+        working-directory: projects/customer-segmentation
+        env:
+          MPLBACKEND: Agg
+        run: python src/build_segments.py
+
+      - name: Run customer-segmentation tests
+        working-directory: projects/customer-segmentation
+        run: pytest -q
+
+      - name: Install Chromium for real screenshots
+        working-directory: projects/customer-segmentation
+        run: |
+          python -m pip install "playwright>=1.50,<2"
+          python -m playwright install --with-deps chromium
+
+      - name: Start Streamlit
+        working-directory: projects/customer-segmentation
+        run: |
+          nohup python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 >/tmp/customer-segmentation.log 2>&1 &
+          echo $! >/tmp/customer-segmentation.pid
+          for i in {1..45}; do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/customer-segmentation.log
+          exit 1
+
+      - name: Capture genuine app screenshots
+        working-directory: projects/customer-segmentation
+        run: python scripts/capture_app_screenshots.py
+
+      - name: Upload engineering evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: customer-segmentation-engineering
+          path: |
+            projects/customer-segmentation/models/
+            projects/customer-segmentation/outputs/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Stop Streamlit
+        if: always()
+        run: |
+          if [ -f /tmp/customer-segmentation.pid ]; then
+            kill $(cat /tmp/customer-segmentation.pid) || true
+          fi
