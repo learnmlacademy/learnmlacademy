@@ -148,6 +148,10 @@ const staticMeta = new Map([
     title: 'Chat With Your PDFs — RAG Project Handbook | LearnMLAcademy',
     description: 'Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit and tests.',
   }],
+  ['/projects/ai-research-assistant', {
+    title: 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy',
+    description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, exact citations, tests and Streamlit.',
+  }],
   ['/projects/model-to-production', {
     title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
     description: 'Take a trained machine-learning model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift detection and rollback.',
