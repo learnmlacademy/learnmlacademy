@@ -144,6 +144,10 @@ const staticMeta = new Map([
     title: 'Customer Segmentation Project — RFM, K-Means, DBSCAN, PCA | LearnMLAcademy',
     description: 'Build customer segments from 541,909 UCI retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, silhouette analysis, PCA, tests and Streamlit.',
   }],
+  ['/projects/pdf-rag', {
+    title: 'Chat With Your PDFs — RAG Project Handbook | LearnMLAcademy',
+    description: 'Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit and tests.',
+  }],
   ['/projects/ai-research-assistant', {
     title: 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy',
     description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, exact citations, tests and Streamlit.',
