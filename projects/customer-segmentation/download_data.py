@@ -71,6 +71,12 @@ def main() -> None:
             f"Unexpected schema {list(frame.columns)!r}; expected {EXPECTED_COLUMNS!r}."
         )
 
+    # Excel stores some identifier columns with mixed numeric/string values.
+    # Normalize text identifiers before writing Parquet so Arrow does not
+    # attempt to coerce cancellation invoice numbers such as "C536379" to int.
+    for column in ["InvoiceNo", "StockCode", "Description", "Country"]:
+        frame[column] = frame[column].astype("string")
+
     frame.to_parquet(PARQUET_PATH, index=False)
 
     print("UCI dataset: Online Retail (dataset 352)")
