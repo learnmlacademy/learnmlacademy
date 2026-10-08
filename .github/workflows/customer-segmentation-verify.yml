@@ -1,4 +1,7 @@
-name: Customer Segmentation Engineering Verify
+name: Customer Segmentation Verify
+
+permissions:
+  contents: write
 
 on:
   push:
@@ -6,6 +9,12 @@ on:
       - feat/customer-segmentation-handbook
     paths:
       - "projects/customer-segmentation/**"
+      - "src/pages/CustomerSegmentationProjectPage.tsx"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "public/project-handbooks/customer-segmentation/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
       - ".github/workflows/customer-segmentation-verify.yml"
   pull_request:
     paths:
@@ -25,7 +34,7 @@ concurrency:
 jobs:
   build-and-verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
 
     steps:
       - name: Check out repository
@@ -83,20 +92,69 @@ jobs:
         working-directory: projects/customer-segmentation
         run: python scripts/capture_app_screenshots.py
 
-      - name: Upload engineering evidence
+      - name: Store verified visual evidence in working tree
+        run: |
+          mkdir -p public/project-handbooks/customer-segmentation
+          cp projects/customer-segmentation/outputs/rfm_distributions.png public/project-handbooks/customer-segmentation/
+          cp projects/customer-segmentation/outputs/k_selection.png public/project-handbooks/customer-segmentation/
+          cp projects/customer-segmentation/outputs/pca_segments.png public/project-handbooks/customer-segmentation/
+          cp projects/customer-segmentation/outputs/cluster_profiles.png public/project-handbooks/customer-segmentation/
+          cp projects/customer-segmentation/outputs/method_comparison.png public/project-handbooks/customer-segmentation/
+          cp projects/customer-segmentation/outputs/screenshots/*.png public/project-handbooks/customer-segmentation/
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install website dependencies
+        run: npm ci
+
+      - name: TypeScript validation
+        run: npm run lint
+
+      - name: Build and prerender website
+        run: npm run build
+
+      - name: Start built website preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/customer-segmentation-site.log 2>&1 &
+          echo $! >/tmp/customer-segmentation-site.pid
+
+      - name: Verify handbook on desktop and mobile
+        working-directory: projects/customer-segmentation
+        run: python scripts/verify_handbook_page.py
+
+      - name: Commit verified visual evidence
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/customer-segmentation-handbook' && success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/customer-segmentation/
+          if git diff --cached --quiet; then
+            echo "Verified screenshots are already current."
+          else
+            git commit -m "Project 4: store verified visual evidence [skip ci]"
+            git restore .
+            git pull --rebase origin feat/customer-segmentation-handbook
+            git push origin HEAD:feat/customer-segmentation-handbook
+          fi
+
+      - name: Stop preview processes
+        if: always()
+        run: |
+          if [ -f /tmp/customer-segmentation.pid ]; then kill $(cat /tmp/customer-segmentation.pid) || true; fi
+          if [ -f /tmp/customer-segmentation-site.pid ]; then kill $(cat /tmp/customer-segmentation-site.pid) || true; fi
+
+      - name: Upload verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: customer-segmentation-engineering
+          name: customer-segmentation-evidence
           path: |
             projects/customer-segmentation/models/
             projects/customer-segmentation/outputs/
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Stop Streamlit
-        if: always()
-        run: |
-          if [ -f /tmp/customer-segmentation.pid ]; then
-            kill $(cat /tmp/customer-segmentation.pid) || true
-          fi
