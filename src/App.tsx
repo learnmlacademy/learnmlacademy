@@ -17,6 +17,7 @@ const HousePriceProjectPage = lazy(() => import('./pages/HousePriceProjectPage')
 const MovieRecommenderProjectPage = lazy(() => import('./pages/MovieRecommenderProjectPage').then(module => ({ default: module.MovieRecommenderProjectPage })));
 const CreditCardFraudProjectPage = lazy(() => import('./pages/CreditCardFraudProjectPage').then(module => ({ default: module.CreditCardFraudProjectPage })));
 const CustomerSegmentationProjectPage = lazy(() => import('./pages/CustomerSegmentationProjectPage').then(module => ({ default: module.CustomerSegmentationProjectPage })));
+const ModelToProductionProjectPage = lazy(() => import('./pages/ModelToProductionProjectPage').then(module => ({ default: module.ModelToProductionProjectPage })));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage').then(module => ({ default: module.PrivacyPolicyPage })));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage').then(module => ({ default: module.TermsOfServicePage })));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage').then(module => ({ default: module.DisclaimerPage })));
@@ -61,6 +62,7 @@ export function AppRoutes() {
           <Route path="projects/movie-recommender" element={<DeferredRoute><MovieRecommenderProjectPage /></DeferredRoute>} />
           <Route path="projects/credit-card-fraud" element={<DeferredRoute><CreditCardFraudProjectPage /></DeferredRoute>} />
           <Route path="projects/customer-segmentation" element={<DeferredRoute><CustomerSegmentationProjectPage /></DeferredRoute>} />
+          <Route path="projects/model-to-production" element={<DeferredRoute><ModelToProductionProjectPage /></DeferredRoute>} />
           <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
           <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
           <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
