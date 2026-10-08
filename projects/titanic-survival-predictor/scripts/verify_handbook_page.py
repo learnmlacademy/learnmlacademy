@@ -38,6 +38,7 @@ FORBIDDEN_TEXT = [
 
 REQUIRED_IMAGES = {
     "/projects/titanic-survival/kaggle-data.jpg",
+    "/project-handbooks/titanic/training_class_rates.png",
     "/project-handbooks/titanic/model_comparison.png",
     "/project-handbooks/titanic/confusion_matrix.png",
     "/project-handbooks/titanic/titanic-app-form.png",
