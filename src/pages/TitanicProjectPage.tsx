@@ -305,6 +305,12 @@ export function TitanicProjectPage() {
           <p><strong>Why:</strong> The target must never appear among the features. We also split before learning imputation/scaling/encoding so the final test set cannot influence preprocessing.</p>
           <HandbookCode code={notebookSplit} language="python" title="Create the stratified 80/20 split" type="runnable" />
           <HandbookCode code={'Training: (712, 7) Final test: (179, 7)\nTraining survival rate: 0.3834\nFinal test survival rate: 0.3855\nDisjoint row indexes: True'} language="text" title="Verified split output" type="output" />
+          <Screenshot
+            src="/project-handbooks/titanic/training_class_rates.png"
+            alt="Real bar chart of Titanic survival rate by ticket class using training rows only"
+            title="Training-only exploratory chart"
+            caption={<>Generated from the 712 training rows after the split. We can explore patterns here without using the final 179-row holdout to guide modeling decisions.</>}
+          />
         </HandbookSection>
 
         <HandbookSection id="training-program" number={9} title="Create the complete training program" checkpoint={<>The file <code>src/train_model.py</code> exists and contains the complete code below.</>}>
