@@ -24,7 +24,7 @@ The work sequence is:
 - [x] Checkpoint 5 — capture real screenshots/output evidence
 - [x] Checkpoint 6 — absolute-beginner website handbook written with visible complete code, real outputs, real screenshots, troubleshooting and completion checklist
 - [x] Checkpoint 7 — `/projects/house-price` route, prerendering, sitemap, project catalog status and SEO integrated on the isolated branch
-- [ ] Checkpoint 8 — final paid-value learning audit + expanded screenshot evidence + desktop/mobile/build/CI re-verification in progress; PR remains draft
+- [x] Checkpoint 8 — final paid-value learning audit + expanded screenshot evidence + desktop/mobile/build/CI re-verification passed; PR remains draft pending explicit user approval
 
 ## Dataset decision
 
@@ -126,7 +126,7 @@ These screenshots must be used as the source of truth for the handbook.
 This project is intentionally isolated on `parallel/house-price-handbook` so Titanic/Codex work can continue independently.
 
 Current branch state:
-- checkpoints 1–7 are complete; checkpoint 8 is deliberately reopened for the stricter implementation-learning and screenshot-quality gate
+- checkpoints 1–8 are complete under the stricter implementation-learning and screenshot-quality gate
 - the branch is based on current `main` and is kept separate to minimize conflicts with Titanic work
-- an earlier full verification run `37653352539` passed the original gate, but the gate has since been made stricter; the latest expanded screenshot run exposed a headless VS Code capture issue that is now fixed and is being re-verified
+- the stricter expanded workflow passed in push run `37741183525` and PR run `37741188510`, including 11 required evidence images, build/prerender and desktop/mobile handbook verification
 - next repository action is PR review/merge coordination; merge order should be chosen to avoid unnecessary conflicts with any active Titanic branch touching `src/App.tsx`, `src/data/projectPortfolio.ts`, `scripts/prerender.mjs` or `generate_sitemap.cjs`
