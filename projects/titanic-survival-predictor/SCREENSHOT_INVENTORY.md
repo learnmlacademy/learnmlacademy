@@ -5,6 +5,7 @@ Every visual below must come from the real project or the real source page used 
 | File | Handbook checkpoint | What it proves |
 | --- | --- | --- |
 | `public/projects/titanic-survival/kaggle-data.jpg` | Dataset step | The real Kaggle Titanic data page used to explain where the learner obtains the competition files |
+| `public/project-handbooks/titanic/training_class_rates.png` | Training-only EDA | The executable notebook/training evidence shows a real ticket-class pattern without using the final holdout for exploration |
 | `public/project-handbooks/titanic/model_comparison.png` | Model comparison | The executable training program compared all five candidate classifiers |
 | `public/project-handbooks/titanic/confusion_matrix.png` | Final evaluation | The real 179-row holdout produced the recorded 100/10/24/45 confusion counts |
 | `public/project-handbooks/titanic/titanic-app-form.png` | Streamlit app | The real running app renders before prediction |
