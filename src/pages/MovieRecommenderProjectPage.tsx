@@ -11,16 +11,16 @@ import {
 } from 'lucide-react';
 import { CodeBlock } from '../components/content/CodeBlock';
 
-const requirementsCode = String.raw\`pandas==2.3.3
+const requirementsCode = String.raw`pandas==2.3.3
 numpy==2.3.3
 scikit-learn==1.7.2
 scipy==1.16.2
 joblib==1.5.2
 matplotlib==3.10.6
 streamlit==1.50.0
-pytest==8.4.2\`;
+pytest==8.4.2`;
 
-const downloadCode = String.raw\`"""Download the official stable MovieLens 100K dataset from GroupLens."""
+const downloadCode = String.raw`"""Download the official stable MovieLens 100K dataset from GroupLens."""
 
 from __future__ import annotations
 
@@ -74,9 +74,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()\`;
+    main()`;
 
-const buildCode = String.raw\`"""Build popularity, content, collaborative and hybrid MovieLens recommenders."""
+const buildCode = String.raw`"""Build popularity, content, collaborative and hybrid MovieLens recommenders."""
 
 from __future__ import annotations
 
@@ -335,9 +335,9 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()\`;
+    main()`;
 
-const appCode = String.raw\`"""Run from the project root with: python -m streamlit run app.py"""
+const appCode = String.raw`"""Run from the project root with: python -m streamlit run app.py"""
 
 from pathlib import Path
 import importlib.util
@@ -428,9 +428,9 @@ st.divider()
 st.caption(
     "This small educational system demonstrates recommendation ideas with historical MovieLens ratings. "
     "Real streaming platforms use many more signals, experiments, safety rules and large-scale infrastructure."
-)\`;
+)`;
 
-const testCode = String.raw\`from pathlib import Path
+const testCode = String.raw`from pathlib import Path
 import importlib.util
 
 import joblib
@@ -523,31 +523,31 @@ def test_reference_output_matches_live_artifact(artifacts):
         hybrid_saved[live.columns].reset_index(drop=True),
         live.reset_index(drop=True),
         check_dtype=False,
-    )\`;
+    )`;
 
-const installCommands = String.raw\`python -m venv .venv
+const installCommands = String.raw`python -m venv .venv
 .\\.venv\\Scripts\\Activate.ps1
 python -m pip install --upgrade pip
-pip install -r requirements.txt\`;
+pip install -r requirements.txt`;
 
-const runCommands = String.raw\`python download_data.py
+const runCommands = String.raw`python download_data.py
 python src/build_recommender.py
 pytest -q
-python -m streamlit run app.py\`;
+python -m streamlit run app.py`;
 
-const gitCommands = String.raw\`git init
+const gitCommands = String.raw`git init
 git add .
 git status
 git commit -m "Build movie recommendation system"
 git branch -M main
 git remote add origin https://github.com/YOUR-USERNAME/movie-recommender.git
-git push -u origin main\`;
+git push -u origin main`;
 
-const hybridOutput = String.raw\`1  Aladdin (1992)                               0.7098
+const hybridOutput = String.raw`1  Aladdin (1992)                               0.7098
 2  Willy Wonka and the Chocolate Factory (1971) 0.6510
 3  Lion King, The (1994)                        0.6041
 4  Aladdin and the King of Thieves (1996)       0.4500
-5  Star Wars (1977)                             0.4040\`;
+5  Star Wars (1977)                             0.4040`;
 
 function Step({
   number,
@@ -710,9 +710,9 @@ export function MovieRecommenderProjectPage() {
         </Step>
 
         <Step number={2} title="Create the project folder" check="PowerShell shows you inside movie-recommender and VS Code opens that folder.">
-          <CodeBlock code={String.raw\`mkdir movie-recommender
+          <CodeBlock code={String.raw`mkdir movie-recommender
 cd movie-recommender
-code .\`} language="powershell" title="Create and open the project" type="runnable" />
+code .`} language="powershell" title="Create and open the project" type="runnable" />
           <p>Create these folders in VS Code Explorer: <code>src</code>, <code>tests</code>, <code>models</code>, <code>outputs</code>, <code>scripts</code> and <code>data</code>.</p>
         </Step>
 
@@ -935,14 +935,14 @@ code .\`} language="powershell" title="Create and open the project" type="runnab
         </Step>
 
         <Step number={22} title="Put the project on GitHub" check="git status does not show .venv, the raw MovieLens folder or the generated Joblib artifact as files to commit.">
-          <CodeBlock code={String.raw\`.venv/
+          <CodeBlock code={String.raw`.venv/
 __pycache__/
 .pytest_cache/
 data/ml-100k/
 data/ml-100k.zip
 models/*.joblib
 outputs/screenshots/
-*.log\`} language="text" title=".gitignore" type="config" />
+*.log`} language="text" title=".gitignore" type="config" />
           <CodeBlock code={gitCommands} language="powershell" title="Git and GitHub commands" type="runnable" />
         </Step>
 
