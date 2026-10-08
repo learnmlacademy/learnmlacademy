@@ -40,6 +40,9 @@ def verify_page(page, viewport_name: str) -> dict:
             raise AssertionError(f"{viewport_name}: unfinished placeholder found: {phrase}")
 
     required_text = [
+        "The practical problem: estimate a home's sale price from information known before the sale",
+        "See the regression problem before choosing an algorithm",
+        "Build the training program in five logical pieces",
         "Topics covered",
         "Tools you will actually use",
         "XGBoost",
@@ -52,7 +55,7 @@ def verify_page(page, viewport_name: str) -> dict:
         "Common problems and fixes",
         "Complete-project checkpoint",
         "How the complete system fits together",
-        "Understand the training file before you run it",
+        "Build the training program in five logical pieces",
         "How the application code works",
         "Now change the project yourself",
         "How to explain this project in an interview",
@@ -73,6 +76,7 @@ def verify_page(page, viewport_name: str) -> dict:
         "/project-handbooks/house-price/vscode-model-comparison.png",
         "/project-handbooks/house-price/vscode-final-metrics.png",
         "/project-handbooks/house-price/actual_vs_predicted.png",
+        "/project-handbooks/house-price/living_area_vs_sale_price.png",
         "/project-handbooks/house-price/vscode-app-code.png",
         "/project-handbooks/house-price/streamlit-house-price-app.png",
         "/project-handbooks/house-price/streamlit-house-price-prediction.png",

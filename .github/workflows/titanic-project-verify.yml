@@ -104,6 +104,7 @@ jobs:
         run: |
           mkdir -p public/project-handbooks/titanic
           cp projects/titanic-survival-predictor/outputs/training_class_rates.png public/project-handbooks/titanic/
+          cp projects/titanic-survival-predictor/outputs/survival_by_sex_class.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/model_comparison.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
           cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/

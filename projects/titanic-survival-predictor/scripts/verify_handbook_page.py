@@ -12,6 +12,9 @@ OUTPUTS = ROOT / "outputs" / "handbook-verification"
 
 REQUIRED_TEXT = [
     "Can You Survive the Titanic? Build a Machine Learning Predictor",
+    "The practical problem: can historical passenger details help us predict survival?",
+    "See the learning problem before writing the model",
+    "Build train_model.py in four understandable pieces",
     "Verified reference result",
     "How the whole system fits together",
     "Install Python on Windows",
@@ -39,6 +42,7 @@ FORBIDDEN_TEXT = [
 REQUIRED_IMAGES = {
     "/projects/titanic-survival/kaggle-data.jpg",
     "/project-handbooks/titanic/training_class_rates.png",
+    "/project-handbooks/titanic/survival_by_sex_class.png",
     "/project-handbooks/titanic/model_comparison.png",
     "/project-handbooks/titanic/confusion_matrix.png",
     "/project-handbooks/titanic/titanic-app-form.png",

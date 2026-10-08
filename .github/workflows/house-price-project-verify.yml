@@ -95,6 +95,7 @@ jobs:
           cp outputs/streamlit-house-price-app.png ../../public/project-handbooks/house-price/
           cp outputs/streamlit-house-price-prediction.png ../../public/project-handbooks/house-price/
           cp outputs/actual_vs_predicted.png ../../public/project-handbooks/house-price/
+          cp outputs/living_area_vs_sale_price.png ../../public/project-handbooks/house-price/
           cp outputs/vscode-*.png ../../public/project-handbooks/house-price/
 
       - name: Set up Node
