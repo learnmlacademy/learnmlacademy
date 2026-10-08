@@ -55,6 +55,12 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
 
 
 def build_popularity(ratings: pd.DataFrame, movies: pd.DataFrame) -> pd.DataFrame:
+    """Create a smoothed popularity baseline.
+
+    A movie with one lucky 5-star rating should not automatically outrank a
+    movie with hundreds of strong ratings, so each movie mean is shrunk toward
+    the global mean using a 25-rating prior.
+    """
     summary = ratings.groupby("movie_id")["rating"].agg(["mean", "count"]).reset_index()
     global_mean = float(ratings["rating"].mean())
     prior = 25.0
@@ -68,6 +74,7 @@ def build_popularity(ratings: pd.DataFrame, movies: pd.DataFrame) -> pd.DataFram
 
 
 def build_content(movies: pd.DataFrame):
+    """Represent each movie with a multi-hot genre vector and cosine distance."""
     labels = movies["genres"].str.split("|")
     encoder = MultiLabelBinarizer(classes=GENRES)
     matrix = encoder.fit_transform(labels).astype(float)
@@ -78,6 +85,7 @@ def build_content(movies: pd.DataFrame):
 
 
 def build_collaborative(ratings: pd.DataFrame, movies: pd.DataFrame):
+    """Build a sparse movie-by-user rating matrix for item-item similarity."""
     movie_ids = movies["movie_id"].tolist()
     user_ids = sorted(ratings["user_id"].unique())
     movie_to_row = {movie_id: index for index, movie_id in enumerate(movie_ids)}
@@ -105,6 +113,10 @@ def neighbor_scores(model, matrix, row: int, n_candidates: int = 60) -> dict[int
 
 
 def recommend(artifacts: dict, movie_id: int, method: str = "hybrid", top_n: int = 10) -> pd.DataFrame:
+    """Return similar known movies using one of the three teaching methods."""
+    if top_n < 1:
+        raise ValueError("top_n must be at least 1")
+
     movies = artifacts["movies"]
     movie_to_row = artifacts["movie_to_row"]
     if movie_id not in movie_to_row:
@@ -150,11 +162,33 @@ def recommend(artifacts: dict, movie_id: int, method: str = "hybrid", top_n: int
 
 
 def popularity_recommendations(artifacts: dict, top_n: int = 10) -> pd.DataFrame:
+    if top_n < 1:
+        raise ValueError("top_n must be at least 1")
     popular = artifacts["popularity"].sort_values(
-        ["weighted_score", "count"], ascending=[False, False]
+        ["weighted_score", "count", "movie_id"], ascending=[False, False, True]
     ).head(top_n).copy()
     popular.insert(0, "rank", range(1, len(popular) + 1))
     return popular[["rank", "movie_id", "title", "genres", "weighted_score", "count"]]
+
+
+def recommend_or_fallback(
+    artifacts: dict,
+    movie_id: int | None,
+    method: str = "hybrid",
+    top_n: int = 10,
+) -> pd.DataFrame:
+    """Use popularity when a new/unknown movie has no learned similarity row.
+
+    This is intentionally a simple cold-start fallback. It does not pretend to
+    personalize an unseen movie; it gives the learner a safe default instead.
+    """
+    if movie_id is None or movie_id not in artifacts["movie_to_row"]:
+        popular = popularity_recommendations(artifacts, top_n=top_n).copy()
+        popular = popular.rename(columns={"weighted_score": "score"})
+        popular["score"] = popular["score"].astype(float).round(4)
+        popular["reason"] = "popularity fallback for cold start"
+        return popular[["rank", "movie_id", "title", "genres", "score", "reason"]]
+    return recommend(artifacts, movie_id, method=method, top_n=top_n)
 
 
 def main() -> None:
@@ -199,6 +233,8 @@ def main() -> None:
         OUTPUT_DIR / "popular_movies.csv", index=False
     )
 
+    total_possible_ratings = int(collab_matrix.shape[0] * collab_matrix.shape[1])
+    observed_ratings = int(collab_matrix.nnz)
     metrics = {
         "ratings": int(len(ratings)),
         "users": int(ratings["user_id"].nunique()),
@@ -208,8 +244,14 @@ def main() -> None:
         "rating_max": float(ratings["rating"].max()),
         "content_features": int(content_matrix.shape[1]),
         "collaborative_shape": list(collab_matrix.shape),
+        "observed_rating_cells": observed_ratings,
+        "possible_rating_cells": total_possible_ratings,
+        "rating_density": observed_ratings / total_possible_ratings,
+        "rating_sparsity": 1.0 - (observed_ratings / total_possible_ratings),
         "reference_movie": "Toy Story (1995)",
         "reference_movie_id": toy_story_id,
+        "hybrid_content_weight": 0.45,
+        "hybrid_collaborative_weight": 0.55,
     }
     (OUTPUT_DIR / "metrics.json").write_text(
         json.dumps(metrics, indent=2) + "\n", encoding="utf-8"
