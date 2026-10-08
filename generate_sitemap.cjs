@@ -22,6 +22,7 @@ const staticPages = [
   { url: '/projects/credit-card-fraud', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/customer-segmentation', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/pdf-rag', priority: '0.8', changefreq: 'monthly' },
+  { url: '/projects/ai-content-creator', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/ai-research-assistant', priority: '0.8', changefreq: 'monthly' },
   { url: '/projects/model-to-production', priority: '0.8', changefreq: 'monthly' },
   { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
