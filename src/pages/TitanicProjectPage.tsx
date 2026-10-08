@@ -216,7 +216,7 @@ export function TitanicProjectPage() {
           <p><strong>What:</strong> Python runs the notebook, training program, tests and Streamlit app.</p>
           <p><strong>Why:</strong> Every later command depends on the Python interpreter and its package manager.</p>
           <HandbookActions steps={[
-            { instruction: <>Open your browser and go to the official Python downloads page.</>, where: 'Browser' },
+            { instruction: <>Open your browser and go to the <a href="https://www.python.org/downloads/windows/" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-700 underline">official Python downloads page</a>.</>, where: 'Browser' },
             { instruction: <>Install a current 64-bit Python 3 release. The verified build used Python 3.13.16.</> },
             { instruction: <>If the installer offers command-line/PATH integration, enable it.</> },
             { instruction: <>Open Start → type <strong>PowerShell</strong> → open it.</> },
@@ -260,7 +260,7 @@ export function TitanicProjectPage() {
           <p><strong>What:</strong> The project uses Kaggle's Titanic competition training table as the learner dataset.</p>
           <p><strong>Why:</strong> <code>train.csv</code> contains both passenger information and the known <code>Survived</code> label needed for supervised learning.</p>
           <HandbookActions steps={[
-            { instruction: <>Open the Kaggle Titanic competition Data page in your browser.</> },
+            { instruction: <>Open the <a href="https://www.kaggle.com/competitions/titanic/data" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-700 underline">Kaggle Titanic competition Data page</a> in your browser.</> },
             { instruction: <>Sign in yourself and accept/review any competition rules Kaggle requires.</> },
             { instruction: <>Download the competition files and extract them.</> },
             { instruction: <>Copy only <code>train.csv</code> into this project's <code>data</code> folder.</>, expected: <>Explorer shows <code>data/train.csv</code>.</> },
