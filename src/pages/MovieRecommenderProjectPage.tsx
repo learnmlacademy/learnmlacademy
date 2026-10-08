@@ -10,6 +10,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { CodeBlock } from '../components/content/CodeBlock';
+import { CosineSimilarityVisual, SparseMovieMatrixVisual } from '../components/projects/MovieConceptVisuals';
 
 const requirementsCode = "pandas==2.3.3\nnumpy==2.3.3\nscikit-learn==1.7.2\nscipy==1.16.2\njoblib==1.5.2\nmatplotlib==3.10.6\nstreamlit==1.50.0\npytest==8.4.2\n";
 const downloadDataCode = "\"\"\"Download the CC0 synthetic movie-ratings dataset from Datanemics.\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\nimport hashlib\nimport urllib.request\n\nimport pandas as pd\n\nROOT = Path(__file__).resolve().parent\nDATA_DIR = ROOT / \"data\"\nDATA_PATH = DATA_DIR / \"movie-ratings.csv\"\n\nDATASET_PAGE = \"https://datanemics.com/datasets/movie-ratings/\"\nCSV_URL = \"https://datanemics.com/datasets/data/movie-ratings.csv\"\nLICENSE = \"CC0 1.0 public domain\"\nEXPECTED_ROWS = 9_000\nEXPECTED_USERS = 1_100\nEXPECTED_MOVIES = 260\nEXPECTED_SHA256 = \"b9e41047db97680f0043a8bdcb18fd5cb25d8f4a6209d5ef536f0ba9b457af52\"\nEXPECTED_COLUMNS = [\n    \"user_id\",\n    \"movie_id\",\n    \"title\",\n    \"genre\",\n    \"release_year\",\n    \"rating\",\n    \"rated_at\",\n]\n\n\ndef download_bytes() -> bytes:\n    request = urllib.request.Request(\n        CSV_URL,\n        headers={\"User-Agent\": \"LearnMLAcademy/1.0 educational-project\"},\n    )\n    with urllib.request.urlopen(request, timeout=120) as response:\n        return response.read()\n\n\ndef main() -> None:\n    DATA_DIR.mkdir(parents=True, exist_ok=True)\n\n    print(\"Dataset: Datanemics Movie ratings\")\n    print(\"Dataset page:\", DATASET_PAGE)\n    print(\"License:\", LICENSE)\n    print(\"Synthetic dataset: yes\")\n\n    raw = download_bytes()\n    sha256 = hashlib.sha256(raw).hexdigest()\n    if sha256 != EXPECTED_SHA256:\n        raise RuntimeError(\n            \"Downloaded CSV fingerprint changed: \"\n            f\"{sha256}; expected {EXPECTED_SHA256}. \"\n            \"Do not continue until the dataset change is reviewed.\"\n        )\n    DATA_PATH.write_bytes(raw)\n\n    frame = pd.read_csv(DATA_PATH)\n    if list(frame.columns) != EXPECTED_COLUMNS:\n        raise RuntimeError(\n            \"Unexpected columns: \"\n            f\"{list(frame.columns)}; expected {EXPECTED_COLUMNS}\"\n        )\n\n    if len(frame) != EXPECTED_ROWS:\n        raise RuntimeError(\n            f\"Unexpected row count: {len(frame):,}; expected {EXPECTED_ROWS:,}\"\n        )\n\n    users = int(frame[\"user_id\"].nunique())\n    movies = int(frame[\"movie_id\"].nunique())\n    if users != EXPECTED_USERS or movies != EXPECTED_MOVIES:\n        raise RuntimeError(\n            \"Unexpected entity counts: \"\n            f\"users={users}, movies={movies}; \"\n            f\"expected users={EXPECTED_USERS}, movies={EXPECTED_MOVIES}\"\n        )\n\n    ratings = pd.to_numeric(frame[\"rating\"], errors=\"raise\")\n    if float(ratings.min()) != 0.5 or float(ratings.max()) != 5.0:\n        raise RuntimeError(\n            f\"Unexpected rating range: {ratings.min()} to {ratings.max()}\"\n        )\n\n    print(f\"Verified rows:    {len(frame):,}\")\n    print(f\"Verified users:   {users:,}\")\n    print(f\"Verified movies:  {movies:,}\")\n    print(f\"Rating range:     {ratings.min():.1f} to {ratings.max():.1f}\")\n    print(f\"SHA256:           {sha256}\")\n    print(f\"Saved to:         {DATA_PATH}\")\n\n\nif __name__ == \"__main__\":\n    main()\n";
@@ -436,6 +437,7 @@ export function MovieRecommenderProjectPage() {
             title="Distance to similarity"
             type="output"
           />
+          <CosineSimilarityVisual />
         </Step>
 
         <Step
@@ -451,6 +453,7 @@ export function MovieRecommenderProjectPage() {
             There are 260 × 1,100 = 286,000 possible movie/user cells. After the latest-interaction rule, the verified build contains 8,291 observed cells—about 2.90% density and 97.10% sparsity.
             A SciPy CSR sparse matrix stores the observed values without allocating ordinary dense values for every empty cell.
           </p>
+          <SparseMovieMatrixVisual />
           <CodeBlock code={collaborativeSnippet} language="python" title="Sparse collaborative matrix block" type="runnable" />
         </Step>
 

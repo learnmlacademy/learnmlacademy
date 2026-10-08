@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build --configLoader runner && npm run prerender && npm run verify:prerender",
+    "build": "vite build --configLoader runner && npm run prerender && npm run verify:prerender && npm run verify:projects",
     "prerender": "node scripts/prerender.mjs",
     "verify:prerender": "node scripts/verify-prerender.mjs",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "generate:sitemap": "node generate_sitemap.cjs",
-    "prebuild": "node generate_sitemap.cjs"
+    "prebuild": "node generate_sitemap.cjs",
+    "verify:projects": "node scripts/verify-project-portfolio.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
