@@ -10,7 +10,7 @@ RUN python -m pip install --no-cache-dir --no-compile -r requirements.txt \
 # No raw data, training scripts, test suite, credentials, or caches in the image.
 COPY api/ ./api/
 COPY src/__init__.py src/contract.py src/model_loader.py src/predict.py src/logging_utils.py ./src/
-COPY config/ ./config/
+COPY --chown=10001:10001 config/ ./config/
 # Training publishes a private temporary directory; give the runtime user access.
 COPY --chown=10001:10001 models/ ./models/
 USER 10001:10001

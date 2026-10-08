@@ -26,7 +26,7 @@
 
 Implementation and measured results are recorded at each checkpoint below.
 Docker executable was not found in this Windows environment; CI verification
-will be used instead. No Docker success is claimed yet.
+was used instead. Docker build and real container runtime passed in GitHub Actions.
 
 ## Checkpoint A — executed 8 October 2026
 
@@ -103,7 +103,7 @@ will be used instead. No Docker success is claimed yet.
 - Both generated model directories and their metadata/reference files coexist
   locally. Main project config remains v1; verification uses disposable configs.
 
-## Checkpoint E — implementation, execution pending
+## Checkpoint E — executed in GitHub Actions
 
 - Docker base pinned to official Python 3.13.16 slim-bookworm manifest
   sha256:a1165e272e578941b84abc79e4ab38a0305cd12803a5c4247979ac7655f4d641.
@@ -114,7 +114,39 @@ will be used instead. No Docker success is claimed yet.
 - CI downloads the pinned public dataset without secrets, trains both versions,
   executes all tests, drift/switch/rollback checks, builds Docker and runs a real
   HTTP smoke test against that container. Artifacts exclude raw data/models.
-- Local Docker is unavailable. Build/runtime success will be recorded only after
-  the actual GitHub Actions run completes.
+- Local Docker is unavailable; build/runtime verification ran on Ubuntu 24.04 CI.
 - Pre-CI review caught Linux private-directory permissions inherited from atomic
   training publication; Docker copies model folders with runtime-user ownership.
+- The same ownership rule covers config/model.json after an atomic operator
+  switch. CI switches the actual configuration v2 then v1 before Docker build
+  so its private Linux permissions are exercised by the non-root runtime test.
+
+### Executed evidence and final scope review
+
+- Run: https://github.com/learnmlacademy/learnmlacademy/actions/runs/37776365418
+  Commit: 873a9486f0a31f6d5495ef75b47b4ae95fed5119. Both jobs passed.
+- Engineering: exact dependency installation/pip check, checksum-pinned data,
+  both model trainings/reloads, 46/46 Pytest cases, drift checks, real API
+  version switching/rollback and final contract checks all passed.
+- Docker image actually built; container actually ran as UID 10001 with a
+  read-only filesystem. Real TCP HTTP verified health, model-info, prediction,
+  invalid-request 422, Swagger and OpenAPI. Docker's health check was healthy.
+- Both versions' holdout metrics exactly match the Windows results above.
+  Linux example probabilities were 0.6509942843701407 / 0.6512331113170211;
+  tiny cross-platform floating-point differences are expected. Rollback was
+  exactly equal within each environment.
+- Repository checks: npm run lint (tsc --noEmit) and Vite build passed.
+  Existing website dependencies reported 15 npm vulnerabilities (3 low,
+  3 moderate, 8 high, 1 critical); existing large-chunk warnings remain.
+  No website dependency or unrelated source change was made in this project.
+- Uploaded run artifact contains JUnit, metrics, drift/version evidence and
+  container logs; no raw data, model binaries, credentials or caches.
+- Source review against starting main 90586d12f480f2d52a00b32a61467380d8e3f61a:
+  changes are confined to projects/model-to-production and its one workflow.
+  Reviewed leakage separation, strict API validation, startup-only loading,
+  no-fit inference, redacted logging, immutable artifacts and atomic switching.
+  No lesson, page, other project, SEO or deployment files were changed.
+- Limitations: local Docker unavailable; HTTPX adapter deprecation warning;
+  dataset-specific licensing caveat noted above; educational drift thresholds;
+  no authentication/TLS/rate limiting/business validation for public production.
+  No merge, registry publication or deployment was performed.

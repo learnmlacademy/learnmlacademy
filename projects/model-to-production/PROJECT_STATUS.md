@@ -16,6 +16,9 @@
 - [x] drift
 - [x] v2 version
 - [x] rollback
-- [ ] Docker
-- [ ] CI
-- [ ] final engineering audit
+- [x] Docker
+- [x] CI
+- [x] final engineering audit
+
+Executed evidence: GitHub Actions run 37776365418, both jobs passed; see
+BUILD_RECORD.md for the tested commit, results and remaining production limitations.

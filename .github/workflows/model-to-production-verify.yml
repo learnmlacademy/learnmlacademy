@@ -58,6 +58,9 @@ jobs:
       - name: Prove API version switching and rollback
         run: |
           python -m scripts.verify_versions
+          # Exercise the real operator-written config (private permissions on Linux).
+          python -m scripts.switch_model --version v2
+          python -m scripts.switch_model --version v1
           python -m scripts.final_checks
       - name: Build Docker image without deploying it
         run: docker build --tag churn-service:ci .
