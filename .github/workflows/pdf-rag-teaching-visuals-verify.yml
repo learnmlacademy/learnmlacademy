@@ -1,0 +1,35 @@
+name: PDF RAG Teaching Visuals Verify
+
+on:
+  pull_request:
+    paths:
+      - "src/components/projects/PdfRagConceptVisuals.tsx"
+      - ".github/workflows/pdf-rag-teaching-visuals-verify.yml"
+  push:
+    branches: ["feat/pdf-rag-handbook-visuals"]
+    paths:
+      - "src/components/projects/PdfRagConceptVisuals.tsx"
+      - ".github/workflows/pdf-rag-teaching-visuals-verify.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pdf-rag-teaching-visuals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-visuals:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Typecheck all React teaching visuals
+        run: npm run lint
+      - name: Check website builds without publishing draft Project 10
+        run: npm run build
