@@ -22,3 +22,19 @@
 
 Executed evidence: GitHub Actions run 37776365418, both jobs passed; see
 BUILD_RECORD.md for the tested commit, results and remaining production limitations.
+
+
+## Website handbook
+
+- [x] detailed practical problem statement
+- [x] beginner-first architecture flow
+- [x] training / serving / validation concepts separated into digestible steps
+- [x] actual v1/v2 metrics included
+- [x] real FastAPI evidence capture scripted
+- [x] drift/version/confusion figures scripted
+- [x] troubleshooting, interview and mastery sections
+- [x] project route/catalog metadata
+- [x] prerender/sitemap integration
+- [ ] full handbook CI verification
+- [ ] verified screenshots stored
+- [ ] final merge
