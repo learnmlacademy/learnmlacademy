@@ -20,10 +20,10 @@ Turn raw retail transactions into understandable customer groups using RFM featu
 - [x] real app screenshot script
 - [x] first clean CI run
 - [x] pin UCI archive SHA256
-- [ ] learner handbook
-- [ ] website integration
-- [ ] desktop/mobile verification
-- [ ] final acceptance audit
+- [x] learner handbook
+- [x] website integration
+- [x] desktop/mobile verification
+- [x] final acceptance audit
 
 ## Dataset boundary
 The project uses UCI Online Retail (dataset 352), a UK non-store retailer transaction dataset with 541,909 rows. UCI lists the dataset under CC BY 4.0. The project must preserve attribution.
@@ -56,3 +56,25 @@ Selected K-Means profiles from the verified run:
 | Loyal regular customers | 2,669 | 134.72 | 1.67 | £497.12 |
 
 The human-readable segment names are educational interpretations of cluster averages; K-Means itself produces numeric cluster IDs, not business labels.
+
+
+## Final handbook verification
+
+GitHub Actions run **37792070792 — SUCCESS**.
+
+Verified:
+- UCI download and checksum pin
+- 541,909 raw transactions
+- 397,884 retained valid purchase rows
+- 4,338 RFM customer rows
+- K-Means / hierarchical / DBSCAN comparison
+- selected K-Means k = 2 with silhouette 0.432624
+- 6 automated tests passed
+- 7 real generated/app screenshots published
+- TypeScript validation passed
+- production build and prerender passed
+- desktop and 390px mobile handbook verification passed
+- no horizontal overflow
+- route, project card, metadata, prerender entry and sitemap entry present
+
+The page explicitly states that the project uses UCI Online Retail data, not Amazon data or Amazon's production recommender/segmentation system.
