@@ -74,6 +74,8 @@ def test_no_evidence_means_abstain():
     answer = generate_answer(example_index(), "purple alien banana hovercraft")
     assert not answer.citations
     assert "could not find" in answer.text
+    weak = generate_answer(example_index(), "What does the travel policy say about purple alien vouchers on Mars?")
+    assert not weak.citations
     with pytest.raises(ValueError):
         example_index().search("")
     with pytest.raises(ValueError):
