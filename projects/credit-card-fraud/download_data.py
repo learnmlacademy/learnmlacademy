@@ -21,6 +21,7 @@ EXPECTED_LICENSE = "Public"
 EXPECTED_ROWS = 284_807
 EXPECTED_COLUMNS = 31
 EXPECTED_FRAUDS = 492
+EXPECTED_SHA256 = "b7efcb35a428bbe22347a05d2437d9177bab07ce61e51214a17bec584ad9496d"
 EXPECTED_FEATURES = ["Time", *[f"V{i}" for i in range(1, 29)], "Amount", "Class"]
 
 
@@ -52,6 +53,12 @@ def main() -> None:
 
     raw = download_bytes(parquet_url)
     sha256 = hashlib.sha256(raw).hexdigest()
+    if sha256 != EXPECTED_SHA256:
+        raise RuntimeError(
+            "OpenML parquet fingerprint changed: "
+            f"{sha256}; expected {EXPECTED_SHA256}. "
+            "Do not continue until the dataset change is reviewed."
+        )
     DATA_PATH.write_bytes(raw)
 
     frame = pd.read_parquet(DATA_PATH)
