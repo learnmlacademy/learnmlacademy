@@ -11,7 +11,7 @@ from typing import Iterable
 import fitz
 import numpy as np
 from scipy.sparse import csr_matrix, load_npz, save_npz
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 MAX_PDF_BYTES = 12 * 1024 * 1024
@@ -198,9 +198,19 @@ class RagIndex:
         return result
 
 
+def has_enough_evidence(hits: list[Hit], question: str) -> bool:
+    """Conservative lexical coverage gate; not proof of answer faithfulness."""
+    if not hits or hits[0].score < 0.025:
+        return False
+    query_terms = set(re.findall(r"[a-z]{3,}", question.lower())) - ENGLISH_STOP_WORDS
+    source_terms = set(re.findall(r"[a-z]{3,}", hits[0].source.text.lower()))
+    matched = query_terms & source_terms
+    return bool(query_terms) and len(matched) >= (2 if len(query_terms) >= 4 else 1) and len(matched) / len(query_terms) >= 0.4
+
+
 def extractive_answer(hits: list[Hit], question: str) -> Answer:
     """Conservative offline answer: show the exact retrieved passage."""
-    if not hits or hits[0].score < 0.025:
+    if not has_enough_evidence(hits, question):
         return Answer(question, "I could not find that information in the uploaded PDFs.",
                       (), tuple(hits), "extractive")
     best = hits[0]
@@ -213,7 +223,7 @@ def generate_answer(index: RagIndex, question: str, *, top_k: int = 4,
                     client=None, model: str = "gpt-4.1-mini") -> Answer:
     """Optional cloud summarization; citations allowlisted, not fact-checking."""
     hits = index.search(question, top_k=top_k)
-    if not hits or hits[0].score < 0.025 or client is None:
+    if not has_enough_evidence(hits, question) or client is None:
         return extractive_answer(hits, question)
     evidence = "\n\n".join(
         f"[{i}] {h.source.filename}, page {h.source.page}, ID {h.source.id}\n{h.source.text[:1800]}"
