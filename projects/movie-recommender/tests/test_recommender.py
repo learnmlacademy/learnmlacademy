@@ -45,9 +45,38 @@ def test_popularity_fallback_is_ranked(artifacts):
     assert result["weighted_score"].is_monotonic_decreasing
 
 
-def test_unknown_movie_is_rejected(artifacts):
+def test_unknown_movie_is_rejected_by_similarity_api(artifacts):
     with pytest.raises(ValueError, match="Unknown movie_id"):
         core.recommend(artifacts, 999999, method="hybrid", top_n=10)
+
+
+def test_unknown_movie_uses_cold_start_fallback(artifacts):
+    result = core.recommend_or_fallback(
+        artifacts,
+        movie_id=999999,
+        method="hybrid",
+        top_n=7,
+    )
+    assert len(result) == 7
+    assert result["rank"].tolist() == list(range(1, 8))
+    assert set(result["reason"]) == {"popularity fallback for cold start"}
+
+
+def test_top_n_must_be_positive(artifacts):
+    movies = artifacts["movies"]
+    movie_id = int(movies.iloc[0]["movie_id"])
+    with pytest.raises(ValueError, match="top_n"):
+        core.recommend(artifacts, movie_id, method="hybrid", top_n=0)
+    with pytest.raises(ValueError, match="top_n"):
+        core.popularity_recommendations(artifacts, top_n=0)
+
+
+def test_collaborative_matrix_is_sparse(artifacts):
+    matrix = artifacts["collab_matrix"]
+    assert matrix.shape == (1_682, 943)
+    assert matrix.nnz == 100_000
+    density = matrix.nnz / (matrix.shape[0] * matrix.shape[1])
+    assert density < 0.10
 
 
 def test_reference_output_matches_live_artifact(artifacts):
