@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - parallel/movie-recommender-handbook
+      - enhance/project-screenshot-coverage
     paths:
       - "projects/movie-recommender/**"
       - "src/App.tsx"
@@ -97,8 +98,7 @@ jobs:
         run: |
           mkdir -p ../../public/project-handbooks/movie-recommender
           cp outputs/rating_distribution.png ../../public/project-handbooks/movie-recommender/
-          cp outputs/screenshots/movie-recommender-form.png ../../public/project-handbooks/movie-recommender/
-          cp outputs/screenshots/movie-recommender-results.png ../../public/project-handbooks/movie-recommender/
+          cp outputs/screenshots/*.png ../../public/project-handbooks/movie-recommender/
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -126,7 +126,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified visual evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/movie-recommender-handbook' && success()
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/parallel/movie-recommender-handbook' || github.ref == 'refs/heads/enhance/project-screenshot-coverage') && success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -136,8 +136,9 @@ jobs:
           else
             git commit -m "Movie recommender: store verified screenshots [skip ci]"
             git restore .
-            git pull --rebase origin parallel/movie-recommender-handbook
-            git push origin HEAD:parallel/movie-recommender-handbook
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            git pull --rebase origin "$BRANCH"
+            git push origin "HEAD:$BRANCH"
           fi
 
       - name: Stop preview processes
