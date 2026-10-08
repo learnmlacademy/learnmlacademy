@@ -49,3 +49,22 @@ will be used instead. No Docker success is claimed yet.
   with --no-compile completed. No security setting was changed.
 - Review found a double-read race in dataset verification; parsing now uses the
   same verified bytes. No inference API or Docker runtime success claimed yet.
+
+## Checkpoint B — executed
+
+- Startup-only trusted loader checks version/path containment, metadata schema,
+  dataset/feature contract, package/Python compatibility and artifact SHA-256
+  before deserializing verified bytes. A matching hash is not a signature:
+  metadata and joblib must both remain operator-controlled.
+- Endpoints: GET /health, GET /model-info, POST /predict; strict Pydantic inputs.
+- All 16 API integration tests passed with FastAPI TestClient, including
+  range/type/category errors, missing/extra fields, explicit unknown charges,
+  real prediction and missing-model startup failure.
+- Direct reload/inference on examples/customer.json returned churn probability
+  0.6509942843701416, class churn, model v1. Measured one-call latency
+  44.5385 ms is only an observed sample, not a performance guarantee.
+- perf_counter covers dataframe construction, saved preprocessing,
+  predict_proba and threshold selection; excludes HTTP parsing/validation,
+  serialization, network and startup loading.
+- Pinned Starlette emits a deprecation warning for its supported HTTPX TestClient
+  adapter; tests pass. No local listener was needed for these integration tests.

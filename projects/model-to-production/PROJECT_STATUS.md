@@ -6,13 +6,13 @@
 - [x] model artifact
 - [x] metadata
 - [ ] model versioning
-- [ ] model loader
-- [ ] FastAPI
-- [ ] validation
+- [x] model loader
+- [x] FastAPI
+- [x] validation
 - [x] unit tests (initial training checks; full coverage checkpoint C)
-- [ ] API integration tests
+- [x] API integration tests
 - [ ] logging
-- [ ] latency
+- [x] latency
 - [ ] drift
 - [ ] v2 version
 - [ ] rollback
