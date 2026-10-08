@@ -1,54 +1,88 @@
-"""Download the official stable MovieLens 100K dataset from GroupLens."""
+"""Download the CC0 synthetic movie-ratings dataset from Datanemics."""
 
 from __future__ import annotations
 
 from pathlib import Path
-import shutil
+import hashlib
 import urllib.request
-import zipfile
+
+import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
-ARCHIVE = DATA_DIR / "ml-100k.zip"
-EXTRACTED = DATA_DIR / "ml-100k"
-URL = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
+DATA_PATH = DATA_DIR / "movie-ratings.csv"
 
-EXPECTED_RATINGS = 100_000
-EXPECTED_USERS = 943
-EXPECTED_MOVIES = 1_682
+DATASET_PAGE = "https://datanemics.com/datasets/movie-ratings/"
+CSV_URL = "https://datanemics.com/datasets/data/movie-ratings.csv"
+LICENSE = "CC0 1.0 public domain"
+EXPECTED_ROWS = 9_000
+EXPECTED_USERS = 1_100
+EXPECTED_MOVIES = 260
+EXPECTED_COLUMNS = [
+    "user_id",
+    "movie_id",
+    "title",
+    "genre",
+    "release_year",
+    "rating",
+    "rated_at",
+]
+
+
+def download_bytes() -> bytes:
+    request = urllib.request.Request(
+        CSV_URL,
+        headers={"User-Agent": "LearnMLAcademy/1.0 educational-project"},
+    )
+    with urllib.request.urlopen(request, timeout=120) as response:
+        return response.read()
 
 
 def main() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    print("Downloading official MovieLens 100K archive from GroupLens...")
-    with urllib.request.urlopen(URL, timeout=120) as response, ARCHIVE.open("wb") as output:
-        shutil.copyfileobj(response, output)
 
-    with zipfile.ZipFile(ARCHIVE) as zipped:
-        names = set(zipped.namelist())
-        required = {"ml-100k/u.data", "ml-100k/u.item", "ml-100k/u.genre"}
-        missing = required.difference(names)
-        if missing:
-            raise RuntimeError(f"MovieLens archive is missing expected files: {sorted(missing)}")
-        zipped.extractall(DATA_DIR)
+    print("Dataset: Datanemics Movie ratings")
+    print("Dataset page:", DATASET_PAGE)
+    print("License:", LICENSE)
+    print("Synthetic dataset: yes")
 
-    rating_lines = sum(1 for _ in (EXTRACTED / "u.data").open("r", encoding="latin-1"))
-    movie_lines = sum(1 for _ in (EXTRACTED / "u.item").open("r", encoding="latin-1"))
-    users = set()
-    with (EXTRACTED / "u.data").open("r", encoding="latin-1") as handle:
-        for line in handle:
-            users.add(int(line.split("\t", 1)[0]))
+    raw = download_bytes()
+    sha256 = hashlib.sha256(raw).hexdigest()
+    DATA_PATH.write_bytes(raw)
 
-    if rating_lines != EXPECTED_RATINGS or movie_lines != EXPECTED_MOVIES or len(users) != EXPECTED_USERS:
+    frame = pd.read_csv(DATA_PATH)
+    if list(frame.columns) != EXPECTED_COLUMNS:
         raise RuntimeError(
-            "Unexpected MovieLens 100K shape: "
-            f"ratings={rating_lines}, users={len(users)}, movies={movie_lines}"
+            "Unexpected columns: "
+            f"{list(frame.columns)}; expected {EXPECTED_COLUMNS}"
         )
 
-    print(f"Verified ratings: {rating_lines:,}")
-    print(f"Verified users:   {len(users):,}")
-    print(f"Verified movies:  {movie_lines:,}")
-    print(f"Extracted to: {EXTRACTED}")
+    if len(frame) != EXPECTED_ROWS:
+        raise RuntimeError(
+            f"Unexpected row count: {len(frame):,}; expected {EXPECTED_ROWS:,}"
+        )
+
+    users = int(frame["user_id"].nunique())
+    movies = int(frame["movie_id"].nunique())
+    if users != EXPECTED_USERS or movies != EXPECTED_MOVIES:
+        raise RuntimeError(
+            "Unexpected entity counts: "
+            f"users={users}, movies={movies}; "
+            f"expected users={EXPECTED_USERS}, movies={EXPECTED_MOVIES}"
+        )
+
+    ratings = pd.to_numeric(frame["rating"], errors="raise")
+    if float(ratings.min()) != 0.5 or float(ratings.max()) != 5.0:
+        raise RuntimeError(
+            f"Unexpected rating range: {ratings.min()} to {ratings.max()}"
+        )
+
+    print(f"Verified rows:    {len(frame):,}")
+    print(f"Verified users:   {users:,}")
+    print(f"Verified movies:  {movies:,}")
+    print(f"Rating range:     {ratings.min():.1f} to {ratings.max():.1f}")
+    print(f"SHA256:           {sha256}")
+    print(f"Saved to:         {DATA_PATH}")
 
 
 if __name__ == "__main__":

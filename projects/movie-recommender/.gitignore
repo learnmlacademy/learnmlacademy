@@ -1,8 +1,7 @@
 .venv/
 __pycache__/
 .pytest_cache/
-data/ml-100k/
-data/ml-100k.zip
+data/movie-ratings.csv
 models/*.joblib
 outputs/screenshots/
 *.log
