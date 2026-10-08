@@ -105,13 +105,13 @@ export function AIResearchAssistantProjectPage() {
             original source quotes, citation verification, a full tool trace, a Markdown research brief
             and a downloadable JSON evidence log.
           </p>
-          <p className="mt-3 text-sm leading-7 text-slate-700">The offline version works without accounts or API keys. The live version retrieves Wikipedia introductory article text and keeps its original article URLs.</p>
+          <p className="mt-3 text-sm leading-7 text-slate-700">The default mode works without accounts or API keys. The live mode reads Wikipedia article text; optional OpenAI synthesis needs your own API key, explicit consent and manual claim review.</p>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6">
           <h2 className="flex items-center gap-2 text-lg font-extrabold text-slate-950"><Code2 className="h-5 w-5 text-indigo-600" /> Exactly which tools you will use</h2>
           <p className="mt-3 text-sm leading-7 text-slate-700">
             Python 3.12, VS Code, terminal, venv, Python dataclasses, Requests, Wikipedia MediaWiki API,
-            Streamlit, pytest, mocking, Playwright, Git, GitHub and GitHub Actions.
+            Streamlit, pytest, mocking, Playwright, Git, GitHub, GitHub Actions and an optional OpenAI API client.
           </p>
           <p className="mt-3 text-sm leading-7 text-slate-700">
             The first agent uses <strong>deterministic tool orchestration and lexical matching</strong>;
@@ -200,6 +200,7 @@ export function AIResearchAssistantProjectPage() {
               why="A classroom exercise must explain what changes when retrieval reads external content."
               check="Live sources have real Wikipedia URLs; failed requests return an explicit error rather than a fake answer.">
           <p>Select <strong>Wikipedia articles (live)</strong> and enter a public research question. This mode makes network requests; do not use confidential topics. Because the source is Wikipedia, verify important claims against original research. The app is intentionally <em>not</em> a general-purpose search engine and does not claim to browse every website.</p>
+          <p><strong>Optional AI writing:</strong> open the Cited Research Brief tab, check the explicit sharing consent, and choose Generate optional AI synthesis. Configure OPENAI_API_KEY in your local environment before starting the app. The selected excerpts and question are sent to OpenAI, may incur charges, and every generated claim still needs a human check. Invalid or missing source markers are rejected rather than shown as verified research.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <img src={base + 'research-mobile-question.png'} className="mx-auto w-full max-w-xs rounded-xl border bg-white" alt="Actual Streamlit research assistant mobile question form" loading="lazy" />
             <img src={base + 'research-mobile-result.png'} className="mx-auto w-full max-w-xs rounded-xl border bg-white" alt="Actual Streamlit research assistant mobile research result" loading="lazy" />
