@@ -1,15 +1,30 @@
 name: Movie Recommender Verify
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
       - parallel/movie-recommender-handbook
     paths:
       - "projects/movie-recommender/**"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "src/pages/MovieRecommenderProjectPage.tsx"
+      - "public/project-handbooks/movie-recommender/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
       - ".github/workflows/movie-recommender-verify.yml"
   pull_request:
     paths:
       - "projects/movie-recommender/**"
+      - "src/App.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "src/pages/MovieRecommenderProjectPage.tsx"
+      - "public/project-handbooks/movie-recommender/**"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
       - ".github/workflows/movie-recommender-verify.yml"
 
 concurrency:
@@ -19,7 +34,7 @@ concurrency:
 jobs:
   build-and-verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Check out repository
@@ -32,12 +47,12 @@ jobs:
           cache: pip
           cache-dependency-path: projects/movie-recommender/requirements.txt
 
-      - name: Install dependencies
+      - name: Install project dependencies
         working-directory: projects/movie-recommender
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
-          python -m pip install playwright
+          python -m pip install "playwright>=1.50,<2"
           python -m pip check
 
       - name: Download official MovieLens 100K
@@ -75,6 +90,65 @@ jobs:
       - name: Capture genuine Streamlit screenshots
         working-directory: projects/movie-recommender
         run: python scripts/capture_app_screenshots.py
+
+      - name: Store verified visual evidence in working tree
+        if: github.event_name == 'push' && success()
+        working-directory: projects/movie-recommender
+        run: |
+          mkdir -p ../../public/project-handbooks/movie-recommender
+          cp outputs/rating_distribution.png ../../public/project-handbooks/movie-recommender/
+          cp outputs/screenshots/movie-recommender-form.png ../../public/project-handbooks/movie-recommender/
+          cp outputs/screenshots/movie-recommender-results.png ../../public/project-handbooks/movie-recommender/
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install website dependencies
+        run: npm ci
+
+      - name: TypeScript validation
+        run: npm run lint
+
+      - name: Build and prerender website
+        run: npm run build
+
+      - name: Start built website preview
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 >/tmp/movie-recommender-site-preview.log 2>&1 &
+          echo $! >/tmp/movie-recommender-site-preview.pid
+
+      - name: Verify handbook on desktop and mobile
+        working-directory: projects/movie-recommender
+        run: python scripts/verify_handbook_page.py
+
+      - name: Commit verified visual evidence to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/movie-recommender-handbook' && success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/movie-recommender/
+          if git diff --cached --quiet; then
+            echo "Verified screenshots are already current."
+          else
+            git commit -m "Movie recommender: store verified screenshots [skip ci]"
+            git restore .
+            git pull --rebase origin parallel/movie-recommender-handbook
+            git push origin HEAD:parallel/movie-recommender-handbook
+          fi
+
+      - name: Stop preview processes
+        if: always()
+        run: |
+          if [ -f /tmp/movie-recommender-streamlit.pid ]; then
+            kill $(cat /tmp/movie-recommender-streamlit.pid) || true
+          fi
+          if [ -f /tmp/movie-recommender-site-preview.pid ]; then
+            kill $(cat /tmp/movie-recommender-site-preview.pid) || true
+          fi
 
       - name: Upload verification evidence
         if: always()
