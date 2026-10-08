@@ -37,6 +37,10 @@ const runCommands = String.raw`python download_data.py
 python src/train_model.py
 streamlit run app.py`;
 
+const gitIgnoreCode = ".venv/\\n__pycache__/\\n.pytest_cache/\\ndata/*.parquet\\ndata/*.csv\\nmodels/*.joblib\\nmodels/*.json\\noutputs/*.csv\\noutputs/*.json\\noutputs/*.png";
+
+const readmeCode = "# House Price Predictor\\n\\nA complete regression project using the Ames Housing dataset.\\n\\n## What it does\\nThe project compares five regression model families, tunes the best one using training-only cross-validation, evaluates it once on an untouched holdout set, saves the complete preprocessing + model pipeline, and serves predictions through Streamlit.\\n\\n## Tools\\nPython, Pandas, NumPy, scikit-learn, XGBoost, Joblib, Matplotlib, Streamlit, Pytest\\n\\n## Run\\n```powershell\\npython download_data.py\\npython src/train_model.py\\npytest -q\\nstreamlit run app.py\\n```\\n\\n## Verified reference result\\n- Winner: XGBoost\\n- Holdout MAE: $15,670\\n- Holdout RMSE: $23,792\\n- Holdout R²: 0.929\\n\\n## Important limitation\\nThis is an educational model trained on historical Ames, Iowa sales. It is not a current professional property appraisal.";
+
 const gitCommands = String.raw`git init
 git add .
 git status
@@ -752,7 +756,9 @@ export function HousePriceProjectPage() {
             │&nbsp;&nbsp; └── test_app.py<br />
             ├── app.py<br />
             ├── download_data.py<br />
-            └── requirements.txt
+            ├── requirements.txt<br />
+            ├── README.md<br />
+            └── .gitignore
           </div>
 
           <figure className="rounded-xl border border-slate-200 bg-slate-50 p-3">
@@ -776,8 +782,18 @@ export function HousePriceProjectPage() {
             <ExternalGuideLink href="https://git-scm.com/install/windows">Git for Windows page</ExternalGuideLink>.
           </p>
           <p>
-            Create a file named <code>.gitignore</code> so large/generated/private machine files are not committed.
-            Then create an empty repository on GitHub and use the commands below. Replace the example remote URL with the
+            First create <code>.gitignore</code>. This prevents the virtual environment, downloaded dataset, trained model
+            and generated outputs from being added to Git accidentally.
+          </p>
+          <CodeBlock code={gitIgnoreCode} language="text" title=".gitignore — copy this exactly" type="config" />
+          <p>
+            Next create <code>README.md</code>. This is the page a recruiter or another learner sees first when opening
+            your GitHub repository. Start with the complete portfolio-ready version below; after you finish the exercises,
+            add what you changed and what happened.
+          </p>
+          <CodeBlock code={readmeCode} language="markdown" title="README.md — project explanation" type="config" />
+          <p>
+            Now create an empty repository on GitHub and use the commands below. Replace the example remote URL with the
             URL GitHub shows for your repository.
           </p>
           <CodeBlock code={gitCommands} language="powershell" title="Git/GitHub commands" type="runnable" />
