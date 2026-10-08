@@ -1,0 +1,52 @@
+name: Project Portfolio Integrity
+
+on:
+  pull_request:
+    paths:
+      - "src/pages/*ProjectPage.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "src/App.tsx"
+      - "scripts/verify-project-portfolio.mjs"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - "package.json"
+      - "public/project-handbooks/**"
+      - ".github/workflows/portfolio-integrity-verify.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/pages/*ProjectPage.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "src/App.tsx"
+      - "scripts/verify-project-portfolio.mjs"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - "package.json"
+      - "public/project-handbooks/**"
+      - ".github/workflows/portfolio-integrity-verify.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-integrity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Check TypeScript
+        run: npm run lint
+      - name: Build, prerender, check portfolio integrity
+        run: npm run build
