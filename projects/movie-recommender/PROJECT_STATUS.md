@@ -14,9 +14,9 @@ Build and execute the real system before writing the final handbook:
 
 ## Dataset
 
-Use the official **MovieLens latest-small** dataset from GroupLens for education/development.
+Use the official stable **MovieLens 100K** dataset from GroupLens.
 
-It contains roughly 100,000 ratings across about 9,000 movies from about 600 users. The downloader must fetch the official archive and keep raw data out of Git.
+It contains exactly 100,000 ratings from 943 users across 1,682 movies. The downloader fetches the official GroupLens archive and keeps raw data out of Git.
 
 ## Reference system design
 
@@ -32,7 +32,7 @@ The learner-facing Streamlit app will let a user choose a movie and recommendati
 ## Quality checkpoints
 
 - [x] 0 — branch created from current main after Titanic + House Price were merged
-- [ ] 1 — project structure, official downloader and dependency lock
+- [x] 1 — project structure, official downloader and dependency lock
 - [ ] 2 — executable recommender pipeline and reproducible outputs
 - [ ] 3 — tests for data contracts, recommendation behavior and cold-start fallback
 - [ ] 4 — Streamlit app and real browser screenshots
