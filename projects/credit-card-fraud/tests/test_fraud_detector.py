@@ -25,7 +25,7 @@ def test_dataset_contract():
     frame = pd.read_parquet(DATA)
     assert frame.shape == (284_807, 31)
     assert list(frame.columns) == train.FEATURES + [train.TARGET]
-    assert int(frame["Class"].sum()) == 492
+    assert int(frame["Class"].astype(int).sum()) == 492
     assert set(frame["Class"].astype(int).unique()) == {0, 1}
 
 
