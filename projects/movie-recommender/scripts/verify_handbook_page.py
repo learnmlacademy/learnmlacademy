@@ -84,6 +84,9 @@ def verify_page(page, viewport_name: str) -> dict:
         "/project-handbooks/movie-recommender/rating_distribution.png",
         "/project-handbooks/movie-recommender/movie-recommender-form.png",
         "/project-handbooks/movie-recommender/movie-recommender-results.png",
+        "/project-handbooks/movie-recommender/movie-recommender-content-results.png",
+        "/project-handbooks/movie-recommender/movie-recommender-collaborative-results.png",
+        "/project-handbooks/movie-recommender/movie-recommender-popular-results.png",
     }
     actual_sources = set(
         images.evaluate_all(
