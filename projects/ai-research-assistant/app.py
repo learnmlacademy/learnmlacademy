@@ -1,9 +1,10 @@
 """Interactive research assistant. Run from this project folder with Streamlit."""
 from __future__ import annotations
 import json
+import os
 import streamlit as st
 
-from src.research import ResearchError, run_research, source_fingerprint
+from src.research import ResearchError, ai_synthesis, run_research, source_fingerprint
 
 SAMPLE = "Do urban trees cool cities, and what limits their benefits?"
 
@@ -29,6 +30,7 @@ with st.sidebar:
 question = st.text_input("What would you like to investigate?", value=SAMPLE, max_chars=250)
 if st.button("Run research", type="primary"):
     try:
+        st.session_state.pop("llm_summary", None)
         with st.spinner("Reading evidence and verifying source references..."):
             st.session_state["research"] = run_research(question, mode=mode)
     except ResearchError as exc:
@@ -52,6 +54,28 @@ if "research" in st.session_state:
         st.download_button("Download audit and source records (.json)",
                            json.dumps(result.export(), indent=2), file_name="research-evidence.json",
                            mime="application/json")
+
+        st.divider()
+        st.subheader("Optional: ask an LLM to synthesize the cited evidence")
+        st.caption("The offline report above works without any key. Optional OpenAI synthesis "
+                   "sends your question and selected excerpts to the provider, may incur charges, "
+                   "and cannot guarantee claim accuracy.")
+        approved = st.checkbox(
+            "I understand this shares the selected excerpts with an external model provider.",
+            key="share_evidence_consent",
+        )
+        if st.button("Generate optional AI synthesis", disabled=not approved):
+            if not os.environ.get("OPENAI_API_KEY"):
+                st.warning("Set OPENAI_API_KEY locally first. Never paste secrets into the app or source code.")
+            else:
+                try:
+                    from openai import OpenAI
+                    st.session_state["llm_summary"] = ai_synthesis(result, OpenAI())
+                except ResearchError as exc:
+                    st.error(str(exc))
+        if "llm_summary" in st.session_state:
+            st.markdown(st.session_state["llm_summary"])
+
     with proof_tab:
         if not result.verified_notes:
             st.warning("No supported source quotes found. Try a more specific question.")
