@@ -35,6 +35,9 @@ BUILD_RECORD.md for the tested commit, results and remaining production limitati
 - [x] troubleshooting, interview and mastery sections
 - [x] project route/catalog metadata
 - [x] prerender/sitemap integration
-- [ ] full handbook CI verification
-- [ ] verified screenshots stored
+- [x] full handbook CI verification
+- [x] verified screenshots stored
 - [ ] final merge
+
+
+Website handbook verification: GitHub Actions run **37793791434 — SUCCESS**.
