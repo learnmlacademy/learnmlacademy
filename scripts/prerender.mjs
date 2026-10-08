@@ -140,6 +140,10 @@ const staticMeta = new Map([
     title: 'Credit Card Fraud Detector Project Handbook | LearnMLAcademy',
     description: 'Build an imbalanced credit-card fraud detector using OpenML data, class weighting, SMOTE, Random Forest, Average Precision, threshold tuning, tests and Streamlit.',
   }],
+  ['/projects/model-to-production', {
+    title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
+    description: 'Take a trained machine-learning model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift detection and rollback.',
+  }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
     description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
