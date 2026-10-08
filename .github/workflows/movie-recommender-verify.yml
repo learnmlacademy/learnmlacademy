@@ -1,0 +1,88 @@
+name: Movie Recommender Verify
+
+on:
+  push:
+    branches:
+      - parallel/movie-recommender-handbook
+    paths:
+      - "projects/movie-recommender/**"
+      - ".github/workflows/movie-recommender-verify.yml"
+  pull_request:
+    paths:
+      - "projects/movie-recommender/**"
+      - ".github/workflows/movie-recommender-verify.yml"
+
+concurrency:
+  group: movie-recommender-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: projects/movie-recommender/requirements.txt
+
+      - name: Install dependencies
+        working-directory: projects/movie-recommender
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install playwright
+          python -m pip check
+
+      - name: Download official MovieLens 100K
+        working-directory: projects/movie-recommender
+        run: python download_data.py
+
+      - name: Build recommender artifacts
+        working-directory: projects/movie-recommender
+        env:
+          MPLBACKEND: Agg
+        run: python src/build_recommender.py
+
+      - name: Run recommendation tests
+        working-directory: projects/movie-recommender
+        run: pytest -q
+
+      - name: Install Chromium
+        working-directory: projects/movie-recommender
+        run: python -m playwright install --with-deps chromium
+
+      - name: Start Streamlit
+        working-directory: projects/movie-recommender
+        run: |
+          nohup python -m streamlit run app.py             --server.headless true             --server.address 127.0.0.1             --server.port 8501             >/tmp/movie-recommender-streamlit.log 2>&1 &
+          echo $! >/tmp/movie-recommender-streamlit.pid
+          for i in {1..45}; do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health >/dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/movie-recommender-streamlit.log
+          exit 1
+
+      - name: Capture genuine Streamlit screenshots
+        working-directory: projects/movie-recommender
+        run: python scripts/capture_app_screenshots.py
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: movie-recommender-evidence
+          path: |
+            projects/movie-recommender/models/
+            projects/movie-recommender/outputs/
+          if-no-files-found: warn
+          retention-days: 14
