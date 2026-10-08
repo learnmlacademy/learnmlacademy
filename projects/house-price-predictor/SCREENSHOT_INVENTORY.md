@@ -15,6 +15,10 @@ Every image listed here is required by the handbook verification. Images are cap
 | 9 | `streamlit-house-price-prediction.png` | Step 17 | Clicking **Estimate sale price** produces a real model prediction | Real Streamlit server + Chromium after interaction |
 | 10 | `vscode-test-code.png` | Step 18 | The smoke-test source shown in the handbook exists | Real Visual Studio Code desktop window |
 | 11 | `vscode-project-workspace.png` | Step 19 | The final project workspace and generated folders/files are present | Real Visual Studio Code desktop window |
+| 12 | `vscode-prediction-examples.png` | Step 14 | The verified run generated concrete prediction example rows | Real Visual Studio Code desktop window opened on generated CSV |
+| 13 | `vscode-app-metadata.png` | Step 16 | The app metadata contains the selected model, metrics, defaults and categories used by the browser app | Real Visual Studio Code desktop window |
+| 14 | `streamlit-house-price-model-details.png` | Step 17 | The running app exposes the actual selected model and holdout metrics | Real Streamlit server + Chromium |
+| 15 | `streamlit-house-price-validation-warning.png` | Step 17 | The app visibly rejects an impossible remodel/build-year relationship | Real Streamlit server + Chromium after invalid input |
 
 ## Deliberately not fabricated
 
