@@ -22,13 +22,16 @@ function Step({ n, title, why, check, children }: StepProps) {
 
 const base = "/project-handbooks/pdf-rag/";
 const files: Array<[string, string]> = [
+  ["projects/pdf-rag/.gitignore", "config"],
   ["projects/pdf-rag/requirements.txt", "config"],
+  ["projects/pdf-rag/src/__init__.py", "python"],
   ["projects/pdf-rag/scripts/make_sample_pdf.py", "python"],
   ["projects/pdf-rag/src/rag.py", "python"],
   ["projects/pdf-rag/scripts/index_and_ask.py", "python"],
   ["projects/pdf-rag/app.py", "python"],
   ["projects/pdf-rag/tests/test_rag.py", "python"],
   ["projects/pdf-rag/scripts/capture_screenshots.py", "python"],
+  [".github/workflows/pdf-rag-project-verify.yml", "yaml"],
 ];
 
 export function PdfRagProjectPage() {
