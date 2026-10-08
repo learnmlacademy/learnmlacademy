@@ -117,6 +117,9 @@ jobs:
             echo "Verified evidence unchanged."
           else
             git commit -m "Titanic: store verified handbook evidence [skip ci]"
+            # Training intentionally rewrites tracked reference outputs in the runner.
+            # Restore those files before rebasing; only verified public evidence is committed.
+            git restore projects/titanic-survival-predictor/outputs || true
             git pull --rebase origin parallel/titanic-quality-review
             git push origin HEAD:parallel/titanic-quality-review
           fi
