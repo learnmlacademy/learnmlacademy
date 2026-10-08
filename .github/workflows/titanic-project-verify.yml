@@ -151,7 +151,9 @@ jobs:
             echo "Verified evidence unchanged."
           else
             git commit -m "Titanic: store verified handbook evidence [skip ci]"
-            git restore projects/titanic-survival-predictor/outputs || true
+            # The test/build process may rewrite tracked generated files such as outputs or sitemap.
+            # Reset all uncommitted tracked changes to this evidence commit before rebasing.
+            git restore .
             git pull --rebase origin parallel/titanic-quality-review
             git push origin HEAD:parallel/titanic-quality-review
           fi
