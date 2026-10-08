@@ -5,6 +5,7 @@ from pathlib import Path
 from threading import Lock
 import numpy as np
 from huggingface_hub import hf_hub_download
+from huggingface_hub.errors import LocalEntryNotFoundError
 from tokenizers import Tokenizer
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,8 +19,11 @@ HASHES = {"tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5a
 
 
 def model_file(name):
-    path = Path(hf_hub_download(MODEL, name, revision=REVISION, token=False,
-                               cache_dir=ROOT / ".cache" / "huggingface"))
+    settings = dict(revision=REVISION, token=False, cache_dir=ROOT / ".cache" / "huggingface")
+    try:
+        path = Path(hf_hub_download(MODEL, name, local_files_only=True, **settings))
+    except LocalEntryNotFoundError:
+        path = Path(hf_hub_download(MODEL, name, **settings))
     if hashlib.sha256(path.read_bytes()).hexdigest() != HASHES[name]:
         raise ValueError("Pinned embedding asset checksum mismatch.")
     return path

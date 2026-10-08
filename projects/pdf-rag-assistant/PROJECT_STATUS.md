@@ -4,13 +4,13 @@
 - [x] chunking
 - [x] metadata
 - [x] embeddings
-- [ ] vector index
-- [ ] persistence
-- [ ] retrieval
-- [ ] reranking
-- [ ] LLM adapter
-- [ ] citation integrity
-- [ ] unsupported-question handling
+- [x] vector index
+- [x] persistence
+- [x] retrieval
+- [x] reranking
+- [x] LLM adapter
+- [x] citation integrity
+- [x] unsupported-question handling
 - [ ] Streamlit
 - [ ] privacy
 - [ ] tests
