@@ -85,3 +85,20 @@ will be used instead. No Docker success is claimed yet.
 - Drift thresholds: numeric mean shift >=0.5 training std or missing-rate
   change >=0.10; category total variation >=0.15. These are educational
   heuristics, not hypothesis tests or automated retraining authority.
+
+## Checkpoint D — executed
+
+- v2 trained with C=0.5, identical pinned data/split/features. Actual holdout:
+  accuracy 0.7920511001; precision 0.6277602524; recall 0.5320855615;
+  F1 0.5759768452; ROC-AUC 0.8379937482; confusion [[917,118],[175,199]].
+  This version exists to exercise rollout, not as a claimed accuracy improvement.
+- The operator command validates the target, fsyncs a temporary config and
+  atomically replaces model.json. Invalid targets leave the original intact.
+- Actual API lifespans verified v1 → v2 → v1. Example churn probabilities:
+  0.6509942843701416 → 0.6512331113170234 → 0.6509942843701416.
+  /health, /model-info and /predict all reported the selected version.
+- A live old worker retains v1 until restart; a new lifespan loads v2. Rollback
+  restores the exact v1 class/probability. No hot-reload/zero-downtime claim.
+- Full suite: 46 passed, one documented HTTPX adapter deprecation warning.
+- Both generated model directories and their metadata/reference files coexist
+  locally. Main project config remains v1; verification uses disposable configs.

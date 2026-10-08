@@ -5,7 +5,7 @@
 - [x] training pipeline
 - [x] model artifact
 - [x] metadata
-- [ ] model versioning
+- [x] model versioning
 - [x] model loader
 - [x] FastAPI
 - [x] validation
@@ -14,8 +14,8 @@
 - [x] logging
 - [x] latency
 - [x] drift
-- [ ] v2 version
-- [ ] rollback
+- [x] v2 version
+- [x] rollback
 - [ ] Docker
 - [ ] CI
 - [ ] final engineering audit

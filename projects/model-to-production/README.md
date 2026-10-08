@@ -85,3 +85,31 @@ The API writes JSON events for startup, inference success/failure and validation
 rejections. Logs include model version and measured inference latency, never
 request bodies or customer feature values. Validation responses retain useful
 field locations/messages without echoing input values.
+
+## Version switching and rollback
+
+```powershell
+python -m src.train --version v2 --c 0.5
+python -m scripts.prepare_drift --version v2
+python -m scripts.verify_versions
+python -m scripts.switch_model --version v2
+```
+
+Stop the API with Ctrl+C, then rerun its Uvicorn command. /health, /model-info
+and /predict now report v2. To roll back:
+
+```powershell
+python -m scripts.switch_model --version v1
+python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
+```
+
+Stop the old process before that final command. Every worker must be restarted;
+this example deliberately does not hot-reload or promise zero downtime.
+The switch validates the complete target artifact before atomically replacing
+config/model.json. A failed switch leaves the old configuration intact.
+
+v2 changes only Logistic Regression's C from 1.0 to 0.5; stronger regularization
+provides a genuinely different model. It is not selected by repeatedly testing
+the holdout and is not claimed to outperform v1. Both artifacts coexist.
+The verification command uses a disposable config and actual FastAPI TestClient
+requests to prove v1 → v2 → v1 and identical predictions after rollback.
