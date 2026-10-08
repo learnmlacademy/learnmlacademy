@@ -126,7 +126,7 @@ const staticMeta = new Map([
   }],
   ['/projects/titanic-survival', {
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
-    description: 'Build the classic Titanic machine-learning project from an empty folder to a working prediction app with Python, Pandas, Scikit-learn, Gradio and GitHub.',
+    description: 'Build a complete Titanic machine-learning classifier from an empty Windows folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.',
   }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
