@@ -13,9 +13,9 @@ Upstream preserved implementation snapshot: `feat/titanic-hands-on-handbook` at 
 - [x] 4 — add block-level implementation explanations, exercises, interview guidance, production boundary and mastery gate
 - [x] 5 — define real screenshot/evidence inventory and strict desktop/mobile handbook verifier
 - [x] 6 — create reproducible CI dataset fingerprint, full train/test/app/screenshot/build workflow
-- [ ] 7 — CI must reproduce training, pass model + Streamlit tests, capture real app screenshots and store public evidence
-- [ ] 8 — TypeScript, production build/prerender, desktop/mobile handbook checks must pass
-- [ ] 9 — final acceptance audit and draft PR; no merge without explicit approval
+- [x] 7 — CI reproduced training, passed model + Streamlit tests, captured real app screenshots and stored public evidence
+- [x] 8 — TypeScript, production build/prerender and desktop/mobile handbook checks passed
+- [x] 9 — final acceptance audit complete; draft PR may be prepared, with no merge without explicit approval
 
 ## Current reference model
 
@@ -37,4 +37,4 @@ Upstream preserved implementation snapshot: `feat/titanic-hands-on-handbook` at 
 
 The measured reference build does not claim feature engineering. `FamilySize` is presented only as a learner experiment. This avoids teaching one implementation while reporting metrics from another.
 
-The project remains **NOT READY TO MERGE** until checkpoints 7–9 pass.
+All quality checkpoints passed in GitHub Actions run `37739719255`. The project is **READY FOR DRAFT REVIEW, NOT FOR MERGE WITHOUT EXPLICIT APPROVAL**.
