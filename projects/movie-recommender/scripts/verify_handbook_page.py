@@ -39,19 +39,20 @@ def verify_page(page, viewport_name: str) -> dict:
         )
 
     body_text = page.locator("body").inner_text()
-    forbidden = ["SCREENSHOTS NEXT", "BUILDING NEXT"]
-    for phrase in forbidden:
+    for phrase in ["SCREENSHOTS NEXT", "BUILDING NEXT"]:
         if phrase in body_text:
-            raise AssertionError(f"{viewport_name}: unfinished placeholder found: {phrase}")
+            raise AssertionError(
+                f"{viewport_name}: unfinished placeholder found: {phrase}"
+            )
 
     required_text = [
-        "Tools you will use",
-        "MovieLens 100K",
-        "100,000 ratings",
-        "943 users",
-        "1,682 movies",
+        "Why this project uses synthetic movie ratings",
+        "CC0",
+        "9,000 synthetic ratings",
+        "1,100 users",
+        "260 movie IDs",
         "Popularity baseline",
-        "multi-hot genre vector",
+        "genre + release-decade",
         "cosine similarity",
         "sparse movie-by-user matrix",
         "Collaborative",
@@ -74,27 +75,31 @@ def verify_page(page, viewport_name: str) -> dict:
                 f"{viewport_name}: required handbook content missing: {phrase}"
             )
 
-    images = page.locator('main img[src^="/project-handbooks/movie-recommender/"]')
+    images = page.locator(
+        'main img[src^="/project-handbooks/movie-recommender/"]'
+    )
     expected_images = {
         "/project-handbooks/movie-recommender/rating_distribution.png",
         "/project-handbooks/movie-recommender/movie-recommender-form.png",
         "/project-handbooks/movie-recommender/movie-recommender-results.png",
     }
     actual_sources = set(
-        images.evaluate_all("imgs => imgs.map(img => img.getAttribute('src'))")
+        images.evaluate_all(
+            "imgs => imgs.map(img => img.getAttribute('src'))"
+        )
     )
     missing_images = sorted(expected_images.difference(actual_sources))
     if missing_images:
         raise AssertionError(
-            f"{viewport_name}: handbook is missing required evidence images: {missing_images}"
+            f"{viewport_name}: handbook is missing evidence images: {missing_images}"
         )
 
     for index in range(images.count()):
-        image_locator = images.nth(index)
-        image_locator.scroll_into_view_if_needed()
+        locator = images.nth(index)
+        locator.scroll_into_view_if_needed()
         page.wait_for_function(
             "(img) => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0",
-            arg=image_locator.element_handle(),
+            arg=locator.element_handle(),
             timeout=10000,
         )
 
@@ -108,10 +113,14 @@ def verify_page(page, viewport_name: str) -> dict:
         }))"""
     )
     for image in image_results:
-        if not image["complete"] or image["naturalWidth"] <= 0 or image["naturalHeight"] <= 0:
-            raise AssertionError(f"{viewport_name}: image failed to load: {image['src']}")
+        if not image["complete"] or image["naturalWidth"] <= 0:
+            raise AssertionError(
+                f"{viewport_name}: image failed to load: {image['src']}"
+            )
         if not image["alt"]:
-            raise AssertionError(f"{viewport_name}: image has no alt text: {image['src']}")
+            raise AssertionError(
+                f"{viewport_name}: image has no alt text: {image['src']}"
+            )
 
     dimensions = page.evaluate(
         """() => ({
@@ -121,8 +130,8 @@ def verify_page(page, viewport_name: str) -> dict:
     )
     if dimensions["scrollWidth"] > dimensions["clientWidth"] + 2:
         raise AssertionError(
-            f"{viewport_name}: page has horizontal overflow "
-            f"({dimensions['scrollWidth']} > {dimensions['clientWidth']})."
+            f"{viewport_name}: horizontal overflow "
+            f"({dimensions['scrollWidth']} > {dimensions['clientWidth']})"
         )
 
     return {

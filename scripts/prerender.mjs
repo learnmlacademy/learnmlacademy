@@ -134,7 +134,7 @@ const staticMeta = new Map([
   }],
   ['/projects/movie-recommender', {
     title: 'Movie Recommendation System Project Handbook | LearnMLAcademy',
-    description: 'Build a Netflix-style educational movie recommender with MovieLens 100K, content similarity, collaborative filtering, a hybrid ranker, tests and Streamlit.',
+    description: 'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.',
   }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',

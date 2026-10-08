@@ -11,543 +11,15 @@ import {
 } from 'lucide-react';
 import { CodeBlock } from '../components/content/CodeBlock';
 
-const requirementsCode = String.raw`pandas==2.3.3
-numpy==2.3.3
-scikit-learn==1.7.2
-scipy==1.16.2
-joblib==1.5.2
-matplotlib==3.10.6
-streamlit==1.50.0
-pytest==8.4.2`;
-
-const downloadCode = String.raw`"""Download the official stable MovieLens 100K dataset from GroupLens."""
-
-from __future__ import annotations
-
-from pathlib import Path
-import shutil
-import urllib.request
-import zipfile
-
-ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "data"
-ARCHIVE = DATA_DIR / "ml-100k.zip"
-EXTRACTED = DATA_DIR / "ml-100k"
-URL = "https://files.grouplens.org/datasets/movielens/ml-100k.zip"
-
-EXPECTED_RATINGS = 100_000
-EXPECTED_USERS = 943
-EXPECTED_MOVIES = 1_682
-
-
-def main() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    print("Downloading official MovieLens 100K archive from GroupLens...")
-    with urllib.request.urlopen(URL, timeout=120) as response, ARCHIVE.open("wb") as output:
-        shutil.copyfileobj(response, output)
-
-    with zipfile.ZipFile(ARCHIVE) as zipped:
-        names = set(zipped.namelist())
-        required = {"ml-100k/u.data", "ml-100k/u.item", "ml-100k/u.genre"}
-        missing = required.difference(names)
-        if missing:
-            raise RuntimeError(f"MovieLens archive is missing expected files: {sorted(missing)}")
-        zipped.extractall(DATA_DIR)
-
-    rating_lines = sum(1 for _ in (EXTRACTED / "u.data").open("r", encoding="latin-1"))
-    movie_lines = sum(1 for _ in (EXTRACTED / "u.item").open("r", encoding="latin-1"))
-    users = set()
-    with (EXTRACTED / "u.data").open("r", encoding="latin-1") as handle:
-        for line in handle:
-            users.add(int(line.split("\\t", 1)[0]))
-
-    if rating_lines != EXPECTED_RATINGS or movie_lines != EXPECTED_MOVIES or len(users) != EXPECTED_USERS:
-        raise RuntimeError(
-            "Unexpected MovieLens 100K shape: "
-            f"ratings={rating_lines}, users={len(users)}, movies={movie_lines}"
-        )
-
-    print(f"Verified ratings: {rating_lines:,}")
-    print(f"Verified users:   {len(users):,}")
-    print(f"Verified movies:  {movie_lines:,}")
-    print(f"Extracted to: {EXTRACTED}")
-
-
-if __name__ == "__main__":
-    main()`;
-
-const buildCode = String.raw`"""Build popularity, content, collaborative and hybrid MovieLens recommenders."""
-
-from __future__ import annotations
-
-from pathlib import Path
-import json
-
-import joblib
-import matplotlib.pyplot as plt
-import pandas as pd
-from scipy.sparse import csr_matrix
-from sklearn.neighbors import NearestNeighbors
-from sklearn.preprocessing import MultiLabelBinarizer, normalize
-
-ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "ml-100k"
-MODEL_DIR = ROOT / "models"
-OUTPUT_DIR = ROOT / "outputs"
-
-GENRES = [
-    "unknown", "Action", "Adventure", "Animation", "Children's", "Comedy",
-    "Crime", "Documentary", "Drama", "Fantasy", "Film-Noir", "Horror",
-    "Musical", "Mystery", "Romance", "Sci-Fi", "Thriller", "War", "Western",
-]
-
-
-def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    ratings_path = DATA / "u.data"
-    movies_path = DATA / "u.item"
-    if not ratings_path.is_file() or not movies_path.is_file():
-        raise FileNotFoundError("Run python download_data.py before building the recommender.")
-
-    ratings = pd.read_csv(
-        ratings_path,
-        sep="\\t",
-        names=["user_id", "movie_id", "rating", "timestamp"],
-        encoding="latin-1",
-    )
-
-    movie_columns = ["movie_id", "title", "release_date", "video_release_date", "imdb_url", *GENRES]
-    movies = pd.read_csv(
-        movies_path,
-        sep="|",
-        names=movie_columns,
-        encoding="latin-1",
-    )
-
-    genre_values = movies[GENRES].to_numpy(dtype=int)
-    movies["genres"] = [
-        "|".join(genre for genre, present in zip(GENRES, row) if present)
-        for row in genre_values
-    ]
-    return ratings, movies[["movie_id", "title", "genres"]].copy()
-
-
-def build_popularity(ratings: pd.DataFrame, movies: pd.DataFrame) -> pd.DataFrame:
-    summary = ratings.groupby("movie_id")["rating"].agg(["mean", "count"]).reset_index()
-    global_mean = float(ratings["rating"].mean())
-    prior = 25.0
-    summary["weighted_score"] = (
-        (summary["count"] / (summary["count"] + prior)) * summary["mean"]
-        + (prior / (summary["count"] + prior)) * global_mean
-    )
-    return movies.merge(summary, on="movie_id", how="left").fillna(
-        {"mean": global_mean, "count": 0, "weighted_score": global_mean}
-    )
-
-
-def build_content(movies: pd.DataFrame):
-    labels = movies["genres"].str.split("|")
-    encoder = MultiLabelBinarizer(classes=GENRES)
-    matrix = encoder.fit_transform(labels).astype(float)
-    matrix = csr_matrix(normalize(matrix, norm="l2"))
-    model = NearestNeighbors(metric="cosine", algorithm="brute")
-    model.fit(matrix)
-    return encoder, matrix, model
-
-
-def build_collaborative(ratings: pd.DataFrame, movies: pd.DataFrame):
-    movie_ids = movies["movie_id"].tolist()
-    user_ids = sorted(ratings["user_id"].unique())
-    movie_to_row = {movie_id: index for index, movie_id in enumerate(movie_ids)}
-    user_to_col = {user_id: index for index, user_id in enumerate(user_ids)}
-
-    rows = ratings["movie_id"].map(movie_to_row).to_numpy()
-    cols = ratings["user_id"].map(user_to_col).to_numpy()
-    values = ratings["rating"].to_numpy(dtype=float)
-
-    matrix = csr_matrix((values, (rows, cols)), shape=(len(movie_ids), len(user_ids)))
-    model = NearestNeighbors(metric="cosine", algorithm="brute")
-    model.fit(matrix)
-    return matrix, model
-
-
-def neighbor_scores(model, matrix, row: int, n_candidates: int = 60) -> dict[int, float]:
-    count = min(n_candidates + 1, matrix.shape[0])
-    distances, indices = model.kneighbors(matrix[row], n_neighbors=count)
-    result: dict[int, float] = {}
-    for index, distance in zip(indices[0], distances[0]):
-        if int(index) == row:
-            continue
-        result[int(index)] = max(0.0, 1.0 - float(distance))
-    return result
-
-
-def recommend(artifacts: dict, movie_id: int, method: str = "hybrid", top_n: int = 10) -> pd.DataFrame:
-    if top_n < 1:
-        raise ValueError("top_n must be at least 1")
-
-    movies = artifacts["movies"]
-    movie_to_row = artifacts["movie_to_row"]
-    if movie_id not in movie_to_row:
-        raise ValueError(f"Unknown movie_id: {movie_id}")
-    row = movie_to_row[movie_id]
-
-    content = neighbor_scores(artifacts["content_model"], artifacts["content_matrix"], row)
-    collaborative = neighbor_scores(
-        artifacts["collab_model"], artifacts["collab_matrix"], row
-    )
-
-    if method == "content":
-        scores = content
-        reason = "similar genres"
-    elif method == "collaborative":
-        scores = collaborative
-        reason = "similar audience ratings"
-    elif method == "hybrid":
-        candidates = set(content) | set(collaborative)
-        scores = {
-            index: 0.45 * content.get(index, 0.0) + 0.55 * collaborative.get(index, 0.0)
-            for index in candidates
-        }
-        reason = "combined genre + audience similarity"
-    else:
-        raise ValueError("method must be content, collaborative or hybrid")
-
-    ranked = sorted(scores.items(), key=lambda pair: (-pair[1], pair[0]))[:top_n]
-    rows = []
-    for rank, (index, score) in enumerate(ranked, start=1):
-        movie = movies.iloc[index]
-        rows.append(
-            {
-                "rank": rank,
-                "movie_id": int(movie["movie_id"]),
-                "title": movie["title"],
-                "genres": movie["genres"],
-                "score": round(float(score), 4),
-                "reason": reason,
-            }
-        )
-    return pd.DataFrame(rows)
-
-
-def popularity_recommendations(artifacts: dict, top_n: int = 10) -> pd.DataFrame:
-    if top_n < 1:
-        raise ValueError("top_n must be at least 1")
-    popular = artifacts["popularity"].sort_values(
-        ["weighted_score", "count", "movie_id"], ascending=[False, False, True]
-    ).head(top_n).copy()
-    popular.insert(0, "rank", range(1, len(popular) + 1))
-    return popular[["rank", "movie_id", "title", "genres", "weighted_score", "count"]]
-
-
-def recommend_or_fallback(
-    artifacts: dict,
-    movie_id: int | None,
-    method: str = "hybrid",
-    top_n: int = 10,
-) -> pd.DataFrame:
-    if movie_id is None or movie_id not in artifacts["movie_to_row"]:
-        popular = popularity_recommendations(artifacts, top_n=top_n).copy()
-        popular = popular.rename(columns={"weighted_score": "score"})
-        popular["score"] = popular["score"].astype(float).round(4)
-        popular["reason"] = "popularity fallback for cold start"
-        return popular[["rank", "movie_id", "title", "genres", "score", "reason"]]
-    return recommend(artifacts, movie_id, method=method, top_n=top_n)
-
-
-def main() -> None:
-    MODEL_DIR.mkdir(exist_ok=True)
-    OUTPUT_DIR.mkdir(exist_ok=True)
-
-    ratings, movies = load_data()
-    popularity = build_popularity(ratings, movies)
-    encoder, content_matrix, content_model = build_content(movies)
-    collab_matrix, collab_model = build_collaborative(ratings, movies)
-    movie_to_row = {movie_id: index for index, movie_id in enumerate(movies["movie_id"])}
-
-    artifacts = {
-        "movies": movies,
-        "popularity": popularity,
-        "genre_encoder": encoder,
-        "content_matrix": content_matrix,
-        "content_model": content_model,
-        "collab_matrix": collab_matrix,
-        "collab_model": collab_model,
-        "movie_to_row": movie_to_row,
-    }
-
-    model_path = MODEL_DIR / "movie_recommender.joblib"
-    joblib.dump(artifacts, model_path)
-    reloaded = joblib.load(model_path)
-
-    toy_story = movies.loc[movies["title"] == "Toy Story (1995)", "movie_id"]
-    if toy_story.empty:
-        raise RuntimeError("Reference movie Toy Story (1995) not found.")
-    toy_story_id = int(toy_story.iloc[0])
-
-    reference_frames = []
-    for method in ["content", "collaborative", "hybrid"]:
-        frame = recommend(reloaded, toy_story_id, method=method, top_n=10)
-        frame.insert(0, "method", method)
-        reference_frames.append(frame)
-    pd.concat(reference_frames, ignore_index=True).to_csv(
-        OUTPUT_DIR / "toy_story_recommendations.csv", index=False
-    )
-
-    popularity_recommendations(reloaded, 10).to_csv(
-        OUTPUT_DIR / "popular_movies.csv", index=False
-    )
-
-    total_possible_ratings = int(collab_matrix.shape[0] * collab_matrix.shape[1])
-    observed_ratings = int(collab_matrix.nnz)
-    metrics = {
-        "ratings": int(len(ratings)),
-        "users": int(ratings["user_id"].nunique()),
-        "movies": int(len(movies)),
-        "rating_mean": float(ratings["rating"].mean()),
-        "rating_min": float(ratings["rating"].min()),
-        "rating_max": float(ratings["rating"].max()),
-        "content_features": int(content_matrix.shape[1]),
-        "collaborative_shape": list(collab_matrix.shape),
-        "observed_rating_cells": observed_ratings,
-        "possible_rating_cells": total_possible_ratings,
-        "rating_density": observed_ratings / total_possible_ratings,
-        "rating_sparsity": 1.0 - (observed_ratings / total_possible_ratings),
-        "reference_movie": "Toy Story (1995)",
-        "reference_movie_id": toy_story_id,
-        "hybrid_content_weight": 0.45,
-        "hybrid_collaborative_weight": 0.55,
-    }
-    (OUTPUT_DIR / "metrics.json").write_text(
-        json.dumps(metrics, indent=2) + "\\n", encoding="utf-8"
-    )
-
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ratings["rating"].value_counts().sort_index().plot(kind="bar", ax=ax)
-    ax.set(title="MovieLens 100K rating distribution", xlabel="Rating", ylabel="Count")
-    fig.tight_layout()
-    fig.savefig(OUTPUT_DIR / "rating_distribution.png", dpi=160)
-    plt.close(fig)
-
-    print("MovieLens recommender built successfully.")
-    print(json.dumps(metrics, indent=2))
-    print("\\nHybrid recommendations for Toy Story (1995):")
-    print(recommend(reloaded, toy_story_id, method="hybrid", top_n=10).to_string(index=False))
-
-
-if __name__ == "__main__":
-    main()`;
-
-const appCode = String.raw`"""Run from the project root with: python -m streamlit run app.py"""
-
-from pathlib import Path
-import importlib.util
-
-import joblib
-import streamlit as st
-
-ROOT = Path(__file__).resolve().parent
-MODEL_PATH = ROOT / "models" / "movie_recommender.joblib"
-
-spec = importlib.util.spec_from_file_location(
-    "movie_recommender_core", ROOT / "src" / "build_recommender.py"
-)
-core = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(core)
-
-st.set_page_config(page_title="Movie Recommendation System", page_icon="🎬", layout="wide")
-st.title("Build Your Own Netflix-Style Movie Recommendation System")
-st.caption("Educational recommender using MovieLens 100K • not Netflix's production algorithm")
-
-if not MODEL_PATH.is_file():
-    st.error("The recommender artifact is missing.")
-    st.code("python download_data.py\\npython src/build_recommender.py", language="powershell")
-    st.stop()
-
-
-@st.cache_resource
-def load_artifacts(modified_ns: int):
-    return joblib.load(MODEL_PATH)
-
-
-artifacts = load_artifacts(MODEL_PATH.stat().st_mtime_ns)
-movies = artifacts["movies"].sort_values(["title", "movie_id"]).reset_index(drop=True)
-
-method_label = st.radio(
-    "Recommendation method",
-    ["Hybrid", "Content-based", "Collaborative", "Popular movies"],
-    horizontal=True,
-)
-
-if method_label == "Popular movies":
-    st.subheader("Popular starting points")
-    popular = core.popularity_recommendations(artifacts, top_n=10).copy()
-    popular["weighted_score"] = popular["weighted_score"].round(3)
-    st.dataframe(popular, hide_index=True, use_container_width=True)
-    st.info(
-        "Popularity is our cold-start fallback. It is useful when we do not yet "
-        "have enough information to calculate a meaningful similarity."
-    )
-else:
-    choices = list(zip(movies["movie_id"].astype(int), movies["title"]))
-    default_choice = next(
-        (choice for choice in choices if choice[1] == "Toy Story (1995)"),
-        choices[0],
-    )
-    selected_choice = st.selectbox(
-        "Choose a movie you like",
-        choices,
-        index=choices.index(default_choice),
-        format_func=lambda choice: f"{choice[1]}  •  MovieLens ID {choice[0]}",
-    )
-    selected_id, selected_title = selected_choice
-
-    method = {
-        "Hybrid": "hybrid",
-        "Content-based": "content",
-        "Collaborative": "collaborative",
-    }[method_label]
-    top_n = st.slider("How many recommendations?", min_value=5, max_value=15, value=10)
-
-    if st.button("Recommend movies", type="primary"):
-        recommendations = core.recommend_or_fallback(
-            artifacts,
-            int(selected_id),
-            method=method,
-            top_n=top_n,
-        )
-        st.subheader(f"Because you chose: {selected_title}")
-        st.dataframe(recommendations, hide_index=True, use_container_width=True)
-        if method == "content":
-            st.caption("Content-based: compare multi-hot genre vectors with cosine similarity.")
-        elif method == "collaborative":
-            st.caption("Collaborative: compare sparse movie-by-user rating patterns.")
-        else:
-            st.caption("Hybrid: 45% genre similarity + 55% audience-rating similarity.")
-
-st.divider()
-st.caption(
-    "This small educational system demonstrates recommendation ideas with historical MovieLens ratings. "
-    "Real streaming platforms use many more signals, experiments, safety rules and large-scale infrastructure."
-)`;
-
-const testCode = String.raw`from pathlib import Path
-import importlib.util
-
-import joblib
-import pandas as pd
-import pytest
-
-ROOT = Path(__file__).resolve().parents[1]
-MODEL = ROOT / "models" / "movie_recommender.joblib"
-
-spec = importlib.util.spec_from_file_location("recommender", ROOT / "src" / "build_recommender.py")
-core = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(core)
-
-
-@pytest.fixture(scope="session")
-def artifacts():
-    assert MODEL.is_file(), "Run python src/build_recommender.py first."
-    return joblib.load(MODEL)
-
-
-def test_dataset_contract():
-    ratings, movies = core.load_data()
-    assert len(ratings) == 100_000
-    assert ratings["user_id"].nunique() == 943
-    assert len(movies) == 1_682
-    assert set(["movie_id", "title", "genres"]).issubset(movies.columns)
-
-
-@pytest.mark.parametrize("method", ["content", "collaborative", "hybrid"])
-def test_recommendations_are_unique_and_exclude_query_movie(artifacts, method):
-    movies = artifacts["movies"]
-    toy_story_id = int(movies.loc[movies["title"] == "Toy Story (1995)", "movie_id"].iloc[0])
-    result = core.recommend(artifacts, toy_story_id, method=method, top_n=10)
-    assert len(result) == 10
-    assert result["movie_id"].is_unique
-    assert toy_story_id not in set(result["movie_id"])
-    assert result["score"].between(0, 1).all()
-
-
-def test_popularity_fallback_is_ranked(artifacts):
-    result = core.popularity_recommendations(artifacts, top_n=10)
-    assert len(result) == 10
-    assert result["rank"].tolist() == list(range(1, 11))
-    assert result["weighted_score"].is_monotonic_decreasing
-
-
-def test_unknown_movie_is_rejected_by_similarity_api(artifacts):
-    with pytest.raises(ValueError, match="Unknown movie_id"):
-        core.recommend(artifacts, 999999, method="hybrid", top_n=10)
-
-
-def test_unknown_movie_uses_cold_start_fallback(artifacts):
-    result = core.recommend_or_fallback(
-        artifacts,
-        movie_id=999999,
-        method="hybrid",
-        top_n=7,
-    )
-    assert len(result) == 7
-    assert result["rank"].tolist() == list(range(1, 8))
-    assert set(result["reason"]) == {"popularity fallback for cold start"}
-
-
-def test_top_n_must_be_positive(artifacts):
-    movies = artifacts["movies"]
-    movie_id = int(movies.iloc[0]["movie_id"])
-    with pytest.raises(ValueError, match="top_n"):
-        core.recommend(artifacts, movie_id, method="hybrid", top_n=0)
-    with pytest.raises(ValueError, match="top_n"):
-        core.popularity_recommendations(artifacts, top_n=0)
-
-
-def test_collaborative_matrix_is_sparse(artifacts):
-    matrix = artifacts["collab_matrix"]
-    assert matrix.shape == (1_682, 943)
-    assert matrix.nnz == 100_000
-    density = matrix.nnz / (matrix.shape[0] * matrix.shape[1])
-    assert density < 0.10
-
-
-def test_reference_output_matches_live_artifact(artifacts):
-    reference_path = ROOT / "outputs" / "toy_story_recommendations.csv"
-    assert reference_path.is_file()
-    saved = pd.read_csv(reference_path)
-    hybrid_saved = saved.loc[saved["method"] == "hybrid"].reset_index(drop=True)
-    movies = artifacts["movies"]
-    movie_id = int(movies.loc[movies["title"] == "Toy Story (1995)", "movie_id"].iloc[0])
-    live = core.recommend(artifacts, movie_id, method="hybrid", top_n=10)
-    pd.testing.assert_frame_equal(
-        hybrid_saved[live.columns].reset_index(drop=True),
-        live.reset_index(drop=True),
-        check_dtype=False,
-    )`;
-
-const installCommands = String.raw`python -m venv .venv
-.\\.venv\\Scripts\\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt`;
-
-const runCommands = String.raw`python download_data.py
-python src/build_recommender.py
-pytest -q
-python -m streamlit run app.py`;
-
-const gitCommands = String.raw`git init
-git add .
-git status
-git commit -m "Build movie recommendation system"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/movie-recommender.git
-git push -u origin main`;
-
-const hybridOutput = String.raw`1  Aladdin (1992)                               0.7098
-2  Willy Wonka and the Chocolate Factory (1971) 0.6510
-3  Lion King, The (1994)                        0.6041
-4  Aladdin and the King of Thieves (1996)       0.4500
-5  Star Wars (1977)                             0.4040`;
+const requirementsCode = "pandas==2.3.3\nnumpy==2.3.3\nscikit-learn==1.7.2\nscipy==1.16.2\njoblib==1.5.2\nmatplotlib==3.10.6\nstreamlit==1.50.0\npytest==8.4.2\n";
+const downloadDataCode = "\"\"\"Download the CC0 synthetic movie-ratings dataset from Datanemics.\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\nimport hashlib\nimport urllib.request\n\nimport pandas as pd\n\nROOT = Path(__file__).resolve().parent\nDATA_DIR = ROOT / \"data\"\nDATA_PATH = DATA_DIR / \"movie-ratings.csv\"\n\nDATASET_PAGE = \"https://datanemics.com/datasets/movie-ratings/\"\nCSV_URL = \"https://datanemics.com/datasets/data/movie-ratings.csv\"\nLICENSE = \"CC0 1.0 public domain\"\nEXPECTED_ROWS = 9_000\nEXPECTED_USERS = 1_100\nEXPECTED_MOVIES = 260\nEXPECTED_COLUMNS = [\n    \"user_id\",\n    \"movie_id\",\n    \"title\",\n    \"genre\",\n    \"release_year\",\n    \"rating\",\n    \"rated_at\",\n]\n\n\ndef download_bytes() -> bytes:\n    request = urllib.request.Request(\n        CSV_URL,\n        headers={\"User-Agent\": \"LearnMLAcademy/1.0 educational-project\"},\n    )\n    with urllib.request.urlopen(request, timeout=120) as response:\n        return response.read()\n\n\ndef main() -> None:\n    DATA_DIR.mkdir(parents=True, exist_ok=True)\n\n    print(\"Dataset: Datanemics Movie ratings\")\n    print(\"Dataset page:\", DATASET_PAGE)\n    print(\"License:\", LICENSE)\n    print(\"Synthetic dataset: yes\")\n\n    raw = download_bytes()\n    sha256 = hashlib.sha256(raw).hexdigest()\n    DATA_PATH.write_bytes(raw)\n\n    frame = pd.read_csv(DATA_PATH)\n    if list(frame.columns) != EXPECTED_COLUMNS:\n        raise RuntimeError(\n            \"Unexpected columns: \"\n            f\"{list(frame.columns)}; expected {EXPECTED_COLUMNS}\"\n        )\n\n    if len(frame) != EXPECTED_ROWS:\n        raise RuntimeError(\n            f\"Unexpected row count: {len(frame):,}; expected {EXPECTED_ROWS:,}\"\n        )\n\n    users = int(frame[\"user_id\"].nunique())\n    movies = int(frame[\"movie_id\"].nunique())\n    if users != EXPECTED_USERS or movies != EXPECTED_MOVIES:\n        raise RuntimeError(\n            \"Unexpected entity counts: \"\n            f\"users={users}, movies={movies}; \"\n            f\"expected users={EXPECTED_USERS}, movies={EXPECTED_MOVIES}\"\n        )\n\n    ratings = pd.to_numeric(frame[\"rating\"], errors=\"raise\")\n    if float(ratings.min()) != 0.5 or float(ratings.max()) != 5.0:\n        raise RuntimeError(\n            f\"Unexpected rating range: {ratings.min()} to {ratings.max()}\"\n        )\n\n    print(f\"Verified rows:    {len(frame):,}\")\n    print(f\"Verified users:   {users:,}\")\n    print(f\"Verified movies:  {movies:,}\")\n    print(f\"Rating range:     {ratings.min():.1f} to {ratings.max():.1f}\")\n    print(f\"SHA256:           {sha256}\")\n    print(f\"Saved to:         {DATA_PATH}\")\n\n\nif __name__ == \"__main__\":\n    main()\n";
+const buildCode = "\"\"\"Build popularity, content, collaborative and hybrid movie recommenders.\"\"\"\n\nfrom __future__ import annotations\n\nfrom pathlib import Path\nimport json\n\nimport joblib\nimport matplotlib.pyplot as plt\nimport pandas as pd\nfrom scipy.sparse import csr_matrix\nfrom sklearn.neighbors import NearestNeighbors\nfrom sklearn.preprocessing import MultiLabelBinarizer, normalize\n\nROOT = Path(__file__).resolve().parents[1]\nDATA_PATH = ROOT / \"data\" / \"movie-ratings.csv\"\nMODEL_DIR = ROOT / \"models\"\nOUTPUT_DIR = ROOT / \"outputs\"\n\nREFERENCE_MOVIE_ID = \"M1000\"\nREFERENCE_MOVIE_TITLE = \"Iron Country\"\nMAX_RATING = 5.0\n\n\ndef load_data() -> tuple[pd.DataFrame, pd.DataFrame]:\n    if not DATA_PATH.is_file():\n        raise FileNotFoundError(\"Run python download_data.py before building the recommender.\")\n\n    frame = pd.read_csv(DATA_PATH)\n    required = {\n        \"user_id\",\n        \"movie_id\",\n        \"title\",\n        \"genre\",\n        \"release_year\",\n        \"rating\",\n        \"rated_at\",\n    }\n    missing = sorted(required.difference(frame.columns))\n    if missing:\n        raise RuntimeError(f\"Dataset is missing required columns: {missing}\")\n\n    frame[\"rating\"] = pd.to_numeric(frame[\"rating\"], errors=\"raise\")\n    frame[\"release_year\"] = pd.to_numeric(frame[\"release_year\"], errors=\"raise\").astype(int)\n    frame[\"rated_at\"] = pd.to_datetime(frame[\"rated_at\"], errors=\"raise\")\n\n    metadata_consistency = (\n        frame.groupby(\"movie_id\")[[\"title\", \"genre\", \"release_year\"]]\n        .nunique(dropna=False)\n        .max()\n        .max()\n    )\n    if int(metadata_consistency) != 1:\n        raise RuntimeError(\"At least one movie_id maps to conflicting title/genre/year metadata.\")\n\n    movies = (\n        frame[[\"movie_id\", \"title\", \"genre\", \"release_year\"]]\n        .drop_duplicates(subset=[\"movie_id\"])\n        .sort_values(\"movie_id\")\n        .reset_index(drop=True)\n    )\n    ratings = frame[[\"user_id\", \"movie_id\", \"rating\", \"rated_at\"]].copy()\n    return ratings, movies\n\n\ndef latest_interactions(ratings: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Keep one latest rating per user/movie pair for the teaching matrix.\"\"\"\n    return (\n        ratings.sort_values(\"rated_at\")\n        .drop_duplicates(subset=[\"user_id\", \"movie_id\"], keep=\"last\")\n        .reset_index(drop=True)\n    )\n\n\ndef build_popularity(interactions: pd.DataFrame, movies: pd.DataFrame) -> pd.DataFrame:\n    \"\"\"Build a smoothed popularity baseline using a 25-rating prior.\"\"\"\n    summary = (\n        interactions.groupby(\"movie_id\")[\"rating\"]\n        .agg([\"mean\", \"count\"])\n        .reset_index()\n    )\n    global_mean = float(interactions[\"rating\"].mean())\n    prior = 25.0\n    summary[\"weighted_score\"] = (\n        (summary[\"count\"] / (summary[\"count\"] + prior)) * summary[\"mean\"]\n        + (prior / (summary[\"count\"] + prior)) * global_mean\n    )\n    return movies.merge(summary, on=\"movie_id\", how=\"left\").fillna(\n        {\"mean\": global_mean, \"count\": 0, \"weighted_score\": global_mean}\n    )\n\n\ndef build_content(movies: pd.DataFrame):\n    \"\"\"Encode each movie with two categorical labels: genre and release decade.\"\"\"\n    labels = [\n        [\n            f\"genre={row.genre}\",\n            f\"decade={(int(row.release_year) // 10) * 10}s\",\n        ]\n        for row in movies.itertuples(index=False)\n    ]\n    encoder = MultiLabelBinarizer()\n    matrix = encoder.fit_transform(labels).astype(float)\n    matrix = csr_matrix(normalize(matrix, norm=\"l2\"))\n\n    model = NearestNeighbors(metric=\"cosine\", algorithm=\"brute\")\n    model.fit(matrix)\n    return encoder, matrix, model\n\n\ndef build_collaborative(interactions: pd.DataFrame, movies: pd.DataFrame):\n    \"\"\"Create a sparse movie-by-user matrix from latest observed ratings.\"\"\"\n    movie_ids = movies[\"movie_id\"].tolist()\n    user_ids = sorted(interactions[\"user_id\"].unique())\n    movie_to_row = {movie_id: index for index, movie_id in enumerate(movie_ids)}\n    user_to_col = {user_id: index for index, user_id in enumerate(user_ids)}\n\n    rows = interactions[\"movie_id\"].map(movie_to_row).to_numpy()\n    cols = interactions[\"user_id\"].map(user_to_col).to_numpy()\n    values = interactions[\"rating\"].to_numpy(dtype=float)\n\n    matrix = csr_matrix(\n        (values, (rows, cols)),\n        shape=(len(movie_ids), len(user_ids)),\n    )\n    model = NearestNeighbors(metric=\"cosine\", algorithm=\"brute\")\n    model.fit(matrix)\n    return matrix, model\n\n\ndef neighbor_scores(model, matrix, row: int, n_candidates: int = 60) -> dict[int, float]:\n    count = min(n_candidates + 1, matrix.shape[0])\n    distances, indices = model.kneighbors(matrix[row], n_neighbors=count)\n\n    scores: dict[int, float] = {}\n    for index, distance in zip(indices[0], distances[0]):\n        index = int(index)\n        if index == row:\n            continue\n        scores[index] = max(0.0, min(1.0, 1.0 - float(distance)))\n    return scores\n\n\ndef recommend(\n    artifacts: dict,\n    movie_id: str,\n    method: str = \"hybrid\",\n    top_n: int = 10,\n) -> pd.DataFrame:\n    if top_n < 1:\n        raise ValueError(\"top_n must be at least 1\")\n\n    movies = artifacts[\"movies\"]\n    movie_to_row = artifacts[\"movie_to_row\"]\n    if movie_id not in movie_to_row:\n        raise ValueError(f\"Unknown movie_id: {movie_id}\")\n\n    row = movie_to_row[movie_id]\n    content = neighbor_scores(\n        artifacts[\"content_model\"],\n        artifacts[\"content_matrix\"],\n        row,\n    )\n    collaborative = neighbor_scores(\n        artifacts[\"collab_model\"],\n        artifacts[\"collab_matrix\"],\n        row,\n    )\n\n    if method == \"content\":\n        scores = content\n        reason = \"similar genre + release decade\"\n    elif method == \"collaborative\":\n        scores = collaborative\n        reason = \"similar audience rating patterns\"\n    elif method == \"hybrid\":\n        candidates = set(content) | set(collaborative)\n        scores = {\n            index: (\n                0.45 * content.get(index, 0.0)\n                + 0.55 * collaborative.get(index, 0.0)\n            )\n            for index in candidates\n        }\n        reason = \"45% content + 55% audience similarity\"\n    else:\n        raise ValueError(\"method must be content, collaborative or hybrid\")\n\n    ranked = sorted(scores.items(), key=lambda pair: (-pair[1], pair[0]))[:top_n]\n    output = []\n    for rank, (index, score) in enumerate(ranked, start=1):\n        movie = movies.iloc[index]\n        output.append(\n            {\n                \"rank\": rank,\n                \"movie_id\": str(movie[\"movie_id\"]),\n                \"title\": str(movie[\"title\"]),\n                \"genre\": str(movie[\"genre\"]),\n                \"release_year\": int(movie[\"release_year\"]),\n                \"score\": round(float(score), 4),\n                \"reason\": reason,\n            }\n        )\n    return pd.DataFrame(output)\n\n\ndef popularity_recommendations(artifacts: dict, top_n: int = 10) -> pd.DataFrame:\n    if top_n < 1:\n        raise ValueError(\"top_n must be at least 1\")\n\n    popular = (\n        artifacts[\"popularity\"]\n        .sort_values(\n            [\"weighted_score\", \"count\", \"movie_id\"],\n            ascending=[False, False, True],\n        )\n        .head(top_n)\n        .copy()\n    )\n    popular.insert(0, \"rank\", range(1, len(popular) + 1))\n    return popular[\n        [\n            \"rank\",\n            \"movie_id\",\n            \"title\",\n            \"genre\",\n            \"release_year\",\n            \"weighted_score\",\n            \"count\",\n        ]\n    ]\n\n\ndef recommend_or_fallback(\n    artifacts: dict,\n    movie_id: str | None,\n    method: str = \"hybrid\",\n    top_n: int = 10,\n) -> pd.DataFrame:\n    \"\"\"Use popularity for an unknown item instead of inventing similarity.\"\"\"\n    if movie_id is None or movie_id not in artifacts[\"movie_to_row\"]:\n        popular = popularity_recommendations(artifacts, top_n=top_n).copy()\n        popular[\"score\"] = (popular[\"weighted_score\"] / MAX_RATING).clip(0.0, 1.0)\n        popular[\"score\"] = popular[\"score\"].round(4)\n        popular[\"reason\"] = \"popularity fallback for cold start\"\n        return popular[\n            [\n                \"rank\",\n                \"movie_id\",\n                \"title\",\n                \"genre\",\n                \"release_year\",\n                \"score\",\n                \"reason\",\n            ]\n        ]\n\n    return recommend(\n        artifacts,\n        movie_id=movie_id,\n        method=method,\n        top_n=top_n,\n    )\n\n\ndef main() -> None:\n    MODEL_DIR.mkdir(exist_ok=True)\n    OUTPUT_DIR.mkdir(exist_ok=True)\n\n    ratings, movies = load_data()\n    interactions = latest_interactions(ratings)\n\n    popularity = build_popularity(interactions, movies)\n    encoder, content_matrix, content_model = build_content(movies)\n    collab_matrix, collab_model = build_collaborative(interactions, movies)\n    movie_to_row = {\n        movie_id: index\n        for index, movie_id in enumerate(movies[\"movie_id\"])\n    }\n\n    artifacts = {\n        \"movies\": movies,\n        \"popularity\": popularity,\n        \"content_encoder\": encoder,\n        \"content_matrix\": content_matrix,\n        \"content_model\": content_model,\n        \"collab_matrix\": collab_matrix,\n        \"collab_model\": collab_model,\n        \"movie_to_row\": movie_to_row,\n    }\n\n    model_path = MODEL_DIR / \"movie_recommender.joblib\"\n    joblib.dump(artifacts, model_path)\n    reloaded = joblib.load(model_path)\n\n    if REFERENCE_MOVIE_ID not in movie_to_row:\n        raise RuntimeError(f\"Reference movie {REFERENCE_MOVIE_ID} is missing.\")\n\n    reference_title = str(\n        movies.loc[movies[\"movie_id\"] == REFERENCE_MOVIE_ID, \"title\"].iloc[0]\n    )\n    if reference_title != REFERENCE_MOVIE_TITLE:\n        raise RuntimeError(\n            \"Reference movie metadata changed: \"\n            f\"{REFERENCE_MOVIE_ID} is {reference_title!r}, \"\n            f\"expected {REFERENCE_MOVIE_TITLE!r}\"\n        )\n\n    reference_frames = []\n    for method in [\"content\", \"collaborative\", \"hybrid\"]:\n        frame = recommend(\n            reloaded,\n            REFERENCE_MOVIE_ID,\n            method=method,\n            top_n=10,\n        )\n        frame.insert(0, \"method\", method)\n        reference_frames.append(frame)\n\n    pd.concat(reference_frames, ignore_index=True).to_csv(\n        OUTPUT_DIR / \"iron_country_recommendations.csv\",\n        index=False,\n    )\n    popularity_recommendations(reloaded, 10).to_csv(\n        OUTPUT_DIR / \"popular_movies.csv\",\n        index=False,\n    )\n\n    possible_cells = int(collab_matrix.shape[0] * collab_matrix.shape[1])\n    observed_cells = int(collab_matrix.nnz)\n    density = observed_cells / possible_cells\n\n    metrics = {\n        \"raw_rating_rows\": int(len(ratings)),\n        \"unique_user_movie_interactions\": int(len(interactions)),\n        \"users\": int(interactions[\"user_id\"].nunique()),\n        \"movies\": int(len(movies)),\n        \"rating_mean\": float(interactions[\"rating\"].mean()),\n        \"rating_min\": float(interactions[\"rating\"].min()),\n        \"rating_max\": float(interactions[\"rating\"].max()),\n        \"content_features\": int(content_matrix.shape[1]),\n        \"content_feature_labels\": list(encoder.classes_),\n        \"collaborative_shape\": list(collab_matrix.shape),\n        \"observed_rating_cells\": observed_cells,\n        \"possible_rating_cells\": possible_cells,\n        \"rating_density\": density,\n        \"rating_sparsity\": 1.0 - density,\n        \"reference_movie\": REFERENCE_MOVIE_TITLE,\n        \"reference_movie_id\": REFERENCE_MOVIE_ID,\n        \"hybrid_content_weight\": 0.45,\n        \"hybrid_collaborative_weight\": 0.55,\n    }\n    (OUTPUT_DIR / \"metrics.json\").write_text(\n        json.dumps(metrics, indent=2) + \"\\n\",\n        encoding=\"utf-8\",\n    )\n\n    fig, ax = plt.subplots(figsize=(7, 4))\n    interactions[\"rating\"].value_counts().sort_index().plot(kind=\"bar\", ax=ax)\n    ax.set(\n        title=\"Synthetic movie-ratings distribution\",\n        xlabel=\"Rating\",\n        ylabel=\"Count\",\n    )\n    fig.tight_layout()\n    fig.savefig(OUTPUT_DIR / \"rating_distribution.png\", dpi=160)\n    plt.close(fig)\n\n    print(\"Movie recommender built successfully.\")\n    print(json.dumps(metrics, indent=2))\n    print(f\"\\nHybrid recommendations for {REFERENCE_MOVIE_TITLE}:\")\n    print(\n        recommend(\n            reloaded,\n            REFERENCE_MOVIE_ID,\n            method=\"hybrid\",\n            top_n=10,\n        ).to_string(index=False)\n    )\n\n\nif __name__ == \"__main__\":\n    main()\n";
+const appCode = "\"\"\"Run from the project root with: python -m streamlit run app.py\"\"\"\n\nfrom pathlib import Path\nimport importlib.util\n\nimport joblib\nimport streamlit as st\n\nROOT = Path(__file__).resolve().parent\nMODEL_PATH = ROOT / \"models\" / \"movie_recommender.joblib\"\nREFERENCE_MOVIE_ID = \"M1000\"\n\nspec = importlib.util.spec_from_file_location(\n    \"movie_recommender_core\",\n    ROOT / \"src\" / \"build_recommender.py\",\n)\ncore = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(core)\n\nst.set_page_config(\n    page_title=\"Movie Recommendation System\",\n    page_icon=\"🎬\",\n    layout=\"wide\",\n)\nst.title(\"Build Your Own Netflix-Style Movie Recommendation System\")\nst.caption(\n    \"Educational recommender using a CC0 synthetic ratings dataset • \"\n    \"not Netflix's production algorithm\"\n)\n\nif not MODEL_PATH.is_file():\n    st.error(\"The recommender artifact is missing.\")\n    st.code(\n        \"python download_data.py\\npython src/build_recommender.py\",\n        language=\"powershell\",\n    )\n    st.stop()\n\n\n@st.cache_resource\ndef load_artifacts(modified_ns: int):\n    return joblib.load(MODEL_PATH)\n\n\nartifacts = load_artifacts(MODEL_PATH.stat().st_mtime_ns)\nmovies = artifacts[\"movies\"].sort_values(\n    [\"title\", \"release_year\", \"movie_id\"]\n).reset_index(drop=True)\n\nmethod_label = st.radio(\n    \"Recommendation method\",\n    [\"Hybrid\", \"Content-based\", \"Collaborative\", \"Popular movies\"],\n    horizontal=True,\n)\n\nif method_label == \"Popular movies\":\n    st.subheader(\"Popular starting points\")\n    popular = core.popularity_recommendations(artifacts, top_n=10).copy()\n    popular[\"weighted_score\"] = popular[\"weighted_score\"].round(3)\n    st.dataframe(popular, hide_index=True, use_container_width=True)\n    st.info(\n        \"Popularity is our cold-start fallback. It does not personalize \"\n        \"to a selected movie.\"\n    )\nelse:\n    choices = [\n        (\n            str(row.movie_id),\n            str(row.title),\n            int(row.release_year),\n        )\n        for row in movies.itertuples(index=False)\n    ]\n    default_choice = next(\n        (choice for choice in choices if choice[0] == REFERENCE_MOVIE_ID),\n        choices[0],\n    )\n    selected_choice = st.selectbox(\n        \"Choose a movie you like\",\n        choices,\n        index=choices.index(default_choice),\n        format_func=lambda choice: (\n            f\"{choice[1]} ({choice[2]}) • ID {choice[0]}\"\n        ),\n    )\n    selected_id, selected_title, _selected_year = selected_choice\n\n    method = {\n        \"Hybrid\": \"hybrid\",\n        \"Content-based\": \"content\",\n        \"Collaborative\": \"collaborative\",\n    }[method_label]\n    top_n = st.slider(\n        \"How many recommendations?\",\n        min_value=5,\n        max_value=15,\n        value=10,\n    )\n\n    if st.button(\"Recommend movies\", type=\"primary\"):\n        recommendations = core.recommend_or_fallback(\n            artifacts,\n            movie_id=selected_id,\n            method=method,\n            top_n=top_n,\n        )\n        st.subheader(f\"Because you chose: {selected_title}\")\n        st.dataframe(\n            recommendations,\n            hide_index=True,\n            use_container_width=True,\n        )\n        if method == \"content\":\n            st.caption(\n                \"Content-based: compare genre + release-decade labels \"\n                \"with cosine similarity.\"\n            )\n        elif method == \"collaborative\":\n            st.caption(\n                \"Collaborative: compare sparse movie-by-user rating patterns.\"\n            )\n        else:\n            st.caption(\n                \"Hybrid: 45% content similarity + \"\n                \"55% audience-rating similarity.\"\n            )\n\nst.divider()\nst.caption(\n    \"The ratings and movie titles in this teaching dataset are synthetic. \"\n    \"The recommendation methods are real, but this app is intentionally small. \"\n    \"Production streaming platforms use far more data, ranking stages, \"\n    \"experimentation and infrastructure.\"\n)\n";
+const testCode = "from pathlib import Path\nimport importlib.util\n\nimport joblib\nimport pandas as pd\nimport pytest\n\nROOT = Path(__file__).resolve().parents[1]\nMODEL = ROOT / \"models\" / \"movie_recommender.joblib\"\n\nspec = importlib.util.spec_from_file_location(\n    \"recommender\",\n    ROOT / \"src\" / \"build_recommender.py\",\n)\ncore = importlib.util.module_from_spec(spec)\nspec.loader.exec_module(core)\n\n\n@pytest.fixture(scope=\"session\")\ndef artifacts():\n    assert MODEL.is_file(), \"Run python src/build_recommender.py first.\"\n    return joblib.load(MODEL)\n\n\ndef test_dataset_contract():\n    ratings, movies = core.load_data()\n    assert len(ratings) == 9_000\n    assert ratings[\"user_id\"].nunique() == 1_100\n    assert len(movies) == 260\n    assert set(\n        [\"movie_id\", \"title\", \"genre\", \"release_year\"]\n    ).issubset(movies.columns)\n\n\ndef test_latest_interactions_have_one_row_per_user_movie():\n    ratings, _movies = core.load_data()\n    interactions = core.latest_interactions(ratings)\n    assert len(interactions) <= len(ratings)\n    assert not interactions.duplicated([\"user_id\", \"movie_id\"]).any()\n\n\n@pytest.mark.parametrize(\"method\", [\"content\", \"collaborative\", \"hybrid\"])\ndef test_recommendations_are_unique_and_exclude_query_movie(\n    artifacts,\n    method,\n):\n    result = core.recommend(\n        artifacts,\n        core.REFERENCE_MOVIE_ID,\n        method=method,\n        top_n=10,\n    )\n    assert len(result) == 10\n    assert result[\"movie_id\"].is_unique\n    assert core.REFERENCE_MOVIE_ID not in set(result[\"movie_id\"])\n    assert result[\"score\"].between(0, 1).all()\n\n\ndef test_popularity_fallback_is_ranked(artifacts):\n    result = core.popularity_recommendations(artifacts, top_n=10)\n    assert len(result) == 10\n    assert result[\"rank\"].tolist() == list(range(1, 11))\n    assert result[\"weighted_score\"].is_monotonic_decreasing\n\n\ndef test_unknown_movie_is_rejected_by_similarity_api(artifacts):\n    with pytest.raises(ValueError, match=\"Unknown movie_id\"):\n        core.recommend(\n            artifacts,\n            \"M_DOES_NOT_EXIST\",\n            method=\"hybrid\",\n            top_n=10,\n        )\n\n\ndef test_unknown_movie_uses_normalized_cold_start_fallback(artifacts):\n    result = core.recommend_or_fallback(\n        artifacts,\n        movie_id=\"M_DOES_NOT_EXIST\",\n        method=\"hybrid\",\n        top_n=7,\n    )\n    assert len(result) == 7\n    assert result[\"rank\"].tolist() == list(range(1, 8))\n    assert set(result[\"reason\"]) == {\n        \"popularity fallback for cold start\"\n    }\n    assert result[\"score\"].between(0, 1).all()\n\n\ndef test_top_n_must_be_positive(artifacts):\n    with pytest.raises(ValueError, match=\"top_n\"):\n        core.recommend(\n            artifacts,\n            core.REFERENCE_MOVIE_ID,\n            method=\"hybrid\",\n            top_n=0,\n        )\n    with pytest.raises(ValueError, match=\"top_n\"):\n        core.popularity_recommendations(artifacts, top_n=0)\n\n\ndef test_collaborative_matrix_is_sparse(artifacts):\n    ratings, _movies = core.load_data()\n    interactions = core.latest_interactions(ratings)\n\n    matrix = artifacts[\"collab_matrix\"]\n    assert matrix.shape == (260, 1_100)\n    assert matrix.nnz == len(interactions)\n    density = matrix.nnz / (matrix.shape[0] * matrix.shape[1])\n    assert density < 0.10\n\n\ndef test_content_features_include_genre_and_decade(artifacts):\n    labels = set(artifacts[\"content_encoder\"].classes_)\n    assert any(label.startswith(\"genre=\") for label in labels)\n    assert any(label.startswith(\"decade=\") for label in labels)\n    assert artifacts[\"content_matrix\"].shape[0] == 260\n\n\ndef test_reference_output_matches_live_artifact(artifacts):\n    reference_path = ROOT / \"outputs\" / \"iron_country_recommendations.csv\"\n    assert reference_path.is_file()\n\n    saved = pd.read_csv(reference_path)\n    hybrid_saved = (\n        saved.loc[saved[\"method\"] == \"hybrid\"]\n        .reset_index(drop=True)\n    )\n    live = core.recommend(\n        artifacts,\n        core.REFERENCE_MOVIE_ID,\n        method=\"hybrid\",\n        top_n=10,\n    )\n\n    pd.testing.assert_frame_equal(\n        hybrid_saved[live.columns].reset_index(drop=True),\n        live.reset_index(drop=True),\n        check_dtype=False,\n    )\n";
+
+const setupCommands = "python -m venv .venv\n.\\.venv\\Scripts\\Activate.ps1\npython -m pip install --upgrade pip\npip install -r requirements.txt";
+const runCommands = "python download_data.py\npython src/build_recommender.py\npytest -q\npython -m streamlit run app.py";
+const gitCommands = "git init\ngit add .\ngit status\ngit commit -m \"Build movie recommendation system\"\ngit branch -M main\ngit remote add origin https://github.com/YOUR-USERNAME/movie-recommender.git\ngit push -u origin main";
 
 function Step({
   number,
@@ -583,7 +55,7 @@ export function MovieRecommenderProjectPage() {
   useEffect(() => {
     const title = 'Movie Recommendation System Project Handbook | LearnMLAcademy';
     const description =
-      'Build a Netflix-style educational movie recommender with MovieLens 100K, content similarity, collaborative filtering, a hybrid ranker, tests and Streamlit.';
+      'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.';
     document.title = title;
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);
@@ -601,9 +73,8 @@ export function MovieRecommenderProjectPage() {
   const tools = [
     'Python',
     'VS Code',
-    'MovieLens 100K',
+    'Datanemics CC0 dataset',
     'Pandas',
-    'NumPy',
     'SciPy',
     'scikit-learn',
     'NearestNeighbors',
@@ -619,6 +90,7 @@ export function MovieRecommenderProjectPage() {
   const topics = [
     'Recommendation systems',
     'Popularity baseline',
+    'Bayesian-style shrinkage',
     'Content-based filtering',
     'Multi-hot encoding',
     'Cosine similarity',
@@ -627,62 +99,82 @@ export function MovieRecommenderProjectPage() {
     'Item-item similarity',
     'Hybrid ranking',
     'Cold start',
+    'Recommendation evaluation',
     'Model persistence',
     'Testing',
-    'Deployment',
   ];
 
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="border-b border-slate-800 bg-slate-950">
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-          <Link to="/projects" className="inline-flex items-center gap-2 text-sm font-bold text-cyan-300 hover:text-cyan-200">
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 text-sm font-bold text-cyan-300 hover:text-cyan-200"
+          >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             All project handbooks
           </Link>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-black text-slate-950">FREE PROJECT</span>
-            <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">Intermediate</span>
-            <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">Windows-first instructions</span>
+            <span className="rounded-full bg-emerald-300 px-3 py-1 text-xs font-black text-slate-950">
+              FREE PROJECT
+            </span>
+            <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">
+              Intermediate
+            </span>
+            <span className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs font-bold text-slate-300">
+              Windows-first instructions
+            </span>
           </div>
 
           <h1 className="mt-4 max-w-5xl text-3xl font-black leading-tight text-white sm:text-5xl">
             Build Your Own Netflix-Style Movie Recommendation System
           </h1>
           <p className="mt-4 max-w-4xl text-base leading-7 text-slate-300 sm:text-lg">
-            Start with an empty folder and finish with a working browser app that can recommend similar movies using content,
-            audience-rating behaviour and a simple hybrid ranker. You will build every important file, run the real system,
-            inspect real outputs and understand why each step exists.
+            Build a complete recommendation engine from an empty folder to a working browser app.
+            You will compare popularity, content-based, collaborative and hybrid recommendation,
+            then test the system and understand exactly where each ranking signal comes from.
           </p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
               <Target className="h-5 w-5 text-cyan-300" aria-hidden="true" />
               <div className="mt-2 text-sm font-black text-white">What you build</div>
-              <div className="mt-1 text-xs leading-5 text-slate-400">A Streamlit app with popularity, content, collaborative and hybrid recommendation modes.</div>
+              <div className="mt-1 text-xs leading-5 text-slate-400">
+                A Streamlit app with four recommendation modes and an explicit cold-start fallback.
+              </div>
             </div>
             <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
               <Database className="h-5 w-5 text-cyan-300" aria-hidden="true" />
-              <div className="mt-2 text-sm font-black text-white">Real dataset</div>
-              <div className="mt-1 text-xs leading-5 text-slate-400">MovieLens 100K: 100,000 ratings, 943 users and 1,682 movies.</div>
+              <div className="mt-2 text-sm font-black text-white">Teaching dataset</div>
+              <div className="mt-1 text-xs leading-5 text-slate-400">
+                9,000 synthetic ratings, 1,100 users and 260 movie IDs, released under CC0.
+              </div>
             </div>
             <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
               <Laptop className="h-5 w-5 text-cyan-300" aria-hidden="true" />
-              <div className="mt-2 text-sm font-black text-white">Verified workflow</div>
-              <div className="mt-1 text-xs leading-5 text-slate-400">Download → build → save → test → run Streamlit → inspect recommendations.</div>
+              <div className="mt-2 text-sm font-black text-white">End-to-end workflow</div>
+              <div className="mt-1 text-xs leading-5 text-slate-400">
+                Download → inspect → build → save → test → run → debug → improve.
+              </div>
             </div>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 sm:p-7">
-          <h2 className="text-xl font-black text-indigo-950">Before you start: what this project is and is not</h2>
-          <p className="mt-3 text-sm leading-7 text-indigo-950">
-            The familiar “Netflix-style” name describes the learning experience, not Netflix's internal algorithm. Our app
-            recommends movies related to one selected movie. It is an educational recommender built from public historical
-            ratings and movie genres. Real streaming systems use many more signals, ranking stages, experiments and safeguards.
+        <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-amber-950">Why this project uses synthetic movie ratings</h2>
+          <p className="mt-3 text-sm leading-7 text-amber-950">
+            The recommendation algorithms in this handbook are real, but the movie titles and ratings are synthetic.
+            Datanemics publishes this dataset under CC0 1.0, so a learner can download, modify and reuse it without
+            depending on personal records or a restricted commercial-data licence. The trade-off is realism: these
+            ratings simulate recommendation-system patterns rather than representing real streaming customers.
+          </p>
+          <p className="mt-3 text-sm leading-7 text-amber-950">
+            “Netflix-style” describes the familiar product idea—choosing one movie and receiving ranked suggestions.
+            This project does not use Netflix data and does not claim to reproduce Netflix's production algorithm.
           </p>
         </section>
 
@@ -692,236 +184,374 @@ export function MovieRecommenderProjectPage() {
             Tools you will use
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {tools.map(tool => <span key={tool} className="rounded-lg border border-indigo-100 bg-indigo-50 px-2.5 py-1.5 text-xs font-bold text-indigo-800">{tool}</span>)}
+            {tools.map(tool => (
+              <span
+                key={tool}
+                className="rounded-lg border border-indigo-100 bg-indigo-50 px-2.5 py-1.5 text-xs font-bold text-indigo-800"
+              >
+                {tool}
+              </span>
+            ))}
           </div>
           <h3 className="mt-6 text-sm font-black text-slate-900">Topics covered</h3>
           <p className="mt-2 text-sm leading-6 text-slate-600">{topics.join(' · ')}</p>
         </section>
 
-        <Step number={1} title="Understand the recommendation problem" check="You can explain that the app ranks related movies; it does not predict a survival class or a house price.">
+        <Step
+          number={1}
+          title="Understand what a recommender returns"
+          check="You can explain that the output is a ranked list, not one class label or one numeric prediction."
+        >
           <p>
-            Classification asks “which class?” Regression asks “what number?” A recommender asks “which items should appear near the top?”
-            That makes the output a <strong>ranked list</strong>, not one label.
+            Classification asks “which class?” Regression asks “what number?” A recommendation system asks
+            <strong> “which items should appear near the top?”</strong> The output is therefore an ordered list.
           </p>
           <p>
-            We will build four levels: a popularity baseline, content similarity, collaborative similarity and a hybrid that combines
-            the last two. The baseline is important because a complex system should beat or add value beyond a simple default.
-          </p>
-        </Step>
-
-        <Step number={2} title="Create the project folder" check="PowerShell shows you inside movie-recommender and VS Code opens that folder.">
-          <CodeBlock code={String.raw`mkdir movie-recommender
-cd movie-recommender
-code .`} language="powershell" title="Create and open the project" type="runnable" />
-          <p>Create these folders in VS Code Explorer: <code>src</code>, <code>tests</code>, <code>models</code>, <code>outputs</code>, <code>scripts</code> and <code>data</code>.</p>
-        </Step>
-
-        <Step number={3} title="Create an isolated Python environment" check="Your terminal prompt starts with (.venv).">
-          <CodeBlock code={installCommands} language="powershell" title="Create environment and install packages" type="runnable" />
-          <p>
-            A virtual environment keeps this project’s package versions separate from other Python work. If PowerShell blocks
-            activation, run <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code> in that terminal and activate again.
+            We will build four versions so that every extra layer has a reason to exist: popularity gives a simple
+            baseline, content compares movie attributes, collaborative filtering compares audience behaviour, and
+            the hybrid combines the last two.
           </p>
         </Step>
 
-        <Step number={4} title="Create requirements.txt" check="pip install -r requirements.txt finishes without an error.">
+        <Step
+          number={2}
+          title="Create the project folder"
+          check="VS Code opens the movie-recommender folder and you can see an empty Explorer."
+        >
+          <CodeBlock
+            code={'mkdir movie-recommender\ncd movie-recommender\ncode .'}
+            language="powershell"
+            title="Create and open the project"
+            type="runnable"
+          />
+          <p>
+            Create these folders in Explorer: <code>data</code>, <code>models</code>, <code>outputs</code>,
+            <code>scripts</code>, <code>src</code> and <code>tests</code>.
+          </p>
+        </Step>
+
+        <Step
+          number={3}
+          title="Create a clean Python environment"
+          check="Your terminal prompt starts with (.venv)."
+        >
+          <CodeBlock code={setupCommands} language="powershell" title="Create and activate .venv" type="runnable" />
+          <p>
+            The virtual environment keeps this project's package versions separate from other Python projects.
+            If PowerShell blocks activation, run
+            <code> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code> in that terminal and activate again.
+          </p>
+        </Step>
+
+        <Step
+          number={4}
+          title="Create requirements.txt"
+          check="pip install -r requirements.txt finishes without an error."
+        >
           <CodeBlock code={requirementsCode} language="text" title="requirements.txt" type="config" />
           <p>
-            <strong>scikit-learn</strong> provides nearest-neighbor search, <strong>SciPy</strong> stores the sparse rating matrix,
-            <strong>Joblib</strong> saves the built recommender, and <strong>Streamlit</strong> provides the browser interface.
+            Pandas reads the ratings, SciPy stores the sparse matrix, scikit-learn performs nearest-neighbour search,
+            Joblib saves the built artifacts, Matplotlib creates evidence, Streamlit serves the app, and Pytest checks behaviour.
           </p>
         </Step>
 
-        <Step number={5} title="Download and verify MovieLens 100K" check="The command prints exactly 100,000 ratings, 943 users and 1,682 movies.">
+        <Step
+          number={5}
+          title="Download the CC0 movie-ratings dataset"
+          check="The script prints 9,000 rows, 1,100 users, 260 movie IDs and a 0.5–5.0 rating range."
+        >
           <p>
-            Create <code>download_data.py</code> in the project root and paste the complete code below. It downloads the stable
-            MovieLens 100K archive directly from GroupLens and checks its important files and row counts.
+            Create <code>download_data.py</code> in the project root. The script downloads the CSV from Datanemics,
+            verifies the exact schema and important counts, computes a SHA-256 fingerprint, and saves the file locally.
           </p>
-          <CodeBlock code={downloadCode} language="python" title="download_data.py" type="runnable" />
-          <CodeBlock code={'python download_data.py'} language="powershell" title="Download and verify data" type="runnable" />
-          <CodeBlock code={'Verified ratings: 100,000\\nVerified users:   943\\nVerified movies:  1,682'} language="text" title="Expected verified counts" type="output" />
+          <CodeBlock code={downloadDataCode} language="python" title="download_data.py — complete source" type="runnable" />
+          <CodeBlock code={'python download_data.py'} language="powershell" title="Download and verify" type="runnable" />
+          <CodeBlock
+            code={'Verified rows:    9,000\nVerified users:   1,100\nVerified movies:  260\nRating range:     0.5 to 5.0'}
+            language="text"
+            title="Expected dataset contract"
+            type="output"
+          />
           <p>
-            These checks protect the rest of the project from silently training on an incomplete or unexpected download.
-          </p>
-        </Step>
-
-        <Step number={6} title="Read the two files that drive the recommender" check="You can explain that u.data contains user-movie ratings and u.item contains movie metadata such as title and genres.">
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-100 text-slate-900"><tr><th className="px-4 py-3">File</th><th className="px-4 py-3">What we use</th><th className="px-4 py-3">Why</th></tr></thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                <tr><td className="px-4 py-3 font-mono text-xs">u.data</td><td className="px-4 py-3">user_id, movie_id, rating, timestamp</td><td className="px-4 py-3">Audience-rating patterns for collaborative similarity</td></tr>
-                <tr><td className="px-4 py-3 font-mono text-xs">u.item</td><td className="px-4 py-3">movie title + 19 genre flags</td><td className="px-4 py-3">Movie features for content similarity</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </Step>
-
-        <Step number={7} title="Build a popularity baseline first" check="You understand why one 5-star rating should not automatically beat hundreds of consistently strong ratings.">
-          <p>
-            The project computes each movie’s average rating and rating count, then <strong>shrinks</strong> the movie average toward
-            the global mean using a 25-rating prior. This is a simple Bayesian-style smoothing idea.
-          </p>
-          <p>
-            Popularity is not personalized, but it is valuable as a default and as a <strong>cold-start fallback</strong> when the system
-            cannot calculate a trustworthy similarity for a new or unknown item.
+            The dataset has seven columns: user ID, movie ID, title, primary genre, release year, rating and rating timestamp.
+            The timestamp lets us handle the possibility that the same user rated the same movie more than once.
           </p>
         </Step>
 
-        <Step number={8} title="Turn movie genres into vectors" check="You can convert a movie such as Animation + Children's + Comedy into a vector of 0s and 1s.">
+        <Step
+          number={6}
+          title="Keep one latest interaction per user and movie"
+          check="You understand why one user/movie pair should occupy one cell in the collaborative matrix."
+        >
           <p>
-            Each of the 19 MovieLens genres becomes one position in a vector. If a movie belongs to a genre, that position is 1;
-            otherwise it is 0. This is a <strong>multi-hot vector</strong> because several genre positions can be 1 at the same time.
+            A matrix cell cannot safely contain two different ratings. The function <code>latest_interactions()</code>
+            sorts by <code>rated_at</code> and keeps the latest rating for each user/movie pair.
           </p>
-          <CodeBlock code={'Toy Story → [0,0,0,1,1,1,...]\\nAction-only movie → [0,1,0,0,0,0,...]'} language="text" title="Tiny genre-vector example" type="output" />
           <p>
-            Important: this project uses multi-hot genre vectors. It does <strong>not</strong> use TF-IDF for the genre representation.
+            This is a developer choice, not a fact of recommendation systems. Another system might average repeated
+            ratings or model them as a time sequence. Here, “latest wins” keeps the teaching matrix easy to interpret.
           </p>
         </Step>
 
-        <Step number={9} title="Understand cosine similarity before using it" check="You know that a smaller cosine distance means a larger cosine similarity, and our code converts distance to 1 - distance.">
+        <Step
+          number={7}
+          title="Build a popularity baseline before anything clever"
+          check="You can explain why a movie with one 5-star rating should not automatically rank above a movie with many strong ratings."
+        >
           <p>
-            Cosine similarity compares the <strong>direction</strong> of two vectors. Two movies sharing many genre directions receive
-            a larger similarity. Scikit-learn's nearest-neighbor model can use cosine <em>distance</em>; the code converts that to a
-            similarity score with <code>1 - distance</code>.
+            A raw average can be misleading when very few people rated an item. Our popularity score shrinks each
+            movie's mean toward the global mean with a prior equivalent to 25 ratings.
           </p>
-          <CodeBlock code={'similarity = 1 - cosine_distance\\n\\ncosine distance 0.10 → similarity 0.90\\ncosine distance 0.80 → similarity 0.20'} language="text" title="Distance to similarity" type="output" />
+          <p>
+            This baseline has two jobs: it gives us something simple to compare against, and it becomes the fallback
+            when a new or unknown movie has no learned similarity information.
+          </p>
         </Step>
 
-        <Step number={10} title="Build the sparse movie-by-user matrix" check="You can explain what a row, a column and a non-empty cell represent.">
+        <Step
+          number={8}
+          title="Represent movie content as two labels"
+          check="You can turn a movie into one genre label and one decade label."
+        >
           <p>
-            Collaborative filtering ignores genre names and looks at behaviour. We build a matrix with one movie per row and one user
-            per column. A known rating fills a cell; most cells are empty because most users have not rated most movies.
+            Each movie gets two content labels. For example, a romance released in 2012 becomes
+            <code> genre=romance</code> and <code>decade=2010s</code>. A multi-hot encoder converts those labels to a
+            vector of 0s and 1s.
           </p>
-          <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-7 text-cyan-950">
-            <strong>Why sparse storage?</strong> The full matrix has 1,682 × 943 possible cells, but only 100,000 observed ratings.
-            A SciPy CSR sparse matrix stores the useful non-zero entries without materializing every missing rating as a normal dense value.
-          </div>
+          <CodeBlock
+            code={'Iron Country (2012) → [genre=romance, decade=2010s]\nAnother romance from 2018 → shares both labels\nA romance from 1984 → shares genre but not decade'}
+            language="text"
+            title="Content idea"
+            type="output"
+          />
+          <p>
+            This deliberately simple representation makes it possible to see where a content recommendation came from.
+            A production system could add plot text, actors, languages, embeddings and many other features.
+          </p>
         </Step>
 
-        <Step number={11} title="Build the complete recommender engine" check="src/build_recommender.py exists and contains the complete code below.">
+        <Step
+          number={9}
+          title="Use cosine similarity to find content neighbours"
+          check="You know that similarity = 1 - cosine distance in this implementation."
+        >
           <p>
-            Create <code>src/build_recommender.py</code>. This one file builds the four teaching strategies, saves a reusable artifact,
-            records metrics, creates a rating-distribution chart and writes deterministic reference recommendations.
+            Cosine similarity compares vector direction. Movies sharing content labels point in more similar directions.
+            scikit-learn's <code>NearestNeighbors</code> gives cosine distance, so the project converts it to a score:
+          </p>
+          <CodeBlock
+            code={'similarity = 1 - cosine_distance\n\ndistance 0.00 → similarity 1.00\ndistance 0.40 → similarity 0.60'}
+            language="text"
+            title="Distance to similarity"
+            type="output"
+          />
+        </Step>
+
+        <Step
+          number={10}
+          title="Build the sparse movie-by-user matrix"
+          check="You can identify a row, column and observed cell in the collaborative matrix."
+        >
+          <p>
+            Collaborative filtering ignores genre and year. Each row represents one movie, each column represents one
+            user, and an observed cell contains that user's latest rating for that movie.
+          </p>
+          <p>
+            There are 260 × 1,100 = 286,000 possible movie/user cells but only a small fraction contain ratings.
+            A SciPy CSR sparse matrix stores the observed values without allocating ordinary dense values for every empty cell.
+          </p>
+        </Step>
+
+        <Step
+          number={11}
+          title="Let audience behaviour create item-item neighbours"
+          check="You can explain why two movies can be collaborative neighbours even if their genres differ."
+        >
+          <p>
+            Two movies are collaborative neighbours when their rating vectors point in similar directions across users.
+            This can reveal relationships that metadata does not describe. That is the central difference from content filtering.
+          </p>
+          <p>
+            This teaching model uses raw 0.5–5 rating vectors. More advanced systems may center ratings, use implicit feedback,
+            factorize the matrix or learn embeddings.
+          </p>
+        </Step>
+
+        <Step
+          number={12}
+          title="Combine the two signals with a hybrid score"
+          check="You know that 45% and 55% are explicit project choices, not universal constants."
+        >
+          <CodeBlock
+            code={'hybrid_score = 0.45 × content_similarity + 0.55 × collaborative_similarity'}
+            language="text"
+            title="Hybrid rule"
+            type="output"
+          />
+          <p>
+            The hybrid gives slightly more weight to audience behaviour while preserving a content signal.
+            A real system would tune or learn these weights using offline evaluation and online experiments.
+          </p>
+        </Step>
+
+        <Step
+          number={13}
+          title="Create the complete recommender engine"
+          check="src/build_recommender.py exists and contains the complete code below."
+        >
+          <p>
+            Create <code>src/build_recommender.py</code>. It loads and validates the data, builds all four strategies,
+            saves a reusable Joblib artifact, creates deterministic reference recommendations and records metrics.
           </p>
           <CodeBlock code={buildCode} language="python" title="src/build_recommender.py — complete source" type="runnable" />
         </Step>
 
-        <Step number={12} title="Run the recommender build" check="The command prints the dataset metrics and a ten-row hybrid recommendation list for Toy Story (1995).">
-          <CodeBlock code={'python src/build_recommender.py'} language="powershell" title="Build and save the recommender" type="runnable" />
-          <p>The verified reference build starts its Toy Story hybrid ranking like this:</p>
-          <CodeBlock code={hybridOutput} language="text" title="Verified reference — first five hybrid results" type="output" />
+        <Step
+          number={14}
+          title="Build the artifacts and inspect Iron Country"
+          check="The command finishes and prints ten hybrid recommendations for Iron Country."
+        >
+          <CodeBlock code={'python src/build_recommender.py'} language="powershell" title="Build the recommender" type="runnable" />
           <p>
-            These are not “correct answers” in the way a classification label can be correct. They are the deterministic result of this
-            specific feature representation, rating matrix and 45/55 hybrid rule.
+            <code>M1000</code> is the fixed reference movie ID and maps to <strong>Iron Country</strong>. The build
+            writes content, collaborative and hybrid reference lists to <code>outputs/iron_country_recommendations.csv</code>.
+          </p>
+          <p>
+            The exact order is evidence from the code and dataset—not a universal ranking of movies. If you change the
+            features or weights, you should expect the order to change.
           </p>
         </Step>
 
-        <Step number={13} title="Read the rating-distribution chart" check="You can explain what the x-axis and y-axis mean and why interaction distributions matter.">
+        <Step
+          number={15}
+          title="Read the real rating-distribution chart"
+          check="You can explain what the x-axis, y-axis and bar heights represent."
+        >
           <p>
-            The build saves <code>outputs/rating_distribution.png</code>. It shows how often each 1–5 rating appears. Before trusting a
-            recommender, inspect the interactions it learns from; recommenders inherit the biases and coverage gaps in their interaction data.
+            The verified build creates <code>outputs/rating_distribution.png</code>. It shows how frequently each star
+            rating appears after keeping the latest user/movie interaction.
           </p>
           <img
             src="/project-handbooks/movie-recommender/rating_distribution.png"
-            alt="Rating distribution generated from the verified MovieLens 100K build"
+            alt="Rating distribution generated by the executable movie recommendation project"
             className="mx-auto max-h-[620px] w-full rounded-xl border border-slate-200 bg-white object-contain"
             loading="lazy"
           />
-        </Step>
-
-        <Step number={14} title="Understand what each recommendation mode is really doing" check="You can explain the difference without using the words 'AI magic'.">
-          <div className="overflow-x-auto rounded-xl border border-slate-200">
-            <table className="min-w-full text-left text-sm">
-              <thead className="bg-slate-100"><tr><th className="px-4 py-3">Mode</th><th className="px-4 py-3">Evidence</th><th className="px-4 py-3">Main weakness</th></tr></thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
-                <tr><td className="px-4 py-3 font-bold">Popularity</td><td className="px-4 py-3">Average rating + count</td><td className="px-4 py-3">Same list for everyone</td></tr>
-                <tr><td className="px-4 py-3 font-bold">Content</td><td className="px-4 py-3">Shared genres</td><td className="px-4 py-3">Cannot discover similarity outside those features</td></tr>
-                <tr><td className="px-4 py-3 font-bold">Collaborative</td><td className="px-4 py-3">Similar rating patterns across users</td><td className="px-4 py-3">Weak for items with little interaction history</td></tr>
-                <tr><td className="px-4 py-3 font-bold">Hybrid</td><td className="px-4 py-3">45% genre + 55% rating-pattern similarity</td><td className="px-4 py-3">Weights are a developer choice, not a universal truth</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </Step>
-
-        <Step number={15} title="Handle cold start explicitly" check="You can explain why an unseen movie cannot have a learned collaborative-neighbor row.">
           <p>
-            <strong>Cold start</strong> means the system lacks enough history for a new user or item. In our item-item design, an unknown
-            movie has no row in the learned matrices, so pretending we have a similarity score would be wrong.
-          </p>
-          <p>
-            <code>recommend_or_fallback()</code> therefore returns the popularity baseline. The fallback is honest: its reason column says
-            <strong>popularity fallback for cold start</strong>.
+            Interaction data is not a random sample of every movie a user could have watched. Users choose what to rate,
+            so recommendation data is typically missing in a meaningful, non-random way.
           </p>
         </Step>
 
-        <Step number={16} title="Create the Streamlit application" check="app.py exists and contains the complete code below.">
+        <Step
+          number={16}
+          title="Handle cold start instead of faking a score"
+          check="You can explain why an unknown movie cannot have a learned matrix row."
+        >
+          <p>
+            <strong>Cold start</strong> means the system lacks enough history for a new user or item. An unknown movie is
+            absent from both learned matrices, so <code>recommend()</code> rejects it.
+          </p>
+          <p>
+            <code>recommend_or_fallback()</code> catches that product situation and returns the popularity ranking instead.
+            Its score is normalized to 0–1 so the output schema stays consistent with similarity scores.
+          </p>
+        </Step>
+
+        <Step
+          number={17}
+          title="Create the Streamlit browser application"
+          check="app.py exists and contains the complete code below."
+        >
           <CodeBlock code={appCode} language="python" title="app.py — complete source" type="runnable" />
           <p>
-            The selector stores both <code>movie_id</code> and title. That matters because titles are labels for humans, while stable IDs
-            are safer for joining and lookup logic.
+            The selector displays title, release year and movie ID. The ID is the true lookup key because different
+            movie IDs can share the same synthetic title.
           </p>
         </Step>
 
-        <Step number={17} title="Run the app and make a real recommendation" check="The browser opens, Toy Story is selected by default, and clicking Recommend movies shows ten ranked rows.">
-          <CodeBlock code={'python -m streamlit run app.py'} language="powershell" title="Start Streamlit" type="runnable" />
+        <Step
+          number={18}
+          title="Run the app and generate real recommendations"
+          check="Iron Country is selected by default and clicking Recommend movies produces a ten-row table."
+        >
+          <CodeBlock code={'python -m streamlit run app.py'} language="powershell" title="Start the browser app" type="runnable" />
           <img
             src="/project-handbooks/movie-recommender/movie-recommender-form.png"
-            alt="Real Streamlit movie recommender form captured from the verified application"
+            alt="Real Streamlit form from the verified movie recommendation application"
             className="w-full rounded-xl border border-slate-200 bg-white"
             loading="lazy"
           />
           <p>
-            Start with <strong>Hybrid</strong>, keep <strong>Toy Story (1995)</strong>, leave 10 recommendations and click the button.
+            Start with <strong>Hybrid</strong>, keep <strong>Iron Country</strong>, leave 10 recommendations and click
+            <strong> Recommend movies</strong>.
           </p>
           <img
             src="/project-handbooks/movie-recommender/movie-recommender-results.png"
-            alt="Real Streamlit movie recommendation results for Toy Story from the verified application"
+            alt="Real Streamlit recommendation results for Iron Country from the verified application"
             className="w-full rounded-xl border border-slate-200 bg-white"
             loading="lazy"
           />
         </Step>
 
-        <Step number={18} title="Add automated tests" check="pytest -q finishes with every test passing.">
+        <Step
+          number={19}
+          title="Add tests that check behaviour, not just startup"
+          check="pytest -q finishes with every test passing."
+        >
           <p>
-            Create <code>tests/test_recommender.py</code>. These tests check more than “the app opens”: dataset shape, ranking uniqueness,
-            query exclusion, score range, popularity ordering, cold-start fallback, sparse storage and deterministic reference output.
+            Create <code>tests/test_recommender.py</code>. The suite checks the dataset contract, latest-interaction rule,
+            three ranking methods, query exclusion, popularity order, cold-start behaviour, normalized fallback scores,
+            sparse storage, content labels and deterministic saved output.
           </p>
           <CodeBlock code={testCode} language="python" title="tests/test_recommender.py — complete source" type="runnable" />
-          <CodeBlock code={'pytest -q'} language="powershell" title="Run tests" type="runnable" />
+          <CodeBlock code={'pytest -q'} language="powershell" title="Run the automated checks" type="runnable" />
         </Step>
 
-        <Step number={19} title="Understand what Joblib saved" check="You can explain that the artifact contains data tables, sparse matrices, fitted nearest-neighbor indexes and lookup mappings—not a neural network.">
+        <Step
+          number={20}
+          title="Understand what the Joblib artifact contains"
+          check="You can name the tables, sparse matrices, nearest-neighbour models and ID lookup stored in the artifact."
+        >
           <p>
-            <code>models/movie_recommender.joblib</code> stores the built recommendation artifacts so the Streamlit app can load them
-            without rebuilding all matrices on every page refresh.
+            <code>models/movie_recommender.joblib</code> is not a neural-network model. It packages the built movie table,
+            popularity table, content encoder/matrix/model, collaborative matrix/model and the movie-ID-to-row mapping.
           </p>
           <p>
-            Joblib files should be treated as trusted local artifacts. Do not load an arbitrary Joblib file received from an untrusted source.
-          </p>
-        </Step>
-
-        <Step number={20} title="Know how to evaluate a recommender honestly" check="You can explain why ordinary classification accuracy is not the main metric for a ranked recommendation list.">
-          <p>
-            Recommendation evaluation is harder because the dataset tells us what users rated, not every movie they might have enjoyed.
-            Offline systems often hide some known interactions and ask whether the recommender ranks those held-out items highly using
-            metrics such as Hit Rate, Precision@K, Recall@K or NDCG.
-          </p>
-          <p>
-            This project deliberately focuses on understanding the four recommendation mechanisms and deterministic behaviour. Do not claim
-            the hybrid is “best” merely because its list looks reasonable. A production decision would require a proper offline protocol and
-            eventually online experiments.
+            The app loads that trusted local artifact instead of rebuilding everything on every browser refresh.
+            Never load arbitrary Joblib files from untrusted sources.
           </p>
         </Step>
 
-        <Step number={21} title="Understand the complete folder" check="You can point to the file responsible for data, build logic, tests and browser inference.">
+        <Step
+          number={21}
+          title="Know what this project has not proved"
+          check="You do not call the hybrid 'best' merely because its recommendations look reasonable."
+        >
+          <p>
+            Recommendation evaluation is different from classification accuracy. The dataset records items people rated,
+            not every item they might have liked. A proper offline experiment might hide known interactions and ask whether
+            the system ranks them highly using Hit Rate@K, Precision@K, Recall@K or NDCG.
+          </p>
+          <p>
+            This project focuses on making the recommendation mechanisms traceable. The exercise section asks you to add
+            an evaluation protocol as the next learning step.
+          </p>
+        </Step>
+
+        <Step
+          number={22}
+          title="Understand the complete project folder"
+          check="You can point to the file responsible for data acquisition, recommendation logic, testing and browser inference."
+        >
           <div className="rounded-xl border border-slate-200 bg-slate-950 p-4 font-mono text-xs leading-6 text-slate-100 sm:text-sm">
             movie-recommender/<br />
-            ├── data/ <span className="text-slate-400"># downloaded, ignored by Git</span><br />
-            ├── models/ <span className="text-slate-400"># generated artifact</span><br />
-            ├── outputs/ <span className="text-slate-400"># metrics, CSVs, chart, screenshots</span><br />
+            ├── data/ <span className="text-slate-400"># downloaded CSV, ignored by Git</span><br />
+            ├── models/ <span className="text-slate-400"># generated Joblib artifact</span><br />
+            ├── outputs/ <span className="text-slate-400"># metrics, reference lists, chart</span><br />
             ├── scripts/<br />
-            │&nbsp;&nbsp; └── capture_app_screenshots.py<br />
+            │&nbsp;&nbsp; ├── capture_app_screenshots.py<br />
+            │&nbsp;&nbsp; └── verify_handbook_page.py<br />
             ├── src/<br />
             │&nbsp;&nbsp; └── build_recommender.py<br />
             ├── tests/<br />
@@ -934,27 +564,34 @@ code .`} language="powershell" title="Create and open the project" type="runnabl
           </div>
         </Step>
 
-        <Step number={22} title="Put the project on GitHub" check="git status does not show .venv, the raw MovieLens folder or the generated Joblib artifact as files to commit.">
-          <CodeBlock code={String.raw`.venv/
-__pycache__/
-.pytest_cache/
-data/ml-100k/
-data/ml-100k.zip
-models/*.joblib
-outputs/screenshots/
-*.log`} language="text" title=".gitignore" type="config" />
+        <Step
+          number={23}
+          title="Put the finished source on GitHub"
+          check="git status does not show .venv, the downloaded CSV or the generated Joblib file."
+        >
+          <CodeBlock
+            code={'.venv/\n__pycache__/\n.pytest_cache/\ndata/movie-ratings.csv\nmodels/*.joblib\noutputs/screenshots/\n*.log'}
+            language="text"
+            title=".gitignore"
+            type="config"
+          />
           <CodeBlock code={gitCommands} language="powershell" title="Git and GitHub commands" type="runnable" />
+          <p>
+            Read <code>git status</code> before committing. Generated data and model artifacts can be rebuilt; the source
+            files and dependency lock are what another learner needs.
+          </p>
         </Step>
 
         <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-7">
           <h2 className="text-xl font-black text-amber-950">Common problems and exact fixes</h2>
           <div className="mt-4 space-y-4 text-sm leading-7 text-amber-950">
-            <p><strong>FileNotFoundError for u.data:</strong> run <code>python download_data.py</code> from the project root first.</p>
+            <p><strong>movie-ratings.csv is missing:</strong> run <code>python download_data.py</code> from the project root.</p>
+            <p><strong>Dataset count/schema verification fails:</strong> do not bypass the check. Delete the downloaded file and rerun; the source may have changed.</p>
             <p><strong>ModuleNotFoundError:</strong> activate <code>.venv</code>, then rerun <code>pip install -r requirements.txt</code>.</p>
-            <p><strong>The Streamlit app says the artifact is missing:</strong> run <code>python src/build_recommender.py</code> before starting the app.</p>
-            <p><strong>You get the selected movie back as recommendation #1:</strong> the query row was not excluded. Check the <code>if int(index) == row: continue</code> guard.</p>
-            <p><strong>Collaborative results look odd:</strong> remember that raw 1–5 rating vectors are a simple teaching design. Mean-centering, implicit feedback, matrix factorization or learned embeddings are possible improvements.</p>
-            <p><strong>Two titles look identical:</strong> use MovieLens IDs as the real key. The app displays the ID beside each title for that reason.</p>
+            <p><strong>Streamlit says the artifact is missing:</strong> run <code>python src/build_recommender.py</code> before starting the app.</p>
+            <p><strong>The selected movie appears in its own recommendations:</strong> verify the query-row exclusion inside <code>neighbor_scores()</code>.</p>
+            <p><strong>Two options have the same title:</strong> that is why the app shows release year and movie ID; never use title alone as the key.</p>
+            <p><strong>Collaborative results seem surprising:</strong> raw rating-vector cosine is intentionally simple. Try mean-centering or matrix factorization as an extension.</p>
           </div>
         </section>
 
@@ -962,10 +599,10 @@ outputs/screenshots/
           <h2 className="text-xl font-black text-fuchsia-950">Now change the system yourself</h2>
           <div className="mt-4 grid gap-4 text-sm leading-7 text-fuchsia-950 sm:grid-cols-2">
             {[
-              ['Exercise 1 — Change hybrid weights', 'Try 70% content and 30% collaborative. Rebuild, compare Toy Story results, and explain which titles moved and why.'],
-              ['Exercise 2 — Change the seed movie', 'Use Star Wars or another movie you know. Compare content, collaborative and hybrid lists instead of judging only one mode.'],
-              ['Exercise 3 — Break cold start on purpose', 'Call recommend() with an unknown ID and observe the exception, then call recommend_or_fallback() and explain why the second behaviour is safer.'],
-              ['Exercise 4 — Add one evaluation protocol', 'Design a leave-one-out test for users with enough ratings and report Hit Rate@10 or Recall@10 without using future/held-out interactions to construct the recommendation evidence.'],
+              ['Exercise 1 — Change hybrid weights', 'Try 70% content and 30% collaborative. Rebuild and explain which recommendations move and which evidence caused the change.'],
+              ['Exercise 2 — Remove the decade feature', 'Use genre only, rebuild, and compare Iron Country content neighbours. This isolates the contribution of release decade.'],
+              ['Exercise 3 — Break cold start on purpose', 'Call recommend() with an unknown movie ID, then call recommend_or_fallback(). Explain why the second behaviour is safer in an application.'],
+              ['Exercise 4 — Add held-out evaluation', 'Hide one known interaction for eligible users and calculate a ranking metric such as Hit Rate@10 or Recall@10 without leaking that held-out interaction into the evidence matrix.'],
             ].map(([title, body]) => (
               <div key={title} className="rounded-xl border border-fuchsia-200 bg-white p-4">
                 <p className="font-black">{title}</p>
@@ -979,12 +616,12 @@ outputs/screenshots/
           <h2 className="text-xl font-black text-blue-950">How to explain this project in an interview</h2>
           <div className="mt-4 space-y-4 text-sm leading-7 text-blue-950">
             {[
-              ['What is content-based filtering here?', 'Each movie is represented by its MovieLens genre flags. We normalize those vectors and retrieve movies with the smallest cosine distance, which is equivalent to the largest cosine similarity.'],
-              ['What is collaborative filtering here?', 'Each movie is represented by the pattern of ratings it received from MovieLens users. Movies with similar rating vectors become neighbours even if their genres differ.'],
-              ['Why use a sparse matrix?', 'Only 100,000 of roughly 1.59 million movie-user cells contain observed ratings, so sparse storage avoids materializing most empty interactions.'],
-              ['What is cold start?', 'A new item has little or no interaction history, so collaborative similarity is unreliable or unavailable. This project falls back to a smoothed popularity list.'],
-              ['Why is the hybrid 45/55?', 'It is an explicit developer choice for this educational build, not a universal optimum. In a real system we would tune or learn ranking weights using offline and online evaluation.'],
-              ['What would you improve first?', 'Add a proper held-out recommendation evaluation, richer item metadata or embeddings, personalized user profiles, bias handling, freshness signals and monitored online experimentation.'],
+              ['Why start with popularity?', 'It creates a transparent baseline and gives the product a fallback when similarity evidence is unavailable. Shrinkage prevents tiny-rating-count items from dominating the leaderboard.'],
+              ['What is content-based filtering here?', 'Each movie has a genre label and a release-decade label. Multi-hot vectors plus cosine nearest neighbours retrieve movies with similar metadata.'],
+              ['What is collaborative filtering here?', 'Each movie is represented by its pattern of ratings across users. Similar rating-vector directions create item-item neighbours independently of genre.'],
+              ['Why use a sparse matrix?', 'Only a small fraction of the 260 × 1,100 possible movie-user cells have observed ratings, so CSR storage avoids allocating ordinary dense values for empty interactions.'],
+              ['What is cold start?', 'A new item has no learned matrix row or interaction history. The project explicitly returns the popularity fallback instead of fabricating a similarity.'],
+              ['What is the biggest dataset limitation?', 'The dataset is synthetic. That makes it safe and reproducible for teaching, but results must not be presented as evidence about real audience preferences.'],
             ].map(([question, answer]) => (
               <div key={question} className="rounded-xl border border-blue-200 bg-white p-4">
                 <p className="font-black">{question}</p>
@@ -997,10 +634,10 @@ outputs/screenshots/
         <section className="rounded-2xl border border-orange-200 bg-orange-50 p-5 sm:p-7">
           <h2 className="text-xl font-black text-orange-950">What would change in a production recommender?</h2>
           <p className="mt-3 text-sm leading-7 text-orange-950">
-            A real streaming product would separate candidate generation from ranking, ingest fresh implicit signals such as views and
-            completion, handle new users/items, monitor popularity and exposure bias, enforce safety/business rules, run offline ranking
-            evaluation, perform A/B tests, cache low-latency results, retrain on a schedule and monitor drift. The small Streamlit app is
-            intentionally designed to make the core ideas visible before adding that infrastructure.
+            A real streaming product would use real consented interaction data, separate candidate generation from ranking,
+            learn from implicit signals such as views and completion, handle new users and items, add richer or learned features,
+            measure ranking quality offline, run online experiments, control popularity/exposure bias, cache low-latency results,
+            monitor data and model drift, and apply business and safety rules.
           </p>
         </section>
 
@@ -1008,20 +645,22 @@ outputs/screenshots/
           <h2 className="text-xl font-black text-emerald-950">Implementation mastery check</h2>
           <div className="mt-4 grid gap-3 text-sm leading-6 text-emerald-950 sm:grid-cols-2">
             {[
-              'What is the output of a recommender: label, number or ranked list?',
-              'Why do we build a popularity baseline?',
-              'What exactly does one position in the genre vector mean?',
-              'Why do we normalize the genre vectors?',
+              'Why is the output a ranked list?',
+              'Why can a raw average-rating leaderboard be misleading?',
+              'What does the 25-rating shrinkage prior do?',
+              'Why keep only the latest repeated user/movie rating?',
+              'What two labels make up a movie content vector?',
               'How is cosine distance converted to similarity?',
               'What are the rows and columns of the collaborative matrix?',
-              'Why is the matrix sparse?',
-              'Why must the query movie be removed from its own neighbours?',
-              'What evidence does collaborative filtering use that content filtering ignores?',
+              'Why is CSR sparse storage useful?',
+              'Why can collaborative neighbours cross genre boundaries?',
               'What does the 45/55 hybrid rule mean?',
+              'Why must the selected movie be excluded from its own neighbours?',
               'What is cold start and what fallback do we use?',
-              'What is actually stored in the Joblib artifact?',
-              'Why is offline recommender evaluation different from accuracy?',
-              'What would you add before calling this a production recommender?',
+              'Why are fallback scores normalized to 0–1?',
+              'What is stored in movie_recommender.joblib?',
+              'Why does a plausible list not prove recommender quality?',
+              'What changes because the teaching dataset is synthetic?',
             ].map(item => (
               <div key={item} className="rounded-xl border border-emerald-200 bg-white p-3">{item}</div>
             ))}
@@ -1035,18 +674,20 @@ outputs/screenshots/
           </h2>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             {[
-              'Official MovieLens 100K data verified',
+              'CC0 synthetic ratings downloaded and verified',
+              'Repeated interactions reduced to one latest user/movie rating',
               'Smoothed popularity baseline built',
-              'Multi-hot content vectors built',
-              'Sparse movie-user rating matrix built',
+              'Genre + decade content vectors built',
+              'Sparse movie-user collaborative matrix built',
               'Cosine nearest-neighbour retrieval works',
               'Hybrid ranking is deterministic',
-              'Cold-start fallback is explicit',
-              'Artifact saves and reloads',
+              'Cold-start fallback is explicit and score-compatible',
+              'Joblib artifact saves and reloads',
               'Automated behavioral tests pass',
-              'Streamlit app serves recommendations',
-              'Real browser screenshots captured',
-              'Limitations and production next steps understood',
+              'Streamlit app serves real generated recommendations',
+              'Real browser screenshots and chart are visible',
+              'Synthetic-data limitation is stated clearly',
+              'Production next steps are understood',
             ].map(item => (
               <div key={item} className="flex items-start gap-2 rounded-xl bg-slate-50 p-3 text-sm text-slate-700">
                 <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
@@ -1054,6 +695,15 @@ outputs/screenshots/
               </div>
             ))}
           </div>
+        </section>
+
+        <section className="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-indigo-950">Run the entire project again from scratch</h2>
+          <p className="mt-3 text-sm leading-7 text-indigo-950">
+            A reproducible project should not depend on files that happen to exist on your laptop. From a clean clone,
+            these four commands should rebuild the data, recommender, tests and browser app:
+          </p>
+          <CodeBlock code={runCommands} language="powershell" title="Reproduce the project" type="runnable" />
         </section>
       </main>
     </div>

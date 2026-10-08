@@ -4,40 +4,28 @@ This is the third free LearnMLAcademy flagship project.
 
 ## What the learner builds
 
-A real Streamlit movie-recommendation application backed by the stable MovieLens 100K dataset. The learner can select a known movie and compare four recommendation strategies:
+A Streamlit movie-recommendation application with four strategies:
 
-1. **Popularity baseline** — a non-personalized, smoothed ranking used as a safe cold-start fallback.
-2. **Content-based similarity** — movies are represented with multi-hot genre vectors and compared with cosine similarity.
-3. **Item-item collaborative similarity** — movies are represented by sparse user-rating patterns and compared with cosine nearest neighbors.
-4. **Hybrid ranking** — combines 45% content similarity and 55% collaborative similarity.
-
-The project deliberately does **not** claim to reproduce Netflix's production algorithm.
+1. **Popularity baseline** — smoothed ranking and cold-start fallback.
+2. **Content-based similarity** — genre + release-decade multi-hot labels with cosine neighbours.
+3. **Item-item collaborative similarity** — sparse movie-by-user rating patterns with cosine neighbours.
+4. **Hybrid ranking** — 45% content + 55% collaborative similarity.
 
 ## Dataset
 
-Source: official GroupLens **MovieLens 100K** archive.
+The project uses Datanemics **Movie ratings**:
 
-The executable verifier confirms:
+- 9,000 synthetic ratings
+- 1,100 users
+- 260 movie IDs
+- rating range 0.5–5.0
+- CC0 1.0 public domain
 
-- 100,000 ratings
-- 943 users
-- 1,682 movies
-- ratings from 1 to 5
+Dataset page: https://datanemics.com/datasets/movie-ratings/
 
-Raw downloaded data and generated model artifacts are kept out of Git.
+The synthetic-data choice is intentional. It makes the tutorial reproducible and licence-safe for reuse, but the results must not be interpreted as real audience behaviour.
 
-## Why the collaborative matrix is sparse
-
-The movie-user matrix has 1,682 × 943 possible cells, but only 100,000 observed ratings. The verified build records:
-
-- density: 6.3047%
-- sparsity: 93.6953%
-
-Sparse CSR storage avoids allocating ordinary dense values for most missing user/movie interactions.
-
-## Run locally
-
-From this directory:
+## Run
 
 ```powershell
 python download_data.py
@@ -46,25 +34,23 @@ pytest -q
 python -m streamlit run app.py
 ```
 
-## Verified quality gate
+## Architecture
 
-GitHub Actions run **37755384707** passed:
+```text
+CSV ratings
+  ├─> smoothed popularity baseline
+  ├─> movie metadata -> genre + decade vectors -> cosine neighbours
+  └─> latest user/movie interactions -> sparse movie-user matrix -> cosine neighbours
 
-- official dataset download
-- recommender build
-- 10 Pytest checks
-- Streamlit health
-- genuine Playwright screenshots
-- TypeScript validation
-- website production build/prerender
-- desktop handbook verification
-- mobile handbook verification
-- horizontal-overflow checks
-
-The learner-facing handbook is integrated at:
-
-`/projects/movie-recommender`
+content similarity + collaborative similarity
+                 |
+                 v
+        45/55 hybrid ranking
+                 |
+                 v
+          Streamlit browser app
+```
 
 ## Important limitation
 
-The app ranks movies related to a selected movie. It is an educational demonstration of popularity, content-based, item-item collaborative and hybrid recommendation. A real production recommender would add rigorous held-out ranking evaluation, user-level personalization, richer/learned features, freshness, online experimentation and production serving infrastructure.
+The data is synthetic and the system is deliberately small. A production recommender would require real consented interaction data, rigorous held-out ranking evaluation, user personalization, richer/learned features, freshness and exposure controls, online experimentation, low-latency serving and monitoring.

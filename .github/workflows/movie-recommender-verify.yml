@@ -55,7 +55,7 @@ jobs:
           python -m pip install "playwright>=1.50,<2"
           python -m pip check
 
-      - name: Download official MovieLens 100K
+      - name: Download CC0 synthetic movie ratings
         working-directory: projects/movie-recommender
         run: python download_data.py
 
