@@ -136,6 +136,10 @@ const staticMeta = new Map([
     title: 'Movie Recommendation System Project Handbook | LearnMLAcademy',
     description: 'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.',
   }],
+  ['/projects/credit-card-fraud', {
+    title: 'Credit Card Fraud Detector Project Handbook | LearnMLAcademy',
+    description: 'Build an imbalanced credit-card fraud detector using OpenML data, class weighting, SMOTE, Random Forest, Average Precision, threshold tuning, tests and Streamlit.',
+  }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
     description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
