@@ -1,0 +1,167 @@
+name: Titanic Project Verify
+
+on:
+  push:
+    branches:
+      - parallel/titanic-quality-review
+    paths:
+      - "projects/titanic-survival-predictor/**"
+      - "public/project-handbooks/titanic/**"
+      - "public/projects/titanic-survival/**"
+      - "src/pages/TitanicProjectPage.tsx"
+      - "src/components/projects/**"
+      - "src/components/content/CodeBlock.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/titanic-project-verify.yml"
+  pull_request:
+    paths:
+      - "projects/titanic-survival-predictor/**"
+      - "public/project-handbooks/titanic/**"
+      - "public/projects/titanic-survival/**"
+      - "src/pages/TitanicProjectPage.tsx"
+      - "src/components/projects/**"
+      - "src/components/content/CodeBlock.tsx"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/prerender.mjs"
+      - "generate_sitemap.cjs"
+      - ".github/workflows/titanic-project-verify.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install Titanic project dependencies
+        working-directory: projects/titanic-survival-predictor
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install playwright
+          python -m pip check
+
+      - name: Download fingerprinted verification dataset
+        working-directory: projects/titanic-survival-predictor
+        run: python scripts/download_verification_data.py
+
+      - name: Train, compare, tune, evaluate and save
+        working-directory: projects/titanic-survival-predictor
+        env:
+          MPLBACKEND: Agg
+        run: python src/train_model.py
+
+      - name: Verify data, notebook, trained artifact and recorded metrics
+        working-directory: projects/titanic-survival-predictor
+        run: python scripts/verify_provenance.py
+
+      - name: Run model and Streamlit tests
+        working-directory: projects/titanic-survival-predictor
+        env:
+          MPLBACKEND: Agg
+        run: python -m unittest discover -s tests -v
+
+      - name: Install Chromium for real app screenshots
+        working-directory: projects/titanic-survival-predictor
+        run: python -m playwright install --with-deps chromium
+
+      - name: Start Streamlit
+        working-directory: projects/titanic-survival-predictor
+        run: |
+          nohup python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 > /tmp/titanic-streamlit.log 2>&1 &
+          echo $! > /tmp/titanic-streamlit.pid
+          for i in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:8501/_stcore/health >/dev/null; then
+              echo "Streamlit is healthy."
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/titanic-streamlit.log
+          exit 1
+
+      - name: Capture genuine Streamlit screenshots
+        working-directory: projects/titanic-survival-predictor
+        run: python scripts/capture_streamlit_screenshots.py
+
+      - name: Store verified handbook evidence in working tree
+        run: |
+          mkdir -p public/project-handbooks/titanic
+          cp projects/titanic-survival-predictor/outputs/model_comparison.png public/project-handbooks/titanic/
+          cp projects/titanic-survival-predictor/outputs/confusion_matrix.png public/project-handbooks/titanic/
+          cp projects/titanic-survival-predictor/outputs/screenshots/*.png public/project-handbooks/titanic/
+
+      - name: Commit verified evidence to review branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/titanic-quality-review'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/titanic
+          if git diff --cached --quiet; then
+            echo "Verified evidence unchanged."
+          else
+            git commit -m "Titanic: store verified handbook evidence [skip ci]"
+            git push
+          fi
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install website dependencies
+        run: npm ci
+
+      - name: TypeScript validation
+        run: npm run lint
+
+      - name: Build and prerender website
+        run: npm run build
+
+      - name: Start built website preview
+        run: |
+          nohup npx vite preview --host 127.0.0.1 --port 4173 > /tmp/titanic-site.log 2>&1 &
+          echo $! > /tmp/titanic-site.pid
+          for i in {1..60}; do
+            if curl --fail --silent http://127.0.0.1:4173/projects/titanic-survival >/dev/null; then
+              echo "Built website preview is healthy."
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/titanic-site.log
+          exit 1
+
+      - name: Verify handbook on desktop and mobile
+        working-directory: projects/titanic-survival-predictor
+        run: python scripts/verify_handbook_page.py
+
+      - name: Stop preview processes
+        if: always()
+        run: |
+          if [ -f /tmp/titanic-streamlit.pid ]; then kill $(cat /tmp/titanic-streamlit.pid) || true; fi
+          if [ -f /tmp/titanic-site.pid ]; then kill $(cat /tmp/titanic-site.pid) || true; fi
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titanic-project-verification
+          path: |
+            projects/titanic-survival-predictor/models/
+            projects/titanic-survival-predictor/outputs/
+          if-no-files-found: warn
+          retention-days: 14
