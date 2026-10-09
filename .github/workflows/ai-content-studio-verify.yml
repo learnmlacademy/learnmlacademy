@@ -2,7 +2,7 @@ name: AI Content Studio Verify
 
 on:
   push:
-    branches: [feat/ai-content-studio-handbook]
+    branches: [feat/ai-content-studio-handbook, fix/learner-handbook-audit-20261009]
     paths:
       - "projects/ai-content-studio/**"
       - "src/pages/AIContentCreatorProjectPage.tsx"
@@ -96,12 +96,14 @@ jobs:
           test -s dist/project-handbooks/ai-content-creator/content-studio-desktop-result.png
           test -s dist/project-handbooks/ai-content-creator/content-studio-mobile-result.png
       - name: Commit screenshot assets to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/ai-content-studio-handbook'
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/feat/ai-content-studio-handbook' || github.ref == 'refs/heads/fix/learner-handbook-audit-20261009')
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add public/project-handbooks/ai-content-creator/
           if ! git diff --cached --quiet; then
             git commit -m "docs: verified Content Studio app evidence [skip ci]"
-            git push
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}"
+            git push origin "HEAD:${{ github.ref_name }}"
           fi
