@@ -52,3 +52,33 @@ Grade a draft in four areas from 0–5: audience relevance, factual grounding, C
 4. What is the risk of including API keys in a prompt or exported draft?
 5. How do temperature and content constraints influence variation?
 6. Why should a failed model response not silently become a fake "AI" success?
+
+
+## Learner path — get files before installing
+
+Start by cloning or downloading the repository, **then** opening `projects/ai-content-studio` in VS Code. The command `python -m pip install -r requirements.txt` cannot work until that file exists. To clone:
+
+```bash
+git clone --depth 1 https://github.com/learnmlacademy/learnmlacademy.git
+cd learnmlacademy/projects/ai-content-studio
+```
+
+You can also download the entire repository ZIP at https://github.com/learnmlacademy/learnmlacademy/archive/refs/heads/main.zip, extract, and open this project folder. The ZIP is not a project-only starter download.
+
+## Real AI without a paid API key (local Ollama)
+
+Install Ollama from https://ollama.com, run `ollama pull llama3.2` to download a model and ensure the local Ollama server is running (typically port 11434). Choose **Local Ollama (real AI; no API fee)** in Streamlit. It sends prompts to `http://127.0.0.1:11434/v1` on the same machine using the OpenAI-compatible client. Local computation consumes RAM, disk and electricity, and response quality varies. The app does not automatically configure a remote cloud Ollama account. The local model must return the JSON schema or the app will show an error.
+
+## Cloud AI keys, consent and model
+
+OpenAI mode is optional, sends the brief/draft to the provider only after explicit consent, and may incur API fees. Put `OPENAI_API_KEY` in your terminal environment, never in repository files. Override the default model with `OPENAI_MODEL` (default `gpt-4.1-mini`). Windows PowerShell: `$env:OPENAI_API_KEY = Read-Host "Paste your API key"`; macOS/Linux: `read -rs -p "OpenAI API key: " OPENAI_API_KEY; echo; export OPENAI_API_KEY`.
+
+## Predict, experiment, observe
+
+1. Change Social post to Email campaign in offline mode. Predict which heading and greeting will change, and check the output. This is formatting, not a genuine rewrite.
+2. Run a 30-word limit. Verify the template never exceeds it. In real model mode an overlong result is rejected rather than claimed successful.
+3. Compare the same brief in the offline template and locally downloaded Ollama model. Which one actually produces novel word choices?
+4. Supply an unverified date. Note that structural checks cannot prove the date is true.
+5. For each experiment write down the initial prediction, the exact setting changed, the observed result and the concept being tested.
+
+**Important:** Offline Rewrite preserves the submitted original text for editing, and offline Summarize only extracts early words. These are explicitly labelled demo behaviors, NOT meaning-aware paraphrasing or summarization. Model paths are covered by mock tests; no paid API run or live Ollama result is claimed.
