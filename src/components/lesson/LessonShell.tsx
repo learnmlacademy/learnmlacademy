@@ -528,11 +528,10 @@ export function LessonShell({
       <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 pb-24 xl:pb-8">
         <div
           ref={contentRootRef}
-          className={
-            showToc
-              ? 'xl:grid xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-10'
-              : 'max-w-4xl mx-auto'
-          }
+          // Keep the column geometry stable before and after the TOC headings
+          // are discovered. Switching from a centered article to a grid after
+          // hydration changes line wraps and moves the footer, causing CLS.
+          className="grid min-w-0 grid-cols-1 xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-10"
         >
           {/* Main Reading Center */}
           <div className="min-w-0 max-w-3xl">
@@ -544,29 +543,35 @@ export function LessonShell({
               topicId={topicId}
             />
 
-            {showToc && (
+            {showToc ? (
               <MobileTableOfContents
                 items={tocItems}
                 activeId={activeSectionId}
                 copied={copied}
                 onCopyLink={handleCopyLink}
               />
+            ) : (
+              // Reserve the closed mobile TOC's space before heading discovery,
+              // preventing a post-hydration insertion from shifting the lesson.
+              <div className="mb-6 h-[50px] rounded-xl border border-transparent xl:hidden" aria-hidden="true" />
             )}
 
             {children}
           </div>
 
           {/* Right Sticky Table of Contents (Desktop) */}
-          {showToc && (
-            <aside className="hidden xl:block">
+          <aside className="hidden xl:block min-w-0">
+            {showToc ? (
               <DesktopTableOfContents
                 items={tocItems}
                 activeId={activeSectionId}
                 copied={copied}
                 onCopyLink={handleCopyLink}
               />
-            </aside>
-          )}
+            ) : (
+              <div className="min-h-[1px]" aria-hidden="true" />
+            )}
+          </aside>
         </div>
       </div>
 
