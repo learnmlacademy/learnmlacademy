@@ -22,7 +22,9 @@ function verifyPage(html, page) {
   assert.equal(canonicals[0][0].match(/href="([^"]*)"/)[1], page.canonical);
   for (const [property, expected] of Object.entries({
     'og:title': page.title, 'og:description': page.description, 'og:url': page.canonical,
+    'og:image': 'https://www.learnmlacademy.com' + (page.image || '/og-image.png'),
     'twitter:title': page.title, 'twitter:description': page.description,
+    'twitter:image': 'https://www.learnmlacademy.com' + (page.image || '/og-image.png'),
   })) {
     const value = onlyMatch(head, new RegExp(`<meta\\b[^>]*(?:property|name)="${property}"[^>]*content="([^"]*)"[^>]*>`, 'gi'), property);
     assert.equal(value, escapeHtml(expected), property);
@@ -35,6 +37,15 @@ function verifyPage(html, page) {
   if (page.heading) assert(headings.includes(normalize(escapeHtml(page.heading))), 'Missing expected lesson/blog H1');
   else assert(headings.some(heading => heading.length > 0), 'Missing static-page H1');
 
+  if (page.kind === 'static' && page.route.startsWith('/projects/')) {
+    const schema = JSON.parse(onlyMatch(head, /<script\b[^>]*id="schema-topic"[^>]*>([^]*?)<\/script>/gi, 'project schema'));
+    const software = schema['@graph']?.find(node => node['@type'] === 'SoftwareSourceCode');
+    const howto = schema['@graph']?.find(node => node['@type'] === 'HowTo');
+    assert.equal(software?.url, page.canonical, 'Project code schema URL');
+    assert(software?.codeRepository?.startsWith('https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/'), 'Project code repository');
+    assert.equal(howto?.step?.length, 4, 'Project how-to steps');
+    assert(page.image?.startsWith('/project-handbooks/'), 'Project image required');
+  }
   if (page.kind === 'lesson') {
     assert(page.canonical.endsWith(page.route) && page.route.startsWith('/learn/'));
     const body = onlyMatch(html, /<article\b[^>]*data-lesson-body[^>]*>([^]*?)<\/article>/gi, 'lesson body');
