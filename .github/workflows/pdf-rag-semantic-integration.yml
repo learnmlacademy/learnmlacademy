@@ -1,0 +1,108 @@
+name: PDF RAG Semantic Integration
+
+on:
+  push:
+    branches: [feat/pdf-rag-semantic-integration]
+  pull_request:
+    paths:
+      - "projects/pdf-rag-assistant/**"
+      - "src/pages/PdfRagSemanticProjectPage.tsx"
+      - "src/data/pdfRagSemantic*.ts"
+      - "src/pages/PdfRagProjectPage.tsx"
+      - ".github/workflows/pdf-rag-semantic-integration.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      HF_HUB_DISABLE_TELEMETRY: "1"
+      HF_HUB_DISABLE_XET: "1"
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: "1"
+      RAG_LLM_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: projects/pdf-rag-assistant/requirements.txt
+      - uses: actions/cache@v4
+        with:
+          path: projects/pdf-rag-assistant/.cache/huggingface
+          key: semantic-rag-minilm-onnx-1110a243fdf4706b3f48f1d95db1a4f5529b4d41
+      - name: Install semantic-engine requirements
+        working-directory: projects/pdf-rag-assistant
+        run: |
+          python -m pip install --no-compile -r requirements.txt
+          python -m pip check
+      - name: Create original synthetic PDFs
+        working-directory: projects/pdf-rag-assistant
+        run: python -m scripts.create_test_pdfs
+      - name: Build real semantic index
+        working-directory: projects/pdf-rag-assistant
+        run: python -m scripts.build_index --pdf-dir data/pdfs --name demo
+      - name: Run complete engineering tests
+        working-directory: projects/pdf-rag-assistant
+        run: python -m pytest -q
+      - name: Verify known page answers and unsupported question
+        working-directory: projects/pdf-rag-assistant
+        run: |
+          python -m scripts.engineering_evidence
+          python -m scripts.query --name demo --question "What is the refund window?"
+      - name: Install browser
+        run: python -m playwright install --with-deps chromium
+      - name: Start Streamlit for real screenshot capture
+        working-directory: projects/pdf-rag-assistant
+        run: |
+          python -m streamlit run app.py --server.headless true --server.address 127.0.0.1 --server.port 8501 --browser.gatherUsageStats false > /tmp/semantic-rag.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:8501/_stcore/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/semantic-rag.log
+          exit 1
+      - name: Capture real upload, answer, citation and expanded evidence
+        working-directory: projects/pdf-rag-assistant
+        run: python -m scripts.capture_app
+      - name: Copy real browser screenshots for handbook
+        run: |
+          mkdir -p public/project-handbooks/pdf-rag-semantic
+          cp projects/pdf-rag-assistant/reports/01-index-built.png public/project-handbooks/pdf-rag-semantic/
+          cp projects/pdf-rag-assistant/reports/02-answer-citations-evidence.png public/project-handbooks/pdf-rag-semantic/
+          cp projects/pdf-rag-assistant/reports/03-answer-mobile.png public/project-handbooks/pdf-rag-semantic/
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install website dependencies
+        run: npm ci
+      - name: Check handbook code is identical to repository
+        run: node scripts/verify-pdf-rag-semantic-code.mjs
+      - name: Check TypeScript
+        run: npm run lint
+      - name: Build and prerender all projects
+        run: npm run build
+      - name: Check advanced route, SEO and authentic screenshots
+        run: |
+          test -s dist/projects/pdf-rag/semantic.html
+          grep -q "all-MiniLM-L6-v2" dist/projects/pdf-rag/semantic.html
+          grep -q "projects/pdf-rag-assistant/src/embedder.py" dist/projects/pdf-rag/semantic.html
+          grep -q "/projects/pdf-rag/semantic" dist/projects/pdf-rag.html
+          grep -q "https://www.learnmlacademy.com/projects/pdf-rag/semantic" dist/sitemap.xml
+          test -s dist/project-handbooks/pdf-rag-semantic/01-index-built.png
+          test -s dist/project-handbooks/pdf-rag-semantic/02-answer-citations-evidence.png
+          test -s dist/project-handbooks/pdf-rag-semantic/03-answer-mobile.png
+      - name: Commit verified original screenshots to feature branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/pdf-rag-semantic-integration'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-handbooks/pdf-rag-semantic/*.png
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: add verified semantic RAG screenshots [skip ci]"
+            git push
+          fi
