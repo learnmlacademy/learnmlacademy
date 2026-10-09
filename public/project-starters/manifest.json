@@ -1,0 +1,86 @@
+[
+  {
+    "project": "titanic-survival",
+    "source_dir": "titanic-survival-predictor",
+    "source_files": 13,
+    "bytes": 26322,
+    "sha256": "c7f8c38d21131c0719197a0e3a7228adae47d5518c7e659a25358b7ce2b83b44"
+  },
+  {
+    "project": "house-price",
+    "source_dir": "house-price-predictor",
+    "source_files": 10,
+    "bytes": 18290,
+    "sha256": "c14774afdc6913158ca5510cc413729963c124fde92bb2067cfec0863ac3d9fc"
+  },
+  {
+    "project": "credit-card-fraud",
+    "source_dir": "credit-card-fraud",
+    "source_files": 10,
+    "bytes": 14592,
+    "sha256": "e9ac1209defe39d680723e8ad850976f58136b963201d41cd195ca83d90cde14"
+  },
+  {
+    "project": "customer-segmentation",
+    "source_dir": "customer-segmentation",
+    "source_files": 10,
+    "bytes": 14359,
+    "sha256": "8ab1043d329bc8b6219605e2d456063bac4a5d6db3242bde667810cfd618bac8"
+  },
+  {
+    "project": "retail-forecasting",
+    "source_dir": "retail-forecasting",
+    "source_files": 9,
+    "bytes": 8688,
+    "sha256": "dd8a0e91b0da0d003da14dc6b7884cdb6f16ec3db96af37cc137ed917769303f"
+  },
+  {
+    "project": "movie-recommender",
+    "source_dir": "movie-recommender",
+    "source_files": 10,
+    "bytes": 16635,
+    "sha256": "c3fb792c862011ab89fead636524f1b2cd11b0830022e93d344b45db0f7a027b"
+  },
+  {
+    "project": "disaster-tweets",
+    "source_dir": "disaster-tweets",
+    "source_files": 8,
+    "bytes": 8290,
+    "sha256": "10745a186a4a75111d70bc6397dd3845dec5eadf8ddd15df4fc0d80989d094d9"
+  },
+  {
+    "project": "digit-recognizer",
+    "source_dir": "digit-recognizer",
+    "source_files": 8,
+    "bytes": 7962,
+    "sha256": "2cc8892d5b3173904b34ed686961598c50a60457c2d3915cfcf67f14eaa58d66"
+  },
+  {
+    "project": "ai-content-creator",
+    "source_dir": "ai-content-studio",
+    "source_files": 8,
+    "bytes": 15242,
+    "sha256": "15fcb205fc32a8a57ec19e489d7b03ccb744673e3e6bb4369292717e37cd5a83"
+  },
+  {
+    "project": "pdf-rag",
+    "source_dir": "pdf-rag",
+    "source_files": 9,
+    "bytes": 15989,
+    "sha256": "4da6c921d3226454b929be3ca3afa2b4dd1a787a4033b205aa16057b9c05f8ea"
+  },
+  {
+    "project": "ai-research-assistant",
+    "source_dir": "ai-research-assistant",
+    "source_files": 8,
+    "bytes": 14260,
+    "sha256": "1fbc3a96c56321e9d53185cb471f4c6758218d74cda3a3c50819eb5e6cc209ab"
+  },
+  {
+    "project": "model-to-production",
+    "source_dir": "model-to-production",
+    "source_files": 35,
+    "bytes": 37302,
+    "sha256": "eb872e1b847453f694fc5140ff667ac358745eb50ea379ae27163a486e0b68b6"
+  }
+]
