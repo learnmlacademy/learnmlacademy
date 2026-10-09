@@ -16,7 +16,7 @@ const SITE_HOSTS = new Set(['www.learnmlacademy.com', 'learnmlacademy.com']);
 const normalizePath = pathname => {
   let decoded = pathname;
   try { decoded = decodeURIComponent(pathname); } catch { /* keep the original encoded path */ }
-  return decoded === '/' ? '/' : decoded.replace(/\\/+$/, '');
+  return decoded === '/' ? '/' : decoded.replace(/\/+$/, '');
 };
 
 async function isBuiltFile(pathname) {
@@ -34,7 +34,7 @@ async function verifyInternalNavigation(pages) {
   let linksChecked = 0;
   for (const page of pages) {
     const html = await fs.readFile(outputPathForRoute(page.route), 'utf8');
-    const anchors = [...html.matchAll(/<a\\b[^>]*\\bhref=["']([^"']+)["'][^>]*>/gi)];
+    const anchors = [...html.matchAll(/<a\b[^>]*\bhref=["']([^"']+)["'][^>]*>/gi)];
     for (const match of anchors) {
       const rawHref = match[1].replaceAll('&amp;', '&').replaceAll('&#x2F;', '/');
       if (!rawHref || rawHref.startsWith('#') || /^(?:mailto:|tel:|javascript:|data:)/i.test(rawHref)) continue;
@@ -47,11 +47,11 @@ async function verifyInternalNavigation(pages) {
       linksChecked++;
       if (pagePaths.has(targetPath)) continue;
       if (await isBuiltFile(target.pathname)) continue;
-      if (!/\\.[a-z0-9]{1,8}$/i.test(targetPath) && await isBuiltFile(targetPath + '.html')) continue;
+      if (!/\.[a-z0-9]{1,8}$/i.test(targetPath) && await isBuiltFile(targetPath + '.html')) continue;
       failures.push(`${page.route}: ${rawHref} resolves to missing internal path ${targetPath}`);
     }
   }
-  assert.equal(failures.length, 0, `Broken internal navigation links (${failures.length}):\\n${failures.slice(0, 100).join('\\n')}`);
+  assert.equal(failures.length, 0, 'Broken internal navigation links (' + failures.length + '):\n' + failures.slice(0, 100).join('\n'));
   console.log(`verify:links PASS — checked ${linksChecked} same-site anchor links across ${pages.length} prerendered pages.`);
 }
 
