@@ -24,10 +24,11 @@ function replaceHeadTag(html, regex, replacement) {
     `<head>${head.replace(new RegExp(regex.source, 'gi'), '')}    ${replacement}\n  </head>`);
 }
 
-function setPageMeta(html, { title, description, canonical, schema, category }) {
+function setPageMeta(html, { title, description, canonical, schema, category, image }) {
   const safeTitle = escapeHtml(title);
   const safeDescription = escapeHtml(description);
   const safeCanonical = escapeHtml(canonical);
+  const safeImage = escapeHtml(image ? `${BASE_URL}${image}` : `${BASE_URL}/og-image.png`);
 
   html = replaceHeadTag(
     html,
@@ -58,6 +59,16 @@ function setPageMeta(html, { title, description, canonical, schema, category }) 
     html,
     /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?\s*>/i,
     `<meta property="og:url" content="${safeCanonical}" />`,
+  );
+  html = replaceHeadTag(
+    html,
+    /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?\s*>/i,
+    `<meta property="og:image" content="${safeImage}" />`,
+  );
+  html = replaceHeadTag(
+    html,
+    /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?\s*>/i,
+    `<meta name="twitter:image" content="${safeImage}" />`,
   );
   html = replaceHeadTag(
     html,
@@ -181,6 +192,56 @@ const staticMeta = new Map([
   }],
 ]);
 
+
+// Each image is a real, previously verified app screenshot in public/.
+// An absolute og:image is required by many social-sharing crawlers.
+const projectEvidence = new Map([
+  ['/projects/titanic-survival', ['titanic/titanic-app-form.png', 'titanic-survival']],
+  ['/projects/house-price', ['house-price/streamlit-house-price-app.png', 'house-price']],
+  ['/projects/credit-card-fraud', ['credit-card-fraud/fraud-app-form.png', 'credit-card-fraud']],
+  ['/projects/customer-segmentation', ['customer-segmentation/customer-segmentation-app.png', 'customer-segmentation']],
+  ['/projects/retail-forecasting', ['retail-forecasting/desktop-app.png', 'retail-forecasting']],
+  ['/projects/movie-recommender', ['movie-recommender/movie-recommender-form.png', 'movie-recommender']],
+  ['/projects/disaster-tweets', ['disaster-tweets/desktop-app.png', 'disaster-tweets']],
+  ['/projects/digit-recognizer', ['digit-recognizer/desktop-app.png', 'digit-recognizer']],
+  ['/projects/ai-content-creator', ['ai-content-creator/content-studio-desktop-form.png', 'ai-content-studio']],
+  ['/projects/pdf-rag', ['pdf-rag/pdf-rag-app-desktop-form.png', 'pdf-rag']],
+  ['/projects/pdf-rag/semantic', ['pdf-rag-semantic/01-index-built.png', 'pdf-rag-assistant']],
+  ['/projects/ai-research-assistant', ['ai-research-assistant/research-desktop-question.png', 'ai-research-assistant']],
+  ['/projects/model-to-production', ['model-to-production/api-swagger-docs.png', 'model-to-production']],
+]);
+
+function projectSchema(route, meta, repositoryFolder) {
+  const canonical = BASE_URL + route;
+  const repository = 'https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/' + repositoryFolder;
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'SoftwareSourceCode',
+        name: meta.title,
+        description: meta.description,
+        url: canonical,
+        codeRepository: repository,
+        programmingLanguage: 'Python',
+        isAccessibleForFree: true,
+      },
+      {
+        '@type': 'HowTo',
+        name: meta.title,
+        description: meta.description,
+        url: canonical,
+        step: [
+          { '@type': 'HowToStep', position: 1, name: 'Get the verified source', text: 'Open the project repository and follow the learner handbook.' },
+          { '@type': 'HowToStep', position: 2, name: 'Set up the environment', text: 'Install dependencies using the project-specific instructions and requirements file.' },
+          { '@type': 'HowToStep', position: 3, name: 'Build, evaluate, and verify', text: 'Run the documented training or retrieval steps, run tests, and inspect the observed results.' },
+          { '@type': 'HowToStep', position: 4, name: 'Run the demo', text: 'Launch the documented application locally and complete the handbook experiments.' },
+        ],
+      },
+    ],
+  });
+}
+
 export function createPrerenderServer() {
   return createServer({
     configLoader: 'runner',
@@ -225,7 +286,17 @@ export async function loadPages(vite) {
   }
 
   const pages = [
-    ...Array.from(staticMeta, ([route, meta]) => ({ route, ...meta, kind: 'static' })),
+    ...Array.from(staticMeta, ([route, meta]) => {
+      const evidence = projectEvidence.get(route);
+      return {
+        route, ...meta, kind: 'static',
+        ...(evidence ? {
+          image: '/project-handbooks/' + evidence[0],
+          category: 'Hands-on Projects',
+          schema: projectSchema(route, meta, evidence[1]),
+        } : {}),
+      };
+    }),
     ...topics.map((topic) => {
       const meta = seo.getSEOData(topic.id, topic.title);
       return {
