@@ -8,6 +8,8 @@ import json
 import joblib
 import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import MultiLabelBinarizer, normalize
@@ -129,16 +131,17 @@ def build_collaborative(interactions: pd.DataFrame, movies: pd.DataFrame):
 
 
 def neighbor_scores(model, matrix, row: int, n_candidates: int = 60) -> dict[int, float]:
-    count = min(n_candidates + 1, matrix.shape[0])
-    distances, indices = model.kneighbors(matrix[row], n_neighbors=count)
+    """Score ALL items, preventing kNN's arbitrary truncation of tied neighbors.
 
-    scores: dict[int, float] = {}
-    for index, distance in zip(indices[0], distances[0]):
-        index = int(index)
-        if index == row:
-            continue
-        scores[index] = max(0.0, min(1.0, 1.0 - float(distance)))
-    return scores
+    The model argument and n_candidates are retained for old teaching call sites.
+    A 260-movie learning dataset is small enough for full cosine comparison.
+    """
+    similarities = cosine_similarity(matrix[row], matrix).ravel()
+    return {
+        int(index): max(0.0, min(1.0, float(score)))
+        for index, score in enumerate(similarities)
+        if index != row and np.isfinite(score) and score > 0
+    }
 
 
 def recommend(
@@ -186,7 +189,19 @@ def recommend(
     else:
         raise ValueError("method must be content, collaborative or hybrid")
 
-    ranked = sorted(scores.items(), key=lambda pair: (-pair[1], pair[0]))[:top_n]
+    # Stable secondary ranking breaks equal scores by measured component scores
+    # and popularity, then immutable movie ID; a tied neighbor never depends on
+    # an undocumented kNN implementation ordering.
+    popularity_by_movie = artifacts["popularity"].set_index("movie_id")["weighted_score"]
+    ranked = sorted(
+        scores.items(),
+        key=lambda pair: (
+            -pair[1], -content.get(pair[0], 0.0),
+            -collaborative.get(pair[0], 0.0),
+            -float(popularity_by_movie.get(str(movies.iloc[pair[0]]["movie_id"]), 0.0)),
+            str(movies.iloc[pair[0]]["movie_id"]),
+        ),
+    )[:top_n]
     output = []
     for rank, (index, score) in enumerate(ranked, start=1):
         movie = movies.iloc[index]
@@ -198,6 +213,8 @@ def recommend(
                 "genre": str(movie["genre"]),
                 "release_year": int(movie["release_year"]),
                 "score": round(float(score), 4),
+                "content_score": round(float(content.get(index, 0.0)), 4),
+                "collaborative_score": round(float(collaborative.get(index, 0.0)), 4),
                 "reason": reason,
             }
         )
@@ -263,12 +280,84 @@ def recommend_or_fallback(
     )
 
 
+
+def evaluate_leave_one_out(ratings: pd.DataFrame, movies: pd.DataFrame,
+                           max_users: int = 120, top_k: int = 10) -> dict:
+    """Leakage-free, clearly bounded next-interaction Hit Rate@K *teaching* study.
+
+    For up to 120 deterministic users having >=3 distinct rated movies, hold
+    out their latest interaction BEFORE rebuilding popularity/collaborative
+    models. Recommend using that user's latest remaining known movie as seed;
+    exclude every movie already rated during training before taking top K.
+    Film metadata may be known, but the held-out rating is NOT used for fits.
+    This is item-to-item recommendation, not an optimized personalized ranker.
+    """
+    if max_users < 1 or top_k < 1:
+        raise ValueError("max_users and top_k must be positive")
+    latest = latest_interactions(ratings)
+    order = latest.sort_values(["user_id", "rated_at", "movie_id"], kind="stable")
+    enough = order.groupby("user_id")["movie_id"].transform("size") >= 3
+    eligible = order.loc[enough]
+    holdout = (eligible.groupby("user_id", sort=True).tail(1)
+               .sort_values(["user_id"], kind="stable")
+               .head(max_users))
+    if holdout.empty:
+        raise ValueError("Need eligible users with three or more interactions")
+    train = latest.drop(index=holdout.index)
+    assert not set(zip(holdout.user_id, holdout.movie_id)) & set(zip(train.user_id, train.movie_id))
+    popularity = build_popularity(train, movies)
+    encoder, content_matrix, content_model = build_content(movies)
+    collab_matrix, collab_model = build_collaborative(train, movies)
+    artifacts = {
+        "movies": movies, "popularity": popularity,
+        "content_encoder": encoder, "content_matrix": content_matrix,
+        "content_model": content_model, "collab_matrix": collab_matrix,
+        "collab_model": collab_model,
+        "movie_to_row": {id_: i for i, id_ in enumerate(movies.movie_id)},
+    }
+    # Avoid recomputing recommendations for users with the same seed item.
+    seed_cache: dict[tuple[str, str], list[str]] = {}
+    popular = popularity_recommendations(artifacts, top_n=len(movies)).movie_id.tolist()
+    hits = {"popularity": 0, "content": 0, "hybrid": 0}
+    for row in holdout.itertuples(index=False):
+        observed = (train.loc[train.user_id == row.user_id]
+                    .sort_values(["rated_at", "movie_id"], kind="stable"))
+        seen = set(observed.movie_id)
+        seed = str(observed.iloc[-1].movie_id)
+        truth = str(row.movie_id)
+        for method in hits:
+            if method == "popularity":
+                ranked_ids = popular
+            else:
+                key = (method, seed)
+                if key not in seed_cache:
+                    seed_cache[key] = recommend(artifacts, seed, method=method,
+                                                top_n=len(movies)).movie_id.tolist()
+                ranked_ids = seed_cache[key]
+            unseen = [item for item in ranked_ids if item not in seen][:top_k]
+            hits[method] += int(truth in unseen)
+    return {
+        "method": "Per-user leave-latest-interaction-out; item-to-item seed from remaining history",
+        "users_evaluated": int(len(holdout)),
+        "train_interactions": int(len(train)),
+        "heldout_interactions": int(len(holdout)),
+        "heldout_pairs_in_training": 0,
+        "top_k": top_k,
+        "hit_rate_at_10": {name: round(n / len(holdout), 4) for name, n in hits.items()},
+        "caution": "Synthetic film ratings, sampled users, one held-out interaction each; not a production recommendation benchmark.",
+    }
+
 def main() -> None:
     MODEL_DIR.mkdir(exist_ok=True)
     OUTPUT_DIR.mkdir(exist_ok=True)
 
     ratings, movies = load_data()
     interactions = latest_interactions(ratings)
+    heldout_eval = evaluate_leave_one_out(ratings, movies)
+    (OUTPUT_DIR / "holdout_hit_rate.json").write_text(
+        json.dumps(heldout_eval, indent=2) + "\n", encoding="utf-8"
+    )
+    print("Measured leave-one-out Hit Rate@10 (synthetic users):", heldout_eval["hit_rate_at_10"])
 
     popularity = build_popularity(interactions, movies)
     encoder, content_matrix, content_model = build_content(movies)
@@ -349,6 +438,7 @@ def main() -> None:
         "reference_movie_id": REFERENCE_MOVIE_ID,
         "hybrid_content_weight": 0.45,
         "hybrid_collaborative_weight": 0.55,
+        "heldout_evaluation": heldout_eval,
     }
     (OUTPUT_DIR / "metrics.json").write_text(
         json.dumps(metrics, indent=2) + "\n",

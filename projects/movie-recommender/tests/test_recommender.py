@@ -139,3 +139,30 @@ def test_reference_output_matches_live_artifact(artifacts):
         live.reset_index(drop=True),
         check_dtype=False,
     )
+
+
+def test_similarity_scores_and_ranking_are_stable_even_with_ties(artifacts):
+    first = core.recommend(artifacts, core.REFERENCE_MOVIE_ID, method="hybrid", top_n=60)
+    second = core.recommend(artifacts, core.REFERENCE_MOVIE_ID, method="hybrid", top_n=60)
+    pd.testing.assert_frame_equal(first, second)
+    assert {"score", "content_score", "collaborative_score"}.issubset(first.columns)
+    assert first[["content_score", "collaborative_score"]].ge(0).all().all()
+    assert first[["content_score", "collaborative_score"]].le(1).all().all()
+    assert all(first["score"].iloc[i] >= first["score"].iloc[i+1]
+               for i in range(len(first)-1))
+
+
+def test_heldout_hit_rate_really_excludes_hidden_user_movie_pairs():
+    ratings, movies = core.load_data()
+    report = core.evaluate_leave_one_out(ratings, movies, max_users=12)
+    assert report["users_evaluated"] == 12
+    assert report["heldout_pairs_in_training"] == 0
+    assert set(report["hit_rate_at_10"]) == {"popularity", "content", "hybrid"}
+    assert all(0 <= value <= 1 for value in report["hit_rate_at_10"].values())
+
+
+def test_full_report_has_actual_holdout_metrics():
+    import json
+    data = json.loads((ROOT / "outputs" / "holdout_hit_rate.json").read_text())
+    assert data["users_evaluated"] > 0
+    assert data["heldout_pairs_in_training"] == 0
