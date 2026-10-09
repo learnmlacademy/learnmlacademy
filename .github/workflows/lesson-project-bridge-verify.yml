@@ -1,0 +1,36 @@
+name: Lesson to Project Bridge Verify
+on:
+  push:
+    branches:
+      - feat/lesson-to-hands-on-project-bridges-20261009
+  pull_request:
+    paths:
+      - "src/components/lesson/LessonProjectBridge.tsx"
+      - "src/pages/TopicPage.tsx"
+      - ".github/workflows/lesson-project-bridge-verify.yml"
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - name: Ensure real project links occur in prerendered lessons
+        run: |
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const paths = ["dist/learn/linear-regression.html","dist/learn/cnn.html","dist/learn/prompt-engineering.html","dist/learn/rag.html","dist/learn/kmeans.html"];
+            for (const p of paths) {
+              const html=fs.readFileSync(p,"utf8");
+              if (!html.includes("Apply this concept in a real hands-on project") || !html.includes("href=\"/projects/")) throw new Error("Missing SSR lesson->project link: "+p);
+              console.log("Verified project link:",p);
+            }
+          '
