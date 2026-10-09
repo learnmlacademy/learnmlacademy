@@ -1,0 +1,74 @@
+name: Three Remaining Projects — Engineering Verify
+on:
+  push:
+    branches:
+      - feat/complete-three-projects-20261009
+  pull_request:
+    paths:
+      - 'projects/digit-recognizer/**'
+      - 'projects/retail-forecasting/**'
+      - 'projects/disaster-tweets/**'
+      - 'src/pages/*ProjectPage.tsx'
+      - 'src/data/projectPortfolio.ts'
+      - '.github/workflows/three-projects-verify.yml'
+  workflow_dispatch:
+
+jobs:
+  retail:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: projects/retail-forecasting
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: projects/retail-forecasting/requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m compileall -q src train.py download_data.py app.py
+  disaster:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: projects/disaster-tweets
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: projects/disaster-tweets/requirements.txt
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m compileall -q src train.py app.py
+  digits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: projects/digit-recognizer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - run: python -m pytest -q
+      - run: python -m compileall -q src train.py app.py
+  website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
