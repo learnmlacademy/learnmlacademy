@@ -67,7 +67,10 @@ function loadGoogleAnalytics() {
 
 export function GoogleAnalytics() {
   const location = useLocation();
-  const [consent, setConsent] = useState<AnalyticsConsent>(readStoredConsent);
+  // SSR and the first browser render must match exactly. Reading localStorage
+  // during render changes the markup for returning visitors and breaks hydration.
+  const [consent, setConsent] = useState<AnalyticsConsent>(null);
+  useEffect(() => { setConsent(readStoredConsent()); }, []);
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -105,7 +108,7 @@ export function GoogleAnalytics() {
   if (consent !== null) return null;
 
   return (
-    <aside
+    <div
       className="fixed inset-x-4 bottom-4 z-[100] mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:p-5"
       role="dialog"
       aria-label="Analytics preference"
@@ -139,6 +142,6 @@ export function GoogleAnalytics() {
           </button>
         </div>
       </div>
-    </aside>
+    </div>
   );
 }
