@@ -14,6 +14,9 @@ if not (ROOT / "artifacts" / "model.joblib").exists():
     st.warning("Download Kaggle data/train.csv and run python train.py first.")
     st.stop()
 
+report = json.loads((ROOT / "artifacts" / "metrics.json").read_text())
+st.caption("Training data: " + report["dataset"])
+
 @st.cache_resource
 def bundle():
     # Load only local self-produced trusted training artifacts.

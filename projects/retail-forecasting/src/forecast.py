@@ -80,7 +80,7 @@ def candidates():
             l2_regularization=10.0, random_state=SEED),
     }
 
-def train_and_evaluate(daily, destination):
+def train_and_evaluate(daily, destination, source_label="Original fictional daily-sales test fixture"):
     rows = make_features(daily)
     train, val, test = split_dates(rows)
     chosen_mae = {"same_day_last_week": scores(val.target, val.lag_7)["mae"]}
@@ -96,7 +96,7 @@ def train_and_evaluate(daily, destination):
     else:
         prediction = test.lag_7.to_numpy()
     report = {
-        "dataset": "UCI Online Retail: positive UK orders, excluding returns and cancellations",
+        "dataset": source_label,
         "target": "gross positive GBP order value per day, not accounting net revenue",
         "forecast_contract": "one-step ahead; observed prior daily actuals are available for each day",
         "train_dates": [str(train.index.min().date()), str(train.index.max().date())],

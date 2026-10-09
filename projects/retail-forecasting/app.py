@@ -7,12 +7,13 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parent
 st.set_page_config(page_title="Retail Sales Forecast", layout="wide")
 st.title("Can We Predict Tomorrow's Sales?")
-st.caption("Official UCI UK retail transactions; positive-order gross GBP, not audited net revenue.")
+st.caption("Next-day positive-order gross GBP, not audited net revenue. Historical dataset ends in 2011.")
 metric_file = ROOT / "artifacts" / "metrics.json"
 if not metric_file.is_file():
     st.warning("First run python download_data.py then python train.py")
     st.stop()
 report = json.loads(metric_file.read_text())
+st.caption("Data source: " + report["dataset"])
 st.subheader("Training and validation")
 st.write("Model selected using validation MAE:", report["selected_model"])
 st.json(report["validation_mae"])

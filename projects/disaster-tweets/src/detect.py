@@ -76,7 +76,7 @@ def metrics(truth, probability, threshold=.5):
         "matrix": confusion_matrix(truth, predicted, labels=[0, 1]).tolist(),
     }
 
-def train_and_evaluate(df, dest):
+def train_and_evaluate(df, dest, source_label="Original fictional 40-example teaching fixture; NOT Kaggle performance"):
     rows = validate_data(df)
     train, val, test = split_rows(rows)
     candidates_eval = []
@@ -95,7 +95,7 @@ def train_and_evaluate(df, dest):
         np.arange(len(trainval)).reshape(-1, 1), trainval.target)
     baseline_prob = baseline.predict(np.arange(len(test)).reshape(-1, 1))
     report = {
-        "dataset": "Official Kaggle Disaster Tweets (competition rules apply)",
+        "dataset": source_label,
         "split": {"train": len(train), "validation": len(val), "test": len(test)},
         "cleaned_n": len(rows),
         "chosen_from_validation": {"model": winner["name"], "threshold": winner["threshold"],

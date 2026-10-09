@@ -8,6 +8,7 @@ if not source.is_file():
 df = pd.read_excel(source, engine="openpyxl")
 if len(df) != 541_909:
     raise SystemExit(f"Official dataset expected 541909 rows, found {len(df)}")
-result = train_and_evaluate(daily_revenue(df), ROOT / "artifacts")
+result = train_and_evaluate(daily_revenue(df), ROOT / "artifacts",
+    source_label="Official UCI Online Retail: positive UK orders excluding returns and cancellations")
 print("Selected model:", result["selected_model"])
 print("Final untouched holdout:", result["test_selected"])
