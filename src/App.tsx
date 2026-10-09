@@ -4,6 +4,7 @@ import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { AppLayout } from './components/layout/AppLayout';
 import { HomePage } from './pages/HomePage';
 import { ProgressProvider } from './context/ProgressContext';
+import { ProjectLearningSupport } from './components/projects/ProjectLearningSupport';
 
 const TopicPage = lazy(() => import('./pages/TopicPage').then(module => ({ default: module.TopicPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then(module => ({ default: module.AboutPage })));
@@ -62,19 +63,19 @@ export function AppRoutes() {
           <Route path="blog/:slug" element={<DeferredRoute><BlogPostPage /></DeferredRoute>} />
           <Route path="cheatsheet" element={<DeferredRoute><CheatsheetPage /></DeferredRoute>} />
           <Route path="projects" element={<DeferredRoute><ProjectsPage /></DeferredRoute>} />
-          <Route path="projects/titanic-survival" element={<DeferredRoute><TitanicProjectPage /></DeferredRoute>} />
-          <Route path="projects/house-price" element={<DeferredRoute><HousePriceProjectPage /></DeferredRoute>} />
-          <Route path="projects/movie-recommender" element={<DeferredRoute><MovieRecommenderProjectPage /></DeferredRoute>} />
-          <Route path="projects/credit-card-fraud" element={<DeferredRoute><CreditCardFraudProjectPage /></DeferredRoute>} />
-          <Route path="projects/customer-segmentation" element={<DeferredRoute><CustomerSegmentationProjectPage /></DeferredRoute>} />
-          <Route path="projects/pdf-rag" element={<DeferredRoute><PdfRagProjectPage /></DeferredRoute>} />
+          <Route path="projects/titanic-survival" element={<DeferredRoute><ProjectLearningSupport projectId="titanic-survival"><TitanicProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/house-price" element={<DeferredRoute><ProjectLearningSupport projectId="house-price"><HousePriceProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/movie-recommender" element={<DeferredRoute><ProjectLearningSupport projectId="movie-recommender"><MovieRecommenderProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/credit-card-fraud" element={<DeferredRoute><ProjectLearningSupport projectId="credit-card-fraud"><CreditCardFraudProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/customer-segmentation" element={<DeferredRoute><ProjectLearningSupport projectId="customer-segmentation"><CustomerSegmentationProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/pdf-rag" element={<DeferredRoute><ProjectLearningSupport projectId="pdf-rag"><PdfRagProjectPage /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="projects/pdf-rag/semantic" element={<DeferredRoute><PdfRagSemanticProjectPage /></DeferredRoute>} />
-          <Route path="projects/ai-content-creator" element={<DeferredRoute><AIContentCreatorProjectPage /></DeferredRoute>} />
-          <Route path="projects/ai-research-assistant" element={<DeferredRoute><AIResearchAssistantProjectPage /></DeferredRoute>} />
-          <Route path="projects/model-to-production" element={<DeferredRoute><ModelToProductionProjectPage /></DeferredRoute>} />
-          <Route path="projects/retail-forecasting" element={<DeferredRoute><RemainingProjectPage kind="retail-forecasting" /></DeferredRoute>} />
-          <Route path="projects/disaster-tweets" element={<DeferredRoute><RemainingProjectPage kind="disaster-tweets" /></DeferredRoute>} />
-          <Route path="projects/digit-recognizer" element={<DeferredRoute><RemainingProjectPage kind="digit-recognizer" /></DeferredRoute>} />
+          <Route path="projects/ai-content-creator" element={<DeferredRoute><ProjectLearningSupport projectId="ai-content-creator"><AIContentCreatorProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/ai-research-assistant" element={<DeferredRoute><ProjectLearningSupport projectId="ai-research-assistant"><AIResearchAssistantProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/model-to-production" element={<DeferredRoute><ProjectLearningSupport projectId="model-to-production"><ModelToProductionProjectPage /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/retail-forecasting" element={<DeferredRoute><ProjectLearningSupport projectId="retail-forecasting"><RemainingProjectPage kind="retail-forecasting" /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/disaster-tweets" element={<DeferredRoute><ProjectLearningSupport projectId="disaster-tweets"><RemainingProjectPage kind="disaster-tweets" /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="projects/digit-recognizer" element={<DeferredRoute><ProjectLearningSupport projectId="digit-recognizer"><RemainingProjectPage kind="digit-recognizer" /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
           <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
           <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
