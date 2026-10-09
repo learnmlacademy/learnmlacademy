@@ -154,21 +154,38 @@ def build_segment_names(
         -z["recency_days"] + z["frequency_orders"] + z["monetary_value"]
     )
 
-    ordered = profiles.sort_values("value_score", ascending=False)["cluster"].tolist()
-    palette = [
-        "High-value active customers",
-        "Loyal regular customers",
-        "Growing customers",
-        "Occasional customers",
-        "Low-engagement customers",
-        "At-risk customers",
-        "Dormant customers",
-        "Long-tail customers",
-    ]
-    names = {
-        int(cluster): palette[min(index, len(palette) - 1)]
-        for index, cluster in enumerate(ordered)
-    }
+    # Human-readable labels are *interpretations of measured RFM*, not fixed
+    # names assigned by arbitrary cluster rank. The thresholds below are
+    # explicit teaching heuristics, not learned business ground truth.
+    def describe(row: pd.Series) -> str:
+        days, orders, spend = (
+            float(row["recency_days"]),
+            float(row["frequency_orders"]),
+            float(row["monetary_value"]),
+        )
+        if days <= 45 and orders >= 3 and spend >= 2000:
+            return "High-value active customers"
+        if days <= 45 and orders >= 3:
+            return "Active repeat customers"
+        if days <= 45:
+            return "Recent occasional customers"
+        if days > 90 and orders < 3:
+            return "Lapsing occasional customers"
+        if days > 90:
+            return "Lapsing repeat customers"
+        if orders >= 3:
+            return "Repeat customers needing re-engagement"
+        return "Occasional customers needing re-engagement"
+
+    names: dict[int, str] = {}
+    used: set[str] = set()
+    for _, row in profiles.sort_values("value_score", ascending=False).iterrows():
+        cluster = int(row["cluster"])
+        label = describe(row)
+        if label in used:
+            label = f"{label} (group {cluster})"
+        used.add(label)
+        names[cluster] = label
     profiles["segment_name"] = profiles["cluster"].map(names)
     return profiles.sort_values("value_score", ascending=False), names
 

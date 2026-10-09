@@ -83,3 +83,19 @@ def test_required_outputs_exist():
         "method_comparison.png",
     ]:
         assert (ROOT / "outputs" / name).is_file(), name
+
+
+def test_segment_names_follow_measured_behavior_not_arbitrary_cluster_rank():
+    # Original fictional RFM teaching rows: second cluster is demonstrably
+    # lapsing (135-day recency) and occasional (under 2 mean orders).
+    rfm = pd.DataFrame({
+        "CustomerID": ["recent", "lapsed"],
+        "recency_days": [26.45, 134.72],
+        "frequency_orders": [8.44, 1.67],
+        "monetary_value": [4544.39, 497.12],
+        "average_order_value": [540.0, 298.0],
+    })
+    profiles, names = core.build_segment_names(rfm, np.asarray([0, 1]))
+    assert names[0] == "High-value active customers"
+    assert names[1] == "Lapsing occasional customers"
+    assert float(profiles.loc[profiles.cluster == 1, "recency_days"].iloc[0]) > 90

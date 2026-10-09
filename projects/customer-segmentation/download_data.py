@@ -27,7 +27,7 @@ EXPECTED_COLUMNS = [
     "CustomerID",
     "Country",
 ]
-# Pin this after the first clean CI download. Until then the script prints the observed hash.
+# Fingerprint recorded from verified official UCI archive and enforced on every download.
 EXPECTED_ZIP_SHA256 = "f5385cbb54bbebf7196389109c6b0621faab0c304e3702548165e71c84aede8b"
 
 

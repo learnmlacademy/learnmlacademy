@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - feat/customer-segmentation-handbook
+      - fix/segmentation-data-grounded-names-20261009
     paths:
       - "projects/customer-segmentation/**"
       - "src/pages/CustomerSegmentationProjectPage.tsx"
@@ -128,7 +129,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified visual evidence
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/customer-segmentation-handbook' && success()
+        if: github.event_name == 'push' && github.ref == 'refs/heads/fix/segmentation-data-grounded-names-20261009' && success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -138,8 +139,8 @@ jobs:
           else
             git commit -m "Project 4: store verified visual evidence [skip ci]"
             git restore .
-            git pull --rebase origin feat/customer-segmentation-handbook
-            git push origin HEAD:feat/customer-segmentation-handbook
+            git pull --rebase origin fix/segmentation-data-grounded-names-20261009
+            git push origin HEAD:fix/segmentation-data-grounded-names-20261009
           fi
 
       - name: Stop preview processes
