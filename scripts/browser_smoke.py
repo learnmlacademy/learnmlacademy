@@ -46,6 +46,7 @@ def browser(width: int, height: int) -> webdriver.Chrome:
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument(f"--window-size={width},{height}")
     options.add_argument("--disable-background-networking")
+    options.set_capability("goog:loggingPrefs", {"browser": "ALL"})
     driver = webdriver.Chrome(options=options)
     driver.set_window_size(width, height)
     driver.set_page_load_timeout(35)
@@ -64,6 +65,37 @@ def check_view(driver: webdriver.Chrome, project_id: str, mobile: bool = False) 
     assert horizontal < 14, f"{project_id}: page overflows {horizontal}px at {'mobile' if mobile else 'desktop'} width"
     if mobile and project_id in {"retail-forecasting", "disaster-tweets", "digit-recognizer"}:
         driver.save_screenshot(str(ARTIFACTS / (project_id + "-mobile.png")))
+
+
+def check_returning_learner_hydration(driver: webdriver.Chrome) -> None:
+    """SSR HTML must hydrate without React recovery for visitors with saved state."""
+    driver.get(BASE + "/")
+    driver.execute_script(
+        "localStorage.setItem('learnml_completed_lessons_v1', "
+        "JSON.stringify(['train-test-split'])); "
+        "localStorage.setItem('learnml_last_visited_topic', 'train-test-split'); "
+        "localStorage.setItem('learnml_analytics_consent_v1', 'denied');"
+    )
+    driver.get(BASE + "/learn/train-test-split")
+    WebDriverWait(driver, 25).until(
+        lambda d: d.find_elements(By.CSS_SELECTOR, "[data-lesson-body='true']")
+    )
+    WebDriverWait(driver, 10).until(
+        lambda d: bool(d.execute_script(
+            "return document.querySelector('main')?.textContent?.includes('Train Test Split')"
+        ))
+    )
+    assert not driver.find_elements(By.CSS_SELECTOR, "script[data-lma-ga]"), (
+        "Declined analytics must never fetch the GA script"
+    )
+    assert driver.find_elements(By.CSS_SELECTOR, "[role='progressbar'][aria-label='Lesson reading progress']"), (
+        "Lesson progress indicator lacks its accessible name"
+    )
+    issues = [
+        item["message"] for item in driver.get_log("browser")
+        if "Minified React error" in item["message"] or "Hydration failed" in item["message"]
+    ]
+    assert not issues, "React hydration error for returning learner: " + " | ".join(issues)
 
 
 def main() -> None:
@@ -90,6 +122,7 @@ def main() -> None:
                     driver.save_screenshot(str(ARTIFACTS / "projects-desktop.png"))
                 for project in PROJECTS:
                     check_view(driver, project, mobile=mobile)
+                check_returning_learner_hydration(driver)
             finally:
                 driver.quit()
         print("BROWSER QA PASS: 12/12 handbook routes and ZIPs, desktop 1440px and mobile 390px, progress UI, navigation and no horizontal page overflow.")

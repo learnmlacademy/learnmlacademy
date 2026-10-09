@@ -334,10 +334,20 @@ export function CustomerSegmentationProjectPage() {
         <section className="rounded-2xl border border-fuchsia-200 bg-fuchsia-50 p-5 sm:p-7">
           <h2 className="text-xl font-black text-fuchsia-950">Troubleshooting checkpoints</h2>
           <div className="mt-4 space-y-3 text-sm leading-7 text-fuchsia-950">
+            <p><strong>First Excel import appears slow:</strong> the 541,909-row UCI XLSX takes time to parse with openpyxl. Keep enough free memory and disk space, let the one-time conversion finish, and reuse the resulting local Parquet file for subsequent runs.</p>
             <p><strong>Parquet says it cannot convert an invoice such as C536379:</strong> invoice IDs mix numeric-looking values and cancellation codes. Keep identifiers as strings before Parquet export.</p>
             <p><strong>One feature dominates the clusters:</strong> verify that log transformation and StandardScaler are applied to all three RFM features.</p>
             <p><strong>DBSCAN gives mostly one cluster or lots of noise:</strong> density methods are sensitive to <code>eps</code> and <code>min_samples</code>. Do not force a misleading silhouette score when fewer than two non-noise clusters exist.</p>
             <p><strong>Your cluster numbers change meaning:</strong> cluster IDs are arbitrary. Interpret clusters from their measured RFM profiles, never from the number 0/1/2 itself.</p>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-indigo-200 bg-indigo-50 p-5 sm:p-7">
+          <h2 className="text-xl font-black text-indigo-950">Optional advanced experiment — do not change the verified model</h2>
+          <div className="mt-3 space-y-3 text-sm leading-7 text-indigo-950">
+            <p><strong>RFM scores 1–5:</strong> choose and document five percentile ranges for recency, frequency and spend. More recent purchases should receive higher recency scores. Calculate the scores for a few customers by hand and see whether the descriptive ranking matches the measured segment profiles.</p>
+            <p><strong>Compare k=3, 4 and 5:</strong> use the same cleaned RFM data and preprocessing, then record silhouette score, group sizes and interpreted customer profiles. Repeat with another seed. Do not assume that more clusters, higher scores or one seed produce the correct business segmentation.</p>
+            <p><strong>Keep results separate:</strong> the actual published baseline and screenshots describe the tested k=2 model. Optional experiments are for learning and must not be presented as original verified results.</p>
           </div>
         </section>
 

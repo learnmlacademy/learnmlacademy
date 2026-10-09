@@ -110,7 +110,8 @@ export function ProjectLearningSupport({ projectId, children }: { projectId: str
     setComplete(next);
     try { localStorage.setItem(storageKey, JSON.stringify(next)); } catch { /* Browsers may disable local storage. */ }
   };
-  const pythonVersion = projectId === 'titanic-survival' || projectId === 'model-to-production' ? '3.13' : '3.12';
+  // Match the version used by each project's passing GitHub Actions workflow.
+  const pythonVersion = ['titanic-survival', 'credit-card-fraud', 'customer-segmentation', 'model-to-production'].includes(projectId) ? '3.13' : '3.12';
 
   return (
     <>

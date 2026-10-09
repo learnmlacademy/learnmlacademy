@@ -514,6 +514,7 @@ export function LessonShell({
       <div
         className="fixed top-0 left-0 right-0 h-1 bg-slate-100 z-50"
         role="progressbar"
+        aria-label="Lesson reading progress"
         aria-valuenow={Math.round(scrollProgress)}
         aria-valuemin={0}
         aria-valuemax={100}
@@ -602,7 +603,7 @@ export function LessonShell({
             onClick={() => window.dispatchEvent(new CustomEvent('learnml:open-nav', { detail: { focusSearch: false } }))}
             className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-2 font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition"
             title="Browse Curriculum"
-            aria-label="Open Curriculum Navigation"
+            aria-label="Curriculum navigation"
           >
             <BookOpen className="h-4 w-4 text-indigo-600 shrink-0" />
             <span className="hidden min-[380px]:inline">Curriculum</span>
@@ -615,7 +616,7 @@ export function LessonShell({
               onClick={() => setTocSheetOpen(true)}
               className="inline-flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-2 font-semibold text-slate-700 shadow-2xs hover:bg-slate-50 hover:text-slate-900 active:scale-95 transition"
               title="Table of Contents"
-              aria-label="Open Table of Contents"
+              aria-label="TOC — Open table of contents"
             >
               <List className="h-4 w-4 text-indigo-600 shrink-0" />
               <span>TOC</span>

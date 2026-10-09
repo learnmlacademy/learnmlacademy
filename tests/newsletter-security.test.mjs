@@ -37,6 +37,10 @@ test('newsletter rejects unsafe signups without calling the email provider', asy
     const checks = [
       { body: {}, headers: {}, method: 'GET', expected: 405 },
       { body: {}, headers: { origin: 'https://attacker.example' }, expected: 403 },
+      { body: {}, headers: { origin: undefined }, expected: 403 },
+      { body: {}, headers: { origin: 'https://attacker.example', host: 'attacker.example' }, expected: 403 },
+      { body: {}, headers: { 'content-length': '5000' }, expected: 413 },
+      { body: { extra: 'X'.repeat(5000) }, expected: 413 },
       { body: {}, headers: { 'content-type': 'text/plain' }, expected: 415 },
       { body: { consent: false }, expected: 400 },
       { body: { website: 'spam.example' }, expected: 400 },
@@ -57,7 +61,7 @@ test('newsletter rejects unsafe signups without calling the email provider', asy
     assert.equal(providerCalls, 1, 'Valid consented signup should reach Brevo');
     assert.equal(res.code, 502, 'Mocked provider failure must be handled safely');
     assert(!JSON.stringify(res.payload).includes('example-test-key'), 'Never leak secrets in responses');
-    console.log('Newsletter security regressions PASS (8 rejection cases, 1 provider failure case).');
+    console.log('Newsletter security regressions PASS (12 rejection cases, 1 provider failure case).');
   } finally {
     globalThis.fetch = originalFetch;
     if (oldApiKey === undefined) delete process.env.BREVO_API_KEY;

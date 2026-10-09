@@ -1,6 +1,7 @@
 import { prerenderToNodeStream } from 'react-dom/static';
 import { StaticRouter } from 'react-router-dom';
 import { AppRoutes } from '../src/App';
+import { GoogleAnalytics } from '../src/components/GoogleAnalytics';
 
 export async function render(url: string): Promise<string> {
   const controller = new AbortController();
@@ -12,6 +13,7 @@ export async function render(url: string): Promise<string> {
     // content in hidden segments that need JavaScript to reveal it.
     const { prelude, postponed } = await prerenderToNodeStream(
       <StaticRouter location={url}>
+        <GoogleAnalytics />
         <AppRoutes />
       </StaticRouter>,
       {
