@@ -56,8 +56,8 @@ def check_view(driver: webdriver.Chrome, project_id: str, mobile: bool = False) 
     driver.get(BASE + "/projects/" + project_id)
     WebDriverWait(driver, 20).until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "h1")) >= 1)
     WebDriverWait(driver, 20).until(lambda d: d.find_elements(By.ID, "project-build-checkpoints"))
-    assert driver.find_elements(By.LINK_TEXT("Download complete source")), project_id + ": source action missing"
-    assert driver.find_elements(By.LINK_TEXT("My build checklist")), project_id + ": navigation missing"
+    assert driver.find_elements(By.LINK_TEXT, "Download complete source"), project_id + ": source action missing"
+    assert driver.find_elements(By.LINK_TEXT, "My build checklist"), project_id + ": navigation missing"
     assert driver.find_elements(By.CSS_SELECTOR, "[role='progressbar']"), project_id + ": accessible progress missing"
     horizontal = driver.execute_script("return document.documentElement.scrollWidth - window.innerWidth")
     # Code blocks scroll inside their own container; the overall page should not.
@@ -85,7 +85,7 @@ def main() -> None:
             driver = browser(width, height)
             try:
                 driver.get(BASE + "/projects")
-                WebDriverWait(driver, 20).until(lambda d: len(d.find_elements(By.LINK_TEXT("Start the handbook"))) == 12)
+                WebDriverWait(driver, 20).until(lambda d: len(d.find_elements(By.LINK_TEXT, "Start the handbook")) == 12)
                 if not mobile:
                     driver.save_screenshot(str(ARTIFACTS / "projects-desktop.png"))
                 for project in PROJECTS:
