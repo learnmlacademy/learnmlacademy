@@ -169,6 +169,17 @@ export function ProjectLearningSupport({ projectId, children }: { projectId: str
               <p className="mt-3 text-xs leading-5 text-slate-600">No global package installation or machine-wide policy changes are necessary. For Windows, explicit environment Python avoids PowerShell activation-policy issues. PyTorch or downloaded datasets may require substantial disk space.</p>
             </div>
           </div>
+          <details className="mt-5 rounded-xl border border-slate-200 p-4">
+            <summary className="cursor-pointer font-bold text-indigo-800">Optional: publish a small demo safely</summary>
+            <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-6 text-slate-700">
+              <li>Finish the local test, save a screenshot and check your actual saved model or index works after restart.</li>
+              <li>Use a repository you control. Exclude API keys, .env files, personal uploads, unlicensed datasets and generated sensitive artifacts.</li>
+              <li>Choose a host that supports your actual Python and system dependencies. If a model or data file is generated locally, plan a permitted and reproducible build step before expecting a cloud demo to start.</li>
+              <li>Test the real hosted application on desktop and mobile, including invalid inputs, empty answers, missing model files and service restarts.</li>
+              <li>Do not expose a paid AI key or an unrestricted inference endpoint to the public; add user authentication, rate limits and spending limits first. Keep a local-only demonstration if you cannot protect it.</li>
+            </ol>
+            <p className="mt-2 text-xs leading-5 text-slate-600">This is an optional safety checklist, not a claim that any project already has a public deployed demo.</p>
+          </details>
           <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-950"><strong>Important limitation:</strong> {challenge.caution}</p>
         </div>
       </section>
