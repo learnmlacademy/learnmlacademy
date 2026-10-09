@@ -29,7 +29,7 @@ REQUIRED_TEXT = [
     "DBSCAN",
     "High-value active customers",
     "1,669",
-    "Loyal regular customers",
+    "Lapsing occasional customers",
     "2,669",
     "Implementation mastery check",
     "Complete-project checkpoint",
