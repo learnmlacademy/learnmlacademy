@@ -49,7 +49,12 @@ st.subheader("Score a verified holdout example")
 selected_id = st.selectbox(
     "Transaction example",
     demos["example_id"].tolist(),
+    format_func=lambda item: item + " (" + str(
+        demos.loc[demos["example_id"] == item, "result_category"].iloc[0]
+    ) + ")",
 )
+st.caption("TP = correctly flagged fraud; TN = correctly ignored legitimate; "
+           "FP = false alarm; FN = missed fraud. Examples include measured mistakes when present.")
 row = demos.loc[demos["example_id"] == selected_id].iloc[0]
 
 left, right, third = st.columns(3)

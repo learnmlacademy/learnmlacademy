@@ -325,12 +325,36 @@ def save_demo_transactions(
     demo["historical_label"] = y_test.to_numpy()
     demo["fraud_score"] = scores
 
-    fraud_examples = demo[demo["historical_label"] == 1].nlargest(6, "fraud_score")
-    legitimate_examples = demo[demo["historical_label"] == 0].nsmallest(6, "fraud_score")
-    selected = pd.concat(
-        [fraud_examples, legitimate_examples],
-        ignore_index=True,
+    demo["result_category"] = np.select(
+        [
+            (demo["historical_label"] == 1) & (demo["fraud_score"] >= bundle["threshold"]),
+            (demo["historical_label"] == 1) & (demo["fraud_score"] < bundle["threshold"]),
+            (demo["historical_label"] == 0) & (demo["fraud_score"] >= bundle["threshold"]),
+        ],
+        ["TP", "FN", "FP"],
+        default="TN",
     )
+
+    # Start with one clearly flagged fraud and one clearly legitimate row for
+    # screenshot exercises; then add genuine mistakes IF they occurred, rather
+    # than cherry-picking only the six easiest examples of each class.
+    selected_parts = []
+    for label, clear_case, mistake_case in ((1, "TP", "FN"), (0, "TN", "FP")):
+        group = demo[demo["historical_label"] == label]
+        if len(group) < 6:
+            raise ValueError("Expected at least six holdout rows per historical class")
+        clear_rows = group[group["result_category"] == clear_case]
+        chosen = []
+        if not clear_rows.empty:
+            chosen.append(clear_rows.sort_values("fraud_score", ascending=(label == 0)).head(1))
+        errors = group[group["result_category"] == mistake_case]
+        if not errors.empty:
+            chosen.append(errors.sort_values("fraud_score", ascending=(label == 1)).head(2))
+        already = pd.concat(chosen) if chosen else group.iloc[:0]
+        remaining = group.drop(index=already.index)
+        filler = remaining.sample(n=6 - len(already), random_state=SEED)
+        selected_parts.append(pd.concat([already, filler]))
+    selected = pd.concat(selected_parts, ignore_index=True)
     selected.insert(
         0,
         "example_id",
@@ -368,11 +392,10 @@ def main() -> None:
     threshold, threshold_table = choose_threshold(y_val, val_scores)
     val_metrics, _ = metrics_at_threshold(y_val, val_scores, threshold)
 
-    X_build = pd.concat([X_train, X_val], axis=0)
-    y_build = pd.concat([y_train, y_val], axis=0)
-    final_model = clone(candidate_models()[winner_name])
-    final_model.fit(X_build, y_build)
-
+    # Use the SAME fitted model for validation-threshold selection, sealed-test
+    # evaluation and saved inference. Refitting on train+validation would change
+    # the probability calibration after the threshold was chosen.
+    final_model = winner
     test_scores = final_model.predict_proba(X_test)[:, 1]
     test_metrics, matrix = metrics_at_threshold(y_test, test_scores, threshold)
 
@@ -413,6 +436,7 @@ def main() -> None:
         "validation_rows": int(len(X_val)),
         "test_rows": int(len(X_test)),
         "selected_model": winner_name,
+        "threshold_model_consistency": "Threshold, test and saved inference use the same model fitted on the 70% training split",
         "selection_metric": "mean 3-fold average precision on training data",
         "target_validation_recall": TARGET_RECALL,
         "chosen_threshold": threshold,
