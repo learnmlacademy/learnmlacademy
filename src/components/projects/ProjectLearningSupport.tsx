@@ -110,7 +110,7 @@ export function ProjectLearningSupport({ projectId, children }: { projectId: str
     setComplete(next);
     try { localStorage.setItem(storageKey, JSON.stringify(next)); } catch { /* Browsers may disable local storage. */ }
   };
-  const pythonVersion = projectId === 'titanic-survival' ? '3.13' : '3.12';
+  const pythonVersion = projectId === 'titanic-survival' || projectId === 'model-to-production' ? '3.13' : '3.12';
 
   return (
     <>
