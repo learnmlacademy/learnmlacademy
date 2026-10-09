@@ -1,0 +1,78 @@
+name: Build Learner Starter ZIPs
+on:
+  push:
+    branches:
+      - feat/project-starter-zips-20261009
+    paths:
+      - 'scripts/build-project-starters.py'
+      - 'src/pages/ProjectsPage.tsx'
+      - '.github/workflows/project-starter-zips.yml'
+      - 'projects/**'
+  pull_request:
+    paths:
+      - 'scripts/build-project-starters.py'
+      - 'src/pages/ProjectsPage.tsx'
+      - '.github/workflows/project-starter-zips.yml'
+permissions:
+  contents: write
+jobs:
+  generate-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Create 12 deterministic downloadable learner source packages
+        run: python scripts/build-project-starters.py
+      - name: Verify source-only archives, no binary data or omitted code
+        run: |
+          python scripts/build-project-starters.py
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import zipfile
+          manifest=json.loads(Path('public/project-starters/manifest.json').read_text())
+          assert len(manifest)==12
+          for item in manifest:
+            source=Path('public/project-starters')/(item['project']+'.zip')
+            with zipfile.ZipFile(source) as z:
+              assert len(z.namelist())==item['source_files']+1
+              assert z.testzip() is None
+              assert not any('/data/' in n or '/models/' in n or '.env' in n for n in z.namelist())
+            assert item['bytes'] <= 2_000_000
+          print('Starter kit ZIP verification: all 12 passed')
+          PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+      - name: Check built site links and all 12 archive assets
+        run: |
+          node --input-type=module -e '
+            import fs from "node:fs";
+            const html=fs.readFileSync("dist/projects.html","utf8");
+            const list=JSON.parse(fs.readFileSync("dist/project-starters/manifest.json","utf8"));
+            for (const item of list) {
+              if (!html.includes("/project-starters/"+item.project+".zip")) throw new Error("Missing website starter link: "+item.project);
+              if (!fs.statSync("dist/project-starters/"+item.project+".zip").size) throw new Error("Empty ZIP "+item.project);
+            }
+            console.log("All twelve ZIPs and project-card links verified");
+          '
+      - name: Commit source-only ZIP files to feature branch
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/project-starters/
+          if ! git diff --cached --quiet; then
+            git commit -m "docs: add 12 verified project starter packages [skip ci]"
+            git restore .
+            git fetch origin feat/project-starter-zips-20261009
+            git rebase origin/feat/project-starter-zips-20261009
+            git push origin HEAD:feat/project-starter-zips-20261009
+          fi

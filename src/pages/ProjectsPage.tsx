@@ -7,6 +7,7 @@ import {
   Clock3,
   Code2,
   Construction,
+  Download,
   Hammer,
   Layers3,
   Wrench,
@@ -125,7 +126,7 @@ export function ProjectsPage() {
                   <p className="mt-2 text-xs leading-5 text-slate-500">{(project.topics ?? project.chapters).join(' · ')}</p>
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-6 flex flex-wrap items-center gap-3">
                   {project.status === 'ready' ? (
                     <Link
                       to={`/projects/${project.id}`}
@@ -140,7 +141,15 @@ export function ProjectsPage() {
                       Full handbook will follow the Titanic template
                     </div>
                   )}
+                  {project.status === 'ready' && (
+                    <a href={`/project-starters/${project.id}.zip`} download={`${project.id}-starter.zip`}
+                       className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50 px-4 text-sm font-bold text-indigo-900 hover:bg-indigo-100">
+                      <Download className="h-4 w-4" aria-hidden="true" />
+                      Download source ZIP
+                    </a>
+                  )}
                 </div>
+                <p className="mt-2 text-xs leading-5 text-slate-500">Starter ZIP contains real source and tests, not models or data. Open its START_HERE.txt first.</p>
               </div>
             </article>
           ))}
