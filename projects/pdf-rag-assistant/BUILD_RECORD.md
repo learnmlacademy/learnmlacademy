@@ -96,3 +96,54 @@ Vector search, app and CI are not yet verified.
   from Answer through the expanded evidence. It records measured rectangles and
   a diagnostic screenshot on a framing failure. No app content, styles, or UI
   behavior were changed. The correction awaits CI and visual inspection.
+
+## Verified engineering checkpoint — 9 October 2026
+
+- Tested commit: 0a9cd8a7c44bfc187718d6a4d6b2322f78b0b942.
+- CI: https://github.com/learnmlacademy/learnmlacademy/actions/runs/37863228134
+  Both engineering and repository-checks jobs passed. Python 3.13.16 with the
+  exact requirements.txt installation passed pip check and 53/53 tests in 8.93s.
+  Repository npm run lint and npx vite build --configLoader runner passed.
+- Real headless Streamlit health check and Chromium browser flow passed:
+  two uploaded PDFs -> 6 pages / 6 chunks -> refund question -> policy.pdf,
+  page 1 citation. A separate browser session built only employee_guide.pdf
+  and answered remote work from page 2 without the first session's sources.
+  Clearing the first session removed its index/answer without changing the
+  second. Browser page-error list was empty; horizontal-overflow check passed.
+- All three genuine PNGs were downloaded and visually inspected:
+  01-index-built.png (1280 x 1000),
+  02-answer-citations-evidence.png (1280 x 1509),
+  03-answer-mobile.png (461 x 1762).
+  Answer, citation filename/page/chunk/score and all four retrieval candidates
+  are readable in the desktop/mobile evidence captures. Nothing was fabricated,
+  restyled, composited or removed from the app to produce these images.
+- Artifact: pdf-rag-evidence-37863228134-1, ID 11587670886, 11 files,
+  260320 bytes, SHA-256
+  570d4fa622557ca2ea6df7fa4e43660cc19704a4129d02bb72a7689cc241b553.
+  Contains screenshots, measured capture bounds, browser result, six-query
+  evidence, CLI result, dependency freeze, JUnit XML and Streamlit log.
+  Download retained locally under ignored reports/ci-37863228134; GitHub
+  artifact retention is 14 days. No private PDFs, indexes or weights included.
+- Final source-scope check: 39 added files, all under this project or its
+  single verification workflow; no existing website/other-project changes.
+  git diff --check passed. No tracked generated PDFs/images/indexes/reports,
+  caches/venv, files over 1 MB, or credential-pattern matches were found.
+- Engineering foundation is verified within its declared limits. No merge,
+  deployment, handbook integration or next project was performed.
+
+## Remaining limitations (not unexecuted success claims)
+
+- No live paid-provider request was made; the compatible JSON Chat Completions
+  adapter is covered by deterministic HTTP tests. User-selected provider/model
+  support must be checked before real remote use.
+- Answers deliberately select validated quotations, not free-form summaries.
+  Source/quote authenticity does not prove truth, relevance or completeness;
+  heuristic thresholds can reject valid paraphrases or select related material.
+- OCR and reliable complex table/multi-column/multilingual interpretation are
+  not implemented. First model download needs internet; cached inference is local.
+- This is an unauthenticated local demo, not a hardened public service. Windows
+  parsing lacks the Linux address-space limit. Disk checksums are not signatures;
+  deletion is not secure erasure. Remote opt-in sends selected passages/question
+  to the configured provider, whose data-retention policy applies.
+- Local Windows Streamlit AppTest timeout remains an environment limitation;
+  Linux AppTest and real-browser behavior were executed successfully in CI.
