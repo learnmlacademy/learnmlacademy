@@ -86,3 +86,13 @@ Vector search, app and CI are not yet verified.
   not show the evidence body, and mobile cut it off. This is a capture defect,
   not a claimed complete visual pass. The capture script now waits for expansion
   and checks that the entire panel fits inside the actual browser viewport.
+
+## Capture framing correction
+
+- Run 37823974108 passed all 53 tests and repository lint/build, but correctly
+  failed the expanded-panel framing assertion. A fixed-height viewport did not
+  contain the full evidence; this run is not a visual pass.
+- The capture script now uses a taller real browser viewport and a bounded crop
+  from Answer through the expanded evidence. It records measured rectangles and
+  a diagnostic screenshot on a framing failure. No app content, styles, or UI
+  behavior were changed. The correction awaits CI and visual inspection.
