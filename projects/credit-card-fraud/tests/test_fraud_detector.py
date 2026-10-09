@@ -67,6 +67,7 @@ def test_saved_artifact_and_report_exist():
     report = json.loads(METRICS.read_text(encoding="utf-8"))
     assert 0 < float(bundle["threshold"]) < 1
     assert bundle["selected_model"] == report["selected_model"]
+    assert "same model" in report["threshold_model_consistency"].lower()
     assert report["selection_metric"].startswith("mean 3-fold average precision")
 
 
@@ -85,6 +86,11 @@ def test_demo_transactions_cover_both_historical_classes():
     assert len(demos) == 12
     assert set(demos["historical_label"].astype(int)) == {0, 1}
     assert set(train.FEATURES).issubset(demos.columns)
+    assert set(demos["result_category"]).issubset({"TP", "FP", "FN", "TN"})
+    assert (demos["result_category"] == "FN").any(), "The official holdout includes missed fraud; show one"
+    assert (demos["result_category"] == "FP").any(), "The official holdout includes false alarms; show one"
+    assert demos.iloc[0]["result_category"] == "TP"
+    assert demos.iloc[6]["result_category"] == "TN"
 
 
 @pytest.mark.parametrize("example_index", [0, 6])
