@@ -1,13 +1,20 @@
 import React from "react";
+
+const DeepLearningIllustratedExample = React.lazy(() => import("../deeplearning/DeepLearningIllustratedExample").then(module => ({ default: module.DeepLearningIllustratedExample })));
+const DeepLearningOptimizersGuide = React.lazy(() => import("../deeplearning/DeepLearningOptimizersGuide").then(module => ({ default: module.DeepLearningOptimizersGuide })));
+const DeepLearningArticleIntro = React.lazy(() => import("../deeplearning/DeepLearningArticleIntro").then(module => ({ default: module.DeepLearningArticleIntro })));
+const DeepLearningLessonExtras = React.lazy(() => import("../deeplearning/DeepLearningLessonExtras").then(module => ({ default: module.DeepLearningLessonExtras })));
+const DeepLearningMathExample = React.lazy(() => import("../deeplearning/DeepLearningMathExample").then(module => ({ default: module.DeepLearningMathExample })));
+const AgenticAIContent = React.lazy(() => import("./AgenticAIContent").then(module => ({ default: module.AgenticAIContent })));
 import { Link, useParams } from "react-router-dom";
 import { AlertTriangle, BookOpen, CheckCircle2, ExternalLink, FlaskConical, Lightbulb, Target, Workflow } from "lucide-react";
 import { getTopicById } from "../../data/curriculum";
-import { DeepLearningIllustratedExample } from "../deeplearning/DeepLearningIllustratedExample";
-import { DeepLearningOptimizersGuide } from "../deeplearning/DeepLearningOptimizersGuide";
-import { DeepLearningArticleIntro } from "../deeplearning/DeepLearningArticleIntro";
-import { DeepLearningLessonExtras } from "../deeplearning/DeepLearningLessonExtras";
-import { DeepLearningMathExample } from "../deeplearning/DeepLearningMathExample";
-import { AgenticAIContent } from "./AgenticAIContent";
+
+
+
+
+
+
 
 type Lesson = {
   intro: string;
