@@ -103,6 +103,7 @@ jobs:
           git add public/project-handbooks/ai-content-creator/
           if ! git diff --cached --quiet; then
             git commit -m "docs: verified Content Studio app evidence [skip ci]"
+            git restore .
             git fetch origin "${{ github.ref_name }}"
             git rebase "origin/${{ github.ref_name }}"
             git push origin "HEAD:${{ github.ref_name }}"
