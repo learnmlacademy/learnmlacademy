@@ -65,7 +65,21 @@ export function PrivacyPolicyPage() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-bold text-indigo-800 mb-4">5. Contact Us</h2>
+          <h2 className="text-2xl font-bold text-indigo-800 mb-4">5. Email PDF subscriptions</h2>
+          <p>
+            If you choose to subscribe for a free interview PDF, we use the email address you provide to
+            deliver the PDF and send occasional learning updates. We use Brevo as our email-list provider.
+            You can unsubscribe from future emails using the unsubscribe link in those messages.
+          </p>
+          <p className="mt-4">
+            Newsletter signup is optional. Please do not enter private passwords, API keys, or sensitive
+            personal details in the email field. Your download request is processed by our website and
+            email provider; the response PDF is not cached publicly.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-bold text-indigo-800 mb-4">6. Contact Us</h2>
           <p>
             If you have any questions about this Privacy Policy or our privacy practices, please contact us via our official channels.
           </p>
