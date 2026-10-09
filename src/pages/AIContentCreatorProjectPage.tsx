@@ -164,6 +164,17 @@ export function AIContentCreatorProjectPage(){
         </ol>
         <p className="mt-3 text-xs leading-6 text-slate-600">Record: your prediction → your exact settings → the observed output → your explanation. This makes each concept testable instead of only readable.</p>
       </section>
+      <section className="rounded-2xl border bg-white p-6">
+        <h2 className="text-xl font-extrabold text-slate-950">Optional final challenge: put your offline demo online</h2>
+        <p className="mt-2 text-sm leading-7 text-slate-700">Once your local app works, share a <strong>template-only</strong> learning demo through <a href="https://share.streamlit.io/" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-700 underline">Streamlit Community Cloud</a>. This demonstrates that the same app code works outside your laptop. Do not add a paid provider API key to an unauthenticated public demo.</p>
+        <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-7 text-slate-700">
+          <li>Ensure the project is in a GitHub repository you control; create a free Streamlit Community Cloud account if eligible.</li>
+          <li>Click <strong>Create app</strong>, select your repository and branch, and set the entrypoint file to <code>projects/ai-content-studio/app.py</code>.</li>
+          <li>Select Python 3.12 if offered, confirm <code>requirements.txt</code> next to the entrypoint, then deploy without configuring <code>OPENAI_API_KEY</code>.</li>
+          <li>Open the generated <code>streamlit.app</code> URL and try the offline template controls. Record screenshots and explain how your local run differs from deployment.</li>
+        </ol>
+        <p className="mt-2 text-xs leading-6 text-slate-600">Ollama localhost is not accessible from a cloud-hosted Streamlit app. Real hosted-model demos require authentication, rate limits and cost controls before opening access publicly. This project has no pre-existing public live demo link.</p>
+      </section>
       <section id="all-code" className="scroll-mt-24 rounded-2xl border border-indigo-200 bg-white p-5 sm:p-7">
         <h2 className="text-2xl font-black text-slate-950">All the real source code — copy and build it yourself</h2>
         <p className="mt-3 text-sm leading-7 text-slate-700">These are complete executable files. Students can copy them directly, or <a className="font-bold text-indigo-700 underline" href="https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/ai-content-studio" target="_blank" rel="noopener noreferrer">open the actual project code on GitHub</a> and <a className="font-bold text-indigo-700 underline" href="https://github.com/learnmlacademy/learnmlacademy/archive/refs/heads/main.zip">get the entire repository ZIP</a>. The website copy is validated byte-for-byte against tested Python source in CI. Download is the complete repo, not a separate starter kit.</p>

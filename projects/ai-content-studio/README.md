@@ -82,3 +82,8 @@ OpenAI mode is optional, sends the brief/draft to the provider only after explic
 5. For each experiment write down the initial prediction, the exact setting changed, the observed result and the concept being tested.
 
 **Important:** Offline Rewrite preserves the submitted original text for editing, and offline Summarize only extracts early words. These are explicitly labelled demo behaviors, NOT meaning-aware paraphrasing or summarization. Model paths are covered by mock tests; no paid API run or live Ollama result is claimed.
+
+
+## Optional deployment exercise
+
+After confirming the local app, publish a **template-only demonstration** through [Streamlit Community Cloud](https://share.streamlit.io/): Create app → choose your own GitHub repository and branch → entrypoint `projects/ai-content-studio/app.py` → select Python 3.12 where supported → deploy. The dependency file is beside the app. Verify on desktop/mobile. Do not configure an OpenAI API key on an unauthenticated public demo; public paid API access needs authentication, rate limits and budgets. Local Ollama on your laptop is not accessible from a cloud server. There is currently no verified hosted Streamlit demo URL to link to.
