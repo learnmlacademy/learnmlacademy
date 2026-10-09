@@ -786,8 +786,6 @@ export const getLearningResourceSchema = (
         "inLanguage": "en-US",
         "isAccessibleForFree": true,
         "image": `${BASE_URL}/og-image.png`,
-        "datePublished": "2025-01-15T08:00:00+00:00",
-        "dateModified": new Date().toISOString(),
         "mainEntityOfPage": {
           "@type": "WebPage",
           "@id": pageUrl

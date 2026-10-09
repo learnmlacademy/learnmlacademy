@@ -16,6 +16,8 @@ export function NewsletterSignup({
   filename = 'ML_Interview_Cheatsheet.pdf',
 }: NewsletterSignupProps) {
   const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
+  const [website, setWebsite] = useState(''); // Invisible honeypot: must stay empty for humans.
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [downloadUrl, setDownloadUrl] = useState('');
@@ -51,6 +53,11 @@ export function NewsletterSignup({
       return;
     }
 
+    if (!consent) {
+      setErrorMsg('Please agree to receive the PDF and occasional learning emails.');
+      return;
+    }
+
     setErrorMsg('');
     setStatus('loading');
 
@@ -60,7 +67,7 @@ export function NewsletterSignup({
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({ email: trimmed, guide: guideId }),
+        body: JSON.stringify({ email: trimmed, guide: guideId, consent, website }),
       });
 
       if (!response.ok) {
@@ -166,9 +173,15 @@ export function NewsletterSignup({
               )}
             </button>
           </div>
-          <p className="text-xs text-slate-400 text-center sm:text-left px-1">
-            No spam. Unsubscribe anytime.
-          </p>
+          <label className="flex max-w-xs items-start gap-2 text-xs leading-5 text-slate-700">
+            <input type="checkbox" checked={consent} onChange={e => { setConsent(e.target.checked); setErrorMsg(''); }} className="mt-1 h-4 w-4 accent-indigo-700" disabled={status === 'loading'} />
+            <span>I agree to receive this PDF and occasional learning emails. I can unsubscribe anytime. Read the <a href="/privacy" className="font-bold text-indigo-700 underline hover:text-indigo-900">Privacy Policy</a>.</span>
+          </label>
+          <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+            <label>Leave this empty
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} />
+            </label>
+          </div>
         </div>
       </div>
     </div>

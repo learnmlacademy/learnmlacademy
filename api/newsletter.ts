@@ -59,8 +59,9 @@ const GUIDES = {
 
 type GuideId = keyof typeof GUIDES;
 
-function resolveGuide(value: unknown): GuideId {
-  return typeof value === "string" && value in GUIDES ? (value as GuideId) : "ml";
+function resolveGuide(value: unknown): GuideId | null {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(GUIDES, value)
+    ? (value as GuideId) : null;
 }
 
 export default async function handler(req: any, res: any) {
@@ -69,11 +70,36 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
+  // Block cross-origin browser form submissions. A supplied Origin must belong
+  // to the public site or to the actual Vercel preview host in the request.
+  const origin = req.headers?.origin;
+  const host = req.headers?.host;
+  const allowedOrigins = new Set(["https://www.learnmlacademy.com", "https://learnmlacademy.com"]);
+  if (typeof host === "string" && /^[a-z0-9.-]+(?::[0-9]+)?$/i.test(host)) {
+    allowedOrigins.add("https://" + host);
+  }
+  if (typeof origin === "string" && !allowedOrigins.has(origin)) {
+    return res.status(403).json({ error: "Cross-site signup is not allowed." });
+  }
+
+  const contentType = String(req.headers?.["content-type"] || "").split(";")[0].trim().toLowerCase();
+  if (contentType !== "application/json") {
+    return res.status(415).json({ error: "Use application/json for signup." });
+  }
+
+  if (req.body?.consent !== true) {
+    return res.status(400).json({ error: "Please agree to receive the PDF and learning emails." });
+  }
+  if (typeof req.body?.website === "string" && req.body.website.trim()) {
+    // The field is hidden from human users; never forward honeypot signups.
+    return res.status(400).json({ error: "Invalid signup." });
+  }
+
   const email = typeof req.body?.email === "string"
     ? req.body.email.trim().toLowerCase()
     : "";
 
-  if (!EMAIL_PATTERN.test(email)) {
+  if (email.length > 254 || !EMAIL_PATTERN.test(email)) {
     return res.status(400).json({ error: "Please enter a valid email address." });
   }
 
@@ -88,11 +114,13 @@ export default async function handler(req: any, res: any) {
   }
 
   const guideId = resolveGuide(req.body?.guide);
+  if (!guideId) return res.status(400).json({ error: "Unknown PDF guide." });
   const guide = GUIDES[guideId];
 
   try {
     const brevoResponse = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
+      signal: AbortSignal.timeout(10000),
       headers: {
         accept: "application/json",
         "content-type": "application/json",

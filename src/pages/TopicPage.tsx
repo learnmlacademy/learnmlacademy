@@ -492,8 +492,6 @@ export function TopicPage() {
         setMeta('meta[property="og:type"]', 'content', 'article');
         setMeta('meta[property="og:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
         setMeta('meta[property="article:section"]', 'content', topicInfo.category.title.replace(/^\d+\.\s*/, ''));
-        setMeta('meta[property="article:published_time"]', 'content', '2025-01-15T08:00:00Z');
-        setMeta('meta[property="article:modified_time"]', 'content', new Date().toISOString());
 
         // Twitter Card tags
         setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
