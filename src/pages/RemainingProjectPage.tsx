@@ -174,6 +174,21 @@ export function RemainingProjectPage({kind}:{kind:Key}) {
      <img src={project.image} alt={project.imageAlt} className="w-full" width="960" height="190"/>
      <figcaption className="mt-3 text-sm text-slate-600">The actual order of operations in this learning project, illustrated. Not a screenshot of a trained model.</figcaption>
     </figure>
+    <section className="rounded-2xl border bg-white p-5 sm:p-7">
+     <h2 className="text-xl font-extrabold text-slate-950">Real application evidence</h2>
+     <p className="mt-2 text-sm leading-7 text-slate-700">
+      Genuine full-page desktop and mobile screenshots captured from a running Streamlit app by GitHub Actions.
+      {kind === "disaster-tweets" ? " The captured NLP app is trained only on an original fictional 40-example smoke-test fixture, explicitly labelled in the screenshot; official Kaggle training must be completed by the learner." :
+      kind === "retail-forecasting" ? " Retail evidence uses the actual SHA-256-verified UCI workbook and held-out daily evaluation." :
+      " Digit evidence uses scikit-learn's original 1,797-image dataset with a real uploaded example."}
+     </p>
+     <div className="mt-4 grid gap-5 lg:grid-cols-2">
+      {(["desktop","mobile"] as const).map(device=><figure key={device} className="min-w-0 overflow-hidden rounded-xl border bg-slate-50 p-3">
+       <img src={"/project-handbooks/"+kind+"/"+device+"-app.png"} alt={"Genuine "+device+" Streamlit "+project.title+" screenshot"} loading="lazy" className="h-auto w-full rounded-lg border object-contain"/>
+       <figcaption className="mt-2 text-xs font-bold text-slate-600">{device === "desktop" ? "Desktop browser evidence" : "390-pixel mobile browser evidence"}</figcaption>
+      </figure>)}
+     </div>
+    </section>
     <section className="rounded-2xl border border-indigo-200 bg-white p-6">
      <h2 className="text-xl font-black text-slate-950">{project.worked.title}</h2>
      <ol className="mt-4 list-decimal space-y-3 pl-6 text-sm leading-7 text-slate-700">
