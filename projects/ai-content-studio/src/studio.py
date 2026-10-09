@@ -123,7 +123,7 @@ def template_preview(request: ContentRequest) -> ContentResult:
     greeting = {"Friendly": "Hello!", "Professional": "Hello,", "Playful": "Let's explore!"}[request.tone]
     if request.kind == "Social post":
         prefix = greeting
-        headline = "An update for " + request.audience
+        headline = "An update from " + request.brand + " for " + request.audience
     elif request.kind == "Email campaign":
         prefix = greeting + " A note from " + request.brand + ":"
         headline = "Subject: A note from " + request.brand
