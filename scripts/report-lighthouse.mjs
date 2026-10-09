@@ -20,7 +20,14 @@ for (const page of pages) {
     .filter(a => a.score !== null && a.score !== undefined && a.score < 0.9 && a.details?.type !== 'opportunity')
     .sort((a, b) => (a.score ?? 0) - (b.score ?? 0))
     .slice(0, 18)
-    .map(a => ({ id: a.id, title: a.title, score: a.score, display: a.displayValue }));
+    .map(a => ({
+      id: a.id, title: a.title, score: a.score, display: a.displayValue,
+      elements: (a.details?.items || []).slice(0, 3).map(item => ({
+        selector: item.node?.selector || item.node?.snippet || item.selector || null,
+        explanation: String(item.explanation || item.description || item.descriptionData || '').slice(0, 220),
+        message: String(item.description || item.url || '').slice(0, 180),
+      })),
+    }));
   summary.push({ page, testedUrl: report.finalUrl, scores, vitals, problems });
 }
 fs.writeFileSync('lighthouse-reports/summary.json', JSON.stringify(summary, null, 2));
@@ -29,7 +36,9 @@ const markdown = ['# LearnMLAcademy automated Lighthouse mobile baseline', '',
   '|---|---:|---:|---:|---:|',
   ...summary.map(x => `| ${x.page} | ${x.scores.performance} | ${x.scores.accessibility} | ${x.scores['best-practices']} | ${x.scores.seo} |`),
   '', 'Lighthouse results are laboratory measures and vary between runs. The original JSON and individual audit issues are attached to the GitHub Actions run.',
-  ...summary.flatMap(x => ['', `## ${x.page}`, ...x.problems.slice(0, 8).map(p => `- ${p.title} (score ${p.score}): ${p.display ?? ''}`)]),
+  ...summary.flatMap(x => ['', `## ${x.page}`, ...x.problems.slice(0, 9).map(p =>
+    `- ${p.title} (score ${p.score}): ${p.display ?? ''}` + p.elements.map(el =>
+      `\n  - Affected: ${el.selector || el.message || el.explanation || 'see original JSON'}`).join(''))]),
   ''].join('\n');
 fs.writeFileSync('lighthouse-reports/summary.md', markdown);
 const gh = process.env.GITHUB_STEP_SUMMARY;
