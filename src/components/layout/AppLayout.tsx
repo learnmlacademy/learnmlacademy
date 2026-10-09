@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { CookieConsent } from '../CookieConsent';
 import { CurriculumNav } from '../navigation/CurriculumNav';
 import { MobileNavDrawer } from '../navigation/MobileNavDrawer';
 import { SiteFooter } from './SiteFooter';
@@ -88,7 +87,6 @@ export function AppLayout() {
         onClose={() => setDrawerOpen(false)}
       />
 
-      <CookieConsent />
     </div>
   );
 }
