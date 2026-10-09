@@ -17,6 +17,7 @@ const HousePriceProjectPage = lazy(() => import('./pages/HousePriceProjectPage')
 const MovieRecommenderProjectPage = lazy(() => import('./pages/MovieRecommenderProjectPage').then(module => ({ default: module.MovieRecommenderProjectPage })));
 const CreditCardFraudProjectPage = lazy(() => import('./pages/CreditCardFraudProjectPage').then(module => ({ default: module.CreditCardFraudProjectPage })));
 const CustomerSegmentationProjectPage = lazy(() => import('./pages/CustomerSegmentationProjectPage').then(module => ({ default: module.CustomerSegmentationProjectPage })));
+const PdfRagSemanticProjectPage = lazy(() => import("./pages/PdfRagSemanticProjectPage").then(module => ({ default: module.PdfRagSemanticProjectPage })));
 const PdfRagProjectPage = lazy(() => import("./pages/PdfRagProjectPage").then(module => ({ default: module.PdfRagProjectPage })));
 const AIContentCreatorProjectPage = lazy(() => import('./pages/AIContentCreatorProjectPage').then(module => ({ default: module.AIContentCreatorProjectPage })));
 const AIResearchAssistantProjectPage = lazy(() => import('./pages/AIResearchAssistantProjectPage').then(module => ({ default: module.AIResearchAssistantProjectPage })));
@@ -66,6 +67,7 @@ export function AppRoutes() {
           <Route path="projects/credit-card-fraud" element={<DeferredRoute><CreditCardFraudProjectPage /></DeferredRoute>} />
           <Route path="projects/customer-segmentation" element={<DeferredRoute><CustomerSegmentationProjectPage /></DeferredRoute>} />
           <Route path="projects/pdf-rag" element={<DeferredRoute><PdfRagProjectPage /></DeferredRoute>} />
+          <Route path="projects/pdf-rag/semantic" element={<DeferredRoute><PdfRagSemanticProjectPage /></DeferredRoute>} />
           <Route path="projects/ai-content-creator" element={<DeferredRoute><AIContentCreatorProjectPage /></DeferredRoute>} />
           <Route path="projects/ai-research-assistant" element={<DeferredRoute><AIResearchAssistantProjectPage /></DeferredRoute>} />
           <Route path="projects/model-to-production" element={<DeferredRoute><ModelToProductionProjectPage /></DeferredRoute>} />

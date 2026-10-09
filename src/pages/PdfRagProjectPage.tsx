@@ -78,6 +78,11 @@ export function PdfRagProjectPage() {
         </div>
       </section>
 
+      <section className="rounded-2xl border border-indigo-300 bg-indigo-50 p-5 sm:p-7">
+        <h2 className="text-xl font-extrabold text-indigo-950">Level 2 — Build real semantic PDF search</h2>
+        <p className="mt-2 text-sm leading-7 text-slate-800">Finished the offline TF-IDF RAG baseline? Continue with local MiniLM ONNX embeddings (384 dimensions), 160-token overlapping chunks, cosine ranking, keyword-aware reranking, validated citations and 53 verified engineering tests. The complete advanced source code remains visible and copyable, with a genuine running app.</p>
+        <Link to="/projects/pdf-rag/semantic" className="mt-3 inline-flex rounded-lg bg-indigo-700 px-5 py-3 text-sm font-extrabold text-white hover:bg-indigo-800">Open advanced semantic RAG handbook →</Link>
+      </section>
       <RagTwoPathDiagram />
       <section className="grid gap-4 md:grid-cols-2">
         <figure className="overflow-hidden rounded-2xl border bg-white">
