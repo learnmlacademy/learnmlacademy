@@ -22,6 +22,7 @@ const PdfRagProjectPage = lazy(() => import("./pages/PdfRagProjectPage").then(mo
 const AIContentCreatorProjectPage = lazy(() => import('./pages/AIContentCreatorProjectPage').then(module => ({ default: module.AIContentCreatorProjectPage })));
 const AIResearchAssistantProjectPage = lazy(() => import('./pages/AIResearchAssistantProjectPage').then(module => ({ default: module.AIResearchAssistantProjectPage })));
 const ModelToProductionProjectPage = lazy(() => import('./pages/ModelToProductionProjectPage').then(module => ({ default: module.ModelToProductionProjectPage })));
+const RemainingProjectPage = lazy(() => import("./pages/RemainingProjectPage").then(module => ({ default: module.RemainingProjectPage })));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage').then(module => ({ default: module.PrivacyPolicyPage })));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage').then(module => ({ default: module.TermsOfServicePage })));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage').then(module => ({ default: module.DisclaimerPage })));
@@ -71,6 +72,9 @@ export function AppRoutes() {
           <Route path="projects/ai-content-creator" element={<DeferredRoute><AIContentCreatorProjectPage /></DeferredRoute>} />
           <Route path="projects/ai-research-assistant" element={<DeferredRoute><AIResearchAssistantProjectPage /></DeferredRoute>} />
           <Route path="projects/model-to-production" element={<DeferredRoute><ModelToProductionProjectPage /></DeferredRoute>} />
+          <Route path="projects/retail-forecasting" element={<DeferredRoute><RemainingProjectPage kind="retail-forecasting" /></DeferredRoute>} />
+          <Route path="projects/disaster-tweets" element={<DeferredRoute><RemainingProjectPage kind="disaster-tweets" /></DeferredRoute>} />
+          <Route path="projects/digit-recognizer" element={<DeferredRoute><RemainingProjectPage kind="digit-recognizer" /></DeferredRoute>} />
           <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
           <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
           <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />
