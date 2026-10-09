@@ -34,6 +34,54 @@ SECTIONS = [
 ]
 
 
+
+# Separate extended authentic learning fixture: does not change the 3-page
+# beginner policy or its tested factual answers.
+OVERLAP_OUT = OUT.with_name("Real_Chunk_Overlap_Demo.pdf")
+OVERLAP_PARAGRAPHS = [
+    "A school travel team keeps a written handoff record because several staff members may review the same request. "
+    "Each stage receives a timestamp, an owner, a short reason and the next action required.",
+    "The first reviewer checks completeness rather than approving spending. "
+    "Missing contact details are returned to the applicant before funding is considered.",
+    "The course coordinator assesses educational purpose and documents how the planned trip relates to the curriculum. "
+    "This helps the finance team see why the expense was proposed.",
+    "The faculty office records an independent signoff. "
+    "A supervisor may ask for clarifications, but the applicant remains responsible for accurate details.",
+    "The travel desk checks dates and transport preferences once the request is approved. "
+    "An itinerary is only a planning proposal until a booking has been confirmed.",
+    "A second colleague reviews receipts for clarity, legibility and relevant costs. "
+    "Receipts should be associated with the corresponding request before financial review begins.",
+    "The team groups related items under a case identifier so that different messages cannot accidentally create duplicate claims. "
+    "A case identifier is not itself a financial approval.",
+    "If one page of a long handbook is split into overlapping text chunks, words at a shared boundary appear in both chunks. "
+    "That repeated span helps retrieval find sentences that straddle an arbitrary cut.",
+    "A learner should inspect the exact shared words and the page number on every returned chunk. "
+    "The overlap must not join text from unrelated PDF pages.",
+    "The process finishes with a teaching-only audit record showing actions and handoffs. "
+    "The example describes imaginary staff and must not be mistaken for a real university policy.",
+]
+
+def make_overlap_demo() -> None:
+    OVERLAP_OUT.parent.mkdir(parents=True, exist_ok=True)
+    pdf = canvas.Canvas(str(OVERLAP_OUT), pagesize=A4)
+    pdf.setTitle("Real PDF Chunk Overlap - Original Learning Example")
+    pdf.setFont("Helvetica-Bold", 17)
+    pdf.drawString(45, 795, "Chunk Boundary Exercise - One Long Page")
+    pdf.setFont("Helvetica", 10)
+    y = 750
+    for paragraph in OVERLAP_PARAGRAPHS:
+        for line in wrap(paragraph, width=102):
+            if y <= 95:
+                raise RuntimeError("Extended overlap fixture unexpectedly does not fit on one page")
+            pdf.drawString(48, y, line)
+            y -= 15
+        y -= 7
+    pdf.setFont("Helvetica-Oblique", 9)
+    pdf.drawString(48, 42, "Original learning fixture / artificial policy / not official advice")
+    pdf.showPage()
+    pdf.save()
+    print(f"Created {OVERLAP_OUT} ({OVERLAP_OUT.stat().st_size} bytes)")
+
 def wrap(text: str, width: int = 88):
     words, rows, current = text.split(), [], []
     for word in words:
@@ -66,6 +114,7 @@ def main():
         pdf.showPage()
     pdf.save()
     print(f"Created {OUT} ({OUT.stat().st_size} bytes)")
+    make_overlap_demo()
 
 
 if __name__ == "__main__":

@@ -109,7 +109,7 @@ export function PdfRagProjectPage() {
         </Step>
         <Step n={3} title="Generate a known-answer PDF" why="A controlled example lets us verify page attribution before trying unknown documents." check="sample_docs/Campus_Travel_Policy.pdf is created with three pages and a cancellation rule on page 3.">
           <CodeBlock code={"python scripts/make_sample_pdf.py"} language="bash" title="Create sample document" type="runnable" />
-          <p>This example policy is fictional and written specifically for the tutorial. Open the PDF and read page 2 (reimbursement) and page 3 (cancellation) before running AI retrieval. <strong>Important learning limitation:</strong> each example page is short; the 140-word chunk limit may produce only one chunk per page. To actually observe overlap, test a longer page or decrease the chunk size in a separate exercise. Do not claim the original three-page fixture demonstrates overlap.</p>
+          <p>The three-page policy remains a short, known-answer retrieval fixture: cancellation is on page 3 and reimbursement on page 2. It is original and fictional. <strong>New:</strong> the same generator also creates <code>sample_docs/Real_Chunk_Overlap_Demo.pdf</code>, with a genuinely long single page specifically for testing chunk overlap without disturbing policy answers.</p>
         </Step>
         <Step n={4} title="Extract each PDF page before splitting it" why="The original PDF parser, not the LLM, must own source page numbers." check="Every chunk has a file name, 1-based page number, and stable chunk ID.">
           <p>Open <code>src/rag.py</code> and study <code>read_pdf()</code>. It checks the file extension, header, size, password and page count. It then reads each page and attaches metadata before any vector indexing. A scanned PDF with no selectable text is rejected rather than pretending to read it.</p>
@@ -118,6 +118,8 @@ export function PdfRagProjectPage() {
         <Step n={5} title="Make overlapping chunks without losing source pages" why="A key sentence might cross chunk boundaries and disappear without overlap." check="Adjacent chunks share boundary words; they still refer to the same original page.">
           <RagChunkOverlapVisual />
           <p>With <strong>140 words per chunk</strong> and <strong>30 overlap words</strong>, the stride is 140 − 30 = <strong>110 words</strong>. Chunk 1 covers 1–140, chunk 2 starts at word 111. The example uses word counts, not model token counts.</p>
+          <CodeBlock code={"python -c \"from pathlib import Path; from src.rag import read_pdf; p=Path('sample_docs/Real_Chunk_Overlap_Demo.pdf'); _, chunks=read_pdf(p.read_bytes(), p.name); print('Chunks:',len(chunks)); print('Boundary equal:',chunks[0].text.split()[-30:]==chunks[1].text.split()[:30]); print('Source pages:',[c.page for c in chunks])\""} language="bash" title="Observe 30 actual overlapping words from a PDF" type="runnable" />
+          <p>Expected result: at least two chunks, <code>Boundary equal: True</code>, and all chunks show source page 1. Try changing the overlap to 0 as an experiment and explain the difference.</p>
           <CodeBlock code={"chunk_words = 140\noverlap_words = 30\nstride = chunk_words - overlap_words  # 110"} language="python" title="Chunk size calculation" type="conceptual" />
         </Step>
         <Step n={6} title="Convert text into searchable numerical vectors" why="We need a measurable rule to decide which passage best matches a question." check="The index creates one sparse vector row for every text chunk.">
