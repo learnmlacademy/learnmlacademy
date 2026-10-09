@@ -129,9 +129,9 @@ export function PdfRagProjectPage() {
           <RagCitationGateVisual />
           <p>Our offline default quotes the strongest passage directly. The optional LLM may summarize retrieved excerpts. Citation numbers are allowed only if they map to retrieved source IDs. This check blocks fabricated ID numbers but <strong>does not automatically verify every generated claim</strong>.</p>
         </Step>
-        <Step n={8} title="Save the vector index, then reload and ask a question" why="A reused local index is faster and avoids repeating PDF extraction on every new query." check="The answer cites Campus_Travel_Policy.pdf, page 3.">
+        <Step n={8} title="Save the vector index, then reload and ask a question" why="See how a JSON/NPZ index is saved and checked; the current loader intentionally recomputes TF-IDF from saved text for an integrity comparison." check="The answer cites Campus_Travel_Policy.pdf, page 3.">
           <CodeBlock code={"python scripts/index_and_ask.py"} language="bash" title="Create, persist, reload and query" type="runnable" />
-          <p>The CLI creates <code>storage/sample_index/index.json</code> with source text and vocabulary and <code>vectors.npz</code> with numeric features. The loader checks source and index integrity. Do not commit private document indexes to Git.</p>
+          <p>The CLI creates <code>storage/sample_index/index.json</code> with source text and vocabulary and <code>vectors.npz</code> with numeric features. <strong>Important:</strong> the current <code>RagIndex.load()</code> refits TF-IDF from saved source chunks and compares it against stored weights, then uses the saved matrix. This is an integrity/reproducibility exercise, not a fully optimized reload that avoids recomputing features. Do not commit private indexes to Git. The advanced semantic RAG track demonstrates a separate persistence design.</p>
         </Step>
         <Step n={9} title="Run all tests, then open the Streamlit web app" why="Tests catch corrupt files, duplicate uploads, wrong source pages, unknown answers and invented citation IDs." check="pytest passes, Streamlit starts and the sample loads in your browser.">
           <CodeBlock code={"python -m pytest -q\npython -m streamlit run app.py"} language="bash" title="Check and run the application" type="runnable" />

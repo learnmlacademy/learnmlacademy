@@ -52,6 +52,7 @@ export function CreditCardFraudProjectPage() {
       </header>
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
+        <p className="mx-auto max-w-6xl px-5 pt-4 text-sm text-amber-900"><strong>Saved-model safety:</strong> Only load Joblib model artifacts you generated yourself or explicitly trust. Joblib uses pickle-based loading and must never open untrusted uploads.</p>
         <section className="rounded-2xl border border-rose-200 bg-rose-50 p-5 sm:p-7">
           <h2 className="flex items-center gap-2 text-xl font-black text-rose-950">
             <Target className="h-5 w-5" aria-hidden="true" />
