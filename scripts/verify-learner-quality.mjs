@@ -35,6 +35,12 @@ assert(support.includes('localStorage.setItem'), 'Learner progress is not saved'
 assert(support.includes('aria-valuenow'), 'Progress bar must have an accessible value');
 assert((await read('src/components/NewsletterSignup.tsx')).includes('Privacy Policy'), 'Signup form lacks privacy disclosure');
 assert((await read('src/pages/legal/PrivacyPolicyPage.tsx')).includes('Brevo'), 'Privacy policy does not explain newsletter provider');
+const layout = await read('src/components/layout/AppLayout.tsx');
+const analytics = await read('src/components/GoogleAnalytics.tsx');
+assert(!layout.includes('CookieConsent'), 'Legacy cookie consent loader must not be mounted alongside GoogleAnalytics');
+assert(app.includes('<GoogleAnalytics />'), 'Single analytics consent banner missing from app');
+assert(analytics.includes("consent !== 'granted'"), 'Analytics script must load only after explicit consent');
+
 
 const source = await read('api/newsletter.ts');
 const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } });
