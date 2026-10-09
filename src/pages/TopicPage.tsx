@@ -5,7 +5,7 @@ import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils
 import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
 import { GenericContent } from "../content/GenericContent";
-import { QuizSection } from "../components/QuizSection";
+const QuizSection = lazy(() => import('../components/QuizSection').then(module => ({ default: module.QuizSection })));
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
 import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
 import { WasThisHelpful } from "../components/lesson/WasThisHelpful";
@@ -546,7 +546,9 @@ export function TopicPage() {
 
   const renderQuiz = () => (
     <div id="quiz-section" key={`quiz-${subtopic.id}`} className="scroll-mt-20">
-      <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      <Suspense fallback={<div className="mt-16 min-h-64 rounded-2xl border border-slate-200 bg-slate-50 p-6" role="status" aria-live="polite">Loading knowledge check…</div>}>
+        <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      </Suspense>
     </div>
   );
 
