@@ -7,6 +7,7 @@ import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 import { GenericContent } from "../content/GenericContent";
 import { QuizSection } from "../components/QuizSection";
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
+import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
 import { WasThisHelpful } from "../components/lesson/WasThisHelpful";
 import { LessonCompletionBanner } from "../components/lesson/LessonCompletionBanner";
 import { useProgress } from "../context/ProgressContext";
@@ -619,6 +620,8 @@ export function TopicPage() {
           )}
         </Suspense>
       </article>
+
+      <LessonProjectBridge topicId={topicId} categoryId={category.id} />
 
       {/* Lesson Completion Progress Card */}
       <LessonCompletionBanner
