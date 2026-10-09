@@ -73,5 +73,7 @@ jobs:
           git add public/project-handbooks/disaster-tweets/*-app.png
           if ! git diff --cached --quiet; then
             git commit -m "docs: add genuine three-project app screenshots [skip ci]"
+            git fetch origin feat/complete-three-projects-20261009
+            git rebase origin/feat/complete-three-projects-20261009
             git push origin "HEAD:feat/complete-three-projects-20261009"
           fi
