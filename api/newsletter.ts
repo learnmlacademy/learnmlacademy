@@ -70,15 +70,18 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: "Method not allowed." });
   }
 
-  // Block cross-origin browser form submissions. A supplied Origin must belong
-  // to the public site or to the actual Vercel preview host in the request.
+  // Browser POST requests supply an Origin. Do not trust a caller-controlled Host
+  // as permission to add arbitrary origins; preview hosts come from Vercel env.
   const origin = req.headers?.origin;
-  const host = req.headers?.host;
   const allowedOrigins = new Set(["https://www.learnmlacademy.com", "https://learnmlacademy.com"]);
-  if (typeof host === "string" && /^[a-z0-9.-]+(?::[0-9]+)?$/i.test(host)) {
-    allowedOrigins.add("https://" + host);
+  if (process.env.VERCEL_ENV === "preview" && process.env.VERCEL_URL) {
+    allowedOrigins.add("https://" + process.env.VERCEL_URL);
   }
-  if (typeof origin === "string" && !allowedOrigins.has(origin)) {
+  if (process.env.NODE_ENV !== "production") {
+    allowedOrigins.add("http://localhost:3000");
+    allowedOrigins.add("http://127.0.0.1:3000");
+  }
+  if (typeof origin !== "string" || !allowedOrigins.has(origin)) {
     return res.status(403).json({ error: "Cross-site signup is not allowed." });
   }
 
@@ -86,12 +89,17 @@ export default async function handler(req: any, res: any) {
   if (contentType !== "application/json") {
     return res.status(415).json({ error: "Use application/json for signup." });
   }
-
-  if (req.body?.consent !== true) {
+  // This endpoint only needs one short email, consent and a handbook ID.
+  // Cap the parsed payload before it reaches the email provider.
+  if (!req.body || typeof req.body !== "object" ||
+      Number(req.headers?.["content-length"] || 0) > 4096 ||
+      JSON.stringify(req.body).length > 4096) {
+    return res.status(413).json({ error: "Signup request is too large." });
+  }
+  if (req.body.consent !== true) {
     return res.status(400).json({ error: "Please agree to receive the PDF and learning emails." });
   }
-  if (typeof req.body?.website === "string" && req.body.website.trim()) {
-    // The field is hidden from human users; never forward honeypot signups.
+  if (typeof req.body.website === "string" && req.body.website.trim()) {
     return res.status(400).json({ error: "Invalid signup." });
   }
 
