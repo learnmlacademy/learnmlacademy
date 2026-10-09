@@ -79,7 +79,7 @@ def main() -> None:
         for project in PROJECTS:
             with urllib.request.urlopen(BASE + "/project-starters/" + project + ".zip", timeout=15) as response:
                 magic = response.read(4)
-                assert response.status == 200 and magic == b"PK\\x03\\x04", project + ": ZIP missing or corrupt"
+                assert response.status == 200 and magic == bytes([80, 75, 3, 4]), project + ": ZIP missing or corrupt"
 
         for width, height, mobile in [(1440, 900, False), (390, 844, True)]:
             driver = browser(width, height)
