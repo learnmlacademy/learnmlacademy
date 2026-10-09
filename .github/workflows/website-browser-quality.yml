@@ -1,0 +1,64 @@
+name: Website Browser and Mobile Quality
+
+on:
+  pull_request:
+    paths:
+      - "src/App.tsx"
+      - "src/pages/**"
+      - "src/components/**"
+      - "src/data/projectPortfolio.ts"
+      - "api/newsletter.ts"
+      - "package.json"
+      - "scripts/browser_smoke.py"
+      - "scripts/verify-learner-quality.mjs"
+      - "tests/newsletter-security.test.mjs"
+      - ".github/workflows/website-browser-quality.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/App.tsx"
+      - "src/pages/**"
+      - "src/components/**"
+      - "src/data/projectPortfolio.ts"
+      - "scripts/browser_smoke.py"
+      - "scripts/verify-learner-quality.mjs"
+      - ".github/workflows/website-browser-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: website-browser-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install and build the complete published site
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+      - name: Install headless browser test client
+        run: python -m pip install selenium==4.36.0
+      - name: Visit all 12 handbook pages at desktop and mobile widths
+        run: python scripts/browser_smoke.py
+      - name: Preserve original Chrome QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-mobile-project-evidence
+          path: browser-quality-evidence/
+          if-no-files-found: ignore
+          retention-days: 7
