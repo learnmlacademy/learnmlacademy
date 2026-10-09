@@ -1,10 +1,10 @@
-import React, { useEffect, lazy, Suspense, useRef } from "react";
+import { useEffect, Suspense, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
 import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
 import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
-import { GenericContent } from "../content/GenericContent";
+import { LessonContentRegistry } from "../content/LessonContentRegistry";
 import { QuizSection } from "../components/QuizSection";
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
 import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
@@ -16,115 +16,6 @@ import {
   LegacyInlineEndingCleanup,
   LegacyLessonSummary,
 } from "../components/LegacyLessonEnding";
-
-// Lazy-loaded content components — each is a separate JS chunk loaded on demand
-const WhatIsMLContent = lazy(() => import("../content/foundations/WhatIsMLContent").then(m => ({ default: m.WhatIsMLContent })));
-const TypesOfMLContent = lazy(() => import("../content/foundations/TypesOfMLContent").then(m => ({ default: m.TypesOfMLContent })));
-const SupervisedIntroContent = lazy(() => import("../content/foundations/SupervisedIntroContent").then(m => ({ default: m.SupervisedIntroContent })));
-const UnsupervisedIntroContent = lazy(() => import("../content/foundations/UnsupervisedIntroContent").then(m => ({ default: m.UnsupervisedIntroContent })));
-const ReinforcementIntroContent = lazy(() => import("../content/foundations/ReinforcementIntroContent").then(m => ({ default: m.ReinforcementIntroContent })));
-const BatchVsOnlineContent = lazy(() => import("../content/foundations/BatchVsOnlineContent").then(m => ({ default: m.BatchVsOnlineContent })));
-const MLLifecycleContent = lazy(() => import("../content/foundations/MLLifecycleContent").then(m => ({ default: m.MLLifecycleContent })));
-
-const PythonForMLContent = lazy(() => import("../content/python/PythonForMLContent").then(m => ({ default: m.PythonForMLContent })));
-const NumpyContent = lazy(() => import("../content/python/NumpyContent").then(m => ({ default: m.NumpyContent })));
-const PandasContent = lazy(() => import("../content/python/PandasContent").then(m => ({ default: m.PandasContent })));
-const ScikitLearnContent = lazy(() => import("../content/python/ScikitLearnContent").then(m => ({ default: m.ScikitLearnContent })));
-
-const LinearRegressionContent = lazy(() => import("../content/supervised/LinearRegressionContent").then(m => ({ default: m.LinearRegressionContent })));
-const GradientDescentContent = lazy(() => import("../content/supervised/GradientDescentContent").then(m => ({ default: m.GradientDescentContent })));
-const PolynomialRegressionContent = lazy(() => import("../content/supervised/PolynomialRegressionContent").then(m => ({ default: m.PolynomialRegressionContent })));
-const RidgeRegressionContent = lazy(() => import("../content/supervised/RidgeRegressionContent").then(m => ({ default: m.RidgeRegressionContent })));
-const LassoRegressionContent = lazy(() => import("../content/supervised/LassoRegressionContent").then(m => ({ default: m.LassoRegressionContent })));
-const ClassificationIntroContent = lazy(() => import("../content/supervised/ClassificationIntroContent").then(m => ({ default: m.ClassificationIntroContent })));
-const LogisticRegressionContent = lazy(() => import("../content/supervised/LogisticRegressionContent").then(m => ({ default: m.LogisticRegressionContent })));
-const DecisionTreesContent = lazy(() => import("../content/supervised/DecisionTreesContent").then(m => ({ default: m.DecisionTreesContent })));
-const NaiveBayesContent = lazy(() => import("../content/supervised/NaiveBayesContent").then(m => ({ default: m.NaiveBayesContent })));
-const KNNContent = lazy(() => import("../content/supervised/KNNContent").then(m => ({ default: m.KNNContent })));
-const SVMContent = lazy(() => import("../content/supervised/SVMContent").then(m => ({ default: m.SVMContent })));
-const RegressionIntroContent = lazy(() => import("../content/supervised/RegressionIntroContent").then(m => ({ default: m.RegressionIntroContent })));
-
-const EDAContent = lazy(() => import("../content/preprocessing/EDAContent").then(m => ({ default: m.EDAContent })));
-const HandlingMissingDataContent = lazy(() => import("../content/preprocessing/HandlingMissingDataContent").then(m => ({ default: m.HandlingMissingDataContent })));
-const EncodingCategoricalContent = lazy(() => import("../content/preprocessing/EncodingCategoricalContent").then(m => ({ default: m.EncodingCategoricalContent })));
-const FeatureScalingContent = lazy(() => import("../content/preprocessing/FeatureScalingContent").then(m => ({ default: m.FeatureScalingContent })));
-const FeatureEngineeringContent = lazy(() => import("../content/preprocessing/FeatureEngineeringContent").then(m => ({ default: m.FeatureEngineeringContent })));
-const FeatureSelectionContent = lazy(() => import("../content/preprocessing/FeatureSelectionContent").then(m => ({ default: m.FeatureSelectionContent })));
-const DataVisualizationContent = lazy(() => import("../content/preprocessing/DataVisualizationContent").then(m => ({ default: m.DataVisualizationContent })));
-
-const TrainTestSplitContent = lazy(() => import("../content/evaluation/TrainTestSplitContent").then(m => ({ default: m.TrainTestSplitContent })));
-const CrossValidationContent = lazy(() => import("../content/evaluation/CrossValidationContent").then(m => ({ default: m.CrossValidationContent })));
-const BiasVarianceContent = lazy(() => import("../content/evaluation/BiasVarianceContent").then(m => ({ default: m.BiasVarianceContent })));
-const OverfittingUnderfittingContent = lazy(() => import("../content/evaluation/OverfittingUnderfittingContent").then(m => ({ default: m.OverfittingUnderfittingContent })));
-const CostFunctionsContent = lazy(() => import("../content/evaluation/CostFunctionsContent").then(m => ({ default: m.CostFunctionsContent })));
-const HyperparameterTuningContent = lazy(() => import("../content/evaluation/HyperparameterTuningContent").then(m => ({ default: m.HyperparameterTuningContent })));
-const GridRandomSearchContent = lazy(() => import("../content/evaluation/GridRandomSearchContent").then(m => ({ default: m.GridRandomSearchContent })));
-const ConfusionMatrixContent = lazy(() => import("../content/evaluation/ConfusionMatrixContent").then(m => ({ default: m.ConfusionMatrixContent })));
-const RocAucContent = lazy(() => import("../content/evaluation/RocAucContent").then(m => ({ default: m.RocAucContent })));
-
-const RandomForestContent = lazy(() => import("../content/ensemble/RandomForestContent").then(m => ({ default: m.RandomForestContent })));
-const BaggingContent = lazy(() => import("../content/ensemble/BaggingContent").then(m => ({ default: m.BaggingContent })));
-const BoostingContent = lazy(() => import("../content/ensemble/BoostingContent").then(m => ({ default: m.BoostingContent })));
-const AdaBoostContent = lazy(() => import("../content/ensemble/AdaBoostContent").then(m => ({ default: m.AdaBoostContent })));
-const GradientBoostingContent = lazy(() => import("../content/ensemble/GradientBoostingContent").then(m => ({ default: m.GradientBoostingContent })));
-const XGBoostContent = lazy(() => import("../content/ensemble/XGBoostContent").then(m => ({ default: m.XGBoostContent })));
-
-const KMeansContent = lazy(() => import("../content/unsupervised/KMeansContent").then(m => ({ default: m.KMeansContent })));
-const HierarchicalContent = lazy(() => import("../content/unsupervised/HierarchicalContent").then(m => ({ default: m.HierarchicalContent })));
-const DBSCANContent = lazy(() => import("../content/unsupervised/DBSCANContent").then(m => ({ default: m.DBSCANContent })));
-const PCAContent = lazy(() => import("../content/unsupervised/PCAContent").then(m => ({ default: m.PCAContent })));
-const TSNEContent = lazy(() => import("../content/unsupervised/TSNEContent").then(m => ({ default: m.TSNEContent })));
-const AssociationRulesContent = lazy(() => import("../content/unsupervised/AssociationRulesContent").then(m => ({ default: m.AssociationRulesContent })));
-const AprioriContent = lazy(() => import("../content/unsupervised/AprioriContent").then(m => ({ default: m.AprioriContent })));
-
-const ArimaContent = lazy(() => import("../content/timeseries/ArimaContent").then(m => ({ default: m.ArimaContent })));
-const MovingAverageContent = lazy(() => import("../content/timeseries/MovingAverageContent").then(m => ({ default: m.MovingAverageContent })));
-const ExponentialSmoothingContent = lazy(() => import("../content/timeseries/ExponentialSmoothingContent").then(m => ({ default: m.ExponentialSmoothingContent })));
-const ForecastingBasicsContent = lazy(() => import("../content/timeseries/ForecastingBasicsContent").then(m => ({ default: m.ForecastingBasicsContent })));
-
-const SemiSupervisedContent = lazy(() => import("../content/advanced/SemiSupervisedContent").then(m => ({ default: m.SemiSupervisedContent })));
-const OnlineLearningContent = lazy(() => import("../content/advanced/OnlineLearningContent").then(m => ({ default: m.OnlineLearningContent })));
-const ReinforcementLearningAdvContent = lazy(() => import("../content/advanced/ReinforcementLearningAdvContent").then(m => ({ default: m.ReinforcementLearningAdvContent })));
-const MultiArmedBanditsContent = lazy(() => import("../content/advanced/MultiArmedBanditsContent").then(m => ({ default: m.MultiArmedBanditsContent })));
-
-const NeuralNetworksContent = lazy(() => import("../content/deeplearning/NeuralNetworksContent").then(m => ({ default: m.NeuralNetworksContent })));
-const DeepLearningIntroContent = lazy(() => import("../content/deeplearning/DeepLearningIntroContent").then(m => ({ default: m.DeepLearningIntroContent })));
-const MathFoundationsContent = lazy(() => import("../content/deeplearning/MathFoundationsContent").then(m => ({ default: m.MathFoundationsContent })));
-const TensorsFrameworksGPUsContent = lazy(() => import("../content/deeplearning/TensorsFrameworksGPUsContent").then(m => ({ default: m.TensorsFrameworksGPUsContent })));
-const ActivationFunctionsContent = lazy(() => import("../content/deeplearning/ActivationFunctionsContent").then(m => ({ default: m.ActivationFunctionsContent })));
-const LossFunctionsContent = lazy(() => import("../content/deeplearning/LossFunctionsContent").then(m => ({ default: m.LossFunctionsContent })));
-const BackpropagationContent = lazy(() => import("../content/deeplearning/BackpropagationContent").then(m => ({ default: m.BackpropagationContent })));
-const TrainingLoopContent = lazy(() => import("../content/deeplearning/TrainingLoopContent").then(m => ({ default: m.TrainingLoopContent })));
-const OptimizersContent = lazy(() => import("../content/deeplearning/OptimizersContent").then(m => ({ default: m.OptimizersContent })));
-const InitializationNormalizationContent = lazy(() => import("../content/deeplearning/InitializationNormalizationContent").then(m => ({ default: m.InitializationNormalizationContent })));
-const RegularizationContent = lazy(() => import("../content/deeplearning/RegularizationContent").then(m => ({ default: m.RegularizationContent })));
-const DataAugmentationContent = lazy(() => import("../content/deeplearning/DataAugmentationContent").then(m => ({ default: m.DataAugmentationContent })));
-const CNNContent = lazy(() => import("../content/deeplearning/CNNContent").then(m => ({ default: m.CNNContent })));
-const CNNArchitecturesContent = lazy(() => import("../content/deeplearning/CNNArchitecturesContent").then(m => ({ default: m.CNNArchitecturesContent })));
-const DetectionSegmentationContent = lazy(() => import("../content/deeplearning/DetectionSegmentationContent").then(m => ({ default: m.DetectionSegmentationContent })));
-const VisionTransformersContent = lazy(() => import("../content/deeplearning/VisionTransformersContent").then(m => ({ default: m.VisionTransformersContent })));
-const RecurrentSequenceContent = lazy(() => import("../content/deeplearning/RecurrentSequenceContent").then(m => ({ default: m.RecurrentSequenceContent })));
-const StateSpaceModelsContent = lazy(() => import("../content/deeplearning/StateSpaceModelsContent").then(m => ({ default: m.StateSpaceModelsContent })));
-const AttentionTransformersContent = lazy(() => import("../content/deeplearning/AttentionTransformersContent").then(m => ({ default: m.AttentionTransformersContent })));
-const TransformersDeepLearningContent = lazy(() => import("../content/deeplearning/AttentionTransformersContent").then(m => ({ default: m.TransformersDeepLearningContent })));
-const DeepLearningNLPContent = lazy(() => import("../content/deeplearning/DeepLearningNLPContent").then(m => ({ default: m.DeepLearningNLPContent })));
-const AutoencodersContent = lazy(() => import("../content/deeplearning/AutoencodersContent").then(m => ({ default: m.AutoencodersContent })));
-const TransferLearningContent = lazy(() => import("../content/deeplearning/TransferLearningContent").then(m => ({ default: m.TransferLearningContent })));
-const SelfSupervisedFewShotContent = lazy(() => import("../content/deeplearning/TransferLearningContent").then(m => ({ default: m.SelfSupervisedFewShotContent })));
-const GraphNeuralNetworksContent = lazy(() => import("../content/deeplearning/GraphNeuralNetworksContent").then(m => ({ default: m.GraphNeuralNetworksContent })));
-const ScientificNetworksContent = lazy(() => import("../content/deeplearning/ScientificNetworksContent").then(m => ({ default: m.ScientificNetworksContent })));
-const ModelDeploymentContent = lazy(() => import("../content/deeplearning/ModelDeploymentContent").then(m => ({ default: m.ModelDeploymentContent })));
-const ModernAIContent = lazy(() => import("../content/modernai/ModernAIContent").then(m => ({ default: m.ModernAIContent })));
-const LLMConsolidatedContent = lazy(() => import("../content/modernai/LLMConsolidatedContent").then(m => ({ default: m.LLMConsolidatedContent })));
-const GenerativeAIBatchOneContent = lazy(() => import("../content/modernai/GenerativeAIBatchOneContent").then(m => ({ default: m.GenerativeAIBatchOneContent })));
-const GenerativeAIBatchTwoContent = lazy(() => import("../content/modernai/GenerativeAIBatchTwoContent").then(m => ({ default: m.GenerativeAIBatchTwoContent })));
-const GenerativeAIBatchThreeContent = lazy(() => import("../content/modernai/GenerativeAIBatchThreeContent").then(m => ({ default: m.GenerativeAIBatchThreeContent })));
-const GenAIBeginnerFoundationsContent = GenerativeAIBatchOneContent;
-const GenAIBeginnerMediaContent = GenerativeAIBatchTwoContent;
-const GenAIBeginnerProductionContent = GenerativeAIBatchThreeContent;
-const ProjectsContent = lazy(() => import("../content/projects/ProjectsContent").then(m => ({ default: m.ProjectsContent })));
-const MLOpsContent = lazy(() => import("../content/mlops/MLOpsContent").then(m => ({ default: m.MLOpsContent })));
-const CareerInterviewContent = lazy(() => import("../content/interview/CareerInterviewContent").then(m => ({ default: m.CareerInterviewContent })));
 
 import { AffiliateRecommendation } from "../components/AffiliateRecommendation";
 import { NewsletterSignup } from "../components/NewsletterSignup";
@@ -172,234 +63,7 @@ function getTopicNavigation(currentId: string) {
   return { prev, next };
 }
 
-const contentMap: Record<string, React.ElementType> = {
-    "what-is-ml": WhatIsMLContent,
-    "types-of-ml": TypesOfMLContent,
-    "supervised-learning-intro": SupervisedIntroContent,
-    "unsupervised-learning-intro": UnsupervisedIntroContent,
-    "reinforcement-learning-intro": ReinforcementIntroContent,
-    "batch-vs-online": BatchVsOnlineContent,
-    "ml-lifecycle": MLLifecycleContent,
 
-    "python-for-ml": PythonForMLContent,
-    "numpy-essentials": NumpyContent,
-    "pandas-essentials": PandasContent,
-    "scikit-learn-essentials": ScikitLearnContent,
-
-    // Preprocessing
-    eda: EDAContent,
-    "handling-missing-data": HandlingMissingDataContent,
-    "encoding-categorical": EncodingCategoricalContent,
-    "feature-scaling": FeatureScalingContent,
-    "feature-engineering": FeatureEngineeringContent,
-    "feature-selection": FeatureSelectionContent,
-    "data-visualization": DataVisualizationContent,
-
-    // Supervised Learning
-    "regression-intro": RegressionIntroContent,
-    "linear-regression": LinearRegressionContent,
-    "gradient-descent": GradientDescentContent,
-    "polynomial-regression": PolynomialRegressionContent,
-    "ridge-regression": RidgeRegressionContent,
-    "lasso-regression": LassoRegressionContent,
-    "classification-intro": ClassificationIntroContent,
-    "logistic-regression": LogisticRegressionContent,
-    "decision-trees": DecisionTreesContent,
-    "naive-bayes": NaiveBayesContent,
-    knn: KNNContent,
-    svm: SVMContent,
-
-    // Model Evaluation
-    "train-test-split": TrainTestSplitContent,
-    "cross-validation": CrossValidationContent,
-    "bias-variance": BiasVarianceContent,
-    "overfitting-underfitting": OverfittingUnderfittingContent,
-    "cost-functions": CostFunctionsContent,
-    "hyperparameter-tuning": HyperparameterTuningContent,
-    "grid-random-search": GridRandomSearchContent,
-    "confusion-matrix": ConfusionMatrixContent,
-    "roc-auc": RocAucContent,
-
-    // Ensemble Learning
-    "random-forest": RandomForestContent,
-    bagging: BaggingContent,
-    boosting: BoostingContent,
-    adaboost: AdaBoostContent,
-    "gradient-boosting": GradientBoostingContent,
-    xgboost: XGBoostContent,
-
-    // Unsupervised Learning
-    kmeans: KMeansContent,
-    hierarchical: HierarchicalContent,
-    dbscan: DBSCANContent,
-    pca: PCAContent,
-    tsne: TSNEContent,
-    "association-rules": AssociationRulesContent,
-    apriori: AprioriContent,
-
-    // Time Series
-    arima: ArimaContent,
-    "moving-average": MovingAverageContent,
-    "exponential-smoothing": ExponentialSmoothingContent,
-    "forecasting-basics": ForecastingBasicsContent,
-
-    "semi-supervised": SemiSupervisedContent,
-    "online-learning": OnlineLearningContent,
-    "reinforcement-learning-adv": ReinforcementLearningAdvContent,
-    "multi-armed-bandits": MultiArmedBanditsContent,
-
-    "neural-networks": NeuralNetworksContent,
-    "deep-learning-intro": DeepLearningIntroContent,
-    "tensors-frameworks-gpus": TensorsFrameworksGPUsContent,
-    "activation-functions": ActivationFunctionsContent,
-    "loss-functions-deep-learning": LossFunctionsContent,
-    backpropagation: BackpropagationContent,
-    "computational-graphs-autodiff": BackpropagationContent,
-    "neural-network-training-loop": TrainingLoopContent,
-    "deep-learning-optimizers": OptimizersContent,
-    "learning-rate-scheduling": OptimizersContent,
-    "weight-initialization": InitializationNormalizationContent,
-    "batch-normalization": InitializationNormalizationContent,
-    "deep-learning-regularization": RegularizationContent,
-    "vanishing-exploding-gradients": InitializationNormalizationContent,
-    "data-augmentation-deep-learning": DataAugmentationContent,
-    cnn: CNNContent,
-    "cnn-architectures-resnet": CNNArchitecturesContent,
-    "computer-vision": ModernAIContent,
-    "object-detection": DetectionSegmentationContent,
-    "rnn-lstm": RecurrentSequenceContent,
-    "state-space-models": StateSpaceModelsContent,
-    "gru-bidirectional-seq2seq": RecurrentSequenceContent,
-    "deep-learning-nlp": DeepLearningNLPContent,
-    "transfer-learning": TransferLearningContent,
-    autoencoders: AutoencodersContent,
-    "self-supervised-contrastive-learning": TransferLearningContent,
-    "graph-neural-networks": GraphNeuralNetworksContent,
-    "debugging-neural-networks": ModernAIContent,
-    "saving-deploying-deep-models": ModelDeploymentContent,
-    "math-foundations-deep-learning": MathFoundationsContent,
-    "mlp-universal-approximation": NeuralNetworksContent,
-    "advanced-neural-optimization": ModernAIContent,
-    "normalization-methods": InitializationNormalizationContent,
-    "label-smoothing-distillation-ensembles": RegularizationContent,
-    "deep-learning-generalization": RegularizationContent,
-    "curriculum-meta-few-shot": TransferLearningContent,
-    "self-supervised-few-shot-learning": SelfSupervisedFewShotContent,
-    "unet-deeplab-gradcam": DetectionSegmentationContent,
-    "vision-transformers": VisionTransformersContent,
-    "state-space-bptt": RecurrentSequenceContent,
-    "attention-transformers-deep-learning": AttentionTransformersContent,
-    "transformers-deep-learning": TransformersDeepLearningContent,
-    "autoencoder-variants": AutoencodersContent,
-    "pinn-kan-topological-networks": ScientificNetworksContent,
-
-    "generative-ai-intro": GenerativeAIBatchOneContent,
-    "generative-vs-discriminative": GenerativeAIBatchOneContent,
-    "how-generative-models-learn": GenerativeAIBatchOneContent,
-    vae: GenerativeAIBatchOneContent,
-    gans: GenerativeAIBatchOneContent,
-    "diffusion-models": GenerativeAIBatchOneContent,
-    "stable-latent-diffusion": GenerativeAIBatchTwoContent,
-    "controlling-diffusion-models": GenerativeAIBatchTwoContent,
-    "finetuning-image-models": GenerativeAIBatchTwoContent,
-    "text-generation-decoding": LLMConsolidatedContent,
-    "hugging-face": ModernAIContent,
-    "multimodal-ai": GenerativeAIBatchTwoContent,
-    "audio-music-video-generation": GenerativeAIBatchTwoContent,
-    "synthetic-data": GenerativeAIBatchTwoContent,
-    "evaluating-generative-models": GenerativeAIBatchThreeContent,
-    "choosing-generative-model": GenerativeAIBatchThreeContent,
-    "genai-apis-open-models": ModernAIContent,
-    "building-genai-apps": GenerativeAIBatchThreeContent,
-    "genai-deployment": GenerativeAIBatchThreeContent,
-    "responsible-generative-ai": GenerativeAIBatchThreeContent,
-
-    "llm-intro": LLMConsolidatedContent,
-    "language-model-evolution": ModernAIContent,
-    "tokenization-embeddings": LLMConsolidatedContent,
-    "transformers-attention": LLMConsolidatedContent,
-    "encoder-decoder-models": ModernAIContent,
-    "context-windows": ModernAIContent,
-    "pretraining-finetuning": LLMConsolidatedContent,
-    "llm-data-preparation": ModernAIContent,
-    "llm-scaling-laws": ModernAIContent,
-    "distributed-llm-training": ModernAIContent,
-    "instruction-tuning-rlhf": LLMConsolidatedContent,
-    "lora-peft": ModernAIContent,
-    "knowledge-distillation": ModernAIContent,
-    "quantization-inference": ModernAIContent,
-    "efficient-llm-serving": LLMConsolidatedContent,
-    "prompt-engineering": LLMConsolidatedContent,
-    "structured-output-function-calling": ModernAIContent,
-    "semantic-search-embeddings": LLMConsolidatedContent,
-    "vector-databases": LLMConsolidatedContent,
-    rag: LLMConsolidatedContent,
-    "advanced-rag": LLMConsolidatedContent,
-    "rag-evaluation": ModernAIContent,
-    "llm-evaluation": LLMConsolidatedContent,
-    "reasoning-models": LLMConsolidatedContent,
-    "llm-benchmarking-selection": ModernAIContent,
-    llmops: LLMConsolidatedContent,
-    "llm-hallucinations-safety": LLMConsolidatedContent,
-
-    "agentic-ai-intro": ModernAIContent,
-    "types-of-ai-agents": ModernAIContent,
-    "agents-vs-workflows": ModernAIContent,
-    "tool-calling": ModernAIContent,
-    "agent-context-engineering": ModernAIContent,
-    "reliable-agent-tools": ModernAIContent,
-    "agent-memory": ModernAIContent,
-    "planning-reflection": ModernAIContent,
-    "agent-state-graphs": ModernAIContent,
-    "durable-long-running-agents": ModernAIContent,
-    "react-agent-pattern": ModernAIContent,
-    "agentic-rag": ModernAIContent,
-    "multi-agent-systems": ModernAIContent,
-    "agent-to-agent-communication": ModernAIContent,
-    "agent-frameworks": ModernAIContent,
-    "model-context-protocol": ModernAIContent,
-    "human-in-the-loop": ModernAIContent,
-    "building-ai-agent": ModernAIContent,
-    "browser-computer-use-agents": ModernAIContent,
-    "code-agents-sandboxing": ModernAIContent,
-    "agent-security": ModernAIContent,
-    "agent-failure-recovery": ModernAIContent,
-    "agent-cost-latency-budgets": ModernAIContent,
-    "agent-evaluation-safety": ModernAIContent,
-    "agent-trajectory-evaluation": ModernAIContent,
-    "agent-observability-deployment": ModernAIContent,
-    "project-customer-churn": ProjectsContent,
-    "project-credit-risk": ProjectsContent,
-    "project-sales-forecasting": ProjectsContent,
-    "project-image-classification": ProjectsContent,
-    "project-genai-app": ProjectsContent,
-    "project-rag-document-qa": ProjectsContent,
-    "project-ai-agent": ProjectsContent,
-    "project-multi-agent-research": ProjectsContent,
-    "ai-engineering-mlops": MLOpsContent,
-    "ml-data-feature-pipelines": MLOpsContent,
-    "experiment-tracking-model-registry": MLOpsContent,
-    "batch-online-inference": MLOpsContent,
-    "ml-cicd-continuous-training": MLOpsContent,
-    "ml-monitoring-drift": MLOpsContent,
-    "production-ai-reliability": MLOpsContent,
-    "ml-system-design": MLOpsContent,
-    "ai-data-career-paths": CareerInterviewContent,
-    "ml-engineer-roadmap": CareerInterviewContent,
-    "ai-engineer-roadmap": CareerInterviewContent,
-    "genai-llm-engineer-roadmap": CareerInterviewContent,
-    "data-scientist-roadmap": CareerInterviewContent,
-    "interview-preparation-strategy": CareerInterviewContent,
-    "ml-interview-questions": CareerInterviewContent,
-    "deep-learning-interview-questions": CareerInterviewContent,
-    "genai-llm-rag-interview": CareerInterviewContent,
-    "agentic-ai-interview": CareerInterviewContent,
-    "python-ai-ml-interview": CareerInterviewContent,
-    "sql-ai-data-interview": CareerInterviewContent,
-    "ml-ai-system-design-interview": CareerInterviewContent,
-    "mlops-production-interview": CareerInterviewContent,
-    "behavioral-project-interview": CareerInterviewContent,
-  };
 
 const topicAliases: Record<string, string> = {
   "mlp-universal-approximation": "neural-networks",
@@ -525,10 +189,7 @@ export function TopicPage() {
   const { subtopic, category } = topicData;
   const { prev, next } = getTopicNavigation(topicId);
 
-  // Content Registry - map IDs to their React components
-  
-
-  const ContentComponent = contentMap[topicId];
+  // Load only the small registry for this lesson's curriculum category.
   const isGenerativeAILesson = category.id === "generative-ai";
   const isLLMLesson = category.id === "large-language-models";
   const isAgenticAILesson = category.id === "agentic-ai";
@@ -612,7 +273,7 @@ export function TopicPage() {
             <div className="h-4 w-full rounded bg-slate-200" />
           </div>
         }>
-          {ContentComponent ? <ContentComponent /> : <GenericContent title={subtopic.title} />}
+          <LessonContentRegistry topicId={topicId} categoryId={category.id} title={subtopic.title} />
           {isLegacyStandardizedLesson && (
             <LegacyInlineEndingCleanup articleRef={articleRef} topicId={topicId} />
           )}
