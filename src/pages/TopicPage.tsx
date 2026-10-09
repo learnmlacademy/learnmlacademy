@@ -1,11 +1,11 @@
-import { useEffect, Suspense, useRef } from "react";
+import { lazy, useEffect, Suspense, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
 import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
 import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
 import { LessonContentRegistry } from "../content/LessonContentRegistry";
-import { QuizSection } from "../components/QuizSection";
+const QuizSection = lazy(() => import("../components/QuizSection").then(m => ({ default: m.QuizSection })));
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
 import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
 import { WasThisHelpful } from "../components/lesson/WasThisHelpful";
@@ -207,7 +207,9 @@ export function TopicPage() {
 
   const renderQuiz = () => (
     <div id="quiz-section" key={`quiz-${subtopic.id}`} className="scroll-mt-20">
-      <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      <Suspense fallback={<div className="min-h-24 py-8 text-sm text-slate-600" role="status">Loading knowledge check…</div>}>
+        <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      </Suspense>
     </div>
   );
 
