@@ -75,6 +75,9 @@ def test_tone_and_operation_are_validated():
 def test_api_key_like_strings_rejected_in_brief():
     with pytest.raises(ValidationError, match="secrets"):
         request(brief="Private API key is sk-abcdefghijklmnopqrstuvwxyz123456789 and do not publish it.")
+    for field in ["brand", "audience", "call_to_action", "draft", "must_include"]:
+        with pytest.raises(ValidationError, match="secrets"):
+            request(**{field: "sk-abcdefghijklmnopqrstuvwxyz123456789"})
 
 
 def test_messages_keep_brief_in_user_message_not_system_policy():
@@ -148,3 +151,30 @@ def test_export_is_explicitly_unverified():
     assert exported["human_fact_checked"] is False
     assert exported["result"]["source_mode"] == "Template demo"
     assert not any("api_key" in key for key in exported.keys())
+
+
+def test_template_format_tone_word_limit_and_no_fake_rewriting():
+    friendly = template_preview(request(tone="Friendly", kind="Social post", max_words=30))
+    formal = template_preview(request(tone="Professional", kind="Email campaign", max_words=30))
+    assert friendly.body != formal.body
+    assert formal.headline.startswith("Subject:")
+    assert len(friendly.body.split()) <= 30
+    assert len(formal.body.split()) <= 30
+    original = "The reading club welcomes readers to our bookshop."
+    rewrite = template_preview(request(operation="Rewrite", draft=original))
+    assert original in rewrite.body
+    assert "NOT paraphrased" in rewrite.body
+    assert "not AI rewriting" in rewrite.caveat
+    short = template_preview(request(operation="Summarize", draft=original))
+    assert "Excerpt" in short.body
+    assert "not AI" in short.caveat
+
+
+def test_local_ollama_is_a_distinct_real_model_path_mocked():
+    client = mock_client(response(source_mode="Local Ollama"))
+    out = generate_with_openai(request(), client, model="llama3.2", source_mode="Local Ollama")
+    assert out.source_mode == "Local Ollama"
+    kwargs = client.chat.completions.create.call_args.kwargs
+    assert kwargs["model"] == "llama3.2"
+    assert "Local Ollama" in kwargs["messages"][0]["content"]
+    assert kwargs["response_format"] == {"type": "json_object"}
