@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - parallel/movie-recommender-handbook
+      - fix/movie-ranking-and-holdout-evaluation-20261009
     paths:
       - "projects/movie-recommender/**"
       - "src/App.tsx"
@@ -125,7 +126,7 @@ jobs:
         run: python scripts/verify_handbook_page.py
 
       - name: Commit verified visual evidence to review branch
-        if: github.event_name == 'push' && github.ref == 'refs/heads/parallel/movie-recommender-handbook' && success()
+        if: github.event_name == 'push' && github.ref == 'refs/heads/fix/movie-ranking-and-holdout-evaluation-20261009' && success()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -135,8 +136,8 @@ jobs:
           else
             git commit -m "Movie recommender: store verified screenshots [skip ci]"
             git restore .
-            git pull --rebase origin parallel/movie-recommender-handbook
-            git push origin HEAD:parallel/movie-recommender-handbook
+            git pull --rebase origin fix/movie-ranking-and-holdout-evaluation-20261009
+            git push origin HEAD:fix/movie-ranking-and-holdout-evaluation-20261009
           fi
 
       - name: Stop preview processes

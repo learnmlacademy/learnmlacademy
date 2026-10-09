@@ -68,3 +68,8 @@ GitHub Actions run **37757264271** passed the full project + website gate:
 - TypeScript validation passed
 - production build/prerender passed
 - desktop/mobile handbook verification passed
+
+
+## Measured evaluation, not just a recommendation screenshot
+
+Run `python src/build_recommender.py` then open `outputs/holdout_hit_rate.json`. It reports Hit Rate@10 for popularity, content and hybrid. The code hides the latest rating for at most 120 reproducibly selected users (with at least three ratings) **before** fitting their popularity and collaborative signals, uses the latest remaining known movie as a seed, and excludes known-rated movies from the top ten. The metric is not from Netflix and not a production personalized recommender. Inspect `score`, `content_score`, `collaborative_score` columns; ties are broken reproducibly using components, popularity and movie ID.
