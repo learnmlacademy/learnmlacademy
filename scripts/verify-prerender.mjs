@@ -12,6 +12,49 @@ function onlyMatch(html, pattern, label) {
   return matches[0][1];
 }
 
+const SITE_HOSTS = new Set(['www.learnmlacademy.com', 'learnmlacademy.com']);
+const normalizePath = pathname => {
+  let decoded = pathname;
+  try { decoded = decodeURIComponent(pathname); } catch { /* keep the original encoded path */ }
+  return decoded === '/' ? '/' : decoded.replace(/\\/+$/, '');
+};
+
+async function isBuiltFile(pathname) {
+  let decoded = pathname;
+  try { decoded = decodeURIComponent(pathname); } catch { /* keep encoded path */ }
+  const candidate = path.resolve('dist', '.' + decoded);
+  const root = path.resolve('dist') + path.sep;
+  if (!candidate.startsWith(root)) return false;
+  try { return (await fs.stat(candidate)).isFile(); } catch { return false; }
+}
+
+async function verifyInternalNavigation(pages) {
+  const pagePaths = new Set(pages.map(page => normalizePath(new URL(page.canonical).pathname)));
+  const failures = [];
+  let linksChecked = 0;
+  for (const page of pages) {
+    const html = await fs.readFile(outputPathForRoute(page.route), 'utf8');
+    const anchors = [...html.matchAll(/<a\\b[^>]*\\bhref=["']([^"']+)["'][^>]*>/gi)];
+    for (const match of anchors) {
+      const rawHref = match[1].replaceAll('&amp;', '&').replaceAll('&#x2F;', '/');
+      if (!rawHref || rawHref.startsWith('#') || /^(?:mailto:|tel:|javascript:|data:)/i.test(rawHref)) continue;
+      let target;
+      try { target = new URL(rawHref, page.canonical); }
+      catch { failures.push(page.route + ': invalid link ' + rawHref); continue; }
+      if (!['http:', 'https:'].includes(target.protocol) || !SITE_HOSTS.has(target.hostname.toLowerCase())) continue;
+      const targetPath = normalizePath(target.pathname);
+      if (targetPath.startsWith('/api/')) continue;
+      linksChecked++;
+      if (pagePaths.has(targetPath)) continue;
+      if (await isBuiltFile(target.pathname)) continue;
+      if (!/\\.[a-z0-9]{1,8}$/i.test(targetPath) && await isBuiltFile(targetPath + '.html')) continue;
+      failures.push(`${page.route}: ${rawHref} resolves to missing internal path ${targetPath}`);
+    }
+  }
+  assert.equal(failures.length, 0, `Broken internal navigation links (${failures.length}):\\n${failures.slice(0, 100).join('\\n')}`);
+  console.log(`verify:links PASS — checked ${linksChecked} same-site anchor links across ${pages.length} prerendered pages.`);
+}
+
 function verifyPage(html, page) {
   const head = onlyMatch(html, /<head>([^]*?)<\/head>/gi, 'head');
   assert.equal(onlyMatch(head, /<title>([^]*?)<\/title>/gi, 'title'), escapeHtml(page.title));
@@ -53,6 +96,9 @@ function verifyPage(html, page) {
     assert(paragraphs.some(match => text(match[1]).length > 80), 'Missing lesson prose/introduction');
     assert(text(body).length > 500, 'Missing substantial lesson content');
     assert(/<h[23]\b/.test(body), 'Missing lesson sections');
+    assert(!body.includes('Welcome to the comprehensive guide on'), 'GenericContent fallback placeholder is rendered instead of a real lesson');
+    assert(!body.includes('Example Standard Implementation Flow'), 'Generic implementation placeholder is rendered instead of the verified lesson code');
+    assert(!body.includes('Accuracy / Error evaluation goes here'), 'Placeholder evaluation output is rendered as lesson content');
     const schema = JSON.parse(onlyMatch(head, /<script\b[^>]*id="schema-topic"[^>]*>([^]*?)<\/script>/gi, 'lesson schema'));
     const article = schema['@graph'].find(item => item['@type']?.includes('TechArticle'));
     assert(article?.['@type'].includes('LearningResource'), 'Missing LearningResource');
@@ -82,7 +128,8 @@ try {
     }
   }
   assert.equal(failures.length, 0, `Prerender verification failed:\n${failures.join('\n')}`);
-  console.log(`verify:prerender PASS — ${lessons.length} lessons, ${pages.filter(p => p.kind === 'blog').length} blog posts, ${pages.filter(p => p.kind === 'static').length} static pages; unique titles, exact metadata/canonicals, schemas and rendered content.`);
+  await verifyInternalNavigation(pages);
+  console.log(`verify:prerender PASS — ${lessons.length} lessons, ${pages.filter(p => p.kind === 'blog').length} blog posts, ${pages.filter(p => p.kind === 'static').length} static pages; unique titles, exact metadata/canonicals, schemas and real lesson content and internal links.`);
 } finally {
   await vite.close();
 }
