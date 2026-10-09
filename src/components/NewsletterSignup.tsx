@@ -178,8 +178,9 @@ export function NewsletterSignup({
             <span>I agree to receive this PDF and occasional learning emails. I can unsubscribe anytime. Read the <a href="/privacy" className="font-bold text-indigo-700 underline hover:text-indigo-900">Privacy Policy</a>.</span>
           </label>
           <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
-            <label htmlFor="signup-website-field">Leave this empty</label>
-            <input id="signup-website-field" type="text" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} />
+            <label>Leave this empty
+              <input type="text" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} />
+            </label>
           </div>
         </div>
       </div>
