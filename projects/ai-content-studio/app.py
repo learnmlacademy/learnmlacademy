@@ -11,15 +11,20 @@ from src.studio import (
 st.set_page_config(page_title="AI Content Studio | LearnMLAcademy", page_icon="✍️", layout="wide")
 st.title("Build Your Own AI Content Studio")
 st.caption("One business brief → reusable social posts, emails and product descriptions.")
-st.info("Start with a **template-only preview**. It uses no AI. For genuine AI writing, "
-        "opt in to the OpenAI API and bring your own key.")
+st.info("Start with the **offline formatting demo** (not AI). For genuine AI writing, "
+        "use a local Ollama model or opt in to the OpenAI API with your own key.")
 with st.sidebar:
     st.header("Writing controls")
     operation = st.selectbox("Operation", ["Create", "Rewrite", "Summarize"])
     kind = st.selectbox("Content format", ["Social post", "Email campaign", "Product description"])
     tone = st.selectbox("Tone", ["Friendly", "Professional", "Playful"])
     max_words = st.slider("Maximum body words", 30, 250, 100, step=10)
-    mode = st.radio("Generation engine", ["Template demo (offline)", "OpenAI API (real AI)"])
+    mode = st.radio("Generation engine", ["Template demo (offline)", "Local Ollama (real AI; no API fee)", "OpenAI API (real AI)"])
+    if mode.startswith("Local Ollama"):
+        st.caption("Runs a downloaded model on THIS computer via localhost:11434. Requires Ollama and RAM/disk space. Cloud models are outside this offline setup.")
+        model_name = os.getenv("OLLAMA_MODEL", "llama3.2")
+    else:
+        model_name = os.getenv("OPENAI_MODEL", "gpt-4.1-mini")
     if mode.startswith("OpenAI"):
         st.warning("Cloud mode sends your brief and any draft to the AI provider. "
                    "Do not send private customer records.")
@@ -61,7 +66,13 @@ if submit:
             if not os.getenv("OPENAI_API_KEY"):
                 raise StudioError("Set OPENAI_API_KEY locally. Offline template mode needs no key.")
             from openai import OpenAI
-            result = generate_with_openai(request, OpenAI())
+            result = generate_with_openai(request, OpenAI(timeout=45), model=model_name)
+        elif mode.startswith("Local Ollama"):
+            from openai import OpenAI
+            local_client = OpenAI(base_url="http://127.0.0.1:11434/v1",
+                                  api_key="ollama", timeout=60)
+            result = generate_with_openai(request, local_client, model=model_name,
+                                          source_mode="Local Ollama")
         else:
             result = template_preview(request)
         record = {"request": request, "result": result}
@@ -95,8 +106,9 @@ if history:
                        file_name="campaign-copy.md", mime="text/markdown")
     st.download_button("Download structured draft (.json)", export_record(request, result),
                        file_name="campaign-record.json", mime="application/json")
-    st.caption("To improve a draft, switch Operation to Rewrite and paste the output back "
-               "into Existing text. Demo mode remains a template; cloud mode calls real AI.")
+    st.caption("To improve a draft, choose Rewrite and paste output into Existing text. "
+               "The demo does not paraphrase or summarize meaning; Ollama uses a local model "
+               "and OpenAI mode calls an external provider with consent.")
     if st.button("Clear session drafts"):
         st.session_state["history"] = []
         st.session_state["selected"] = 0
