@@ -528,11 +528,9 @@ export function LessonShell({
       <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 pb-24 xl:pb-8">
         <div
           ref={contentRootRef}
-          className={
-            showToc
-              ? 'xl:grid xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-10'
-              : 'max-w-4xl mx-auto'
-          }
+          // Reserve the desktop TOC column from the server render so client-side
+          // heading discovery cannot resize and reflow the entire lesson.
+          className="xl:grid xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-10"
         >
           {/* Main Reading Center */}
           <div className="min-w-0 max-w-3xl">
@@ -544,13 +542,17 @@ export function LessonShell({
               topicId={topicId}
             />
 
-            {showToc && (
+            {showToc ? (
               <MobileTableOfContents
                 items={tocItems}
                 activeId={activeSectionId}
                 copied={copied}
                 onCopyLink={handleCopyLink}
               />
+            ) : (
+              // Keep the same space for the mobile TOC before/after headings
+              // are discovered from the already server-rendered lesson body.
+              <div className="mb-6 h-[46px] xl:hidden" aria-hidden="true" />
             )}
 
             {children}
