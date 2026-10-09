@@ -1,11 +1,11 @@
 import React from "react";
+import { DeepLearningOptimizersGuide } from "../deeplearning/DeepLearningOptimizersGuide";
+import { AgenticAIContent } from "./AgenticAIContent";
 
 const DeepLearningIllustratedExample = React.lazy(() => import("../deeplearning/DeepLearningIllustratedExample").then(module => ({ default: module.DeepLearningIllustratedExample })));
-const DeepLearningOptimizersGuide = React.lazy(() => import("../deeplearning/DeepLearningOptimizersGuide").then(module => ({ default: module.DeepLearningOptimizersGuide })));
 const DeepLearningArticleIntro = React.lazy(() => import("../deeplearning/DeepLearningArticleIntro").then(module => ({ default: module.DeepLearningArticleIntro })));
 const DeepLearningLessonExtras = React.lazy(() => import("../deeplearning/DeepLearningLessonExtras").then(module => ({ default: module.DeepLearningLessonExtras })));
 const DeepLearningMathExample = React.lazy(() => import("../deeplearning/DeepLearningMathExample").then(module => ({ default: module.DeepLearningMathExample })));
-const AgenticAIContent = React.lazy(() => import("./AgenticAIContent").then(module => ({ default: module.AgenticAIContent })));
 import { Link, useParams } from "react-router-dom";
 import { AlertTriangle, BookOpen, CheckCircle2, ExternalLink, FlaskConical, Lightbulb, Target, Workflow } from "lucide-react";
 import { getTopicById } from "../../data/curriculum";
@@ -1310,7 +1310,7 @@ export function ModernAIContent() {
 
   return (
     <div className="space-y-8">
-      {learningPath === "deep-learning" && <DeepLearningArticleIntro topicId={topicId} />}
+      {learningPath === "deep-learning" && <React.Suspense fallback={<div className="min-h-[30rem]" aria-hidden="true" />}><DeepLearningArticleIntro topicId={topicId} /></React.Suspense>}
 
       {learningPath !== "deep-learning" && <section className="not-prose bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-2xl p-6">
         <h2 className="text-xl font-bold text-indigo-900 flex items-center gap-2 mb-4"><Target className="w-5 h-5" />What You Will Learn</h2>
@@ -1383,11 +1383,11 @@ export function ModernAIContent() {
         </section>
       )}
 
-      {learningPath === "deep-learning" && <DeepLearningIllustratedExample topicId={topicId} />}
+      {learningPath === "deep-learning" && <React.Suspense fallback={<div className="min-h-[26rem]" aria-hidden="true" />}><DeepLearningIllustratedExample topicId={topicId} /></React.Suspense>}
 
-      {learningPath === "deep-learning" && <DeepLearningMathExample topicId={topicId} />}
+      {learningPath === "deep-learning" && <React.Suspense fallback={<div className="min-h-[18rem]" aria-hidden="true" />}><DeepLearningMathExample topicId={topicId} /></React.Suspense>}
 
-      {learningPath === "deep-learning" && <DeepLearningLessonExtras topicId={topicId} />}
+      {learningPath === "deep-learning" && <React.Suspense fallback={<div className="min-h-[24rem]" aria-hidden="true" />}><DeepLearningLessonExtras topicId={topicId} /></React.Suspense>}
 
       {topicId === "deep-learning-optimizers" && <DeepLearningOptimizersGuide />}
 
