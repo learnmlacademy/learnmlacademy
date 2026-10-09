@@ -363,6 +363,18 @@ export function HomePage() {
               ))}
             </div>
 
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <Link
+                to="/projects"
+                className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-cyan-300 px-4 py-2 text-xs font-extrabold text-slate-950 transition hover:bg-cyan-200"
+              >
+                <FolderKanban className="h-4 w-4" aria-hidden="true" />
+                Build 12 real ML & AI projects
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <span className="text-xs text-slate-300">Full handbooks, working code and starter ZIPs</span>
+            </div>
+
             <a
               href="#free-interview-handbooks"
               className="mt-3 inline-flex items-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-xs font-black text-violet-200 lg:hidden"
