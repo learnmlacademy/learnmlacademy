@@ -45,4 +45,15 @@ assert(analytics.includes("consent !== 'granted'"), 'Analytics script must load 
 const source = await read('api/newsletter.ts');
 const compiled = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } });
 assert(!compiled.diagnostics?.some(d => d.category === ts.DiagnosticCategory.Error), 'Newsletter TypeScript transpilation failed');
+const assets = await fs.readdir(path.join(root, 'dist/assets'));
+const jsFiles = await Promise.all(assets.filter(file => file.endsWith('.js')).map(async file => ({
+  file, size: (await fs.stat(path.join(root, 'dist/assets', file))).size,
+})));
+const largest = [...jsFiles].sort((a, b) => b.size - a.size)[0];
+const topicChunk = jsFiles.find(item => item.file.startsWith('TopicPage-'));
+assert(topicChunk, 'The route-level TopicPage chunk should remain a separate lazy bundle');
+assert(topicChunk.size < 300 * 1024, 'TopicPage chunk grew above 300 KiB: ' + Math.round(topicChunk.size / 1024) + ' KiB');
+assert(largest.size < 480 * 1024, 'JavaScript asset exceeds the 480 KiB performance budget: ' + largest.file + ' ' + Math.round(largest.size / 1024) + ' KiB');
+assert(assets.some(file => file.startsWith('foundations-') && file.endsWith('.js')), 'Foundation lesson registry was not split into an on-demand chunk');
+console.log('bundle budget PASS — TopicPage ' + Math.round(topicChunk.size / 1024) + ' KiB; largest JavaScript ' + Math.round(largest.size / 1024) + ' KiB (' + largest.file + ').');
 console.log('verify:quality PASS — 12 browser-ready static handbooks, mobile-friendly navigation, setup sections, starter downloads, consent and privacy checks.');

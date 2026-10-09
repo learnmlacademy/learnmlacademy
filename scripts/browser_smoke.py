@@ -6,6 +6,7 @@ No third-party API credentials are required.
 from __future__ import annotations
 
 import os
+import re
 import socket
 import subprocess
 import time
@@ -98,6 +99,44 @@ def check_returning_learner_hydration(driver: webdriver.Chrome) -> None:
     assert not issues, "React hydration error for returning learner: " + " | ".join(issues)
 
 
+def curriculum_topic_ids() -> list[str]:
+    source = Path("src/data/curriculum.ts").read_text(encoding="utf-8")
+    categories = re.finditer(
+        r'\{\s*id:\s*"[^"]+",\s*title:\s*"[^"]+",\s*subtopics:\s*\[([\s\S]*?)\n\s*\],\s*\}',
+        source,
+    )
+    ids: list[str] = []
+    for category in categories:
+        ids.extend(re.findall(r'\{\s*id:\s*"([^"]+)"', category.group(1)))
+    if len(ids) != 167 or len(set(ids)) != 167:
+        raise AssertionError(f"Expected 167 unique lesson IDs from curriculum; found {len(ids)} / {len(set(ids))}")
+    return ids
+
+
+def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
+    url = BASE + "/learn/" + topic_id
+    driver.get(url)
+    WebDriverWait(driver, 25).until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "h1")) >= 1)
+    article = WebDriverWait(driver, 25).until(lambda d: d.find_element(By.CSS_SELECTOR, "article[data-lesson-body='true']"))
+    WebDriverWait(driver, 25).until(lambda d: len(article.text.strip()) > 200)
+    title = driver.execute_script("return document.title || ''").strip()
+    description = driver.execute_script("return document.querySelector('meta[name=description]')?.content || ''").strip()
+    canonical = driver.execute_script("return document.querySelector('link[rel=canonical]')?.href || ''").strip()
+    assert len(title) >= 12, topic_id + ": missing page title"
+    assert len(description) >= 50, topic_id + ": missing/short meta description"
+    assert canonical.startswith("https://www.learnmlacademy.com/"), topic_id + ": missing canonical"
+    horizontal = driver.execute_script("return document.documentElement.scrollWidth - window.innerWidth")
+    assert horizontal < 14, f"{topic_id}: page overflows {horizontal}px at mobile width"
+    browser_errors = [
+        item["message"] for item in driver.get_log("browser")
+        if "Minified React error" in item["message"]
+        or "Hydration failed" in item["message"]
+        or "Uncaught TypeError" in item["message"]
+        or "Uncaught ReferenceError" in item["message"]
+    ]
+    assert not browser_errors, topic_id + ": JavaScript/hydration errors: " + " | ".join(browser_errors[:3])
+
+
 def main() -> None:
     server = subprocess.Popen(
         ["npm", "run", "preview", "--", "--host", "127.0.0.1", "--port", "4173", "--strictPort"],
@@ -122,10 +161,15 @@ def main() -> None:
                     driver.save_screenshot(str(ARTIFACTS / "projects-desktop.png"))
                 for project in PROJECTS:
                     check_view(driver, project, mobile=mobile)
+                if mobile:
+                    lesson_ids = curriculum_topic_ids()
+                    for index, topic_id in enumerate(lesson_ids, start=1):
+                        check_lesson(driver, topic_id)
+                    print(f"Lesson browser QA PASS: {len(lesson_ids)} curriculum routes at 390px; title/description/canonical, rendered content, no horizontal overflow or React hydration errors.")
                 check_returning_learner_hydration(driver)
             finally:
                 driver.quit()
-        print("BROWSER QA PASS: 12/12 handbook routes and ZIPs, desktop 1440px and mobile 390px, progress UI, navigation and no horizontal page overflow.")
+        print("BROWSER QA PASS: all 12 project handbooks at desktop/mobile, all 167 lesson routes at mobile, ZIPs, progress UI, metadata and no horizontal overflow/hydration errors.")
     finally:
         server.terminate()
         try:
