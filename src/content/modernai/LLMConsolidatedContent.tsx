@@ -4,15 +4,21 @@ import { FormulaBlock } from "../../components/content/FormulaBlock";
 import { SummaryCard } from "../../components/lesson/SummaryCard";
 import { DataTable } from "../../components/content/DataTable";
 import React from "react";
+
+const LLMIntroProofContent = React.lazy(() => import("./LLMIntroProofContent").then(module => ({ default: module.LLMIntroProofContent })));
+const LLMFoundationsBeginnerContent = React.lazy(() => import("./LLMFoundationsBeginnerContent").then(module => ({ default: module.LLMFoundationsBeginnerContent })));
+const LLMRAGBeginnerContent = React.lazy(() => import("./LLMRAGBeginnerContent").then(module => ({ default: module.LLMRAGBeginnerContent })));
+const LLMProductionBeginnerContent = React.lazy(() => import("./LLMProductionBeginnerContent").then(module => ({ default: module.LLMProductionBeginnerContent })));
+
 import { AlertTriangle, CheckCircle2, Lightbulb, Target } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
 import { getTopicById } from "../../data/curriculum";
 import { llmLessonEnhancements } from "./llmLessonEnhancements";
-import { LLMIntroProofContent } from "./LLMIntroProofContent";
-import { LLMFoundationsBeginnerContent } from "./LLMFoundationsBeginnerContent";
-import { LLMRAGBeginnerContent } from "./LLMRAGBeginnerContent";
-import { LLMProductionBeginnerContent } from "./LLMProductionBeginnerContent";
+
+
+
+
 
 type LessonSection = {
   title: string;
