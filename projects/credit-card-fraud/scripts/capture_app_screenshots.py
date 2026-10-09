@@ -9,7 +9,7 @@ URL = "http://127.0.0.1:8501"
 
 def choose_example(page, example_id: str) -> None:
     page.get_by_role("combobox", name="Transaction example").click()
-    page.get_by_text(example_id, exact=True).click()
+    page.get_by_text(example_id, exact=False).click()
 
 
 def main() -> None:
