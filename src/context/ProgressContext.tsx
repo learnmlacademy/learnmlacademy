@@ -57,8 +57,16 @@ function getInitialLastVisited(): string | null {
 }
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(getInitialCompletedLessons);
-  const [lastVisitedTopicId, setLastVisitedState] = useState<string | null>(getInitialLastVisited);
+  // SSR starts with empty progress. The first browser render must be identical;
+  // reading localStorage in a useState initializer causes React hydration errors
+  // for returning learners with completed lessons or a last-visited topic.
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => new Set());
+  const [lastVisitedTopicId, setLastVisitedState] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCompletedLessons(getInitialCompletedLessons());
+    setLastVisitedState(getInitialLastVisited());
+  }, []);
 
   // Sync state changes to localStorage and dispatch custom event
   const persist = useCallback((nextSet: Set<string>) => {
