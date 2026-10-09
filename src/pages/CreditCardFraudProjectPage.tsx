@@ -286,6 +286,15 @@ export function CreditCardFraudProjectPage() {
             Recall = TP/(TP+FN); F1 = 2×Precision×Recall/(Precision+Recall).
             Unlike a fabricated fixed result, the plotted matrix and the JSON file must agree with the model you actually trained.
           </div>
+<div className="mt-4 rounded-xl border border-indigo-200 bg-indigo-50 p-4 text-sm leading-7 text-indigo-950">
+            <strong>Actual verified OpenML run — threshold-matched model (CI, 9 October 2026):</strong>
+            The fitted training-only Random Forest selected a validation threshold of <strong>0.673629</strong>.
+            The untouched test had <strong>42,639 true negatives, 9 false positives, 21 false negatives, and 53 true positives</strong>.
+            Precision = 53 / (53 + 9) = <strong>85.48%</strong>;
+            recall = 53 / (53 + 21) = <strong>71.62%</strong>.
+            F1 = <strong>0.7794</strong>, Average Precision = <strong>0.7886</strong>, and ROC-AUC = <strong>0.9667</strong>.
+            These numbers come from the real full-dataset GitHub Actions run, not a hypothetical example.
+          </div>
         </HandbookSection>
 
         <HandbookSection id="app" number={12} title="Turn the model + threshold into a fraud-review application" checkpoint={<>The app scores a real holdout example and explains TP, FP, FN or TN.</>}>
