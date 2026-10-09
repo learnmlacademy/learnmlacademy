@@ -176,3 +176,8 @@ Be ready to explain:
 - why XGBoost was selected from evidence rather than assumed in advance
 - how saving the full pipeline prevents training-serving mismatch
 - what the model cannot reliably claim outside historical Ames housing data
+
+
+## Working prediction smoke test
+
+Run `python -m pytest -q` after training. The Streamlit AppTest now clicks **Estimate sale price**, checks no exception, and asserts a nonempty positive result from the actual saved fitted pipeline. Merely opening a page is not sufficient. Optional extension: on training-only folds compare raw-target regression to `TransformedTargetRegressor(func=np.log1p, inverse_func=np.expm1)` and calculate metrics in dollars, then leave the sealed holdout alone until selection.
