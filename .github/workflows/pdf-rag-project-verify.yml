@@ -2,7 +2,7 @@ name: PDF RAG Project Verify
 
 on:
   push:
-    branches: [feat/pdf-rag-handbook-visuals]
+    branches: [feat/pdf-rag-handbook-visuals, fix/pdf-rag-genuine-overlap-exercise-20261009]
     paths:
       - "projects/pdf-rag/**"
       - "src/pages/PdfRagProjectPage.tsx"
