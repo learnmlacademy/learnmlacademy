@@ -526,10 +526,9 @@ export function LessonShell({
       </div>
 
       <div className="mx-auto w-full max-w-[1400px] px-4 py-6 sm:px-6 lg:px-8 pb-24 xl:pb-8">
+        {/* Reserve the desktop TOC column before client-side heading discovery. */}
         <div
           ref={contentRootRef}
-          // Reserve the desktop TOC column from the server render so client-side
-          // heading discovery cannot resize and reflow the entire lesson.
           className="xl:grid xl:grid-cols-[minmax(0,1fr)_250px] xl:gap-10"
         >
           {/* Main Reading Center */}
@@ -550,9 +549,10 @@ export function LessonShell({
                 onCopyLink={handleCopyLink}
               />
             ) : (
-              // Keep the same space for the mobile TOC before/after headings
-              // are discovered from the already server-rendered lesson body.
-              <div className="mb-6 h-[46px] xl:hidden" aria-hidden="true" />
+              <>
+                {/* Reserve the TOC's space before it is populated from SSR headings. */}
+                <div className="mb-6 h-[46px] xl:hidden" aria-hidden="true" />
+              </>
             )}
 
             {children}
