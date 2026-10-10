@@ -116,7 +116,7 @@ export function GoogleAnalytics() {
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="max-w-2xl">
-          <p className="font-semibold text-slate-900">Help us improve Learn ML Academy</p>
+          <p className="font-semibold text-slate-900">Help us improve LearnMLAcademy</p>
           <p className="mt-1 text-sm leading-relaxed text-slate-600">
             We use Google Analytics only after you allow analytics so we can understand which lessons are useful.
             Advertising storage remains disabled. Read our{' '}

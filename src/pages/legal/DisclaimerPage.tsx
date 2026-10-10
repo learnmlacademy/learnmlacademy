@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 export function DisclaimerPage() {
   useEffect(() => {
-    document.title = 'Disclaimer | ML Academy';
+    document.title = 'Disclaimer | LearnMLAcademy';
     let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (meta) meta.setAttribute('content', 'Read the ML Academy Disclaimer covering affiliate links, educational content accuracy, and advertising disclosures.');
+    if (meta) meta.setAttribute('content', 'Read the LearnMLAcademy Disclaimer covering affiliate links, educational content accuracy, and advertising disclosures.');
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/disclaimer');

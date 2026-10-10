@@ -152,7 +152,7 @@ export function TopicPage() {
         setMeta('meta[property="og:title"]', 'content', seo.title);
         setMeta('meta[property="og:description"]', 'content', seo.description);
         setMeta('meta[property="og:url"]', 'content', getCanonicalUrl(topicId));
-        setMeta('meta[property="og:site_name"]', 'content', 'Learn ML Academy');
+        setMeta('meta[property="og:site_name"]', 'content', 'LearnMLAcademy');
         setMeta('meta[property="og:type"]', 'content', 'article');
         setMeta('meta[property="og:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
         setMeta('meta[property="article:section"]', 'content', topicInfo.category.title.replace(/^\d+\.\s*/, ''));

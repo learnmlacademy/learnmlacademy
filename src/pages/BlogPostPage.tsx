@@ -44,7 +44,7 @@ export function BlogPostPage() {
 
   useEffect(() => {
     if (post) {
-      document.title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
+      document.title = post.seoTitle ?? `${post.title} | LearnMLAcademy Blog`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.setAttribute('content', fitMetaDescription(post.excerpt));
       window.scrollTo(0, 0);

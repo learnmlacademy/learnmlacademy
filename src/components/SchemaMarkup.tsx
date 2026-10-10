@@ -14,12 +14,12 @@ export function ArticleSchema({ title, description, topicId }: ArticleSchemaProp
     "description": description,
     "author": {
       "@type": "Organization",
-      "name": "ML Academy",
+      "name": "LearnMLAcademy",
       "url": "https://www.learnmlacademy.com"
     },
     "publisher": {
       "@type": "Organization",
-      "name": "ML Academy",
+      "name": "LearnMLAcademy",
       "url": "https://www.learnmlacademy.com",
       "logo": {
         "@type": "ImageObject",
@@ -53,7 +53,7 @@ export function WebsiteSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "ML Academy",
+    "name": "LearnMLAcademy",
     "url": "https://www.learnmlacademy.com",
     "description": "Free machine learning tutorials covering Linear Regression, Decision Trees, Neural Networks, Deep Learning and more.",
     "potentialAction": {

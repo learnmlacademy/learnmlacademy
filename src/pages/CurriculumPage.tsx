@@ -12,14 +12,14 @@ export function CurriculumPage() {
   const [filter, setFilter] = useState<FilterStatus>('all');
 
   useEffect(() => {
-    document.title = `AI Curriculum | ${tutorialCount} Free ML, LLM & Agent Tutorials | ML Academy`;
+    document.title = `AI Curriculum | ${tutorialCount} Free ML, LLM & Agent Tutorials | LearnMLAcademy`;
     const setMeta = (selector: string, attr: string, value: string) => {
       let el = document.querySelector(selector) as HTMLMetaElement | null;
       if (el) el.setAttribute(attr, value);
     };
     const desc = `Browse ${tutorialCount} free tutorials covering Machine Learning, Deep Learning, Generative AI, Large Language Models, RAG, and Agentic AI with simple examples and code. Track your progress as you learn.`;
     setMeta('meta[name="description"]', 'content', desc);
-    setMeta('meta[property="og:title"]', 'content', 'Modern AI Curriculum | ML Academy');
+    setMeta('meta[property="og:title"]', 'content', 'Modern AI Curriculum | LearnMLAcademy');
     setMeta('meta[property="og:description"]', 'content', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
