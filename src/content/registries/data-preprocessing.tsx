@@ -3,14 +3,22 @@ import { GenericContent } from "../GenericContent";
 
 type RegistryProps = { topicId: string; title: string };
 
-const EDAContent = lazy(() => import("../preprocessing/EDAContent").then(m => ({ default: m.EDAContent })));
-const HandlingMissingDataContent = lazy(() => import("../preprocessing/HandlingMissingDataContent").then(m => ({ default: m.HandlingMissingDataContent })));
-const EncodingCategoricalContent = lazy(() => import("../preprocessing/EncodingCategoricalContent").then(m => ({ default: m.EncodingCategoricalContent })));
-const BiasVarianceContent = lazy(() => import("../evaluation/BiasVarianceContent").then(m => ({ default: m.BiasVarianceContent })));
-const FeatureScalingContent = lazy(() => import("../preprocessing/FeatureScalingContent").then(m => ({ default: m.FeatureScalingContent })));
-const FeatureEngineeringContent = lazy(() => import("../preprocessing/FeatureEngineeringContent").then(m => ({ default: m.FeatureEngineeringContent })));
-const FeatureSelectionContent = lazy(() => import("../preprocessing/FeatureSelectionContent").then(m => ({ default: m.FeatureSelectionContent })));
-const DataVisualizationContent = lazy(() => import("../preprocessing/DataVisualizationContent").then(m => ({ default: m.DataVisualizationContent })));
+const loadEDAContent = () => import("../preprocessing/EDAContent");
+const EDAContent = lazy(() => loadEDAContent().then(m => ({ default: m.EDAContent })));
+const loadHandlingMissingDataContent = () => import("../preprocessing/HandlingMissingDataContent");
+const HandlingMissingDataContent = lazy(() => loadHandlingMissingDataContent().then(m => ({ default: m.HandlingMissingDataContent })));
+const loadEncodingCategoricalContent = () => import("../preprocessing/EncodingCategoricalContent");
+const EncodingCategoricalContent = lazy(() => loadEncodingCategoricalContent().then(m => ({ default: m.EncodingCategoricalContent })));
+const loadBiasVarianceContent = () => import("../evaluation/BiasVarianceContent");
+const BiasVarianceContent = lazy(() => loadBiasVarianceContent().then(m => ({ default: m.BiasVarianceContent })));
+const loadFeatureScalingContent = () => import("../preprocessing/FeatureScalingContent");
+const FeatureScalingContent = lazy(() => loadFeatureScalingContent().then(m => ({ default: m.FeatureScalingContent })));
+const loadFeatureEngineeringContent = () => import("../preprocessing/FeatureEngineeringContent");
+const FeatureEngineeringContent = lazy(() => loadFeatureEngineeringContent().then(m => ({ default: m.FeatureEngineeringContent })));
+const loadFeatureSelectionContent = () => import("../preprocessing/FeatureSelectionContent");
+const FeatureSelectionContent = lazy(() => loadFeatureSelectionContent().then(m => ({ default: m.FeatureSelectionContent })));
+const loadDataVisualizationContent = () => import("../preprocessing/DataVisualizationContent");
+const DataVisualizationContent = lazy(() => loadDataVisualizationContent().then(m => ({ default: m.DataVisualizationContent })));
 
 const contentMap: Record<string, ComponentType> = {
   "eda": EDAContent,
@@ -26,4 +34,21 @@ const contentMap: Record<string, ComponentType> = {
 export default function LessonCategoryRegistry({ topicId, title }: RegistryProps) {
   const Content = contentMap[topicId];
   return Content ? <Content /> : <GenericContent title={title} />;
+}
+
+
+const lessonPreloaders: Record<string, () => Promise<unknown>> = {
+  "eda": () => loadEDAContent(),
+  "handling-missing-data": () => loadHandlingMissingDataContent(),
+  "encoding-categorical": () => loadEncodingCategoricalContent(),
+  "bias-variance": () => loadBiasVarianceContent(),
+  "feature-scaling": () => loadFeatureScalingContent(),
+  "feature-engineering": () => loadFeatureEngineeringContent(),
+  "feature-selection": () => loadFeatureSelectionContent(),
+  "data-visualization": () => loadDataVisualizationContent(),
+};
+
+export function preloadLessonContent(topicId: string): Promise<unknown> {
+  const load = lessonPreloaders[topicId];
+  return load ? load() : Promise.resolve();
 }

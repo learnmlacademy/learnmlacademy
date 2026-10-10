@@ -3,7 +3,8 @@ import { GenericContent } from "../GenericContent";
 
 type RegistryProps = { topicId: string; title: string };
 
-const ModernAIContent = lazy(() => import("../modernai/ModernAIContent").then(m => ({ default: m.ModernAIContent })));
+const loadModernAIContent = () => import("../modernai/ModernAIContent");
+const ModernAIContent = lazy(() => loadModernAIContent().then(m => ({ default: m.ModernAIContent })));
 
 const contentMap: Record<string, ComponentType> = {
   "agentic-ai-intro": ModernAIContent,
@@ -27,4 +28,29 @@ const contentMap: Record<string, ComponentType> = {
 export default function LessonCategoryRegistry({ topicId, title }: RegistryProps) {
   const Content = contentMap[topicId];
   return Content ? <Content /> : <GenericContent title={title} />;
+}
+
+
+const lessonPreloaders: Record<string, () => Promise<unknown>> = {
+  "agentic-ai-intro": () => loadModernAIContent(),
+  "tool-calling": () => loadModernAIContent(),
+  "building-ai-agent": () => loadModernAIContent(),
+  "planning-reflection": () => loadModernAIContent(),
+  "agent-context-engineering": () => loadModernAIContent(),
+  "agent-memory": () => loadModernAIContent(),
+  "agent-state-graphs": () => loadModernAIContent(),
+  "durable-long-running-agents": () => loadModernAIContent(),
+  "agentic-rag": () => loadModernAIContent(),
+  "multi-agent-systems": () => loadModernAIContent(),
+  "model-context-protocol": () => loadModernAIContent(),
+  "agent-frameworks": () => loadModernAIContent(),
+  "browser-computer-use-agents": () => loadModernAIContent(),
+  "agent-security": () => loadModernAIContent(),
+  "agent-evaluation-safety": () => loadModernAIContent(),
+  "agent-observability-deployment": () => loadModernAIContent(),
+};
+
+export function preloadLessonContent(topicId: string): Promise<unknown> {
+  const load = lessonPreloaders[topicId];
+  return load ? load() : Promise.resolve();
 }

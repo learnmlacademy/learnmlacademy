@@ -178,6 +178,7 @@ const curriculumLessonCount = curriculum.reduce(
 
 export function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showHandbooks, setShowHandbooks] = useState(false);
   const navigate = useNavigate();
   const {
     completedCount,
@@ -204,6 +205,38 @@ export function HomePage() {
   }, [searchQuery]);
 
   const nextIncomplete = getNextIncompleteTopic();
+
+  const openHandbooks = (event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    setShowHandbooks(true);
+    window.history.replaceState(null, '', '#free-interview-handbooks');
+    window.setTimeout(() => {
+      document.getElementById('free-interview-handbooks')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 50);
+  };
+
+  useEffect(() => {
+    const handleHash = () => {
+      if (typeof window !== 'undefined' && window.location.hash === '#free-interview-handbooks') {
+        setShowHandbooks(true);
+        window.setTimeout(() => {
+          document.getElementById('free-interview-handbooks')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }, 50);
+      }
+    };
+
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, []);
 
   useEffect(() => {
     const title = 'LearnMLAcademy — Learn Machine Learning from Zero to Expert';
@@ -263,7 +296,10 @@ export function HomePage() {
         <div className="relative mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8 lg:py-5">
           <a
             href="#free-interview-handbooks"
-            className="absolute right-8 top-1/2 hidden w-[300px] -translate-y-1/2 rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-500/20 to-indigo-500/15 p-4 shadow-2xl backdrop-blur transition hover:-translate-y-[52%] hover:border-cyan-300/50 lg:block"
+            onClick={openHandbooks}
+            aria-expanded={showHandbooks}
+            aria-controls="free-interview-handbooks"
+            className="absolute right-8 top-1/2 hidden w-[300px] -translate-y-1/2 cursor-pointer rounded-2xl border border-violet-400/30 bg-gradient-to-br from-violet-500/20 to-indigo-500/15 p-4 shadow-2xl backdrop-blur transition hover:-translate-y-[52%] hover:border-cyan-300/50 lg:block"
           >
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-300 px-2.5 py-1 text-[10px] font-black tracking-wide text-slate-950">
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
@@ -276,7 +312,7 @@ export function HomePage() {
               ML, Deep Learning, GenAI, LLM & RAG, Agentic AI, Python, SQL, System Design, MLOps and Behavioral.
             </p>
             <div className="mt-3 inline-flex items-center gap-1 text-xs font-black text-cyan-300">
-              Browse & download
+              {showHandbooks ? 'View open handbooks' : 'Browse & download'}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </div>
           </a>
@@ -377,7 +413,10 @@ export function HomePage() {
 
             <a
               href="#free-interview-handbooks"
-              className="mt-3 inline-flex items-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-xs font-black text-violet-200 lg:hidden"
+              onClick={openHandbooks}
+              aria-expanded={showHandbooks}
+              aria-controls="free-interview-handbooks"
+              className="mt-3 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-violet-400/30 bg-violet-500/10 px-3 py-2 text-xs font-black text-violet-200 lg:hidden"
             >
               <GraduationCap className="h-4 w-4" aria-hidden="true" />
               Explore 10 free interview handbook PDFs
@@ -387,7 +426,16 @@ export function HomePage() {
         </div>
       </section>
 
-      <InterviewHandbookShowcase />
+      {showHandbooks && (
+        <InterviewHandbookShowcase
+          onClose={() => {
+            setShowHandbooks(false);
+            if (typeof window !== 'undefined' && window.location.hash === '#free-interview-handbooks') {
+              window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            }
+          }}
+        />
+      )}
 
       {/* Browse by topic */}
       <section className="bg-white py-5 sm:py-6">
@@ -635,7 +683,10 @@ export function HomePage() {
             </div>
             <a
               href="#free-interview-handbooks"
-              className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700"
+              onClick={openHandbooks}
+              aria-expanded={showHandbooks}
+              aria-controls="free-interview-handbooks"
+              className="mt-6 inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 self-start rounded-xl bg-blue-600 px-5 text-sm font-bold text-white transition hover:bg-blue-700"
             >
               Explore all free PDFs
               <ArrowRight className="h-4 w-4" aria-hidden="true" />

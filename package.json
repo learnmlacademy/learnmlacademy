@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "vite build --configLoader runner && npm run prerender && npm run verify:prerender && npm run verify:projects && npm run verify:quality",
+    "build": "vite build --mode production --configLoader runner && npm run prerender && npm run verify:prerender && npm run verify:projects && npm run verify:quality",
     "prerender": "node scripts/prerender.mjs",
     "verify:prerender": "node scripts/verify-prerender.mjs",
     "preview": "vite preview",
