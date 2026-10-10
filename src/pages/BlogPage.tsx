@@ -53,14 +53,14 @@ export function BlogPage() {
   const rest = filtered.filter(p => !p.featured);
 
   useEffect(() => {
-    document.title = 'ML Academy Blog | Machine Learning Tips, Guides & Career Advice';
+    document.title = 'LearnMLAcademy Blog | Machine Learning Tips, Guides & Career Advice';
     const setMeta = (selector: string, attr: string, value: string) => {
       let el = document.querySelector(selector) as HTMLMetaElement | null;
       if (el) el.setAttribute(attr, value);
     };
-    const desc = 'Read the ML Academy blog for practical Machine Learning guides, algorithm comparisons, interview prep tips, and career advice for aspiring data scientists.';
+    const desc = 'Read the LearnMLAcademy blog for practical Machine Learning guides, algorithm comparisons, interview prep tips, and career advice for aspiring data scientists.';
     setMeta('meta[name="description"]', 'content', desc);
-    setMeta('meta[property="og:title"]', 'content', 'ML Academy Blog');
+    setMeta('meta[property="og:title"]', 'content', 'LearnMLAcademy Blog');
     setMeta('meta[property="og:description"]', 'content', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
@@ -78,7 +78,7 @@ export function BlogPage() {
       <div className="mb-12">
         <div className="flex items-center gap-2 text-indigo-600 font-semibold text-sm mb-3">
           <Rss className="w-4 h-4"/>
-          <span>ML Academy Blog</span>
+          <span>LearnMLAcademy Blog</span>
         </div>
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
           Tutorials, Tips &amp; Guides

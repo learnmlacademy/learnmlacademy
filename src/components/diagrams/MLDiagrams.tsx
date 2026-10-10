@@ -1,6 +1,6 @@
 /**
  * MLDiagrams.tsx
- * Original SVG diagrams hand-crafted for ML Academy.
+ * Original SVG diagrams hand-crafted for LearnMLAcademy.
  * All visuals are 100% original — no reproduction of external works.
  * Safe for Google AdSense, monetization, and copyright compliance.
  */

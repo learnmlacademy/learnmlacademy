@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 export function PrivacyPolicyPage() {
   useEffect(() => {
-    document.title = 'Privacy Policy | ML Academy';
+    document.title = 'Privacy Policy | LearnMLAcademy';
     let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (meta) meta.setAttribute('content', 'Read the ML Academy Privacy Policy covering data collection, cookies, Google Analytics, and third-party advertising practices.');
+    if (meta) meta.setAttribute('content', 'Read the LearnMLAcademy Privacy Policy covering data collection, cookies, Google Analytics, and third-party advertising practices.');
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/privacy');

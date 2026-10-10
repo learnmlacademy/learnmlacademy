@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
+import { curriculum } from '../data/curriculum';
 import { Mail, Award, Target, BookOpen, Users, Shield, Code, Cloud, Database, Linkedin, ExternalLink } from 'lucide-react';
 
 export function AboutPage() {
   useEffect(() => {
-    document.title = 'About ML Academy | Free Machine Learning Tutorials & Resources';
+    document.title = 'About LearnMLAcademy | Free Machine Learning Tutorials & Resources';
     const setMeta = (selector: string, attr: string, value: string) => {
       let el = document.querySelector(selector) as HTMLMetaElement | null;
       if (el) el.setAttribute(attr, value);
     };
-    const desc = 'Learn about ML Academy — a free platform teaching Machine Learning, Deep Learning, Generative AI, LLMs, and Agentic AI with 133 hands-on tutorials.';
+    const lessonCount = curriculum.reduce((total, category) => total + category.subtopics.length, 0);
+    const desc = `Discover LearnMLAcademy, a free platform teaching Machine Learning, Deep Learning, Generative AI, LLMs and Agentic AI with ${lessonCount} hands-on lessons.`;
     setMeta('meta[name="description"]', 'content', desc);
-    setMeta('meta[property="og:title"]', 'content', 'About ML Academy');
+    setMeta('meta[property="og:title"]', 'content', 'About LearnMLAcademy');
     setMeta('meta[property="og:description"]', 'content', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;

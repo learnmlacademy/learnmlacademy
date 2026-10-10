@@ -90,7 +90,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Master NumPy for Machine Learning with Python. Learn vectorisation, broadcasting, matrix operations and linear algebra with real code examples and output."
     },
     "pandas-essentials": {
-      title: "Pandas Essentials for Machine Learning | ML Academy",
+      title: "Pandas Essentials for Machine Learning | LearnMLAcademy",
       description: "Learn the most important Pandas DataFrame operations, cleaning techniques, and feature engineering for Machine Learning data prep."
     },
     "scikit-learn-essentials": {
@@ -112,7 +112,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn how to convert categorical text data into numerical formats using One-Hot Encoding and Label Encoding for ML models."
     },
     "bias-variance": {
-      title: "Bias-Variance Tradeoff Explained with Python Examples | ML Academy",
+      title: "Bias-Variance Tradeoff Explained with Python Examples | LearnMLAcademy",
       description: "Deep dive into the Bias-Variance Tradeoff in Machine Learning. Understand underfitting, overfitting, and how to diagnose each with learning curves in Python."
     },
     "feature-scaling": {
@@ -286,7 +286,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
       description: "Learn Exponential Smoothing and Holt-Winters in Python. Model time series with trend and seasonality using statsmodels, with examples and forecast plots."
     },
     "forecasting-basics": {
-      title: "Time Series Forecasting Basics | ML Academy",
+      title: "Time Series Forecasting Basics | LearnMLAcademy",
       description: "Learn the fundamentals of Time Series Forecasting, trend, seasonality, and evaluation metrics like MAE and MAP with Python."
     },
 
@@ -560,7 +560,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
 
     // Explicit metadata for redesigned Deep Learning and Modern AI lessons
     "neural-network-training-loop": {
-      title: "Neural Network Training Loop & Debugging | ML Academy",
+      title: "Neural Network Training Loop & Debugging | LearnMLAcademy",
       description: "Learn the full neural network training loop: forward pass, loss calculation, backpropagation, optimizer updates, validation, and practical debugging checks."
     },
     "deep-learning-optimizers": {
@@ -746,7 +746,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
   };
 
   const selected = seoData[topicId] || {
-    title: `${defaultTitle} Tutorial | ML Academy`,
+    title: `${defaultTitle} Tutorial | LearnMLAcademy`,
     description: `Learn the central ideas behind ${defaultTitle}, what its main components do, how they connect in practice, and where the approach can fail.`
   };
 
@@ -792,12 +792,12 @@ export const getLearningResourceSchema = (
         },
         "author": {
           "@type": "Organization",
-          "name": "Learn ML Academy",
+          "name": "LearnMLAcademy",
           "url": BASE_URL
         },
         "publisher": {
           "@type": "Organization",
-          "name": "Learn ML Academy",
+          "name": "LearnMLAcademy",
           "url": BASE_URL,
           "logo": {
             "@type": "ImageObject",

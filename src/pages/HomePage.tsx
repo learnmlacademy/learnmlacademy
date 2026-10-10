@@ -206,7 +206,7 @@ export function HomePage() {
   const nextIncomplete = getNextIncompleteTopic();
 
   useEffect(() => {
-    const title = 'ML Academy — Learn Machine Learning from Zero to Expert';
+    const title = 'LearnMLAcademy — Learn Machine Learning from Zero to Expert';
     const description =
       'Free machine learning tutorials covering Machine Learning, Deep Learning, Generative AI, LLMs, RAG and Agentic AI with worked examples and quizzes.';
 
