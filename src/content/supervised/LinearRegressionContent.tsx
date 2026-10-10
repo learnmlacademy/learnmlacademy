@@ -3,6 +3,8 @@ import {
   ComposedChart, Scatter, Line, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, AreaChart, Area
 } from 'recharts';
+import { HumanRegressor } from '../../components/interactive/HumanRegressor';
+import { EquationExplorer } from '../../components/interactive/EquationExplorer';
 
 export function LinearRegressionContent() {
   const noisyData = [
@@ -126,6 +128,8 @@ export function LinearRegressionContent() {
           </ResponsiveContainer>
         </div>
 
+        <HumanRegressor />
+
         <h3 className="text-2xl font-bold text-indigo-800 mb-4">Machine Learning Workflow</h3>
         <p className="text-lg leading-relaxed mb-4">
           The standard machine learning workflow for Linear Regression involves:
@@ -232,6 +236,8 @@ export function LinearRegressionContent() {
         <p className="text-lg leading-relaxed mb-6">
           The main objective of linear regression is to determine the best values for the slope and intercept so that the line stays as close as possible to the actual data points.
         </p>
+
+        <EquationExplorer />
 
         <h3 className="text-2xl font-bold text-indigo-800 mb-4">How the Best-Fit Line is Calculated</h3>
         <p className="text-lg leading-relaxed mb-4">
