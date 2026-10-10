@@ -645,7 +645,7 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     },
     "rag": {
       title: "Retrieval-Augmented Generation (RAG) Explained",
-      description: "Learn how RAG retrieves external evidence before LLM generation, including indexing, retrieval, context assembly, citations, failure boundaries and safe abstention."
+      description: "Learn how RAG retrieves evidence before LLM generation: indexing, retrieval, context assembly, citations, failure boundaries and safe abstention."
     },
     "semantic-search-embeddings": {
       title: "Semantic Search with Embeddings for RAG",

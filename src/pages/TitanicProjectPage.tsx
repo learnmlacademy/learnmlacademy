@@ -114,7 +114,7 @@ export function TitanicProjectPage() {
   useEffect(() => {
     const title = 'Titanic Survival Predictor Project Handbook | LearnMLAcademy';
     const description =
-      'Build a complete Titanic machine-learning classifier from an empty Windows folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.';
+      'Build a Titanic survival classifier from an empty folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.';
     document.title = title;
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);

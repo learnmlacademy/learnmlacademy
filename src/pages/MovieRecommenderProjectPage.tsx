@@ -66,7 +66,7 @@ export function MovieRecommenderProjectPage() {
   useEffect(() => {
     const title = 'Movie Recommendation System Project Handbook | LearnMLAcademy';
     const description =
-      'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.';
+      'Build a Netflix-style movie recommender on a CC0 ratings dataset with content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.';
     document.title = title;
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);
