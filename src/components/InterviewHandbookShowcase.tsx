@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, Download, FileText, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Download, FileText, Sparkles, X } from 'lucide-react';
 import { NewsletterSignup } from './NewsletterSignup';
 import {
   interviewHandbooks,
@@ -32,7 +32,11 @@ const handbookLabels: Record<InterviewHandbookId, string> = {
   behavioral: 'Behavioral & Projects',
 };
 
-export function InterviewHandbookShowcase() {
+export interface InterviewHandbookShowcaseProps {
+  onClose?: () => void;
+}
+
+export function InterviewHandbookShowcase({ onClose }: InterviewHandbookShowcaseProps = {}) {
   const [selectedId, setSelectedId] = useState<InterviewHandbookId>('llm-rag');
   const selected = interviewHandbooks[selectedId];
 
@@ -73,17 +77,30 @@ export function InterviewHandbookShowcase() {
                 Detailed explanations, worked examples, diagrams, figures, code, system-design flows and interview-ready answers — not just short question lists.
               </p>
             </div>
-            <div className="mt-4 grid gap-2 text-sm text-indigo-50 sm:grid-cols-3 lg:mt-0 lg:grid-cols-1">
-              {[
-                'Section-specific PDFs',
-                'Detailed examples & code',
-                'Instant email download',
-              ].map(item => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" aria-hidden="true" />
-                  <span className="font-semibold">{item}</span>
-                </div>
-              ))}
+            <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between lg:mt-0 lg:flex-col lg:items-end">
+              <div className="grid gap-2 text-sm text-indigo-50 sm:grid-cols-3 lg:grid-cols-1">
+                {[
+                  'Section-specific PDFs',
+                  'Detailed examples & code',
+                  'Instant email download',
+                ].map(item => (
+                  <div key={item} className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" aria-hidden="true" />
+                    <span className="font-semibold">{item}</span>
+                  </div>
+                ))}
+              </div>
+              {onClose && (
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-white/25 bg-white/10 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40"
+                  aria-label="Hide interview handbooks showcase"
+                >
+                  <X className="h-4 w-4" aria-hidden="true" />
+                  Hide section
+                </button>
+              )}
             </div>
           </div>
 

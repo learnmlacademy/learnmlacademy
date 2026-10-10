@@ -1,0 +1,52 @@
+name: npm dependency security audit
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/dependency-security-audit.yml"
+      - "scripts/report-npm-audit.mjs"
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/dependency-security-audit.yml"
+      - "scripts/report-npm-audit.mjs"
+  workflow_dispatch:
+  schedule:
+    - cron: "30 4 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Install pinned dependencies
+        run: npm ci
+      - name: Record npm audit details without hiding vulnerabilities
+        shell: bash
+        run: |
+          npm audit --json > npm-audit.json || true
+          node scripts/report-npm-audit.mjs npm-audit.json
+      - name: Save complete npm audit response
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-dependency-audit
+          path: npm-audit.json
+          if-no-files-found: ignore
+          retention-days: 14

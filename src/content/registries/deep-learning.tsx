@@ -3,30 +3,54 @@ import { GenericContent } from "../GenericContent";
 
 type RegistryProps = { topicId: string; title: string };
 
-const DeepLearningIntroContent = lazy(() => import("../deeplearning/DeepLearningIntroContent").then(m => ({ default: m.DeepLearningIntroContent })));
-const NeuralNetworksContent = lazy(() => import("../deeplearning/NeuralNetworksContent").then(m => ({ default: m.NeuralNetworksContent })));
-const MathFoundationsContent = lazy(() => import("../deeplearning/MathFoundationsContent").then(m => ({ default: m.MathFoundationsContent })));
-const ActivationFunctionsContent = lazy(() => import("../deeplearning/ActivationFunctionsContent").then(m => ({ default: m.ActivationFunctionsContent })));
-const TensorsFrameworksGPUsContent = lazy(() => import("../deeplearning/TensorsFrameworksGPUsContent").then(m => ({ default: m.TensorsFrameworksGPUsContent })));
-const LossFunctionsContent = lazy(() => import("../deeplearning/LossFunctionsContent").then(m => ({ default: m.LossFunctionsContent })));
-const BackpropagationContent = lazy(() => import("../deeplearning/BackpropagationContent").then(m => ({ default: m.BackpropagationContent })));
-const TrainingLoopContent = lazy(() => import("../deeplearning/TrainingLoopContent").then(m => ({ default: m.TrainingLoopContent })));
-const OptimizersContent = lazy(() => import("../deeplearning/OptimizersContent").then(m => ({ default: m.OptimizersContent })));
-const InitializationNormalizationContent = lazy(() => import("../deeplearning/InitializationNormalizationContent").then(m => ({ default: m.InitializationNormalizationContent })));
-const RegularizationContent = lazy(() => import("../deeplearning/RegularizationContent").then(m => ({ default: m.RegularizationContent })));
-const DataAugmentationContent = lazy(() => import("../deeplearning/DataAugmentationContent").then(m => ({ default: m.DataAugmentationContent })));
-const CNNContent = lazy(() => import("../deeplearning/CNNContent").then(m => ({ default: m.CNNContent })));
-const CNNArchitecturesContent = lazy(() => import("../deeplearning/CNNArchitecturesContent").then(m => ({ default: m.CNNArchitecturesContent })));
-const DetectionSegmentationContent = lazy(() => import("../deeplearning/DetectionSegmentationContent").then(m => ({ default: m.DetectionSegmentationContent })));
-const VisionTransformersContent = lazy(() => import("../deeplearning/VisionTransformersContent").then(m => ({ default: m.VisionTransformersContent })));
-const RecurrentSequenceContent = lazy(() => import("../deeplearning/RecurrentSequenceContent").then(m => ({ default: m.RecurrentSequenceContent })));
-const AttentionTransformersContent = lazy(() => import("../deeplearning/AttentionTransformersContent").then(m => ({ default: m.AttentionTransformersContent })));
-const TransformersDeepLearningContent = lazy(() => import("../deeplearning/AttentionTransformersContent").then(m => ({ default: m.TransformersDeepLearningContent })));
-const AutoencodersContent = lazy(() => import("../deeplearning/AutoencodersContent").then(m => ({ default: m.AutoencodersContent })));
-const TransferLearningContent = lazy(() => import("../deeplearning/TransferLearningContent").then(m => ({ default: m.TransferLearningContent })));
-const SelfSupervisedFewShotContent = lazy(() => import("../deeplearning/TransferLearningContent").then(m => ({ default: m.SelfSupervisedFewShotContent })));
-const GraphNeuralNetworksContent = lazy(() => import("../deeplearning/GraphNeuralNetworksContent").then(m => ({ default: m.GraphNeuralNetworksContent })));
-const ModelDeploymentContent = lazy(() => import("../deeplearning/ModelDeploymentContent").then(m => ({ default: m.ModelDeploymentContent })));
+const loadDeepLearningIntroContent = () => import("../deeplearning/DeepLearningIntroContent");
+const DeepLearningIntroContent = lazy(() => loadDeepLearningIntroContent().then(m => ({ default: m.DeepLearningIntroContent })));
+const loadNeuralNetworksContent = () => import("../deeplearning/NeuralNetworksContent");
+const NeuralNetworksContent = lazy(() => loadNeuralNetworksContent().then(m => ({ default: m.NeuralNetworksContent })));
+const loadMathFoundationsContent = () => import("../deeplearning/MathFoundationsContent");
+const MathFoundationsContent = lazy(() => loadMathFoundationsContent().then(m => ({ default: m.MathFoundationsContent })));
+const loadActivationFunctionsContent = () => import("../deeplearning/ActivationFunctionsContent");
+const ActivationFunctionsContent = lazy(() => loadActivationFunctionsContent().then(m => ({ default: m.ActivationFunctionsContent })));
+const loadTensorsFrameworksGPUsContent = () => import("../deeplearning/TensorsFrameworksGPUsContent");
+const TensorsFrameworksGPUsContent = lazy(() => loadTensorsFrameworksGPUsContent().then(m => ({ default: m.TensorsFrameworksGPUsContent })));
+const loadLossFunctionsContent = () => import("../deeplearning/LossFunctionsContent");
+const LossFunctionsContent = lazy(() => loadLossFunctionsContent().then(m => ({ default: m.LossFunctionsContent })));
+const loadBackpropagationContent = () => import("../deeplearning/BackpropagationContent");
+const BackpropagationContent = lazy(() => loadBackpropagationContent().then(m => ({ default: m.BackpropagationContent })));
+const loadTrainingLoopContent = () => import("../deeplearning/TrainingLoopContent");
+const TrainingLoopContent = lazy(() => loadTrainingLoopContent().then(m => ({ default: m.TrainingLoopContent })));
+const loadOptimizersContent = () => import("../deeplearning/OptimizersContent");
+const OptimizersContent = lazy(() => loadOptimizersContent().then(m => ({ default: m.OptimizersContent })));
+const loadInitializationNormalizationContent = () => import("../deeplearning/InitializationNormalizationContent");
+const InitializationNormalizationContent = lazy(() => loadInitializationNormalizationContent().then(m => ({ default: m.InitializationNormalizationContent })));
+const loadRegularizationContent = () => import("../deeplearning/RegularizationContent");
+const RegularizationContent = lazy(() => loadRegularizationContent().then(m => ({ default: m.RegularizationContent })));
+const loadDataAugmentationContent = () => import("../deeplearning/DataAugmentationContent");
+const DataAugmentationContent = lazy(() => loadDataAugmentationContent().then(m => ({ default: m.DataAugmentationContent })));
+const loadCNNContent = () => import("../deeplearning/CNNContent");
+const CNNContent = lazy(() => loadCNNContent().then(m => ({ default: m.CNNContent })));
+const loadCNNArchitecturesContent = () => import("../deeplearning/CNNArchitecturesContent");
+const CNNArchitecturesContent = lazy(() => loadCNNArchitecturesContent().then(m => ({ default: m.CNNArchitecturesContent })));
+const loadDetectionSegmentationContent = () => import("../deeplearning/DetectionSegmentationContent");
+const DetectionSegmentationContent = lazy(() => loadDetectionSegmentationContent().then(m => ({ default: m.DetectionSegmentationContent })));
+const loadVisionTransformersContent = () => import("../deeplearning/VisionTransformersContent");
+const VisionTransformersContent = lazy(() => loadVisionTransformersContent().then(m => ({ default: m.VisionTransformersContent })));
+const loadRecurrentSequenceContent = () => import("../deeplearning/RecurrentSequenceContent");
+const RecurrentSequenceContent = lazy(() => loadRecurrentSequenceContent().then(m => ({ default: m.RecurrentSequenceContent })));
+const loadAttentionTransformersContent = () => import("../deeplearning/AttentionTransformersContent");
+const AttentionTransformersContent = lazy(() => loadAttentionTransformersContent().then(m => ({ default: m.AttentionTransformersContent })));
+const loadTransformersDeepLearningContent = () => import("../deeplearning/AttentionTransformersContent");
+const TransformersDeepLearningContent = lazy(() => loadTransformersDeepLearningContent().then(m => ({ default: m.TransformersDeepLearningContent })));
+const loadAutoencodersContent = () => import("../deeplearning/AutoencodersContent");
+const AutoencodersContent = lazy(() => loadAutoencodersContent().then(m => ({ default: m.AutoencodersContent })));
+const loadTransferLearningContent = () => import("../deeplearning/TransferLearningContent");
+const TransferLearningContent = lazy(() => loadTransferLearningContent().then(m => ({ default: m.TransferLearningContent })));
+const loadSelfSupervisedFewShotContent = () => import("../deeplearning/TransferLearningContent");
+const SelfSupervisedFewShotContent = lazy(() => loadSelfSupervisedFewShotContent().then(m => ({ default: m.SelfSupervisedFewShotContent })));
+const loadGraphNeuralNetworksContent = () => import("../deeplearning/GraphNeuralNetworksContent");
+const GraphNeuralNetworksContent = lazy(() => loadGraphNeuralNetworksContent().then(m => ({ default: m.GraphNeuralNetworksContent })));
+const loadModelDeploymentContent = () => import("../deeplearning/ModelDeploymentContent");
+const ModelDeploymentContent = lazy(() => loadModelDeploymentContent().then(m => ({ default: m.ModelDeploymentContent })));
 
 const contentMap: Record<string, ComponentType> = {
   "deep-learning-intro": DeepLearningIntroContent,
@@ -58,4 +82,37 @@ const contentMap: Record<string, ComponentType> = {
 export default function LessonCategoryRegistry({ topicId, title }: RegistryProps) {
   const Content = contentMap[topicId];
   return Content ? <Content /> : <GenericContent title={title} />;
+}
+
+
+const lessonPreloaders: Record<string, () => Promise<unknown>> = {
+  "deep-learning-intro": () => loadDeepLearningIntroContent(),
+  "neural-networks": () => loadNeuralNetworksContent(),
+  "math-foundations-deep-learning": () => loadMathFoundationsContent(),
+  "activation-functions": () => loadActivationFunctionsContent(),
+  "tensors-frameworks-gpus": () => loadTensorsFrameworksGPUsContent(),
+  "loss-functions-deep-learning": () => loadLossFunctionsContent(),
+  "backpropagation": () => loadBackpropagationContent(),
+  "neural-network-training-loop": () => loadTrainingLoopContent(),
+  "deep-learning-optimizers": () => loadOptimizersContent(),
+  "weight-initialization": () => loadInitializationNormalizationContent(),
+  "deep-learning-regularization": () => loadRegularizationContent(),
+  "data-augmentation-deep-learning": () => loadDataAugmentationContent(),
+  "cnn": () => loadCNNContent(),
+  "cnn-architectures-resnet": () => loadCNNArchitecturesContent(),
+  "object-detection": () => loadDetectionSegmentationContent(),
+  "vision-transformers": () => loadVisionTransformersContent(),
+  "rnn-lstm": () => loadRecurrentSequenceContent(),
+  "attention-transformers-deep-learning": () => loadAttentionTransformersContent(),
+  "transformers-deep-learning": () => loadTransformersDeepLearningContent(),
+  "autoencoders": () => loadAutoencodersContent(),
+  "transfer-learning": () => loadTransferLearningContent(),
+  "self-supervised-few-shot-learning": () => loadSelfSupervisedFewShotContent(),
+  "graph-neural-networks": () => loadGraphNeuralNetworksContent(),
+  "saving-deploying-deep-models": () => loadModelDeploymentContent(),
+};
+
+export function preloadLessonContent(topicId: string): Promise<unknown> {
+  const load = lessonPreloaders[topicId];
+  return load ? load() : Promise.resolve();
 }

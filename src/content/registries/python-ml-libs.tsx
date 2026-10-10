@@ -3,10 +3,14 @@ import { GenericContent } from "../GenericContent";
 
 type RegistryProps = { topicId: string; title: string };
 
-const PythonForMLContent = lazy(() => import("../python/PythonForMLContent").then(m => ({ default: m.PythonForMLContent })));
-const NumpyContent = lazy(() => import("../python/NumpyContent").then(m => ({ default: m.NumpyContent })));
-const PandasContent = lazy(() => import("../python/PandasContent").then(m => ({ default: m.PandasContent })));
-const ScikitLearnContent = lazy(() => import("../python/ScikitLearnContent").then(m => ({ default: m.ScikitLearnContent })));
+const loadPythonForMLContent = () => import("../python/PythonForMLContent");
+const PythonForMLContent = lazy(() => loadPythonForMLContent().then(m => ({ default: m.PythonForMLContent })));
+const loadNumpyContent = () => import("../python/NumpyContent");
+const NumpyContent = lazy(() => loadNumpyContent().then(m => ({ default: m.NumpyContent })));
+const loadPandasContent = () => import("../python/PandasContent");
+const PandasContent = lazy(() => loadPandasContent().then(m => ({ default: m.PandasContent })));
+const loadScikitLearnContent = () => import("../python/ScikitLearnContent");
+const ScikitLearnContent = lazy(() => loadScikitLearnContent().then(m => ({ default: m.ScikitLearnContent })));
 
 const contentMap: Record<string, ComponentType> = {
   "python-for-ml": PythonForMLContent,
@@ -18,4 +22,17 @@ const contentMap: Record<string, ComponentType> = {
 export default function LessonCategoryRegistry({ topicId, title }: RegistryProps) {
   const Content = contentMap[topicId];
   return Content ? <Content /> : <GenericContent title={title} />;
+}
+
+
+const lessonPreloaders: Record<string, () => Promise<unknown>> = {
+  "python-for-ml": () => loadPythonForMLContent(),
+  "numpy-essentials": () => loadNumpyContent(),
+  "pandas-essentials": () => loadPandasContent(),
+  "scikit-learn-essentials": () => loadScikitLearnContent(),
+};
+
+export function preloadLessonContent(topicId: string): Promise<unknown> {
+  const load = lessonPreloaders[topicId];
+  return load ? load() : Promise.resolve();
 }

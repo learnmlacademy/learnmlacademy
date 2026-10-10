@@ -3,13 +3,20 @@ import { GenericContent } from "../GenericContent";
 
 type RegistryProps = { topicId: string; title: string };
 
-const KMeansContent = lazy(() => import("../unsupervised/KMeansContent").then(m => ({ default: m.KMeansContent })));
-const HierarchicalContent = lazy(() => import("../unsupervised/HierarchicalContent").then(m => ({ default: m.HierarchicalContent })));
-const DBSCANContent = lazy(() => import("../unsupervised/DBSCANContent").then(m => ({ default: m.DBSCANContent })));
-const PCAContent = lazy(() => import("../unsupervised/PCAContent").then(m => ({ default: m.PCAContent })));
-const TSNEContent = lazy(() => import("../unsupervised/TSNEContent").then(m => ({ default: m.TSNEContent })));
-const AssociationRulesContent = lazy(() => import("../unsupervised/AssociationRulesContent").then(m => ({ default: m.AssociationRulesContent })));
-const AprioriContent = lazy(() => import("../unsupervised/AprioriContent").then(m => ({ default: m.AprioriContent })));
+const loadKMeansContent = () => import("../unsupervised/KMeansContent");
+const KMeansContent = lazy(() => loadKMeansContent().then(m => ({ default: m.KMeansContent })));
+const loadHierarchicalContent = () => import("../unsupervised/HierarchicalContent");
+const HierarchicalContent = lazy(() => loadHierarchicalContent().then(m => ({ default: m.HierarchicalContent })));
+const loadDBSCANContent = () => import("../unsupervised/DBSCANContent");
+const DBSCANContent = lazy(() => loadDBSCANContent().then(m => ({ default: m.DBSCANContent })));
+const loadPCAContent = () => import("../unsupervised/PCAContent");
+const PCAContent = lazy(() => loadPCAContent().then(m => ({ default: m.PCAContent })));
+const loadTSNEContent = () => import("../unsupervised/TSNEContent");
+const TSNEContent = lazy(() => loadTSNEContent().then(m => ({ default: m.TSNEContent })));
+const loadAssociationRulesContent = () => import("../unsupervised/AssociationRulesContent");
+const AssociationRulesContent = lazy(() => loadAssociationRulesContent().then(m => ({ default: m.AssociationRulesContent })));
+const loadAprioriContent = () => import("../unsupervised/AprioriContent");
+const AprioriContent = lazy(() => loadAprioriContent().then(m => ({ default: m.AprioriContent })));
 
 const contentMap: Record<string, ComponentType> = {
   "kmeans": KMeansContent,
@@ -24,4 +31,20 @@ const contentMap: Record<string, ComponentType> = {
 export default function LessonCategoryRegistry({ topicId, title }: RegistryProps) {
   const Content = contentMap[topicId];
   return Content ? <Content /> : <GenericContent title={title} />;
+}
+
+
+const lessonPreloaders: Record<string, () => Promise<unknown>> = {
+  "kmeans": () => loadKMeansContent(),
+  "hierarchical": () => loadHierarchicalContent(),
+  "dbscan": () => loadDBSCANContent(),
+  "pca": () => loadPCAContent(),
+  "tsne": () => loadTSNEContent(),
+  "association-rules": () => loadAssociationRulesContent(),
+  "apriori": () => loadAprioriContent(),
+};
+
+export function preloadLessonContent(topicId: string): Promise<unknown> {
+  const load = lessonPreloaders[topicId];
+  return load ? load() : Promise.resolve();
 }
