@@ -4,4 +4,7 @@ dist/
 .DS_Store
 .aistudio/
 metadata.json
-.env.example
+.env.*
+!.env.example
+.vercel/
+*.log
