@@ -117,7 +117,7 @@ const staticMeta = new Map([
   }],
   ['/curriculum', {
     title: 'AI & Machine Learning Curriculum | ML Academy',
-    description: 'Explore the ML Academy learning path from machine-learning foundations through deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI.',
+    description: 'Follow the ML Academy path from ML foundations to deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI engineering.',
   }],
   ['/about', {
     title: 'About ML Academy',
@@ -135,12 +135,12 @@ const staticMeta = new Map([
     title: 'Hands-On ML & AI Project Handbooks | LearnMLAcademy',
     description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
   }],
-  ['/projects/retail-forecasting', {title: 'Retail Forecasting — Complete Time Series Handbook | LearnMLAcademy', description: 'Build a real UK retail daily sales forecasting system with leakage-safe lag features, chronological splits, regression and baseline comparison, Streamlit and complete code.'}],
-  ['/projects/disaster-tweets', {title: 'Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
+  ['/projects/retail-forecasting', {title: 'Retail Forecasting — Complete Time Series Handbook | LearnMLAcademy', description: 'Build a UK retail daily sales forecaster with leakage-safe lag features, chronological splits, baseline comparison, a Streamlit app and complete code.'}],
+  ['/projects/disaster-tweets', {title: 'Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy', description: 'Build a disaster-tweet classifier from Kaggle data with TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
   ['/projects/digit-recognizer', {title: 'Digit Recognizer — Complete CNN Handbook | LearnMLAcademy', description: 'Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.'}],
   ['/projects/titanic-survival', {
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
-    description: 'Build a complete Titanic machine-learning classifier from an empty Windows folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.',
+    description: 'Build a Titanic survival classifier from an empty folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.',
   }],
   ['/projects/house-price', {
     title: 'House Price Predictor Project Handbook | LearnMLAcademy',
@@ -148,19 +148,19 @@ const staticMeta = new Map([
   }],
   ['/projects/movie-recommender', {
     title: 'Movie Recommendation System Project Handbook | LearnMLAcademy',
-    description: 'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.',
+    description: 'Build a Netflix-style movie recommender on a CC0 ratings dataset with content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.',
   }],
   ['/projects/credit-card-fraud', {
     title: 'Credit Card Fraud Detector Project Handbook | LearnMLAcademy',
-    description: 'Build an imbalanced credit-card fraud detector using OpenML data, class weighting, SMOTE, Random Forest, Average Precision, threshold tuning, tests and Streamlit.',
+    description: 'Build a credit-card fraud detector on imbalanced OpenML data with class weighting, SMOTE, Random Forest, threshold tuning, tests and Streamlit.',
   }],
   ['/projects/customer-segmentation', {
     title: 'Customer Segmentation Project — RFM, K-Means, DBSCAN, PCA | LearnMLAcademy',
-    description: 'Build customer segments from 541,909 UCI retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, silhouette analysis, PCA, tests and Streamlit.',
+    description: 'Segment customers from 541,909 UCI retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, PCA, tests and a Streamlit app.',
   }],
   ['/projects/pdf-rag/semantic', {
     title: 'Build a Semantic PDF RAG Assistant — Complete Advanced Handbook | LearnMLAcademy',
-    description: 'Build a semantic PDF search assistant with local MiniLM ONNX embeddings, page-bound tokens, cosine ranking, reranking, validated citations, complete code and real Streamlit screenshots.',
+    description: 'Build a semantic PDF search assistant with local MiniLM ONNX embeddings, cosine ranking, reranking, validated citations and complete Streamlit code.',
   }],
   ['/projects/pdf-rag', {
     title: 'Chat With Your PDFs — RAG Project Handbook | LearnMLAcademy',
@@ -168,7 +168,7 @@ const staticMeta = new Map([
   }],
   ['/projects/ai-content-creator', {
     title: 'Build Your Own ChatGPT-Style AI Content Creator | LearnMLAcademy',
-    description: 'Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests and complete copyable code.',
+    description: 'Build a Streamlit content studio with Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests and complete copyable code.',
   }],
   ['/projects/ai-research-assistant', {
     title: 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy',
@@ -176,7 +176,7 @@ const staticMeta = new Map([
   }],
   ['/projects/model-to-production', {
     title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
-    description: 'Take a trained machine-learning model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift detection and rollback.',
+    description: 'Take a trained ML model from laptop to a tested FastAPI service with validation, Docker, CI, model versioning, drift detection and rollback.',
   }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',

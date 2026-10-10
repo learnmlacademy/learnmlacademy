@@ -17,6 +17,9 @@ function verifyPage(html, page) {
   assert.equal(onlyMatch(head, /<title>([^]*?)<\/title>/gi, 'title'), escapeHtml(page.title));
   const description = onlyMatch(head, /<meta\b[^>]*name="description"[^>]*content="([^"]*)"[^>]*>/gi, 'description');
   assert.equal(description, escapeHtml(page.description));
+  // Search snippets: keep descriptions complete and short enough not to be cut by Google.
+  assert.ok(page.description.length <= 155, `Meta description is ${page.description.length} chars (max 155) for ${page.canonical}`);
+  assert.ok(!/\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the|safe)\.$/i.test(page.description), `Meta description ends on a dangling word for ${page.canonical}`);
   const canonicals = [...head.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi)];
   assert.equal(canonicals.length, 1, 'Expected exactly one canonical link');
   assert.equal(canonicals[0][0].match(/href="([^"]*)"/)[1], page.canonical);
