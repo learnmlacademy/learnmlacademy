@@ -13,7 +13,7 @@ function request(body = {}, headerOverrides = {}, method = 'POST') {
   const req = {
     method,
     headers: { origin: 'https://www.learnmlacademy.com', host: 'www.learnmlacademy.com', 'content-type': 'application/json', ...headerOverrides },
-    body: { email: 'learner@example.com', guide: 'ml', consent: true, website: '', ...body },
+    body: { email: 'learner@learnmlacademy.com', guide: 'ml', consent: true, website: '', ...body },
   };
   const res = {
     code: null,
@@ -45,6 +45,11 @@ test('newsletter rejects unsafe signups without calling the email provider', asy
       { body: { consent: false }, expected: 400 },
       { body: { website: 'spam.example' }, expected: 400 },
       { body: { email: 'no-at-sign' }, expected: 400 },
+      { body: { email: 'a@b.com' }, expected: 400 },
+      { body: { email: 'q@b.com' }, expected: 400 },
+      { body: { email: 'test@test.com' }, expected: 400 },
+      { body: { email: 'asdf@asdf.com' }, expected: 400 },
+      { body: { email: 'user@mailinator.com' }, expected: 400 },
       { body: { email: 'x'.repeat(250) + '@example.com' }, expected: 400 },
       { body: { guide: 'unknown' }, expected: 400 },
     ];
@@ -61,7 +66,7 @@ test('newsletter rejects unsafe signups without calling the email provider', asy
     assert.equal(providerCalls, 1, 'Valid consented signup should reach Brevo');
     assert.equal(res.code, 502, 'Mocked provider failure must be handled safely');
     assert(!JSON.stringify(res.payload).includes('example-test-key'), 'Never leak secrets in responses');
-    console.log('Newsletter security regressions PASS (12 rejection cases, 1 provider failure case).');
+    console.log('Newsletter security regressions PASS (16 rejection cases, 1 provider failure case).');
   } finally {
     globalThis.fetch = originalFetch;
     if (oldApiKey === undefined) delete process.env.BREVO_API_KEY;

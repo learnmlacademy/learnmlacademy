@@ -1,7 +1,65 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const BLOCKED_DOMAINS = new Set([
+  "b.com", "a.com", "c.com", "d.com", "e.com", "f.com",
+  "test.com", "fake.com", "dummy.com", "asdf.com", "qwerty.com",
+  "sample.com", "nowhere.com", "nomail.com", "example.com", "example.org", "example.net",
+  "mailinator.com", "tempmail.com", "10minutemail.com",
+  "guerrillamail.com", "throwawaymail.com", "yopmail.com",
+  "trashmail.com", "sharklasers.com", "dispostable.com",
+  "getairmail.com", "maildrop.cc", "temp-mail.org", "mytempemail.com"
+]);
+
+const DUMMY_LOCAL_PARTS = new Set([
+  "test", "fake", "asdf", "qwerty", "dummy", "sample",
+  "noemail", "nobody", "null", "undefined", "temp", "trash",
+  "admin", "administrator", "user", "unknown", "abc", "xyz",
+  "none", "na", "testing"
+]);
+
+function isValidEmailAddress(raw: unknown): boolean {
+  if (typeof raw !== "string") return false;
+  const email = raw.trim().toLowerCase();
+
+  if (email.length < 6 || email.length > 254) return false;
+
+  const atParts = email.split("@");
+  if (atParts.length !== 2) return false;
+
+  const [local, fullDomain] = atParts;
+
+  if (local.length < 2 || local.length > 64) return false;
+  if (local.startsWith(".") || local.endsWith(".") || local.includes("..")) return false;
+  if (!/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+$/.test(local)) return false;
+
+  if (DUMMY_LOCAL_PARTS.has(local)) return false;
+  if (/^(.)\1+$/.test(local) && local.length >= 3) return false;
+
+  if (!fullDomain.includes(".") || fullDomain.length > 253) return false;
+  if (fullDomain.startsWith(".") || fullDomain.endsWith(".") || fullDomain.includes("..")) return false;
+
+  const domainParts = fullDomain.split(".");
+  if (domainParts.length < 2) return false;
+
+  const tld = domainParts[domainParts.length - 1];
+  if (!/^[a-z]{2,24}$/.test(tld)) return false;
+
+  const sld = domainParts[domainParts.length - 2];
+  if (sld.length < 2) return false;
+
+  for (const part of domainParts) {
+    if (part.length === 0 || part.length > 63) return false;
+    if (part.startsWith("-") || part.endsWith("-")) return false;
+    if (!/^[a-z0-9-]+$/.test(part)) return false;
+  }
+
+  if (local === sld) return false;
+  if (BLOCKED_DOMAINS.has(fullDomain)) return false;
+
+  return true;
+}
+
 const DEFAULT_LIST_ID = 2;
 
 const GUIDES = {
@@ -107,7 +165,7 @@ export default async function handler(req: any, res: any) {
     ? req.body.email.trim().toLowerCase()
     : "";
 
-  if (email.length > 254 || !EMAIL_PATTERN.test(email)) {
+  if (!isValidEmailAddress(email)) {
     return res.status(400).json({ error: "Please enter a valid email address." });
   }
 

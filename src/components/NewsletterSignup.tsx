@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Mail, Download, CheckCircle, Loader } from 'lucide-react';
 import type { InterviewHandbookId } from '../data/interviewHandbooks';
+import { isValidEmail } from '../utils/emailValidation';
 
 type NewsletterSignupProps = {
   guideId?: InterviewHandbookId;
@@ -48,7 +49,7 @@ export function NewsletterSignup({
 
   const handleSubmit = async () => {
     const trimmed = email.trim().toLowerCase();
-    if (!trimmed || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    if (!trimmed || !isValidEmail(trimmed)) {
       setErrorMsg('Please enter a valid email address.');
       return;
     }
