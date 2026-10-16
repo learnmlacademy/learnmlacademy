@@ -100,7 +100,7 @@ export function NewsletterSignup({
 
   if (status === 'success') {
     return (
-      <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-8 text-center my-10">
+      <div data-nosnippet="" className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-8 text-center my-10">
         <CheckCircle className="w-14 h-14 text-green-500 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-slate-900 mb-2">You're all set! 🎉</h3>
         <p className="text-slate-600 mb-6 max-w-md mx-auto">
@@ -121,7 +121,7 @@ export function NewsletterSignup({
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-6 md:p-8 my-10">
+    <div data-nosnippet="" className="bg-gradient-to-br from-indigo-50 to-violet-50 border border-indigo-100 rounded-2xl p-6 md:p-8 my-10">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
         <div className="flex-shrink-0 w-14 h-14 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
           <Download className="w-7 h-7 text-white" />

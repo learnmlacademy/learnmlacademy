@@ -109,6 +109,7 @@ export function GoogleAnalytics() {
 
   return (
     <div
+      data-nosnippet=""
       className="fixed inset-x-4 bottom-4 z-[100] mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:p-5"
       role="dialog"
       aria-label="Analytics preference"

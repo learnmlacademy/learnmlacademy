@@ -211,7 +211,7 @@
   ],
   "functions": {
     "api/newsletter.ts": {
-      "includeFiles": "private/ML_Interview_Cheatsheet.pdf"
+      "includeFiles": "private/**"
     }
   },
   "rewrites": [
@@ -219,5 +219,6 @@
       "source": "/((?!assets/|api/).*)",
       "destination": "/"
     }
-  ]
+  ],
+  "trailingSlash": false
 }

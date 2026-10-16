@@ -24,6 +24,7 @@ const AIContentCreatorProjectPage = lazy(() => import('./pages/AIContentCreatorP
 const AIResearchAssistantProjectPage = lazy(() => import('./pages/AIResearchAssistantProjectPage').then(module => ({ default: module.AIResearchAssistantProjectPage })));
 const ModelToProductionProjectPage = lazy(() => import('./pages/ModelToProductionProjectPage').then(module => ({ default: module.ModelToProductionProjectPage })));
 const RemainingProjectPage = lazy(() => import("./pages/RemainingProjectPage").then(module => ({ default: module.RemainingProjectPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then(module => ({ default: module.ContactPage })));
 const PrivacyPolicyPage = lazy(() => import('./pages/legal/PrivacyPolicyPage').then(module => ({ default: module.PrivacyPolicyPage })));
 const TermsOfServicePage = lazy(() => import('./pages/legal/TermsOfServicePage').then(module => ({ default: module.TermsOfServicePage })));
 const DisclaimerPage = lazy(() => import('./pages/legal/DisclaimerPage').then(module => ({ default: module.DisclaimerPage })));
@@ -76,6 +77,7 @@ export function AppRoutes() {
           <Route path="projects/retail-forecasting" element={<DeferredRoute><ProjectLearningSupport projectId="retail-forecasting"><RemainingProjectPage kind="retail-forecasting" /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="projects/disaster-tweets" element={<DeferredRoute><ProjectLearningSupport projectId="disaster-tweets"><RemainingProjectPage kind="disaster-tweets" /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="projects/digit-recognizer" element={<DeferredRoute><ProjectLearningSupport projectId="digit-recognizer"><RemainingProjectPage kind="digit-recognizer" /></ProjectLearningSupport></DeferredRoute>} />
+          <Route path="contact" element={<DeferredRoute><ContactPage /></DeferredRoute>} />
           <Route path="privacy" element={<DeferredRoute><PrivacyPolicyPage /></DeferredRoute>} />
           <Route path="terms" element={<DeferredRoute><TermsOfServicePage /></DeferredRoute>} />
           <Route path="disclaimer" element={<DeferredRoute><DisclaimerPage /></DeferredRoute>} />

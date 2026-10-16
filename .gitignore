@@ -5,3 +5,10 @@ dist/
 .aistudio/
 metadata.json
 .env.example
+-e 
+__pycache__/
+*.pyc
+*.bundle
+
+bun.lock
+*.patch

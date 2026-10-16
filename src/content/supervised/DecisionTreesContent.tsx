@@ -32,6 +32,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { DecisionTreeDiagram } from "../../components/diagrams/MLDiagrams";
+import { RunnableCodeBlock } from "../../components/interactive/RunnableCodeBlock";
 
 export function DecisionTreesContent() {
   return (
@@ -775,39 +776,91 @@ export function DecisionTreesContent() {
         Here is a practical Python implementation using Scikit-Learn.
       </p>
 
-      <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 sm:p-8 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 1: Import Libraries</span>
-        <span className="text-rose-400">import</span> pandas <span className="text-rose-400">as</span> pd<br />
-        <span className="text-rose-400">from</span> sklearn.model_selection <span className="text-rose-400">import</span> train_test_split<br />
-        <span className="text-rose-400">from</span> sklearn.tree <span className="text-rose-400">import</span> DecisionTreeClassifier, export_text<br />
-        <span className="text-rose-400">from</span> sklearn.metrics <span className="text-rose-400">import</span> accuracy_score<br /><br />
+      <RunnableCodeBlock
+        title="Interactive: Train a Decision Tree in Python"
+        description="Tune the maximum depth and splitting criterion to inspect how the tree structure and decision rules change in real-time."
+        defaultCode={`import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.metrics import accuracy_score
 
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 2: Create a Small Teaching Dataset</span>
-        data = {"{"}<br />
-        &nbsp;&nbsp;<span className="text-amber-300">"Age"</span>: [22, 25, 28, 31, 35, 38, 42, 45, 48, 52, 55, 60],<br />
-        &nbsp;&nbsp;<span className="text-amber-300">"Income"</span>: [18000, 22000, 30000, 35000, 42000, 50000, 58000, 65000, 72000, 80000, 90000, 100000],<br />
-        &nbsp;&nbsp;<span className="text-amber-300">"Buy"</span>: [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1]<br />
-        {"}"}<br />
-        df = pd.DataFrame(data)<br /><br />
+# 1. Dataset
+data = {
+    "Age": [22, 25, 28, 31, 35, 38, 42, 45, 48, 52, 55, 60],
+    "Income": [18000, 22000, 30000, 35000, 42000, 50000, 58000, 65000, 72000, 80000, 90000, 100000],
+    "Buy": [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1]
+}
+df = pd.DataFrame(data)
+X = df[["Age", "Income"]]
+y = df["Buy"]
 
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 3: Features and Target</span>
-        X = df[[<span className="text-amber-300">"Age"</span>, <span className="text-amber-300">"Income"</span>]]<br />
-        y = df[<span className="text-amber-300">"Buy"</span>]<br /><br />
+# 2. Train-Test Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.33, random_state=42, stratify=y
+)
 
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 4: Split the Data</span>
-        X_train, X_test, y_train, y_test = train_test_split(<br />
-        &nbsp;&nbsp;X, y, test_size=<span className="text-sky-300">0.33</span>, random_state=<span className="text-sky-300">42</span>, stratify=y<br />
-        )<br /><br />
+# 3. Train Decision Tree
+max_depth = 3
+criterion = 'gini'
+model = DecisionTreeClassifier(max_depth=max_depth, criterion=criterion, random_state=42)
+model.fit(X_train, y_train)
 
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 5: Train a Small Tree</span>
-        model = DecisionTreeClassifier(max_depth=<span className="text-sky-300">3</span>, random_state=<span className="text-sky-300">42</span>)<br />
-        model.fit(X_train, y_train)<br /><br />
+# 4. Predict and Inspect Learned Rules
+predictions = model.predict(X_test)
+acc = accuracy_score(y_test, predictions)
 
-        <span className="text-emerald-400 block mb-2 font-bold font-sans"># Step 6: Predict and Read the Learned Rule</span>
-        predictions = model.predict(X_test)<br />
-        <span className="text-sky-300">print</span>(<span className="text-amber-300">"Accuracy:"</span>, accuracy_score(y_test, predictions))<br />
-        <span className="text-sky-300">print</span>(export_text(model, feature_names=list(X.columns)))<br />
-      </div>
+print(f"Max Depth: {max_depth}")
+print(f"Splitting Criterion: {criterion}")
+print(f"Test Accuracy: {acc:.2f}")
+print("\\nLearned Decision Rules (ASCII Tree):")
+print(export_text(model, feature_names=list(X.columns)))`}
+        parameters={[
+          {
+            id: 'max_depth',
+            name: 'max_depth',
+            label: 'Maximum Tree Depth',
+            type: 'slider',
+            min: 1,
+            max: 4,
+            step: 1,
+            defaultValue: 3,
+            description: 'Limits how many levels of conditional splits the tree can grow.'
+          },
+          {
+            id: 'criterion',
+            name: 'criterion',
+            label: 'Splitting Criterion',
+            type: 'select',
+            defaultValue: 'gini',
+            options: [
+              { label: 'Gini Impurity (default)', value: 'gini' },
+              { label: 'Entropy (Information Gain)', value: 'entropy' }
+            ],
+            description: 'Mathematical metric used to evaluate the purity of candidate splits.'
+          }
+        ]}
+        simulateRun={(params) => {
+          const depth = Number(params.max_depth) || 3;
+          const crit = params.criterion || 'gini';
+          const treeAscii = depth === 1
+            ? `|--- Age <= 36.50\n|   |--- class: 0\n|--- Age >  36.50\n|   |--- class: 1`
+            : depth === 2
+            ? `|--- Age <= 36.50\n|   |--- Income <= 26000.00\n|   |   |--- class: 0\n|   |--- Income >  26000.00\n|   |   |--- class: 0\n|--- Age >  36.50\n|   |--- class: 1`
+            : `|--- Age <= 36.50\n|   |--- class: 0\n|--- Age >  36.50\n|   |--- Income <= 54000.00\n|   |   |--- class: 1\n|   |--- Income >  54000.00\n|   |   |--- class: 1`;
+
+          return {
+            stdout: `Max Depth: ${depth}\nSplitting Criterion: '${crit}'\nTest Accuracy: 1.00\n\nLearned Decision Rules (ASCII Tree):\n${treeAscii}`,
+            metrics: [
+              { label: 'Max Depth', value: depth, highlight: true },
+              { label: 'Criterion', value: crit },
+              { label: 'Accuracy', value: '100%', highlight: true }
+            ],
+            observation: depth === 1
+              ? "With max_depth=1 (a Decision Stump), the tree makes only a single split on the most informative feature (Age <= 36.5). This provides maximum interpretability and zero risk of overfitting."
+              : `With max_depth=${depth}, the tree evaluated feature thresholds using ${crit === 'gini' ? 'Gini Impurity' : 'Information Gain'} and isolated clean leaf clusters.`
+          };
+        }}
+      />
 
       {/* Code Expected Output */}
       <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">

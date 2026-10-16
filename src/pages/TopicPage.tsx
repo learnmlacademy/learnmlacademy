@@ -5,9 +5,10 @@ import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils
 import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
 import { LessonContentRegistry } from "../content/LessonContentRegistry";
-const QuizSection = lazy(() => import("../components/QuizSection").then(m => ({ default: m.QuizSection })));
+import { QuizSection } from "../components/QuizSection";
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
 import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
+import { MidLessonCallout } from "../components/lesson/MidLessonCallout";
 import { WasThisHelpful } from "../components/lesson/WasThisHelpful";
 import { LessonCompletionBanner } from "../components/lesson/LessonCompletionBanner";
 import { useProgress } from "../context/ProgressContext";
@@ -207,9 +208,7 @@ export function TopicPage() {
 
   const renderQuiz = () => (
     <div id="quiz-section" key={`quiz-${subtopic.id}`} className="scroll-mt-20">
-      <Suspense fallback={<div className="min-h-24 py-8 text-sm text-slate-600" role="status">Loading knowledge check…</div>}>
-        <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
-      </Suspense>
+      <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
     </div>
   );
 
@@ -263,7 +262,7 @@ export function TopicPage() {
     >
       <article
         ref={articleRef}
-        data-lesson-body
+        data-lesson-body="true"
         key={`article-${topicId}`}
         className="lesson-body prose prose-slate max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-indigo-600 hover:prose-a:text-indigo-800 prose-img:rounded-xl"
       >
@@ -276,38 +275,47 @@ export function TopicPage() {
           </div>
         }>
           <LessonContentRegistry topicId={topicId} categoryId={category.id} title={subtopic.title} />
+          <MidLessonCallout topicId={topicId} categoryId={category.id} />
           {isLegacyStandardizedLesson && (
             <LegacyInlineEndingCleanup articleRef={articleRef} topicId={topicId} />
           )}
         </Suspense>
       </article>
 
-      <LessonProjectBridge topicId={topicId} categoryId={category.id} />
+      <div data-nosnippet="">
+        <LessonProjectBridge topicId={topicId} categoryId={category.id} />
 
-      {/* Lesson Completion Progress Card */}
-      <LessonCompletionBanner
-        topicId={topicId}
-        topicTitle={subtopic.title}
-        nextTopic={next ? { id: next.id, title: next.title } : undefined}
-      />
+        {/* Lesson Completion Progress Card */}
+        <LessonCompletionBanner
+          topicId={topicId}
+          topicTitle={subtopic.title}
+          nextTopic={next ? { id: next.id, title: next.title } : undefined}
+        />
 
-      {/* Reader Feedback (Competitive UX Standard) */}
-      <WasThisHelpful topicId={topicId} topicTitle={subtopic.title} />
+        {/* Reader Feedback (Competitive UX Standard) */}
+        <WasThisHelpful topicId={topicId} topicTitle={subtopic.title} />
+      </div>
 
       {isModernStandardizedLesson ? (
         <>
           {renderQuiz()}
-          {renderStandardContinueLearning("continue-learning-heading")}
-          <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
-          <AffiliateRecommendation />
+          <div data-nosnippet="">
+            {renderStandardContinueLearning("continue-learning-heading")}
+            <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
+            <AffiliateRecommendation />
+          </div>
         </>
       ) : (
         <>
-          <LegacyLessonSummary topicId={topicId} />
+          <div data-nosnippet="">
+            <LegacyLessonSummary topicId={topicId} />
+          </div>
           {renderQuiz()}
-          {renderStandardContinueLearning(`continue-learning-${topicId}`)}
-          <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
-          <AffiliateRecommendation />
+          <div data-nosnippet="">
+            {renderStandardContinueLearning(`continue-learning-${topicId}`)}
+            <NewsletterSignup {...getInterviewHandbookForTopic(topicId)} />
+            <AffiliateRecommendation />
+          </div>
         </>
       )}
     </LessonShell>

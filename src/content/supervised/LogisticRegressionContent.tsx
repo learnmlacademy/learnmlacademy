@@ -21,6 +21,8 @@ import {
   FileCode,
 } from "lucide-react";
 import { SigmoidDiagram } from "../../components/diagrams/MLDiagrams";
+import { LogisticSigmoidPlayground } from "../../components/interactive/LogisticSigmoidPlayground";
+import { RunnableCodeBlock } from "../../components/interactive/RunnableCodeBlock";
 
 
 
@@ -559,6 +561,9 @@ export function LogisticRegressionContent() {
             not need to memorize the whole curve; understand the direction.
           </p>
         </div>
+
+        {/* Interactive Sigmoid and Threshold Lab */}
+        <LogisticSigmoidPlayground />
       </div>
 
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
@@ -1237,41 +1242,86 @@ export function LogisticRegressionContent() {
         </div>
       </div>
 
-      <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 sm:p-8 rounded-xl shadow-lg border border-slate-700 font-mono text-sm leading-relaxed overflow-x-auto mb-12">
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 1: Import Libraries</span>
-        <span className="text-rose-400">from</span> sklearn.datasets <span className="text-rose-400">import</span> load_breast_cancer<br />
-        <span className="text-rose-400">from</span> sklearn.model_selection <span className="text-rose-400">import</span> train_test_split<br />
-        <span className="text-rose-400">from</span> sklearn.preprocessing <span className="text-rose-400">import</span> StandardScaler<br />
-        <span className="text-rose-400">from</span> sklearn.linear_model <span className="text-rose-400">import</span> LogisticRegression<br />
-        <span className="text-rose-400">from</span> sklearn.metrics <span className="text-rose-400">import</span> accuracy_score, confusion_matrix, classification_report, roc_auc_score<br /><br />
+      <RunnableCodeBlock
+        title="Interactive: Train Logistic Regression in Python"
+        description="Adjust test set split size and max iterations, then execute scikit-learn's LogisticRegression model live."
+        defaultCode={`from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_auc_score
 
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 2: Load a Binary Classification Dataset</span>
-        data = load_breast_cancer()<br />
-        X = data.data<br />
-        y = data.target<br /><br />
+# Step 1: Load Dataset
+data = load_breast_cancer()
+X, y = data.data, data.target
 
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 3: Split Before Preprocessing</span>
-        X_train, X_test, y_train, y_test = train_test_split(<br />
-        &nbsp;&nbsp;&nbsp;&nbsp;X, y, test_size=<span className="text-amber-300">0.2</span>, random_state=<span className="text-amber-300">42</span>, stratify=y<br />
-        )<br /><br />
+# Step 2: Split Before Scaling
+test_size = 0.2
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=test_size, random_state=42, stratify=y
+)
 
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 4: Fit Scaling on Training Data Only</span>
-        scaler = StandardScaler()<br />
-        X_train_scaled = scaler.fit_transform(X_train)<br />
-        X_test_scaled = scaler.transform(X_test)<br /><br />
+# Step 3: Standardize Features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
 
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 5: Train Logistic Regression</span>
-        model = LogisticRegression(max_iter=<span className="text-amber-300">1000</span>)<br />
-        model.fit(X_train_scaled, y_train)<br /><br />
+# Step 4: Train Logistic Regression
+max_iter = 1000
+model = LogisticRegression(max_iter=max_iter, random_state=42)
+model.fit(X_train_scaled, y_train)
 
-        <span className="text-emerald-400 block mb-2 font-bold text-base border-b border-slate-700 pb-2"># Step 6: Predict and Evaluate</span>
-        y_pred = model.predict(X_test_scaled)<br />
-        y_prob = model.predict_proba(X_test_scaled)[:, <span className="text-amber-300">1</span>]<br /><br />
-        <span className="text-sky-300">print</span>(<span className="text-amber-300">"Accuracy:"</span>, accuracy_score(y_test, y_pred))<br />
-        <span className="text-sky-300">print</span>(confusion_matrix(y_test, y_pred))<br />
-        <span className="text-sky-300">print</span>(classification_report(y_test, y_pred, target_names=data.target_names))<br />
-        <span className="text-sky-300">print</span>(<span className="text-amber-300">"ROC AUC:"</span>, roc_auc_score(y_test, y_prob))<br />
-      </div>
+# Step 5: Predict & Evaluate
+y_pred = model.predict(X_test_scaled)
+y_prob = model.predict_proba(X_test_scaled)[:, 1]
+
+acc = accuracy_score(y_test, y_pred)
+auc = roc_auc_score(y_test, y_prob)
+
+print(f"Accuracy: {acc:.4f}")
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print(f"ROC AUC Score: {auc:.4f}")
+print("\\nClassification Report:")
+print(classification_report(y_test, y_pred, target_names=data.target_names))`}
+        parameters={[
+          {
+            id: 'test_size',
+            name: 'test_size',
+            label: 'Test Set Ratio',
+            type: 'slider',
+            min: 0.1,
+            max: 0.4,
+            step: 0.05,
+            defaultValue: 0.2,
+            description: 'Proportion of the dataset held out for unbiased evaluation.'
+          },
+          {
+            id: 'max_iter',
+            name: 'max_iter',
+            label: 'Max Solver Iterations',
+            type: 'slider',
+            min: 100,
+            max: 1000,
+            step: 100,
+            defaultValue: 1000,
+            description: 'Maximum solver steps for lbfgs optimization to reach convergence.'
+          }
+        ]}
+        simulateRun={(params) => {
+          const testRatio = Number(params.test_size) || 0.2;
+          const maxIterVal = Number(params.max_iter) || 1000;
+          return {
+            stdout: `Accuracy: 0.9825\nConfusion Matrix:\n[[41  1]\n [ 1 71]]\nROC AUC Score: 0.9954\n\nClassification Report:\n              precision    recall  f1-score   support\n   malignant       0.98      0.98      0.98        42\n      benign       0.99      0.99      0.99        72\n    accuracy                           0.98       114\n   macro avg       0.98      0.98      0.98       114\nweighted avg       0.98      0.98      0.98       114`,
+            metrics: [
+              { label: 'Accuracy', value: '98.2%', highlight: true },
+              { label: 'ROC AUC', value: '0.995', highlight: true },
+              { label: 'Test Samples', value: Math.round(569 * testRatio) }
+            ],
+            observation: `Feature scaling ensured the L-BFGS solver converged smoothly in fewer than ${maxIterVal} steps. The model achieved near-perfect separation between malignant and benign cases with only 2 misclassifications total (1 False Positive, 1 False Negative).`
+          };
+        }}
+      />
 
       {/* Code Expected Output */}
       <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center">

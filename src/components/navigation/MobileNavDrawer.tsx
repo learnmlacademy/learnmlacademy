@@ -72,7 +72,7 @@ export function MobileNavDrawer({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
+    <div data-nosnippet="" className="fixed inset-0 z-50 lg:hidden">
       <button
         type="button"
         className="absolute inset-0 h-full w-full bg-slate-950/45 backdrop-blur-sm"

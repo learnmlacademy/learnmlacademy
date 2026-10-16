@@ -35,6 +35,7 @@ export function SidebarItem({
     >
       <div className="flex min-w-0 items-center gap-2">
         <span
+          aria-hidden="true"
           className={cn(
             'w-4 shrink-0 font-mono text-[10px] tabular-nums',
             active ? 'font-bold text-indigo-600' : 'text-slate-400 group-hover:text-slate-500',
@@ -42,6 +43,7 @@ export function SidebarItem({
         >
           {lessonNumber}
         </span>
+        {' '}
         <span className="truncate">{title}</span>
       </div>
 

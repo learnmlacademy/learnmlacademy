@@ -1,5 +1,6 @@
 import "../textbook.css";
 import { LLMVisualFigure } from "../../components/diagrams/LLMDiagrams";
+import { RagArchitectureDiagram } from "../../components/diagrams/RagArchitectureDiagram";
 import { Link } from "react-router-dom";
 import { Callout } from "../../components/content/Callout";
 import { DataTable } from "../../components/content/DataTable";
@@ -22,29 +23,7 @@ function Steps({ items }: { items: Array<{ title: string; body: string }> }) {
 }
 
 function RAGPipelineFigure() {
-  return (
-    <FigureShell
-      title="RAG: find useful evidence before asking the LLM to answer"
-      caption="Retrieval does not replace the LLM. It supplies selected external evidence to the generation step."
-      accessibleDescription="A four-step pipeline shows a user question, retrieval from approved documents, assembly of relevant passages into context, and an LLM answer grounded in that evidence."
-    >
-      <div className="grid gap-3 md:grid-cols-4">
-        {[
-          ["Question","How many casual-leave days do I get?"],
-          ["Retrieve","Find relevant passages in the approved HR manual"],
-          ["Add evidence","Place the best passages beside the question"],
-          ["Generate","LLM answers using the supplied evidence"],
-        ].map(([title,body],index)=>(
-          <div key={title} className="relative rounded-xl border border-slate-200 bg-white p-4">
-            <p className="text-xs font-bold text-indigo-600">STEP {index+1}</p>
-            <p className="mt-1 font-bold text-slate-900">{title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-700">{body}</p>
-            {index<3 && <span className="absolute -right-4 top-1/2 hidden -translate-y-1/2 text-xl font-bold text-indigo-500 md:block" aria-hidden="true">→</span>}
-          </div>
-        ))}
-      </div>
-    </FigureShell>
-  );
+  return <RagArchitectureDiagram />;
 }
 
 function RAGLesson() {

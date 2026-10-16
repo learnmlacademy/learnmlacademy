@@ -4,6 +4,7 @@ import { blogPosts } from '../data/blog';
 import { fitMetaDescription } from '../utils/seo';
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
+import { CorePrerequisitesCard } from '../components/navigation/CorePrerequisitesCard';
 import { getInterviewHandbookForBlog } from '../data/interviewHandbooks';
 import { TopMLAlgorithmsContent } from '../content/blog/top-ml-algorithms-explained';
 import { MLInterviewPrepContent } from '../content/blog/ml-interview-prep-guide';
@@ -108,6 +109,9 @@ export function BlogPostPage() {
           </a>
         </div>
       )}
+
+      {/* Core Prerequisite Concepts Card */}
+      <CorePrerequisitesCard slug={slug} />
 
       {/* Content or coming soon */}
       <article className="prose prose-slate prose-lg max-w-none">

@@ -39,12 +39,25 @@ function verifyPage(html, page) {
 
   if (page.kind === 'static' && page.route.startsWith('/projects/')) {
     const schema = JSON.parse(onlyMatch(head, /<script\b[^>]*id="schema-topic"[^>]*>([^]*?)<\/script>/gi, 'project schema'));
+    const article = schema['@graph']?.find(node => node['@type']?.includes('TechArticle'));
+    const breadcrumb = schema['@graph']?.find(node => node['@type'] === 'BreadcrumbList');
     const software = schema['@graph']?.find(node => node['@type'] === 'SoftwareSourceCode');
     const howto = schema['@graph']?.find(node => node['@type'] === 'HowTo');
+    assert(article?.['@type']?.includes('LearningResource'), 'Project missing LearningResource');
+    assert.equal(article?.headline, page.title, 'Project headline');
+    assert.equal(breadcrumb?.itemListElement?.at(-1)?.item, page.canonical, 'Project breadcrumb canonical');
     assert.equal(software?.url, page.canonical, 'Project code schema URL');
     assert(software?.codeRepository?.startsWith('https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/'), 'Project code repository');
     assert.equal(howto?.step?.length, 4, 'Project how-to steps');
     assert(page.image?.startsWith('/project-handbooks/'), 'Project image required');
+  }
+  if (page.kind === 'blog') {
+    const schema = JSON.parse(onlyMatch(head, /<script\b[^>]*id="schema-topic"[^>]*>([^]*?)<\/script>/gi, 'blog schema'));
+    const article = schema['@graph']?.find(node => node['@type']?.includes('TechArticle'));
+    const breadcrumb = schema['@graph']?.find(node => node['@type'] === 'BreadcrumbList');
+    assert(article?.['@type']?.includes('LearningResource'), 'Blog missing LearningResource');
+    assert.equal(article?.headline, page.title, 'Blog headline');
+    assert.equal(breadcrumb?.itemListElement?.at(-1)?.item, page.canonical, 'Blog breadcrumb canonical');
   }
   if (page.kind === 'lesson') {
     assert(page.canonical.endsWith(page.route) && page.route.startsWith('/learn/'));

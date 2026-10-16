@@ -80,7 +80,7 @@ function MobileTableOfContentsSheet({
   };
 
   return (
-    <div className="fixed inset-0 z-50 xl:hidden">
+    <div data-nosnippet="" className="fixed inset-0 z-50 xl:hidden">
       {/* Backdrop */}
       <button
         type="button"
@@ -544,12 +544,14 @@ export function LessonShell({
             />
 
             {showToc ? (
-              <MobileTableOfContents
-                items={tocItems}
-                activeId={activeSectionId}
-                copied={copied}
-                onCopyLink={handleCopyLink}
-              />
+              <div data-nosnippet="">
+                <MobileTableOfContents
+                  items={tocItems}
+                  activeId={activeSectionId}
+                  copied={copied}
+                  onCopyLink={handleCopyLink}
+                />
+              </div>
             ) : (
               // Reserve the closed mobile TOC's space before heading discovery,
               // preventing a post-hydration insertion from shifting the lesson.
@@ -560,7 +562,7 @@ export function LessonShell({
           </div>
 
           {/* Right Sticky Table of Contents (Desktop) */}
-          <aside className="hidden xl:block min-w-0">
+          <aside data-nosnippet="" className="hidden xl:block min-w-0">
             {showToc ? (
               <DesktopTableOfContents
                 items={tocItems}
@@ -600,7 +602,7 @@ export function LessonShell({
       />
 
       {/* Synchronized Mobile Bottom Action Bar (Screen < xl) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200/90 bg-white/95 backdrop-blur px-2.5 sm:px-4 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-lg xl:hidden">
+      <div data-nosnippet="" className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200/90 bg-white/95 backdrop-blur px-2.5 sm:px-4 py-2 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-lg xl:hidden">
         <div className="mx-auto flex max-w-lg items-center justify-between gap-1.5 text-xs">
           {/* Open Curriculum Drawer Button */}
           <button

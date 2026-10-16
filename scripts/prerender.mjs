@@ -120,12 +120,12 @@ const staticMeta = new Map([
     description: 'Explore the ML Academy learning path from machine-learning foundations through deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI.',
   }],
   ['/about', {
-    title: 'About ML Academy',
-    description: 'Learn about ML Academy and its beginner-first approach to teaching machine learning and modern AI step by step.',
+    title: 'About LearnMLAcademy — Hands-On AI & Machine Learning Education',
+    description: 'Learn about LearnMLAcademy and its beginner-first approach to teaching Machine Learning, Deep Learning, Generative AI, LLMs, and Agentic AI with code.',
   }],
   ['/blog', {
-    title: 'Machine Learning & AI Blog | ML Academy',
-    description: 'Practical machine-learning and AI guides covering algorithms, interviews, model evaluation, Generative AI and RAG.',
+    title: 'Machine Learning & AI Engineering Blog | LearnMLAcademy',
+    description: 'Practical machine learning and AI guides covering algorithms, FAANG interviews, model evaluation, Generative AI, large language models, and RAG systems.',
   }],
   ['/cheatsheet', {
     title: 'Free ML Interview Cheatsheet | ML Academy',
@@ -135,20 +135,20 @@ const staticMeta = new Map([
     title: 'Hands-On ML & AI Project Handbooks | LearnMLAcademy',
     description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
   }],
-  ['/projects/retail-forecasting', {title: 'Retail Forecasting — Complete Time Series Handbook | LearnMLAcademy', description: 'Build a real UK retail daily sales forecasting system with leakage-safe lag features, chronological splits, regression and baseline comparison, Streamlit and complete code.'}],
+  ['/projects/retail-forecasting', {title: 'Retail Forecasting — Complete Time Series Handbook | LearnMLAcademy', description: 'Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.'}],
   ['/projects/disaster-tweets', {title: 'Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
   ['/projects/digit-recognizer', {title: 'Digit Recognizer — Complete CNN Handbook | LearnMLAcademy', description: 'Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.'}],
   ['/projects/titanic-survival', {
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
-    description: 'Build a complete Titanic machine-learning classifier from an empty Windows folder to a tested Streamlit app with five models, cross-validation, tuning and real evaluation.',
+    description: 'Build a complete Titanic machine-learning classifier from scratch to a tested Streamlit web app with five models, cross-validation, and performance tuning.',
   }],
   ['/projects/house-price', {
     title: 'House Price Predictor Project Handbook | LearnMLAcademy',
-    description: 'Build a house price predictor from an empty Windows folder to a tested Streamlit app using Ames Housing, Python, scikit-learn and XGBoost.',
+    description: 'Build an end-to-end Ames house price predictor from an empty folder to a tested Streamlit app using Python, scikit-learn regression, and XGBoost models.',
   }],
   ['/projects/movie-recommender', {
     title: 'Movie Recommendation System Project Handbook | LearnMLAcademy',
-    description: 'Build a Netflix-style educational movie recommender with a CC0 synthetic ratings dataset, content similarity, collaborative filtering, hybrid ranking, tests and Streamlit.',
+    description: 'Build a Netflix-style educational movie recommender using synthetic ratings, content similarity, collaborative filtering, hybrid ranking, and Streamlit.',
   }],
   ['/projects/credit-card-fraud', {
     title: 'Credit Card Fraud Detector Project Handbook | LearnMLAcademy',
@@ -156,15 +156,15 @@ const staticMeta = new Map([
   }],
   ['/projects/customer-segmentation', {
     title: 'Customer Segmentation Project — RFM, K-Means, DBSCAN, PCA | LearnMLAcademy',
-    description: 'Build customer segments from 541,909 UCI retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, silhouette analysis, PCA, tests and Streamlit.',
+    description: 'Build customer segments from 541,909 retail transactions using RFM analysis, K-Means clustering, DBSCAN, PCA dimensionality reduction, and Streamlit.',
   }],
   ['/projects/pdf-rag/semantic', {
     title: 'Build a Semantic PDF RAG Assistant — Complete Advanced Handbook | LearnMLAcademy',
-    description: 'Build a semantic PDF search assistant with local MiniLM ONNX embeddings, page-bound tokens, cosine ranking, reranking, validated citations, complete code and real Streamlit screenshots.',
+    description: 'Build a semantic PDF search assistant with local MiniLM ONNX embeddings, page-bound tokens, cosine similarity ranking, reranking, and Streamlit app code.',
   }],
   ['/projects/pdf-rag', {
     title: 'Chat With Your PDFs — RAG Project Handbook | LearnMLAcademy',
-    description: 'Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit and tests.',
+    description: 'Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit web interface, and automated tests.',
   }],
   ['/projects/ai-content-creator', {
     title: 'Build Your Own ChatGPT-Style AI Content Creator | LearnMLAcademy',
@@ -172,11 +172,11 @@ const staticMeta = new Map([
   }],
   ['/projects/ai-research-assistant', {
     title: 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy',
-    description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, exact citations, tests and Streamlit.',
+    description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, citation verification, tests, and Streamlit.',
   }],
   ['/projects/model-to-production', {
     title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
-    description: 'Take a trained machine-learning model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift detection and rollback.',
+    description: 'Take a trained ML model from laptop to production using a tested FastAPI service with validation, Docker, CI, model versioning, drift checks, and rollback.',
   }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
@@ -217,6 +217,60 @@ function projectSchema(route, meta, repositoryFolder) {
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
+      {
+        '@type': ['TechArticle', 'LearningResource'],
+        '@id': `${canonical}#article`,
+        url: canonical,
+        headline: meta.title,
+        name: meta.title,
+        description: meta.description,
+        educationalLevel: 'Intermediate',
+        learningResourceType: 'Project Handbook',
+        inLanguage: 'en-US',
+        isAccessibleForFree: true,
+        image: `${BASE_URL}/og-image.png`,
+        datePublished: '2026-02-01',
+        dateModified: '2026-03-28',
+        timeRequired: 'PT45M',
+        author: {
+          '@type': 'Person',
+          name: 'Prateek Sharan',
+          url: `${BASE_URL}/about`,
+        },
+        publisher: {
+          '@type': 'Organization',
+          name: 'LearnMLAcademy',
+          url: BASE_URL,
+          logo: {
+            '@type': 'ImageObject',
+            url: `${BASE_URL}/favicon.svg`,
+          },
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${canonical}#breadcrumb`,
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Home',
+            item: BASE_URL,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Projects',
+            item: `${BASE_URL}/projects`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: meta.title,
+            item: canonical,
+          },
+        ],
+      },
       {
         '@type': 'SoftwareSourceCode',
         name: meta.title,
@@ -305,13 +359,79 @@ export async function loadPages(vite) {
         schema: seo.getLearningResourceSchema(topic.id, meta.title, meta.description, topic.category),
       };
     }),
-    ...blogPosts.map((post) => ({
-      route: `/blog/${post.slug}`,
-      title: post.seoTitle ?? `${post.title} | ML Academy Blog`,
-      description: seo.fitMetaDescription(post.excerpt),
-      heading: post.title,
-      kind: 'blog',
-    })),
+    ...blogPosts.map((post) => {
+      const canonical = `${BASE_URL}/blog/${post.slug}`;
+      const title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
+      const description = seo.fitMetaDescription(post.excerpt);
+      const blogSchema = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': ['TechArticle', 'LearningResource'],
+            '@id': `${canonical}#article`,
+            url: canonical,
+            headline: title,
+            name: post.title,
+            description: description,
+            educationalLevel: post.tags?.includes('beginner') ? 'Beginner' : 'Intermediate',
+            learningResourceType: 'Guide',
+            inLanguage: 'en-US',
+            isAccessibleForFree: true,
+            image: `${BASE_URL}/og-image.png`,
+            datePublished: post.date,
+            dateModified: '2026-03-28',
+            timeRequired: `PT${post.readTime || 12}M`,
+            author: {
+              '@type': 'Person',
+              name: 'Prateek Sharan',
+              url: `${BASE_URL}/about`,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'LearnMLAcademy',
+              url: BASE_URL,
+              logo: {
+                '@type': 'ImageObject',
+                url: `${BASE_URL}/favicon.svg`,
+              },
+            },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            '@id': `${canonical}#breadcrumb`,
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: BASE_URL,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blog',
+                item: `${BASE_URL}/blog`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: post.title,
+                item: canonical,
+              },
+            ],
+          },
+        ],
+      });
+      return {
+        route: `/blog/${post.slug}`,
+        title,
+        description,
+        heading: post.title,
+        category: post.category,
+        schema: blogSchema,
+        kind: 'blog',
+      };
+    }),
   ];
 
   if (new Set(pages.map((page) => page.route)).size !== pages.length) {

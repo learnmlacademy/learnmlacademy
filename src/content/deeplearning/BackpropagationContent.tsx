@@ -1,4 +1,5 @@
 import React from "react";
+import { Backprop2DDiagram } from "../../components/diagrams/Backprop2DDiagram";
 
 function arrowHead(x: number, y: number, color: string, reverse = false) {
   return reverse
@@ -45,13 +46,7 @@ function ComputationGraph() {
 }
 
 function ScalarGradientFlowFigure() {
-  return (
-    <figure className="not-prose my-7 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="border-b border-slate-200 bg-slate-50 px-5 py-4"><p className="font-bold text-slate-900">The same graph is read in two directions</p></div>
-      <div className="overflow-x-auto p-5 md:p-6"><div className="min-w-[820px] space-y-5"><div className="grid grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] items-center gap-3 text-center"><div className="rounded-xl border border-amber-200 bg-amber-50 p-4"><p className="text-xs font-bold uppercase text-amber-700">known values</p><p className="mt-2 font-mono font-black">x=2, w=0.5, b=1</p></div><span className="text-2xl text-indigo-500">→</span><div className="rounded-xl border border-blue-200 bg-blue-50 p-4"><p className="text-xs font-bold uppercase text-blue-700">multiply + add</p><p className="mt-2 font-mono font-black">ŷ=0.5×2+1=2</p></div><span className="text-2xl text-indigo-500">→</span><div className="rounded-xl border border-violet-200 bg-violet-50 p-4"><p className="text-xs font-bold uppercase text-violet-700">compare with y=4</p><p className="mt-2 font-mono font-black">ŷ−y=−2</p></div><span className="text-2xl text-indigo-500">→</span><div className="rounded-xl border border-rose-200 bg-rose-50 p-4"><p className="text-xs font-bold uppercase text-rose-700">loss</p><p className="mt-2 font-mono font-black">½(−2)²=2</p></div></div><div className="flex items-center justify-center rounded-xl bg-rose-50 p-3 text-sm font-bold text-rose-800">Backward pass starts here and moves right to left ↓</div><div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-3 text-center"><div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4"><p className="text-xs font-bold uppercase text-emerald-700">weight gradient</p><p className="mt-2 font-mono font-black">∂L/∂w=−2×2=−4</p></div><span className="text-2xl text-rose-500">←</span><div className="rounded-xl border border-amber-200 bg-amber-50 p-4"><p className="text-xs font-bold uppercase text-amber-700">local effect of w</p><p className="mt-2 font-mono font-black">∂ŷ/∂w=x=2</p></div><span className="text-2xl text-rose-500">←</span><div className="rounded-xl border border-rose-200 bg-rose-50 p-4"><p className="text-xs font-bold uppercase text-rose-700">local loss effect</p><p className="mt-2 font-mono font-black">∂L/∂ŷ=−2</p></div></div></div></div>
-      <figcaption className="border-t border-slate-100 px-5 py-3 text-sm leading-relaxed text-slate-600">Forward values answer “what did the model predict?” Backward derivatives answer “how strongly did each earlier value influence the loss?” The data itself does not travel backward.</figcaption>
-    </figure>
-  );
+  return <Backprop2DDiagram />;
 }
 
 function Step({ number, title, children, result }: { number: string; title: string; children: React.ReactNode; result: string }) {

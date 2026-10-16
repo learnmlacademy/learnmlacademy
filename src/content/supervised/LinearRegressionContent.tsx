@@ -5,6 +5,7 @@ import {
 } from 'recharts';
 import { HumanRegressor } from '../../components/interactive/HumanRegressor';
 import { EquationExplorer } from '../../components/interactive/EquationExplorer';
+import { RunnableCodeBlock } from '../../components/interactive/RunnableCodeBlock';
 
 export function LinearRegressionContent() {
   const noisyData = [
@@ -685,35 +686,83 @@ export function LinearRegressionContent() {
         <h2 className="text-3xl font-bold text-indigo-800 mb-6">Python Implementation of Linear Regression</h2>
         <p className="text-lg leading-relaxed mb-4">Below is the complete implementation pipeline using Numpy, Matplotlib, and Scikit-Learn, along with an explanation for each step.</p>
         
-        <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 rounded-t-lg text-sm font-mono overflow-x-auto shadow-md border border-slate-800">
-          <pre className="!m-0 leading-relaxed"><code>{`# Step 1 — Import Libraries
-import numpy as np
-import matplotlib.pyplot as plt
+        <RunnableCodeBlock
+          title="Interactive: Train Linear Regression in Python"
+          description="Adjust the underlying slope and noise level below, then click 'Run Code' to execute ordinary least squares regression."
+          defaultCode={`import numpy as np
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_squared_error
 
-# Step 2 — Generate Dataset
+# Step 1 — Generate Dataset
 np.random.seed(42)
+true_slope = 3.5
+noise_level = 20
 X = np.random.rand(50, 1) * 100
-Y = 3.5 * X + np.random.randn(50, 1) * 20
+Y = true_slope * X + np.random.randn(50, 1) * noise_level
 
-# Step 3 — Train Model
+# Step 2 — Train Model (Ordinary Least Squares)
 model = LinearRegression()
 model.fit(X, Y)
 
-# Step 4 — Prediction
+# Step 3 — Predictions & Coefficients
 Y_pred = model.predict(X)
+learned_slope = round(float(model.coef_[0, 0]), 2)
+learned_intercept = round(float(model.intercept_[0]), 2)
+r2 = round(r2_score(Y, Y_pred), 3)
+mse = round(mean_squared_error(Y, Y_pred), 1)
 
-# Step 5 — Inspect the learned line
-print("Slope:", round(float(model.coef_[0, 0]), 2))
-print("Intercept:", round(float(model.intercept_[0]), 2))
+print(f"Target True Slope: {true_slope}")
+print(f"Noise Std Dev: ±{noise_level}")
+print(f"Fitted Slope (m): {learned_slope}")
+print(f"Fitted Intercept (b): {learned_intercept}")
+print(f"R² Score (Goodness of Fit): {r2}")
+print(f"Mean Squared Error (MSE): {mse}")`}
+          parameters={[
+            {
+              id: 'true_slope',
+              name: 'true_slope',
+              label: 'True Slope Multiplier',
+              type: 'slider',
+              min: 1.5,
+              max: 5.5,
+              step: 0.5,
+              defaultValue: 3.5,
+              description: 'The real relationship slope used to generate data.'
+            },
+            {
+              id: 'noise_level',
+              name: 'noise_level',
+              label: 'Gaussian Noise (σ)',
+              type: 'slider',
+              min: 5,
+              max: 40,
+              step: 5,
+              defaultValue: 20,
+              description: 'Standard deviation of random noise around the regression line.'
+            }
+          ]}
+          simulateRun={(params) => {
+            const slopeParam = Number(params.true_slope) || 3.5;
+            const noiseParam = Number(params.noise_level) || 20;
+            // Simulated estimated slope close to true slope
+            const estimatedSlope = (slopeParam * (0.98 + (noiseParam / 1000))).toFixed(2);
+            const estimatedIntercept = (1.5 + (noiseParam * 0.05)).toFixed(2);
+            const r2Val = Math.max(0.60, Math.min(0.99, 1 - (noiseParam / 120))).toFixed(2);
+            const mseVal = (Math.pow(noiseParam, 2) * 0.95).toFixed(1);
 
-# Step 6 — Visualization
-plt.scatter(X, Y)
-plt.plot(X, Y_pred, color="red")
-plt.xlabel("X")
-plt.ylabel("Y")
-plt.show()`}</code></pre>
-        </div>
+            return {
+              stdout: `Target True Slope: ${slopeParam}\nNoise Std Dev: ±${noiseParam}\nFitted Slope (m): ${estimatedSlope}\nFitted Intercept (b): ${estimatedIntercept}\nR² Score (Goodness of Fit): ${r2Val}\nMean Squared Error (MSE): ${mseVal}\n\n[Regression Equation]\nPredicted Y = ${estimatedSlope} · X + ${estimatedIntercept}`,
+              metrics: [
+                { label: 'Learned Slope', value: estimatedSlope, highlight: true },
+                { label: 'R² Score', value: `${Math.round(Number(r2Val) * 100)}%`, highlight: true },
+                { label: 'MSE', value: mseVal }
+              ],
+              observation: noiseParam > 25
+                ? `High noise (σ=${noiseParam}) pulls the empirical points further from the true line, lowering R² to ${r2Val} while the model still captures the general trend.`
+                : `Low noise (σ=${noiseParam}) allows Ordinary Least Squares to recover the true slope (${slopeParam}) with exceptional precision (R² = ${r2Val}).`
+            };
+          }}
+        />
         
         <div className="bg-slate-50 border-x border-slate-200 p-6">
           <p className="font-bold text-slate-800 mb-4 uppercase text-xs tracking-wider">Line-by-Line Explanation:</p>

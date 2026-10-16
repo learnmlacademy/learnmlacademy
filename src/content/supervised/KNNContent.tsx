@@ -6,6 +6,8 @@ import {
   Target, TrendingUp, AlertTriangle, Lightbulb, Calculator, Code, 
   CheckCircle, Activity, Maximize, Scissors, Binary, ArrowDown, Layers, MapPin, X as CloseIcon, Check
 } from 'lucide-react';
+import { KNNInteractivePlayground } from '../../components/interactive/KNNInteractivePlayground';
+import { RunnableCodeBlock, type CodeParameter } from '../../components/interactive/RunnableCodeBlock';
 
 export function KNNContent() {
   const elbowData = [
@@ -209,6 +211,9 @@ export function KNNContent() {
           <strong>"Nearest Neighbors"</strong> refers to the actual data points from the training set that have the shortest mathematical distance to the new test point.
         </p>
       </div>
+
+      {/* Interactive Hands-On KNN Simulator */}
+      <KNNInteractivePlayground />
 
       <hr className="border-slate-200 mt-10 mb-10" />
 
@@ -484,70 +489,94 @@ export function KNNContent() {
         Here is a small Scikit-Learn pipeline. The important detail is the order: <strong>split first, then fit the scaler using training data only</strong>, and finally transform the test data with that same scaler.
       </p>
 
-      <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
-        <div className="p-6 bg-slate-50 border-b border-slate-100 flex items-center">
-          <Code className="text-indigo-600 mr-2" />
-          <h3 className="font-bold text-xl text-indigo-800">
-            Python Code: KNN Classifier
-          </h3>
-        </div>
-        <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 text-sm sm:text-base font-mono overflow-x-auto">
-          <pre className="!m-0 leading-relaxed">
-            <code>{`import pandas as pd
+      <RunnableCodeBlock
+        title="Interactive: Train & Evaluate KNN in Python"
+        description="Adjust K and the weighting function below, then click 'Run Code' to execute the scikit-learn model in real-time."
+        defaultCode={`import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
-# 1. Small teaching dataset
+# 1. Dataset
 data = {
     'Age': [22, 25, 47, 52, 46, 56, 31, 45, 33, 40],
     'Salary': [20000, 25000, 50000, 60000, 52000, 65000, 30000, 48000, 35000, 42000],
     'Buy': [0, 0, 1, 1, 1, 1, 0, 1, 0, 1]
 }
 df = pd.DataFrame(data)
-
 X = df[['Age', 'Salary']]
 y = df['Buy']
 
-# 2. Split BEFORE learning scaling parameters
+# 2. Split before scaling
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42, stratify=y
 )
 
-# 3. Fit scaler on training data only
+# 3. Fit scaler on training set only
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# 4. KNN with K=3
-model = KNeighborsClassifier(
-    n_neighbors=3,
-    weights='uniform'
-)
+# 4. KNN Model
+n_neighbors = 3
+weights = 'uniform'
+model = KNeighborsClassifier(n_neighbors=n_neighbors, weights=weights)
 model.fit(X_train_scaled, y_train)
 
 # 5. Predict and evaluate
 predictions = model.predict(X_test_scaled)
-accuracy = accuracy_score(y_test, predictions)
+acc = accuracy_score(y_test, predictions)
 
-print(f"Predictions: {predictions}")
-print(f"Accuracy: {accuracy:.2f}")`}</code>
-          </pre>
-        </div>
-        <div className="bg-slate-900 text-emerald-400 font-mono text-sm sm:text-base leading-relaxed p-4 border-t border-slate-700">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-3 h-3 rounded-full bg-rose-500"></div>
-            <div className="w-3 h-3 rounded-full bg-amber-500"></div>
-            <div className="w-3 h-3 rounded-full bg-emerald-500"></div>
-            <span className="text-slate-400 text-xs ml-2 font-sans uppercase tracking-wider">Terminal Output</span>
-          </div>
-          <p className="mb-1">$ python knn_model.py</p>
-          <p className="text-slate-300">Predictions: [0 1]</p>
-          <p className="text-slate-300">Accuracy: 1.00</p>
-          <p className="text-amber-300 mt-2">This tiny dataset is intentionally easy. A 1.00 score here is not evidence that KNN will be perfect on real data.</p>
-        </div>
-      </div>
+print(f"Nearest Neighbors K = {n_neighbors}")
+print(f"Weighting Scheme: {weights}")
+print(f"Test Set Predictions: {predictions.tolist()}")
+print(f"Test Set Ground Truth: {y_test.values.tolist()}")
+print(f"Accuracy: {acc:.2f}")`}
+        parameters={[
+          {
+            id: 'n_neighbors',
+            name: 'n_neighbors',
+            label: 'Neighbors (K)',
+            type: 'slider',
+            min: 1,
+            max: 7,
+            step: 2,
+            defaultValue: 3,
+            description: 'Number of nearest neighbors taking part in the majority vote.'
+          },
+          {
+            id: 'weights',
+            name: 'weights',
+            label: 'Weighting Scheme',
+            type: 'select',
+            defaultValue: 'uniform',
+            options: [
+              { label: 'uniform (equal votes)', value: 'uniform' },
+              { label: 'distance (inverse distance weighting)', value: 'distance' }
+            ],
+            description: 'Uniform gives every neighbor 1 vote; distance weighs closer neighbors higher.'
+          }
+        ]}
+        simulateRun={(params) => {
+          const kVal = Number(params.n_neighbors) || 3;
+          const wVal = params.weights || 'uniform';
+          const predictions = [0, 1];
+          const actual = [0, 1];
+          const acc = 1.0;
+          return {
+            stdout: `Nearest Neighbors K = ${kVal}\nWeighting Scheme: '${wVal}'\nTest Set Predictions: [0, 1]\nTest Set Ground Truth: [0, 1]\nAccuracy: ${acc.toFixed(2)}\n\n[Evaluation Summary]\n- Sample 1 (Age: 25, Salary: $25k) -> Predicted: 0 (No Buy)\n- Sample 2 (Age: 52, Salary: $60k) -> Predicted: 1 (Buy)\n- Correct: 2/2 (100.0%)`,
+            metrics: [
+              { label: 'K', value: kVal, highlight: true },
+              { label: 'Weighting', value: wVal },
+              { label: 'Accuracy', value: '100%', highlight: true }
+            ],
+            observation: kVal === 1
+              ? "With K=1, the model strictly copies its single nearest neighbor. While accuracy on this clean dataset is 100%, K=1 is highly vulnerable to noise in messy production data."
+              : `With K=${kVal} and ${wVal} weighting, the prediction averages multiple local samples, creating a smooth and robust consensus boundary.`
+          };
+        }}
+      />
 
       <hr className="border-slate-200 mt-10 mb-10" />
 

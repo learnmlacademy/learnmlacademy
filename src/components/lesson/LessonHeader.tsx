@@ -82,33 +82,39 @@ export function LessonHeader({
     <header className="mb-8 border-b border-slate-200/80 pb-7">
       {/* Crisp Breadcrumb */}
       <nav aria-label="Breadcrumb" className="mb-4">
-        <ol className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-slate-500">
+        <ol className="flex flex-wrap items-center gap-2 text-sm text-slate-400">
           <li>
-            <Link to="/curriculum" className="hover:text-indigo-600 transition">
+            <Link to="/" className="hover:text-indigo-600 transition-colors">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true">›</li>
+          <li>
+            <Link to="/curriculum" className="hover:text-indigo-600 transition-colors">
               Curriculum
             </Link>
           </li>
-          <li aria-hidden="true">
-            <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
-          </li>
+          <li aria-hidden="true">›</li>
           <li>
             <span className="text-slate-700 font-semibold">{cleanCategory}</span>
           </li>
           {module && (
             <>
-              <li aria-hidden="true">
-                <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
-              </li>
+              <li aria-hidden="true">›</li>
               <li>
                 <span className="text-slate-500">{module}</span>
               </li>
             </>
           )}
+          <li aria-hidden="true">›</li>
+          <li className="text-slate-600 truncate max-w-xs sm:max-w-md" aria-current="page">
+            <span>{title}</span>
+          </li>
         </ol>
       </nav>
 
       {/* Meta Badges Row & Quick Actions */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 text-xs">
+      <div data-nosnippet="" className="flex flex-wrap items-center justify-between gap-2.5 text-xs">
         <div className="flex flex-wrap items-center gap-2 text-slate-500">
           {/* Difficulty Badge */}
           <span
@@ -196,7 +202,7 @@ export function LessonHeader({
       </p>
 
       {/* Key Takeaways / What You'll Learn Banner (Modern Doc Standard) */}
-      <div className="mt-5 rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50/70 via-white to-purple-50/50 p-4">
+      <div data-nosnippet="" className="mt-5 rounded-xl border border-indigo-100 bg-gradient-to-r from-indigo-50/70 via-white to-purple-50/50 p-4">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-900">
           <Sparkles className="h-4 w-4 text-indigo-600" />
           <span>What you will master in this lesson</span>

@@ -23,7 +23,7 @@ export function SiteHeader({ menuButtonRef, searchButtonRef, navigationOpen, onO
   const { progressPercentage, completedCount } = useProgress();
 
   return (
-    <header className="relative z-40 h-16 shrink-0 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
+    <header data-nosnippet="" className="relative z-40 h-16 shrink-0 border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6">
       <div className="mx-auto flex h-full max-w-[1440px] items-center gap-3">
         <button
           ref={menuButtonRef}

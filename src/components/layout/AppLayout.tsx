@@ -45,7 +45,7 @@ export function AppLayout() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[var(--lma-canvas)] font-sans text-[var(--lma-text-primary)]">
-      <a href="#main-scroll" className="lma-skip-link">
+      <a href="#main-scroll" className="lma-skip-link" data-nosnippet="">
         Skip to main content
       </a>
 
@@ -60,6 +60,7 @@ export function AppLayout() {
         {showDesktopCurriculum && (
           <aside
             aria-label="Curriculum navigation"
+            data-nosnippet=""
             className="lma-scrollbar hidden w-[var(--lma-curriculum-width)] shrink-0 overflow-y-auto border-r border-slate-200/90 bg-white px-2.5 py-4 lg:block"
           >
             <CurriculumNav activeTopicId={activeTopicId} />

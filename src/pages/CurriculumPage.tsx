@@ -79,15 +79,17 @@ export function CurriculumPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {projectPortfolio.slice(0, 6).map(project => (
-                      <span key={project.id} className="rounded-lg bg-indigo-50 px-2.5 py-1.5 text-xs font-bold text-indigo-800">
-                        {project.shortTitle}
-                      </span>
+                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {projectPortfolio.map(project => (
+                      <Link
+                        key={project.id}
+                        to={`/projects/${project.id}`}
+                        className="group flex items-center justify-between rounded-lg border border-indigo-100 bg-indigo-50/70 px-3 py-2 text-xs font-bold text-indigo-900 transition-colors hover:border-indigo-300 hover:bg-indigo-100"
+                      >
+                        <span className="truncate">{project.shortTitle}</span>
+                        <ArrowRight className="h-3.5 w-3.5 shrink-0 text-indigo-600 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                      </Link>
                     ))}
-                    <span className="rounded-lg bg-slate-100 px-2.5 py-1.5 text-xs font-bold text-slate-600">
-                      +{projectPortfolio.length - 6} more
-                    </span>
                   </div>
                   <Link
                     to="/projects"
@@ -202,8 +204,15 @@ export function CurriculumPage() {
                           {/* Center: Lesson Link */}
                           <Link
                             to={`/learn/${topic.id}`}
-                            className="flex-1 min-w-0 py-1.5 group"
+                            className="flex-1 min-w-0 py-1.5 group flex items-center gap-2"
                           >
+                            <span
+                              aria-hidden="true"
+                              className="font-mono text-xs text-slate-400 group-hover:text-indigo-600 shrink-0 tabular-nums"
+                            >
+                              {topicIndex + 1}.
+                            </span>
+                            {' '}
                             <span
                               className={`text-sm font-medium transition-colors group-hover:text-indigo-600 block truncate ${
                                 completed

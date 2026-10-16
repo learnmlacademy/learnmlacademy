@@ -42,7 +42,7 @@ export function CurriculumNav({
     : [];
 
   return (
-    <nav aria-label={label} className="flex h-full flex-col text-slate-800">
+    <nav aria-label={label} data-nosnippet="" className="flex h-full flex-col text-slate-800">
       {/* Search Header */}
       {!hideSearch && (
         <div className="sticky top-0 z-10 bg-white pb-3 pt-1">

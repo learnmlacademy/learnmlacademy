@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Download, ListChecks } from 'lucide-react';
 import { projectPortfolio } from '../../data/projectPortfolio';
+import { CorePrerequisitesCard } from '../navigation/CorePrerequisitesCard';
 
 type Experiment = { prediction: string; experiment: string; evidence: string; caution: string };
 
@@ -126,6 +127,9 @@ export function ProjectLearningSupport({ projectId, children }: { projectId: str
           <Download className="h-4 w-4" aria-hidden="true" /> Download complete source
         </a>
       </nav>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <CorePrerequisitesCard projectId={projectId} />
+      </div>
       {children}
       <section id="project-build-checkpoints" aria-labelledby="project-build-heading" className="mx-auto my-10 max-w-6xl scroll-mt-8 px-4 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-indigo-200 bg-white p-5 shadow-sm sm:p-7">

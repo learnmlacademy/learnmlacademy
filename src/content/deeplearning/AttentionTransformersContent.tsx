@@ -1,4 +1,5 @@
 import React from "react";
+import { TransformerBlockDiagram } from "../../components/diagrams/TransformerBlockDiagram";
 
 function EncoderDecoderFigure() {
   const source = ["the", "machine", "stopped"];
@@ -19,8 +20,7 @@ function TransformerArchitectureFigure() {
 }
 
 function TransformerBlockFlowFigure() {
-  const steps = ["x", "attention", "add residual x", "normalization", "feed-forward network", "add residual", "normalization", "block output"];
-  return <figure className="not-prose my-7 overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"><p className="font-bold text-slate-900">One common post-norm Transformer block flow</p><div className="mt-5 overflow-x-auto"><div className="flex min-w-[1120px] items-stretch gap-2">{steps.map((step,i)=><React.Fragment key={step}><div className={`flex flex-1 items-center justify-center rounded-xl border p-4 text-center text-sm font-bold ${i===0||i===steps.length-1?"border-indigo-300 bg-indigo-50 text-indigo-950":"border-violet-200 bg-violet-50 text-violet-950"}`}>{step}</div>{i<steps.length-1&&<span className="flex items-center text-xl font-black text-slate-400">→</span>}</React.Fragment>)}</div></div><figcaption className="mt-5 text-sm leading-relaxed text-slate-600">Each residual addition combines a sublayer&apos;s input with its output, so their dimensions must match. Pre-norm architectures move normalization before the attention or feed-forward sublayer; post-norm architectures place it after the residual addition.</figcaption></figure>;
+  return <TransformerBlockDiagram />;
 }
 
 function CausalMaskFigure() {
