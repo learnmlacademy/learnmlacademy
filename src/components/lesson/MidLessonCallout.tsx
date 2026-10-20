@@ -172,6 +172,54 @@ const topicProjects: Record<string, ProjectInfo> = {
     shortTitle: "Disaster Tweet NLP",
     tagline: "Preprocess raw Twitter text, extract TF-IDF features, and train a high-F1 sentiment classifier.",
   },
+  "project-customer-churn": {
+    to: "/projects/model-to-production",
+    title: "Take an AI Model From Laptop to Production",
+    shortTitle: "Model to Production",
+    tagline: "Production serving counterpart: package a trained churn pipeline into a production FastAPI service with Docker, CI, and drift checks.",
+  },
+  "project-credit-risk": {
+    to: "/projects/credit-card-fraud",
+    title: "Can AI Catch a Stolen Credit Card Transaction?",
+    shortTitle: "Credit Card Fraud Detector",
+    tagline: "Related financial risk build: handle severe class imbalance with PR-AUC, class weighting, and cost-sensitive threshold tuning.",
+  },
+  "project-sales-forecasting": {
+    to: "/projects/retail-forecasting",
+    title: "Can We Predict Tomorrow's Sales? Build a Retail Forecasting System",
+    shortTitle: "Retail Sales Forecaster",
+    tagline: "Practical build: engineer leakage-free lag features and rolling windows for chronological retail sales forecasting.",
+  },
+  "project-image-classification": {
+    to: "/projects/digit-recognizer",
+    title: "Teach AI to Read Handwritten Numbers - Build Your Own Digit Recognizer",
+    shortTitle: "Handwritten Digit Recognizer",
+    tagline: "Practical build: train and evaluate a PyTorch CNN with confusion matrix diagnostics and Streamlit image upload.",
+  },
+  "project-genai-app": {
+    to: "/projects/ai-content-creator",
+    title: "Build Your Own ChatGPT-Style AI Content Creator",
+    shortTitle: "AI Content Creator",
+    tagline: "Practical build: build a production GenAI studio with prompt contracts, structured JSON outputs, and LLM evaluations.",
+  },
+  "project-rag-document-qa": {
+    to: "/projects/pdf-rag",
+    title: "Chat With Your PDFs - Build Your Own RAG Assistant",
+    shortTitle: "PDF RAG Assistant",
+    tagline: "Practical build: extract document text, compute vector embeddings, and ground answers with verified page citations.",
+  },
+  "project-ai-agent": {
+    to: "/projects/ai-research-assistant",
+    title: "Build Your Own Perplexity-Style AI Research Assistant",
+    shortTitle: "AI Research Assistant",
+    tagline: "Practical build: implement autonomous tool calling, bounded ReAct trajectories, citation checking, and safe exit guards.",
+  },
+  "project-multi-agent-research": {
+    to: "/projects/ai-research-assistant",
+    title: "Build Your Own Perplexity-Style AI Research Assistant",
+    shortTitle: "AI Research Assistant",
+    tagline: "Practical build: explore multi-step research execution, evidence extraction, citation auditing, and structured brief synthesis.",
+  },
 };
 
 // Module Interview Prep Guide + PDF mappings

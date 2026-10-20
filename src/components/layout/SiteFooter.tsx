@@ -1,15 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const footerLinks = [
-  { to: '/about', label: 'About' },
-  { to: '/curriculum', label: 'Curriculum' },
-  { to: '/blog', label: 'Blog' },
-  { to: '/cheatsheet', label: 'Free cheatsheet' },
-  { to: '/contact', label: 'Contact' },
-  { to: '/privacy', label: 'Privacy' },
-  { to: '/terms', label: 'Terms' },
-  { to: '/disclaimer', label: 'Disclaimer' },
+  { to: "/about", label: "About" },
+  { to: "/curriculum", label: "Curriculum" },
+  { to: "/projects", label: "Projects" },
+  { to: "/blog", label: "Blog" },
+  { to: "/cheatsheet", label: "Free cheatsheet" },
+  { to: "/contact", label: "Contact" },
+  { to: "/privacy", label: "Privacy" },
+  { to: "/terms", label: "Terms" },
+  { to: "/disclaimer", label: "Disclaimer" },
 ];
 
 export function SiteFooter() {

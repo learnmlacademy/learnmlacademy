@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState, type ComponentType } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, type ComponentType } from 'react';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Bot,
@@ -11,14 +11,15 @@ import {
   Database,
   FolderKanban,
   GraduationCap,
+  Hammer,
   MessageSquareText,
   Network,
-  Search,
   ServerCog,
   Sparkles,
 } from 'lucide-react';
 import { WebsiteSchema } from '../components/SchemaMarkup';
 import { InterviewHandbookShowcase } from '../components/InterviewHandbookShowcase';
+import { LessonSearch } from '../components/search/LessonSearch';
 import { curriculum } from '../data/curriculum';
 import { blogPosts } from '../data/blog';
 import { projectPortfolio } from '../data/projectPortfolio';
@@ -107,12 +108,12 @@ const tracks: TrackCard[] = [
 ];
 
 const popularTopics = [
+  { label: 'Linear Regression', route: '/learn/linear-regression' },
+  { label: 'Neural Networks', route: '/learn/neural-networks' },
   { label: 'Gradient Descent', route: '/learn/gradient-descent' },
+  { label: 'Generative AI', route: '/learn/generative-ai-intro' },
   { label: 'RAG', route: '/learn/rag' },
-  { label: 'Transformers', route: '/learn/transformers-attention' },
   { label: 'AI Agents', route: '/learn/agentic-ai-intro' },
-  { label: 'MCP', route: '/learn/model-context-protocol' },
-  { label: 'Vector Databases', route: '/learn/vector-databases' },
 ];
 
 const recommendedLessons = [
@@ -161,25 +162,13 @@ const homepageBlogPosts = [...blogPosts]
   .sort((a, b) => b.date.localeCompare(a.date))
   .slice(0, 3);
 
-const allLessons = curriculum
-  .filter(category => category.id !== 'projects')
-  .flatMap(category =>
-    category.subtopics.map(lesson => ({
-      ...lesson,
-      categoryTitle: category.title.replace(/^\d+\.\s*/, ''),
-      route: `/learn/${lesson.id}`,
-    })),
-  );
-
 const curriculumLessonCount = curriculum.reduce(
   (total, category) => total + category.subtopics.length,
   0,
 );
 
 export function HomePage() {
-  const [searchQuery, setSearchQuery] = useState('');
   const [showHandbooks, setShowHandbooks] = useState(false);
-  const navigate = useNavigate();
   const {
     completedCount,
     progressPercentage,
@@ -190,19 +179,6 @@ export function HomePage() {
 
   const tutorialCount = curriculumLessonCount;
   const projectCount = projectPortfolio.length;
-
-  const searchResults = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return [];
-
-    return allLessons
-      .filter(lesson =>
-        lesson.title.toLowerCase().includes(query) ||
-        lesson.categoryTitle.toLowerCase().includes(query) ||
-        lesson.module?.toLowerCase().includes(query),
-      )
-      .slice(0, 8);
-  }, [searchQuery]);
 
   const nextIncomplete = getNextIncompleteTopic();
 
@@ -265,14 +241,6 @@ export function HomePage() {
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/');
   }, []);
 
-  const handleSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (searchResults[0]) {
-      navigate(searchResults[0].route);
-      setSearchQuery('');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-slate-50">
       <WebsiteSchema />
@@ -332,61 +300,15 @@ export function HomePage() {
               LLMs, RAG, Agentic AI and production AI engineering.
             </p>
 
-            <form onSubmit={handleSearchSubmit} className="relative mt-3 max-w-3xl">
-              <Search
-                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
-                aria-hidden="true"
+            <div className="mt-3 max-w-3xl">
+              <LessonSearch
+                placeholder="Search tutorials & project handbooks — e.g. RAG, Linear Regression, Titanic..."
+                className="w-full"
+                inputClassName="h-11 w-full rounded-xl border border-white/10 bg-white pl-10 pr-10 text-sm font-medium text-slate-900 shadow-xl placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15"
               />
-              <input
-                type="search"
-                value={searchQuery}
-                onChange={event => setSearchQuery(event.target.value)}
-                placeholder="Search tutorials — e.g. RAG, Linear Regression, AI Agents..."
-                aria-label="Search tutorials"
-                className="h-11 w-full rounded-xl border border-white/10 bg-white pl-11 pr-12 text-sm font-medium text-slate-900 shadow-xl outline-none placeholder:text-slate-400 focus:border-cyan-400 focus:ring-4 focus:ring-cyan-400/15"
-              />
-              <button
-                type="submit"
-                aria-label="Open first search result"
-                className="absolute right-1.5 top-1.5 grid h-8 w-8 place-items-center rounded-lg bg-blue-600 text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-300"
-              >
-                <Search className="h-4.5 w-4.5" aria-hidden="true" />
-              </button>
+            </div>
 
-              {searchQuery.trim() && (
-                <div className="absolute left-0 right-0 top-[3.2rem] z-30 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 text-left shadow-2xl">
-                  {searchResults.length === 0 ? (
-                    <p className="px-3 py-4 text-sm text-slate-500">
-                      No lessons found for &quot;{searchQuery}&quot;.
-                    </p>
-                  ) : (
-                    <ul className="max-h-80 overflow-y-auto">
-                      {searchResults.map(result => (
-                        <li key={result.id}>
-                          <Link
-                            to={result.route}
-                            onClick={() => setSearchQuery('')}
-                            className="group flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 transition hover:bg-slate-50"
-                          >
-                            <div className="min-w-0">
-                              <p className="truncate text-sm font-bold text-slate-900 group-hover:text-blue-700">
-                                {result.title}
-                              </p>
-                              <p className="mt-0.5 text-xs text-slate-500">
-                                {result.categoryTitle}
-                              </p>
-                            </div>
-                            <ArrowRight className="h-4 w-4 shrink-0 text-slate-300 group-hover:text-blue-600" aria-hidden="true" />
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </form>
-
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
               <span className="mr-1 text-xs font-semibold text-slate-400">Popular searches:</span>
               {popularTopics.map(topic => (
                 <Link
@@ -437,8 +359,269 @@ export function HomePage() {
         />
       )}
 
+      {/* Choose your learning path - Goal-Based Discovery */}
+      <section aria-labelledby="learning-paths-heading" className="border-b border-slate-200 bg-slate-50 py-8 sm:py-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-600">Goal-based learning</p>
+            <h2 id="learning-paths-heading" className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+              Choose your learning path
+            </h2>
+            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              One complete AI library, four focused ways to learn. Start with foundational concepts, jump directly into a specialized subject, develop advanced production expertise, or build working software.
+            </p>
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* Card A: Start from the beginning */}
+            <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-blue-300 hover:shadow-md">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2.5 py-0.5 text-[11px] font-bold text-blue-800 uppercase tracking-wider">
+                    Beginners
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">Path 1</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-blue-50 text-blue-700">
+                    <GraduationCap className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-950">Start from the beginning</h3>
+                </div>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  New to machine learning? Follow a sensible progression from core intuition to working algorithms, data preprocessing, and evaluation.
+                </p>
+                <div className="mt-4 rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
+                  <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Recommended sequence:</p>
+                  <ol className="space-y-1.5 text-slate-600">
+                    <li className="flex items-center gap-2">
+                      <span className="font-mono text-blue-600 font-bold text-[11px]">1.</span>
+                      <Link to="/learn/what-is-ml" className="hover:text-blue-700 hover:underline">What Is Machine Learning?</Link>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="font-mono text-blue-600 font-bold text-[11px]">2.</span>
+                      <Link to="/learn/python-for-ml" className="hover:text-blue-700 hover:underline">Python for ML & Libraries</Link>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="font-mono text-blue-600 font-bold text-[11px]">3.</span>
+                      <Link to="/learn/linear-regression" className="hover:text-blue-700 hover:underline">Linear Regression</Link>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <Link
+                  to="/learn/what-is-ml"
+                  className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2 text-xs font-black text-white transition hover:bg-blue-700"
+                >
+                  Start First Lesson
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/curriculum"
+                  className="text-center text-[11px] font-bold text-slate-500 hover:text-blue-600"
+                >
+                  View full curriculum roadmap →
+                </Link>
+              </div>
+            </div>
+
+            {/* Card B: Learn a specific topic */}
+            <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-violet-300 hover:shadow-md">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center rounded-md border border-violet-200 bg-violet-50 px-2.5 py-0.5 text-[11px] font-bold text-violet-800 uppercase tracking-wider">
+                    Direct Subject Entry
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">Path 2</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-violet-50 text-violet-700">
+                    <Sparkles className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-950">Learn a specific topic</h3>
+                </div>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Already familiar with basic concepts? Jump straight into modern AI subjects without being forced to start at the beginning.
+                </p>
+                <div className="mt-4 rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
+                  <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Direct entry points:</p>
+                  <ul className="space-y-1.5 text-slate-600">
+                    <li className="flex items-center justify-between">
+                      <Link to="/learn/deep-learning-intro" className="font-medium text-slate-800 hover:text-violet-700 hover:underline">
+                        Deep Learning
+                      </Link>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">Intro</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <Link to="/learn/generative-ai-intro" className="font-medium text-slate-800 hover:text-violet-700 hover:underline">
+                        Generative AI
+                      </Link>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">Intro</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <Link to="/learn/llm-intro" className="font-medium text-slate-800 hover:text-violet-700 hover:underline">
+                        Large Language Models
+                      </Link>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">Intro</span>
+                    </li>
+                    <li className="flex items-center justify-between">
+                      <Link to="/learn/agentic-ai-intro" className="font-medium text-slate-800 hover:text-violet-700 hover:underline">
+                        Agentic AI
+                      </Link>
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100">Intro</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <Link
+                  to="/learn/generative-ai-intro"
+                  className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-violet-600 px-4 py-2 text-xs font-black text-white transition hover:bg-violet-700"
+                >
+                  Explore Modern AI
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <a
+                  href="#browse-by-topic"
+                  className="text-center text-[11px] font-bold text-slate-500 hover:text-violet-600"
+                >
+                  Browse all topic tracks ↓
+                </a>
+              </div>
+            </div>
+
+            {/* Card C: Deepen professional expertise */}
+            <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-amber-300 hover:shadow-md">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center rounded-md border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-[11px] font-bold text-amber-800 uppercase tracking-wider">
+                    Advanced
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">Path 3</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-amber-50 text-amber-700">
+                    <ServerCog className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-950">Deepen professional expertise</h3>
+                </div>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  For engineers and ML practitioners seeking advanced architectures, evaluation benchmarks, reliability, and system design.
+                </p>
+                <div className="mt-4 rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
+                  <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Advanced topics:</p>
+                  <ul className="space-y-1.5 text-slate-600">
+                    <li>
+                      <Link to="/learn/advanced-rag" className="font-medium text-slate-800 hover:text-amber-700 hover:underline block truncate">
+                        • Advanced RAG & Dense Retrieval
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/learn/llm-evaluation" className="font-medium text-slate-800 hover:text-amber-700 hover:underline block truncate">
+                        • LLM Evaluation & Benchmarking
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/learn/agent-security" className="font-medium text-slate-800 hover:text-amber-700 hover:underline block truncate">
+                        • Agent Security & Guardrails
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/learn/ml-system-design" className="font-medium text-slate-800 hover:text-amber-700 hover:underline block truncate">
+                        • End-to-End AI System Design
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <Link
+                  to="/learn/ml-system-design"
+                  className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-amber-600 px-4 py-2 text-xs font-black text-white transition hover:bg-amber-700"
+                >
+                  Study System Design
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/curriculum"
+                  className="text-center text-[11px] font-bold text-slate-500 hover:text-amber-700"
+                >
+                  View MLOps & Architecture modules →
+                </Link>
+              </div>
+            </div>
+
+            {/* Card D: Build practical AI systems */}
+            <div className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition hover:border-emerald-300 hover:shadow-md">
+              <div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="inline-flex items-center rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800 uppercase tracking-wider">
+                    Hands-On Builds
+                  </span>
+                  <span className="text-xs font-bold text-slate-400">Path 4</span>
+                </div>
+                <div className="mt-3 flex items-center gap-2.5">
+                  <div className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+                    <FolderKanban className="h-5 w-5" aria-hidden="true" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-950">Build practical AI systems</h3>
+                </div>
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Turn theory into working software with 12 complete project handbooks built from scratch with code, tests, and Streamlit UIs.
+                </p>
+                <div className="mt-4 rounded-xl bg-slate-50 border border-slate-100 p-3 text-xs space-y-2">
+                  <p className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">Featured handbooks:</p>
+                  <ul className="space-y-1.5 text-slate-600">
+                    <li>
+                      <Link to="/projects/titanic-survival" className="font-medium text-slate-800 hover:text-emerald-700 hover:underline block truncate">
+                        • Titanic Survival Predictor
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/projects/pdf-rag" className="font-medium text-slate-800 hover:text-emerald-700 hover:underline block truncate">
+                        • Chat With Your PDFs (RAG)
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/projects/ai-research-assistant" className="font-medium text-slate-800 hover:text-emerald-700 hover:underline block truncate">
+                        • AI Research Assistant (Agent)
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/projects/model-to-production" className="font-medium text-slate-800 hover:text-emerald-700 hover:underline block truncate">
+                        • Model to Production (FastAPI & CI)
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+                <Link
+                  to="/projects"
+                  className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-black text-white transition hover:bg-emerald-700"
+                >
+                  Browse 12 Project Handbooks
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/curriculum"
+                  className="text-center text-[11px] font-bold text-slate-500 hover:text-emerald-700"
+                >
+                  View 8 project tutorial lessons →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Browse by topic */}
-      <section className="bg-white py-5 sm:py-6">
+      <section id="browse-by-topic" className="bg-white py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
             <div>

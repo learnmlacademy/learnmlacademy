@@ -61,6 +61,8 @@ const byTopic: Record<string, string[]> = {
   "building-ai-agent": ["research"],
   "ml-cicd-continuous-training": ["mlops"],
   "ml-monitoring-drift": ["mlops"],
+  "project-customer-churn": ["mlops"],
+  "project-credit-risk": ["fraud"],
   "project-sales-forecasting": ["retail"],
   "project-image-classification": ["digit"],
   "project-genai-app": ["studio"],

@@ -172,7 +172,7 @@ export function TopicPage() {
           scriptSchema.setAttribute('type', 'application/ld+json');
           document.head.appendChild(scriptSchema);
         }
-        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description, topicInfo.category.title);
+        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description, topicInfo.category.title, topicInfo.subtopic.difficulty);
       }
     }
   }, [topicId]);
@@ -257,6 +257,7 @@ export function TopicPage() {
       description={getSEOData(topicId, subtopic.title).description}
       category={category.title}
       module={subtopic.module}
+      difficulty={subtopic.difficulty}
       nextTopic={next ? { id: next.id, title: next.title } : undefined}
       prevTopic={prev ? { id: prev.id, title: prev.title } : undefined}
     >

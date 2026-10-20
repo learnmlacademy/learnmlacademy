@@ -740,7 +740,10 @@ export const getCanonicalUrl = (topicId?: string): string => {
   return BASE_URL;
 };
 
-function getEducationalLevel(categoryTitle?: string): 'Beginner' | 'Intermediate' | 'Advanced' {
+function getEducationalLevel(categoryTitle?: string, difficulty?: 'Beginner' | 'Intermediate' | 'Advanced'): 'Beginner' | 'Intermediate' | 'Advanced' {
+  if (difficulty === 'Beginner' || difficulty === 'Intermediate' || difficulty === 'Advanced') {
+    return difficulty;
+  }
   if (!categoryTitle) return 'Intermediate';
   const c = categoryTitle.toLowerCase();
   if (c.includes('foundation') || c.includes('python')) return 'Beginner';
@@ -754,11 +757,12 @@ export const getLearningResourceSchema = (
   topicId: string,
   title: string,
   description: string,
-  categoryTitle?: string
+  categoryTitle?: string,
+  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced'
 ): string => {
   const pageUrl = `${BASE_URL}/learn/${topicId}`;
   const cleanCategory = (categoryTitle || 'Machine Learning').replace(/^\d+\.\s*/, '');
-  const educationalLevel = getEducationalLevel(categoryTitle);
+  const educationalLevel = getEducationalLevel(categoryTitle, difficulty);
   const quizzes = getQuizzesForTopicId(topicId) || [];
   const faqQuestions = quizzes.slice(0, 5);
 

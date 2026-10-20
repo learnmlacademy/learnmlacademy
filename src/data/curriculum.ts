@@ -1,7 +1,10 @@
+export type LessonDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
+
 export type SubTopic = {
   id: string;
   title: string;
   module?: string;
+  difficulty?: LessonDifficulty;
 };
 
 export type Category = {
@@ -129,7 +132,7 @@ export const curriculum: Category[] = [
     id: "deep-learning",
     title: "10. Deep Learning",
     subtopics: [
-      { id: "deep-learning-intro", title: "Deep Learning Basics and Model Types" },
+      { id: "deep-learning-intro", title: "Deep Learning Basics and Model Types", difficulty: "Beginner" },
       { id: "neural-networks", title: "How Neural Networks Learn" },
       { id: "math-foundations-deep-learning", title: "Essential Math for Neural Networks" },
       { id: "activation-functions", title: "Activation Functions" },
@@ -157,7 +160,7 @@ export const curriculum: Category[] = [
   },
   {
     id: "advanced-deep-learning",
-    title: "Advanced Deep Learning Topics",
+    title: "11. Advanced Deep Learning Topics",
     subtopics: [
       { id: "state-space-models", title: "State-Space Models" },
       { id: "deep-learning-nlp", title: "Deep Learning for NLP" },
@@ -166,9 +169,9 @@ export const curriculum: Category[] = [
   },
   {
     id: "generative-ai",
-    title: "11. Generative AI",
+    title: "12. Generative AI",
     subtopics: [
-      { id: "generative-ai-intro", title: "What Is Generative AI?", module: "Module 1 — Foundations" },
+      { id: "generative-ai-intro", title: "What Is Generative AI?", module: "Module 1 — Foundations", difficulty: "Beginner" },
       { id: "generative-vs-discriminative", title: "Generative vs Discriminative Models", module: "Module 1 — Foundations" },
       { id: "how-generative-models-learn", title: "How Generative Models Learn and Generate New Data", module: "Module 1 — Foundations" },
       { id: "vae", title: "Variational Autoencoders for Generation", module: "Module 2 — Core Generative Model Families" },
@@ -189,9 +192,9 @@ export const curriculum: Category[] = [
   },
   {
     id: "large-language-models",
-    title: "12. Large Language Models",
+    title: "13. Large Language Models",
     subtopics: [
-      { id: "llm-intro", title: "What Are Large Language Models? From N-Grams to Modern LLMs" },
+      { id: "llm-intro", title: "What Are Large Language Models? From N-Grams to Modern LLMs", difficulty: "Beginner" },
       { id: "tokenization-embeddings", title: "Tokens, Embeddings & Context Windows" },
       { id: "transformers-attention", title: "Transformer Architecture & LLM Model Families" },
       { id: "text-generation-decoding", title: "How LLMs Generate Text: Next-Token Prediction & Decoding" },
@@ -211,9 +214,9 @@ export const curriculum: Category[] = [
   },
   {
     id: "agentic-ai",
-    title: "13. Agentic AI",
+    title: "14. Agentic AI",
     subtopics: [
-      { id: "agentic-ai-intro", title: "What Is Agentic AI? Agents, Workflows & Types" },
+      { id: "agentic-ai-intro", title: "What Is Agentic AI? Agents, Workflows & Types", difficulty: "Beginner" },
       { id: "tool-calling", title: "Tool Calling & Reliable Tool Design" },
       { id: "building-ai-agent", title: "Build a Simple AI Agent End-to-End" },
       { id: "planning-reflection", title: "Planning, ReAct & Reflection" },
@@ -233,7 +236,7 @@ export const curriculum: Category[] = [
   },
   {
     id: "projects",
-    title: "14. Projects",
+    title: "15. Projects",
     subtopics: [
       { id: "project-customer-churn", title: "Customer Churn Prediction — End-to-End ML Project" },
       { id: "project-credit-risk", title: "Credit Risk Prediction with Explainable ML" },
@@ -247,7 +250,7 @@ export const curriculum: Category[] = [
   },
   {
     id: "ai-engineering-mlops",
-    title: "15. AI Engineering & MLOps",
+    title: "16. AI Engineering & MLOps",
     subtopics: [
       { id: "ai-engineering-mlops", title: "AI Engineering & MLOps: From Notebook to Production" },
       { id: "ml-data-feature-pipelines", title: "Production Data, Feature & ML Pipelines" },
@@ -261,7 +264,7 @@ export const curriculum: Category[] = [
   },
   {
     id: "interview-preparation",
-    title: "16. Career & Interview Preparation",
+    title: "17. Career & Interview Preparation",
     subtopics: [
       { id: "ai-data-career-paths", title: "Choose Your AI & Data Career", module: "Career Roadmaps" },
       { id: "ml-engineer-roadmap", title: "Machine Learning Engineer Roadmap", module: "Career Roadmaps" },
@@ -291,3 +294,136 @@ export function getTopicById(id: string): { subtopic: SubTopic, category: Catego
   }
   return null;
 }
+
+export type TrackId =
+  | 'all'
+  | 'foundations'
+  | 'deep-learning'
+  | 'generative-ai'
+  | 'large-language-models'
+  | 'agentic-ai'
+  | 'projects'
+  | 'ai-engineering-mlops'
+  | 'career-interview';
+
+export type CurriculumTrack = {
+  id: TrackId;
+  label: string;
+  shortLabel?: string;
+  description: string;
+  categoryIds: string[];
+  aliases?: string[];
+};
+
+export const curriculumTracks: CurriculumTrack[] = [
+  {
+    id: 'all',
+    label: 'All curriculum',
+    shortLabel: 'All Tracks',
+    description: 'Explore all 17 modules and 167 tutorials across the complete curriculum.',
+    categoryIds: [
+      'foundations',
+      'python-ml-libs',
+      'data-preprocessing',
+      'supervised-learning',
+      'ensemble-learning',
+      'unsupervised-learning',
+      'model-evaluation',
+      'time-series',
+      'advanced-paradigms',
+      'deep-learning',
+      'advanced-deep-learning',
+      'generative-ai',
+      'large-language-models',
+      'agentic-ai',
+      'projects',
+      'ai-engineering-mlops',
+      'interview-preparation',
+    ],
+  },
+  {
+    id: 'foundations',
+    label: 'Machine Learning Foundations',
+    shortLabel: 'ML Foundations',
+    description: 'Learn the core concepts, algorithms, and evaluation methods.',
+    categoryIds: [
+      'foundations',
+      'python-ml-libs',
+      'data-preprocessing',
+      'supervised-learning',
+      'ensemble-learning',
+      'unsupervised-learning',
+      'model-evaluation',
+      'time-series',
+      'advanced-paradigms',
+    ],
+    aliases: ['ml-foundations', 'machine-learning-foundations'],
+  },
+  {
+    id: 'deep-learning',
+    label: 'Deep Learning',
+    shortLabel: 'Deep Learning',
+    description: 'Understand neural networks, training, architectures, and advanced models.',
+    categoryIds: ['deep-learning', 'advanced-deep-learning'],
+  },
+  {
+    id: 'generative-ai',
+    label: 'Generative AI',
+    shortLabel: 'Generative AI',
+    description: 'Explore generative model families, evaluation, and applications.',
+    categoryIds: ['generative-ai'],
+  },
+  {
+    id: 'large-language-models',
+    label: 'LLMs & RAG',
+    shortLabel: 'LLMs & RAG',
+    description: 'Learn language models, embeddings, retrieval, and grounding.',
+    categoryIds: ['large-language-models'],
+    aliases: ['llms-rag', 'llm-rag'],
+  },
+  {
+    id: 'agentic-ai',
+    label: 'Agentic AI',
+    shortLabel: 'Agentic AI',
+    description: 'Study tool use, planning, memory, agent workflows, and safety.',
+    categoryIds: ['agentic-ai'],
+  },
+  {
+    id: 'projects',
+    label: 'Project Learning',
+    shortLabel: 'Project Learning',
+    description: 'Apply concepts through tutorials and complete hands-on builds.',
+    categoryIds: ['projects'],
+    aliases: ['project-learning'],
+  },
+  {
+    id: 'ai-engineering-mlops',
+    label: 'AI Engineering & MLOps',
+    shortLabel: 'AI Engineering & MLOps',
+    description: 'Build, test, serve, and monitor AI systems.',
+    categoryIds: ['ai-engineering-mlops'],
+  },
+  {
+    id: 'career-interview',
+    label: 'Career & Interview Preparation',
+    shortLabel: 'Career & Interviews',
+    description: 'Follow career roadmaps and practise technical interviews.',
+    categoryIds: ['interview-preparation'],
+    aliases: ['interview-preparation', 'interview-prep'],
+  },
+];
+
+export function getTrackById(id: string): CurriculumTrack | undefined {
+  return curriculumTracks.find(
+    track => track.id === id || (track.aliases && track.aliases.includes(id))
+  );
+}
+
+export function getCategoriesForTrack(trackId: TrackId | string): Category[] {
+  const track = getTrackById(trackId) || curriculumTracks[0];
+  if (track.id === 'all') {
+    return curriculum;
+  }
+  return curriculum.filter(category => track.categoryIds.includes(category.id));
+}
+

@@ -30,6 +30,7 @@ type LessonShellProps = {
   description: string;
   category: string;
   module?: string;
+  difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   nextTopic?: { id: string; title: string };
   prevTopic?: { id: string; title: string };
   children: ReactNode;
@@ -383,6 +384,7 @@ export function LessonShell({
   description,
   category,
   module,
+  difficulty,
   nextTopic,
   prevTopic,
   children,
@@ -541,6 +543,7 @@ export function LessonShell({
               category={category}
               module={module}
               topicId={topicId}
+              difficulty={difficulty}
             />
 
             {showToc ? (

@@ -26,6 +26,7 @@ const staticCorePages: SitemapEntry[] = [
   { url: '/blog', lastmod: TODAY, changefreq: 'weekly', priority: '0.8' },
   { url: '/about', lastmod: TODAY, changefreq: 'weekly', priority: '0.7' },
   { url: '/cheatsheet', lastmod: TODAY, changefreq: 'weekly', priority: '0.8' },
+  { url: '/contact', lastmod: TODAY, changefreq: 'monthly', priority: '0.5' },
   { url: '/privacy', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
   { url: '/terms', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
   { url: '/disclaimer', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },

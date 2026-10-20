@@ -164,7 +164,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [Saving, Loading & Deploying Deep Models](https://www.learnmlacademy.com/learn/saving-deploying-deep-models): Export PyTorch weights to ONNX runtimes and serve low-latency microservices, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 11: Advanced Deep Learning Topics
+### Module 11: 11. Advanced Deep Learning Topics
 - Overview: State-Space Models (SSMs/Mamba), Graph Neural Networks (GNNs), Physics-Informed NNs (PINNs), and KANs.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 3
@@ -174,7 +174,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [Physics-Informed, KAN and Topological Networks](https://www.learnmlacademy.com/learn/pinn-kan-topological-networks): Solve differential equations with PINNs and learnable spline nets, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 12: 11. Generative AI
+### Module 12: 12. Generative AI
 - Overview: VAEs, GANs, Latent Diffusion, Stable Diffusion, ControlNet, multimodal AI, and synthetic data generation.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 17
@@ -198,7 +198,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [Deploying Generative AI Applications](https://www.learnmlacademy.com/learn/genai-deployment): Deploy generative AI models to production with auto-scaling systems, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 13: 12. Large Language Models
+### Module 13: 13. Large Language Models
 - Overview: Architecture of modern LLMs, tokenization, BPE, rotary embeddings (RoPE), KV cache, RAG, and fine-tuning.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 16
@@ -221,7 +221,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [LLMOps & Building Production LLM Applications](https://www.learnmlacademy.com/learn/llmops): Deploy and monitor enterprise LLM applications with tracing and latency budgets, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 14: 13. Agentic AI
+### Module 14: 14. Agentic AI
 - Overview: ReAct patterns, tool calling, memory management, multi-agent coordination, Model Context Protocol (MCP), and sandboxed execution.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 16
@@ -244,7 +244,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [Agent Observability, Cost, Latency & Deployment](https://www.learnmlacademy.com/learn/agent-observability-deployment): Monitor production AI agents with distributed tracing, latency, and cost alerts, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 15: 14. Projects
+### Module 15: 15. Projects
 - Overview: Hands-on production machine learning and AI projects with verifiable code, datasets, and deployable Streamlit apps.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
@@ -259,7 +259,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [Build a Multi-Agent Research Assistant](https://www.learnmlacademy.com/learn/project-multi-agent-research): Coordinate multi-agent workflows for automated web research and fact synthesis, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 16: 15. AI Engineering & MLOps
+### Module 16: 16. AI Engineering & MLOps
 - Overview: Model deployment with FastAPI/Docker, quantization (AWQ/GGUF), vLLM serving, monitoring, and data drift detection.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
@@ -274,7 +274,7 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
   - [End-to-End ML/AI System Design](https://www.learnmlacademy.com/learn/ml-system-design): Master end-to-end ML system design interviews with scalable architectures, with Python code, architecture diagrams, worked examples, and interview quiz.
 
 
-### Module 17: 16. Career & Interview Preparation
+### Module 17: 17. Career & Interview Preparation
 - Overview: Technical questions, system design architecture, coding exercises, and behavioral frameworks for big-tech AI roles.
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 15

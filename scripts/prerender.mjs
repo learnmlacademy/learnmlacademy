@@ -178,6 +178,10 @@ const staticMeta = new Map([
     title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
     description: 'Take a trained ML model from laptop to production using a tested FastAPI service with validation, Docker, CI, model versioning, drift checks, and rollback.',
   }],
+  ['/contact', {
+    title: 'Contact Us | Learn ML Academy',
+    description: 'Get in touch with the Learn ML Academy team for feedback, lesson suggestions, corrections, or partnerships.',
+  }],
   ['/privacy', {
     title: 'Privacy Policy | ML Academy',
     description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
@@ -332,6 +336,7 @@ export async function loadPages(vite) {
       id: subtopic.id,
       title: subtopic.title,
       category: category.title,
+      difficulty: subtopic.difficulty,
     })),
   );
 
@@ -356,7 +361,7 @@ export async function loadPages(vite) {
       return {
         route: `/learn/${topic.id}`, ...meta, kind: 'lesson',
         heading: topic.title, category: topic.category,
-        schema: seo.getLearningResourceSchema(topic.id, meta.title, meta.description, topic.category),
+        schema: seo.getLearningResourceSchema(topic.id, meta.title, meta.description, topic.category, topic.difficulty),
       };
     }),
     ...blogPosts.map((post) => {
