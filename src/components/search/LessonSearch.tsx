@@ -1,4 +1,4 @@
-import React, { useId, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import { searchableLessons, type UnifiedSearchItem } from "../../data/learningNavigation";
@@ -102,6 +102,33 @@ export function LessonSearch({
     onNavigate?.();
     navigate(destination);
   };
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: globalThis.KeyboardEvent) => {
+      const isCmdK = (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k';
+      const isSlash = event.key === '/' && !event.metaKey && !event.ctrlKey && !event.altKey;
+
+      if (!isCmdK && !isSlash) return;
+
+      const activeEl = document.activeElement;
+      const isInput =
+        activeEl?.tagName === 'INPUT' ||
+        activeEl?.tagName === 'TEXTAREA' ||
+        (activeEl as HTMLElement)?.isContentEditable;
+
+      if (isSlash && isInput) return;
+
+      if (searchRef.current) {
+        event.preventDefault();
+        searchRef.current.focus();
+        searchRef.current.select();
+        setOpen(true);
+      }
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [searchRef]);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Escape") {

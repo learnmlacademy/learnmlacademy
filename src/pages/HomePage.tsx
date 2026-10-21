@@ -401,7 +401,17 @@ export function HomePage() {
       title: 'Machine Learning',
       sub: 'Foundations, Regression, Trees, Evaluation',
       route: '/learn/what-is-ml',
-      count: '47 lessons',
+      categoryIds: [
+        'foundations',
+        'python-ml-libs',
+        'data-preprocessing',
+        'supervised-learning',
+        'ensemble-learning',
+        'unsupervised-learning',
+        'model-evaluation',
+        'time-series',
+        'advanced-paradigms',
+      ],
       color: 'from-sky-500 to-blue-600',
       activeBorder: 'border-sky-400 bg-sky-950/40 text-sky-300',
       tagColor: 'text-sky-400 bg-sky-500/10 border-sky-500/20',
@@ -412,7 +422,7 @@ export function HomePage() {
       title: 'Deep Learning',
       sub: 'Backprop, CNNs, Transformers',
       route: '/learn/deep-learning-intro',
-      count: '28 lessons',
+      categoryIds: ['deep-learning', 'advanced-deep-learning'],
       color: 'from-violet-500 to-purple-600',
       activeBorder: 'border-violet-400 bg-violet-950/40 text-violet-300',
       tagColor: 'text-violet-400 bg-violet-500/10 border-violet-500/20',
@@ -423,7 +433,7 @@ export function HomePage() {
       title: 'Generative AI',
       sub: 'Diffusion, VAEs, Multimodal Models',
       route: '/learn/generative-ai-intro',
-      count: '18 lessons',
+      categoryIds: ['generative-ai'],
       color: 'from-rose-500 to-pink-600',
       activeBorder: 'border-rose-400 bg-rose-950/40 text-rose-300',
       tagColor: 'text-rose-400 bg-rose-500/10 border-rose-500/20',
@@ -434,7 +444,7 @@ export function HomePage() {
       title: 'LLMs & RAG',
       sub: 'Vector Search, Context, Chunking',
       route: '/learn/llm-intro',
-      count: '23 lessons',
+      categoryIds: ['large-language-models'],
       color: 'from-emerald-500 to-teal-600',
       activeBorder: 'border-emerald-400 bg-emerald-950/40 text-emerald-300',
       tagColor: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
@@ -445,7 +455,7 @@ export function HomePage() {
       title: 'Agentic AI',
       sub: 'Tool Calling, Memory, MCP, Multi-Agent',
       route: '/learn/agentic-ai-intro',
-      count: '21 lessons',
+      categoryIds: ['agentic-ai'],
       color: 'from-amber-500 to-orange-600',
       activeBorder: 'border-amber-400 bg-amber-950/40 text-amber-300',
       tagColor: 'text-amber-400 bg-amber-500/10 border-amber-500/20',
@@ -456,7 +466,7 @@ export function HomePage() {
       title: 'AI Engineering & MLOps',
       sub: 'FastAPI, Docker, CI/CD, Drift Monitoring',
       route: '/learn/ai-engineering-mlops',
-      count: '30 lessons',
+      categoryIds: ['ai-engineering-mlops'],
       color: 'from-indigo-500 to-blue-600',
       activeBorder: 'border-indigo-400 bg-indigo-950/40 text-indigo-300',
       tagColor: 'text-indigo-400 bg-indigo-500/10 border-indigo-500/20',
@@ -635,7 +645,7 @@ export function HomePage() {
 
                         <div className="flex items-center gap-2 shrink-0 pl-2">
                           <span className="font-mono text-[10px] font-bold text-slate-400">
-                            {stage.count}
+                            {lessonCountFor(stage.categoryIds)} lessons
                           </span>
                           <ArrowRight className="h-3.5 w-3.5 text-slate-500 transition group-hover:translate-x-0.5 group-hover:text-cyan-400" aria-hidden="true" />
                         </div>
