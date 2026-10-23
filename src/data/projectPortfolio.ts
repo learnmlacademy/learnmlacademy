@@ -23,7 +23,7 @@ export const projectPortfolio: ProjectPortfolioItem[] = [
     chapters: ["Python", "EDA", "Missing Data", "Encoding", "Scaling", "Classification", "Model Evaluation", "Cross-Validation", "Feature Engineering", "Deployment"],
     topics: ["Exploratory Data Analysis (EDA)", "Missing Data", "Categorical Encoding", "Feature Scaling", "Logistic Regression", "K-Nearest Neighbors", "Support Vector Machine", "Decision Tree", "Random Forest", "Preprocessing Pipelines", "Cross-Validation", "Hyperparameter Tuning", "Accuracy", "Precision", "Recall", "F1 Score", "Confusion Matrix", "Model Persistence (Save and Load)"],
     level: "Beginner",
-    buildTime: "Self-paced • save checkpoints",
+    buildTime: "4-6 hours (estimated)",
     status: "ready",
   },
   {
