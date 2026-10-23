@@ -121,7 +121,7 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
     # replace a server-rendered article node while the test is waiting.
     WebDriverWait(driver, 25).until(
         lambda d: d.execute_script(
-            "return document.querySelector('article[data-lesson-body=\\\"true\\\"]')?.textContent?.trim().length > 200"
+            """return document.querySelector('article[data-lesson-body="true"]')?.textContent?.trim().length > 200"""
         )
     )
     title = driver.execute_script("return document.title || ''").strip()
