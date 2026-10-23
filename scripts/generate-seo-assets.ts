@@ -7,29 +7,28 @@ import { interviewHandbooks, type InterviewHandbookId } from '../src/data/interv
 import { getSEOData } from '../src/utils/seo.ts';
 
 const BASE_URL = 'https://www.learnmlacademy.com';
-const TODAY = '2026-03-28';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 1. SITEMAP.XML GENERATION
 // ─────────────────────────────────────────────────────────────────────────────
 interface SitemapEntry {
   url: string;
-  lastmod: string;
+  lastmod?: string;
   changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
   priority: string;
 }
 
 const staticCorePages: SitemapEntry[] = [
-  { url: '/', lastmod: TODAY, changefreq: 'weekly', priority: '1.0' },
-  { url: '/curriculum', lastmod: TODAY, changefreq: 'weekly', priority: '0.9' },
-  { url: '/projects', lastmod: TODAY, changefreq: 'weekly', priority: '0.9' },
-  { url: '/blog', lastmod: TODAY, changefreq: 'weekly', priority: '0.8' },
-  { url: '/about', lastmod: TODAY, changefreq: 'weekly', priority: '0.7' },
-  { url: '/cheatsheet', lastmod: TODAY, changefreq: 'weekly', priority: '0.8' },
-  { url: '/contact', lastmod: TODAY, changefreq: 'monthly', priority: '0.5' },
-  { url: '/privacy', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
-  { url: '/terms', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
-  { url: '/disclaimer', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
+  { url: '/', changefreq: 'weekly', priority: '1.0' },
+  { url: '/curriculum', changefreq: 'weekly', priority: '0.9' },
+  { url: '/projects', changefreq: 'weekly', priority: '0.9' },
+  { url: '/blog', changefreq: 'weekly', priority: '0.8' },
+  { url: '/about', changefreq: 'weekly', priority: '0.7' },
+  { url: '/cheatsheet', changefreq: 'weekly', priority: '0.8' },
+  { url: '/contact', changefreq: 'monthly', priority: '0.5' },
+  { url: '/privacy', changefreq: 'weekly', priority: '0.3' },
+  { url: '/terms', changefreq: 'weekly', priority: '0.3' },
+  { url: '/disclaimer', changefreq: 'weekly', priority: '0.3' },
 ];
 
 const verifiedTopicLastmods: Record<string, string[]> = {
@@ -117,19 +116,17 @@ const sitemapEntries: SitemapEntry[] = [
   ...staticCorePages,
   ...projectRoutes.map(route => ({
     url: route,
-    lastmod: TODAY,
     changefreq: 'weekly' as const,
     priority: '0.8',
   })),
   ...allTopics.map(t => ({
     url: `/learn/${t.id}`,
-    lastmod: topicLastmodMap.get(t.id) || TODAY,
+    lastmod: topicLastmodMap.get(t.id),
     changefreq: 'weekly' as const,
     priority: '0.8',
   })),
   ...blogPosts.map(p => ({
     url: `/blog/${p.slug}`,
-    lastmod: p.date || TODAY,
     changefreq: 'weekly' as const,
     priority: '0.7',
   })),
@@ -141,8 +138,7 @@ ${sitemapEntries
   .map(
     entry => `  <url>
     <loc>${BASE_URL}${entry.url}</loc>
-    <lastmod>${entry.lastmod}</lastmod>
-    <changefreq>${entry.changefreq}</changefreq>
+${entry.lastmod ? `    <lastmod>${entry.lastmod}</lastmod>\n` : ''}    <changefreq>${entry.changefreq}</changefreq>
     <priority>${entry.priority}</priority>
   </url>`,
   )
