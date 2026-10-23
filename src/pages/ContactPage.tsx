@@ -13,12 +13,12 @@ export function ContactPage() {
   const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
-    document.title = 'Contact Us | Learn ML Academy';
+    document.title = 'Contact Us | LearnMLAcademy';
     const meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
     if (meta) {
       meta.setAttribute(
         'content',
-        'Get in touch with the Learn ML Academy team for feedback, lesson suggestions, corrections, or partnerships.'
+        'Get in touch with the LearnMLAcademy team for feedback, lesson suggestions, corrections, or partnerships.'
       );
     }
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -95,7 +95,7 @@ export function ContactPage() {
               <h3 className="font-semibold text-slate-900">Platform</h3>
             </div>
             <p className="mt-2 text-sm text-slate-600">
-              Learn ML Academy is an independent educational publication dedicated to open-access machine learning, deep learning, and AI tutorials.
+              LearnMLAcademy is an independent educational publication dedicated to open-access machine learning, deep learning, and AI tutorials.
             </p>
           </div>
         </div>
