@@ -29,7 +29,10 @@ const exactRoutePreloaders: Record<string, () => Promise<unknown>> = {
  * briefly replacing a full page with a Suspense fallback on the first frame.
  */
 export async function preloadInitialRoute(pathname: string): Promise<void> {
-  const normalizedPath = pathname.replace(/\\/+$/, "") || "/";
+  let normalizedPath = pathname || "/";
+  while (normalizedPath.length > 1 && normalizedPath.endsWith("/")) {
+    normalizedPath = normalizedPath.slice(0, -1);
+  }
 
   if (normalizedPath.startsWith("/learn/")) {
     const topicId = decodeURIComponent(normalizedPath.slice("/learn/".length).split("/")[0]);
