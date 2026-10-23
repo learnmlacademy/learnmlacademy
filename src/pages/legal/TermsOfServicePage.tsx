@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 export function TermsOfServicePage() {
   useEffect(() => {
-    document.title = 'Terms of Service | ML Academy';
+    document.title = 'Terms of Service | LearnMLAcademy';
     let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (meta) meta.setAttribute('content', 'Read the ML Academy Terms of Service governing use of our free Machine Learning tutorials, content, and website.');
+    if (meta) meta.setAttribute('content', 'Read the LearnMLAcademy Terms of Service governing use of our free Machine Learning tutorials, content, and website.');
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/terms');

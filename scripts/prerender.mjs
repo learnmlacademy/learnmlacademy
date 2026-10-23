@@ -85,7 +85,7 @@ function setPageMeta(html, { title, description, canonical, schema, category, im
     html = replaceHeadTag(html, /<meta\s+property="og:type"[^>]*>/i,
       '<meta property="og:type" content="article" />');
     html = replaceHeadTag(html, /<meta\s+property="og:site_name"[^>]*>/i,
-      '<meta property="og:site_name" content="Learn ML Academy" />');
+      '<meta property="og:site_name" content="LearnMLAcademy" />');
     html = replaceHeadTag(html, /<meta\s+property="article:section"[^>]*>/i,
       `<meta property="article:section" content="${escapeHtml(category.replace(/^\d+\.\s*/, ''))}" />`);
   }
@@ -112,12 +112,12 @@ export function outputPathForRoute(route) {
 
 const staticMeta = new Map([
   ['/', {
-    title: 'ML Academy — Learn Machine Learning from Zero to Expert',
+    title: 'LearnMLAcademy — Learn Machine Learning from Zero to Expert',
     description: 'Free machine learning tutorials covering Machine Learning, Deep Learning, Generative AI, LLMs, RAG and Agentic AI with worked examples and quizzes.',
   }],
   ['/curriculum', {
-    title: 'AI & Machine Learning Curriculum | ML Academy',
-    description: 'Explore the ML Academy learning path from machine-learning foundations through deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI.',
+    title: 'AI & Machine Learning Curriculum | LearnMLAcademy',
+    description: 'Explore the LearnMLAcademy learning path from machine-learning foundations through deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI.',
   }],
   ['/about', {
     title: 'About LearnMLAcademy — Hands-On AI & Machine Learning Education',
@@ -128,8 +128,8 @@ const staticMeta = new Map([
     description: 'Practical machine learning and AI guides covering algorithms, FAANG interviews, model evaluation, Generative AI, large language models, and RAG systems.',
   }],
   ['/cheatsheet', {
-    title: 'Free ML Interview Cheatsheet | ML Academy',
-    description: 'Get the free ML Academy interview cheatsheet with practical questions and answers covering core ML, evaluation, deep learning and system design.',
+    title: 'Free ML Interview Cheatsheet | LearnMLAcademy',
+    description: 'Get the free LearnMLAcademy interview cheatsheet with practical questions and answers covering core ML, evaluation, deep learning and system design.',
   }],
   ['/projects', {
     title: 'Hands-On ML & AI Project Handbooks | LearnMLAcademy',
@@ -179,20 +179,20 @@ const staticMeta = new Map([
     description: 'Take a trained ML model from laptop to production using a tested FastAPI service with validation, Docker, CI, model versioning, drift checks, and rollback.',
   }],
   ['/contact', {
-    title: 'Contact Us | Learn ML Academy',
-    description: 'Get in touch with the Learn ML Academy team for feedback, lesson suggestions, corrections, or partnerships.',
+    title: 'Contact Us | LearnMLAcademy',
+    description: 'Get in touch with the LearnMLAcademy team for feedback, lesson suggestions, corrections, or partnerships.',
   }],
   ['/privacy', {
-    title: 'Privacy Policy | ML Academy',
-    description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
+    title: 'Privacy Policy | LearnMLAcademy',
+    description: 'Read the LearnMLAcademy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
   }],
   ['/terms', {
-    title: 'Terms of Service | ML Academy',
-    description: 'Read the ML Academy terms of service for details about website use, educational content, user responsibilities, and important service conditions.',
+    title: 'Terms of Service | LearnMLAcademy',
+    description: 'Read the LearnMLAcademy terms of service for details about website use, educational content, user responsibilities, and important service conditions.',
   }],
   ['/disclaimer', {
-    title: 'Disclaimer | ML Academy',
-    description: 'Read the ML Academy disclaimer for important information about educational content, accuracy, external links, and limits of website information.',
+    title: 'Disclaimer | LearnMLAcademy',
+    description: 'Read the LearnMLAcademy disclaimer for important information about educational content, accuracy, external links, and limits of website information.',
   }],
 ]);
 
@@ -366,7 +366,7 @@ export async function loadPages(vite) {
     }),
     ...blogPosts.map((post) => {
       const canonical = `${BASE_URL}/blog/${post.slug}`;
-      const title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
+      const title = post.seoTitle ?? `${post.title} | LearnMLAcademy Blog`;
       const description = seo.fitMetaDescription(post.excerpt);
       const blogSchema = JSON.stringify({
         '@context': 'https://schema.org',
