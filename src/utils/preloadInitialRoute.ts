@@ -1,6 +1,3 @@
-import { getTopicById } from "../data/curriculum";
-import { preloadLessonContent } from "../content/LessonContentRegistry";
-
 const exactRoutePreloaders: Record<string, () => Promise<unknown>> = {
   "/curriculum": () => import("../pages/CurriculumPage"),
   "/about": () => import("../pages/AboutPage"),
@@ -36,16 +33,17 @@ export async function preloadInitialRoute(pathname: string): Promise<void> {
 
   if (normalizedPath.startsWith("/learn/")) {
     const topicId = decodeURIComponent(normalizedPath.slice("/learn/".length).split("/")[0]);
-    const [topicPageModule, topic] = await Promise.all([
+    const [topicPageModule, curriculumModule, lessonRegistryModule] = await Promise.all([
       import("../pages/TopicPage"),
-      import("../data/curriculum").then(module => module.getTopicById(topicId)),
+      import("../data/curriculum"),
+      import("../content/LessonContentRegistry"),
     ]);
 
-    // Keep the import explicit so bundlers can statically analyze the route chunk.
+    // Keep the route module import explicit so bundlers can statically analyze it.
     void topicPageModule;
-
+    const topic = curriculumModule.getTopicById(topicId);
     if (topic) {
-      await preloadLessonContent(topic.category.id, topicId);
+      await lessonRegistryModule.preloadLessonContent(topic.category.id, topicId);
     }
     return;
   }
