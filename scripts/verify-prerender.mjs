@@ -85,6 +85,19 @@ try {
   const lessons = pages.filter(page => page.kind === 'lesson');
   const lessonFiles = (await fs.readdir('dist/learn')).filter(name => name.endsWith('.html'));
   assert.equal(lessonFiles.length, 167, 'Expected exactly 167 generated canonical lesson files');
+  const sitemapXml = await fs.readFile('dist/sitemap.xml', 'utf8');
+  const sitemapEntries = [...sitemapXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
+  assert.equal(sitemapEntries.length, 201, 'Sitemap must retain all 201 public routes');
+  const sitemapUrls = sitemapEntries.map(entry => entry.match(/<loc>([^<]+)<\/loc>/)?.[1]);
+  assert(sitemapUrls.every(url => url?.startsWith('https://www.learnmlacademy.com/')), 'Sitemap URLs must use the canonical HTTPS host');
+  assert.equal(new Set(sitemapUrls).size, sitemapUrls.length, 'Sitemap URLs must be unique');
+  const sitemapLastmods = sitemapEntries.map(entry => entry.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1]).filter(Boolean);
+  assert(sitemapLastmods.length > 0, 'Preserve explicitly verified lesson modification dates');
+  assert(!sitemapLastmods.includes('2026-03-28'), 'Do not publish the old blanket sitemap date as a fallback');
+  for (const date of sitemapLastmods) {
+    assert(/^\d{4}-\d{2}-\d{2}$/.test(date), `Invalid sitemap lastmod date: ${date}`);
+    assert.equal(new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10), date, `Invalid calendar date in sitemap: ${date}`);
+  }
   assert.equal(new Set(lessons.map(page => page.title)).size, 167, 'Lesson SEO titles must be unique');
   const failures = [];
   for (const page of pages) {
