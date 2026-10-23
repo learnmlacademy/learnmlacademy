@@ -6,10 +6,13 @@ export function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    subject: 'general',
+    subject: 'Lesson Feedback',
     message: '',
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [deliveryState, setDeliveryState] = useState<'sent' | 'mailto' | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [submissionError, setSubmissionError] = useState('');
+  const [website, setWebsite] = useState('');
   const [emailError, setEmailError] = useState('');
 
   useEffect(() => {
@@ -30,24 +33,64 @@ export function ContactPage() {
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/contact');
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedName = formData.name.trim();
     const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
+
     if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
       setEmailError('Please enter a valid email address.');
       return;
     }
-    if (!formData.message.trim()) return;
+    if (!trimmedMessage) {
+      setSubmissionError('Please enter a message.');
+      return;
+    }
+
     setEmailError('');
-    
-    // Construct mailto link as direct communication fallback
-    const subjectLine = encodeURIComponent(`[LearnMLAcademy] ${formData.subject}: from ${formData.name || 'Learner'}`);
-    const bodyContent = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${trimmedEmail}\nSubject Category: ${formData.subject}\n\nMessage:\n${formData.message}`
-    );
-    window.location.href = `mailto:machinelearningacademy83@gmail.com?subject=${subjectLine}&body=${bodyContent}`;
-    setSubmitted(true);
-  };
+    setSubmissionError('');
+    setIsSending(true);
+
+    let useMailtoFallback = false;
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          subject: formData.subject,
+          message: trimmedMessage,
+          website,
+        }),
+      });
+      const result: { error?: string; ok?: boolean } = await response.json().catch(() => ({}));
+
+      if (response.ok && result.ok) {
+        setDeliveryState('sent');
+        return;
+      }
+      if ([400, 403, 413, 415].includes(response.status)) {
+        setSubmissionError(result.error || 'Please check your details and try again.');
+        return;
+      }
+      useMailtoFallback = true;
+    } catch {
+      useMailtoFallback = true;
+    } finally {
+      setIsSending(false);
+    }
+
+    if (useMailtoFallback) {
+      const subjectLine = encodeURIComponent('[LearnMLAcademy] ' + formData.subject + ': from ' + (trimmedName || 'Learner'));
+      const bodyContent = encodeURIComponent(
+        'Name: ' + trimmedName + '\nEmail: ' + trimmedEmail + '\nSubject Category: ' + formData.subject + '\n\nMessage:\n' + trimmedMessage
+      );
+      window.location.href = 'mailto:machinelearningacademy83@gmail.com?subject=' + subjectLine + '&body=' + bodyContent;
+      setDeliveryState('mailto');
+    }
+  };;
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
@@ -102,19 +145,21 @@ export function ContactPage() {
 
         {/* Contact Form */}
         <div className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm md:col-span-2">
-          {submitted ? (
+          {deliveryState ? (
             <div className="py-12 text-center">
               <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
-              <h2 className="mt-4 text-2xl font-bold text-slate-900">Message Prepared!</h2>
+              <h2 className="mt-4 text-2xl font-bold text-slate-900">{deliveryState === 'sent' ? 'Message sent successfully!' : 'Message Prepared!'}</h2>
               <p className="mt-2 text-slate-600">
-                Your email client has been opened with your inquiry. If it did not launch automatically, feel free to write to us directly at:
+                {deliveryState === 'sent'
+                  ? 'Thank you. Your inquiry has been sent to our team.'
+                  : 'Server-side delivery is temporarily unavailable, so we opened your email client instead. If it did not launch, write to us directly at:'}
               </p>
               <div className="mt-4 font-mono font-medium text-indigo-600">
                 machinelearningacademy83@gmail.com
               </div>
               <button
                 type="button"
-                onClick={() => setSubmitted(false)}
+                onClick={() => { setDeliveryState(null); setSubmissionError(''); }}
                 className="mt-6 rounded-lg bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition"
               >
                 Send another message
@@ -123,6 +168,13 @@ export function ContactPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <h2 className="text-xl font-bold text-slate-900">Send an Inquiry</h2>
+              <div aria-hidden="true" className="pointer-events-none absolute h-px w-px overflow-hidden" style={{ left: '-10000px' }}>
+                <label htmlFor="website">Leave this field blank</label>
+                <input type="text" id="website" name="website" value={website} onChange={e => setWebsite(e.target.value)} tabIndex={-1} autoComplete="off" />
+              </div>
+              {submissionError && (
+                <p className="text-sm text-red-600" role="alert">{submissionError}</p>
+              )}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-slate-700">
                   Your Name
@@ -133,6 +185,7 @@ export function ContactPage() {
                   value={formData.name}
                   onChange={e => setFormData({ ...formData, name: e.target.value })}
                   placeholder="e.g. Alex Chen"
+                  maxLength={100}
                   className="mt-1 block w-full rounded-md border border-slate-300 px-3.5 py-2 text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -151,6 +204,7 @@ export function ContactPage() {
                     if (emailError) setEmailError('');
                   }}
                   placeholder="alex@example.com"
+                  maxLength={254}
                   className={`mt-1 block w-full rounded-md border px-3.5 py-2 text-slate-900 placeholder-slate-400 focus:outline-none sm:text-sm ${
                     emailError
                       ? 'border-red-300 focus:border-red-500 focus:ring-1 focus:ring-red-500'
@@ -189,6 +243,7 @@ export function ContactPage() {
                   id="message"
                   required
                   rows={5}
+                  maxLength={6000}
                   value={formData.message}
                   onChange={e => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Write your message here..."
@@ -198,10 +253,11 @@ export function ContactPage() {
 
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition"
+                disabled={isSending}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition disabled:cursor-wait disabled:opacity-70"
               >
                 <Send className="h-4 w-4" />
-                Submit Message
+                {isSending ? 'Sending...' : 'Submit Message'}
               </button>
             </form>
           )}
