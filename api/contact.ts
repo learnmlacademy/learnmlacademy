@@ -59,7 +59,7 @@ export default async function handler(req: any, res: any) {
   } catch {
     return res.status(400).json({ error: "Invalid contact submission." });
   }
-  if (Number(req.headers?.["content-length"] || 0) > MAX_PAYLOAD_BYTES || serializedizedLength(serializedBody) > MAX_PAYLOAD_BYTES) {
+  if (Number(req.headers?.["content-length"] || 0) > MAX_PAYLOAD_BYTES || serializedByteLength(serializedBody) > MAX_PAYLOAD_BYTES) {
     return res.status(413).json({ error: "Your message is too large. Please shorten it and try again." });
   }
 
@@ -126,6 +126,6 @@ export default async function handler(req: any, res: any) {
   }
 }
 
-function serializedizedLength(value: string): number {
+function serializedByteLength(value: string): number {
   return new TextEncoder().encode(value).length;
 }
