@@ -723,7 +723,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
 
 export const getSEOData = (topicId: string, defaultTitle: string): { title: string; description: string } => {
   const selected = seoData[topicId] || {
-    title: `${defaultTitle} Tutorial for Machine Learning | LearnML`,
+    title: `${defaultTitle} Tutorial for Machine Learning | LearnMLAcademy`,
     description: fitMetaDescription(`Learn the central concepts behind ${defaultTitle}, understand how each component works in practice, explore formulas, and avoid common failures.`)
   };
 
