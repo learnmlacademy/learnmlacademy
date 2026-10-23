@@ -39,7 +39,7 @@ export function AffiliateRecommendation() {
     <div className="mt-16 border-t border-slate-200 pt-12 pb-8">
       <h3 className="text-2xl font-bold text-slate-800">Optional Learning Resources</h3>
       <p className="text-slate-600 mt-3 mb-2 leading-relaxed">
-        These resources may complement the lesson. They are optional and are not required to use ML Academy.
+        These resources may complement the lesson. They are optional and are not required to use LearnMLAcademy.
       </p>
       <p className="text-slate-500 text-xs mb-8">
         As an Amazon Associate I earn from qualifying purchases. Other links are identified separately when they are not affiliate links.
