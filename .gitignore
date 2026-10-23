@@ -9,7 +9,6 @@ metadata.json
 !.env.example
 .vercel/
 *.log
--e 
 __pycache__/
 *.pyc
 *.bundle
