@@ -4,8 +4,11 @@ dist/
 .DS_Store
 .aistudio/
 metadata.json
-.env.example
--e 
+.env
+.env.*
+!.env.example
+.vercel/
+*.log
 __pycache__/
 *.pyc
 *.bundle
