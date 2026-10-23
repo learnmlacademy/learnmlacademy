@@ -117,8 +117,13 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
     url = BASE + "/learn/" + topic_id
     driver.get(url)
     WebDriverWait(driver, 25).until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "h1")) >= 1)
-    article = WebDriverWait(driver, 25).until(lambda d: d.find_element(By.CSS_SELECTOR, "article[data-lesson-body='true']"))
-    WebDriverWait(driver, 25).until(lambda d: len(article.text.strip()) > 200)
+    # Re-query the live DOM on each poll: the page may finish hydrating and
+    # replace a server-rendered article node while the test is waiting.
+    WebDriverWait(driver, 25).until(
+        lambda d: d.execute_script(
+            "return document.querySelector('article[data-lesson-body=\\\"true\\\"]')?.textContent?.trim().length > 200"
+        )
+    )
     title = driver.execute_script("return document.title || ''").strip()
     description = driver.execute_script("return document.querySelector('meta[name=description]')?.content || ''").strip()
     canonical = driver.execute_script("return document.querySelector('link[rel=canonical]')?.href || ''").strip()
