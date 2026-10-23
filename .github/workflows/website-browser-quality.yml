@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - "src/App.tsx"
+      - "src/main.tsx"
+      - "src/content/**"
+      - "src/utils/**"
       - "src/pages/**"
       - "src/components/**"
       - "src/data/projectPortfolio.ts"
