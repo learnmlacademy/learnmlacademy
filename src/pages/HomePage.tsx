@@ -1073,8 +1073,8 @@ export function HomePage() {
                 12 Real Machine Learning & AI Projects
               </h2>
               <p className="mt-2 max-w-2xl text-sm text-slate-600">
-                Full-fidelity handbooks with reproducible data pipelines, baseline comparisons, unit tests,
-                Streamlit interfaces, and downloadable starter ZIPs. No mock data or half-finished code.
+                Step-by-step handbooks with runnable starter code, evaluation details, and downloadable ZIPs.
+                Dataset sources and demo/offline modes are identified where relevant.
               </p>
             </div>
 
@@ -1176,7 +1176,7 @@ export function HomePage() {
                   </pre>
                   <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
                     <span>Clean pipeline architecture</span>
-                    <span className="text-cyan-400">Zero synthetic mockups</span>
+                    <span className="text-cyan-400">Page-aware citations</span>
                   </div>
                 </div>
               </div>
@@ -1339,7 +1339,7 @@ export function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 7. RECOMMENDED FOR YOU: EDITORIAL & VISUAL LESSON SPOTLIGHTS */}
+      {/* 7. START HERE: EDITORIAL & VISUAL LESSON SPOTLIGHTS */}
       {/* ========================================================================= */}
       <section className="border-b border-slate-200 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1347,7 +1347,7 @@ export function HomePage() {
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">High-Impact Starting Points</p>
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
-                Recommended for you
+                Start here
               </h2>
               <p className="mt-1 text-sm text-slate-600">
                 Hand-picked cornerstone lessons featuring interactive diagrams, worked calculations, and clear intuition.
@@ -1580,7 +1580,7 @@ export function HomePage() {
               Ready to master machine learning and artificial intelligence?
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
-              Start with zero prerequisites. 167 verified tutorials, 12 full-stack projects, and 10 interview handbooks—free forever.
+              Explore 167 tutorials, 12 project handbooks, and 10 interview handbooks. Core lessons are free; optional premium resources may be offered separately.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <Link
