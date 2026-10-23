@@ -1157,19 +1157,22 @@ export function HomePage() {
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-[11px] text-slate-400">
                     <span className="flex items-center gap-1.5">
                       <Terminal className="h-3.5 w-3.5 text-emerald-400" />
-                      verified-test-suite.py
+                      projects/pdf-rag/tests/test_rag.py
                     </span>
-                    <span className="text-emerald-400 font-bold">100% PASS</span>
+                    <span className="text-emerald-400 font-bold">10 Tests Included</span>
                   </div>
                   <pre className="mt-3 overflow-x-auto text-[11px] leading-5 text-slate-300">
-                    <code>{`# Verified Handbook Deliverables
-✓ test_page_level_extraction()
-✓ test_sparse_tfidf_retrieval()
-✓ test_citation_faithfulness()
-✓ test_streamlit_offline_mode()
+                    <code>{`# projects/pdf-rag/tests/test_rag.py
+# 10 automated unit tests in suite:
+• test_page_numbers_and_source_ids()
+• test_overlap_preserves_boundary_and_pages()
+• test_retrieval_and_citations_have_original_page()
+• test_embedded_prompt_injection_is_only_pdf_evidence()
+• test_saved_index_roundtrip_and_tampering_detected()
+# (+5 more in suite: corrupt-PDF, abstain, dedup, citations, real-overlap)
 
-📦 starter_code.zip (Full scaffold)
-🧪 10 automated unit tests included`}</code>
+📦 local-pdf-rag-assistant.zip (Complete starter scaffold)
+🧪 10 unit tests included (historical CI run: 10 passed)`}</code>
                   </pre>
                   <div className="mt-4 pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
                     <span>Clean pipeline architecture</span>
