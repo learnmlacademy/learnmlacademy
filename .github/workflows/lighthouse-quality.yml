@@ -53,11 +53,12 @@ jobs:
             if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
             sleep 1
           done
-          for route in home projects lesson; do
+          for route in home projects lesson genai; do
             case "$route" in
               home) path="/" ;;
               projects) path="/projects" ;;
               lesson) path="/learn/train-test-split" ;;
+              genai) path="/learn/generative-ai-intro" ;;
             esac
             npx --yes lighthouse@12.8.2 "http://127.0.0.1:4173${path}" \
               --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage" \
