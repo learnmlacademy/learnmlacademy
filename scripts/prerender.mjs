@@ -85,7 +85,7 @@ function setPageMeta(html, { title, description, canonical, schema, category, im
     html = replaceHeadTag(html, /<meta\s+property="og:type"[^>]*>/i,
       '<meta property="og:type" content="article" />');
     html = replaceHeadTag(html, /<meta\s+property="og:site_name"[^>]*>/i,
-      '<meta property="og:site_name" content="LearnMLAcademy" />');
+      '<meta property="og:site_name" content="Learn ML Academy" />');
     html = replaceHeadTag(html, /<meta\s+property="article:section"[^>]*>/i,
       `<meta property="article:section" content="${escapeHtml(category.replace(/^\d+\.\s*/, ''))}" />`);
   }
@@ -112,12 +112,12 @@ export function outputPathForRoute(route) {
 
 const staticMeta = new Map([
   ['/', {
-    title: 'LearnMLAcademy — Learn Machine Learning from Zero to Expert',
+    title: 'ML Academy — Learn Machine Learning from Zero to Expert',
     description: 'Free machine learning tutorials covering Machine Learning, Deep Learning, Generative AI, LLMs, RAG and Agentic AI with worked examples and quizzes.',
   }],
   ['/curriculum', {
-    title: 'AI & Machine Learning Curriculum | LearnMLAcademy',
-    description: 'Explore the LearnMLAcademy learning path from machine-learning foundations through deep learning, Generative AI, LLMs, RAG, Agentic AI, projects and production AI.',
+    title: 'AI & Machine Learning Curriculum | ML Academy',
+    description: 'Explore the ML Academy learning path from ML foundations to deep learning, Generative AI, LLMs, RAG, AI agents, and production machine learning.',
   }],
   ['/about', {
     title: 'About LearnMLAcademy — Hands-On AI & Machine Learning Education',
@@ -128,14 +128,14 @@ const staticMeta = new Map([
     description: 'Practical machine learning and AI guides covering algorithms, FAANG interviews, model evaluation, Generative AI, large language models, and RAG systems.',
   }],
   ['/cheatsheet', {
-    title: 'Free ML Interview Cheatsheet | LearnMLAcademy',
-    description: 'Get the free LearnMLAcademy interview cheatsheet with practical questions and answers covering core ML, evaluation, deep learning and system design.',
+    title: 'Free ML Interview Cheatsheet | ML Academy',
+    description: 'Get the free ML Academy interview cheatsheet with practical questions and answers covering core ML, evaluation, deep learning and system design.',
   }],
   ['/projects', {
     title: 'Hands-On ML & AI Project Handbooks | LearnMLAcademy',
     description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
   }],
-  ['/projects/retail-forecasting', {title: 'Retail Forecasting — Complete Time Series Handbook | LearnMLAcademy', description: 'Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.'}],
+  ['/projects/retail-forecasting', {title: 'Retail Sales Forecasting Handbook | LearnMLAcademy', description: 'Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.'}],
   ['/projects/disaster-tweets', {title: 'Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
   ['/projects/digit-recognizer', {title: 'Digit Recognizer — Complete CNN Handbook | LearnMLAcademy', description: 'Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.'}],
   ['/projects/titanic-survival', {
@@ -152,14 +152,14 @@ const staticMeta = new Map([
   }],
   ['/projects/credit-card-fraud', {
     title: 'Credit Card Fraud Detector Project Handbook | LearnMLAcademy',
-    description: 'Build an imbalanced credit-card fraud detector using OpenML data, class weighting, SMOTE, Random Forest, Average Precision, threshold tuning, tests and Streamlit.',
+    description: 'Build an imbalanced credit card fraud detector using OpenML data, SMOTE, class weighting, Random Forest, precision-recall tuning, tests, and Streamlit.',
   }],
   ['/projects/customer-segmentation', {
-    title: 'Customer Segmentation Project — RFM, K-Means, DBSCAN, PCA | LearnMLAcademy',
+    title: 'Customer Segmentation: RFM, K-Means & PCA | LearnMLAcademy',
     description: 'Build customer segments from 541,909 retail transactions using RFM analysis, K-Means clustering, DBSCAN, PCA dimensionality reduction, and Streamlit.',
   }],
   ['/projects/pdf-rag/semantic', {
-    title: 'Build a Semantic PDF RAG Assistant — Complete Advanced Handbook | LearnMLAcademy',
+    title: 'Semantic PDF RAG Assistant Handbook | LearnMLAcademy',
     description: 'Build a semantic PDF search assistant with local MiniLM ONNX embeddings, page-bound tokens, cosine similarity ranking, reranking, and Streamlit app code.',
   }],
   ['/projects/pdf-rag', {
@@ -171,28 +171,28 @@ const staticMeta = new Map([
     description: 'Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests and complete copyable code.',
   }],
   ['/projects/ai-research-assistant', {
-    title: 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy',
+    title: 'AI Research Assistant: Agent Tools & Citations | LearnMLAcademy',
     description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, citation verification, tests, and Streamlit.',
   }],
   ['/projects/model-to-production', {
-    title: 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy',
+    title: 'Model to Production: FastAPI, Docker & CI | LearnMLAcademy',
     description: 'Take a trained ML model from laptop to production using a tested FastAPI service with validation, Docker, CI, model versioning, drift checks, and rollback.',
   }],
   ['/contact', {
-    title: 'Contact Us | LearnMLAcademy',
-    description: 'Get in touch with the LearnMLAcademy team for feedback, lesson suggestions, corrections, or partnerships.',
+    title: 'Contact Us | Learn ML Academy',
+    description: 'Get in touch with the Learn ML Academy team for feedback, lesson suggestions, corrections, or partnerships.',
   }],
   ['/privacy', {
-    title: 'Privacy Policy | LearnMLAcademy',
-    description: 'Read the LearnMLAcademy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
+    title: 'Privacy Policy | ML Academy',
+    description: 'Read the ML Academy privacy policy to learn how site information is collected, used, stored, and handled when you visit or use our services.',
   }],
   ['/terms', {
-    title: 'Terms of Service | LearnMLAcademy',
-    description: 'Read the LearnMLAcademy terms of service for details about website use, educational content, user responsibilities, and important service conditions.',
+    title: 'Terms of Service | ML Academy',
+    description: 'Read the ML Academy terms of service for details about website use, educational content, user responsibilities, and important service conditions.',
   }],
   ['/disclaimer', {
-    title: 'Disclaimer | LearnMLAcademy',
-    description: 'Read the LearnMLAcademy disclaimer for important information about educational content, accuracy, external links, and limits of website information.',
+    title: 'Disclaimer | ML Academy',
+    description: 'Read the ML Academy disclaimer for important information about educational content, accuracy, external links, and limits of website information.',
   }],
 ]);
 
@@ -366,7 +366,7 @@ export async function loadPages(vite) {
     }),
     ...blogPosts.map((post) => {
       const canonical = `${BASE_URL}/blog/${post.slug}`;
-      const title = post.seoTitle ?? `${post.title} | LearnMLAcademy Blog`;
+      const title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
       const description = seo.fitMetaDescription(post.excerpt);
       const blogSchema = JSON.stringify({
         '@context': 'https://schema.org',

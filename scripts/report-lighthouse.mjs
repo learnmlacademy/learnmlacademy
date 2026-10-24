@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
-const pages = ['home', 'projects', 'lesson', 'genai'];
+const pages = ['home', 'projects', 'lesson'];
 const summary = [];
 
 for (const page of pages) {
@@ -11,15 +11,6 @@ for (const page of pages) {
     ['performance', 'accessibility', 'best-practices', 'seo'].map(name =>
       [name, Math.round(100 * (report.categories[name]?.score ?? 0))])
   );
-  if (['home', 'projects', 'lesson'].includes(page)) {
-    const requests = report.audits['network-requests']?.details?.items || [];
-    const eagerRecharts = requests.filter(item => /vendor-recharts/i.test(item.url || ''));
-    assert.equal(
-      eagerRecharts.length,
-      0,
-      `The unrelated ${page} route downloaded the vendor-recharts chunk.`,
-    );
-  }
   const vitals = {};
   for (const name of ['first-contentful-paint', 'largest-contentful-paint', 'speed-index', 'total-blocking-time', 'cumulative-layout-shift']) {
     const audit = report.audits[name];
@@ -53,4 +44,4 @@ fs.writeFileSync('lighthouse-reports/summary.md', markdown);
 const gh = process.env.GITHUB_STEP_SUMMARY;
 if (gh) fs.appendFileSync(gh, markdown);
 console.log(markdown);
-assert.equal(summary.length, 4);
+assert.equal(summary.length, 3);

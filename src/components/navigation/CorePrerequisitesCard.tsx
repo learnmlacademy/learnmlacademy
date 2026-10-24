@@ -106,19 +106,19 @@ const projectPrerequisites: Record<string, PrerequisiteItem[]> = {
   ],
   "retail-forecasting": [
     { url: "/learn/forecasting-basics", title: "Time-Series Forecasting & Stationarity", concept: "Autoregressive dependencies, stationarity tests, and baseline lags." },
-    { url: "/learn/forecasting-basics", title: "Trend, Seasonality & Residual Decomposition", concept: "Isolating seasonal sales spikes and underlying market trends." },
+    { url: "/learn/moving-average", title: "Moving Average & Smoothing", concept: "Rolling windows, smoothing volatility, and trend extraction." },
     { url: "/learn/arima", title: "ARIMA & SARIMA Autoregressive Modeling", concept: "Integrated autoregressive moving average modeling for retail cycles." },
     { url: "/learn/cross-validation", title: "MAE, RMSE & Forecast Evaluation", concept: "Chronological evaluation without lookahead data leakage." },
   ],
   "movie-recommender": [
-    { url: "/learn/knn", title: "Recommendation System Architectures", concept: "Comparing content-based filtering with collaborative filtering." },
+    { url: "/learn/association-rules", title: "Association Rules & Item Mining", concept: "Extracting co-occurrence patterns and item-item affinity from transactions." },
     { url: "/learn/pca", title: "Matrix Factorization & Dimensionality Reduction", concept: "Latent user and item embedding decomposition from sparse ratings." },
     { url: "/learn/knn", title: "Cosine Similarity & K-Nearest Neighbors", concept: "Computing angle distance across high-dimensional movie vectors." },
     { url: "/learn/semantic-search-embeddings", title: "Embedding Similarity for Content Filtering", concept: "Matching movie plots and descriptions using vector proximity." },
   ],
   "disaster-tweets": [
     { url: "/learn/deep-learning-nlp", title: "Text Cleaning, Tokenization & NLP Pipelines", concept: "Stripping URLs, punctuation, and converting words to embeddings." },
-    { url: "/learn/naive-bayes", title: "Naive Bayes for Text Classification", concept: "Conditional word probabilities for real-time disaster alerts." },
+    { url: "/learn/feature-engineering", title: "Text Feature Engineering & Vocabulary", concept: "Extracting n-gram word features and term frequency representations." },
     { url: "/learn/naive-bayes", title: "Multinomial Naive Bayes for Real-Time Alerts", concept: "Probabilistic classification on sparse textual feature representations." },
     { url: "/learn/confusion-matrix", title: "Precision, Recall & F1-Score Evaluation", concept: "Balancing false alarms and missed emergency notifications." },
   ],
@@ -131,7 +131,7 @@ const projectPrerequisites: Record<string, PrerequisiteItem[]> = {
   "ai-content-creator": [
     { url: "/learn/prompt-engineering", title: "Few-Shot Prompt Engineering & System Roles", concept: "Structuring instructions, constraints, and illustrative few-shot examples." },
     { url: "/learn/text-generation-decoding", title: "Sampling Parameters: Temperature & Top-P", concept: "Controlling output diversity and deterministic responses in LLMs." },
-    { url: "/learn/prompt-engineering", title: "Structured JSON Outputs & Schema Validation", concept: "Constraining generative model completions to validated JSON schemas." },
+    { url: "/learn/responsible-generative-ai", title: "Safety Guardrails & Content Constraints", concept: "Validating model completions against safety rules and schemas." },
     { url: "/learn/llm-evaluation", title: "LLM Output Evaluation & Guardrail Verification", concept: "Automated evaluation rubrics and content safety guardrails." },
   ],
   "pdf-rag": [

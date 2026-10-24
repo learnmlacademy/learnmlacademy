@@ -29,7 +29,7 @@ export function CustomerSegmentationProjectPage() {
   const project = projectPortfolioById['customer-segmentation'];
 
   useEffect(() => {
-    document.title = 'Customer Segmentation Project — RFM, K-Means, DBSCAN, PCA | LearnMLAcademy';
+    document.title = 'Customer Segmentation: RFM, K-Means & PCA | LearnMLAcademy';
     const description = 'Build a real customer-segmentation system from 541,909 UCI Online Retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, silhouette analysis, PCA and Streamlit.';
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {

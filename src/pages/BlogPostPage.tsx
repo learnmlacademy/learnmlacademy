@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { blogPosts } from '../data/blog';
-import { fitMetaDescription } from '../utils/seo';
+import { fitMetaDescription } from '../utils/clientSeo';
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight, Download } from 'lucide-react';
 import { NewsletterSignup } from '../components/NewsletterSignup';
 import { CorePrerequisitesCard } from '../components/navigation/CorePrerequisitesCard';
@@ -45,7 +45,7 @@ export function BlogPostPage() {
 
   useEffect(() => {
     if (post) {
-      document.title = post.seoTitle ?? `${post.title} | LearnMLAcademy Blog`;
+      document.title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.setAttribute('content', fitMetaDescription(post.excerpt));
       window.scrollTo(0, 0);

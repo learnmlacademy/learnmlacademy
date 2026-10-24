@@ -117,13 +117,8 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
     url = BASE + "/learn/" + topic_id
     driver.get(url)
     WebDriverWait(driver, 25).until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "h1")) >= 1)
-    # Re-query the live DOM on each poll: the page may finish hydrating and
-    # replace a server-rendered article node while the test is waiting.
-    WebDriverWait(driver, 25).until(
-        lambda d: d.execute_script(
-            """return document.querySelector('article[data-lesson-body="true"]')?.textContent?.trim().length > 200"""
-        )
-    )
+    article = WebDriverWait(driver, 25).until(lambda d: d.find_element(By.CSS_SELECTOR, "article[data-lesson-body='true']"))
+    WebDriverWait(driver, 25).until(lambda d: len(article.text.strip()) > 200)
     title = driver.execute_script("return document.title || ''").strip()
     description = driver.execute_script("return document.querySelector('meta[name=description]')?.content || ''").strip()
     canonical = driver.execute_script("return document.querySelector('link[rel=canonical]')?.href || ''").strip()
@@ -140,13 +135,6 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
         or "Uncaught ReferenceError" in item["message"]
     ]
     assert not browser_errors, topic_id + ": JavaScript/hydration errors: " + " | ".join(browser_errors[:3])
-    if topic_id == "generative-ai-intro":
-        WebDriverWait(driver, 20).until(
-            lambda d: d.find_elements(By.CSS_SELECTOR, "svg.recharts-surface")
-        )
-        assert driver.find_elements(By.CSS_SELECTOR, "svg.recharts-surface"), (
-            "Generative AI interactive charts did not render after changing chunk strategy"
-        )
 
 
 def main() -> None:

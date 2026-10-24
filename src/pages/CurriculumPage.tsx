@@ -79,14 +79,14 @@ export function CurriculumPage() {
   const trackIncludesProjects = displayedCategories.some((c) => c.id === 'projects');
 
   useEffect(() => {
-    document.title = `AI Curriculum | ${tutorialCount} Free ML, LLM & Agent Tutorials | LearnMLAcademy`;
+    document.title = 'AI & Machine Learning Curriculum | ML Academy';
     const setMeta = (selector: string, attr: string, value: string) => {
       let el = document.querySelector(selector) as HTMLMetaElement | null;
       if (el) el.setAttribute(attr, value);
     };
-    const desc = `Browse ${tutorialCount} free tutorials covering Machine Learning, Deep Learning, Generative AI, Large Language Models, RAG, and Agentic AI with simple examples and code. Track your progress as you learn.`;
+    const desc = 'Explore the ML Academy learning path from ML foundations to deep learning, Generative AI, LLMs, RAG, AI agents, and production machine learning.';
     setMeta('meta[name="description"]', 'content', desc);
-    setMeta('meta[property="og:title"]', 'content', 'Modern AI Curriculum | LearnMLAcademy');
+    setMeta('meta[property="og:title"]', 'content', 'AI & Machine Learning Curriculum | ML Academy');
     setMeta('meta[property="og:description"]', 'content', desc);
 
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;

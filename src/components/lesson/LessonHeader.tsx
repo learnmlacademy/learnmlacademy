@@ -21,6 +21,8 @@ type LessonHeaderProps = {
   topicId?: string;
   difficulty?: 'Beginner' | 'Intermediate' | 'Advanced';
   readTimeMinutes?: number;
+  updatedDate?: string;
+  learningOutcomes?: [string, string, string];
 };
 
 // Helper to determine difficulty based on category
@@ -44,12 +46,29 @@ export function LessonHeader({
   topicId,
   difficulty,
   readTimeMinutes = 10,
+  updatedDate,
+  learningOutcomes,
 }: LessonHeaderProps) {
   const cleanCategory = category.replace(/^\d+\.\s*/, '');
   const diffLevel = getDifficultyLevel(category, difficulty);
   const [copied, setCopied] = useState(false);
   const { isCompleted, toggleCompleted } = useProgress();
   const completed = topicId ? isCompleted(topicId) : false;
+
+  const isRag = topicId === 'rag';
+  const effectiveUpdatedDate = updatedDate ?? (isRag ? 'Updated October 2026' : 'Updated March 2026');
+  const defaultOutcomes: [string, string, string] = isRag
+    ? [
+        'Two-phase architecture: offline indexing vs real-time retrieval',
+        'Source citation mechanisms, context boundaries & failure modes',
+        'When to choose standard prompting vs RAG vs fine-tuning',
+      ]
+    : [
+        'Intuitive core mechanisms & practical real-world intuition',
+        'Step-by-step mathematical breakdown & visual diagrams',
+        'Runnable Python implementation & practical trade-offs',
+      ];
+  const effectiveOutcomes = learningOutcomes ?? defaultOutcomes;
 
   const difficultyColors = {
     Beginner: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
@@ -137,7 +156,7 @@ export function LessonHeader({
           {/* Freshness / Update Date */}
           <span className="hidden sm:inline-flex items-center gap-1 font-medium">
             <Calendar className="h-3.5 w-3.5 text-slate-400" />
-            <span>Updated March 2026</span>
+            <span>{effectiveUpdatedDate}</span>
           </span>
 
           <span className="text-slate-300 hidden md:inline" aria-hidden="true">·</span>
@@ -208,18 +227,12 @@ export function LessonHeader({
           <span>What you will master in this lesson</span>
         </div>
         <div className="mt-2.5 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs text-slate-700">
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-3.5 w-3.5 text-indigo-600 shrink-0 mt-0.5" />
-            <span>Intuitive core mechanisms & practical real-world intuition</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-3.5 w-3.5 text-indigo-600 shrink-0 mt-0.5" />
-            <span>Step-by-step mathematical breakdown & visual diagrams</span>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-3.5 w-3.5 text-indigo-600 shrink-0 mt-0.5" />
-            <span>Runnable Python implementation & practical trade-offs</span>
-          </div>
+          {effectiveOutcomes.map((outcome, idx) => (
+            <div key={idx} className="flex items-start gap-2">
+              <CheckCircle2 className="h-3.5 w-3.5 text-indigo-600 shrink-0 mt-0.5" />
+              <span>{outcome}</span>
+            </div>
+          ))}
         </div>
       </div>
     </header>

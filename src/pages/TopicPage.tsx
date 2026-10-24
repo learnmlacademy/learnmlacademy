@@ -1,11 +1,11 @@
 import { lazy, useEffect, Suspense, useRef } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { getTopicById, curriculum } from "../data/curriculum";
-import { getSEOData, getCanonicalUrl, getLearningResourceSchema } from "../utils/seo";
+import { getSEOData, updateClientMeta } from "../utils/clientSeo";
 import { getInterviewHandbookForTopic } from "../data/interviewHandbooks";
 
 import { LessonContentRegistry } from "../content/LessonContentRegistry";
-import { QuizSection } from "../components/QuizSection";
+const QuizSection = lazy(() => import("../components/QuizSection").then((m) => ({ default: m.QuizSection })));
 import { ContinueLearning } from "../components/lesson/ContinueLearning";
 import { LessonProjectBridge } from "../components/lesson/LessonProjectBridge";
 import { MidLessonCallout } from "../components/lesson/MidLessonCallout";
@@ -149,49 +149,12 @@ export function TopicPage() {
       const topicInfo = getTopicById(topicId);
       if (topicInfo) {
         const seo = getSEOData(topicId, topicInfo.subtopic.title);
-        document.title = seo.title;
-
-        // Meta description
-        const setMeta = (sel: string, attr: string, val: string) => {
-          let el = document.querySelector(sel);
-          if (!el) { el = document.createElement('meta'); document.head.appendChild(el); }
-          el.setAttribute(attr, val);
-        };
-        setMeta('meta[name="description"]', 'content', seo.description);
-
-        // Canonical link
-        let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
-        if (!canonical) {
-          canonical = document.createElement('link');
-          canonical.setAttribute('rel', 'canonical');
-          document.head.appendChild(canonical);
-        }
-        canonical.setAttribute('href', getCanonicalUrl(topicId));
-
-        // Open Graph tags (per-page)
-        setMeta('meta[property="og:title"]', 'content', seo.title);
-        setMeta('meta[property="og:description"]', 'content', seo.description);
-        setMeta('meta[property="og:url"]', 'content', getCanonicalUrl(topicId));
-        setMeta('meta[property="og:site_name"]', 'content', 'LearnMLAcademy');
-        setMeta('meta[property="og:type"]', 'content', 'article');
-        setMeta('meta[property="og:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
-        setMeta('meta[property="article:section"]', 'content', topicInfo.category.title.replace(/^\d+\.\s*/, ''));
-
-        // Twitter Card tags
-        setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image');
-        setMeta('meta[name="twitter:title"]', 'content', seo.title);
-        setMeta('meta[name="twitter:description"]', 'content', seo.description);
-        setMeta('meta[name="twitter:image"]', 'content', 'https://www.learnmlacademy.com/og-image.png');
-
-        // JSON-LD: LearningResource + BreadcrumbList
-        let scriptSchema = document.querySelector('#schema-topic') as HTMLScriptElement;
-        if (!scriptSchema) {
-          scriptSchema = document.createElement('script');
-          scriptSchema.setAttribute('id', 'schema-topic');
-          scriptSchema.setAttribute('type', 'application/ld+json');
-          document.head.appendChild(scriptSchema);
-        }
-        scriptSchema.textContent = getLearningResourceSchema(topicId, seo.title, seo.description, topicInfo.category.title, topicInfo.subtopic.difficulty);
+        updateClientMeta({
+          title: seo.title,
+          description: seo.description,
+          topicId,
+          categoryTitle: topicInfo.category.title,
+        });
       }
     }
   }, [topicId]);
@@ -227,7 +190,9 @@ export function TopicPage() {
 
   const renderQuiz = () => (
     <div id="quiz-section" key={`quiz-${subtopic.id}`} className="scroll-mt-20">
-      <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      <Suspense fallback={null}>
+        <QuizSection topicId={subtopic.id} topicTitle={subtopic.title} />
+      </Suspense>
     </div>
   );
 

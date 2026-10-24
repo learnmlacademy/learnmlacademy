@@ -138,7 +138,12 @@ const projects: Record<Key,Detail> = {
 export function RemainingProjectPage({kind}:{kind:Key}) {
  const project = projects[kind];
  useEffect(() => {
-  document.title = project.title + " | LearnMLAcademy";
+  const titles: Record<Key, string> = {
+    "digit-recognizer": "Digit Recognizer — Complete CNN Handbook | LearnMLAcademy",
+    "retail-forecasting": "Retail Sales Forecasting Handbook | LearnMLAcademy",
+    "disaster-tweets": "Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy",
+  };
+  document.title = titles[kind] ?? (project.title + " | LearnMLAcademy");
   const description = project.finish.slice(0, 165);
   const meta = document.querySelector('meta[name="description"]');
   if (meta) meta.setAttribute("content", description);

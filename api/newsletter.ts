@@ -1,6 +1,105 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+const rateLimitStore = new Map<string, number[]>();
+
+function extractClientIp(req: any): string {
+  if (!req) return "127.0.0.1";
+  const vercelForwarded = req.headers?.["x-vercel-forwarded-for"];
+  if (typeof vercelForwarded === "string" && vercelForwarded.trim()) {
+    return vercelForwarded.split(",")[0].trim();
+  }
+  const forwarded = req.headers?.["x-forwarded-for"];
+  if (typeof forwarded === "string" && forwarded.trim()) {
+    return forwarded.split(",")[0].trim();
+  }
+  const realIp = req.headers?.["x-real-ip"];
+  if (typeof realIp === "string" && realIp.trim()) {
+    return realIp.trim();
+  }
+  return req.socket?.remoteAddress || "127.0.0.1";
+}
+
+async function enforceRateLimit(
+  req: any,
+  res: any,
+  action: string,
+  optionsOrMax: number | { maxRequests?: number; windowSeconds?: number } = 5,
+  windowSecondsParam = 600
+): Promise<boolean> {
+  const maxRequests = typeof optionsOrMax === "number" ? optionsOrMax : (optionsOrMax?.maxRequests ?? 5);
+  const windowSeconds = typeof optionsOrMax === "number" ? windowSecondsParam : (optionsOrMax?.windowSeconds ?? 600);
+  const ip = extractClientIp(req);
+  const key = `rl:${action}:${ip}`;
+
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+
+  if (redisUrl && redisToken) {
+    try {
+      const cleanUrl = redisUrl.replace(/\/+$/, "");
+      const response = await fetch(`${cleanUrl}/pipeline`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${redisToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([["INCR", key], ["TTL", key]]),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const count = Number(data[0]?.result);
+        let ttl = Number(data[1]?.result);
+        if (ttl <= 0) {
+          fetch(`${cleanUrl}/expire/${encodeURIComponent(key)}/${windowSeconds}`, {
+            headers: { Authorization: `Bearer ${redisToken}` },
+          }).catch(() => {});
+          ttl = windowSeconds;
+        }
+        res.setHeader("X-RateLimit-Limit", String(maxRequests));
+        res.setHeader("X-RateLimit-Remaining", String(Math.max(0, maxRequests - count)));
+        if (count > maxRequests) {
+          res.setHeader("Retry-After", String(Math.max(1, ttl)));
+          res.status(429).json({
+            error: "Too many requests. Please try again later.",
+            retryAfterSeconds: Math.max(1, ttl),
+          });
+          return false;
+        }
+        return true;
+      }
+    } catch {
+      // Fall back to memory on Redis failure
+    }
+  }
+
+  const now = Date.now();
+  const windowMs = windowSeconds * 1000;
+  const cutoff = now - windowMs;
+  let timestamps = rateLimitStore.get(key) || [];
+  timestamps = timestamps.filter((t) => t > cutoff);
+
+  if (timestamps.length >= maxRequests) {
+    const oldest = timestamps[0];
+    const retryAfter = Math.ceil(Math.max(1000, oldest + windowMs - now) / 1000);
+    res.setHeader("X-RateLimit-Limit", String(maxRequests));
+    res.setHeader("X-RateLimit-Remaining", "0");
+    res.setHeader("Retry-After", String(retryAfter));
+    res.status(429).json({
+      error: "Too many requests. Please try again later.",
+      retryAfterSeconds: retryAfter,
+    });
+    return false;
+  }
+
+  timestamps.push(now);
+  rateLimitStore.set(key, timestamps);
+  res.setHeader("X-RateLimit-Limit", String(maxRequests));
+  res.setHeader("X-RateLimit-Remaining", String(Math.max(0, maxRequests - timestamps.length)));
+  return true;
+}
+
+
 const BLOCKED_DOMAINS = new Set([
   "b.com", "a.com", "c.com", "d.com", "e.com", "f.com",
   "test.com", "fake.com", "dummy.com", "asdf.com", "qwerty.com",
@@ -182,6 +281,10 @@ export default async function handler(req: any, res: any) {
   const guideId = resolveGuide(req.body?.guide);
   if (!guideId) return res.status(400).json({ error: "Unknown PDF guide." });
   const guide = GUIDES[guideId];
+
+  if (!(await enforceRateLimit(req, res, "newsletter", { maxRequests: 5, windowSeconds: 600 }))) {
+    return;
+  }
 
   try {
     const brevoResponse = await fetch("https://api.brevo.com/v3/contacts", {

@@ -42,7 +42,7 @@ function Step({number, title, why, verify, children}: StepProps) {
 
 export function PdfRagSemanticProjectPage() {
   useEffect(() => {
-    document.title = "Build a Semantic PDF RAG Assistant — Complete Advanced Handbook | LearnMLAcademy";
+    document.title = "Semantic PDF RAG Assistant Handbook | LearnMLAcademy";
     const description = "Build semantic PDF search with local MiniLM ONNX embeddings, token chunking, cosine similarity, reranking, citations, a working Streamlit app and 53 engineering tests.";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", description);

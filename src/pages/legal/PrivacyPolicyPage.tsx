@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 export function PrivacyPolicyPage() {
   useEffect(() => {
-    document.title = 'Privacy Policy | LearnMLAcademy';
+    document.title = 'Privacy Policy | ML Academy';
     let meta = document.querySelector('meta[name="description"]') as HTMLMetaElement | null;
-    if (meta) meta.setAttribute('content', 'Read the LearnMLAcademy Privacy Policy covering data collection, cookies, Google Analytics, and third-party advertising practices.');
+    if (meta) meta.setAttribute('content', 'Read the ML Academy Privacy Policy covering data collection, cookies, Google Analytics, and third-party advertising practices.');
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
     if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
     canonical.setAttribute('href', 'https://www.learnmlacademy.com/privacy');
@@ -42,7 +42,7 @@ export function PrivacyPolicyPage() {
         <section>
           <h2 className="text-2xl font-bold text-indigo-800 mb-4">3. Use of Cookies and Third-Party Advertising</h2>
           <p>
-            This website uses cookies to personalize content and analyze traffic. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to LearnMLAcademy or other websites on the Internet.
+            This website uses cookies to personalize content and analyze traffic. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to Learn ML Academy or other websites on the Internet.
           </p>
           <p className="mt-4">
             Google's use of advertising cookies (such as DoubleClick) enables it and its partners to serve ads to our visitors based on their visit to our site and/or other sites across the Web.
@@ -87,7 +87,7 @@ export function PrivacyPolicyPage() {
             If you have any questions about this Privacy Policy, our data practices, or wish to exercise your data rights, please contact us at:
           </p>
           <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <p className="font-semibold text-slate-800">LearnMLAcademy Editorial & Privacy Desk</p>
+            <p className="font-semibold text-slate-800">Learn ML Academy Editorial & Privacy Desk</p>
             <p className="mt-1 text-slate-600">Email: <a href="mailto:machinelearningacademy83@gmail.com" className="text-indigo-600 font-medium hover:underline">machinelearningacademy83@gmail.com</a></p>
             <p className="mt-1 text-slate-600">Contact Page: <a href="/contact" className="text-indigo-600 font-medium hover:underline">learnmlacademy.com/contact</a></p>
           </div>

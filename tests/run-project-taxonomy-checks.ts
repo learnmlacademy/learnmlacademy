@@ -57,4 +57,34 @@ for (const project of projectPortfolio) {
   assert.equal(project.status, 'ready', `Project ${project.id} must be ready`);
 }
 
+// 3. Verify Starters and Prerequisite Resolution
+import fs from 'node:fs';
+import path from 'node:path';
+
+const manifestRaw = fs.readFileSync(path.resolve('public/project-starters/manifest.json'), 'utf8');
+const manifest = JSON.parse(manifestRaw);
+assert.equal(manifest.length, 12, 'Manifest must contain 12 starter entries');
+for (const project of projectPortfolio) {
+  const item = manifest.find((m: any) => m.project === project.id);
+  assert(item, `Manifest missing starter entry for ${project.id}`);
+  const zipPath = path.resolve(`public/project-starters/${project.id}.zip`);
+  assert(fs.existsSync(zipPath), `Starter archive missing: ${project.id}.zip`);
+  const stat = fs.statSync(zipPath);
+  assert(stat.size > 1000, `Starter archive too small or empty: ${project.id}.zip`);
+  assert.equal(stat.size, item.bytes, `Starter archive size mismatch for ${project.id}.zip`);
+}
+
+// 4. Verify all Prerequisite URLs in CorePrerequisitesCard resolve to valid lessons
+const prereqSource = fs.readFileSync(path.resolve('src/components/navigation/CorePrerequisitesCard.tsx'), 'utf8');
+const urls = [...prereqSource.matchAll(/url:\s*\"([^\"]+)\"/g)].map(m => m[1]);
+assert(urls.length > 0, 'Must have prerequisite URLs in CorePrerequisitesCard');
+
+for (const url of urls) {
+  const slugMatch = url.match(/^\/learn\/([a-zA-Z0-9-]+)$/);
+  assert(slugMatch, `Prerequisite URL ${url} is not a valid /learn/ route`);
+  const topic = getTopicById(slugMatch[1]);
+  assert(topic, `Prerequisite slug ${slugMatch[1]} does not resolve to any curriculum lesson`);
+}
+
 console.log('ALL PROJECT TAXONOMY CHECKS PASS');
+

@@ -51,7 +51,7 @@ const allFiles: Array<[string, string]> = [
 
 export function AIResearchAssistantProjectPage() {
   useEffect(() => {
-    document.title = 'AI Research Assistant Project — Agent Tools and Citations | LearnMLAcademy';
+    document.title = 'AI Research Assistant: Agent Tools & Citations | LearnMLAcademy';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, exact citations, tests and Streamlit.');
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

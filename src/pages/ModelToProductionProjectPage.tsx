@@ -29,7 +29,7 @@ export function ModelToProductionProjectPage() {
   const project = projectPortfolioById['model-to-production'];
 
   useEffect(() => {
-    document.title = 'Model to Production Project — FastAPI, Docker, CI, Drift & Rollback | LearnMLAcademy';
+    document.title = 'Model to Production: FastAPI, Docker & CI | LearnMLAcademy';
     const description = 'Take a trained churn model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift checks and rollback.';
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {

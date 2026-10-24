@@ -74,8 +74,8 @@ custom = {
 
     # Module 12 (Large Language Models & RAG)
     "rag": (
-        "Retrieval-Augmented Generation (RAG) in Python: Architecture, Embeddings & Code | LearnMLAcademy",
-        "Build Retrieval-Augmented Generation (RAG) systems with vector search"
+        "Retrieval-Augmented Generation (RAG) Architecture | ML Academy",
+        "Understand Retrieval-Augmented Generation (RAG): indexing vs query phases, source attribution, failure boundaries, diagrams, and self-check quiz"
     ),
     "llm-intro": (
         "What Are Large Language Models? Architecture, Scaling & 2026 Guide | LearnMLAcademy",

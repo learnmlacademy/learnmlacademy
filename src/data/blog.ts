@@ -123,6 +123,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "xgboost-vs-random-forest",
     title: "XGBoost vs Random Forest: Which Should You Choose?",
+    seoTitle: "XGBoost vs Random Forest: Which Should You Choose? | ML Academy",
     excerpt: "Compare XGBoost and Random Forest, understand how they differ, when to use each model, and how to tune them effectively with practical code examples.",
     category: "Algorithms",
     readTime: 11,
