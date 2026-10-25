@@ -14,7 +14,12 @@ function onlyMatch(html, pattern, label) {
 
 function verifyPage(html, page) {
   const head = onlyMatch(html, /<head>([^]*?)<\/head>/gi, 'head');
-  assert.equal(onlyMatch(head, /<title>([^]*?)<\/title>/gi, 'title'), escapeHtml(page.title));
+  const actualTitle = onlyMatch(head, /<title>([^]*?)<\/title>/gi, 'title');
+  assert.equal(actualTitle, escapeHtml(page.title));
+  assert(
+    page.title.length <= 60,
+    `SEO Title regression: Title exceeds 60 characters for route ${page.route} (${page.title.length} chars):\n  Actual Title: "${page.title}"`
+  );
   const description = onlyMatch(head, /<meta\b[^>]*name="description"[^>]*content="([^"]*)"[^>]*>/gi, 'description');
   assert.equal(description, escapeHtml(page.description));
   const canonicals = [...head.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi)];
@@ -90,6 +95,7 @@ try {
   const lessonFiles = (await fs.readdir('dist/learn')).filter(name => name.endsWith('.html'));
   assert.equal(lessonFiles.length, 167, 'Expected exactly 167 generated canonical lesson files');
   assert.equal(new Set(lessons.map(page => page.title)).size, 167, 'Lesson SEO titles must be unique');
+  assert.equal(new Set(pages.map(page => page.title)).size, pages.length, 'All page SEO titles across the site must be unique');
   const failures = [];
   for (const page of pages) {
     try {
