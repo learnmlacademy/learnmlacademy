@@ -72,6 +72,10 @@ function verifyPage(html, page) {
     assert.equal(article.url, page.canonical);
     assert.equal(article.headline, page.title);
     assert.equal(article.description, page.description);
+    assert.equal(article.dateModified, page.dateModified, `dateModified mismatch for ${page.route}: expected ${page.dateModified}, got ${article.dateModified}`);
+    if (page.route === '/learn/rag') {
+      assert.equal(article.dateModified, '2026-10-16', `RAG dateModified must be 2026-10-16, got ${article.dateModified}`);
+    }
     const breadcrumb = schema['@graph'].find(item => item['@type'] === 'BreadcrumbList');
     assert.equal(breadcrumb?.itemListElement.at(-1).item, page.canonical);
     assert.equal(breadcrumb?.itemListElement.at(-2).name, page.category.replace(/^\d+\.\s*/, ''));

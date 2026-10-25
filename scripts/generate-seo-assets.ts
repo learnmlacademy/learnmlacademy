@@ -4,7 +4,7 @@ import { curriculum } from '../src/data/curriculum.ts';
 import { projectPortfolio } from '../src/data/projectPortfolio.ts';
 import { blogPosts } from '../src/data/blog.ts';
 import { interviewHandbooks, type InterviewHandbookId } from '../src/data/interviewHandbooks.ts';
-import { getSEOData } from '../src/utils/seo.ts';
+import { getSEOData, getTopicDateModified } from '../src/utils/seo.ts';
 
 const BASE_URL = 'https://www.learnmlacademy.com';
 const TODAY = '2026-03-28';
@@ -31,71 +31,6 @@ const staticCorePages: SitemapEntry[] = [
   { url: '/terms', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
   { url: '/disclaimer', lastmod: '2026-01-01', changefreq: 'weekly', priority: '0.3' },
 ];
-
-const verifiedTopicLastmods: Record<string, string[]> = {
-  '2026-09-28': [
-    'agentic-ai-intro',
-    'tool-calling',
-    'building-ai-agent',
-    'planning-reflection',
-    'agent-context-engineering',
-    'agent-memory',
-    'agent-state-graphs',
-    'durable-long-running-agents',
-    'agentic-rag',
-    'multi-agent-systems',
-    'model-context-protocol',
-    'agent-frameworks',
-    'browser-computer-use-agents',
-    'agent-security',
-    'agent-evaluation-safety',
-    'agent-observability-deployment',
-  ],
-  '2026-09-27': [
-    'generative-ai-intro',
-    'generative-vs-discriminative',
-    'how-generative-models-learn',
-    'vae',
-    'gans',
-    'diffusion-models',
-    'stable-latent-diffusion',
-    'controlling-diffusion-models',
-    'finetuning-image-models',
-    'multimodal-ai',
-    'audio-music-video-generation',
-    'synthetic-data',
-    'evaluating-generative-models',
-    'responsible-generative-ai',
-    'choosing-generative-model',
-    'building-genai-apps',
-    'genai-deployment',
-    'llm-intro',
-    'tokenization-embeddings',
-    'transformers-attention',
-    'text-generation-decoding',
-    'prompt-engineering',
-    'pretraining-finetuning',
-    'instruction-tuning-rlhf',
-    'semantic-search-embeddings',
-    'vector-databases',
-    'advanced-rag',
-    'llm-evaluation',
-    'llm-hallucinations-safety',
-    'reasoning-models',
-    'efficient-llm-serving',
-    'llmops',
-  ],
-  '2026-10-16': [
-    'rag',
-  ],
-};
-
-const topicLastmodMap = new Map<string, string>();
-for (const [date, ids] of Object.entries(verifiedTopicLastmods)) {
-  for (const id of ids) {
-    topicLastmodMap.set(id, date);
-  }
-}
 
 const allTopics = curriculum.flatMap(c => c.subtopics);
 
@@ -125,7 +60,7 @@ const sitemapEntries: SitemapEntry[] = [
   })),
   ...allTopics.map(t => ({
     url: `/learn/${t.id}`,
-    lastmod: topicLastmodMap.get(t.id) || TODAY,
+    lastmod: getTopicDateModified(t.id),
     changefreq: 'weekly' as const,
     priority: '0.8',
   })),

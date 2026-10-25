@@ -1,5 +1,6 @@
 import { getQuizzesForTopicId, type QuizQuestion } from '../data/quizzes';
-export { fitMetaDescription, seoData, getSEOData } from './seoData';
+export { fitMetaDescription, seoData, getSEOData, getTopicDateModified } from './seoData';
+import { getTopicDateModified } from './seoData';
 
 const BASE_URL = 'https://www.learnmlacademy.com';
 
@@ -33,6 +34,7 @@ export const getLearningResourceSchema = (
   const educationalLevel = getEducationalLevel(categoryTitle, difficulty);
   const quizzes = getQuizzesForTopicId(topicId) || [];
   const faqQuestions = quizzes.slice(0, 5);
+  const dateModified = getTopicDateModified(topicId);
 
   const graph: any[] = [
     {
@@ -48,7 +50,7 @@ export const getLearningResourceSchema = (
       "isAccessibleForFree": true,
       "image": `${BASE_URL}/og-image.png`,
       "datePublished": "2026-01-15",
-      "dateModified": "2026-03-28",
+      "dateModified": dateModified,
       "timeRequired": "PT12M",
       "mainEntityOfPage": {
         "@type": "WebPage",

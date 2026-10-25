@@ -720,6 +720,66 @@ export const seoData: Record<string, { title: string; description: string }> = {
   }
 };
 
+export const TOPIC_MODIFICATION_DATES: Record<string, string> = {
+  'rag': '2026-10-16',
+  // Agentic AI topics: 2026-09-28
+  'agentic-ai-intro': '2026-09-28',
+  'tool-calling': '2026-09-28',
+  'building-ai-agent': '2026-09-28',
+  'planning-reflection': '2026-09-28',
+  'agent-context-engineering': '2026-09-28',
+  'agent-memory': '2026-09-28',
+  'agent-state-graphs': '2026-09-28',
+  'durable-long-running-agents': '2026-09-28',
+  'agentic-rag': '2026-09-28',
+  'multi-agent-systems': '2026-09-28',
+  'model-context-protocol': '2026-09-28',
+  'agent-frameworks': '2026-09-28',
+  'browser-computer-use-agents': '2026-09-28',
+  'agent-security': '2026-09-28',
+  'agent-evaluation-safety': '2026-09-28',
+  'agent-observability-deployment': '2026-09-28',
+  // Generative AI & LLM topics: 2026-09-27
+  'generative-ai-intro': '2026-09-27',
+  'generative-vs-discriminative': '2026-09-27',
+  'how-generative-models-learn': '2026-09-27',
+  'vae': '2026-09-27',
+  'gans': '2026-09-27',
+  'diffusion-models': '2026-09-27',
+  'stable-latent-diffusion': '2026-09-27',
+  'controlling-diffusion-models': '2026-09-27',
+  'finetuning-image-models': '2026-09-27',
+  'multimodal-ai': '2026-09-27',
+  'audio-music-video-generation': '2026-09-27',
+  'synthetic-data': '2026-09-27',
+  'evaluating-generative-models': '2026-09-27',
+  'responsible-generative-ai': '2026-09-27',
+  'choosing-generative-model': '2026-09-27',
+  'building-genai-apps': '2026-09-27',
+  'genai-deployment': '2026-09-27',
+  'llm-intro': '2026-09-27',
+  'tokenization-embeddings': '2026-09-27',
+  'transformers-attention': '2026-09-27',
+  'text-generation-decoding': '2026-09-27',
+  'prompt-engineering': '2026-09-27',
+  'pretraining-finetuning': '2026-09-27',
+  'instruction-tuning-rlhf': '2026-09-27',
+  'semantic-search-embeddings': '2026-09-27',
+  'vector-databases': '2026-09-27',
+  'advanced-rag': '2026-09-27',
+  'llm-evaluation': '2026-09-27',
+  'llm-hallucinations-safety': '2026-09-27',
+  'reasoning-models': '2026-09-27',
+  'efficient-llm-serving': '2026-09-27',
+  'llmops': '2026-09-27',
+};
+
+export const DEFAULT_TOPIC_DATE_MODIFIED = '2026-03-28';
+
+export function getTopicDateModified(topicId: string): string {
+  return TOPIC_MODIFICATION_DATES[topicId] ?? DEFAULT_TOPIC_DATE_MODIFIED;
+}
+
 export const getSEOData = (topicId: string, defaultTitle: string): { title: string; description: string } => {
   const selected = seoData[topicId] || {
     title: `${defaultTitle} Tutorial for Machine Learning | LearnML`,
@@ -731,3 +791,4 @@ export const getSEOData = (topicId: string, defaultTitle: string): { title: stri
     description: fitMetaDescription(selected.description)
   };
 };
+

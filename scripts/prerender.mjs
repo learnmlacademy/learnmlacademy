@@ -361,6 +361,7 @@ export async function loadPages(vite) {
       return {
         route: `/learn/${topic.id}`, ...meta, kind: 'lesson',
         heading: topic.title, category: topic.category,
+        dateModified: seo.getTopicDateModified(topic.id),
         schema: seo.getLearningResourceSchema(topic.id, meta.title, meta.description, topic.category, topic.difficulty),
       };
     }),
@@ -368,6 +369,7 @@ export async function loadPages(vite) {
       const canonical = `${BASE_URL}/blog/${post.slug}`;
       const title = post.seoTitle ?? `${post.title} | ML Academy Blog`;
       const description = seo.fitMetaDescription(post.excerpt);
+      const postDateModified = post.date || '2026-03-28';
       const blogSchema = JSON.stringify({
         '@context': 'https://schema.org',
         '@graph': [
@@ -384,7 +386,7 @@ export async function loadPages(vite) {
             isAccessibleForFree: true,
             image: `${BASE_URL}/og-image.png`,
             datePublished: post.date,
-            dateModified: '2026-03-28',
+            dateModified: postDateModified,
             timeRequired: `PT${post.readTime || 12}M`,
             author: {
               '@type': 'Person',
