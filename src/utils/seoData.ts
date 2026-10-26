@@ -119,7 +119,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
     "description": "Engineer predictive features, interaction terms, and temporal signals, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "feature-selection": {
-    "title": "Feature Selection & Extraction | LearnMLAcademy",
+    "title": "Feature Selection Techniques | LearnMLAcademy",
     "description": "Select optimal feature subsets using variance thresholds and elimination, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "data-visualization": {
@@ -487,7 +487,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
     "description": "Design production prompts with few-shot examples and output schemas, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "pretraining-finetuning": {
-    "title": "How LLMs Are Pretrained & Trained | LearnMLAcademy",
+    "title": "LLM Pretraining & Fine-Tuning | LearnMLAcademy",
     "description": "Explore how modern foundation LLMs are pretrained at scale on massive compute, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "instruction-tuning-rlhf": {
@@ -587,7 +587,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
     "description": "Secure AI agents against prompt injection, privilege escalation, and loops, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-evaluation-safety": {
-    "title": "Evaluating AI Agents: Benchmarks | LearnMLAcademy",
+    "title": "AI Agent Evaluation & Safety | LearnMLAcademy",
     "description": "Evaluate AI agent performance with trajectory benchmarks and safety metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-observability-deployment": {

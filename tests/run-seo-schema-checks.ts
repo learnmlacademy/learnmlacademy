@@ -31,6 +31,11 @@ for (const [id, data] of Object.entries(seoData)) {
   );
 }
 
+// 1c. Validate specific reviewed titles
+assert.equal(seoData['feature-selection']?.title, 'Feature Selection Techniques | LearnMLAcademy');
+assert.equal(seoData['pretraining-finetuning']?.title, 'LLM Pretraining & Fine-Tuning | LearnMLAcademy');
+assert.equal(seoData['agent-evaluation-safety']?.title, 'AI Agent Evaluation & Safety | LearnMLAcademy');
+
 // 2. Non-RAG lessons do not blanket-inherit the RAG modification date
 const foundationsDate = getTopicDateModified('linear-regression');
 assert.equal(foundationsDate, '2026-03-28', 'Baseline curriculum topics should keep 2026-03-28');
