@@ -28,9 +28,6 @@ export default defineConfig({
           if (id.includes('node_modules/lucide-react/')) {
             return 'vendor-lucide';
           }
-          if (id.includes('node_modules/recharts/') || id.includes('node_modules/d3-')) {
-            return 'vendor-recharts';
-          }
           if (id.includes('agenticTutorialLabs.json') || id.includes('genaiTutorialLabs.json') || id.includes('llmTutorialLabs.json')) {
             return 'modernai-labs-data';
           }

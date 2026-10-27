@@ -14,7 +14,7 @@
     "generate:sitemap": "node generate_sitemap.cjs",
     "prebuild": "node generate_sitemap.cjs",
     "verify:projects": "node scripts/verify-project-portfolio.mjs",
-    "verify:quality": "node scripts/verify-learner-quality.mjs && node --test tests/contact-security.test.mjs && node --test tests/newsletter-security.test.mjs && node --test tests/unified-search.test.mjs && node --test tests/curriculum-numbering.test.mjs && node --test tests/project-taxonomy.test.mjs && node --test tests/homepage-discovery.test.mjs && node --test tests/curriculum-tracks.test.mjs && node --test tests/rate-limiter.test.mjs && node --test tests/seo-schema-consistency.test.mjs"
+    "verify:quality": "node scripts/verify-learner-quality.mjs && node --test tests/contact-security.test.mjs && node --test tests/newsletter-security.test.mjs && node --test tests/unified-search.test.mjs && node --test tests/curriculum-numbering.test.mjs && node --test tests/project-taxonomy.test.mjs && node --test tests/homepage-discovery.test.mjs && node --test tests/curriculum-tracks.test.mjs && node --test tests/rate-limiter.test.mjs && node --test tests/seo-schema-consistency.test.mjs && node --test tests/deferred-recharts.test.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
