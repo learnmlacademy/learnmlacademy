@@ -13,11 +13,11 @@ for (const page of pages) {
   );
   if (['home', 'projects', 'lesson'].includes(page)) {
     const requests = report.audits['network-requests']?.details?.items || [];
-    const eagerRecharts = requests.filter(item => /vendor-recharts|recharts/i.test(item.url || ''));
+    const eagerRecharts = requests.filter(item => /vendor-recharts|recharts|d3-/i.test(item.url || ''));
     assert.equal(
       eagerRecharts.length,
       0,
-      `The unrelated ${page} route downloaded the vendor-recharts chunk.`,
+      `The unrelated ${page} route downloaded recharts or d3 chunks: ${eagerRecharts.map(r => r.url).join(', ')}`,
     );
   }
   const vitals = {};
