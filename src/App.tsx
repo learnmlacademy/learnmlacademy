@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { AppLayout } from './components/layout/AppLayout';
 import { HomePage } from './pages/HomePage';
+import { ProjectsPage } from './pages/ProjectsPage';
 import { ProgressProvider } from './context/ProgressContext';
 import { ProjectLearningSupport } from './components/projects/ProjectLearningSupport';
 
@@ -12,7 +13,6 @@ const CurriculumPage = lazy(() => import('./pages/CurriculumPage').then(module =
 const BlogPage = lazy(() => import('./pages/BlogPage').then(module => ({ default: module.BlogPage })));
 const BlogPostPage = lazy(() => import('./pages/BlogPostPage').then(module => ({ default: module.BlogPostPage })));
 const CheatsheetPage = lazy(() => import('./pages/CheatsheetPage').then(module => ({ default: module.CheatsheetPage })));
-const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(module => ({ default: module.ProjectsPage })));
 const TitanicProjectPage = lazy(() => import('./pages/TitanicProjectPage').then(module => ({ default: module.TitanicProjectPage })));
 const HousePriceProjectPage = lazy(() => import('./pages/HousePriceProjectPage').then(module => ({ default: module.HousePriceProjectPage })));
 const MovieRecommenderProjectPage = lazy(() => import('./pages/MovieRecommenderProjectPage').then(module => ({ default: module.MovieRecommenderProjectPage })));
@@ -63,7 +63,7 @@ export function AppRoutes() {
           <Route path="blog" element={<DeferredRoute><BlogPage /></DeferredRoute>} />
           <Route path="blog/:slug" element={<DeferredRoute><BlogPostPage /></DeferredRoute>} />
           <Route path="cheatsheet" element={<DeferredRoute><CheatsheetPage /></DeferredRoute>} />
-          <Route path="projects" element={<DeferredRoute><ProjectsPage /></DeferredRoute>} />
+          <Route path="projects" element={<ProjectsPage />} />
           <Route path="projects/titanic-survival" element={<DeferredRoute><ProjectLearningSupport projectId="titanic-survival"><TitanicProjectPage /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="projects/house-price" element={<DeferredRoute><ProjectLearningSupport projectId="house-price"><HousePriceProjectPage /></ProjectLearningSupport></DeferredRoute>} />
           <Route path="projects/movie-recommender" element={<DeferredRoute><ProjectLearningSupport projectId="movie-recommender"><MovieRecommenderProjectPage /></ProjectLearningSupport></DeferredRoute>} />
