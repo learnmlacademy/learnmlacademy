@@ -1,15 +1,18 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import { getLearningResourceSchema, getTopicDateModified } from '../src/utils/seo.ts';
+import { getLearningResourceSchema, getTopicDateModified, seoData } from '../src/utils/seo.ts';
 import { curriculum } from '../src/data/curriculum.ts';
 
 // 1. RAG topic schema dateModified matches sitemap lastmod of 2026-10-16
 assert.equal(getTopicDateModified('rag'), '2026-10-16');
 
+const ragTitle = seoData['rag']?.title || 'Retrieval-Augmented Generation (RAG) | LearnMLAcademy';
+assert(ragTitle.length <= 60, `RAG title exceeds 60 chars: ${ragTitle.length}`);
+
 const schemaJson = getLearningResourceSchema(
   'rag',
-  'Retrieval-Augmented Generation (RAG) Architecture | ML Academy',
+  ragTitle,
   'Understand Retrieval-Augmented Generation (RAG): indexing vs query phases, source attribution, failure boundaries, diagrams, and self-check quiz.',
   'Large Language Models',
   'Advanced'
@@ -19,6 +22,19 @@ const schema = JSON.parse(schemaJson);
 const article = schema['@graph']?.find((item: any) => item['@type']?.includes('TechArticle'));
 assert.ok(article, 'Schema must contain TechArticle');
 assert.equal(article.dateModified, '2026-10-16', 'RAG JSON-LD dateModified must be 2026-10-16');
+
+// 1b. Validate all 167 lesson titles in seoData are <= 60 characters
+for (const [id, data] of Object.entries(seoData)) {
+  assert(
+    data.title.length <= 60,
+    `SEO title exceeds 60 characters for topic ${id} (${data.title.length} chars): "${data.title}"`
+  );
+}
+
+// 1c. Validate specific reviewed titles
+assert.equal(seoData['feature-selection']?.title, 'Feature Selection Techniques | LearnMLAcademy');
+assert.equal(seoData['pretraining-finetuning']?.title, 'LLM Pretraining & Fine-Tuning | LearnMLAcademy');
+assert.equal(seoData['agent-evaluation-safety']?.title, 'AI Agent Evaluation & Safety | LearnMLAcademy');
 
 // 2. Non-RAG lessons do not blanket-inherit the RAG modification date
 const foundationsDate = getTopicDateModified('linear-regression');

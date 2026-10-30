@@ -81,7 +81,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "deep-learning-interview-prep-guide",
     title: "Deep Learning Interview Preparation Guide",
-    seoTitle: "Deep Learning Interview Guide | Neural Networks & Transformers",
+    seoTitle: "Deep Learning Interview Guide: Networks & Transformers",
     excerpt: "Prepare for Deep Learning interviews with a structured roadmap covering neural-network fundamentals, CNNs, RNNs, Transformers, training, debugging, and production.",
     category: "Career",
     readTime: 14,
@@ -123,7 +123,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "xgboost-vs-random-forest",
     title: "XGBoost vs Random Forest: Which Should You Choose?",
-    seoTitle: "XGBoost vs Random Forest: Which Should You Choose? | ML Academy",
+    seoTitle: "XGBoost vs Random Forest: Which Should You Choose?",
     excerpt: "Compare XGBoost and Random Forest, understand how they differ, when to use each model, and how to tune them effectively with practical code examples.",
     category: "Algorithms",
     readTime: 11,

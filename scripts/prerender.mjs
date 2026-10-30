@@ -120,7 +120,7 @@ const staticMeta = new Map([
     description: 'Explore the ML Academy learning path from ML foundations to deep learning, Generative AI, LLMs, RAG, AI agents, and production machine learning.',
   }],
   ['/about', {
-    title: 'About LearnMLAcademy — Hands-On AI & Machine Learning Education',
+    title: 'About LearnMLAcademy: AI & Machine Learning Education',
     description: 'Learn about LearnMLAcademy and its beginner-first approach to teaching Machine Learning, Deep Learning, Generative AI, LLMs, and Agentic AI with code.',
   }],
   ['/blog', {
@@ -136,7 +136,7 @@ const staticMeta = new Map([
     description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
   }],
   ['/projects/retail-forecasting', {title: 'Retail Sales Forecasting Handbook | LearnMLAcademy', description: 'Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.'}],
-  ['/projects/disaster-tweets', {title: 'Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
+  ['/projects/disaster-tweets', {title: 'Disaster Tweet NLP Classifier Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
   ['/projects/digit-recognizer', {title: 'Digit Recognizer — Complete CNN Handbook | LearnMLAcademy', description: 'Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.'}],
   ['/projects/titanic-survival', {
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
@@ -147,7 +147,7 @@ const staticMeta = new Map([
     description: 'Build an end-to-end Ames house price predictor from an empty folder to a tested Streamlit app using Python, scikit-learn regression, and XGBoost models.',
   }],
   ['/projects/movie-recommender', {
-    title: 'Movie Recommendation System Project Handbook | LearnMLAcademy',
+    title: 'Movie Recommender System Project Handbook | LearnMLAcademy',
     description: 'Build a Netflix-style educational movie recommender using synthetic ratings, content similarity, collaborative filtering, hybrid ranking, and Streamlit.',
   }],
   ['/projects/credit-card-fraud', {
@@ -167,11 +167,11 @@ const staticMeta = new Map([
     description: 'Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit web interface, and automated tests.',
   }],
   ['/projects/ai-content-creator', {
-    title: 'Build Your Own ChatGPT-Style AI Content Creator | LearnMLAcademy',
+    title: 'ChatGPT-Style AI Content Creator Handbook | LearnMLAcademy',
     description: 'Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests and complete copyable code.',
   }],
   ['/projects/ai-research-assistant', {
-    title: 'AI Research Assistant: Agent Tools & Citations | LearnMLAcademy',
+    title: 'AI Research Assistant Agent Handbook | LearnMLAcademy',
     description: 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, citation verification, tests, and Streamlit.',
   }],
   ['/projects/model-to-production', {

@@ -51,671 +51,671 @@ export const fitMetaDescription = (description: string): string => {
 
 export const seoData: Record<string, { title: string; description: string }> = {
   "what-is-ml": {
-    "title": "What is Machine Learning? Algorithms, Types & Python 2026 Guide | LearnMLAcademy",
+    "title": "What is Machine Learning? | LearnMLAcademy",
     "description": "Understand machine learning definitions, core workflow, and paradigms, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "types-of-ml": {
-    "title": "Types of Machine Learning: Supervised, Unsupervised & RL 2026 Guide | LearnMLAcademy",
+    "title": "Types of Machine Learning | LearnMLAcademy",
     "description": "Master the four main types of machine learning and real applications, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "supervised-learning-intro": {
-    "title": "Supervised Learning in Python: Algorithms, Math & 2026 Guide | LearnMLAcademy",
+    "title": "Supervised Learning Guide | LearnMLAcademy",
     "description": "Learn supervised learning algorithms, labelled datasets, and metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "unsupervised-learning-intro": {
-    "title": "Unsupervised Learning in Python: Clustering & PCA 2026 Guide | LearnMLAcademy",
+    "title": "Unsupervised Learning Guide | LearnMLAcademy",
     "description": "Explore unsupervised learning techniques, clustering, and latent patterns, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "reinforcement-learning-intro": {
-    "title": "Reinforcement Learning Tutorial: MDP, Policy & Python 2026 Guide | LearnMLAcademy",
+    "title": "Reinforcement Learning Intro | LearnMLAcademy",
     "description": "Understand reinforcement learning agents, reward signals, and Q-learning, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "batch-vs-online": {
-    "title": "Batch vs Online Learning in Production: Architecture & 2026 Guide | LearnMLAcademy",
+    "title": "Batch vs Online Learning | LearnMLAcademy",
     "description": "Compare batch training versus streaming online incremental ML updates, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-lifecycle": {
-    "title": "End-to-End Machine Learning Lifecycle: Data to Deployment 2026 Guide | LearnMLAcademy",
+    "title": "Machine Learning Life Cycle | LearnMLAcademy",
     "description": "Follow the complete machine learning lifecycle from data to deployment, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "python-for-ml": {
-    "title": "Python for Machine Learning: NumPy, Pandas & Scikit-Learn 2026 Guide | LearnMLAcademy",
+    "title": "Python for Machine Learning | LearnMLAcademy",
     "description": "Master essential Python programming for machine learning and data science, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "numpy-essentials": {
-    "title": "NumPy Essentials for Machine Learning: Vectorized Arrays & Code | LearnMLAcademy",
+    "title": "NumPy Essentials for ML | LearnMLAcademy",
     "description": "Master NumPy array indexing, broadcasting, matrix math, and operations, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "pandas-essentials": {
-    "title": "Pandas Essentials for Machine Learning: DataFrames, Cleaning & Code | LearnMLAcademy",
+    "title": "Pandas Essentials for ML | LearnMLAcademy",
     "description": "Manipulate DataFrames, clean tabular data, and compute aggregations, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "scikit-learn-essentials": {
-    "title": "Scikit-Learn Essentials in Python: Estimators, Pipelines & Code | LearnMLAcademy",
+    "title": "Scikit-Learn Essentials | LearnMLAcademy",
     "description": "Build scikit-learn preprocessing pipelines, models, and transformers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "eda": {
-    "title": "Exploratory Data Analysis (EDA) in Python: Visualizations & Guide | LearnMLAcademy",
+    "title": "Exploratory Data Analysis (EDA) | LearnMLAcademy",
     "description": "Perform exploratory data analysis with statistical summaries and plots, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "handling-missing-data": {
-    "title": "Handling Missing Data in Python: Imputation, KNN & 2026 Guide | LearnMLAcademy",
+    "title": "Handling Missing Data in ML | LearnMLAcademy",
     "description": "Handle missing data using mean, median, KNN, and iterative imputation, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "encoding-categorical": {
-    "title": "Encoding Categorical Data in Python: One-Hot, Target & Ordinal Guide | LearnMLAcademy",
+    "title": "Encoding Categorical Data | LearnMLAcademy",
     "description": "Encode categorical features with one-hot, target, and ordinal methods, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "bias-variance": {
-    "title": "Bias-Variance Tradeoff in Machine Learning: Math & Python Guide | LearnMLAcademy",
+    "title": "Bias-Variance Tradeoff in ML | LearnMLAcademy",
     "description": "Diagnose bias-variance tradeoff, generalization error, and tradeoffs, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "feature-scaling": {
-    "title": "Feature Scaling in Python: StandardScaler vs MinMaxScaler Guide | LearnMLAcademy",
+    "title": "Feature Scaling: Scalers & Math | LearnMLAcademy",
     "description": "Apply feature scaling with StandardScaler, MinMaxScaler, and RobustScaler, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "feature-engineering": {
-    "title": "Feature Engineering Techniques in Python: Domain Features & Code | LearnMLAcademy",
+    "title": "Feature Engineering Guide | LearnMLAcademy",
     "description": "Engineer predictive features, interaction terms, and temporal signals, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "feature-selection": {
-    "title": "Feature Selection Techniques in Python: Filter, Wrapper & Embedded | LearnMLAcademy",
+    "title": "Feature Selection Techniques | LearnMLAcademy",
     "description": "Select optimal feature subsets using variance thresholds and elimination, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "data-visualization": {
-    "title": "Data Visualization for Machine Learning: Matplotlib & Seaborn in Python | LearnMLAcademy",
+    "title": "Data Visualization for ML | LearnMLAcademy",
     "description": "Create informative data visualizations with Matplotlib, Seaborn, and plots, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "regression-intro": {
-    "title": "Introduction to Regression in Python: Linear, Polynomial & Metrics | LearnMLAcademy",
+    "title": "Regression Algorithms Overview | LearnMLAcademy",
     "description": "Understand continuous target estimation, baseline models, and metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "linear-regression": {
-    "title": "Linear Regression in Python: Math, OLS, Scikit-Learn & 2026 Guide | LearnMLAcademy",
+    "title": "Linear Regression: Math & Code | LearnMLAcademy",
     "description": "Derive linear regression with Ordinary Least Squares and gradient descent, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "gradient-descent": {
-    "title": "Gradient Descent from Scratch in Python: Batch, Mini-Batch & SGD | LearnMLAcademy",
+    "title": "Gradient Descent Optimization | LearnMLAcademy",
     "description": "Implement gradient descent optimization, learning rates, and updates, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "polynomial-regression": {
-    "title": "Polynomial Regression in Python: Degree Selection & Overfitting | LearnMLAcademy",
+    "title": "Polynomial Regression Guide | LearnMLAcademy",
     "description": "Fit polynomial regression curves while preventing high-variance overfitting, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ridge-regression": {
-    "title": "Ridge Regression (L2 Regularization) in Python: Math, Penalty & Code | LearnMLAcademy",
+    "title": "Ridge Regression (L2) Guide | LearnMLAcademy",
     "description": "Constrain regression coefficients using Ridge L2 regularization penalties, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "lasso-regression": {
-    "title": "Lasso Regression (L1 Regularization) in Python: Sparsity & Selection | LearnMLAcademy",
+    "title": "Lasso Regression (L1) Guide | LearnMLAcademy",
     "description": "Perform automated feature selection using Lasso L1 regularization sparsity, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "classification-intro": {
-    "title": "Introduction to Classification in Python: Decision Boundaries & Code | LearnMLAcademy",
+    "title": "Classification Algorithms Guide | LearnMLAcademy",
     "description": "Categorize discrete target classes with decision boundaries and probabilities, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "logistic-regression": {
-    "title": "Logistic Regression in Python: Sigmoid Math, Odds Ratios & Code | LearnMLAcademy",
+    "title": "Logistic Regression: Math & Code | LearnMLAcademy",
     "description": "Master logistic regression, sigmoid activation, and decision boundaries, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "decision-trees": {
-    "title": "Decision Trees in Python: Gini Impurity, Entropy, Pruning & Code | LearnMLAcademy",
+    "title": "Decision Trees: Math & Code | LearnMLAcademy",
     "description": "Construct decision tree classifiers with Gini impurity and cost pruning, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "naive-bayes": {
-    "title": "Naive Bayes Classifier in Python: Bayes Theorem & Probabilities Guide | LearnMLAcademy",
+    "title": "Naive Bayes Classifier Guide | LearnMLAcademy",
     "description": "Apply Bayes theorem with conditional independence assumptions for text, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "knn": {
-    "title": "K-Nearest Neighbors (KNN) in Python: Distance Metrics & Tuning | LearnMLAcademy",
+    "title": "K-Nearest Neighbors (KNN) Guide | LearnMLAcademy",
     "description": "Implement K-Nearest Neighbors classification and Euclidean distance, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "svm": {
-    "title": "Support Vector Machines (SVM) in Python: Kernel Trick & Math Guide | LearnMLAcademy",
+    "title": "Support Vector Machines (SVM) | LearnMLAcademy",
     "description": "Maximize classification margins with Support Vector Machines and kernels, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "random-forest": {
-    "title": "Random Forest Classifier in Python: Out-of-Bag & Feature Importance | LearnMLAcademy",
+    "title": "Random Forest: Ensemble Guide | LearnMLAcademy",
     "description": "Train Random Forest ensembles with bootstrap aggregation and tree bagging, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "bagging": {
-    "title": "Bootstrap Aggregating (Bagging) in Python: Variance Reduction & Code | LearnMLAcademy",
+    "title": "Bagging & Bootstrap Aggregation | LearnMLAcademy",
     "description": "Reduce model variance using bootstrap sampling and parallel bagging estimators, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "boosting": {
-    "title": "Boosting Algorithms in Python: Sequential Residual Learning & Code | LearnMLAcademy",
+    "title": "Boosting Algorithms Overview | LearnMLAcademy",
     "description": "Train sequential boosting ensembles that correct earlier errors iteratively, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "adaboost": {
-    "title": "AdaBoost Classifier in Python: Adaptive Sample Weights & Math Guide | LearnMLAcademy",
+    "title": "AdaBoost Algorithm: Math & Code | LearnMLAcademy",
     "description": "Understand AdaBoost iterative sample weighting and sequential corrections, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "gradient-boosting": {
-    "title": "Gradient Boosting Machines in Python: Residual Learning & Code | LearnMLAcademy",
+    "title": "Gradient Boosting: Math & Code | LearnMLAcademy",
     "description": "Build Gradient Boosting models that fit successive pseudo-residuals, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "xgboost": {
-    "title": "XGBoost in Python: Regularized Trees, Histograms & Fast Code Guide | LearnMLAcademy",
+    "title": "XGBoost Algorithm: Math & Code | LearnMLAcademy",
     "description": "Optimize XGBoost hyperparameters with second-order Taylor expansions, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "kmeans": {
-    "title": "K-Means Clustering in Python: Elbow Method, Silhouette & Code Guide | LearnMLAcademy",
+    "title": "K-Means Clustering: Math & Code | LearnMLAcademy",
     "description": "Cluster unlabelled data with K-Means, inertia curves, and centroid updates, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "hierarchical": {
-    "title": "Hierarchical Clustering in Python: Dendrograms, Agglomerative & Code | LearnMLAcademy",
+    "title": "Hierarchical Clustering Guide | LearnMLAcademy",
     "description": "Build agglomerative hierarchical tree dendrograms and compute linkages, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "dbscan": {
-    "title": "DBSCAN Clustering in Python: Density, Epsilon, MinPts & Noise Guide | LearnMLAcademy",
+    "title": "DBSCAN Clustering: Math & Code | LearnMLAcademy",
     "description": "Discover arbitrary-shaped density clusters and isolate outliers with DBSCAN, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "pca": {
-    "title": "PCA Dimensionality Reduction in Python: Eigenvalues, Variance & Code | LearnMLAcademy",
+    "title": "PCA Dimensionality Reduction | LearnMLAcademy",
     "description": "Reduce high-dimensional feature spaces using Principal Component Analysis, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "tsne": {
-    "title": "t-SNE Dimensionality Reduction in Python: Non-Linear Manifold Guide | LearnMLAcademy",
+    "title": "t-SNE Dimensionality Reduction | LearnMLAcademy",
     "description": "Visualize high-dimensional data clusters with non-linear t-SNE probability maps, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "association-rules": {
-    "title": "Association Rule Mining in Python: Support, Confidence & Lift Guide | LearnMLAcademy",
+    "title": "Association Rule Mining Guide | LearnMLAcademy",
     "description": "Mine associative purchase rules using support, confidence, and lift metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "apriori": {
-    "title": "Apriori Algorithm in Python: Frequent Itemsets & Market Basket Code | LearnMLAcademy",
+    "title": "Apriori Algorithm: Math & Code | LearnMLAcademy",
     "description": "Extract frequent itemsets and association rules with the Apriori algorithm, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "train-test-split": {
-    "title": "Train-Test Split & Stratification in Python: Clean Validation Guide | LearnMLAcademy",
+    "title": "Train-Test Split & Validation | LearnMLAcademy",
     "description": "Partition datasets with stratified sampling to preserve label balances, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "cross-validation": {
-    "title": "K-Fold Cross-Validation in Python: Stratified & TimeSeriesSplit Guide | LearnMLAcademy",
+    "title": "Cross-Validation Strategies | LearnMLAcademy",
     "description": "Evaluate generalization performance using K-Fold and stratified validation, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "overfitting-underfitting": {
-    "title": "Overfitting vs Underfitting in Machine Learning: Diagnosis & Fixes | LearnMLAcademy",
+    "title": "Overfitting vs Underfitting Guide | LearnMLAcademy",
     "description": "Diagnose model variance and bias issues using empirical learning curves, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "cost-functions": {
-    "title": "Machine Learning Cost Functions: Convexity, Optimization & Math Guide | LearnMLAcademy",
+    "title": "Cost & Loss Functions in ML | LearnMLAcademy",
     "description": "Compare convex optimization landscapes and loss functions in machine learning, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "hyperparameter-tuning": {
-    "title": "Hyperparameter Tuning in Python: Bayesian, Optuna & Search Strategies | LearnMLAcademy",
+    "title": "Hyperparameter Tuning in ML | LearnMLAcademy",
     "description": "Optimize machine learning hyperparameters using systematic tuning methods, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "grid-random-search": {
-    "title": "Grid Search vs Random Search in Python: Scikit-Learn Tuning Guide | LearnMLAcademy",
+    "title": "Grid Search vs Random Search | LearnMLAcademy",
     "description": "Compare Grid Search exhaustive exploration against fast Random Search sweeps, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "confusion-matrix": {
-    "title": "Confusion Matrix & Classification Metrics in Python: Precision, Recall | LearnMLAcademy",
+    "title": "Confusion Matrix & Metrics | LearnMLAcademy",
     "description": "Interpret confusion matrices, precision, recall, and harmonic F1-scores, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "roc-auc": {
-    "title": "ROC-AUC Curve Explained in Python: TPR, FPR & Decision Thresholds | LearnMLAcademy",
+    "title": "ROC-AUC Curve Interpretation | LearnMLAcademy",
     "description": "Evaluate binary classifiers across all decision thresholds with ROC curves, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "arima": {
-    "title": "ARIMA & SARIMA in Python: Autoregressive & Moving Average Time Series | LearnMLAcademy",
+    "title": "ARIMA Time Series Forecasting | LearnMLAcademy",
     "description": "Model non-stationary time series using ARIMA differencing and lag parameters, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "moving-average": {
-    "title": "Moving Averages in Python: SMA, EMA & Trend Smoothing Time Series | LearnMLAcademy",
+    "title": "Moving Average for Time Series | LearnMLAcademy",
     "description": "Smooth noisy temporal signals using Simple and Exponential Moving Averages, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "exponential-smoothing": {
-    "title": "Exponential Smoothing in Python: Holt-Winters Forecasting Guide | LearnMLAcademy",
+    "title": "Exponential Smoothing Models | LearnMLAcademy",
     "description": "Forecast trends and seasonal cycles using Holt-Winters exponential smoothing, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "forecasting-basics": {
-    "title": "Time Series Forecasting Basics in Python: Stationarity & Lags Guide | LearnMLAcademy",
+    "title": "Time Series Forecasting Basics | LearnMLAcademy",
     "description": "Understand time-series stationarity, autocorrelation, and lag features, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "semi-supervised": {
-    "title": "Semi-Supervised Learning in Python: Pseudo-Labelling & Label Spread | LearnMLAcademy",
+    "title": "Semi-Supervised Learning Guide | LearnMLAcademy",
     "description": "Leverage large unlabelled datasets with pseudo-labelling and label spreading, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "online-learning": {
-    "title": "Online Incremental Learning in Python: River, SGD & Streaming Data | LearnMLAcademy",
+    "title": "Online Learning & Streaming ML | LearnMLAcademy",
     "description": "Stream machine learning updates continuously using incremental SGD algorithms, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "reinforcement-learning-adv": {
-    "title": "Deep Reinforcement Learning in Python: DQN, Policy Gradients & PPO | LearnMLAcademy",
+    "title": "Advanced Reinforcement Learning | LearnMLAcademy",
     "description": "Implement Deep Q-Networks and policy gradient algorithms for game agents, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "multi-armed-bandits": {
-    "title": "Multi-Armed Bandits in Python: Epsilon-Greedy, UCB & Thompson Sampling | LearnMLAcademy",
+    "title": "Multi-Armed Bandits Guide | LearnMLAcademy",
     "description": "Solve exploration-exploitation trade-offs with UCB algorithms, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "deep-learning-intro": {
-    "title": "Deep Learning Basics in Python: Neural Network Architectures Guide | LearnMLAcademy",
+    "title": "Deep Learning Fundamentals | LearnMLAcademy",
     "description": "Understand deep neural network fundamentals, layers, and representations, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "neural-networks": {
-    "title": "How Neural Networks Learn: Forward Pass, Loss & Weights in Python | LearnMLAcademy",
+    "title": "How Neural Networks Learn | LearnMLAcademy",
     "description": "Follow how artificial neurons compute activations and update synaptic weights, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "math-foundations-deep-learning": {
-    "title": "Math Foundations for Deep Learning: Linear Algebra, Calculus & Code | LearnMLAcademy",
+    "title": "Math for Neural Networks | LearnMLAcademy",
     "description": "Master the linear algebra and multivariate calculus powering neural networks, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "activation-functions": {
-    "title": "Activation Functions in Neural Networks: ReLU, Sigmoid, GeLU in Python | LearnMLAcademy",
+    "title": "Neural Activation Functions | LearnMLAcademy",
     "description": "Compare non-linear activation functions including ReLU, LeakyReLU, and GeLU, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "tensors-frameworks-gpus": {
-    "title": "PyTorch Tensors, CUDA & GPU Acceleration Tutorial: Python Guide | LearnMLAcademy",
+    "title": "Tensors, Frameworks & GPUs | LearnMLAcademy",
     "description": "Manage multidimensional tensors and accelerate training on CUDA GPU hardware, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "loss-functions-deep-learning": {
-    "title": "Deep Learning Loss Functions: Cross-Entropy, MSE & Focal Loss Guide | LearnMLAcademy",
+    "title": "Deep Learning Loss Functions | LearnMLAcademy",
     "description": "Select optimal loss functions for deep regression, classification, and ranking, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "backpropagation": {
-    "title": "Backpropagation from Scratch in Python: Chain Rule Math & Autograd | LearnMLAcademy",
+    "title": "Backpropagation & Autodiff | LearnMLAcademy",
     "description": "Derive backpropagation step by step using the calculus chain rule in Python, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "neural-network-training-loop": {
-    "title": "PyTorch Neural Network Training Loop: Epochs, Batches & Debugging | LearnMLAcademy",
+    "title": "Neural Network Training Loops | LearnMLAcademy",
     "description": "Construct robust PyTorch training loops with validation and gradient tracking, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "deep-learning-optimizers": {
-    "title": "Deep Learning Optimizers: Adam, AdamW, RMSprop & Schedulers in Python | LearnMLAcademy",
+    "title": "Deep Learning Optimizers Guide | LearnMLAcademy",
     "description": "Compare adaptive optimizers including AdamW, momentum, and cosine schedulers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "weight-initialization": {
-    "title": "Weight Initialization & Batch Normalization: Xavier, He & PyTorch | LearnMLAcademy",
+    "title": "Weight Initialization in NNs | LearnMLAcademy",
     "description": "Prevent vanishing gradients with He initialization and Layer Normalization, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "deep-learning-regularization": {
-    "title": "Deep Learning Regularization: Dropout, Weight Decay & Early Stopping | LearnMLAcademy",
+    "title": "Deep Learning Regularization | LearnMLAcademy",
     "description": "Prevent deep neural network overfitting with dropout and weight decay penalties, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "data-augmentation-deep-learning": {
-    "title": "Data Augmentation in PyTorch: Torchvision Image Transforms & Code | LearnMLAcademy",
+    "title": "Deep Learning Data Augmentation | LearnMLAcademy",
     "description": "Expand computer vision training datasets with affine transforms, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "cnn": {
-    "title": "Convolutional Neural Networks (CNNs) in PyTorch: Kernels, Pooling & Code | LearnMLAcademy",
+    "title": "CNNs & Image Classification | LearnMLAcademy",
     "description": "Master convolutional kernels, feature maps, and pooling layers for vision, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "cnn-architectures-resnet": {
-    "title": "Modern CNN Architectures: AlexNet, VGG & ResNet Residuals in PyTorch | LearnMLAcademy",
+    "title": "CNN Architectures: AlexNet to ResNet | LearnMLAcademy",
     "description": "Understand deep residual connections and skip connections in ResNet networks, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "object-detection": {
-    "title": "Object Detection & Segmentation: YOLO, Mask R-CNN & Grad-CAM in Python | LearnMLAcademy",
+    "title": "Object Detection & Segmentation | LearnMLAcademy",
     "description": "Detect bounding boxes and explain convolutional feature maps with Grad-CAM, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "vision-transformers": {
-    "title": "Vision Transformers (ViT) in PyTorch: Patch Embeddings & Self-Attention | LearnMLAcademy",
+    "title": "Vision Transformers (ViT) Guide | LearnMLAcademy",
     "description": "Process image patches with Transformer self-attention using Vision Transformers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "rnn-lstm": {
-    "title": "RNNs, LSTMs and GRUs in PyTorch: Sequential Hidden States & Gates | LearnMLAcademy",
+    "title": "RNNs, LSTMs & GRUs Explained | LearnMLAcademy",
     "description": "Capture long-term temporal dependencies with LSTM and GRU gating mechanisms, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "attention-transformers-deep-learning": {
-    "title": "Seq2Seq Models & Attention Mechanisms in PyTorch: Deep Learning Guide | LearnMLAcademy",
+    "title": "Seq2Seq Models & Attention | LearnMLAcademy",
     "description": "Understand encoder-decoder sequence modeling and Bahdanau attention alignments, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "transformers-deep-learning": {
-    "title": "Transformers for Deep Learning: Positional Encodings & Attention Math | LearnMLAcademy",
+    "title": "Transformers for Deep Learning | LearnMLAcademy",
     "description": "Construct Transformer encoder and decoder stacks with positional encodings, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "autoencoders": {
-    "title": "Autoencoders in PyTorch: Latent Bottlenecks, Reconstruction & Code | LearnMLAcademy",
+    "title": "Autoencoders & Variants Guide | LearnMLAcademy",
     "description": "Compress high-dimensional data into bottleneck latent spaces with autoencoders, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "transfer-learning": {
-    "title": "Transfer Learning & Model Fine-Tuning in PyTorch: Pretrained Weights | LearnMLAcademy",
+    "title": "Transfer Learning & Fine-Tuning | LearnMLAcademy",
     "description": "Adapt pretrained deep vision and language models to downstream tasks with LoRA, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "self-supervised-few-shot-learning": {
-    "title": "Self-Supervised & Few-Shot Learning in Python: Contrastive SimCLR Guide | LearnMLAcademy",
+    "title": "Self-Supervised & Few-Shot Learning | LearnMLAcademy",
     "description": "Train representations without labels using contrastive learning and few shots, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "graph-neural-networks": {
-    "title": "Graph Neural Networks (GNNs) in Python: Message Passing & PyTorch Geometric | LearnMLAcademy",
+    "title": "Graph Neural Networks (GNNs) | LearnMLAcademy",
     "description": "Process relational graph structures with message passing and node embeddings, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "saving-deploying-deep-models": {
-    "title": "Saving & Deploying Deep Learning Models: ONNX, TorchScript & FastAPI | LearnMLAcademy",
+    "title": "Saving & Deploying Deep Models | LearnMLAcademy",
     "description": "Export PyTorch weights to ONNX runtimes and serve low-latency microservices, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "state-space-models": {
-    "title": "State-Space Models (SSMs) & Mamba Architecture in Python: 2026 Guide | LearnMLAcademy",
+    "title": "State-Space Models (Mamba) Guide | LearnMLAcademy",
     "description": "Understand linear State-Space Models (SSMs) and selective Mamba scan layers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "deep-learning-nlp": {
-    "title": "Deep Learning for NLP: Word2Vec, GloVe, FastText & Tokenizers in Python | LearnMLAcademy",
+    "title": "Deep Learning for NLP Guide | LearnMLAcademy",
     "description": "Process natural language text using Word2Vec embeddings and subword tokenizers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "pinn-kan-topological-networks": {
-    "title": "Physics-Informed Neural Networks (PINNs) & KANs in Python: 2026 Guide | LearnMLAcademy",
+    "title": "PINNs, KANs & Topological Networks | LearnMLAcademy",
     "description": "Solve differential equations with PINNs and learnable spline nets, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "generative-ai-intro": {
-    "title": "What is Generative AI? Architecture, Models & Python 2026 Guide | LearnMLAcademy",
+    "title": "What Is Generative AI? | LearnMLAcademy",
     "description": "Discover how Generative AI models synthesize novel text, images, and audio, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "generative-vs-discriminative": {
-    "title": "Generative vs Discriminative Models in Python: Math, Examples & Guide | LearnMLAcademy",
+    "title": "Generative vs Discriminative Models | LearnMLAcademy",
     "description": "Compare generative versus discriminative models with joint and conditional math, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "how-generative-models-learn": {
-    "title": "How Generative Models Learn Data Distributions: 2026 Guide | LearnMLAcademy",
+    "title": "How Generative Models Learn | LearnMLAcademy",
     "description": "Understand how generative models estimate and sample distributions, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "vae": {
-    "title": "Variational Autoencoders (VAEs) in Python: Math, Architecture & Code | LearnMLAcademy",
+    "title": "Variational Autoencoders (VAEs) | LearnMLAcademy",
     "description": "Implement Variational Autoencoders (VAEs) using the reparameterization trick, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "gans": {
-    "title": "Generative Adversarial Networks (GANs) in Python: Architecture & Code | LearnMLAcademy",
+    "title": "Generative Adversarial Networks (GANs) | LearnMLAcademy",
     "description": "Train Generative Adversarial Networks (GANs) using minimax loss and DCGAN code, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "diffusion-models": {
-    "title": "Diffusion Models from Scratch in Python: Math, Noise Schedules & Code | LearnMLAcademy",
+    "title": "Diffusion Models Architecture | LearnMLAcademy",
     "description": "Derive diffusion models from scratch using forward noise and reverse denoising, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "stable-latent-diffusion": {
-    "title": "Stable Diffusion & Latent Architecture in Python: UNet & VAE Guide | LearnMLAcademy",
+    "title": "Stable Diffusion & Latent Diffusion | LearnMLAcademy",
     "description": "Explore Latent Stable Diffusion architectures with UNet denoisers, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "controlling-diffusion-models": {
-    "title": "ControlNet & Guided Diffusion in Python: Architecture & 2026 Guide | LearnMLAcademy",
+    "title": "Controlling Diffusion Models | LearnMLAcademy",
     "description": "Control image generation with ControlNet and edge conditioning, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "finetuning-image-models": {
-    "title": "Fine-Tuning Diffusion Models: LoRA & DreamBooth in Python Guide | LearnMLAcademy",
+    "title": "Fine-Tuning Image Models | LearnMLAcademy",
     "description": "Fine-tune image diffusion models using LoRA weights and DreamBooth, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "multimodal-ai": {
-    "title": "Multimodal Generative AI in Python: CLIP, Vision-Language & Code | LearnMLAcademy",
+    "title": "Multimodal Generative AI | LearnMLAcademy",
     "description": "Connect text and visual modalities using CLIP contrastive encoders, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "audio-music-video-generation": {
-    "title": "AI Audio, Speech & Video Generation: Architecture & Python Guide | LearnMLAcademy",
+    "title": "Audio, Music & Video Generation | LearnMLAcademy",
     "description": "Synthesize realistic audio, speech, music, and video using modern diffusion, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "synthetic-data": {
-    "title": "Synthetic Data Generation in Python: CTGAN, Privacy & 2026 Guide | LearnMLAcademy",
+    "title": "Synthetic Data Generation | LearnMLAcademy",
     "description": "Generate privacy-preserving synthetic tabular and text datasets using CTGAN, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "evaluating-generative-models": {
-    "title": "Evaluating Generative AI: FID, IS, BLEU, ROUGE & Perplexity Guide | LearnMLAcademy",
+    "title": "Evaluating Generative Models | LearnMLAcademy",
     "description": "Evaluate generative image and text models using FID scores and perplexity, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "responsible-generative-ai": {
-    "title": "Responsible Generative AI: Safety, Bias & Watermarking 2026 Guide | LearnMLAcademy",
+    "title": "Responsible Generative AI Guide | LearnMLAcademy",
     "description": "Implement responsible AI governance, synthetic watermarking, and bias detection, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "choosing-generative-model": {
-    "title": "Choosing Generative Models: VAEs vs GANs vs Diffusion 2026 Guide | LearnMLAcademy",
+    "title": "Choosing Generative Models Guide | LearnMLAcademy",
     "description": "Select the optimal generative model architecture based on latency and fidelity, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "building-genai-apps": {
-    "title": "Building GenAI Applications in Python: Architecture, APIs & Code | LearnMLAcademy",
+    "title": "Building GenAI Applications | LearnMLAcademy",
     "description": "Build production Generative AI applications with streaming APIs and caching, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "genai-deployment": {
-    "title": "Deploying Generative AI Applications: vLLM, Streaming & 2026 Guide | LearnMLAcademy",
+    "title": "Deploying Generative AI Models | LearnMLAcademy",
     "description": "Deploy generative AI models to production with auto-scaling systems, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "llm-intro": {
-    "title": "What Are Large Language Models? Architecture, Scaling & 2026 Guide | LearnMLAcademy",
+    "title": "What Are Large Language Models? | LearnMLAcademy",
     "description": "Understand modern Large Language Model architectures and pretraining, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "tokenization-embeddings": {
-    "title": "LLM Tokenization & Embeddings in Python: BPE, RoPE & Context Guide | LearnMLAcademy",
+    "title": "Tokens, Embeddings & Context Windows | LearnMLAcademy",
     "description": "Master Byte-Pair Encoding (BPE) tokenization, rotary embeddings, and context, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "transformers-attention": {
-    "title": "Transformer Architecture & Self-Attention in Python: Math & Code | LearnMLAcademy",
+    "title": "Transformer Architecture for LLMs | LearnMLAcademy",
     "description": "Understand Transformer multi-head self-attention mechanics and QKV math, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "text-generation-decoding": {
-    "title": "LLM Text Generation & Decoding in Python: Beam Search & Top-P Guide | LearnMLAcademy",
+    "title": "LLM Next-Token Prediction & Decoding | LearnMLAcademy",
     "description": "Control LLM text generation using temperature, top-k, top-p, and beam search, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "prompt-engineering": {
-    "title": "Prompt Engineering & Structured Outputs in Python: 2026 Guide | LearnMLAcademy",
+    "title": "Prompt Engineering & Structured Outputs | LearnMLAcademy",
     "description": "Design production prompts with few-shot examples and output schemas, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "pretraining-finetuning": {
-    "title": "How LLMs Are Trained: Pretraining, Compute Scaling & 2026 Guide | LearnMLAcademy",
+    "title": "LLM Pretraining & Fine-Tuning | LearnMLAcademy",
     "description": "Explore how modern foundation LLMs are pretrained at scale on massive compute, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "instruction-tuning-rlhf": {
-    "title": "Fine-Tuning LLMs with LoRA, SFT & RLHF in Python: 2026 Guide | LearnMLAcademy",
+    "title": "Fine-Tuning LLMs: SFT, RLHF & LoRA | LearnMLAcademy",
     "description": "Fine-tune LLMs efficiently using Supervised Fine-Tuning (SFT) and LoRA adapters, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "rag": {
-    "title": "Retrieval-Augmented Generation (RAG) Architecture | ML Academy",
+    "title": "Retrieval-Augmented Generation (RAG) | LearnMLAcademy",
     "description": "Understand Retrieval-Augmented Generation (RAG): indexing vs query phases, source attribution, failure boundaries, diagrams, and self-check quiz."
   },
   "semantic-search-embeddings": {
-    "title": "Semantic Search with Neural Embeddings in Python: 2026 Guide | LearnMLAcademy",
+    "title": "Semantic Search with Embeddings | LearnMLAcademy",
     "description": "Build semantic search engines using dense neural embeddings and cosine, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "vector-databases": {
-    "title": "Vector Databases for LLMs: Pinecone, Qdrant & Milvus 2026 Guide | LearnMLAcademy",
+    "title": "Vector Databases for LLMs | LearnMLAcademy",
     "description": "Select and query vector databases using HNSW indexing and metadata filtering, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "advanced-rag": {
-    "title": "Advanced RAG in Python: Chunking, Reranking & Hybrid Search Guide | LearnMLAcademy",
+    "title": "Advanced RAG: Chunking & Reranking | LearnMLAcademy",
     "description": "Optimize RAG pipelines with chunking, rerankers, and hybrid search, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "llm-evaluation": {
-    "title": "Evaluating LLMs: Benchmarks, MMLU & RAG Triad in Python Guide | LearnMLAcademy",
+    "title": "Evaluating Large Language Models | LearnMLAcademy",
     "description": "Evaluate LLM accuracy using MMLU benchmarks and automated judges, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "llm-hallucinations-safety": {
-    "title": "LLM Hallucinations & Guardrails: NeMo, Llama-Guard & 2026 Guide | LearnMLAcademy",
+    "title": "LLM Hallucinations & Guardrails | LearnMLAcademy",
     "description": "Detect and eliminate LLM hallucinations using guardrails and filters, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "reasoning-models": {
-    "title": "Reasoning Models & Test-Time Compute: Chain-of-Thought 2026 Guide | LearnMLAcademy",
+    "title": "Reasoning Models & Test-Time Compute | LearnMLAcademy",
     "description": "Understand reasoning models, chain-of-thought prompting, and test-time compute, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "efficient-llm-serving": {
-    "title": "Efficient LLM Serving: vLLM, PagedAttention & Quantization Guide | LearnMLAcademy",
+    "title": "Efficient LLM Serving & Inference | LearnMLAcademy",
     "description": "Serve LLMs at scale with vLLM PagedAttention, KV cache reuse, and quantization, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "llmops": {
-    "title": "LLMOps in Production: Evaluation, Tracing, Cost & 2026 Guide | LearnMLAcademy",
+    "title": "LLMOps in Production Guide | LearnMLAcademy",
     "description": "Deploy and monitor enterprise LLM applications with tracing and latency budgets, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agentic-ai-intro": {
-    "title": "What Is Agentic AI? Autonomous Agents vs Workflows: 2026 Guide | LearnMLAcademy",
+    "title": "What Is Agentic AI? Agent Concepts | LearnMLAcademy",
     "description": "Learn autonomous AI agent architectures and deterministic workflows, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "tool-calling": {
-    "title": "AI Agent Tool Calling in Python: Schema Validation, Idempotency & Retries | LearnMLAcademy",
+    "title": "AI Agent Tool Calling Architecture | LearnMLAcademy",
     "description": "Master AI agent tool calling, schema validation, and safe error retries, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "building-ai-agent": {
-    "title": "Build an Autonomous AI Agent from Scratch in Python: Step-by-Step | LearnMLAcademy",
+    "title": "Build an AI Agent from Scratch | LearnMLAcademy",
     "description": "Build an autonomous AI agent from scratch with step-by-step reasoning, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "planning-reflection": {
-    "title": "Agent Planning, ReAct & Reflection in Python: Architecture & Code | LearnMLAcademy",
+    "title": "Agent Planning, ReAct & Reflection | LearnMLAcademy",
     "description": "Implement AI agent planning loops, ReAct reasoning, and self-reflection, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-context-engineering": {
-    "title": "Context Engineering for AI Agents: Budgets & Compaction 2026 Guide | LearnMLAcademy",
+    "title": "Context Engineering for AI Agents | LearnMLAcademy",
     "description": "Optimize AI agent context windows with token budgets and smart compaction, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-memory": {
-    "title": "AI Agent Memory Systems: Short-Term, Long-Term & Vector Memory Guide | LearnMLAcademy",
+    "title": "AI Agent Memory Systems Explained | LearnMLAcademy",
     "description": "Design AI agent memory using short-term state and long-term vector storage, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-state-graphs": {
-    "title": "Agent State Graphs & Workflows in Python: LangGraph 2026 Guide | LearnMLAcademy",
+    "title": "Agent State Graphs & Workflows | LearnMLAcademy",
     "description": "Build reliable agent workflows, cyclical state graphs, and checkpoints, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "durable-long-running-agents": {
-    "title": "Durable & Long-Running AI Agents: Human-in-the-Loop & 2026 Guide | LearnMLAcademy",
+    "title": "Durable & Long-Running AI Agents | LearnMLAcademy",
     "description": "Implement durable long-running AI agents with human-in-the-loop checkpoints, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agentic-rag": {
-    "title": "Agentic RAG in Python: Router, Multi-Hop Search & Self-Correction | LearnMLAcademy",
+    "title": "Agentic RAG Architecture & Router | LearnMLAcademy",
     "description": "Build agentic RAG systems with intelligent routing and verification, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "multi-agent-systems": {
-    "title": "Multi-Agent Systems in Python: Handoffs, Consensus & 2026 Guide | LearnMLAcademy",
+    "title": "Multi-Agent Systems & Handoffs | LearnMLAcademy",
     "description": "Architect multi-agent systems with role delegation, handoffs, and consensus, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "model-context-protocol": {
-    "title": "Model Context Protocol (MCP) Tutorial: AI Agent Interoperability & Python Example | LearnMLAcademy",
+    "title": "Model Context Protocol (MCP) Guide | LearnMLAcademy",
     "description": "Implement Model Context Protocol (MCP) clients and servers for AI tools, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-frameworks": {
-    "title": "AI Agent Frameworks Compared: LangGraph vs CrewAI vs AutoGen Guide | LearnMLAcademy",
+    "title": "AI Agent Frameworks Compared | LearnMLAcademy",
     "description": "Compare top AI agent frameworks including LangGraph, CrewAI, and AutoGen, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "browser-computer-use-agents": {
-    "title": "Browser & Computer-Use AI Agents in Python: Sandboxing 2026 Guide | LearnMLAcademy",
+    "title": "Computer-Use & Browser AI Agents | LearnMLAcademy",
     "description": "Build browser automation and computer-use AI agents with safe sandboxing, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-security": {
-    "title": "AI Agent Security: Prompt Injection, Guardrails & 2026 Guide | LearnMLAcademy",
+    "title": "AI Agent Security & Guardrails | LearnMLAcademy",
     "description": "Secure AI agents against prompt injection, privilege escalation, and loops, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-evaluation-safety": {
-    "title": "Evaluating AI Agents: Trajectory Benchmarks & Safety 2026 Guide | LearnMLAcademy",
+    "title": "AI Agent Evaluation & Safety | LearnMLAcademy",
     "description": "Evaluate AI agent performance with trajectory benchmarks and safety metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agent-observability-deployment": {
-    "title": "AI Agent Observability: Tracing, Latency, Cost & Deployment Guide | LearnMLAcademy",
+    "title": "AI Agent Observability & Tracing | LearnMLAcademy",
     "description": "Monitor production AI agents with distributed tracing, latency, and cost alerts, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-customer-churn": {
-    "title": "Customer Churn Prediction Project: Machine Learning Pipeline in Python | LearnMLAcademy",
+    "title": "Customer Churn Prediction Project | LearnMLAcademy",
     "description": "Build an end-to-end customer churn prediction pipeline with scikit-learn, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-credit-risk": {
-    "title": "Credit Risk Prediction Project: Explainable Machine Learning & SHAP | LearnMLAcademy",
+    "title": "Credit Risk Prediction ML Project | LearnMLAcademy",
     "description": "Predict loan defaults with gradient boosted trees and explainable SHAP values, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-sales-forecasting": {
-    "title": "Sales Forecasting Project in Python: Time-Series Regression & Streamlit | LearnMLAcademy",
+    "title": "Sales Forecasting ML Project | LearnMLAcademy",
     "description": "Forecast multi-store retail sales using lag features and chronological splits, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-image-classification": {
-    "title": "Image Classification Project in PyTorch: ResNet Transfer Learning | LearnMLAcademy",
+    "title": "Image Classification Project | LearnMLAcademy",
     "description": "Train an image classifier from scratch using transfer learning with ResNet, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-genai-app": {
-    "title": "Build a Generative AI Application in Python: LLM APIs & Streamlit | LearnMLAcademy",
+    "title": "Build a Generative AI Application | LearnMLAcademy",
     "description": "Develop an interactive Generative AI application with streaming responses, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-rag-document-qa": {
-    "title": "Build a Document Q&A System with RAG: Vector Search in Python Project | LearnMLAcademy",
+    "title": "Document Q&A RAG System Project | LearnMLAcademy",
     "description": "Construct an enterprise PDF question-answering system using RAG retrieval, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-ai-agent": {
-    "title": "Build an AI Agent with Tools & Memory: End-to-End Python Project | LearnMLAcademy",
+    "title": "Build an AI Agent with Tools | LearnMLAcademy",
     "description": "Implement a fully autonomous AI agent with tool execution and memory state, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "project-multi-agent-research": {
-    "title": "Build a Multi-Agent Research Assistant in Python: Full System Project | LearnMLAcademy",
+    "title": "Multi-Agent Research Assistant Project | LearnMLAcademy",
     "description": "Coordinate multi-agent workflows for automated web research and fact synthesis, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ai-engineering-mlops": {
-    "title": "AI Engineering & MLOps in Production: Notebook to FastAPI Guide | LearnMLAcademy",
+    "title": "AI Engineering & MLOps Overview | LearnMLAcademy",
     "description": "Transition machine learning models from prototype notebooks to production APIs, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-data-feature-pipelines": {
-    "title": "Production ML Data & Feature Pipelines in Python: 2026 Guide | LearnMLAcademy",
+    "title": "ML Data & Feature Pipelines Guide | LearnMLAcademy",
     "description": "Build scalable ML data and feature pipelines with automated schema validation, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "experiment-tracking-model-registry": {
-    "title": "MLflow Experiment Tracking & Model Registry in Python Guide | LearnMLAcademy",
+    "title": "ML Experiment Tracking & Registries | LearnMLAcademy",
     "description": "Track machine learning experiments and manage model versions using MLflow, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "batch-online-inference": {
-    "title": "Batch vs Online vs Streaming ML Inference: Architecture & Code | LearnMLAcademy",
+    "title": "Batch vs Online ML Inference | LearnMLAcademy",
     "description": "Design batch, real-time online, and event streaming inference architectures, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-cicd-continuous-training": {
-    "title": "CI/CD for Machine Learning & Continuous Training (CT) 2026 Guide | LearnMLAcademy",
+    "title": "CI/CD & Continuous Training for ML | LearnMLAcademy",
     "description": "Implement automated CI/CD pipelines and continuous retraining, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-monitoring-drift": {
-    "title": "ML Monitoring & Data Drift Detection in Python: Evidently Guide | LearnMLAcademy",
+    "title": "ML Monitoring & Data Drift Detection | LearnMLAcademy",
     "description": "Detect data drift, concept drift, and performance decay using Evidently metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "production-ai-reliability": {
-    "title": "Production AI Reliability, Cost Budgets & Security 2026 Guide | LearnMLAcademy",
+    "title": "Production AI Reliability & Security | LearnMLAcademy",
     "description": "Ensure production AI system reliability, cost optimization, and API security, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-system-design": {
-    "title": "End-to-End ML/AI System Design: Production Architecture Guide | LearnMLAcademy",
+    "title": "End-to-End ML System Design Guide | LearnMLAcademy",
     "description": "Master end-to-end ML system design interviews with scalable architectures, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ai-data-career-paths": {
-    "title": "AI & Data Career Paths: ML Engineer vs Data Scientist 2026 Guide | LearnMLAcademy",
+    "title": "AI & Data Career Paths Compared | LearnMLAcademy",
     "description": "Navigate high-growth AI and data science career paths, salaries, and skills, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-engineer-roadmap": {
-    "title": "Machine Learning Engineer Roadmap 2026: Skills, Math & Projects | LearnMLAcademy",
+    "title": "ML Engineer Career Roadmap Guide | LearnMLAcademy",
     "description": "Follow the comprehensive 2026 Machine Learning Engineer roadmap, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ai-engineer-roadmap": {
-    "title": "AI Engineer Roadmap 2026: LLMs, RAG, Agents & Production Tools | LearnMLAcademy",
+    "title": "AI Engineer Career Roadmap Guide | LearnMLAcademy",
     "description": "Master the 2026 AI Engineer curriculum covering LLMs, RAG, and agent frameworks, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "genai-llm-engineer-roadmap": {
-    "title": "Generative AI & LLM Engineer Roadmap 2026: Complete Guide | LearnMLAcademy",
+    "title": "GenAI & LLM Engineer Roadmap Guide | LearnMLAcademy",
     "description": "Accelerate your career with the Generative AI and LLM Engineer roadmap, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "data-scientist-roadmap": {
-    "title": "Data Scientist Career Roadmap 2026: Statistics, Python & ML | LearnMLAcademy",
+    "title": "Data Scientist Career Roadmap Guide | LearnMLAcademy",
     "description": "Explore the modern Data Scientist roadmap covering statistics and ML, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "interview-preparation-strategy": {
-    "title": "How to Prepare for AI & ML Technical Interviews: 2026 Guide | LearnMLAcademy",
+    "title": "AI & ML Interview Preparation Strategy | LearnMLAcademy",
     "description": "Prepare effectively for technical AI and machine learning interviews, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-interview-questions": {
-    "title": "Top 100 Machine Learning Interview Questions & Detailed Answers | LearnMLAcademy",
+    "title": "Machine Learning Interview Questions | LearnMLAcademy",
     "description": "Ace machine learning interviews with top 100 solved theory and math questions, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "deep-learning-interview-questions": {
-    "title": "Top Deep Learning Interview Questions & Solved Answers: 2026 Guide | LearnMLAcademy",
+    "title": "Deep Learning Interview Questions | LearnMLAcademy",
     "description": "Master essential Deep Learning interview questions on CNNs and LLMs, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "genai-llm-rag-interview": {
-    "title": "Generative AI, LLM & RAG Interview Questions: Solved 2026 Guide | LearnMLAcademy",
+    "title": "Generative AI & LLM Interview Questions | LearnMLAcademy",
     "description": "Prepare for Generative AI, LLM, and RAG interview rounds with solved questions, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "agentic-ai-interview": {
-    "title": "Top Agentic AI Interview Questions & Architectures: 2026 Guide | LearnMLAcademy",
+    "title": "Agentic AI Interview Questions Guide | LearnMLAcademy",
     "description": "Prepare for Agentic AI interviews covering tool design and memory, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "python-ai-ml-interview": {
-    "title": "Python Coding for Machine Learning Interviews: Solved Problems | LearnMLAcademy",
+    "title": "Python Coding for ML Interviews | LearnMLAcademy",
     "description": "Practice essential Python coding problems asked in machine learning interviews, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "sql-ai-data-interview": {
-    "title": "SQL Coding for Data & AI Interviews: Window Functions & Queries | LearnMLAcademy",
+    "title": "SQL Coding for Data & AI Interviews | LearnMLAcademy",
     "description": "Solve practical SQL interview questions using window functions and aggregations, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "ml-ai-system-design-interview": {
-    "title": "Machine Learning System Design Interview: Framework & Solved Cases | LearnMLAcademy",
+    "title": "ML System Design Interview Guide | LearnMLAcademy",
     "description": "Design scalable ML systems during interviews using proven structural frameworks, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "mlops-production-interview": {
-    "title": "MLOps & Production AI Interview Questions: Debugging Scenarios | LearnMLAcademy",
+    "title": "MLOps & Production ML Interview Questions | LearnMLAcademy",
     "description": "Prepare for MLOps technical interviews with real-world debugging scenarios, with Python code, architecture diagrams, worked examples, and interview quiz."
   },
   "behavioral-project-interview": {
-    "title": "AI/ML Behavioral & Project Deep-Dive Interview: STAR Framework Guide | LearnMLAcademy",
+    "title": "AI/ML Behavioral Interview Guide | LearnMLAcademy",
     "description": "Master behavioral and project deep-dive interviews using the STAR method, with Python code, architecture diagrams, worked examples, and interview quiz."
   }
 };
