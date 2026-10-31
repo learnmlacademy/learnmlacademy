@@ -34,6 +34,9 @@ export default defineConfig({
           if (id.includes('agenticLessonDetails') || id.includes('agenticLessonEnhancements')) {
             return 'modernai-agentic-details';
           }
+          if (id.includes('AgenticAIDiagrams') || id.includes('AgenticTutorialDiagrams')) {
+            return 'modernai-agentic-diagrams';
+          }
           if (id.includes('src/data/quizzes') || id.includes('Quizzes.ts')) {
             return 'data-quizzes';
           }

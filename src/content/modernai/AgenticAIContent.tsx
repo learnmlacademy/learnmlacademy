@@ -7,6 +7,7 @@ import { AgenticVisualFigure } from "../../components/diagrams/AgenticAIDiagrams
 import { agenticLessonDetails, type AgenticTable } from "./agenticLessonDetails";
 import { agenticLessonEnhancements } from "./agenticLessonEnhancements";
 import { agenticReadingFlow } from "./agenticReadingFlow";
+import { AgenticWorkedLab, type AgenticTutorialTopic } from "./AgenticTutorialExpansion";
 import "../textbook.css";
 
 export type AgenticBaseLesson = {
@@ -168,6 +169,8 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
           </ol>
         </section>
       )}
+
+      <AgenticWorkedLab topicId={topicId as AgenticTutorialTopic} />
 
       <Callout role="mistake" title="Common mistake"><p>{lesson.mistake}</p></Callout>
 
