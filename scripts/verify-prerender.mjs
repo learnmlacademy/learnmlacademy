@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import { createPrerenderServer, escapeHtml, loadPages, outputPathForRoute } from './prerender.mjs';
 
@@ -7,18 +8,61 @@ const normalize = value => value.replace(/<!--[^]*?-->/g, '').replace(/\s+/g, ' 
 const text = value => normalize(value.replace(/<script\b[^]*?<\/script>/gi, '').replace(/<[^>]*>/g, ' '));
 
 function decodeHtml(html) {
+  const namedEntities = {
+    '&amp;': '&',
+    '&lt;': '<',
+    '&gt;': '>',
+    '&quot;': '"',
+    '&apos;': "'",
+    '&mdash;': '—',
+    '&ndash;': '–',
+    '&nbsp;': '\u00a0',
+  };
   return html
-    .replaceAll('&amp;', '&')
-    .replaceAll('&lt;', '<')
-    .replaceAll('&gt;', '>')
-    .replaceAll('&quot;', '"')
-    .replaceAll('&#x27;', "'")
-    .replaceAll('&#39;', "'")
-    .replaceAll('&mdash;', '—')
-    .replaceAll('&ndash;', '–');
+    .replace(/&#(x[\da-f]+|\d+);/gi, (entity, code) => {
+      const value = code[0].toLowerCase() === 'x'
+        ? Number.parseInt(code.slice(1), 16)
+        : Number.parseInt(code, 10);
+      return Number.isInteger(value) && value >= 0 && value <= 0x10ffff
+        ? String.fromCodePoint(value)
+        : entity;
+    })
+    .replace(/&(amp|lt|gt|quot|apos|mdash|ndash|nbsp);/gi, entity =>
+      namedEntities[entity.toLowerCase()] ?? entity
+    );
 }
 
-const cleanText = value => normalize(decodeHtml(value.replace(/<script\b[^]*?<\/script>/gi, '').replace(/<[^>]*>/g, ' ')));
+const cleanText = value =>
+  normalize(decodeHtml(value.replace(/<script\b[^]*?<\/script>/gi, '').replace(/<[^>]*>/g, ' ')));
+
+const rawText = value =>
+  decodeHtml(value.replace(/<script\b[^]*?<\/script>/gi, '').replace(/<[^>]*>/g, ''))
+    .replace(/\r\n?/g, '\n');
+
+function extractRenderedCode(figureHtml, topicId, label) {
+  const match = figureHtml.match(/<pre\b[^>]*>[\s\S]*?<code\b[^>]*>([\s\S]*?)<\/code>[\s\S]*?<\/pre>/i);
+  assert(match, topicId + ': Missing pre/code content in the ' + label + ' code block');
+  return rawText(match[1]);
+}
+
+function canonicalQuizJson(value) {
+  const quote = text =>
+    JSON.stringify(text).replace(/[\u007f-\uffff]/g, character =>
+      '\\u' + character.charCodeAt(0).toString(16).padStart(4, '0')
+    );
+  if (Array.isArray(value)) {
+    return '[' + value.map(canonicalQuizJson).join(',') + ']';
+  }
+  if (value && typeof value === 'object') {
+    return '{' + Object.keys(value).sort().map(key =>
+      quote(key) + ':' + canonicalQuizJson(value[key])
+    ).join(',') + '}';
+  }
+  return typeof value === 'string' ? quote(value) : JSON.stringify(value);
+}
+
+const EXPECTED_AGENTIC_QUIZ_SHA256 = '7c1d9ad1b22247ad22c12a3daaecba4a95353fa70579c5958a8b2a357ae62f8d';
+// Update this fingerprint only after deliberate human review of the complete Agentic AI quiz changes.
 
 const AGENTIC_TOPIC_IDS = [
   'agentic-ai-intro',
@@ -70,11 +114,19 @@ function verifyAgenticWorkedLab(html, topicId, labData) {
   );
 
   // B. Learning content
-  assert(labHtml.includes('data-formula-block'), `${topicId}: Missing data-formula-block in lab`);
+  const formulaFigures = [...labHtml.matchAll(/<figure\b(?=[^>]*\bdata-formula-block(?:\s|=|>))[^>]*>([\s\S]*?)<\/figure>/gi)];
+  assert.equal(formulaFigures.length, 1, topicId + ': Expected exactly one formula block; found ' + formulaFigures.length);
+  const formulaExpression = formulaFigures[0][1].match(/<div\b[^>]*>([\s\S]*?)<\/div>/i);
+  assert(formulaExpression, topicId + ': Missing rendered formula expression');
+  assert.equal(
+    cleanText(formulaExpression[1]),
+    cleanText(labData.formula),
+    topicId + ': Rendered formula expression differs from agenticTutorialLabs.json'
+  );
   if (labData.formulaExplanation) {
     assert(
       labPlain.includes(normalize(decodeHtml(labData.formulaExplanation))),
-      `${topicId}: Missing formula explanation`
+      topicId + ': Missing formula explanation'
     );
   }
 
@@ -87,15 +139,30 @@ function verifyAgenticWorkedLab(html, topicId, labData) {
     );
   }
 
-  assert(
-    labPlain.includes('Complete Python Exercise'),
-    `${topicId}: Missing "Complete Python Exercise" title in lab`
+  const codeBlockFigures = [...labHtml.matchAll(/<figure\b(?=[^>]*\bdata-code-block(?:\s|=|>))[^>]*>[\s\S]*?<\/figure>/gi)]
+    .map(match => match[0]);
+  assert.equal(codeBlockFigures.length, 2, topicId + ': Expected exactly two lab code blocks; found ' + codeBlockFigures.length);
+  const exerciseFigure = codeBlockFigures.find(figure =>
+    cleanText(figure).includes('Complete Python Exercise')
   );
-  assert(labHtml.includes('data-code-block'), `${topicId}: Missing data-code-block in lab`);
-
+  const outputFigure = codeBlockFigures.find(figure =>
+    cleanText(figure).includes('Output from This Exact Program')
+  );
+  assert(exerciseFigure, topicId + ': Missing "Complete Python Exercise" code block');
+  assert(outputFigure, topicId + ': Missing "Output from This Exact Program" code block');
   assert(
-    labPlain.includes('Output from This Exact Program'),
-    `${topicId}: Missing "Output from This Exact Program" title in lab`
+    codeBlockFigures.indexOf(exerciseFigure) < codeBlockFigures.indexOf(outputFigure),
+    topicId + ': Python exercise must appear before captured program output'
+  );
+  assert.equal(
+    extractRenderedCode(exerciseFigure, topicId, 'Python exercise'),
+    labData.code.replace(/\r\n?/g, '\n'),
+    topicId + ': Rendered Python exercise differs from agenticTutorialLabs.json'
+  );
+  assert.equal(
+    extractRenderedCode(outputFigure, topicId, 'captured output'),
+    labData.output.replace(/\r\n?/g, '\n'),
+    topicId + ': Rendered captured output differs from agenticTutorialLabs.json'
   );
 
   assert.equal(labData.notes.length, 3, `${topicId}: Expected lab JSON to have 3 notes`);
@@ -113,13 +180,34 @@ function verifyAgenticWorkedLab(html, topicId, labData) {
 
   assert(
     labPlain.includes('From the Exercise to an Application'),
-    `${topicId}: Missing "From the Exercise to an Application" table in lab`
+    topicId + ': Missing "From the Exercise to an Application" table in lab'
   );
-  for (const row of labData.choices) {
-    assert(
-      labPlain.includes(normalize(decodeHtml(row[0]))),
-      `${topicId}: Missing application choice situation: "${row[0]}"`
-    );
+  const choiceTables = [...labHtml.matchAll(/<table\b[^>]*>[\s\S]*?<\/table>/gi)].map(match => match[0]);
+  assert.equal(choiceTables.length, 1, topicId + ': Expected exactly one choices table; found ' + choiceTables.length);
+  const tableHtml = choiceTables[0];
+  const headerRow = tableHtml.match(/<thead\b[^>]*>[\s\S]*?<tr\b[^>]*>([\s\S]*?)<\/tr>[\s\S]*?<\/thead>/i);
+  assert(headerRow, topicId + ': Missing choices table header row');
+  const headers = [...headerRow[1].matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/gi)].map(match => cleanText(match[1]));
+  assert.deepEqual(
+    headers,
+    ['Situation', 'Practical choice', 'Important qualification'],
+    topicId + ': Choices table headers or column count changed'
+  );
+  const body = tableHtml.match(/<tbody\b[^>]*>([\s\S]*?)<\/tbody>/i);
+  assert(body, topicId + ': Missing choices table body');
+  const renderedRows = [...body[1].matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map(rowMatch =>
+    [...rowMatch[1].matchAll(/<t[hd]\b[^>]*>([\s\S]*?)<\/t[hd]>/gi)].map(cellMatch => cleanText(cellMatch[1]))
+  );
+  assert.equal(renderedRows.length, labData.choices.length, topicId + ': Choices row count mismatch');
+  for (let rowIndex = 0; rowIndex < labData.choices.length; rowIndex++) {
+    assert.equal(renderedRows[rowIndex].length, 3, topicId + ': Choices row ' + (rowIndex + 1) + ' must have exactly 3 columns');
+    for (let columnIndex = 0; columnIndex < 3; columnIndex++) {
+      assert.equal(
+        renderedRows[rowIndex][columnIndex],
+        cleanText(labData.choices[rowIndex][columnIndex]),
+        topicId + ': Choices cell mismatch at row ' + (rowIndex + 1) + ', column ' + (columnIndex + 1)
+      );
+    }
   }
 
   assert(
@@ -205,7 +293,16 @@ function verifyAgenticQuizIntegrity(agenticQuizData, expectedTopicIds) {
   assert.equal(
     totalQuestions,
     80,
-    `Expected exactly 80 total Agentic AI quiz questions; found ${totalQuestions}`
+    'Expected exactly 80 total Agentic AI quiz questions; found ' + totalQuestions
+  );
+
+  const actualFingerprint = createHash('sha256')
+    .update(canonicalQuizJson(agenticQuizData), 'utf8')
+    .digest('hex');
+  assert.equal(
+    actualFingerprint,
+    EXPECTED_AGENTIC_QUIZ_SHA256,
+    'Agentic AI quiz content fingerprint changed. Review every quiz change before updating EXPECTED_AGENTIC_QUIZ_SHA256.'
   );
 }
 
