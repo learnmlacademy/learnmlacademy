@@ -12,12 +12,17 @@ import {
   validateBaselineSafety,
   sha256,
 } from './generate-content-preservation-manifest.mjs';
+import {
+  matchMultiset,
+} from './preservation-engine.mjs';
 
 function createMockBaseline() {
   const code1 = 'def fit(X, y):\n    w = np.linalg.pinv(X) @ y\n    return w\n';
+  const dupCode = 'def diag_utility():\n    return True\n';
+
   return {
-    exactCharCount: 1000,
-    normalizedCharCount: 900,
+    exactCharCount: 1200,
+    normalizedCharCount: 1100,
     headings: [
       { level: 'h1', text: 'Linear Regression Guide', count: 1 },
       { level: 'h2', text: 'Mathematical Formulation', count: 1 },
@@ -28,6 +33,18 @@ function createMockBaseline() {
       { text: 'Short step.', count: 1 },
       { text: 'Repeatable observation note.', count: 2 },
     ],
+    listItems: [
+      'Standardize feature inputs prior to computing the pseudo-inverse.',
+      'Initialize model weights with small normal values.',
+      'Duplicate checklist item.',
+      'Duplicate checklist item.',
+    ],
+    captions: [
+      'Figure 1: Training convergence curve across iterations.',
+      'Table 1: Hyperparameter bounds and defaults.',
+      'Repeated figure caption.',
+      'Repeated figure caption.',
+    ],
     codeBlocks: [
       {
         index: 1,
@@ -35,6 +52,20 @@ function createMockBaseline() {
         caption: 'Python fit loop',
         code: code1,
         hash: sha256(code1),
+      },
+      {
+        index: 2,
+        kind: 'figure-code-block',
+        caption: 'Diagnostic utility block',
+        code: dupCode,
+        hash: sha256(dupCode),
+      },
+      {
+        index: 3,
+        kind: 'figure-code-block',
+        caption: 'Diagnostic utility block',
+        code: dupCode,
+        hash: sha256(dupCode),
       },
     ],
     tables: [
@@ -45,10 +76,12 @@ function createMockBaseline() {
         rows: [
           ['OLS', 'Low', 'Fast'],
           ['Ridge', 'Medium', 'Fast'],
+          ['DupRow', 'Identical', 'Constant'],
+          ['DupRow', 'Identical', 'Constant'],
         ],
-        rowCount: 2,
+        rowCount: 4,
         colCount: 3,
-        rawText: 'Feature comparison Model Complexity Speed OLS Low Fast Ridge Medium Fast',
+        rawText: 'Feature comparison Model Complexity Speed OLS Low Fast Ridge Medium Fast DupRow Identical Constant DupRow Identical Constant',
       },
     ],
     formulas: [
@@ -57,12 +90,32 @@ function createMockBaseline() {
         expression: 'y = X w + \\epsilon',
         explanation: 'Where w is parameter vector and epsilon is noise.',
       },
+      {
+        index: 2,
+        expression: 'E = \\frac{1}{2} ||y - X w||^2',
+        explanation: 'Mean squared error loss function.',
+      },
+      {
+        index: 3,
+        expression: 'E = \\frac{1}{2} ||y - X w||^2',
+        explanation: 'Mean squared error loss function.',
+      },
     ],
     figures: [
       {
         index: 1,
         title: 'Residual Plot',
         caption: 'Scatter plot of residuals showing homoscedasticity.',
+      },
+      {
+        index: 2,
+        title: 'Loss Surface',
+        caption: 'Convex quadratic bowl in weight space.',
+      },
+      {
+        index: 3,
+        title: 'Loss Surface',
+        caption: 'Convex quadratic bowl in weight space.',
       },
     ],
     quizzes: [
@@ -82,6 +135,8 @@ function syncNormalizedText(curr) {
   curr.normalizedText = [
     ...curr.headings.map(h => h.text),
     ...curr.paragraphs.map(p => p.text),
+    ...(curr.listItems || []),
+    ...(curr.captions || []),
     ...curr.formulas.map(f => f.expression + ' ' + (f.explanation || '')),
     ...curr.tables.map(t => (t.headers || []).join(' ') + ' ' + (t.rows || []).flat().join(' ')),
   ].join(' ');
@@ -91,8 +146,10 @@ function createMatchingCurrent(baseline) {
   const curr = {
     exactCharCount: baseline.exactCharCount,
     normalizedCharCount: baseline.normalizedCharCount,
-    headings: baseline.headings.flatMap(h => Array(h.count).fill({ level: h.level, text: h.text })),
-    paragraphs: baseline.paragraphs.flatMap(p => Array(p.count).fill({ text: p.text })),
+    headings: baseline.headings.flatMap(h => Array(h.count || 1).fill({ level: h.level, text: h.text })),
+    paragraphs: baseline.paragraphs.flatMap(p => Array(p.count || 1).fill({ text: p.text })),
+    listItems: [...(baseline.listItems || [])],
+    captions: [...(baseline.captions || [])],
     codeBlocks: baseline.codeBlocks.map(c => ({ ...c })),
     tables: baseline.tables.map(t => ({
       ...t,
@@ -107,7 +164,7 @@ function createMatchingCurrent(baseline) {
 }
 
 async function runNegativeTests() {
-  console.log('Running Content-Preservation Guardrail Negative Test Suite...\n');
+  console.log('Running Content-Preservation Guardrail Comprehensive Test Suite...\n');
 
   let passedTests = 0;
   let totalTests = 0;
@@ -125,7 +182,7 @@ async function runNegativeTests() {
     }
   }
 
-  // --- Negative Tests: Rejection Assertions ---
+  // --- Negative Tests: Paragraph Preservation ---
 
   // 1. A deleted paragraph
   runTest('Rejects a deleted paragraph', () => {
@@ -185,12 +242,94 @@ async function runNegativeTests() {
     syncNormalizedText(curr);
     const v = verifyPageContent(curr, base, '/test');
     assert(
-      v.some(m => m.includes('Repeatable observation note.') && m.includes('expected count 2, found 1')),
+      v.some(m => m.includes('Repeatable observation note.') && (m.includes('multiplicity') || m.includes('duplicate'))),
       'Must detect reduction in paragraph multiplicity'
     );
   });
 
-  // 5. A shortened Python code block
+  // --- Negative Tests: List Items Preservation ---
+
+  // 5. A deleted list item
+  runTest('Rejects a deleted list item', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.listItems = curr.listItems.filter(l => !l.includes('Standardize feature inputs'));
+    syncNormalizedText(curr);
+    curr.exactCharCount -= 60;
+    curr.normalizedCharCount -= 60;
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('Baseline list item missing or deleted')), 'Must detect deleted list item');
+  });
+
+  // 6. A shortened or modified list item
+  runTest('Rejects a shortened or modified list item', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.listItems[0] = 'Standardize feature inputs.';
+    syncNormalizedText(curr);
+    curr.exactCharCount -= 25;
+    curr.normalizedCharCount -= 25;
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('Baseline list item was shortened or modified')), 'Must detect modified list item');
+  });
+
+  // 7. A removed duplicate list item (loss of multiplicity)
+  runTest('Rejects a removed duplicate list item (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    const idx = curr.listItems.indexOf('Duplicate checklist item.');
+    curr.listItems.splice(idx, 1);
+    syncNormalizedText(curr);
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('Duplicate checklist item.') && (m.includes('multiplicity') || m.includes('duplicate'))),
+      'Must detect reduction in list item multiplicity'
+    );
+  });
+
+  // --- Negative Tests: Captions Preservation ---
+
+  // 8. A deleted caption
+  runTest('Rejects a deleted caption', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.captions = curr.captions.filter(c => !c.includes('Figure 1: Training convergence'));
+    syncNormalizedText(curr);
+    curr.exactCharCount -= 50;
+    curr.normalizedCharCount -= 50;
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('Baseline caption missing or deleted')), 'Must detect deleted caption');
+  });
+
+  // 9. A shortened or modified caption
+  runTest('Rejects a shortened or modified caption', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.captions[0] = 'Figure 1: Convergence.';
+    syncNormalizedText(curr);
+    curr.exactCharCount -= 25;
+    curr.normalizedCharCount -= 25;
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('Baseline caption was shortened or modified')), 'Must detect modified caption');
+  });
+
+  // 10. A removed duplicate caption (loss of multiplicity)
+  runTest('Rejects a removed duplicate caption (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    const idx = curr.captions.indexOf('Repeated figure caption.');
+    curr.captions.splice(idx, 1);
+    syncNormalizedText(curr);
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('Repeated figure caption.') && (m.includes('multiplicity') || m.includes('duplicate'))),
+      'Must detect reduction in caption multiplicity'
+    );
+  });
+
+  // --- Negative Tests: Code Blocks Preservation ---
+
+  // 11. A shortened Python code block
   runTest('Rejects a shortened Python code block', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -201,7 +340,7 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('code block #1 was shortened or modified')), 'Must detect shortened code');
   });
 
-  // 6. A replaced code block
+  // 12. A replaced code block
   runTest('Rejects a code block replaced with unrelated code', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -212,7 +351,21 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('missing or replaced with unrelated code')), 'Must detect replaced code');
   });
 
-  // 7. A modified table cell
+  // 13. A removed duplicate code block (loss of multiplicity)
+  runTest('Rejects a removed duplicate code block (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.codeBlocks.pop(); // Remove the second duplicate diagnostic block
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('Baseline code block') && (m.includes('multiplicity') || m.includes('duplicate'))),
+      'Must detect duplicate code block deletion'
+    );
+  });
+
+  // --- Negative Tests: Tables Preservation ---
+
+  // 14. A modified table cell
   runTest('Rejects a modified table cell', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -222,18 +375,32 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('has a modified or deleted row')), 'Must detect modified table cell');
   });
 
-  // 8. A deleted table row
+  // 15. A deleted table row
   runTest('Rejects a deleted table row', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
-    curr.tables[0].rows.pop(); // Remove Ridge row
-    curr.tables[0].rowCount = 1;
+    curr.tables[0].rows = curr.tables[0].rows.filter(r => r[0] !== 'Ridge');
+    curr.tables[0].rowCount = 3;
     curr.tables[0].hash = sha256(JSON.stringify({ headers: curr.tables[0].headers, rows: curr.tables[0].rows }));
     const v = verifyPageContent(curr, base, '/test');
     assert(v.some(m => m.includes('rows decreased')), 'Must detect deleted table row');
   });
 
-  // 9. A deleted table column
+  // 16. A removed duplicate table row (loss of multiplicity)
+  runTest('Rejects a removed duplicate table row (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.tables[0].rows.pop(); // Remove one of the DupRow rows
+    curr.tables[0].rowCount = 3;
+    curr.tables[0].hash = sha256(JSON.stringify({ headers: curr.tables[0].headers, rows: curr.tables[0].rows }));
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('table #1') && (m.includes('duplicate row') || m.includes('multiplicity') || m.includes('rows decreased'))),
+      'Must detect duplicate table row removal'
+    );
+  });
+
+  // 17. A deleted table column
   runTest('Rejects a deleted table column', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -245,7 +412,9 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('columns decreased')), 'Must detect deleted table column');
   });
 
-  // 10. A modified mathematical formula
+  // --- Negative Tests: Formulas Preservation ---
+
+  // 18. A modified mathematical formula
   runTest('Rejects a modified mathematical formula', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -254,7 +423,53 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('formula expression missing or modified')), 'Must detect modified formula');
   });
 
-  // 11. A changed quiz option
+  // 19. A removed duplicate formula (loss of multiplicity)
+  runTest('Rejects a removed duplicate formula (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.formulas.pop(); // Remove the second duplicate MSE formula
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('Baseline formula') && (m.includes('multiplicity') || m.includes('duplicate'))),
+      'Must detect duplicate formula deletion'
+    );
+  });
+
+  // 20. A modified formula explanation
+  runTest('Rejects a modified formula explanation', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.formulas[0].explanation = 'Altered noise explanation.';
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('formula explanation for "y = X w + \\epsilon" was modified or deleted')), 'Must detect modified formula explanation');
+  });
+
+  // --- Negative Tests: Figures Preservation ---
+
+  // 21. A deleted figure caption
+  runTest('Rejects a deleted figure caption', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.figures[0].caption = ''; // Caption deleted
+    const v = verifyPageContent(curr, base, '/test');
+    assert(v.some(m => m.includes('caption was removed or modified')), 'Must detect deleted figure caption');
+  });
+
+  // 22. A removed duplicate figure (loss of multiplicity)
+  runTest('Rejects a removed duplicate figure (loss of multiplicity)', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.figures.pop(); // Remove the second duplicate Loss Surface figure
+    const v = verifyPageContent(curr, base, '/test');
+    assert(
+      v.some(m => m.includes('Baseline figure') && (m.includes('multiplicity') || m.includes('duplicate'))),
+      'Must detect duplicate figure deletion'
+    );
+  });
+
+  // --- Negative Tests: Quiz Preservation ---
+
+  // 23. A changed quiz option
   runTest('Rejects a changed quiz option', () => {
     const base = createMockBaseline();
     const currQuizzes = [
@@ -270,7 +485,7 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('option [1] was changed')), 'Must detect changed quiz option');
   });
 
-  // 12. A changed quiz explanation
+  // 24. A changed quiz explanation
   runTest('Rejects a changed quiz explanation', () => {
     const base = createMockBaseline();
     const currQuizzes = [
@@ -286,11 +501,12 @@ async function runNegativeTests() {
     assert(v.some(m => m.includes('explanation was altered')), 'Must detect altered quiz explanation');
   });
 
-  // 13. A deleted heading replaced with ordinary paragraph text
+  // --- Negative Tests: Structural & Multiset Matching Invariants ---
+
+  // 25. A deleted heading replaced with ordinary paragraph text
   runTest('Rejects a deleted heading replaced with ordinary paragraph text', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
-    // Remove <h2>Mathematical Formulation</h2> from headings and append it to paragraphs
     curr.headings = curr.headings.filter(h => h.text !== 'Mathematical Formulation');
     curr.paragraphs.push({ text: 'Mathematical Formulation' });
     const v = verifyPageContent(curr, base, '/test');
@@ -300,16 +516,21 @@ async function runNegativeTests() {
     );
   });
 
-  // 14. A deleted figure caption
-  runTest('Rejects a deleted figure caption', () => {
-    const base = createMockBaseline();
-    const curr = createMatchingCurrent(base);
-    curr.figures[0].caption = ''; // Caption deleted
-    const v = verifyPageContent(curr, base, '/test');
-    assert(v.some(m => m.includes('caption was removed or modified')), 'Must detect deleted figure caption');
+  // 26. Reuse of a single current item to satisfy multiple baseline items
+  runTest('Rejects reuse of one current element to satisfy multiple baseline items', () => {
+    const baselineItems = ['Item A', 'Item A'];
+    const currentItems = ['Item A']; // Only 1 instance available
+    const violations = matchMultiset(
+      baselineItems,
+      currentItems,
+      (b, c) => b === c,
+      (b) => `Missing element: ${b}`
+    );
+    assert.equal(violations.length, 1, 'Second baseline item must fail to match because first consumed the only available item');
+    assert(violations[0].includes('Missing element: Item A'));
   });
 
-  // 15. A missing original route
+  // 27. A missing original route
   runTest('Rejects a missing original baseline route', () => {
     const baselinePages = {
       '/learn/topic-a': {},
@@ -325,7 +546,7 @@ async function runNegativeTests() {
     assert(violations.some(m => m.includes('/learn/topic-b: Route was removed or replaced.')), 'Must detect missing route');
   });
 
-  // 16. A missing downloadable starter archive
+  // 28. A missing downloadable starter archive
   runTest('Rejects a missing or altered downloadable starter archive', async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'lma-asset-test-'));
     try {
@@ -342,7 +563,6 @@ async function runNegativeTests() {
           ],
         },
       };
-      // Do not write file -> test missing file detection
       const violations = await verifyProtectedAssets(mockManifest, tmpDir);
       assert(violations.some(m => m.includes('Missing project starter archive')), 'Must detect missing ZIP');
     } finally {
@@ -350,8 +570,10 @@ async function runNegativeTests() {
     }
   });
 
-  // 17. An unsafe baseline update that removes existing content
-  runTest('Rejects an unsafe baseline update that removes existing content', () => {
+  // --- Negative Tests: Baseline Updater Validation ---
+
+  // 29. Baseline updater rejects character/paragraph reduction
+  runTest('Baseline updater rejects an unsafe baseline update that removes existing content', () => {
     const existingManifest = {
       pages: {
         '/learn/test': {
@@ -364,22 +586,244 @@ async function runNegativeTests() {
     const newManifest = {
       pages: {
         '/learn/test': {
-          exactCharCount: 800, // Reduced characters!
+          exactCharCount: 800,
           normalizedCharCount: 750,
-          paragraphs: [], // Deleted paragraph!
+          paragraphs: [],
         },
       },
     };
     assert.throws(
       () => validateBaselineSafety(existingManifest, newManifest),
       /UNSAFE BASELINE UPDATE REJECTED/,
-      'Must abort unsafe baseline update'
+      'Must abort unsafe baseline update on paragraph deletion'
+    );
+  });
+
+  // 30. Baseline updater rejects changed quiz explanation
+  runTest('Baseline updater rejects changed quiz explanation during baseline update', () => {
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          paragraphs: [{ text: 'P', count: 1 }],
+          quizzes: [
+            {
+              id: 1,
+              question: 'Q?',
+              options: ['A', 'B'],
+              correctAnswerIndex: 0,
+              explanation: 'Original explanation.',
+            },
+          ],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          paragraphs: [{ text: 'P', count: 1 }],
+          quizzes: [
+            {
+              id: 1,
+              question: 'Q?',
+              options: ['A', 'B'],
+              correctAnswerIndex: 0,
+              explanation: 'Tampered explanation.',
+            },
+          ],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /explanation was altered/,
+      'Must abort baseline update when quiz explanation changes'
+    );
+  });
+
+  // 31. Baseline updater rejects changed quiz option
+  runTest('Baseline updater rejects changed quiz option during baseline update', () => {
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          paragraphs: [{ text: 'P', count: 1 }],
+          quizzes: [
+            {
+              id: 1,
+              question: 'Q?',
+              options: ['Option 1', 'Option 2'],
+              correctAnswerIndex: 0,
+              explanation: 'Exp',
+            },
+          ],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          paragraphs: [{ text: 'P', count: 1 }],
+          quizzes: [
+            {
+              id: 1,
+              question: 'Q?',
+              options: ['Option 1 Altered', 'Option 2'],
+              correctAnswerIndex: 0,
+              explanation: 'Exp',
+            },
+          ],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /option \[1\] was changed/,
+      'Must abort baseline update when quiz option changes'
+    );
+  });
+
+  // 32. Baseline updater rejects deleted list item
+  runTest('Baseline updater rejects deleted list item during baseline update', () => {
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          listItems: ['Item 1', 'Item 2'],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          listItems: ['Item 1'],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /Baseline list item missing or deleted/,
+      'Must abort baseline update when list item is deleted'
+    );
+  });
+
+  // 33. Baseline updater rejects deleted caption
+  runTest('Baseline updater rejects deleted caption during baseline update', () => {
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          captions: ['Caption 1', 'Caption 2'],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          captions: ['Caption 1'],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /Baseline caption missing or deleted/,
+      'Must abort baseline update when caption is deleted'
+    );
+  });
+
+  // 34. Baseline updater rejects duplicate code block deletion
+  runTest('Baseline updater rejects duplicate code block deletion during baseline update', () => {
+    const code = 'print(1)\n';
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          codeBlocks: [
+            { index: 1, code, hash: sha256(code), caption: 'C' },
+            { index: 2, code, hash: sha256(code), caption: 'C' },
+          ],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          codeBlocks: [
+            { index: 1, code, hash: sha256(code), caption: 'C' },
+          ],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /Baseline code block.*multiplicity reduced/,
+      'Must abort baseline update when duplicate code block is removed'
+    );
+  });
+
+  // 35. Baseline updater rejects duplicate table row deletion
+  runTest('Baseline updater rejects duplicate table row deletion during baseline update', () => {
+    const existingManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          tables: [
+            {
+              index: 1,
+              headers: ['Col'],
+              rows: [['Dup'], ['Dup']],
+              rowCount: 2,
+              colCount: 1,
+              hash: sha256('tbl'),
+            },
+          ],
+        },
+      },
+    };
+    const newManifest = {
+      pages: {
+        '/learn/test': {
+          exactCharCount: 500,
+          normalizedCharCount: 450,
+          tables: [
+            {
+              index: 1,
+              headers: ['Col'],
+              rows: [['Dup']],
+              rowCount: 1,
+              colCount: 1,
+              hash: sha256('tbl-short'),
+            },
+          ],
+        },
+      },
+    };
+    assert.throws(
+      () => validateBaselineSafety(existingManifest, newManifest),
+      /Baseline table #1 rows decreased/,
+      'Must abort baseline update when duplicate table row is removed'
     );
   });
 
   // --- Positive Tests: Additions Permitted ---
 
-  // Positive 1: New paragraphs are accepted
+  // 36. Positive: New paragraphs are accepted
   runTest('Accepts new paragraphs added to an existing page', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -391,13 +835,26 @@ async function runNegativeTests() {
     assert.equal(v.length, 0, 'Additive paragraphs must pass cleanly');
   });
 
-  // Positive 2: New code blocks are accepted
+  // 37. Positive: New list items and captions are accepted
+  runTest('Accepts new list items and captions added to an existing page', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.listItems.push('Third newly introduced optimization checklist item.');
+    curr.captions.push('Figure 4: Brand new architectural diagram caption.');
+    curr.exactCharCount += 105;
+    curr.normalizedCharCount += 105;
+    syncNormalizedText(curr);
+    const v = verifyPageContent(curr, base, '/test');
+    assert.equal(v.length, 0, 'Additive list items and captions must pass cleanly');
+  });
+
+  // 38. Positive: New code blocks are accepted
   runTest('Accepts new code blocks added to an existing page', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
     const newCode = 'print("A newly added helper block")\n';
     curr.codeBlocks.push({
-      index: 2,
+      index: 4,
       kind: 'figure-code-block',
       caption: 'Diagnostic helper',
       code: newCode,
@@ -409,7 +866,7 @@ async function runNegativeTests() {
     assert.equal(v.length, 0, 'Additive code blocks must pass cleanly');
   });
 
-  // Positive 3: New tables are accepted
+  // 39. Positive: New tables and rows are accepted
   runTest('Accepts new tables added to an existing page', () => {
     const base = createMockBaseline();
     const curr = createMatchingCurrent(base);
@@ -427,7 +884,20 @@ async function runNegativeTests() {
     assert.equal(v.length, 0, 'Additive tables must pass cleanly');
   });
 
-  // Positive 4: New quiz questions are accepted
+  // 40. Positive: New formulas are accepted
+  runTest('Accepts new formulas added to an existing page', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.formulas.push({
+      index: 4,
+      expression: 'L_{ridge} = ||y - X w||^2 + \\lambda ||w||_2^2',
+      explanation: 'Ridge L2 regularized objective.',
+    });
+    const v = verifyPageContent(curr, base, '/test');
+    assert.equal(v.length, 0, 'Additive formulas must pass cleanly');
+  });
+
+  // 41. Positive: New quiz questions are accepted
   runTest('Accepts new quiz questions added to an existing topic', () => {
     const base = createMockBaseline();
     const currQuizzes = [
@@ -444,7 +914,7 @@ async function runNegativeTests() {
     assert.equal(v.length, 0, 'Additive quiz questions must pass cleanly');
   });
 
-  // Positive 5: Additional pages can be added through the controlled baseline-update process
+  // 42. Positive: Additional pages can be added through the controlled baseline-update process
   runTest('Accepts new routes and pages added through controlled baseline evolution', () => {
     const existingManifest = {
       pages: {
@@ -472,7 +942,6 @@ async function runNegativeTests() {
         },
       },
     };
-    // Should pass without throwing!
     validateBaselineSafety(existingManifest, newManifest);
   });
 

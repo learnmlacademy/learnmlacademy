@@ -72,6 +72,38 @@ Run the preservation verification suite:
 
 ```bash
 npm run verify:content-preservation
+npm run test:preservation-negatives
 ```
 
-If any existing page loses characters, paragraphs, headings, code, formulas, tables, or quizzes, the command exits with a non-zero error code and blocks deployment.
+If any existing page loses characters, paragraphs, headings, code, formulas, tables, list items, captions, or quizzes, the command exits with a non-zero error code and blocks deployment.
+
+---
+
+## 5. Final Hardening Architecture & Invariants (Prompt 2B)
+
+### A. Multiset 1-to-1 Matching Engine (`scripts/preservation-engine.mjs`)
+- Replaces loose count checks and unrestricted `Array.find` searches with strict multiset 1-to-1 matching.
+- An element from current content is consumed at most once (`usedCurrentIndices = new Set()`).
+- Identical duplicates in the baseline (such as repeated formula blocks, identical code blocks, repeated captions, duplicate list items, and repeated table rows) require an equal multiplicity in current content.
+- Deleting one duplicate out of multiple identical entries is immediately detected as a violation.
+
+### B. Full Coverage for List Items & Educational Captions
+- All 3,361 list items and 488 captions/annotations across all 201 pages are fingerprinted and matched 1-to-1.
+- Detects deleted, shortened, modified, or reduced multiplicity for list items and captions.
+
+### C. Unified Verifier & Baseline Updater Logic
+- Both `verify-content-preservation.mjs` and `generate-content-preservation-manifest.mjs` share identical comparison logic exported from `preservation-engine.mjs`.
+- Attempting to update the baseline via `validateBaselineSafety` enforces the exact same non-negotiable checks (character thresholds, headings, paragraphs, code, tables, formulas, figures, quizzes, lists, captions, and protected assets). Unsafe updates are strictly rejected.
+
+### D. Private Object Storage Provider Abstraction (`scripts/storage-provider.mjs`)
+- Implements `StorageProvider` interface for protected documents and project starter ZIPs.
+- `LocalStorageProvider`: Active during local development and build verification, verifying files against local disk paths.
+- `PrivateObjectStorageProvider`: Release 1 specification for migrating PDF interview handbooks to private, signed-URL object storage (e.g., S3, Cloud Storage, Cloudflare R2) without exposing public buckets or credentials.
+- All documents retain exact SHA-256 integrity verification regardless of the underlying storage backend.
+
+### E. GitHub Main Branch Protection
+- Configured via GitHub REST API on `main` branch:
+  - Required status checks: `['verify', 'audit', 'browser-check']`
+  - Strict branch update requirement enabled
+  - Enforce admins enabled
+

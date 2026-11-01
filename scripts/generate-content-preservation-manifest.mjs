@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { createPrerenderServer, loadPages, outputPathForRoute } from './prerender.mjs';
+import { compareManifestSafety } from './preservation-engine.mjs';
 
 export const BASELINE_COMMIT = '4da2ece18a2e359b397c1504fb8585c4df5eb473';
 export const MANIFEST_PATH = path.resolve('quality/content-preservation/manifest.json');
@@ -318,136 +319,7 @@ export async function hashFile(filePath) {
 }
 
 export function validateBaselineSafety(existingManifest, newManifest) {
-  if (!existingManifest || !existingManifest.pages) return;
-
-  const violations = [];
-
-  // 1. Verify that all existing routes remain present
-  for (const [route, oldPage] of Object.entries(existingManifest.pages)) {
-    const newPage = newManifest.pages[route];
-    if (!newPage) {
-      violations.push(`Route removed: ${route}`);
-      continue;
-    }
-
-    // 2. Authored character counts must never decrease
-    if (newPage.exactCharCount < oldPage.exactCharCount) {
-      violations.push(
-        `${route}: Exact character count decreased from ${oldPage.exactCharCount} to ${newPage.exactCharCount}`
-      );
-    }
-    if (newPage.normalizedCharCount < oldPage.normalizedCharCount) {
-      violations.push(
-        `${route}: Normalized character count decreased from ${oldPage.normalizedCharCount} to ${newPage.normalizedCharCount}`
-      );
-    }
-
-    // 3. Headings preservation
-    for (const oldHead of oldPage.headings || []) {
-      const match = (newPage.headings || []).find(
-        h => h.level === oldHead.level && cleanForSearch(h.text) === cleanForSearch(oldHead.text)
-      );
-      if (!match || (match.count || 1) < (oldHead.count || 1)) {
-        violations.push(
-          `${route}: Missing or modified baseline heading [${oldHead.level}]: "${oldHead.text}"`
-        );
-      }
-    }
-
-    // 4. Paragraphs preservation
-    for (const oldPara of oldPage.paragraphs || []) {
-      const match = (newPage.paragraphs || []).find(
-        p => cleanForSearch(p.text) === cleanForSearch(oldPara.text)
-      );
-      if (!match || (match.count || 1) < (oldPara.count || 1)) {
-        violations.push(
-          `${route}: Missing or reduced baseline paragraph: "${oldPara.text.slice(0, 60)}..."`
-        );
-      }
-    }
-
-    // 5. Code blocks preservation
-    for (const oldCode of oldPage.codeBlocks || []) {
-      const match = (newPage.codeBlocks || []).find(c => c.hash === oldCode.hash);
-      if (!match) {
-        violations.push(
-          `${route}: Missing or modified baseline code block #${oldCode.index}`
-        );
-      }
-    }
-
-    // 6. Tables preservation
-    for (const oldTable of oldPage.tables || []) {
-      const match = (newPage.tables || []).find(t => {
-        if (oldTable.headers && Array.isArray(oldTable.headers) && oldTable.headers.length > 0) {
-          return oldTable.headers.every(h => t.headers.some(th => cleanForSearch(th) === cleanForSearch(h)));
-        }
-        if (oldTable.text) {
-          const cleanOld = cleanForSearch(oldTable.text);
-          const tFlat = cleanForSearch(t.rawText || ((t.caption ? t.caption + ' ' : '') + t.headers.join(' ') + ' ' + t.rows.flat().join(' ')));
-          return tFlat.includes(cleanOld.slice(0, 30)) || cleanOld.includes(tFlat.slice(0, 30));
-        }
-        return false;
-      });
-      if (!match) {
-        violations.push(
-          `${route}: Missing baseline table #${oldTable.index}`
-        );
-      }
-    }
-
-    // 7. Formulas preservation
-    for (const oldFormula of oldPage.formulas || []) {
-      const oldExpr = oldFormula.expression || oldFormula.formula || '';
-      const match = (newPage.formulas || []).find(f => {
-        const cleanExpr = cleanForSearch(f.expression);
-        const cleanOld = cleanForSearch(oldExpr);
-        return cleanExpr === cleanOld || f.fullText.includes(cleanOld.slice(0, 30)) || cleanOld.includes(cleanExpr.slice(0, 30));
-      });
-      if (!match) {
-        violations.push(
-          `${route}: Missing baseline formula: "${oldExpr}"`
-        );
-      }
-    }
-
-    // 8. Quizzes preservation
-    for (const oldQuiz of oldPage.quizzes || []) {
-      const match = (newPage.quizzes || []).find(
-        q => q.id === oldQuiz.id || cleanForSearch(q.question) === cleanForSearch(oldQuiz.question)
-      );
-      if (!match) {
-        violations.push(`${route}: Missing quiz question #${oldQuiz.id}`);
-      } else {
-        if (cleanForSearch(match.question) !== cleanForSearch(oldQuiz.question)) {
-          violations.push(`${route}: Quiz question #${oldQuiz.id} text altered`);
-        }
-        if (match.optionCount < (oldQuiz.optionCount || oldQuiz.options?.length || 0)) {
-          violations.push(`${route}: Quiz question #${oldQuiz.id} option count decreased`);
-        }
-        if (match.correctAnswerIndex !== oldQuiz.correctAnswerIndex) {
-          violations.push(`${route}: Quiz question #${oldQuiz.id} correct answer index changed`);
-        }
-      }
-    }
-  }
-
-  // 9. Protected assets preservation
-  if (existingManifest.protectedAssets) {
-    for (const oldZip of existingManifest.protectedAssets.projectStarterZips || []) {
-      const newZip = (newManifest.protectedAssets?.projectStarterZips || []).find(z => z.filename === oldZip.filename);
-      if (!newZip || newZip.sha256 !== oldZip.sha256) {
-        violations.push(`Project starter ZIP ${oldZip.filename} altered or missing`);
-      }
-    }
-    for (const oldPdf of existingManifest.protectedAssets.interviewPdfs || []) {
-      const newPdf = (newManifest.protectedAssets?.interviewPdfs || []).find(p => p.filename === oldPdf.filename);
-      if (!newPdf || newPdf.sha256 !== oldPdf.sha256) {
-        violations.push(`Interview PDF ${oldPdf.filename} altered or missing`);
-      }
-    }
-  }
-
+  const violations = compareManifestSafety(existingManifest, newManifest);
   if (violations.length > 0) {
     throw new Error(
       `UNSAFE BASELINE UPDATE REJECTED with ${violations.length} violation(s):\n` +
@@ -455,6 +327,7 @@ export function validateBaselineSafety(existingManifest, newManifest) {
     );
   }
 }
+
 
 export async function generateManifest() {
   console.log('Generating content-preservation manifest from audited baseline...');
