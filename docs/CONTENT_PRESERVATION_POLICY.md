@@ -107,21 +107,24 @@ quality/content-preservation/
 
 ## 5. Automated Verification & CI Enforcement
 
-The preservation test suite is executed locally and in GitHub Actions via:
+The preservation test suite is executed locally and in CI via:
 
 ```bash
 npm run verify:content-preservation
+npm run test:preservation-negatives
 ```
 
-### Verification Rules Enforced by the Test
-1. **Zero Character Regression**: For every page, `current.exactCharCount >= baseline.exactCharCount` and `current.normalizedCharCount >= baseline.normalizedCharCount`.
-2. **Heading Retention**: Every heading present in the baseline must exist on the current page.
-3. **Paragraph Retention**: Every baseline paragraph must still be present in the page text. If a paragraph is deleted—even if 10,000 characters of unrelated text are added elsewhere—the test detects the missing paragraph and fails.
-4. **Code Block Retention**: `current.codeBlockCount >= baseline.codeBlockCount`. Code examples cannot be shortened or deleted.
-5. **Table Retention**: `current.tableCount >= baseline.tableCount`.
-6. **Formula Retention**: `current.formulaCount >= baseline.formulaCount`.
-7. **Quiz Retention**: All 773 quiz questions across all 167 topics must match their baseline question text, option count, answer index, and explanation.
-8. **Route and Asset Integrity**: All 201 canonical routes, 12 project starter ZIPs, 10 interview PDFs, and 33 legacy redirects must remain intact.
+### Verification Rules Enforced by the Test Suite
+1. **Zero Character Regression**: For every baseline page, `current.exactCharCount >= baseline.exactCharCount` (2,817,056 baseline exact characters) and `current.normalizedCharCount >= baseline.normalizedCharCount` (2,654,695 baseline normalized characters).
+2. **Heading Retention & Hierarchy**: Every heading present in the baseline must exist with its exact heading level (`h1`-`h6`), exact text, and multiplicity preserved. Headings demoted to paragraph text are rejected.
+3. **Paragraph Retention & Multiplicity**: All 11,505 baseline paragraphs—regardless of length—must remain present with multiplicity preserved. Truncation, partial deletion, duplicate removal, and replacement with filler are rejected.
+4. **Code Block Source Integrity**: All 724 code blocks (362 interactive figure code blocks + 362 standalone pre-code blocks) are verified against baseline SHA-256 hashes. Code content, indentation, comments, line breaks, and captions must remain intact.
+5. **Table Structure & Cell Data**: All 504 tables are validated cell-by-cell. No table, row, column, header, or cell value may be deleted or modified. Additive rows and new tables are permitted.
+6. **Mathematical Formula Invariance**: All 47 formula blocks are verified for exact mathematical expressions (symbols, operators, variables) and accompanying parameter definitions.
+7. **Complete Quiz Preservation**: All 773 quiz questions across 167 curriculum topics must retain their exact question ID, question text, option texts in exact order, correct answer index, and full educational explanation.
+8. **Protected Asset Integrity**: All 12 downloadable project starter ZIP archives and 10 interview PDF handbooks are validated against cryptographic SHA-256 digests. Document identity is decoupled from local storage paths, enabling future migration to private object storage with signed URLs.
+9. **Route & Growth Permissiveness**: All 201 baseline routes must remain present. Additional pages and routes may be added and protected through the controlled baseline-evolution workflow.
+10. **Automated Negative Test Guard**: The 22-case negative and positive test suite (`npm run test:preservation-negatives`) proves that any attempted omission or truncation is immediately flagged and blocked.
 
 ---
 

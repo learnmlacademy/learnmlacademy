@@ -8,7 +8,7 @@
 
 ## Executive Summary & Architecture Principles
 
-LearnMLAcademy is a production-grade, zero-cost AI & Machine Learning educational platform consisting of **201 canonical static pages** (167 curriculum lessons, 13 project handbooks across 12 projects, 11 engineering blog guides, and 10 static foundation pages) containing **2,732,393 exact authored characters**, **362 runnable code blocks**, **504 tables**, **47 formula derivations**, **124 visual figure shells**, and **773 verified quiz questions**.
+LearnMLAcademy is a production-grade, zero-cost AI & Machine Learning educational platform consisting of **201 canonical static pages** (167 curriculum lessons across 17 sequential tracks, 13 project handbooks across 12 projects, 11 engineering blog guides, and 10 static foundation pages) containing **2,817,056 exact authored characters** (preserving Python indentation, code line breaks, math operators, block breaks), **2,654,695 normalized prose characters**, **4,015 educational headings**, **11,505 authored paragraphs**, **3,361 list items**, **488 captions**, **724 runnable code blocks** (362 interactive figure code blocks + 362 standalone pre-code blocks), **504 tables**, **47 formula derivations**, **124 visual figure shells**, **773 verified quiz questions**, **12 project starter ZIP archives**, and **10 interview PDF handbooks**.
 
 To transform the platform into a world-class educational resource while upholding the **Absolute Content-Preservation Policy**, engineering work is partitioned into five distinct, sequential releases. Each release is governed by strict entry criteria, verified dependencies, quality gates, and automated regression suites.
 
