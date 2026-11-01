@@ -101,9 +101,12 @@ If any existing page loses characters, paragraphs, headings, code, formulas, tab
 - `PrivateObjectStorageProvider`: Release 1 specification for migrating PDF interview handbooks to private, signed-URL object storage (e.g., S3, Cloud Storage, Cloudflare R2) without exposing public buckets or credentials.
 - All documents retain exact SHA-256 integrity verification regardless of the underlying storage backend.
 
-### E. GitHub Main Branch Protection
+### E. GitHub Main Branch Protection (Prompt 2C Verified)
 - Configured via GitHub REST API on `main` branch:
-  - Required status checks: `['verify', 'audit', 'browser-check']`
-  - Strict branch update requirement enabled
-  - Enforce admins enabled
+  - Required status checks:
+    - `content-preservation` (expected from GitHub Actions `app_id: 15368`)
+    - `audit` (expected from GitHub Actions `app_id: 15368`)
+  - Enforce admins enabled (`enforce_admins: true`)
+  - Full workflow specification and administrator installation steps: see [`quality/content-preservation/CI_GUARDRAILS.md`](./CI_GUARDRAILS.md).
+
 
