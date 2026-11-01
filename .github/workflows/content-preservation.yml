@@ -1,0 +1,49 @@
+name: Content Preservation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: content-preservation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content-preservation:
+    name: content-preservation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies (clean install)
+        run: npm ci
+
+      - name: Verify TypeScript compilation & types
+        run: npm run lint
+
+      - name: Build, Prerender & Run Preservation Guardrails
+        run: npm run build
+
+      - name: Upload evidence on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: content-preservation-failure-evidence
+          path: |
+            dist/
+            quality/
+          retention-days: 7

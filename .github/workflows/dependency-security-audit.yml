@@ -2,11 +2,7 @@ name: npm dependency security audit
 
 on:
   pull_request:
-    paths:
-      - "package.json"
-      - "package-lock.json"
-      - ".github/workflows/dependency-security-audit.yml"
-      - "scripts/report-npm-audit.mjs"
+    branches: [main]
   push:
     branches: [main]
     paths:
