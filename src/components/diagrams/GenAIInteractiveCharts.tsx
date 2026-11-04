@@ -39,7 +39,7 @@ export function MarketComputeExplosionChart() {
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h4 className="text-base font-bold text-slate-900">Historical Compute & Context Growth in Generative AI</h4>
+          <h3 className="text-base font-bold text-slate-900">Historical Compute & Context Growth in Generative AI</h3>
           <p className="text-xs text-slate-600">Training compute scaling (PetaFLOP-days, log-scaled) alongside context window capacity.</p>
         </div>
         <span className="rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700">Compute Frontier</span>

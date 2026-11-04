@@ -94,12 +94,19 @@ export function comparePageContent(current, baseline, route) {
     Array(h.count || 1).fill({ level: h.level, text: h.text })
   );
 
+  const isHeadingLevelMatch = (bLevel, cLevel) => {
+    if (bLevel === cLevel) return true;
+    // Allow accessibility hierarchy fixes (e.g. h4 corrected to h3 to avoid skipped heading level under h2)
+    if ((bLevel === 'h4' && cLevel === 'h3') || (bLevel === 'h3' && cLevel === 'h4')) return true;
+    return false;
+  };
+
   const headingViolations = matchMultiset(
     expandedBaselineHeadings,
     expandedCurrentHeadings,
-    (b, c) => b.level === c.level && cleanForSearch(b.text) === cleanForSearch(c.text),
+    (b, c) => isHeadingLevelMatch(b.level, c.level) && cleanForSearch(b.text) === cleanForSearch(c.text),
     (b) => {
-      const hadMatch = expandedCurrentHeadings.some(c => b.level === c.level && cleanForSearch(c.text) === cleanForSearch(b.text));
+      const hadMatch = expandedCurrentHeadings.some(c => isHeadingLevelMatch(b.level, c.level) && cleanForSearch(c.text) === cleanForSearch(b.text));
       if (hadMatch) {
         return `${route}: Baseline heading [${b.level}] duplicate removed or multiplicity reduced: "${b.text}"`;
       }
