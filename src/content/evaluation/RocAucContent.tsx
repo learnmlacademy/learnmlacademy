@@ -303,7 +303,7 @@ export function RocAucContent() {
 
         <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-8">
           <div className="bg-slate-50 p-4 border-b border-slate-200 flex justify-between items-center">
-            <h4 className="font-bold text-slate-800">ROC Curve & AUC Score</h4>
+            <h3 className="font-bold text-slate-800">ROC Curve & AUC Score</h3>
             <span className="text-xs font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded">Python</span>
           </div>
           <div className="bg-[#1e1e1e] text-[#d4d4d4] p-5 text-sm font-mono overflow-x-auto">

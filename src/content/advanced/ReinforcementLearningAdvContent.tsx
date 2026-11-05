@@ -267,10 +267,10 @@ export function ReinforcementLearningAdvContent() {
       <div className="space-y-6 mb-12">
         <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
           <div className="bg-slate-50 border-b border-slate-200 p-4">
-            <h4 className="font-bold text-indigo-900 flex items-center m-0">
+            <h3 className="font-bold text-indigo-900 flex items-center m-0">
                <PlaySquare className="w-5 h-5 mr-2 text-indigo-600" />
                Implementing Q-Learning Logic
-            </h4>
+            </h3>
           </div>
           <div className="p-0 bg-[#1e1e1e]">
             <pre className="text-[#d4d4d4] font-mono text-sm p-4 overflow-x-auto whitespace-pre-wrap m-0">
@@ -323,9 +323,9 @@ episodes = <span className="text-amber-300">1000</span>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="bg-emerald-50 border-emerald-200 border rounded-xl overflow-hidden shadow-sm">
            <div className="bg-emerald-100 px-6 py-4 border-b border-emerald-200">
-             <h4 className="text-emerald-900 font-bold flex items-center text-xl m-0">
+             <h3 className="text-emerald-900 font-bold flex items-center text-xl m-0">
                Advantages
-             </h4>
+             </h3>
            </div>
            <div className="p-6">
              <ul className="space-y-3 text-emerald-900 m-0 pl-0 list-none text-[15px]">
@@ -339,9 +339,9 @@ episodes = <span className="text-amber-300">1000</span>
 
         <div className="bg-rose-50 border-rose-200 border rounded-xl overflow-hidden shadow-sm">
            <div className="bg-rose-100 px-6 py-4 border-b border-rose-200">
-             <h4 className="text-rose-900 font-bold flex items-center text-xl m-0">
+             <h3 className="text-rose-900 font-bold flex items-center text-xl m-0">
                Disadvantages
-             </h4>
+             </h3>
            </div>
            <div className="p-6">
              <ul className="space-y-3 text-rose-900 m-0 pl-0 list-none text-[15px]">
