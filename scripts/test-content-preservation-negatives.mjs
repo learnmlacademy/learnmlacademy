@@ -985,7 +985,7 @@ async function runNegativeTests() {
     };
     const violations = verifyPageContent(curr, base, '/learn/sample-topic');
     assert(violations.some(message => message.includes('Missing or modified baseline heading [h4]')),
-      \`Expected changed heading text to be rejected, got ${violations.join("; ")}\`);
+      `Expected changed heading text to be rejected, got ${violations.join("; ")}`);
   });
 
   // 45. Negative: deleting a heading is still prohibited.
@@ -1004,7 +1004,7 @@ async function runNegativeTests() {
     };
     const violations = verifyPageContent(curr, base, '/learn/sample-topic');
     assert(violations.some(message => message.includes('Missing or modified baseline heading [h3]')),
-      \`Expected missing heading to be rejected, got ${violations.join("; ")}\`);
+      `Expected missing heading to be rejected, got ${violations.join("; ")}`);
   });
 
   // 46. Positive: semantic heading-level corrections apply consistently across routes.
@@ -1041,7 +1041,7 @@ async function runNegativeTests() {
     };
     const violations = verifyPageContent(curr, base, '/learn/sample-topic');
     assert(violations.some(message => message.includes('duplicate removed or multiplicity reduced')),
-      \`Expected duplicate heading reduction to be rejected, got ${violations.join("; ")}\`);
+      `Expected duplicate heading reduction to be rejected, got ${violations.join("; ")}`);
   });
 
   console.log(`\nAll ${passedTests}/${totalTests} Negative and Positive Test Cases PASSED successfully.`);

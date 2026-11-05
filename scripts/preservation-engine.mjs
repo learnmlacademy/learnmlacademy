@@ -104,9 +104,9 @@ export function comparePageContent(current, baseline, route) {
     (b) => {
       const hadMatch = expandedCurrentHeadings.some(c => cleanForSearch(c.text) === cleanForSearch(b.text));
       if (hadMatch) {
-        return \`${route}: Baseline heading [${b.level}] duplicate removed or multiplicity reduced: "${b.text}"\`;
+        return `${route}: Baseline heading [${b.level}] duplicate removed or multiplicity reduced: "${b.text}"`;
       }
-      return \`${route}: Missing or modified baseline heading [${b.level}]: "${b.text}"\`;
+      return `${route}: Missing or modified baseline heading [${b.level}]: "${b.text}"`;
     }
   );
   violations.push(...headingViolations);
