@@ -140,7 +140,7 @@ export function NaiveBayesContent() {
         <p className="text-blue-800 font-semibold mb-6">
            Posterior = (Likelihood × Prior) / Evidence
         </p>
-        <h4 className="font-bold text-blue-900 mb-3">Terminology</h4>
+        <h3 className="font-bold text-blue-900 mb-3">Terminology</h3>
         <ul className="space-y-4 text-lg text-blue-800">
           <li><strong className="font-mono bg-white px-2 py-1 rounded">P(A|B) Posterior:</strong> Updated probability of class A after observing evidence B.</li>
           <li><strong className="font-mono bg-white px-2 py-1 rounded">P(B|A) Likelihood:</strong> Probability of observing evidence B when class A is true.</li>

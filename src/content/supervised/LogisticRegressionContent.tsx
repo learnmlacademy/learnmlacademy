@@ -166,9 +166,9 @@ export function LogisticRegressionContent() {
       </p>
 
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
-        <h4 className="font-bold text-xl mb-3 flex items-center text-emerald-900">
+        <h3 className="font-bold text-xl mb-3 flex items-center text-emerald-900">
           Simple Beginner Definition
-        </h4>
+        </h3>
         <div className="flex flex-col items-center justify-center space-y-3 font-mono text-emerald-800 font-bold bg-white p-6 rounded border border-emerald-200 shadow-sm">
           <span className="bg-emerald-100 px-4 py-2 rounded">INPUT DATA</span>
           <span className="text-emerald-400">↓</span>
@@ -267,9 +267,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-rose-50 border border-rose-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-rose-900 mb-3">
+          <h3 className="font-bold text-rose-900 mb-3">
             Linear Regression Problem
-          </h4>
+          </h3>
           <p className="text-lg text-rose-800 mb-3">
             Possible continuous outputs:
           </p>
@@ -283,9 +283,9 @@ export function LogisticRegressionContent() {
           </p>
         </div>
         <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-emerald-900 mb-3">
+          <h3 className="font-bold text-emerald-900 mb-3">
             Logistic Regression Solution
-          </h4>
+          </h3>
           <p className="text-lg text-emerald-800 mb-3">
             Uses the Sigmoid Function. We need outputs strictly between:
           </p>
@@ -429,9 +429,9 @@ export function LogisticRegressionContent() {
       </p>
 
       <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm mb-8">
-        <h4 className="text-xl font-bold text-slate-800 mb-4 text-center">
+        <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">
           Linear Equation
-        </h4>
+        </h3>
         <div className="flex justify-center mb-6">
           <p className="text-2xl font-mono text-indigo-700 font-bold bg-white px-6 py-3 rounded shadow-sm border border-indigo-100">
             z = b₀ + b₁x₁ + b₂x₂ + ... + bₙxₙ
@@ -621,9 +621,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         <div className="bg-sky-50 border border-sky-200 p-6 rounded-xl shadow-sm text-center flex flex-col justify-center">
-          <h4 className="text-xl font-bold text-sky-900 mb-6">
+          <h3 className="text-xl font-bold text-sky-900 mb-6">
             Threshold Logic
-          </h4>
+          </h3>
           <div className="font-mono text-lg font-bold space-y-4">
             <div className="bg-white p-3 rounded border border-sky-200 text-sky-800 flex justify-center items-center shadow-sm">
               Probability ≥ 0.5 <span className="mx-4 text-slate-400">→</span>{" "}
@@ -690,9 +690,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl shadow-sm">
-          <h4 className="text-xl font-bold text-indigo-900 mb-4">
+          <h3 className="text-xl font-bold text-indigo-900 mb-4">
             Log Loss Formula
-          </h4>
+          </h3>
           <p className="text-lg text-slate-700 mb-4">
             Unlike Linear Regression, Logistic Regression uses Log Loss.
           </p>
@@ -791,9 +791,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-sky-50 border border-sky-200 p-6 rounded-xl shadow-sm">
-          <h4 className="text-xl font-bold text-sky-900 mb-4">
+          <h3 className="text-xl font-bold text-sky-900 mb-4">
             Odds Definition
-          </h4>
+          </h3>
           <p className="text-lg text-slate-700 mb-4">
             Logistic Regression uses odds internally.
           </p>
@@ -875,9 +875,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-white border border-slate-200 p-6 rounded-xl shadow-sm">
-          <h4 className="text-xl font-bold text-slate-800 mb-4">
+          <h3 className="text-xl font-bold text-slate-800 mb-4">
             Confusion Matrix
-          </h4>
+          </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full font-mono text-sm text-center">
               <thead>
@@ -1144,9 +1144,9 @@ export function LogisticRegressionContent() {
 
       {/* End to End Workflow */}
       <div className="mb-8 p-6 bg-slate-50 border border-slate-200 rounded-xl shadow-sm text-center">
-        <h4 className="font-bold text-slate-800 mb-4 font-sans text-lg">
+        <h3 className="font-bold text-slate-800 mb-4 font-sans text-lg">
           Machine Learning Pipeline Workflow
-        </h4>
+        </h3>
         <div className="flex flex-wrap items-center justify-center gap-2 font-mono text-xs sm:text-sm">
           <span className="bg-white border border-slate-300 px-3 py-1.5 rounded shadow-sm text-slate-700">
             Load Dataset
@@ -1352,9 +1352,9 @@ print(classification_report(y_test, y_pred, target_names=data.target_names))`}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="space-y-6">
           <div className="bg-rose-50 border border-rose-200 p-6 rounded-xl shadow-sm">
-            <h4 className="text-xl font-bold text-rose-800 mb-4 flex items-center">
+            <h3 className="text-xl font-bold text-rose-800 mb-4 flex items-center">
               <XIcon className="mr-2 w-6 h-6" /> Common Mistakes
-            </h4>
+            </h3>
             <ul className="list-none space-y-3 text-rose-800 text-base">
               <li className="bg-white px-4 py-2 rounded shadow-sm border border-rose-100 flex flex-col">
                 <strong className="text-rose-900 pb-1">
@@ -1383,10 +1383,10 @@ print(classification_report(y_test, y_pred, target_names=data.target_names))`}
         </div>
 
         <div className="bg-emerald-50 border border-emerald-200 p-6 rounded-xl shadow-sm">
-          <h4 className="text-xl font-bold text-emerald-800 mb-4 flex items-center">
+          <h3 className="text-xl font-bold text-emerald-800 mb-4 flex items-center">
             <CheckCircle className="mr-2 w-6 h-6 text-emerald-600" /> Best
             Practices
-          </h4>
+          </h3>
           <ul className="list-disc pl-6 space-y-3 text-emerald-800 text-lg font-medium">
             <li>Scale numerical features when feature scales differ substantially or the chosen solver/regularization benefits from it.</li>
             <li>Use cross-validation.</li>

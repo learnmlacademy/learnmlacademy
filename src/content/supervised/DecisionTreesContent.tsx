@@ -141,9 +141,9 @@ export function DecisionTreesContent() {
       <DecisionTreeDiagram />
 
       <div className="mb-12 p-6 bg-slate-50 border border-slate-200 rounded-xl shadow-sm text-center">
-        <h4 className="font-bold text-slate-800 mb-6 font-sans text-lg">
+        <h3 className="font-bold text-slate-800 mb-6 font-sans text-lg">
           Simple Decision Tree Workflow
-        </h4>
+        </h3>
         <div className="flex flex-col items-center justify-center font-mono text-sm sm:text-base font-bold text-slate-700 space-y-2">
           <span className="bg-white border border-slate-300 px-6 py-2 rounded shadow-sm">
             Input Data
@@ -399,9 +399,9 @@ export function DecisionTreesContent() {
       </div>
 
       <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm mb-12">
-        <h4 className="text-xl font-bold text-slate-800 mb-6 text-center">
+        <h3 className="text-xl font-bold text-slate-800 mb-6 text-center">
           Understanding Purity
-        </h4>
+        </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg text-center">
             <h5 className="font-bold font-sans text-emerald-900 mb-3">

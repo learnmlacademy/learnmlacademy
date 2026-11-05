@@ -414,7 +414,7 @@ export function SVMContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col justify-center">
-          <h4 className="font-bold text-center text-slate-800 border-b border-slate-100 pb-2 mb-4">Non-linear Data (Not Linearly Separable)</h4>
+          <h3 className="font-bold text-center text-slate-800 border-b border-slate-100 pb-2 mb-4">Non-linear Data (Not Linearly Separable)</h3>
           <div className="w-full h-[250px]">
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 10, bottom: 10, left: -20 }}>
