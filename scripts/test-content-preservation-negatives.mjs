@@ -1044,6 +1044,22 @@ async function runNegativeTests() {
       `Expected duplicate heading reduction to be rejected, got ${violations.join("; ")}`);
   });
 
+  // 48. Negative: semantic level corrections must not reorder authored headings.
+  runTest('Rejects reordered baseline headings while allowing level-only corrections', () => {
+    const base = createMockBaseline();
+    const curr = createMatchingCurrent(base);
+    curr.headings = [...curr.headings].reverse().map((heading, index) => ({
+      ...heading,
+      level: index === 0 ? 'h2' : heading.level,
+    }));
+    syncNormalizedText(curr);
+    const violations = verifyPageContent(curr, base, '/learn/heading-order');
+    assert(
+      violations.some(message => message.includes('Baseline heading order changed')),
+      `Expected heading reordering to be rejected, got ${violations.join('; ')}`
+    );
+  });
+
   console.log(`\nAll ${passedTests}/${totalTests} Negative and Positive Test Cases PASSED successfully.`);
 }
 
