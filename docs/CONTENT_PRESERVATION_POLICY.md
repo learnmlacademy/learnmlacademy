@@ -17,7 +17,7 @@ Existing authored content must **NEVER** be shortened, summarized, truncated, or
 
 ### Protected Content Elements
 This policy strictly protects:
-- **Headings and Subheadings (`<h1>` - `<h6>`)**: Structure and terminology must remain.
+- **Headings and Subheadings (`<h1>` - `<h6>`)**: Exact heading wording, order, and multiplicity must remain; semantic heading levels may be corrected when the rendered hierarchy audit passes.
 - **Paragraphs and Explanations (`<p>`)**: In-depth conceptual reasoning, intuition, and prose.
 - **Numerical Examples & Step-by-Step Derivations**: Small-number worked calculations.
 - **Mathematical Formulas**: Expressions and symbol-by-symbol parameter explanations.
@@ -116,7 +116,7 @@ npm run test:preservation-negatives
 
 ### Verification Rules Enforced by the Test Suite
 1. **Zero Character Regression**: For every baseline page, `current.exactCharCount >= baseline.exactCharCount` (2,817,056 baseline exact characters) and `current.normalizedCharCount >= baseline.normalizedCharCount` (2,654,695 baseline normalized characters).
-2. **Heading Retention & Hierarchy**: Every heading present in the baseline must exist with its exact heading level (`h1`-`h6`), exact text, and multiplicity preserved. Headings demoted to paragraph text are rejected.
+2. **Heading Retention & Hierarchy**: Every baseline heading must retain its exact text, order, and multiplicity. A semantic heading-level correction (for example, H4 to H3) is permitted only when the rendered heading hierarchy audit passes; missing headings, rewritten text, reduced duplicates, and headings demoted to ordinary paragraph text remain prohibited.
 3. **Paragraph Retention & Multiplicity**: All 11,505 baseline paragraphs—regardless of length—must remain present with multiplicity preserved. Truncation, partial deletion, duplicate removal, and replacement with filler are rejected.
 4. **Code Block Source Integrity**: All 724 code blocks (362 interactive figure code blocks + 362 standalone pre-code blocks) are verified against baseline SHA-256 hashes. Code content, indentation, comments, line breaks, and captions must remain intact.
 5. **Table Structure & Cell Data**: All 504 tables are validated cell-by-cell. No table, row, column, header, or cell value may be deleted or modified. Additive rows and new tables are permitted.
