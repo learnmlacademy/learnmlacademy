@@ -97,6 +97,23 @@ export function comparePageContent(current, baseline, route) {
     Array(h.count || 1).fill({ level: h.level, text: h.text })
   );
 
+  // Preserve the original order of distinct heading groups while allowing new
+  // headings to be inserted between them. Levels may change for accessibility,
+  // but the learner-facing outline must not be rearranged.
+  const baselineHeadingOrder = (baseline.headings || []).map(h => cleanForSearch(h.text));
+  const currentHeadingOrder = (current.headings || []).map(h => cleanForSearch(h.text));
+  let currentOrderIndex = 0;
+  for (const baselineHeading of baselineHeadingOrder) {
+    const matchingIndex = currentHeadingOrder.indexOf(baselineHeading, currentOrderIndex);
+    if (matchingIndex === -1) {
+      violations.push(
+        `${route}: Baseline heading order changed near "${baselineHeading}". Existing heading groups must remain in their original order.`
+      );
+      break;
+    }
+    currentOrderIndex = matchingIndex + 1;
+  }
+
   const headingViolations = matchMultiset(
     expandedBaselineHeadings,
     expandedCurrentHeadings,
