@@ -149,17 +149,17 @@ export function RidgeRegressionContent() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-red-50 p-5 rounded-lg border border-red-100">
-          <h4 className="font-bold text-red-800 mb-2">
+          <h3 className="font-bold text-red-800 mb-2">
             1. To Prevent Overfitting
-          </h4>
+          </h3>
           <p className="text-red-900 text-sm">
             Ordinary Least Squares minimizes squared prediction error. With noisy data, many predictors, or strongly correlated predictors, the fitted coefficients can become unnecessarily sensitive. Ridge can reduce that variance.
           </p>
         </div>
         <div className="bg-amber-50 p-5 rounded-lg border border-amber-100">
-          <h4 className="font-bold text-amber-800 mb-2">
+          <h3 className="font-bold text-amber-800 mb-2">
             2. To Handle Multicollinearity
-          </h4>
+          </h3>
           <p className="text-amber-900 text-sm">
             When predictors are strongly correlated (for example, house area and number of rooms), ordinary least-squares coefficients can become unstable. Ridge improves the conditioning of the problem and often stabilizes those coefficients.
           </p>
@@ -512,9 +512,9 @@ export function RidgeRegressionContent() {
           <div className="bg-indigo-100 p-3 rounded-full mb-3">
             <Activity className="w-6 h-6 text-indigo-600" />
           </div>
-          <h4 className="font-bold text-indigo-900 mb-2">
+          <h3 className="font-bold text-indigo-900 mb-2">
             Linear Relationship
-          </h4>
+          </h3>
           <p className="text-sm text-indigo-700">
             There must be a linear relationship between features and the target
             variable.
@@ -524,7 +524,7 @@ export function RidgeRegressionContent() {
           <div className="bg-emerald-100 p-3 rounded-full mb-3">
             <Hash className="w-6 h-6 text-emerald-600" />
           </div>
-          <h4 className="font-bold text-emerald-900 mb-2">Feature Scaling</h4>
+          <h3 className="font-bold text-emerald-900 mb-2">Feature Scaling</h3>
           <p className="text-sm text-emerald-700">
             Scaling is strongly recommended when numerical features use very different units, because the L2 penalty acts on coefficient size. It is not a mathematical requirement that every Ridge input be standardized.
           </p>
@@ -533,7 +533,7 @@ export function RidgeRegressionContent() {
           <div className="bg-blue-100 p-3 rounded-full mb-3">
             <UserCheck className="w-6 h-6 text-blue-600" />
           </div>
-          <h4 className="font-bold text-blue-900 mb-2">Handles Collinearity</h4>
+          <h3 className="font-bold text-blue-900 mb-2">Handles Collinearity</h3>
           <p className="text-sm text-blue-700">
             Ridge can stabilize coefficient estimates when predictors are strongly correlated, but it does not make every collinearity-related interpretation problem disappear.
           </p>
@@ -542,7 +542,7 @@ export function RidgeRegressionContent() {
           <div className="bg-amber-100 p-3 rounded-full mb-3">
             <TrendingUp className="w-6 h-6 text-amber-600" />
           </div>
-          <h4 className="font-bold text-amber-900 mb-2">Constant Variance</h4>
+          <h3 className="font-bold text-amber-900 mb-2">Constant Variance</h3>
           <p className="text-sm text-amber-700">
             Roughly constant residual variance is useful for classical linear-model assumptions and inference. Prediction quality should still be checked directly with validation data.
           </p>
@@ -740,9 +740,9 @@ print(f"Ridge Regression Weights:  {np.round(ridge.coef_, 2)}")`}</code>
           </div>
 
           <div className="bg-[#0cf277]/10 border border-[#0cf277]/30 p-4 rounded-xl shadow-inner mt-2">
-            <h4 className="font-bold text-[#09994c] mb-2 text-xs uppercase tracking-wider flex items-center">
+            <h3 className="font-bold text-[#09994c] mb-2 text-xs uppercase tracking-wider flex items-center">
               Terminal Output
-            </h4>
+            </h3>
             <pre className="font-mono text-sm text-[#09994c] whitespace-pre-wrap m-0">Linear Regression Weights: [3.13 1.32 7.76]
 Ridge Regression Weights:  [2.70 1.14 6.85]</pre>
             <p className="text-xs text-slate-600 mt-3 pt-3 border-t border-[#0cf277]/30">

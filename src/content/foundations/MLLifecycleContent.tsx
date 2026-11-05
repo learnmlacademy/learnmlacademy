@@ -221,7 +221,7 @@ export function MLLifecycleContent() {
           { title: 'Feature Scaling & Dimensionality', body: 'Feature scaling matters especially for distance-based and gradient-based methods because variables with very different numerical scales can influence calculations unevenly. Tree-based models are generally much less sensitive to scaling. Very high-dimensional data can also become difficult for some methods, so feature selection or dimensionality reduction such as PCA may be useful when appropriate.' },
         ].map(c => (
           <div key={c.title} className="pl-4 border-l-4 border-slate-400 bg-white py-2 mb-4">
-            <h4 className="text-lg font-bold text-slate-800 mb-2">{c.title}</h4>
+            <h3 className="text-lg font-bold text-slate-800 mb-2">{c.title}</h3>
             <p className="text-slate-700 text-lg leading-relaxed m-0">{c.body}</p>
           </div>
         ))}

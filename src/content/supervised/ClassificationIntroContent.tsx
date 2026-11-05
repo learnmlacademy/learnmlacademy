@@ -207,9 +207,9 @@ export function ClassificationIntroContent() {
       </p>
 
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md mb-8">
-        <h4 className="font-bold text-xl mb-3 flex items-center text-emerald-900">
+        <h3 className="font-bold text-xl mb-3 flex items-center text-emerald-900">
           Simple Beginner Definition
-        </h4>
+        </h3>
         <div className="flex flex-col items-center justify-center space-y-3 font-mono text-emerald-800 font-bold bg-white p-6 rounded border border-emerald-200">
           <span className="bg-emerald-100 px-4 py-2 rounded">INPUT DATA</span>
           <span className="text-emerald-400">↓</span>
@@ -1215,9 +1215,9 @@ print("Predicted class:", "Pass" if prediction == 1 else "Fail")`}</code></pre>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <h4 className="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">
+          <h3 className="text-xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-2">
             Useful Starting Points (Not Fixed Rules)
-          </h4>
+          </h3>
           <ul className="space-y-4 text-lg">
             <li className="flex flex-col">
               <span className="text-slate-500 font-bold text-sm uppercase tracking-wide">

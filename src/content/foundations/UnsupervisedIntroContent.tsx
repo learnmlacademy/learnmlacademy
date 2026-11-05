@@ -279,7 +279,7 @@ export function UnsupervisedIntroContent() {
 
       <div className="space-y-8 mb-12">
         <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-6 rounded-r-md">
-           <h4 className="text-xl font-bold text-emerald-800 mb-4">Advantages</h4>
+           <h3 className="text-xl font-bold text-emerald-800 mb-4">Advantages</h3>
            <ul className="list-disc pl-6 space-y-3 text-slate-800 text-lg">
              <li><strong>Cost Effective:</strong> Human-labeled data is incredibly expensive to generate. Unsupervised models utilize raw, unstructured data, which is essentially free and abundant on the internet.</li>
              <li><strong>Discovering Unknowns:</strong> It finds hidden patterns and complex relationships that humans might never have thought to look for.</li>
@@ -287,7 +287,7 @@ export function UnsupervisedIntroContent() {
            </ul>
         </div>
         <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-4 pr-6 rounded-r-md">
-           <h4 className="text-xl font-bold text-slate-800 mb-4">Limitations</h4>
+           <h3 className="text-xl font-bold text-slate-800 mb-4">Limitations</h3>
            <ul className="list-disc pl-6 space-y-3 text-slate-800 text-lg">
              <li><strong>Unpredictable Results:</strong> Because there are no intended target answers, predicting what exact features the model will learn to group by is difficult.</li>
              <li><strong>Human Interpretation Required:</strong> The algorithm groups data mathematically, but a human expert must review the clusters to assign actual business meaning to them.</li>

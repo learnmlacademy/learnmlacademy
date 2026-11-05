@@ -66,7 +66,7 @@ export function ContactPage() {
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 text-indigo-600">
               <Mail className="h-5 w-5" />
-              <h3 className="font-semibold text-slate-900">Direct Email</h3>
+              <h2 className="font-semibold text-slate-900">Direct Email</h2>
             </div>
             <p className="mt-2 text-sm text-slate-600">
               Primary editorial & support:
@@ -82,7 +82,7 @@ export function ContactPage() {
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 text-indigo-600">
               <Clock className="h-5 w-5" />
-              <h3 className="font-semibold text-slate-900">Response Time</h3>
+              <h2 className="font-semibold text-slate-900">Response Time</h2>
             </div>
             <p className="mt-2 text-sm text-slate-600">
               We typically review and reply to all genuine educational inquiries within <strong>24–48 hours</strong>.
@@ -92,7 +92,7 @@ export function ContactPage() {
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-3 text-indigo-600">
               <MapPin className="h-5 w-5" />
-              <h3 className="font-semibold text-slate-900">Platform</h3>
+              <h2 className="font-semibold text-slate-900">Platform</h2>
             </div>
             <p className="mt-2 text-sm text-slate-600">
               Learn ML Academy is an independent educational publication dedicated to open-access machine learning, deep learning, and AI tutorials.

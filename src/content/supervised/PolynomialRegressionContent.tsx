@@ -166,9 +166,9 @@ export function PolynomialRegressionContent() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-center text-slate-800 mb-4">
+          <h3 className="font-bold text-center text-slate-800 mb-4">
             Linear Relationship
-          </h4>
+          </h3>
           <div className="h-64 w-full bg-white p-2 border border-slate-200 rounded">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={linearData}>
@@ -196,9 +196,9 @@ export function PolynomialRegressionContent() {
           </p>
         </div>
         <div className="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-center text-slate-800 mb-4">
+          <h3 className="font-bold text-center text-slate-800 mb-4">
             Polynomial Relationship
-          </h4>
+          </h3>
           <div className="h-64 w-full bg-white p-2 border border-slate-200 rounded">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={polyData}>
@@ -453,9 +453,9 @@ export function PolynomialRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-lg shadow-sm">
-          <h4 className="font-bold text-indigo-900 mb-4">
+          <h3 className="font-bold text-indigo-900 mb-4">
             Example Transformation (Degree 4)
-          </h4>
+          </h3>
           <div className="flex justify-between items-center bg-white p-4 rounded shadow-sm mb-4 border border-indigo-100">
             <div className="font-mono font-bold text-slate-700">x</div>
             <ArrowRight className="text-indigo-400 mx-2" />
@@ -470,9 +470,9 @@ export function PolynomialRegressionContent() {
         </div>
 
         <div className="bg-white border border-slate-200 p-6 rounded-lg shadow-sm flex flex-col items-center text-center">
-          <h4 className="font-bold text-slate-800 mb-4 uppercase text-sm tracking-wider">
+          <h3 className="font-bold text-slate-800 mb-4 uppercase text-sm tracking-wider">
             Transformation Workflow
-          </h4>
+          </h3>
           <div className="flex flex-col gap-2 w-full max-w-xs">
             <div className="bg-slate-100 border border-slate-300 font-bold p-2 text-slate-700 rounded shadow-sm relative z-10 w-full">
               Original Input
@@ -624,9 +624,9 @@ export function PolynomialRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white border border-slate-200 p-5 rounded-lg shadow-sm flex flex-col items-center">
-          <h4 className="font-bold text-slate-800 mb-1 uppercase tracking-wider text-sm">
+          <h3 className="font-bold text-slate-800 mb-1 uppercase tracking-wider text-sm">
             Underfitting
-          </h4>
+          </h3>
           <div className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded mb-4 font-mono">
             Degree 1 (Straight)
           </div>
@@ -639,9 +639,9 @@ export function PolynomialRegressionContent() {
           </p>
         </div>
         <div className="bg-white border-2 border-emerald-400 p-5 rounded-lg shadow-md flex flex-col items-center">
-          <h4 className="font-bold text-emerald-800 mb-1 uppercase tracking-wider text-sm">
+          <h3 className="font-bold text-emerald-800 mb-1 uppercase tracking-wider text-sm">
             Good Fit
-          </h4>
+          </h3>
           <div className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded mb-4 font-mono">
             Example: Degree 2 or 3
           </div>
@@ -667,9 +667,9 @@ export function PolynomialRegressionContent() {
           </p>
         </div>
         <div className="bg-white border border-red-300 p-5 rounded-lg shadow-sm flex flex-col items-center">
-          <h4 className="font-bold text-red-800 mb-1 uppercase tracking-wider text-sm">
+          <h3 className="font-bold text-red-800 mb-1 uppercase tracking-wider text-sm">
             Overfitting
-          </h4>
+          </h3>
           <div className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded mb-4 font-mono">
             Very High Degree
           </div>
@@ -809,9 +809,9 @@ export function PolynomialRegressionContent() {
             <UserCheck className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <h4 className="font-bold text-indigo-900 mb-1">
+            <h3 className="font-bold text-indigo-900 mb-1">
               Independent Observations
-            </h4>
+            </h3>
             <p className="text-sm text-indigo-700">
               Data points must be independent; one sample should not influence
               another.
@@ -824,9 +824,9 @@ export function PolynomialRegressionContent() {
             <Layers className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <h4 className="font-bold text-emerald-900 mb-1">
+            <h3 className="font-bold text-emerald-900 mb-1">
               Correlated Polynomial Terms
-            </h4>
+            </h3>
             <p className="text-sm text-emerald-700">
               Polynomial terms such as x, x² and x³ can be strongly correlated. This can make individual coefficients unstable or harder to interpret, especially at high degrees.
             </p>
@@ -838,7 +838,7 @@ export function PolynomialRegressionContent() {
             <Activity className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h4 className="font-bold text-blue-900 mb-1">Continuous Target</h4>
+            <h3 className="font-bold text-blue-900 mb-1">Continuous Target</h3>
             <p className="text-sm text-blue-700">
               Polynomial regression is normally used to predict a numeric continuous target, such as price, temperature or score.
             </p>
@@ -850,9 +850,9 @@ export function PolynomialRegressionContent() {
             <Target className="w-5 h-5 text-amber-600" />
           </div>
           <div>
-            <h4 className="font-bold text-amber-900 mb-1">
+            <h3 className="font-bold text-amber-900 mb-1">
               Choose Degree with Validation
-            </h4>
+            </h3>
             <p className="text-sm text-amber-700">
               Degree is a model-choice decision, not a statistical assumption. Compare candidate degrees on validation data or with cross-validation.
             </p>
@@ -864,7 +864,7 @@ export function PolynomialRegressionContent() {
             <Hash className="w-5 h-5 text-rose-600" />
           </div>
           <div>
-            <h4 className="font-bold text-rose-900 mb-1">Random Errors</h4>
+            <h3 className="font-bold text-rose-900 mb-1">Random Errors</h3>
             <p className="text-sm text-rose-700">
               Residuals should not show a strong systematic pattern. Roughly constant error variance matters for classical inference, and residual normality is mainly relevant when constructing traditional significance tests or confidence intervals.
             </p>
@@ -1440,9 +1440,9 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="bg-indigo-50 border border-indigo-100 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-indigo-900 mb-2">
+          <h3 className="font-bold text-indigo-900 mb-2">
             1. Mean Absolute Error (MAE)
-          </h4>
+          </h3>
           <div className="bg-white p-2 rounded border border-indigo-200 font-mono text-center text-sm shadow-inner mt-2">
             MAE = 1/n * Σ |y_i - ŷ_i|
           </div>
@@ -1451,9 +1451,9 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
           </p>
         </div>
         <div className="bg-emerald-50 border border-emerald-100 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-emerald-900 mb-2">
+          <h3 className="font-bold text-emerald-900 mb-2">
             2. Root Mean Squared Error (RMSE)
-          </h4>
+          </h3>
           <div className="bg-white p-2 rounded border border-emerald-200 font-mono text-center text-sm shadow-inner mt-2">
             RMSE = √[1/n * Σ (y_i - ŷ_i)²]
           </div>
@@ -1462,7 +1462,7 @@ print("Polynomial Regression Prediction:", poly_prediction)`}</code>
           </p>
         </div>
         <div className="bg-amber-50 border border-amber-100 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-amber-900 mb-2">3. R² Score</h4>
+          <h3 className="font-bold text-amber-900 mb-2">3. R² Score</h3>
           <div className="bg-white p-2 rounded border border-amber-200 font-mono text-center text-sm shadow-inner mt-2">
             R² = 1 - (SS_res / SS_tot)
           </div>

@@ -385,9 +385,9 @@ export function BatchVsOnlineContent() {
 
       <div className="bg-slate-800 text-white p-8 rounded-xl relative overflow-hidden mt-10 mb-10 shadow-lg">
         <BookOpen className="absolute right-4 top-4 h-24 w-24 text-slate-700 opacity-30" />
-        <h4 className="text-xl font-bold mt-0 border-b border-slate-600 pb-3 mb-6 text-amber-400">
+        <h3 className="text-xl font-bold mt-0 border-b border-slate-600 pb-3 mb-6 text-amber-400">
           Engineering Checkpoint
-        </h4>
+        </h3>
         <p className="font-bold text-slate-200 text-lg mb-2">Scenario:</p>
         <p className="text-lg bg-slate-700/60 p-5 rounded-lg mb-6 leading-relaxed border border-slate-600">
           You are engineering the machine learning backend for a national weather service. The sensors nationwide push 500 Gigabytes of temperature, humidity, and barometric pressure data every single day. <br /><br />

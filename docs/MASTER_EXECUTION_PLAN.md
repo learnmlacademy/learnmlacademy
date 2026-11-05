@@ -66,8 +66,9 @@ To transform the platform into a world-class educational resource while upholdin
 ### Objectives
 1. **167 Lesson-Specific Meta Descriptions**:
    - Replace any template-based or truncated meta descriptions with hand-crafted, high-CTR educational descriptions (between 130 and 155 characters).
-2. **Heading Hierarchy & Semantic Architecture**:
-   - Audit all 4,015 headings across the 201 pages to ensure strict sequential hierarchy (`h1` $\to$ `h2` $\to$ `h3`) with zero skipped levels.
+2. **Heading Hierarchy & Semantic Architecture — implemented in PR #81**:
+   - Audited all 201 canonical prerendered pages and corrected semantic heading levels while preserving exact authored heading text and multiplicity.
+   - Added a blocking rendered-HTML audit for one main landmark, one H1, non-empty accessible heading text, and no skipped heading levels. The latest CI audit reports 201/201 pages clean and zero violations.
 3. **Sitemap Date Synchronization**:
    - Automatically link `lastmod` dates in `public/sitemap.xml` directly to `dateModified` in `TechArticle` / `LearningResource` JSON-LD schemas.
 4. **Consolidation of Stale PR Work**:
@@ -76,7 +77,7 @@ To transform the platform into a world-class educational resource while upholdin
    - Ensure the 16 Agentic AI and 17 GenAI lessons remain grounded in primary source literature (ReAct, MCP, tool execution contracts, context window budgets).
 
 ### Quality Gates & Verification
-- `npm run verify:prerender` validates title uniqueness, description lengths ($\le 160$ chars), canonical exactness, and JSON-LD validity.
+- `npm run verify:prerender` validates unique titles, lesson meta descriptions (130–155 characters), canonical exactness, JSON-LD validity, and the rendered heading hierarchy across all 201 canonical pages.
 - Schema validation passes Google Rich Results testing for `TechArticle`, `LearningResource`, `HowTo`, and `BreadcrumbList`.
 
 ---

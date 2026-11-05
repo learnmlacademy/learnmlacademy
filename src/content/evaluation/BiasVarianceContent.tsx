@@ -959,9 +959,9 @@ export function BiasVarianceContent() {
       </p>
 
       <div className="bg-indigo-50 border border-indigo-200 p-6 rounded-xl mb-10 text-center shadow-sm">
-        <h4 className="font-bold text-indigo-900 mb-4 text-xl">
+        <h3 className="font-bold text-indigo-900 mb-4 text-xl">
           Cross-Validation Workflow
-        </h4>
+        </h3>
         <div className="text-lg text-indigo-800 uppercase font-mono tracking-widest space-y-2">
           <div>Dataset</div>
           <div className="text-indigo-400">↓</div>

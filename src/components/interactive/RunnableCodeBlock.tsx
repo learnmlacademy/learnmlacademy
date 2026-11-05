@@ -120,7 +120,7 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
               <span className="rounded bg-indigo-500/20 px-2 py-0.5 text-xs font-bold uppercase tracking-wider text-indigo-300">
                 {language}
               </span>
-              <h4 className="text-sm font-bold text-slate-100 sm:text-base">{title}</h4>
+              <h3 className="text-sm font-bold text-slate-100 sm:text-base">{title}</h3>
             </div>
             {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
           </div>

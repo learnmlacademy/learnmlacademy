@@ -173,7 +173,7 @@ export function RandomForestContent() {
       </h2>
       <div className="bg-white border text-left border-slate-200 shadow-sm rounded-xl overflow-hidden mb-10">
          <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-             <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Training & Prediction Pipeline</h4>
+             <h3 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Training & Prediction Pipeline</h3>
          </div>
          <div className="p-6">
             <ol className="list-decimal pl-6 space-y-4 text-lg text-slate-700 marker:text-emerald-600 marker:font-bold">
@@ -276,7 +276,7 @@ export function RandomForestContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h4 className="font-bold text-slate-800 text-center mb-2">Classification: Combine Tree Opinions</h4>
+          <h3 className="font-bold text-slate-800 text-center mb-2">Classification: Combine Tree Opinions</h3>
           <p className="text-sm text-slate-500 text-center mb-5">Simple voting intuition with five trees.</p>
           <div className="grid grid-cols-5 gap-2 mb-5">
             {voteData.map((entry) => (
@@ -292,7 +292,7 @@ export function RandomForestContent() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h4 className="font-bold text-slate-800 text-center mb-2">Illustrative Feature Importance</h4>
+          <h3 className="font-bold text-slate-800 text-center mb-2">Illustrative Feature Importance</h3>
           <p className="text-sm text-slate-500 text-center mb-5">Example values only — not a universal ranking.</p>
           <div className="space-y-4">
             {featureImportance.map((item) => (
@@ -512,7 +512,7 @@ export function RandomForestContent() {
       <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
           <Code className="text-indigo-600 mr-2" />
-          <h4 className="font-bold text-indigo-800 text-xl">Python Code: Random Forest Classifier</h4>
+          <h3 className="font-bold text-indigo-800 text-xl">Python Code: Random Forest Classifier</h3>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
           <pre className="!m-0">

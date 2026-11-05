@@ -160,7 +160,7 @@ export function AdaBoostContent() {
 
       <div className="bg-white border text-left border-slate-200 shadow-sm rounded-xl overflow-hidden mb-12">
          <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-             <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm">AdaBoost Pipeline</h4>
+             <h3 className="font-bold text-slate-800 uppercase tracking-wider text-sm">AdaBoost Pipeline</h3>
          </div>
          <div className="p-6">
             <ol className="list-decimal pl-6 space-y-4 text-lg text-slate-700 marker:text-indigo-600 marker:font-bold">
@@ -223,7 +223,7 @@ export function AdaBoostContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-slate-800 text-lg mb-3">Step 1 — Compute Error Rate</h4>
+          <h3 className="font-bold text-slate-800 text-lg mb-3">Step 1 — Compute Error Rate</h3>
           <p className="text-slate-700 mb-4">Error rate measures how many <em>weighted</em> samples were classified incorrectly.</p>
           <div className="bg-white p-3 rounded border text-center font-serif text-lg text-indigo-700 mb-4 shadow-sm">
              Error = Σ wᵢ · I(yᵢ ≠ h(xᵢ))
@@ -232,7 +232,7 @@ export function AdaBoostContent() {
         </div>
 
         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-slate-800 text-lg mb-3">Step 2 — Compute Alpha (α) Value</h4>
+          <h3 className="font-bold text-slate-800 text-lg mb-3">Step 2 — Compute Alpha (α) Value</h3>
           <p className="text-slate-700 mb-4">In the classic binary AdaBoost derivation, alpha represents the learner&apos;s contribution to the final weighted vote.</p>
           <div className="bg-white p-3 rounded border text-center font-serif text-lg text-indigo-700 mb-4 shadow-sm">
              α = ½ ln( (1 - Error) / Error )
@@ -365,7 +365,7 @@ export function AdaBoostContent() {
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center">
              <Code className="text-indigo-600 mr-2" />
-             <h4 className="font-bold text-indigo-800 text-xl">Steps 1 to 3: Structure & Fit Logic</h4>
+             <h3 className="font-bold text-indigo-800 text-xl">Steps 1 to 3: Structure & Fit Logic</h3>
           </div>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
@@ -434,7 +434,7 @@ class SimpleAdaBoost:
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center">
              <Code className="text-indigo-600 mr-2" />
-             <h4 className="font-bold text-indigo-800 text-xl">Steps 4+: Prediction & Execution</h4>
+             <h3 className="font-bold text-indigo-800 text-xl">Steps 4+: Prediction & Execution</h3>
           </div>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">

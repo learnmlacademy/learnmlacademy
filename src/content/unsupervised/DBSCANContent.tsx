@@ -240,7 +240,7 @@ Noise / Outliers`}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 shadow-sm">
-            <h4 className="text-xl font-bold text-emerald-900 mb-3 text-center">1. Core Point</h4>
+            <h3 className="text-xl font-bold text-emerald-900 mb-3 text-center">1. Core Point</h3>
             <p className="text-slate-800 mb-4 text-center">A core point has at least <code>min_samples</code> samples in its eps-neighborhood, counting itself. Core points form the dense interior of clusters.</p>
             <div className="bg-white rounded p-3 text-center border border-emerald-100 font-mono text-sm leading-relaxed text-emerald-800">
               &nbsp;&nbsp;&nbsp;● ● ● <br/>
@@ -251,7 +251,7 @@ Noise / Outliers`}
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-sm">
-            <h4 className="text-xl font-bold text-blue-900 mb-3 text-center">2. Border Point</h4>
+            <h3 className="text-xl font-bold text-blue-900 mb-3 text-center">2. Border Point</h3>
             <p className="text-slate-800 mb-4 text-center">A border point is not core itself, but it lies within eps of a core point and can therefore belong to that core point's cluster.</p>
             <div className="bg-white rounded p-3 text-center border border-blue-100 font-mono text-sm leading-relaxed text-blue-800">
               ● ● ● ● ●<br/>
@@ -263,7 +263,7 @@ Noise / Outliers`}
           </div>
 
           <div className="bg-rose-50 border border-rose-200 rounded-xl p-6 shadow-sm">
-            <h4 className="text-xl font-bold text-rose-900 mb-3 text-center">3. Noise Point</h4>
+            <h3 className="text-xl font-bold text-rose-900 mb-3 text-center">3. Noise Point</h3>
             <p className="text-slate-800 mb-4 text-center">A final noise point is neither a core point nor assigned as a border point of a cluster. Scikit-learn gives such samples the label <code>-1</code>.</p>
             <div className="bg-white rounded p-3 text-center border border-rose-100 font-mono text-sm leading-relaxed text-rose-800">
               ● ● ● ●<br/>
@@ -306,11 +306,11 @@ Mark Remaining Points as Noise`}
 
         <div className="space-y-6 text-lg text-slate-800">
           <div>
-            <h4 className="font-bold text-xl text-slate-900">Step 1 — Select a Point</h4>
+            <h3 className="font-bold text-xl text-slate-900">Step 1 — Select a Point</h3>
             <p>Conceptually, DBSCAN considers an unvisited point and inspects its local neighborhood. The exact processing order is an implementation detail.</p>
           </div>
           <div>
-            <h4 className="font-bold text-xl text-slate-900">Step 2 — Find Neighbors</h4>
+            <h3 className="font-bold text-xl text-slate-900">Step 2 — Find Neighbors</h3>
             <p>It finds samples whose distance is within <code>eps</code>. Euclidean distance is common, but Scikit-learn's DBSCAN supports other metrics too.</p>
             <div className="pl-4 border-l-4 border-blue-400 bg-blue-50 py-4 pr-4 rounded-r-md my-4">
               <p className="font-mono text-blue-900 font-bold mb-2">Euclidean Distance Formula:</p>
@@ -325,11 +325,11 @@ Mark Remaining Points as Noise`}
             </div>
           </div>
           <div>
-            <h4 className="font-bold text-xl text-slate-900">Step 3 — Determine Point Type</h4>
+            <h3 className="font-bold text-xl text-slate-900">Step 3 — Determine Point Type</h3>
             <p>If the eps-neighborhood contains at least <code>min_samples</code> samples (including the point itself), it is a core point. A non-core point can later belong to a cluster as a border point if it is within eps of a core point; otherwise it remains noise.</p>
           </div>
           <div>
-            <h4 className="font-bold text-xl text-slate-900">Step 4 — Expand Cluster</h4>
+            <h3 className="font-bold text-xl text-slate-900">Step 4 — Expand Cluster</h3>
             <p>From a core point, DBSCAN expands through neighboring core points and includes their reachable border points. This is what allows a cluster to follow a curved or irregular dense region.</p>
           </div>
         </div>
@@ -446,7 +446,7 @@ Mark Remaining Points as Noise`}
         <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 border-l-4 border-l-indigo-500">
           <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
             <Code className="text-indigo-600 mr-3" />
-            <h4 className="font-bold text-slate-800 text-lg">Python Code: DBSCAN Clustering</h4>
+            <h3 className="font-bold text-slate-800 text-lg">Python Code: DBSCAN Clustering</h3>
           </div>
           <div className="p-0">
             <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">

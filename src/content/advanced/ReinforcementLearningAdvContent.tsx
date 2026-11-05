@@ -103,7 +103,7 @@ export function ReinforcementLearningAdvContent() {
          <div className="flex items-start">
             <Zap className="text-emerald-600 w-6 h-6 mr-3 mt-1 shrink-0" />
             <div>
-               <h4 className="font-bold text-emerald-900 text-lg mb-2">Simple Human Analogy</h4>
+               <h3 className="font-bold text-emerald-900 text-lg mb-2">Simple Human Analogy</h3>
                <p className="text-emerald-800 leading-relaxed m-0 text-[15px]">
                   Imagine teaching a child to ride a bicycle. Initially, the child falls frequently, makes mistakes, and loses balance. But gradually, they learn from mistakes, understand balance, improve movement, and gain confidence. Eventually, the child masters bicycle riding without a labeled dataset. Learning happened through trial and error.
                </p>
@@ -167,31 +167,31 @@ export function ReinforcementLearningAdvContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h4 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
+            <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
                <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs mr-3 font-mono">1</span>
                Agent
-            </h4>
+            </h3>
             <p className="text-slate-700 leading-relaxed text-[15px] m-0">The learner or decision-maker. It interacts with the environment and tries to maximize rewards. (e.g., A Self-driving Car AI).</p>
          </div>
          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h4 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
+            <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
                <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs mr-3 font-mono">2</span>
                Environment
-            </h4>
+            </h3>
             <p className="text-slate-700 leading-relaxed text-[15px] m-0">The world in which the agent operates. The environment responds to the agent’s actions. (e.g., Roads and traffic).</p>
          </div>
          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h4 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
+            <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
                <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs mr-3 font-mono">3</span>
                State & Action
-            </h4>
+            </h3>
             <p className="text-slate-700 leading-relaxed text-[15px] m-0">A <strong>State</strong> represents the current situation of the environment. An <strong>Action</strong> is a decision taken by the agent (e.g., State: Obstacle ahead, Action: Brake).</p>
          </div>
          <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 shadow-sm">
-            <h4 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
+            <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center">
                <span className="bg-indigo-100 text-indigo-800 px-2 py-1 rounded text-xs mr-3 font-mono">4</span>
                Reward Signal
-            </h4>
+            </h3>
             <p className="text-slate-700 leading-relaxed text-[15px] m-0">Feedback received from the environment telling the agent whether its action was good or bad. (e.g., Safe driving yields +5, Collision yields -100).</p>
          </div>
       </div>
@@ -229,7 +229,7 @@ export function ReinforcementLearningAdvContent() {
       </p>
 
       <div className="pl-4 border-l-4 border-slate-400 bg-slate-50 py-6 pr-4 rounded-r-md mb-10 shadow-sm">
-         <h4 className="font-mono text-slate-800 font-bold text-lg mb-3">Q-Learning Update Formula:</h4>
+         <h3 className="font-mono text-slate-800 font-bold text-lg mb-3">Q-Learning Update Formula:</h3>
          <div className="text-[17px] mb-4 pl-4 text-indigo-800 font-mono tracking-tighter">
             Q(s,a) = Q(s,a) + α [r + γ max Q(s',a') - Q(s,a)]
          </div>
@@ -267,10 +267,10 @@ export function ReinforcementLearningAdvContent() {
       <div className="space-y-6 mb-12">
         <div className="bg-white border rounded-xl overflow-hidden shadow-sm">
           <div className="bg-slate-50 border-b border-slate-200 p-4">
-            <h4 className="font-bold text-indigo-900 flex items-center m-0">
+            <h3 className="font-bold text-indigo-900 flex items-center m-0">
                <PlaySquare className="w-5 h-5 mr-2 text-indigo-600" />
                Implementing Q-Learning Logic
-            </h4>
+            </h3>
           </div>
           <div className="p-0 bg-[#1e1e1e]">
             <pre className="text-[#d4d4d4] font-mono text-sm p-4 overflow-x-auto whitespace-pre-wrap m-0">
@@ -323,9 +323,9 @@ episodes = <span className="text-amber-300">1000</span>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="bg-emerald-50 border-emerald-200 border rounded-xl overflow-hidden shadow-sm">
            <div className="bg-emerald-100 px-6 py-4 border-b border-emerald-200">
-             <h4 className="text-emerald-900 font-bold flex items-center text-xl m-0">
+             <h3 className="text-emerald-900 font-bold flex items-center text-xl m-0">
                Advantages
-             </h4>
+             </h3>
            </div>
            <div className="p-6">
              <ul className="space-y-3 text-emerald-900 m-0 pl-0 list-none text-[15px]">
@@ -339,9 +339,9 @@ episodes = <span className="text-amber-300">1000</span>
 
         <div className="bg-rose-50 border-rose-200 border rounded-xl overflow-hidden shadow-sm">
            <div className="bg-rose-100 px-6 py-4 border-b border-rose-200">
-             <h4 className="text-rose-900 font-bold flex items-center text-xl m-0">
+             <h3 className="text-rose-900 font-bold flex items-center text-xl m-0">
                Disadvantages
-             </h4>
+             </h3>
            </div>
            <div className="p-6">
              <ul className="space-y-3 text-rose-900 m-0 pl-0 list-none text-[15px]">

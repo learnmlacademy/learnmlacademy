@@ -513,9 +513,9 @@ print(f"Random Forest RMSE: {rf_rmse:.2f}")`}</code></pre>
           </div>
 
           <div className="bg-[#0cf277]/10 border border-[#0cf277]/50 rounded-2xl p-6 shadow-sm">
-             <h4 className="font-bold text-[#09994c] mb-4 uppercase tracking-wider flex items-center">
+             <h3 className="font-bold text-[#09994c] mb-4 uppercase tracking-wider flex items-center">
                 Terminal Output & Analysis
-             </h4>
+             </h3>
              <pre className="font-mono text-base text-[#09994c] whitespace-pre-wrap m-0 leading-relaxed p-4 bg-black/5 rounded-xl border border-[#09994c]/20">
 $ python regression_example.py
 Linear Regression RMSE: 0.00
