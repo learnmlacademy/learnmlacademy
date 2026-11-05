@@ -52,3 +52,11 @@ test('summarizes page and issue counts for the full-site report', () => {
   assert.equal(summary.flaggedPageCount, 1);
   assert.equal(summary.issueCounts['skipped-level'], 1);
 });
+
+
+test('does not mistake a CSS hidden utility class for an HTML hidden attribute', () => {
+  const html = '<main><div class="hidden xl:block"><h1>Page title</h1><h2>Content section</h2></div></main>';
+  const result = auditPageHeadingHierarchy(html, '/css-hidden-class');
+  assert.deepEqual(result.issues, []);
+  assert.deepEqual(result.headings.map(item => item.text), ['Page title', 'Content section']);
+});

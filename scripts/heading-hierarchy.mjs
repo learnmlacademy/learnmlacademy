@@ -35,6 +35,16 @@ function cleanHeadingText(markup) {
   ).replace(/\s+/g, ' ').trim();
 }
 
+function hasHiddenAttribute(attributes) {
+  // A CSS utility class can contain the word "hidden"; only inspect real HTML attributes.
+  const withoutClass = attributes.replace(
+    /\bclass(?:Name)?\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi,
+    ' '
+  );
+  return /(?:^|\s)hidden(?:\s|=|$)/i.test(withoutClass) ||
+    /\baria-hidden\s*=\s*(["'])true\1/i.test(withoutClass);
+}
+
 function stripNonContentRegions(markup) {
   let content = markup;
   for (const tag of ['nav', 'aside', 'footer']) {
@@ -45,8 +55,8 @@ function stripNonContentRegions(markup) {
   }
   // Exclude content that is explicitly absent from the accessibility tree.
   content = content.replace(
-    /<([a-z][\w:-]*)\b(?=[^>]*(?:\bhidden\b|\baria-hidden\s*=\s*["']true["']))[^>]*>[\s\S]*?<\/\1\s*>/gi,
-    ' '
+    /<([a-z][\w:-]*)\b([^>]*)>[\s\S]*?<\/\1\s*>/gi,
+    (whole, _tag, attributes) => hasHiddenAttribute(attributes) ? ' ' : whole
   );
   return content;
 }
@@ -65,7 +75,7 @@ export function auditPageHeadingHierarchy(html, route = '(unknown route)') {
   const mainMarkup = mainRegions[0]?.[1] ?? html;
   const content = stripNonContentRegions(mainMarkup);
   const headings = [...content.matchAll(/<h([1-6])\b([^>]*)>([\s\S]*?)<\/h\1\s*>/gi)]
-    .filter(match => !/\bhidden\b|\baria-hidden\s*=\s*["']true["']/i.test(match[2]))
+    .filter(match => !hasHiddenAttribute(match[2]))
     .map(match => ({
       level: Number(match[1]),
       id: match[2].match(/\bid=["']([^"']+)["']/i)?.[1] ?? null,
