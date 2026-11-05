@@ -223,7 +223,7 @@ export function AdaBoostContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-slate-800 text-lg mb-3">Step 1 — Compute Error Rate</h4>
+          <h3 className="font-bold text-slate-800 text-lg mb-3">Step 1 — Compute Error Rate</h3>
           <p className="text-slate-700 mb-4">Error rate measures how many <em>weighted</em> samples were classified incorrectly.</p>
           <div className="bg-white p-3 rounded border text-center font-serif text-lg text-indigo-700 mb-4 shadow-sm">
              Error = Σ wᵢ · I(yᵢ ≠ h(xᵢ))
@@ -232,7 +232,7 @@ export function AdaBoostContent() {
         </div>
 
         <div className="bg-slate-50 border border-slate-200 p-6 rounded-xl shadow-sm">
-          <h4 className="font-bold text-slate-800 text-lg mb-3">Step 2 — Compute Alpha (α) Value</h4>
+          <h3 className="font-bold text-slate-800 text-lg mb-3">Step 2 — Compute Alpha (α) Value</h3>
           <p className="text-slate-700 mb-4">In the classic binary AdaBoost derivation, alpha represents the learner&apos;s contribution to the final weighted vote.</p>
           <div className="bg-white p-3 rounded border text-center font-serif text-lg text-indigo-700 mb-4 shadow-sm">
              α = ½ ln( (1 - Error) / Error )

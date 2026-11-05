@@ -239,15 +239,15 @@ export function KMeansContent() {
 
       <div className="space-y-6 mb-10">
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
-          <h4 className="text-lg font-bold text-indigo-800 mb-2">Step 1 — Choose Number of Clusters (K)</h4>
+          <h3 className="text-lg font-bold text-indigo-800 mb-2">Step 1 — Choose Number of Clusters (K)</h3>
           <p className="text-lg text-slate-700 mb-0">The first step is selecting how many clusters should exist. For example, K = 3 means create 3 clusters.</p>
         </div>
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
-          <h4 className="text-lg font-bold text-indigo-800 mb-2">Step 2 — Initialize Centroids</h4>
+          <h3 className="text-lg font-bold text-indigo-800 mb-2">Step 2 — Initialize Centroids</h3>
           <p className="text-lg text-slate-700 mb-0">The algorithm needs starting centers. They may be initialized randomly, but practical implementations commonly use <strong>k-means++</strong>, which chooses spread-out starting centers to improve initialization.</p>
         </div>
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
-          <h4 className="text-lg font-bold text-indigo-800 mb-2">Step 3 — Assign Points to Nearest Centroid</h4>
+          <h3 className="text-lg font-bold text-indigo-800 mb-2">Step 3 — Assign Points to Nearest Centroid</h3>
           <p className="text-lg text-slate-700 mb-2">Each point calculates its distance to every centroid. Then the point joins the nearest cluster.</p>
           <div className="bg-slate-50 p-3 rounded text-slate-700 text-sm font-mono border-l-4 border-slate-300">
             Suppose Centroid A distance = 2, Centroid B distance = 8.<br/>
@@ -255,7 +255,7 @@ export function KMeansContent() {
           </div>
         </div>
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm">
-          <h4 className="text-lg font-bold text-indigo-800 mb-2">Step 4 — Recalculate Centroids</h4>
+          <h3 className="text-lg font-bold text-indigo-800 mb-2">Step 4 — Recalculate Centroids</h3>
           <p className="text-lg text-slate-700 mb-2">After assignments, each centroid moves to the coordinate-wise mean of the points currently assigned to it.</p>
           <div className="bg-slate-50 p-3 rounded text-slate-700 text-sm font-mono border-l-4 border-slate-300 space-y-1">
             <p>Points: (2,2), (4,4), (6,2)</p>
@@ -265,7 +265,7 @@ export function KMeansContent() {
           </div>
         </div>
         <div className="p-5 bg-white border border-slate-200 rounded-lg shadow-sm mb-4">
-          <h4 className="text-lg font-bold text-indigo-800 mb-2">Step 5 — Repeat Iteratively</h4>
+          <h3 className="text-lg font-bold text-indigo-800 mb-2">Step 5 — Repeat Iteratively</h3>
           <p className="text-lg text-slate-700 mb-0">Again: Assign points ➔ Update centroids. Implementations stop when the centers change only within a small tolerance, or when a maximum number of iterations is reached. The resulting solution is a <strong>local optimum</strong>, so initialization can matter.</p>
         </div>
       </div>

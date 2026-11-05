@@ -276,7 +276,7 @@ export function RandomForestContent() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h4 className="font-bold text-slate-800 text-center mb-2">Classification: Combine Tree Opinions</h4>
+          <h3 className="font-bold text-slate-800 text-center mb-2">Classification: Combine Tree Opinions</h3>
           <p className="text-sm text-slate-500 text-center mb-5">Simple voting intuition with five trees.</p>
           <div className="grid grid-cols-5 gap-2 mb-5">
             {voteData.map((entry) => (
@@ -292,7 +292,7 @@ export function RandomForestContent() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-6">
-          <h4 className="font-bold text-slate-800 text-center mb-2">Illustrative Feature Importance</h4>
+          <h3 className="font-bold text-slate-800 text-center mb-2">Illustrative Feature Importance</h3>
           <p className="text-sm text-slate-500 text-center mb-5">Example values only — not a universal ranking.</p>
           <div className="space-y-4">
             {featureImportance.map((item) => (
