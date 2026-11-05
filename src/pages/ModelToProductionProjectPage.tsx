@@ -30,7 +30,7 @@ export function ModelToProductionProjectPage() {
 
   useEffect(() => {
     document.title = 'Model to Production: FastAPI, Docker & CI | LearnMLAcademy';
-    const description = 'Take a trained churn model from laptop to a tested FastAPI service with strict validation, Docker, CI, model versioning, drift checks and rollback.';
+    const description = 'Take a trained ML model from laptop to production using a tested FastAPI service with validation, Docker, CI, model versioning, drift checks, and rollback.';
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
       meta = document.createElement('meta');

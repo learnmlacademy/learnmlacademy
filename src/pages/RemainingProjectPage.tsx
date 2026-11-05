@@ -143,8 +143,13 @@ export function RemainingProjectPage({kind}:{kind:Key}) {
     "retail-forecasting": "Retail Sales Forecasting Handbook | LearnMLAcademy",
     "disaster-tweets": "Disaster Tweet Detector — Complete NLP Handbook | LearnMLAcademy",
   };
+  const descriptions: Record<Key, string> = {
+    "retail-forecasting": "Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.",
+    "disaster-tweets": "Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete code.",
+    "digit-recognizer": "Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.",
+  };
   document.title = titles[kind] ?? (project.title + " | LearnMLAcademy");
-  const description = project.finish.slice(0, 165);
+  const description = descriptions[kind] ?? project.finish.slice(0, 155);
   const meta = document.querySelector('meta[name="description"]');
   if (meta) meta.setAttribute("content", description);
   let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

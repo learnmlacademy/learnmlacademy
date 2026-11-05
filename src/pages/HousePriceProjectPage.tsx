@@ -109,7 +109,7 @@ export function HousePriceProjectPage() {
   useEffect(() => {
     const title = 'House Price Predictor Project Handbook | LearnMLAcademy';
     const description =
-      'Build a house price predictor from an empty Windows folder to a tested Streamlit app using Ames Housing, Python, scikit-learn and XGBoost.';
+      'Build an end-to-end Ames house price predictor from an empty folder to a tested Streamlit app using Python, scikit-learn regression, and XGBoost models.';
     document.title = title;
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);

@@ -30,7 +30,7 @@ export function CustomerSegmentationProjectPage() {
 
   useEffect(() => {
     document.title = 'Customer Segmentation: RFM, K-Means & PCA | LearnMLAcademy';
-    const description = 'Build a real customer-segmentation system from 541,909 UCI Online Retail transactions using RFM, K-Means, hierarchical clustering, DBSCAN, silhouette analysis, PCA and Streamlit.';
+    const description = 'Build customer segments from 541,909 retail transactions using RFM analysis, K-Means clustering, DBSCAN, PCA dimensionality reduction, and Streamlit.';
     let meta = document.querySelector('meta[name="description"]');
     if (!meta) {
       meta = document.createElement('meta');
