@@ -149,9 +149,9 @@ export function DataVisualizationContent() {
 
       <div className="grid md:grid-cols-3 gap-4 my-6 not-prose">
         <div className="border border-slate-200 p-5 rounded-xl bg-white shadow-sm border-t-4 border-t-blue-500">
-          <h4 className="font-bold text-lg text-slate-900 mb-2">
+          <h3 className="font-bold text-lg text-slate-900 mb-2">
             Univariate Analysis
-          </h4>
+          </h3>
           <p className="text-sm text-slate-600 mb-3">
             Analyzing exactly <strong>one variable</strong> at a time. The main
             purpose is to describe the data and find patterns that exist within
@@ -166,9 +166,9 @@ export function DataVisualizationContent() {
         </div>
 
         <div className="border border-slate-200 p-5 rounded-xl bg-white shadow-sm border-t-4 border-t-emerald-500">
-          <h4 className="font-bold text-lg text-slate-900 mb-2">
+          <h3 className="font-bold text-lg text-slate-900 mb-2">
             Bivariate Analysis
-          </h4>
+          </h3>
           <p className="text-sm text-slate-600 mb-3">
             Analyzing <strong>two variables</strong> simultaneously to discover
             the empirical relationship between them.
@@ -182,9 +182,9 @@ export function DataVisualizationContent() {
         </div>
 
         <div className="border border-slate-200 p-5 rounded-xl bg-white shadow-sm border-t-4 border-t-purple-500">
-          <h4 className="font-bold text-lg text-slate-900 mb-2">
+          <h3 className="font-bold text-lg text-slate-900 mb-2">
             Multivariate Analysis
-          </h4>
+          </h3>
           <p className="text-sm text-slate-600 mb-3">
             Analyzing <strong>more than two variables</strong> to understand
             simultaneous relationships and interactions across multiple
