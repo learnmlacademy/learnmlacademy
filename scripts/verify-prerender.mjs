@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs/promises';
 import { createPrerenderServer, escapeHtml, loadPages, outputPathForRoute } from './prerender.mjs';
+import { auditPageHeadingHierarchy, summarizeHeadingAudit } from './heading-hierarchy.mjs';
 
 // These checks read generated HTML, before JavaScript or client effects can repair it.
 const normalize = value => value.replace(/<!--[^]*?-->/g, '').replace(/\s+/g, ' ').trim();
@@ -406,14 +407,28 @@ try {
   assert.equal(new Set(lessons.map(page => page.title)).size, 167, 'Lesson SEO titles must be unique');
   assert.equal(new Set(pages.map(page => page.title)).size, pages.length, 'All page SEO titles across the site must be unique');
   const failures = [];
+  const headingAuditResults = [];
   for (const page of pages) {
     try {
-      verifyPage(await fs.readFile(outputPathForRoute(page.route), 'utf8'), page);
+      const html = await fs.readFile(outputPathForRoute(page.route), 'utf8');
+      verifyPage(html, page);
+      headingAuditResults.push(auditPageHeadingHierarchy(html, page.route));
     } catch (error) {
-      failures.push(`${page.route}: ${error.message}`);
+      failures.push(\`${page.route}: ${error.message}\`);
     }
   }
-  assert.equal(failures.length, 0, `Prerender verification failed:\n${failures.join('\n')}`);
+  assert.equal(failures.length, 0, \`Prerender verification failed:\n${failures.join("\n")}\`);
+
+  // Report the existing heading outline before enforcing it in a subsequent remediation step.
+  const headingAudit = summarizeHeadingAudit(headingAuditResults);
+  console.log(
+    \`heading hierarchy audit (diagnostic): ${headingAudit.pageCount} pages; ${headingAudit.cleanPageCount} clean; ${headingAudit.flaggedPageCount} flagged; issue counts: ${JSON.stringify(headingAudit.issueCounts)}\`
+  );
+  for (const result of headingAudit.results) {
+    for (const issue of result.issues) {
+      console.log(\`heading audit: ${result.route} [${issue.code}] ${issue.message}\`);
+    }
+  }
   assert.equal(
     verifiedAgenticLabs.size,
     16,
