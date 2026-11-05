@@ -1034,9 +1034,9 @@ export function LogisticRegressionContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <h4 className="bg-slate-100 p-4 font-bold text-slate-800 border-b border-slate-200 text-lg">
+          <h3 className="bg-slate-100 p-4 font-bold text-slate-800 border-b border-slate-200 text-lg">
             Logistic vs Linear Regression
-          </h4>
+          </h3>
           <div className="p-4">
             <table className="min-w-full text-left text-sm lg:text-base">
               <tbody className="divide-y divide-slate-100">
@@ -1061,9 +1061,9 @@ export function LogisticRegressionContent() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-          <h4 className="bg-slate-100 p-4 font-bold text-slate-800 border-b border-slate-200 text-lg">
+          <h3 className="bg-slate-100 p-4 font-bold text-slate-800 border-b border-slate-200 text-lg">
             Logistic vs Decision Tree
-          </h4>
+          </h3>
           <div className="p-4">
             <table className="min-w-full text-left text-sm lg:text-base">
               <tbody className="divide-y divide-slate-100">

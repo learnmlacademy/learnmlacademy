@@ -215,7 +215,7 @@ export function NaiveBayesContent() {
 
       <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-10">
          <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-             <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Step-by-Step Probability Calculation</h4>
+             <h3 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Step-by-Step Probability Calculation</h3>
          </div>
          <div className="p-6">
             <ol className="list-decimal pl-6 space-y-6 text-lg text-slate-700 marker:text-indigo-600 marker:font-bold">
@@ -637,7 +637,7 @@ print(f"Accuracy: {model.score(X_test_tfidf, y_test):.2%}")`}</pre>
       <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-12">
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
           <Code className="text-indigo-600 mr-2" />
-          <h4 className="font-bold text-indigo-800 text-xl">Python Code: Multinomial NB (Text Data)</h4>
+          <h3 className="font-bold text-indigo-800 text-xl">Python Code: Multinomial NB (Text Data)</h3>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
           <pre className="!m-0">

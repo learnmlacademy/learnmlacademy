@@ -404,9 +404,9 @@ export function DecisionTreesContent() {
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-emerald-50 border border-emerald-200 p-4 rounded-lg text-center">
-            <h5 className="font-bold font-sans text-emerald-900 mb-3">
+            <h4 className="font-bold font-sans text-emerald-900 mb-3">
               Pure Node Example
-            </h5>
+            </h4>
             <div className="flex gap-2 justify-center mb-3">
               <span className="bg-emerald-500 text-white px-2 py-1 rounded font-bold text-xs shadow-sm">
                 YES
@@ -427,9 +427,9 @@ export function DecisionTreesContent() {
           </div>
 
           <div className="bg-rose-50 border border-rose-200 p-4 rounded-lg text-center">
-            <h5 className="font-bold font-sans text-rose-900 mb-3">
+            <h4 className="font-bold font-sans text-rose-900 mb-3">
               Impure Node Example
-            </h5>
+            </h4>
             <div className="flex gap-2 justify-center mb-3">
               <span className="bg-emerald-500 text-white px-2 py-1 rounded font-bold text-xs shadow-sm">
                 YES

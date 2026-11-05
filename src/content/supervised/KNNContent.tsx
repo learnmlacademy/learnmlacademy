@@ -269,7 +269,7 @@ export function KNNContent() {
 
       <div className="bg-white border text-left border-slate-200 shadow-sm rounded-xl overflow-hidden mb-10">
          <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-             <h4 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Prediction Workflow</h4>
+             <h3 className="font-bold text-slate-800 uppercase tracking-wider text-sm">Prediction Workflow</h3>
          </div>
          <div className="p-6">
             <ol className="list-decimal pl-6 space-y-4 text-lg text-slate-700 marker:text-indigo-600 marker:font-bold">
