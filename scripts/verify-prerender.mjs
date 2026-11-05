@@ -419,16 +419,26 @@ try {
   }
   assert.equal(failures.length, 0, `Prerender verification failed:\n${failures.join("\n")}`);
 
-  // Report the existing heading outline before enforcing it in a subsequent remediation step.
+  // Enforce the rendered heading outline on every canonical prerendered page.
   const headingAudit = summarizeHeadingAudit(headingAuditResults);
-  console.log(
-    `heading hierarchy audit (diagnostic): ${headingAudit.pageCount} pages; ${headingAudit.cleanPageCount} clean; ${headingAudit.flaggedPageCount} flagged; issue counts: ${JSON.stringify(headingAudit.issueCounts)}`
-  );
   for (const result of headingAudit.results) {
     for (const issue of result.issues) {
-      console.log(`heading audit: ${result.route} [${issue.code}] ${issue.message}`);
+      console.error(`heading audit: ${result.route} [${issue.code}] ${issue.message}`);
     }
   }
+  assert.equal(
+    headingAudit.pageCount,
+    pages.length,
+    `Heading hierarchy audit must cover every canonical page: expected ${pages.length}, found ${headingAudit.pageCount}`
+  );
+  assert.equal(
+    headingAudit.flaggedPageCount,
+    0,
+    `Heading hierarchy audit failed on ${headingAudit.flaggedPageCount} pages with issue counts ${JSON.stringify(headingAudit.issueCounts)}`
+  );
+  console.log(
+    `heading hierarchy audit PASS — ${headingAudit.pageCount} canonical pages; ${headingAudit.cleanPageCount} clean; 0 heading violations.`
+  );
   assert.equal(
     verifiedAgenticLabs.size,
     16,
