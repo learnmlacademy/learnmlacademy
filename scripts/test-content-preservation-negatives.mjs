@@ -945,7 +945,187 @@ async function runNegativeTests() {
     validateBaselineSafety(existingManifest, newManifest);
   });
 
+  // 43. Positive: Exact intended correction is accepted
+  runTest('Accepts exact intended heading correction on /learn/generative-ai-intro (h4 -> h3)', () => {
+    const base = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h2', text: 'Where generation helps—and where caution is required', count: 1 },
+        { level: 'h4', text: 'Historical Compute & Context Growth in Generative AI', count: 1 },
+      ],
+      paragraphs: [{ text: 'Training compute scaling alongside context window capacity.', count: 1 }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const curr = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h2', text: 'Where generation helps—and where caution is required' },
+        { level: 'h3', text: 'Historical Compute & Context Growth in Generative AI' },
+      ],
+      paragraphs: [{ text: 'Training compute scaling alongside context window capacity.' }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const v = verifyPageContent(curr, base, '/learn/generative-ai-intro');
+    assert.equal(v.length, 0, 'Exact intended heading correction on /learn/generative-ai-intro must pass cleanly');
+  });
+
+  // 44. Negative: An unrelated h4 -> h3 change is rejected
+  runTest('Rejects an unrelated h4 -> h3 change', () => {
+    const base = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h4', text: 'Unrelated Subheading Text', count: 1 },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.', count: 1 }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const curr = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h3', text: 'Unrelated Subheading Text' },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.' }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const v = verifyPageContent(curr, base, '/learn/generative-ai-intro');
+    assert(v.length >= 1, 'Unrelated h4 -> h3 change must be rejected');
+    assert(v.some(msg => msg.includes('Missing or modified baseline heading [h4]')), `Expected heading violation, got ${v.join('; ')}`);
+  });
+
+  // 45. Negative: An unrelated h3 -> h4 change is rejected
+  runTest('Rejects an unrelated h3 -> h4 change', () => {
+    const base = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h3', text: 'Historical Compute & Context Growth in Generative AI', count: 1 },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.', count: 1 }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const curr = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h4', text: 'Historical Compute & Context Growth in Generative AI' },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.' }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const v = verifyPageContent(curr, base, '/learn/generative-ai-intro');
+    assert(v.length >= 1, 'Unrelated h3 -> h4 change must be rejected');
+    assert(v.some(msg => msg.includes('Missing or modified baseline heading [h3]')), `Expected heading violation, got ${v.join('; ')}`);
+  });
+
+  // 46. Negative: The same heading on another route does not receive the exception
+  runTest('Rejects the same heading modification on another route', () => {
+    const base = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h4', text: 'Historical Compute & Context Growth in Generative AI', count: 1 },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.', count: 1 }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const curr = {
+      exactCharCount: 800,
+      normalizedCharCount: 750,
+      headings: [
+        { level: 'h3', text: 'Historical Compute & Context Growth in Generative AI' },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.' }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const v = verifyPageContent(curr, base, '/learn/another-topic');
+    assert(v.length >= 1, 'The same heading on another route must not receive the exception');
+    assert(v.some(msg => msg.includes('Missing or modified baseline heading [h4]')), `Expected heading violation, got ${v.join('; ')}`);
+  });
+
+  // 47. Negative: Duplicate heading multiplicity is still enforced
+  runTest('Enforces duplicate heading multiplicity even when exception heading is duplicated', () => {
+    const base = {
+      exactCharCount: 1200,
+      normalizedCharCount: 1100,
+      headings: [
+        { level: 'h4', text: 'Historical Compute & Context Growth in Generative AI', count: 2 },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.', count: 1 }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const curr = {
+      exactCharCount: 1200,
+      normalizedCharCount: 1100,
+      headings: [
+        { level: 'h3', text: 'Historical Compute & Context Growth in Generative AI' },
+      ],
+      paragraphs: [{ text: 'Paragraph under heading.' }],
+      listItems: [],
+      captions: [],
+      codeBlocks: [],
+      tables: [],
+      formulas: [],
+      figures: [],
+    };
+    const v = verifyPageContent(curr, base, '/learn/generative-ai-intro');
+    assert(v.length >= 1, 'Duplicate heading reduction must be detected');
+    assert(
+      v.some(msg => msg.includes('duplicate removed or multiplicity reduced')),
+      `Expected multiplicity reduction violation, got ${v.join('; ')}`
+    );
+  });
+
   console.log(`\nAll ${passedTests}/${totalTests} Negative and Positive Test Cases PASSED successfully.`);
 }
 
 await runNegativeTests();
+

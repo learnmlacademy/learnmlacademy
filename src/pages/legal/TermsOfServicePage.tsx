@@ -16,7 +16,7 @@ export function TermsOfServicePage() {
       
       <div className="prose prose-slate max-w-none text-lg text-slate-700 leading-relaxed space-y-8">
         <p>
-          Last updated: {new Date().toLocaleDateString()}
+          Last updated: 11/1/2026
         </p>
 
         <section>

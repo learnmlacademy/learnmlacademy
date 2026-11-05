@@ -70,11 +70,11 @@ export function BlogPostPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-sm text-slate-400 mb-8">
-        <Link to="/" className="hover:text-indigo-600 transition-colors">Home</Link>
-        <span>›</span>
-        <Link to="/blog" className="hover:text-indigo-600 transition-colors">Blog</Link>
-        <span>›</span>
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-slate-400 mb-8">
+        <Link to="/" className="text-slate-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xs transition-colors">Home</Link>
+        <span aria-hidden="true">›</span>
+        <Link to="/blog" className="text-slate-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xs transition-colors">Blog</Link>
+        <span aria-hidden="true">›</span>
         <span className="text-slate-600 truncate max-w-xs">{post.title}</span>
       </nav>
 

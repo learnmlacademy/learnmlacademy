@@ -103,13 +103,13 @@ export function LessonHeader({
       <nav aria-label="Breadcrumb" className="mb-4">
         <ol className="flex flex-wrap items-center gap-2 text-sm text-slate-400">
           <li>
-            <Link to="/" className="hover:text-indigo-600 transition-colors">
+            <Link to="/" className="text-slate-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xs transition-colors">
               Home
             </Link>
           </li>
           <li aria-hidden="true">›</li>
           <li>
-            <Link to="/curriculum" className="hover:text-indigo-600 transition-colors">
+            <Link to="/curriculum" className="text-slate-600 hover:text-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-xs transition-colors">
               Curriculum
             </Link>
           </li>
