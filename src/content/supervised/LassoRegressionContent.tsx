@@ -56,9 +56,9 @@ export function LassoRegressionContent() {
         Lasso Regression is a regularization technique used to improve prediction accuracy and implicitly perform feature selection.</p>
 
       <div className="bg-slate-50 border border-slate-200 p-6 rounded-lg mb-10 shadow-sm">
-        <h4 className="font-bold text-slate-800 mb-2">
+        <h3 className="font-bold text-slate-800 mb-2">
           The full form of LASSO is:
-        </h4>
+        </h3>
         <p className="text-indigo-700 font-mono text-lg mb-4">
           Least Absolute Shrinkage and Selection Operator
         </p>
@@ -220,9 +220,9 @@ export function LassoRegressionContent() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
         <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-emerald-800 mb-4 text-center">
+          <h3 className="font-bold text-emerald-800 mb-4 text-center">
             GOOD GENERALIZATION
-          </h4>
+          </h3>
           <div className="space-y-3 font-mono text-sm">
             <div className="flex justify-between bg-white p-2 rounded">
               <span className="text-slate-600">Training Error</span>
@@ -235,9 +235,9 @@ export function LassoRegressionContent() {
           </div>
         </div>
         <div className="bg-rose-50 border border-rose-200 p-5 rounded-lg shadow-sm">
-          <h4 className="font-bold text-rose-800 mb-4 text-center">
+          <h3 className="font-bold text-rose-800 mb-4 text-center">
             OVERFITTING
-          </h4>
+          </h3>
           <div className="space-y-3 font-mono text-sm">
             <div className="flex justify-between bg-white p-2 rounded">
               <span className="text-slate-600">Training Error</span>
@@ -396,10 +396,10 @@ export function LassoRegressionContent() {
 
       {/* Understanding L1 Penalty */}
       <div className="pl-4 border-l-4 border-emerald-400 bg-emerald-50 py-4 pr-4 rounded-r-md my-8">
-        <h4 className="font-bold text-xl mb-3 flex items-center text-slate-800">
+        <h3 className="font-bold text-xl mb-3 flex items-center text-slate-800">
           <CheckCircle className="w-6 h-6 mr-2 text-emerald-600" />{" "}
           Understanding the L1 Penalty
-        </h4>
+        </h3>
         <p className="mb-4 text-slate-700 text-lg">
           The L1 penalty uses the absolute value of coefficients.
         </p>
@@ -548,10 +548,10 @@ export function LassoRegressionContent() {
 
       {/* Geometric Interpretation */}
       <div className="pl-4 border-l-4 border-indigo-400 bg-indigo-50 py-4 pr-4 rounded-r-md my-8">
-        <h4 className="font-bold text-xl mb-3 flex items-center text-slate-800">
+        <h3 className="font-bold text-xl mb-3 flex items-center text-slate-800">
           <Box className="w-6 h-6 mr-2 text-indigo-600" /> Why Lasso Creates
           Sparse Models
-        </h4>
+        </h3>
         <p className="text-slate-700 text-lg mb-4">
           With two coefficients, the L1 constraint has a diamond-shaped boundary.
           Its sharp corners lie on the axes, which helps explain why Lasso solutions
@@ -575,7 +575,7 @@ export function LassoRegressionContent() {
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-blue-50 border border-blue-200 p-5 rounded-lg shadow-sm text-center">
-          <h4 className="font-bold text-blue-800 mb-4">Ridge Penalty (L2)</h4>
+          <h3 className="font-bold text-blue-800 mb-4">Ridge Penalty (L2)</h3>
           <div className="font-mono text-xl text-blue-900 bg-white p-3 rounded mb-4 shadow-inner">
             λΣθ²
           </div>
@@ -584,9 +584,9 @@ export function LassoRegressionContent() {
           </p>
         </div>
         <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-lg shadow-sm text-center">
-          <h4 className="font-bold text-emerald-800 mb-4">
+          <h3 className="font-bold text-emerald-800 mb-4">
             Lasso Penalty (L1)
-          </h4>
+          </h3>
           <div className="font-mono text-xl text-emerald-900 bg-white p-3 rounded mb-4 shadow-inner">
             λΣ|θ|
           </div>
@@ -696,16 +696,16 @@ export function LassoRegressionContent() {
         <Divide className="mr-2 text-indigo-600" /> Multicollinearity in Lasso
       </h2>
       <div className="bg-amber-50 border border-amber-200 p-6 rounded-xl my-6 shadow-sm">
-        <h4 className="font-bold text-amber-900 mb-2">
+        <h3 className="font-bold text-amber-900 mb-2">
           What is Multicollinearity?
-        </h4>
+        </h3>
         <p className="text-amber-800 mb-4">
           When features are highly correlated (e.g., House Area and Number of
           Rooms).
         </p>
-        <h4 className="font-bold text-amber-900 mb-2">
+        <h3 className="font-bold text-amber-900 mb-2">
           Lasso Behavior with Correlated Features:
-        </h4>
+        </h3>
         <p className="text-amber-800 mb-4">
           With strongly correlated predictors, Lasso may keep one and shrink another to zero.
           Which one is selected can be unstable when predictors carry very similar information.
