@@ -414,19 +414,19 @@ try {
       verifyPage(html, page);
       headingAuditResults.push(auditPageHeadingHierarchy(html, page.route));
     } catch (error) {
-      failures.push(\`${page.route}: ${error.message}\`);
+      failures.push(`${page.route}: ${error.message}`);
     }
   }
-  assert.equal(failures.length, 0, \`Prerender verification failed:\n${failures.join("\n")}\`);
+  assert.equal(failures.length, 0, `Prerender verification failed:\n${failures.join("\n")}`);
 
   // Report the existing heading outline before enforcing it in a subsequent remediation step.
   const headingAudit = summarizeHeadingAudit(headingAuditResults);
   console.log(
-    \`heading hierarchy audit (diagnostic): ${headingAudit.pageCount} pages; ${headingAudit.cleanPageCount} clean; ${headingAudit.flaggedPageCount} flagged; issue counts: ${JSON.stringify(headingAudit.issueCounts)}\`
+    `heading hierarchy audit (diagnostic): ${headingAudit.pageCount} pages; ${headingAudit.cleanPageCount} clean; ${headingAudit.flaggedPageCount} flagged; issue counts: ${JSON.stringify(headingAudit.issueCounts)}`
   );
   for (const result of headingAudit.results) {
     for (const issue of result.issues) {
-      console.log(\`heading audit: ${result.route} [${issue.code}] ${issue.message}\`);
+      console.log(`heading audit: ${result.route} [${issue.code}] ${issue.message}`);
     }
   }
   assert.equal(
