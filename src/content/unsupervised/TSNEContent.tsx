@@ -324,7 +324,7 @@ Final Visualization`}
         <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-8 border-l-4 border-l-indigo-500">
           <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
             <Code className="text-indigo-600 mr-3" />
-            <h4 className="font-bold text-slate-800 text-lg">Python Code: t-SNE on handwritten digits</h4>
+            <h3 className="font-bold text-slate-800 text-lg">Python Code: t-SNE on handwritten digits</h3>
           </div>
           <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">
 <pre><code>{`import matplotlib.pyplot as plt

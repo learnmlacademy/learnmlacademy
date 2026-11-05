@@ -401,7 +401,7 @@ export function KMeansContent() {
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <div className="flex items-center">
              <Code className="text-indigo-600 mr-2" />
-             <h4 className="font-bold text-indigo-800 text-xl">K-Means Python Implementation</h4>
+             <h3 className="font-bold text-indigo-800 text-xl">K-Means Python Implementation</h3>
           </div>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">

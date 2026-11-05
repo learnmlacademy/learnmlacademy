@@ -309,7 +309,7 @@ export function GradientBoostingContent() {
 
       <div className="bg-white border rounded-xl overflow-hidden shadow-sm mb-10">
         <div className="bg-slate-50 px-6 py-4 border-b border-slate-200">
-          <h4 className="font-bold text-indigo-800 text-xl">GradientBoostingRegressor</h4>
+          <h3 className="font-bold text-indigo-800 text-xl">GradientBoostingRegressor</h3>
         </div>
         <div className="bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm sm:text-base leading-relaxed p-6 overflow-x-auto">
           <pre className="!m-0"><code>{`from sklearn.datasets import load_diabetes

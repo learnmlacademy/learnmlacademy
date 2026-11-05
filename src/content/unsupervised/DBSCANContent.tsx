@@ -446,7 +446,7 @@ Mark Remaining Points as Noise`}
         <div className="bg-white border text-left border-slate-200 rounded-xl overflow-hidden shadow-sm mb-10 border-l-4 border-l-indigo-500">
           <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
             <Code className="text-indigo-600 mr-3" />
-            <h4 className="font-bold text-slate-800 text-lg">Python Code: DBSCAN Clustering</h4>
+            <h3 className="font-bold text-slate-800 text-lg">Python Code: DBSCAN Clustering</h3>
           </div>
           <div className="p-0">
             <div className="bg-[#1e1e1e] text-[#d4d4d4] p-6 overflow-x-auto text-sm font-mono leading-relaxed">
