@@ -160,7 +160,7 @@ model.fit(X_train, y_train, epochs=50, validation_split=0.2)`,
       ))}
 
       <div className="bg-indigo-600 rounded-2xl p-8 text-center">
-        <h3 className="text-white font-bold text-2xl mb-3">Which algorithm should you start with?</h3>
+        <h2 className="text-white font-bold text-2xl mb-3">Which algorithm should you start with?</h2>
         <p className="text-indigo-200 mb-4 leading-relaxed">
           Always start with <strong className="text-white">Logistic Regression</strong> or <strong className="text-white">Random Forest</strong> as your baseline. 
           They are fast, interpretable, and work well on most problems. Only move to XGBoost or Neural Networks after establishing a strong baseline.

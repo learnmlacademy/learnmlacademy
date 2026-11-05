@@ -11,7 +11,7 @@ export function SparseMovieMatrixVisual() {
   return (
     <figure className="my-5 rounded-2xl border border-sky-200 bg-sky-50 p-4 sm:p-6">
       <figcaption className="mb-4">
-        <h4 className="font-bold text-slate-900">A movie-by-user matrix: most ratings are missing</h4>
+        <h3 className="font-bold text-slate-900">A movie-by-user matrix: most ratings are missing</h3>
         <p className="mt-2 text-sm leading-6 text-slate-700">Rows are movies; columns are users. A filled square is an observed rating. An empty square means that user has not rated that movie — it is <strong>not a zero-star rating</strong>.</p>
       </figcaption>
       <div className="overflow-x-auto">
@@ -29,7 +29,7 @@ export function CosineSimilarityVisual() {
   return (
     <figure className="my-5 rounded-2xl border border-violet-200 bg-violet-50 p-4 sm:p-6">
       <figcaption>
-        <h4 className="font-bold text-slate-900">Cosine similarity: compare direction, not just magnitude</h4>
+        <h3 className="font-bold text-slate-900">Cosine similarity: compare direction, not just magnitude</h3>
         <p className="mt-2 text-sm leading-6 text-slate-700">Imagine two simplified movie-feature vectors, A = [1, 1] and B = [1, 0]. They point 45° apart. This is a teaching example, not a measured result from the dataset.</p>
       </figcaption>
       <svg viewBox="0 0 500 275" className="mx-auto my-4 h-auto w-full max-w-xl" role="img" aria-label="Two vectors from the origin, vector A at 45 degrees and vector B horizontal; cosine similarity about 0.707">
