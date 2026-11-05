@@ -654,9 +654,9 @@ X_test_scaled = scaler.transform(X_test)`}</code>
       </h2>
       <div className="bg-slate-800 text-white p-6 rounded-xl relative overflow-hidden not-prose mb-10">
         <BookOpen className="absolute right-4 top-4 h-16 w-16 text-slate-700 opacity-50" />
-        <h4 className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
+        <h3 className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
           Test Your Knowledge
-        </h4>
+        </h3>
         <p className="font-medium text-slate-200">Scenario:</p>
         <p className="text-sm bg-slate-700/50 p-3 rounded mb-4">
           You are building an algorithm for a real estate firm. The data has

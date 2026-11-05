@@ -1298,9 +1298,9 @@ plt.show()`}
       </h2>
       <div className="bg-slate-800 text-white p-6 rounded-xl relative overflow-hidden not-prose mb-10">
         <BrainCircuit className="absolute right-4 top-4 h-16 w-16 text-slate-700 opacity-50" />
-        <h4 className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
+        <h3 className="text-lg font-bold mt-0 border-b border-slate-600 pb-2 mb-4 text-indigo-300">
           Check Your Understanding
-        </h4>
+        </h3>
         <div className="space-y-4 relative z-10">
           <div>
             <p className="font-bold text-slate-200">
