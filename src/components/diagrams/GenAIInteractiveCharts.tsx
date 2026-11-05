@@ -85,7 +85,7 @@ export function GenerativeVsDiscriminativeBoundaryChart() {
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h4 className="text-base font-bold text-slate-900">Discriminative Boundary vs Generative Distribution Contours</h4>
+          <h3 className="text-base font-bold text-slate-900">Discriminative Boundary vs Generative Distribution Contours</h3>
           <p className="text-xs text-slate-600">Discriminative draws one dividing line; Generative models the complete density cloud for each class.</p>
         </div>
         <div className="flex gap-1.5 rounded-lg border border-slate-200 bg-slate-50 p-1">
@@ -200,7 +200,7 @@ export function InteractiveSamplingSimulator() {
             <Sparkles className="h-4 w-4" />
           </div>
           <div>
-            <h4 className="text-base font-bold text-slate-900">Interactive Sampling & Conditioning Simulator</h4>
+            <h3 className="text-base font-bold text-slate-900">Interactive Sampling & Conditioning Simulator</h3>
             <p className="text-xs text-slate-600">Drag the random value slider r in [0, 1) or switch conditions to see how samples emerge!</p>
           </div>
         </div>
@@ -315,7 +315,7 @@ export function VAELossAndLatentChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">VAE ELBO Loss Balance Across Training Epochs</h4>
+        <h3 className="text-base font-bold text-slate-900">VAE ELBO Loss Balance Across Training Epochs</h3>
         <p className="text-xs text-slate-600">Total Loss = Reconstruction Loss (negative log-likelihood) + KL Divergence (regularization to standard normal prior).</p>
       </div>
       <div className="h-64 w-full">
@@ -354,7 +354,7 @@ export function GANTrainingDynamicsChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">GAN Adversarial Convergence: Generator vs Discriminator</h4>
+        <h3 className="text-base font-bold text-slate-900">GAN Adversarial Convergence: Generator vs Discriminator</h3>
         <p className="text-xs text-slate-600">Tracking minimax loss and discriminator accuracy toward theoretical Nash Equilibrium (log 2 ≈ 0.693).</p>
       </div>
       <div className="h-64 w-full">
@@ -396,7 +396,7 @@ export function DiffusionNoiseScheduleChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Forward Diffusion Signal Retention (ᾱₜ) Over 1000 Timesteps</h4>
+        <h3 className="text-base font-bold text-slate-900">Forward Diffusion Signal Retention (ᾱₜ) Over 1000 Timesteps</h3>
         <p className="text-xs text-slate-600">Cosine schedule prevents signal from vanishing too abruptly in early timesteps compared to linear schedule.</p>
       </div>
       <div className="h-64 w-full">
@@ -429,7 +429,7 @@ export function LatentVsPixelSpaceChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Pixel-Space Diffusion vs Latent Diffusion Compute Comparison</h4>
+        <h3 className="text-base font-bold text-slate-900">Pixel-Space Diffusion vs Latent Diffusion Compute Comparison</h3>
         <p className="text-xs text-slate-600">Compressing spatial dimensions 8× reduces active tensor values by 48×, dropping inference latency by 10×!</p>
       </div>
       <div className="h-60 w-full">
@@ -468,7 +468,7 @@ export function CFGScaleTradeoffChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Classifier-Free Guidance (CFG Scale w) Trade-off Analysis</h4>
+        <h3 className="text-base font-bold text-slate-900">Classifier-Free Guidance (CFG Scale w) Trade-off Analysis</h3>
         <p className="text-xs text-slate-600">ε̂ = ε_uncond + w · (ε_cond - ε_uncond). Sweet spot is typically between 6.0 and 8.5.</p>
       </div>
 
@@ -505,7 +505,7 @@ export function FineTuningTradeoffChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Fine-Tuning Method Resource Footprint vs Checkpoint Size</h4>
+        <h3 className="text-base font-bold text-slate-900">Fine-Tuning Method Resource Footprint vs Checkpoint Size</h3>
         <p className="text-xs text-slate-600">LoRA delivers over 85% of full fine-tuning flexibility with less than 0.5% of the checkpoint storage size!</p>
       </div>
       <div className="h-64 w-full">
@@ -540,7 +540,7 @@ export function GenerativeModelFamilyRadarChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Generative Model Families Multi-Dimensional Comparison</h4>
+        <h3 className="text-base font-bold text-slate-900">Generative Model Families Multi-Dimensional Comparison</h3>
         <p className="text-xs text-slate-600">Each family represents a distinct mathematical trade-off across quality, speed, diversity, and stability.</p>
       </div>
       <div className="h-72 w-full">
@@ -576,7 +576,7 @@ export function FIDConvergenceChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">FID Score (Lower is Better) vs Inception Score (Higher is Better)</h4>
+        <h3 className="text-base font-bold text-slate-900">FID Score (Lower is Better) vs Inception Score (Higher is Better)</h3>
         <p className="text-xs text-slate-600">FID measures distance between generated and real feature distributions; Inception Score measures class certainty and diversity.</p>
       </div>
       <div className="h-64 w-full">
@@ -609,7 +609,7 @@ export function EndToEndLatencyChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">End-to-End Production Latency Breakdown (Milliseconds)</h4>
+        <h3 className="text-base font-bold text-slate-900">End-to-End Production Latency Breakdown (Milliseconds)</h3>
         <p className="text-xs text-slate-600">Comparing total request lifecycles across remote providers, semantic caching, self-hosted vLLM, and local inference.</p>
       </div>
       <div className="h-64 w-full">
@@ -644,7 +644,7 @@ export function TSTRBenchmarkChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">TSTR (Train on Synthetic, Test on Real) Benchmark Accuracy (%)</h4>
+        <h3 className="text-base font-bold text-slate-900">TSTR (Train on Synthetic, Test on Real) Benchmark Accuracy (%)</h3>
         <p className="text-xs text-slate-600">All models are evaluated on the identical untouched Real test set to verify downstream statistical utility.</p>
       </div>
       <div className="h-64 w-full">
@@ -679,7 +679,7 @@ export function AudioVideoComputeScalingChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Video Generation Compute Scaling: Full 3D Attention vs Factorized 2D+1D</h4>
+        <h3 className="text-base font-bold text-slate-900">Video Generation Compute Scaling: Full 3D Attention vs Factorized 2D+1D</h3>
         <p className="text-xs text-slate-600">Full 3D attention scales quadratically with frames $O(F^2 \cdot H^2 W^2)$; factorized spatial-temporal attention reduces memory by &gt;90%!</p>
       </div>
       <div className="h-64 w-full">
@@ -712,7 +712,7 @@ export function LayeredSafetyFunnelChart() {
   return (
     <div className="not-prose my-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="mb-4">
-        <h4 className="text-base font-bold text-slate-900">Layered Safety Defense-in-Depth Mitigation Funnel</h4>
+        <h3 className="text-base font-bold text-slate-900">Layered Safety Defense-in-Depth Mitigation Funnel</h3>
         <p className="text-xs text-slate-600">Residual jailbreak and policy vulnerability rate drops from 48% down to &lt;0.3% across defense tiers.</p>
       </div>
       <div className="h-64 w-full">

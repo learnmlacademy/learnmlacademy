@@ -766,10 +766,10 @@ plt.show()`}</code>
 
         {/* VISUAL OUTPUT */}
         <div className="bg-slate-100 p-6 md:p-8 border-t border-slate-200">
-          <h4 className="font-bold text-slate-800 text-xl mb-6 flex items-center">
+          <h3 className="font-bold text-slate-800 text-xl mb-6 flex items-center">
             <TrendingUp className="mr-2 text-indigo-600" />
             Expected Output Visualizations
-          </h4>
+          </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Dendrogram Output */}
