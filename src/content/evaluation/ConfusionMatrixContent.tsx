@@ -1,4 +1,5 @@
 import React from 'react';
+import { PythonCodeRunner } from '../../components/interactive/PythonCodeRunner';
 import {
   Target,
   AlertTriangle,
@@ -404,6 +405,53 @@ plt.title("Confusion Matrix")
 plt.show()`}</code>
             </pre>
           </div>
+          <PythonCodeRunner
+            title="Run the confusion matrix and classification report"
+            showCode={false}
+            packages={['numpy', 'scikit-learn', 'matplotlib']}
+            code={String.raw`import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.metrics import (
+    confusion_matrix,
+    classification_report,
+    ConfusionMatrixDisplay,
+)
+
+# 1 = Dog (positive class), 0 = Not Dog (negative class)
+y_true = np.array([1, 1, 1, 0, 1, 0, 1, 1, 0, 0])
+y_pred = np.array([1, 0, 1, 0, 1, 1, 1, 1, 0, 0])
+
+# Rows = true labels, columns = predicted labels
+cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
+tn, fp, fn, tp = cm.ravel()
+
+print("Confusion matrix:")
+print(cm)
+print(f"TN={tn}, FP={fp}, FN={fn}, TP={tp}")
+
+print("\\nClassification report:")
+print(
+    classification_report(
+        y_true,
+        y_pred,
+        labels=[0, 1],
+        target_names=["Not Dog", "Dog"],
+        digits=2,
+    )
+)
+
+# Current scikit-learn display API
+ConfusionMatrixDisplay.from_predictions(
+    y_true,
+    y_pred,
+    labels=[0, 1],
+    display_labels=["Not Dog", "Dog"],
+    cmap="Blues",
+    values_format="d",
+)
+plt.title("Confusion Matrix")
+plt.show()`}
+          />
           <div className="bg-[#1e1e1e] text-sky-300 p-4 font-mono text-sm border-t border-slate-700 overflow-x-auto">
             <p className="mb-1">Verified output:</p>
             <pre className="text-slate-300 whitespace-pre">{`Confusion matrix:
