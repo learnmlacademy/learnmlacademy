@@ -1308,6 +1308,7 @@ print(classification_report(y_test, y_pred, target_names=data.target_names))`}
             description: 'Maximum solver steps for lbfgs optimization to reach convergence.'
           }
         ]}
+        executionPackages={['scikit-learn']}
         simulateRun={(params) => {
           const testRatio = Number(params.test_size) || 0.2;
           const maxIterVal = Number(params.max_iter) || 1000;
