@@ -53,7 +53,7 @@ export function AIResearchAssistantProjectPage() {
   useEffect(() => {
     document.title = 'AI Research Assistant: Agent Tools & Citations | LearnMLAcademy';
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute('content', 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, exact citations, tests and Streamlit.');
+    if (meta) meta.setAttribute('content', 'Build a Perplexity-style educational research assistant from scratch using a bounded agent, source reading, citation verification, tests, and Streamlit.');
     let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!link) { link = document.createElement('link'); link.rel = 'canonical'; document.head.appendChild(link); }
     link.href = 'https://www.learnmlacademy.com/projects/ai-research-assistant';

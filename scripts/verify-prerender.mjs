@@ -313,6 +313,8 @@ function onlyMatch(html, pattern, label) {
   return matches[0][1];
 }
 
+const DANGLING_WORD_REGEX = /\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)$/i;
+
 function verifyPage(html, page) {
   const head = onlyMatch(html, /<head>([^]*?)<\/head>/gi, 'head');
   const actualTitle = onlyMatch(head, /<title>([^]*?)<\/title>/gi, 'title');
@@ -323,6 +325,21 @@ function verifyPage(html, page) {
   );
   const description = onlyMatch(head, /<meta\b[^>]*name="description"[^>]*content="([^"]*)"[^>]*>/gi, 'description');
   assert.equal(description, escapeHtml(page.description));
+  assert(
+    page.description.length <= 155,
+    `SEO Description regression: Description exceeds 155 characters for route ${page.route} (${page.description.length} chars):\n  Actual Description: "${page.description}"`
+  );
+  if (page.kind === 'lesson') {
+    assert(
+      page.description.length >= 130,
+      `SEO Description regression: Lesson description under 130 characters for route ${page.route} (${page.description.length} chars):\n  Actual Description: "${page.description}"`
+    );
+  }
+  const trimmedDesc = page.description.replace(/[.,;:!?-]+$/, '').trim();
+  assert(
+    !DANGLING_WORD_REGEX.test(trimmedDesc),
+    `SEO Description regression: Description ends with dangling word/preposition for route ${page.route}:\n  "${page.description}"`
+  );
   const canonicals = [...head.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi)];
   assert.equal(canonicals.length, 1, 'Expected exactly one canonical link');
   assert.equal(canonicals[0][0].match(/href="([^"]*)"/)[1], page.canonical);
@@ -351,10 +368,13 @@ function verifyPage(html, page) {
     const howto = schema['@graph']?.find(node => node['@type'] === 'HowTo');
     assert(article?.['@type']?.includes('LearningResource'), 'Project missing LearningResource');
     assert.equal(article?.headline, page.title, 'Project headline');
+    assert.equal(article?.description, page.description, 'Project article description mismatch');
     assert.equal(breadcrumb?.itemListElement?.at(-1)?.item, page.canonical, 'Project breadcrumb canonical');
     assert.equal(software?.url, page.canonical, 'Project code schema URL');
+    assert.equal(software?.description, page.description, 'Project software description mismatch');
     assert(software?.codeRepository?.startsWith('https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/'), 'Project code repository');
     assert.equal(howto?.step?.length, 4, 'Project how-to steps');
+    assert.equal(howto?.description, page.description, 'Project howto description mismatch');
     assert(page.image?.startsWith('/project-handbooks/'), 'Project image required');
   }
   if (page.kind === 'blog') {
@@ -363,6 +383,7 @@ function verifyPage(html, page) {
     const breadcrumb = schema['@graph']?.find(node => node['@type'] === 'BreadcrumbList');
     assert(article?.['@type']?.includes('LearningResource'), 'Blog missing LearningResource');
     assert.equal(article?.headline, page.title, 'Blog headline');
+    assert.equal(article?.description, page.description, 'Blog article description mismatch');
     assert.equal(breadcrumb?.itemListElement?.at(-1)?.item, page.canonical, 'Blog breadcrumb canonical');
   }
   if (page.kind === 'lesson') {

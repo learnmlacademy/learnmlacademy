@@ -136,7 +136,7 @@ const staticMeta = new Map([
     description: 'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.',
   }],
   ['/projects/retail-forecasting', {title: 'Retail Sales Forecasting Handbook | LearnMLAcademy', description: 'Build a real UK retail sales forecasting system with leakage-safe lag features, chronological splits, baseline evaluation, Streamlit, and complete code.'}],
-  ['/projects/disaster-tweets', {title: 'Disaster Tweet NLP Classifier Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete runnable code.'}],
+  ['/projects/disaster-tweets', {title: 'Disaster Tweet NLP Classifier Handbook | LearnMLAcademy', description: 'Build a real disaster-language classifier from Kaggle tweets using TF-IDF, Naive Bayes, Logistic Regression, validation, metrics and complete code.'}],
   ['/projects/digit-recognizer', {title: 'Digit Recognizer — Complete CNN Handbook | LearnMLAcademy', description: 'Train a real PyTorch CNN from scratch on 1797 handwritten digit examples and build a Streamlit digit recognition app with all code and numerical exercises.'}],
   ['/projects/titanic-survival', {
     title: 'Titanic Survival Predictor Project Handbook | LearnMLAcademy',
@@ -168,7 +168,7 @@ const staticMeta = new Map([
   }],
   ['/projects/ai-content-creator', {
     title: 'ChatGPT-Style AI Content Creator Handbook | LearnMLAcademy',
-    description: 'Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests and complete copyable code.',
+    description: 'Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests, and copyable code.',
   }],
   ['/projects/ai-research-assistant', {
     title: 'AI Research Assistant Agent Handbook | LearnMLAcademy',

@@ -1,11 +1,8 @@
 // Extracted pure SEO metadata and string fitters (no quiz or heavy runtime imports)
-const META_DESCRIPTION_MAX_LENGTH = 160;
+const META_DESCRIPTION_MAX_LENGTH = 155;
 
 export const fitMetaDescription = (description: string): string => {
   const normalized = description.replace(/\s+/g, " ").trim();
-  if (normalized.length <= META_DESCRIPTION_MAX_LENGTH && normalized.length >= 140) {
-    return normalized;
-  }
   if (normalized.length <= META_DESCRIPTION_MAX_LENGTH) {
     return normalized;
   }
@@ -17,7 +14,7 @@ export const fitMetaDescription = (description: string): string => {
     candidate.lastIndexOf("?")
   );
 
-  if (sentenceEnd >= 135) {
+  if (sentenceEnd >= 130) {
     return candidate.slice(0, sentenceEnd + 1);
   }
 
@@ -29,7 +26,7 @@ export const fitMetaDescription = (description: string): string => {
     candidate.lastIndexOf("–")
   );
 
-  if (phraseEnd >= 135) {
+  if (phraseEnd >= 130) {
     return `${candidate
       .slice(0, phraseEnd)
       .replace(/[,:;\-–—]+$/, "")
@@ -152,7 +149,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "classification-intro": {
     "title": "Classification Algorithms Guide | LearnMLAcademy",
-    "description": "Categorize discrete target classes with decision boundaries and probabilities, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Categorize discrete target classes with decision boundaries, posterior probabilities, Python code, architecture diagrams, worked examples, and quizzes."
   },
   "logistic-regression": {
     "title": "Logistic Regression: Math & Code | LearnMLAcademy",
@@ -180,7 +177,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "bagging": {
     "title": "Bagging & Bootstrap Aggregation | LearnMLAcademy",
-    "description": "Reduce model variance using bootstrap sampling and parallel bagging estimators, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Reduce model variance using bootstrap sampling and parallel bagging estimators, with Python code, ensemble diagrams, worked examples, and interview quiz."
   },
   "boosting": {
     "title": "Boosting Algorithms Overview | LearnMLAcademy",
@@ -216,7 +213,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "tsne": {
     "title": "t-SNE Dimensionality Reduction | LearnMLAcademy",
-    "description": "Visualize high-dimensional data clusters with non-linear t-SNE probability maps, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Visualize high-dimensional data clusters with non-linear t-SNE probability maps, Python code, cluster diagrams, worked examples, and an interview quiz."
   },
   "association-rules": {
     "title": "Association Rule Mining Guide | LearnMLAcademy",
@@ -240,7 +237,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "cost-functions": {
     "title": "Cost & Loss Functions in ML | LearnMLAcademy",
-    "description": "Compare convex optimization landscapes and loss functions in machine learning, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Compare convex optimization landscapes and loss functions in machine learning, with Python code, loss curves, worked examples, and interview quiz checks."
   },
   "hyperparameter-tuning": {
     "title": "Hyperparameter Tuning in ML | LearnMLAcademy",
@@ -280,7 +277,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "online-learning": {
     "title": "Online Learning & Streaming ML | LearnMLAcademy",
-    "description": "Stream machine learning updates continuously using incremental SGD algorithms, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Stream machine learning updates continuously using incremental SGD algorithms, with Python code, flow diagrams, worked examples, and an interview quiz."
   },
   "reinforcement-learning-adv": {
     "title": "Advanced Reinforcement Learning | LearnMLAcademy",
@@ -296,7 +293,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "neural-networks": {
     "title": "How Neural Networks Learn | LearnMLAcademy",
-    "description": "Follow how artificial neurons compute activations and update synaptic weights, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Follow how artificial neurons compute activations and update synaptic weights, with Python code, network diagrams, worked examples, and an interview quiz."
   },
   "math-foundations-deep-learning": {
     "title": "Math for Neural Networks | LearnMLAcademy",
@@ -312,7 +309,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "loss-functions-deep-learning": {
     "title": "Deep Learning Loss Functions | LearnMLAcademy",
-    "description": "Select optimal loss functions for deep regression, classification, and ranking, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Select optimal loss functions for deep regression, classification, and ranking, with Python code, loss formulas, worked examples, and an interview quiz."
   },
   "backpropagation": {
     "title": "Backpropagation & Autodiff | LearnMLAcademy",
@@ -320,7 +317,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "neural-network-training-loop": {
     "title": "Neural Network Training Loops | LearnMLAcademy",
-    "description": "Construct robust PyTorch training loops with validation and gradient tracking, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Construct robust PyTorch training loops with validation and gradient tracking, with Python code, training diagrams, worked examples, and an interview quiz."
   },
   "deep-learning-optimizers": {
     "title": "Deep Learning Optimizers Guide | LearnMLAcademy",
@@ -332,7 +329,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "deep-learning-regularization": {
     "title": "Deep Learning Regularization | LearnMLAcademy",
-    "description": "Prevent deep neural network overfitting with dropout and weight decay penalties, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Prevent deep neural network overfitting with dropout and weight decay penalties, with Python code, diagrams, worked examples, and an interview quiz."
   },
   "data-augmentation-deep-learning": {
     "title": "Deep Learning Data Augmentation | LearnMLAcademy",
@@ -352,7 +349,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "vision-transformers": {
     "title": "Vision Transformers (ViT) Guide | LearnMLAcademy",
-    "description": "Process image patches with Transformer self-attention using Vision Transformers, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Process image patches with Transformer self-attention using Vision Transformers, with Python code, patch diagrams, worked examples, and an interview quiz."
   },
   "rnn-lstm": {
     "title": "RNNs, LSTMs & GRUs Explained | LearnMLAcademy",
@@ -360,7 +357,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "attention-transformers-deep-learning": {
     "title": "Seq2Seq Models & Attention | LearnMLAcademy",
-    "description": "Understand encoder-decoder sequence modeling and Bahdanau attention alignments, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Understand sequence modeling and Bahdanau attention alignments in deep learning, with Python code, flow diagrams, worked examples, and an interview quiz."
   },
   "transformers-deep-learning": {
     "title": "Transformers for Deep Learning | LearnMLAcademy",
@@ -368,15 +365,15 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "autoencoders": {
     "title": "Autoencoders & Variants Guide | LearnMLAcademy",
-    "description": "Compress high-dimensional data into bottleneck latent spaces with autoencoders, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Compress high-dimensional data into bottleneck latent spaces with autoencoders, with Python code, latent diagrams, worked examples, and an interview quiz."
   },
   "transfer-learning": {
     "title": "Transfer Learning & Fine-Tuning | LearnMLAcademy",
-    "description": "Adapt pretrained deep vision and language models to downstream tasks with LoRA, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Adapt pretrained deep vision and language models to downstream tasks with LoRA, with Python code, fine-tuning diagrams, worked examples, and a quiz."
   },
   "self-supervised-few-shot-learning": {
     "title": "Self-Supervised & Few-Shot Learning | LearnMLAcademy",
-    "description": "Train representations without labels using contrastive learning and few shots, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Train representations without labels using contrastive learning and few shots, with Python code, workflow diagrams, worked examples, and an interview quiz."
   },
   "graph-neural-networks": {
     "title": "Graph Neural Networks (GNNs) | LearnMLAcademy",
@@ -392,7 +389,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "deep-learning-nlp": {
     "title": "Deep Learning for NLP Guide | LearnMLAcademy",
-    "description": "Process natural language text using Word2Vec embeddings and subword tokenizers, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Process natural language text using Word2Vec embeddings and subword tokenizers, with Python code, token diagrams, worked examples, and an interview quiz."
   },
   "pinn-kan-topological-networks": {
     "title": "PINNs, KANs & Topological Networks | LearnMLAcademy",
@@ -404,7 +401,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "generative-vs-discriminative": {
     "title": "Generative vs Discriminative Models | LearnMLAcademy",
-    "description": "Compare generative versus discriminative models with joint and conditional math, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Compare generative and discriminative models with joint and conditional math, with Python code, decision diagrams, worked examples, and an interview quiz."
   },
   "how-generative-models-learn": {
     "title": "How Generative Models Learn | LearnMLAcademy",
@@ -416,11 +413,11 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "gans": {
     "title": "Generative Adversarial Networks (GANs) | LearnMLAcademy",
-    "description": "Train Generative Adversarial Networks (GANs) using minimax loss and DCGAN code, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Train Generative Adversarial Networks using minimax loss and DCGAN architecture, with Python code, loss curves, worked examples, and an interview quiz."
   },
   "diffusion-models": {
     "title": "Diffusion Models Architecture | LearnMLAcademy",
-    "description": "Derive diffusion models from scratch using forward noise and reverse denoising, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Derive diffusion models from scratch using forward noise and reverse denoising, with Python code, noise diagrams, worked examples, and an interview quiz."
   },
   "stable-latent-diffusion": {
     "title": "Stable Diffusion & Latent Diffusion | LearnMLAcademy",
@@ -452,11 +449,11 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "responsible-generative-ai": {
     "title": "Responsible Generative AI Guide | LearnMLAcademy",
-    "description": "Implement responsible AI governance, synthetic watermarking, and bias detection, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Implement responsible AI governance, synthetic watermarking, and bias detection, with Python code, safety diagrams, worked examples, and an interview quiz."
   },
   "choosing-generative-model": {
     "title": "Choosing Generative Models Guide | LearnMLAcademy",
-    "description": "Select the optimal generative model architecture based on latency and fidelity, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Select the optimal generative model architecture based on latency and fidelity, with Python code, radar diagrams, worked examples, and an interview quiz."
   },
   "building-genai-apps": {
     "title": "Building GenAI Applications | LearnMLAcademy",
@@ -488,11 +485,11 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "pretraining-finetuning": {
     "title": "LLM Pretraining & Fine-Tuning | LearnMLAcademy",
-    "description": "Explore how modern foundation LLMs are pretrained at scale on massive compute, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Explore how modern foundation LLMs are pretrained at scale on massive compute, with Python code, training diagrams, worked examples, and an interview quiz."
   },
   "instruction-tuning-rlhf": {
     "title": "Fine-Tuning LLMs: SFT, RLHF & LoRA | LearnMLAcademy",
-    "description": "Fine-tune LLMs efficiently using Supervised Fine-Tuning (SFT) and LoRA adapters, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Fine-tune LLMs efficiently using Supervised Fine-Tuning and LoRA adapters, with Python code, alignment diagrams, worked examples, and an interview quiz."
   },
   "rag": {
     "title": "Retrieval-Augmented Generation (RAG) | LearnMLAcademy",
@@ -520,15 +517,15 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "reasoning-models": {
     "title": "Reasoning Models & Test-Time Compute | LearnMLAcademy",
-    "description": "Understand reasoning models, chain-of-thought prompting, and test-time compute, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Understand reasoning models, chain-of-thought prompting, and test-time compute, with Python code, search diagrams, worked examples, and an interview quiz."
   },
   "efficient-llm-serving": {
     "title": "Efficient LLM Serving & Inference | LearnMLAcademy",
-    "description": "Serve LLMs at scale with vLLM PagedAttention, KV cache reuse, and quantization, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Serve LLMs at scale with vLLM PagedAttention, KV cache reuse, and quantization, with Python code, memory diagrams, worked examples, and an interview quiz."
   },
   "llmops": {
     "title": "LLMOps in Production Guide | LearnMLAcademy",
-    "description": "Deploy and monitor enterprise LLM applications with tracing and latency budgets, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Deploy and monitor enterprise LLM applications with latency and cost budgets, with Python code, telemetry diagrams, worked examples, and an interview quiz."
   },
   "agentic-ai-intro": {
     "title": "What Is Agentic AI? Agent Concepts | LearnMLAcademy",
@@ -592,7 +589,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "agent-observability-deployment": {
     "title": "AI Agent Observability & Tracing | LearnMLAcademy",
-    "description": "Monitor production AI agents with distributed tracing, latency, and cost alerts, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Monitor production AI agents with distributed tracing, latency, and cost alerts, with Python code, metric diagrams, worked examples, and an interview quiz."
   },
   "project-customer-churn": {
     "title": "Customer Churn Prediction Project | LearnMLAcademy",
@@ -600,11 +597,11 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "project-credit-risk": {
     "title": "Credit Risk Prediction ML Project | LearnMLAcademy",
-    "description": "Predict loan defaults with gradient boosted trees and explainable SHAP values, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Predict loan defaults with gradient boosted trees and explainable SHAP values, with Python code, risk diagrams, worked examples, and an interview quiz."
   },
   "project-sales-forecasting": {
     "title": "Sales Forecasting ML Project | LearnMLAcademy",
-    "description": "Forecast multi-store retail sales using lag features and chronological splits, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Forecast multi-store retail sales using lag features and chronological splits, with Python code, trend diagrams, worked examples, and an interview quiz."
   },
   "project-image-classification": {
     "title": "Image Classification Project | LearnMLAcademy",
@@ -624,15 +621,15 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "project-multi-agent-research": {
     "title": "Multi-Agent Research Assistant Project | LearnMLAcademy",
-    "description": "Coordinate multi-agent workflows for automated web research and fact synthesis, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Coordinate multi-agent workflows for automated web research and fact synthesis, with Python code, agent diagrams, worked examples, and an interview quiz."
   },
   "ai-engineering-mlops": {
     "title": "AI Engineering & MLOps Overview | LearnMLAcademy",
-    "description": "Transition machine learning models from prototype notebooks to production APIs, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Transition machine learning models from prototype notebooks to production APIs, with Python code, MLOps diagrams, worked examples, and an interview quiz."
   },
   "ml-data-feature-pipelines": {
     "title": "ML Data & Feature Pipelines Guide | LearnMLAcademy",
-    "description": "Build scalable ML data and feature pipelines with automated schema validation, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Build scalable ML data and feature pipelines with automated schema validation, with Python code, pipeline diagrams, worked examples, and an interview quiz."
   },
   "experiment-tracking-model-registry": {
     "title": "ML Experiment Tracking & Registries | LearnMLAcademy",
@@ -648,7 +645,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "ml-monitoring-drift": {
     "title": "ML Monitoring & Data Drift Detection | LearnMLAcademy",
-    "description": "Detect data drift, concept drift, and performance decay using Evidently metrics, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Detect data drift, concept drift, and performance decay using Evidently metrics, with Python code, drift diagrams, worked examples, and an interview quiz."
   },
   "production-ai-reliability": {
     "title": "Production AI Reliability & Security | LearnMLAcademy",
@@ -668,7 +665,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "ai-engineer-roadmap": {
     "title": "AI Engineer Career Roadmap Guide | LearnMLAcademy",
-    "description": "Master the 2026 AI Engineer curriculum covering LLMs, RAG, and agent frameworks, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Master the 2026 AI Engineer curriculum covering LLMs, RAG, and agent frameworks, with Python code, guide diagrams, worked examples, and an interview quiz."
   },
   "genai-llm-engineer-roadmap": {
     "title": "GenAI & LLM Engineer Roadmap Guide | LearnMLAcademy",
@@ -684,7 +681,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "ml-interview-questions": {
     "title": "Machine Learning Interview Questions | LearnMLAcademy",
-    "description": "Ace machine learning interviews with top 100 solved theory and math questions, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Ace machine learning interviews with top 100 solved theory and math questions, with Python code, visual diagrams, worked examples, and an interview quiz."
   },
   "deep-learning-interview-questions": {
     "title": "Deep Learning Interview Questions | LearnMLAcademy",
@@ -692,7 +689,7 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "genai-llm-rag-interview": {
     "title": "Generative AI & LLM Interview Questions | LearnMLAcademy",
-    "description": "Prepare for Generative AI, LLM, and RAG interview rounds with solved questions, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Prepare for Generative AI, LLM, and RAG interview rounds with solved questions, with Python code, system diagrams, worked examples, and an interview quiz."
   },
   "agentic-ai-interview": {
     "title": "Agentic AI Interview Questions Guide | LearnMLAcademy",
@@ -700,15 +697,15 @@ export const seoData: Record<string, { title: string; description: string }> = {
   },
   "python-ai-ml-interview": {
     "title": "Python Coding for ML Interviews | LearnMLAcademy",
-    "description": "Practice essential Python coding problems asked in machine learning interviews, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Practice essential Python coding problems asked in machine learning interviews, with Python code, flow diagrams, worked examples, and an interview quiz."
   },
   "sql-ai-data-interview": {
     "title": "SQL Coding for Data & AI Interviews | LearnMLAcademy",
-    "description": "Solve practical SQL interview questions using window functions and aggregations, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Solve practical SQL interview questions using window functions and aggregations, with Python code, schema diagrams, worked examples, and an interview quiz."
   },
   "ml-ai-system-design-interview": {
     "title": "ML System Design Interview Guide | LearnMLAcademy",
-    "description": "Design scalable ML systems during interviews using proven structural frameworks, with Python code, architecture diagrams, worked examples, and interview quiz."
+    "description": "Design scalable ML systems during interviews using proven structural frameworks, with Python code, system diagrams, worked examples, and an interview quiz."
   },
   "mlops-production-interview": {
     "title": "MLOps & Production ML Interview Questions | LearnMLAcademy",

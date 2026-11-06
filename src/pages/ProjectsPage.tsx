@@ -18,7 +18,7 @@ export function ProjectsPage() {
   useEffect(() => {
     document.title = 'Hands-On ML & AI Project Handbooks | LearnMLAcademy';
     const description =
-      'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools, step-by-step instructions and working outputs.';
+      'Build recognizable Machine Learning, Deep Learning, Generative AI, RAG, Agentic AI and MLOps projects with exact tools and step-by-step instructions.';
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute('content', description);
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

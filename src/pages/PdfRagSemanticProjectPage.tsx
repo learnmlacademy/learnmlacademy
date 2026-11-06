@@ -43,7 +43,7 @@ function Step({number, title, why, verify, children}: StepProps) {
 export function PdfRagSemanticProjectPage() {
   useEffect(() => {
     document.title = "Semantic PDF RAG Assistant Handbook | LearnMLAcademy";
-    const description = "Build semantic PDF search with local MiniLM ONNX embeddings, token chunking, cosine similarity, reranking, citations, a working Streamlit app and 53 engineering tests.";
+    const description = "Build a semantic PDF search assistant with local MiniLM ONNX embeddings, page-bound tokens, cosine similarity ranking, reranking, and Streamlit app code.";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", description);
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

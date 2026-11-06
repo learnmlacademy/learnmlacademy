@@ -38,7 +38,7 @@ export function PdfRagProjectPage() {
   useEffect(() => {
     document.title = "Chat With Your PDFs — RAG Project Handbook | LearnMLAcademy";
     const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Build a page-aware PDF RAG assistant with real Python code, TF-IDF vectors, cosine similarity, source citations, Streamlit, screenshots and tests.");
+    if (meta) meta.setAttribute("content", "Build a page-aware PDF RAG assistant with real Python code, TF-IDF, cosine similarity, source citations, Streamlit web interface, and automated tests.");
     let canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (!canonical) { canonical = document.createElement("link"); canonical.rel = "canonical"; document.head.appendChild(canonical); }
     canonical.href = "https://www.learnmlacademy.com/projects/pdf-rag";

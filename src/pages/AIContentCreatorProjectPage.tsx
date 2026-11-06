@@ -37,7 +37,7 @@ const files:Array<[string,string]>=[
 export function AIContentCreatorProjectPage(){
   useEffect(()=>{
     document.title="Build Your Own ChatGPT-Style AI Content Creator | LearnMLAcademy";
-    const description="Build a real AI Content Studio with Python, Streamlit, Pydantic, structured JSON, optional OpenAI generation, rewrite, summarize, tests and copyable code.";
+    const description="Create a real Streamlit content studio using Python, structured JSON, Pydantic, optional OpenAI generation, writing modes, tests, and copyable code.";
     const meta=document.querySelector('meta[name="description"]');
     if(meta)meta.setAttribute("content",description);
     let canonical=document.querySelector('link[rel="canonical"]') as HTMLLinkElement|null;
