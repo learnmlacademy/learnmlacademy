@@ -77,6 +77,11 @@ test("Phase 1 execution is wired to real lesson routes, with the invalid roadmap
     assert(source.includes("PythonCodeRunner") || source.includes("executionPackages"), id + ": missing Python execution control");
   }
   const roadmap = await read("../docs/MASTER_EXECUTION_PLAN.md");
-  assert(!roadmap.includes("evaluation-metrics"), "The non-existent evaluation-metrics lesson slug must not be used");
-  assert(roadmap.includes("roc-auc"), "The actual ROC-AUC lesson must be in Phase 1");
+  const phaseOneLine = roadmap.split("\n").find((line) => line.trim().startsWith("- Phase 1:"));
+  assert(phaseOneLine, "The Phase 1 lesson list must be present");
+  const phaseOneSlugs = [...phaseOneLine.matchAll(/`([^`]+)`/g)].map((match) => match[1]);
+  assert.deepEqual(phaseOneSlugs, [
+    "what-is-ml", "linear-regression", "train-test-split", "decision-trees", "kmeans",
+    "logistic-regression", "roc-auc", "confusion-matrix", "knn", "pca",
+  ], "Phase 1 must use ten real curriculum lesson slugs and replace the invalid evaluation-metrics slug");
 });
