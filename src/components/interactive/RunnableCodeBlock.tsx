@@ -356,7 +356,10 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
       {/* Prompt to run if not run yet */}
       {!output && (
         <div className="border-t border-slate-800 bg-slate-900/40 px-5 py-3 text-center text-xs text-slate-400">
-          Click <strong className="text-emerald-400">"Run Code"</strong> above to execute this script in the sandbox and inspect live outputs.
+          {executionPackages
+            ? <>Click <strong className="text-emerald-400">"Run Code"</strong> above to execute this Python script in your browser.</>
+            : <>Click <strong className="text-emerald-400">"Run Code"</strong> above to view this illustrative simulation. </>
+          }
         </div>
       )}
     </div>
