@@ -11,7 +11,7 @@ test("all 16 Agentic AI and 17 GenAI lessons expose curated primary or official 
   });
   assert.match(
     output,
-    /MODERN AI SOURCE COVERAGE PASS: 16 Agentic AI lessons \\+ 17 GenAI lessons; \\d+ lesson-level references\\./,
+    /MODERN AI SOURCE COVERAGE PASS: 16 Agentic AI lessons \+ 17 GenAI lessons; \d+ lesson-level references\./,
     "Modern AI lesson source coverage must pass",
   );
 });
