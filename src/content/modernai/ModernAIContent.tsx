@@ -8,6 +8,7 @@ import { DeepLearningArticleIntro } from "../deeplearning/DeepLearningArticleInt
 import { DeepLearningLessonExtras } from "../deeplearning/DeepLearningLessonExtras";
 import { DeepLearningMathExample } from "../deeplearning/DeepLearningMathExample";
 import { AgenticAIContent } from "./AgenticAIContent";
+import { getVerifiedModernAILessonReferences } from "./verifiedLessonReferences";
 
 type Lesson = {
   intro: string;
@@ -1230,6 +1231,8 @@ const sourceLibrary: Record<string, LessonReference> = {
 };
 
 function getLessonReferences(topicId: string, path: LearningPath): LessonReference[] {
+  const verifiedReferences = getVerifiedModernAILessonReferences(topicId);
+  if (verifiedReferences.length > 0) return verifiedReferences;
   if (path === "deep-learning") {
     if (/backpropagation|computational-graphs-autodiff/.test(topicId)) return [sourceLibrary.pytorchAutograd, sourceLibrary.pytorchBasics];
     if (/deep-learning-optimizers/.test(topicId)) return [sourceLibrary.tensorflowSgd, sourceLibrary.tensorflowAdam, sourceLibrary.pytorchOptimization];
