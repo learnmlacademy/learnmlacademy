@@ -741,6 +741,7 @@ print(f"Mean Squared Error (MSE): {mse}")`}
               description: 'Standard deviation of random noise around the regression line.'
             }
           ]}
+          executionPackages={['numpy', 'scikit-learn']}
           simulateRun={(params) => {
             const slopeParam = Number(params.true_slope) || 3.5;
             const noiseParam = Number(params.noise_level) || 20;
