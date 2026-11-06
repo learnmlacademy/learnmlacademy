@@ -3,6 +3,7 @@ import { SimpleProgrammingVsMLDiagram, SimpleFruitLearningDiagram } from "../../
 
 import { Bot, Lightbulb, TrendingUp, Layers, CheckCircle2, ShieldAlert, Cpu } from "lucide-react";
 import { MLWorkflowDiagram } from "../../components/diagrams/MLDiagrams";
+import { PythonCodeRunner } from "../../components/interactive/PythonCodeRunner";
 
 export function WhatIsMLContent() {
   return (
@@ -27,6 +28,41 @@ export function WhatIsMLContent() {
         <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 text-center"><p className="font-bold text-violet-900">3. Model</p><p className="text-sm text-slate-600 mt-1">Store what was learned</p></div>
         <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-center"><p className="font-bold text-emerald-900">4. Predict</p><p className="text-sm text-slate-600 mt-1">Handle new data</p></div>
       </div>
+
+      <section className="mb-10 rounded-2xl border border-indigo-100 bg-indigo-50/50 p-5 sm:p-6">
+        <h3 className="mb-2 text-xl font-bold text-indigo-900">Try a tiny learning example in Python</h3>
+        <p className="mb-4 text-sm leading-relaxed text-slate-700">
+          This small program uses labelled examples to learn a simple decision threshold, then applies it to a new example. It is an intentionally simplified teaching model, not a general-purpose predictor.
+        </p>
+        <PythonCodeRunner
+          title="Learn a simple threshold from examples"
+          code={String.raw`# Training examples: (weekly study hours, result)
+training_examples = [
+    (1, "not passed"),
+    (2, "not passed"),
+    (3, "not passed"),
+    (5, "passed"),
+    (6, "passed"),
+    (7, "passed"),
+]
+
+# Learn from the labelled examples
+failed_hours = [hours for hours, result in training_examples if result == "not passed"]
+passed_hours = [hours for hours, result in training_examples if result == "passed"]
+
+# Choose a threshold halfway between the nearest groups
+decision_threshold = (max(failed_hours) + min(passed_hours)) / 2
+
+# Predict for a new example
+new_student_hours = 4.5
+prediction = "passed" if new_student_hours >= decision_threshold else "not passed"
+
+print("Learned decision threshold:", decision_threshold)
+print("New student's study hours:", new_student_hours)
+print("Predicted result:", prediction)`}
+        />
+      </section>
+
       <p className="text-lg leading-relaxed mb-8">
         In traditional programming, developers write fixed rules to solve problems.
         For instance, if you want a program to calculate taxes, you write the exact
