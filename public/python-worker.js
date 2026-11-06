@@ -3,6 +3,7 @@ const ALLOWED_PACKAGES = new Set(["numpy", "pandas", "scikit-learn", "matplotlib
 const MAX_CODE_CHARS = 32000;
 const MAX_OUTPUT_CHARS = 64000;
 const MAX_PLOTS = 4;
+const MAX_PLOT_BASE64_CHARS = 1500000;
 const PLOT_SENTINEL = "__LEARNMLACADEMY_PLOT__";
 
 let pyodidePromise;
@@ -77,7 +78,9 @@ self.onmessage = async (event) => {
     return;
   }
 
-  const startTime = performance.now();
+  let executionStartTime = 0;
+  let stdoutLength = 0;
+  let stderrLength = 0;
   const stdoutChunks = [];
   const stderrChunks = [];
   try {
@@ -94,15 +97,26 @@ self.onmessage = async (event) => {
 
     pyodide.setStdout({
       batched: (text) => {
-        if (stdoutChunks.join("").length < MAX_OUTPUT_CHARS) stdoutChunks.push(text);
+        const remaining = MAX_OUTPUT_CHARS - stdoutLength;
+        if (remaining > 0) {
+          const chunk = text.slice(0, remaining);
+          stdoutChunks.push(chunk);
+          stdoutLength += chunk.length;
+        }
       },
     });
     pyodide.setStderr({
       batched: (text) => {
-        if (stderrChunks.join("").length < MAX_OUTPUT_CHARS) stderrChunks.push(text);
+        const remaining = MAX_OUTPUT_CHARS - stderrLength;
+        if (remaining > 0) {
+          const chunk = text.slice(0, remaining);
+          stderrChunks.push(chunk);
+          stderrLength += chunk.length;
+        }
       },
     });
 
+    executionStartTime = performance.now();
     send(id, { type: "status", phase: "running" });
     await pyodide.runPythonAsync(code);
 
@@ -114,7 +128,10 @@ self.onmessage = async (event) => {
       const visibleLines = [];
       for (const line of outputLines) {
         if (line.startsWith(PLOT_SENTINEL)) {
-          if (plots.length < MAX_PLOTS) plots.push(`data:image/png;base64,${line.slice(PLOT_SENTINEL.length)}`);
+          const plot = line.slice(PLOT_SENTINEL.length);
+          if (plots.length < MAX_PLOTS && plot.length <= MAX_PLOT_BASE64_CHARS) {
+            plots.push(`data:image/png;base64,${plot}`);
+          }
         } else {
           visibleLines.push(line);
         }
@@ -128,7 +145,7 @@ self.onmessage = async (event) => {
       stdout,
       stderr,
       plots,
-      durationMs: Math.round(performance.now() - startTime),
+      durationMs: executionStartTime ? Math.round(performance.now() - executionStartTime) : 0,
     });
   } catch (error) {
     send(id, {
@@ -136,8 +153,8 @@ self.onmessage = async (event) => {
       stdout: stdoutChunks.join("\n").slice(0, MAX_OUTPUT_CHARS),
       stderr: stderrChunks.join("\n").slice(0, MAX_OUTPUT_CHARS),
       plots: [],
-      error: error instanceof Error ? error.message : String(error),
-      durationMs: Math.round(performance.now() - startTime),
+      error: (error instanceof Error ? error.message : String(error)).slice(0, MAX_OUTPUT_CHARS),
+      durationMs: executionStartTime ? Math.round(performance.now() - executionStartTime) : 0,
     });
   }
 };
