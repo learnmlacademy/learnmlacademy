@@ -70,7 +70,8 @@ To transform the platform into a world-class educational resource while upholdin
    - Audited all 201 canonical prerendered pages and corrected semantic heading levels while preserving exact authored heading text and multiplicity.
    - Added a blocking rendered-HTML audit for one main landmark, one H1, non-empty accessible heading text, and no skipped heading levels. The latest CI audit reports 201/201 pages clean and zero violations.
 3. **Sitemap Date Synchronization**:
-   - Automatically link `lastmod` dates in `public/sitemap.xml` directly to `dateModified` in `TechArticle` / `LearningResource` JSON-LD schemas.
+   - Emit `lastmod` only when a per-page `dateModified` is explicitly verified, and keep the sitemap value identical to the page's `TechArticle` / `LearningResource` JSON-LD value.
+   - Omit unsupported modification dates; never use a global fallback, a project placeholder, or a blog publication date as `lastmod`.
 4. **Consolidation of Stale PR Work**:
    - Audit historical branches (e.g. PR #60, feature branches) to extract useful, peer-reviewed educational diagrams without altering existing text.
 5. **Advanced Generative AI and Agentic AI Audits**:
