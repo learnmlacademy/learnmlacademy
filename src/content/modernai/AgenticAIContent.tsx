@@ -8,6 +8,7 @@ import { agenticLessonDetails, type AgenticTable } from "./agenticLessonDetails"
 import { agenticLessonEnhancements } from "./agenticLessonEnhancements";
 import { agenticReadingFlow } from "./agenticReadingFlow";
 import { AgenticWorkedLab, type AgenticTutorialTopic } from "./AgenticTutorialExpansion";
+import { getVerifiedModernAILessonReferences } from "./verifiedLessonReferences";
 import "../textbook.css";
 
 export type AgenticBaseLesson = {
@@ -108,6 +109,7 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
   const enhancement = agenticLessonEnhancements[topicId];
   const detail = agenticLessonDetails[topicId];
   const reading = agenticReadingFlow[topicId];
+  const references = getVerifiedModernAILessonReferences(topicId);
   if (!enhancement || !detail || !reading) return null;
 
   return (
@@ -175,6 +177,21 @@ export function AgenticAIContent({ topicId, lesson }: { topicId: string; lesson:
       <Callout role="mistake" title="Common mistake"><p>{lesson.mistake}</p></Callout>
 
       <div data-agentic-summary><SummaryCard items={enhancement.summary} className="mt-0" /></div>
+
+      <section data-verified-further-reading>
+        <h2 className="mb-3 text-2xl font-bold text-indigo-800">Verified Further Reading</h2>
+        <p className="mb-5 text-slate-600">
+          These primary research papers and current official specifications support the concepts and implementation guidance in this lesson. The explanations, analogies, exercises, and code above remain original teaching material.
+        </p>
+        <div className="not-prose grid gap-3">
+          {references.map((reference) => (
+            <a key={reference.url} href={reference.url} target="_blank" rel="noreferrer" className="group rounded-xl border border-slate-200 bg-white p-4 transition-all hover:border-indigo-300 hover:shadow-sm">
+              <h3 className="font-semibold text-slate-900 group-hover:text-indigo-700">{reference.title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-slate-600">{reference.note}</p>
+            </a>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
