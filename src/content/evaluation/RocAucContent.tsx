@@ -1,4 +1,5 @@
 import React from 'react';
+import { PythonCodeRunner } from '../../components/interactive/PythonCodeRunner';
 import {
   Activity,
   BarChart2,
@@ -350,6 +351,53 @@ plt.plot([0, 1], [0, 1], "--", label="Random ranking")
 plt.legend()
 plt.show()`}</code></pre>
           </div>
+          <PythonCodeRunner
+            title="Run the ROC curve and AUC example"
+            showCode={false}
+            packages={['scikit-learn', 'matplotlib']}
+            code={String.raw`import matplotlib.pyplot as plt
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import roc_curve, roc_auc_score, RocCurveDisplay
+
+# 1. Load educational binary-classification data
+X, y = load_breast_cancer(return_X_y=True)
+
+# 2. Keep a final test set
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.30,
+    random_state=42,
+    stratify=y
+)
+
+# 3. Scale using training data inside the Pipeline, then fit
+model = make_pipeline(
+    StandardScaler(),
+    LogisticRegression(max_iter=2000)
+)
+model.fit(X_train, y_train)
+
+# 4. Use continuous scores for the positive class
+#    (decision_function scores can also be used by many estimators)
+y_score = model.predict_proba(X_test)[:, 1]
+
+# 5. Compute ROC points and ROC-AUC
+fpr, tpr, thresholds = roc_curve(y_test, y_score)
+auc_score = roc_auc_score(y_test, y_score)
+
+print(f"AUC Score: {auc_score:.3f}")
+print(f"ROC points: {len(fpr)}")
+
+# 6. Plot from the same predictions
+RocCurveDisplay.from_predictions(y_test, y_score)
+plt.plot([0, 1], [0, 1], "--", label="Random ranking")
+plt.legend()
+plt.show()`}
+          />
           <div className="bg-[#1e1e1e] p-4 font-mono text-sm border-t border-slate-700">
             <p className="text-emerald-400">Expected output for this fixed split:</p>
             <pre className="text-emerald-300 mt-2">{`AUC Score: 0.998
