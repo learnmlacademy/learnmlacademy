@@ -39,7 +39,8 @@ test("Pyodide runtime is pinned, lazy, and package loading is allowlisted", asyn
   const component = await read("../src/components/interactive/PythonCodeRunner.tsx");
   const config = JSON.parse(await read("../vercel.json"));
 
-  assert.match(worker, /cdn\.jsdelivr\.net\/pyodide\/v314\.0\.7\/full\/pyodide\.mjs/);
+  assert.match(worker, /const PYODIDE_BASE_URL = "https:\/\/cdn\.jsdelivr\.net\/pyodide\/v314\.0\.7\/full\//);
+  assert.match(worker, /import\(PYODIDE_BASE_URL \+ "pyodide\.mjs"\)/);
   assert.match(worker, /new Set\(\["numpy", "pandas", "scikit-learn", "matplotlib"\]\)/);
   assert.match(worker, /pyodide\.loadPackage\(missingPackages\)/);
   assert.doesNotMatch(worker, /micropip\.install/);
