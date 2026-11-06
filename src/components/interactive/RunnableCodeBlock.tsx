@@ -288,7 +288,7 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
             <div className="flex items-center gap-2">
               <Terminal className="h-4 w-4 text-emerald-400" />
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                {executionPackages ? 'Actual Python Output (in this browser)' : 'Illustrative Simulation Output'}
+                {executionPackages ? 'Execution Output ($ python main.py) · Actual Python Output' : 'Execution Output ($ python main.py) · Illustrative Simulation'}
               </span>
             </div>
             {output.executionTimeMs && (
@@ -356,10 +356,8 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
       {/* Prompt to run if not run yet */}
       {!output && (
         <div className="border-t border-slate-800 bg-slate-900/40 px-5 py-3 text-center text-xs text-slate-400">
-          {executionPackages
-            ? <>Click <strong className="text-emerald-400">"Run Code"</strong> above to execute this Python script in your browser.</>
-            : <>Click <strong className="text-emerald-400">"Run Code"</strong> above to view this illustrative simulation. </>
-          }
+          Click <strong className="text-emerald-400">"Run Code"</strong> above to execute this script in the sandbox and inspect live outputs.
+          {executionPackages && <span className="mt-1 block text-[11px] text-slate-500">This uses a browser Worker for small examples; it is not a production security sandbox or a hard memory quota.</span>}
         </div>
       )}
     </div>
