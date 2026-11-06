@@ -558,6 +558,7 @@ print(f"Accuracy: {acc:.2f}")`}
             description: 'Uniform gives every neighbor 1 vote; distance weighs closer neighbors higher.'
           }
         ]}
+        executionPackages={['pandas', 'scikit-learn']}
         simulateRun={(params) => {
           const kVal = Number(params.n_neighbors) || 3;
           const wVal = params.weights || 'uniform';
