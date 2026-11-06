@@ -23,13 +23,13 @@ test("49 Modern AI labs remain standard-library-only and use no external service
     assert.equal(typeof lesson.code, "string", topicId + ": missing Python code");
     assert.equal(typeof lesson.output, "string", topicId + ": missing expected output");
     const imports = [
-      ...lesson.code.matchAll(/^\\s*(?:from\\s+([A-Za-z_][A-Za-z0-9_.]*)\\s+import|import\\s+([A-Za-z_][A-Za-z0-9_.]*))/gm),
+      ...lesson.code.matchAll(/^\s*(?:from\s+([A-Za-z_][A-Za-z0-9_.]*)\s+import|import\s+([A-Za-z_][A-Za-z0-9_.]*))/gm),
     ].map((match) => (match[1] || match[2]).split(".")[0]);
     for (const name of imports) {
       assert(standardLibrary.has(name), topicId + ": non-standard-library import " + name);
     }
-    assert(!/\\b(?:requests|urllib|httpx|aiohttp|socket|subprocess)\\b/.test(lesson.code), topicId + ": external network/process API found");
-    assert(!/\\b(?:https?:\\/\\/|micropip\\.install)\\b/.test(lesson.code), topicId + ": external dependency or URL found");
+    assert(!/\b(?:requests|urllib|httpx|aiohttp|socket|subprocess)\b/.test(lesson.code), topicId + ": external network/process API found");
+    assert(!/\b(?:https?:\/\/|micropip\.install)\b/.test(lesson.code), topicId + ": external dependency or URL found");
   }
 });
 
@@ -39,11 +39,11 @@ test("Pyodide runtime is pinned, lazy, and package loading is allowlisted", asyn
   const component = await read("../src/components/interactive/PythonCodeRunner.tsx");
   const config = JSON.parse(await read("../vercel.json"));
 
-  assert.match(worker, /cdn\\.jsdelivr\\.net\\/pyodide\\/v314\\.0\\.7\\/full\\/pyodide\\.mjs/);
-  assert.match(worker, /new Set\\(\\["numpy", "pandas", "scikit-learn", "matplotlib"\\]\\)/);
-  assert.match(worker, /pyodide\\.loadPackage\\(missingPackages\\)/);
-  assert.doesNotMatch(worker, /micropip\\.install/);
-  assert.match(hook, /new Worker\\("\/python-worker\\.js",\\s*\\{\\s*type: "module"/);
+  assert.match(worker, /cdn\.jsdelivr\.net\/pyodide\/v314\.0\.7\/full\/pyodide\.mjs/);
+  assert.match(worker, /new Set\(\["numpy", "pandas", "scikit-learn", "matplotlib"\]\)/);
+  assert.match(worker, /pyodide\.loadPackage\(missingPackages\)/);
+  assert.doesNotMatch(worker, /micropip\.install/);
+  assert.match(hook, /new Worker\("\/python-worker\.js",\s*\{\s*type: "module"/);
   assert.match(hook, /EXECUTION_TIMEOUT_MS = 5000/);
   assert.match(hook, /MAX_CODE_CHARS = 32000/);
   assert.match(hook, /INITIALIZATION_TIMEOUT_MS = 120000/);
@@ -54,9 +54,9 @@ test("Pyodide runtime is pinned, lazy, and package loading is allowlisted", asyn
   assert(workerHeaders, "Dedicated Worker response headers are required");
   const policy = workerHeaders.headers.find((item) => item.key.toLowerCase() === "content-security-policy")?.value || "";
   assert.match(policy, /default-src 'none'/);
-  assert.match(policy, /script-src https:\\/\\/cdn\\.jsdelivr\\.net 'wasm-unsafe-eval'/);
-  assert.match(policy, /connect-src https:\\/\\/cdn\\.jsdelivr\\.net(?:;|$)/);
-  assert.doesNotMatch(policy, /connect-src[^;]*(?:'self'|\\*)/);
+  assert.match(policy, /script-src https:\/\/cdn\.jsdelivr\.net 'wasm-unsafe-eval'/);
+  assert.match(policy, /connect-src https:\/\/cdn\.jsdelivr\.net(?:;|$)/);
+  assert.doesNotMatch(policy, /connect-src[^;]*(?:'self'|\*)/);
 });
 
 test("Phase 1 execution is wired to real lesson routes, with the invalid roadmap slug removed", async () => {
@@ -77,6 +77,6 @@ test("Phase 1 execution is wired to real lesson routes, with the invalid roadmap
     assert(source.includes("PythonCodeRunner") || source.includes("executionPackages"), id + ": missing Python execution control");
   }
   const roadmap = await read("../docs/MASTER_EXECUTION_PLAN.md");
-  assert(!/\`evaluation-metrics\`/.test(roadmap), "The non-existent evaluation-metrics lesson slug must not be used");
-  assert(roadmap.includes("\`roc-auc\`"), "The actual ROC-AUC lesson must be in Phase 1");
+  assert(!roadmap.includes("evaluation-metrics"), "The non-existent evaluation-metrics lesson slug must not be used");
+  assert(roadmap.includes("roc-auc"), "The actual ROC-AUC lesson must be in Phase 1");
 });
