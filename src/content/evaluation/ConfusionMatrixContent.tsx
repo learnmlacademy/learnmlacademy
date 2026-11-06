@@ -429,7 +429,7 @@ print("Confusion matrix:")
 print(cm)
 print(f"TN={tn}, FP={fp}, FN={fn}, TP={tp}")
 
-print("\\nClassification report:")
+print("\nClassification report:")
 print(
     classification_report(
         y_true,
