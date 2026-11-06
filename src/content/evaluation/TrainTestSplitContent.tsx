@@ -1,4 +1,5 @@
 import React from 'react';
+import { PythonCodeRunner } from '../../components/interactive/PythonCodeRunner';
 import { Target, Layers, AlertTriangle, Code, Columns, Clock, Users } from 'lucide-react';
 
 export function TrainTestSplitContent() {
@@ -311,6 +312,45 @@ accuracy = accuracy_score(y_test, y_pred)
 print("Test accuracy:", round(accuracy, 3))`}</code></pre>
           </div>
         </div>
+
+        <PythonCodeRunner
+          title="Run the complete train, split and evaluate example"
+          showCode={false}
+          packages={['numpy', 'scikit-learn']}
+          code={String.raw`import numpy as np
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+# Step 1 — Load a small classification dataset
+X, y = load_iris(return_X_y=True)
+
+# Step 2 — Hold out 20% for testing
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    random_state=42,
+    shuffle=True,
+    stratify=y
+)
+
+print("Train shape:", X_train.shape)
+print("Test shape:", X_test.shape)
+print("Train class counts:", np.bincount(y_train))
+print("Test class counts:", np.bincount(y_test))
+
+# Step 3 — Train only on the training set
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+# Step 4 — Evaluate on the held-out test set
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+print("Test accuracy:", round(accuracy, 3))`}
+        />
 
         <div className="bg-slate-900 text-slate-100 rounded-xl p-5 mb-8 font-mono text-sm overflow-x-auto whitespace-pre">
 {`Train shape: (120, 4)

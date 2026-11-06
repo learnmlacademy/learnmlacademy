@@ -1,4 +1,5 @@
 import React from 'react';
+import { PythonCodeRunner } from '../../components/interactive/PythonCodeRunner';
 import {
   Activity,
   AlertTriangle,
@@ -475,6 +476,40 @@ plt.ylabel("PC2")
 plt.title("PCA Projection of Iris Data")
 plt.show()`}</code></pre>
           </div>
+          <PythonCodeRunner
+            title="Run PCA on the Iris dataset and view the projection"
+            showCode={false}
+            packages={['scikit-learn', 'matplotlib']}
+            code={String.raw`import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_iris
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+# 1. Load data
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# 2. Standardize deliberately before PCA
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 3. Reduce 4 features to 2 principal components
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+# 4. Inspect explained variance
+print("Explained variance ratio:", pca.explained_variance_ratio_.round(4))
+print("Cumulative explained variance:", round(pca.explained_variance_ratio_.sum(), 4))
+
+# 5. Visualize the 2D projection
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.title("PCA Projection of Iris Data")
+plt.show()`}
+          />
           <div className="bg-slate-50 border-t border-slate-200 p-4">
             <p className="font-mono text-sm text-slate-800 mb-2"><strong>Verified output:</strong></p>
             <pre className="font-mono text-sm text-slate-700 whitespace-pre-wrap">{`Explained variance ratio: [0.7296 0.2285]

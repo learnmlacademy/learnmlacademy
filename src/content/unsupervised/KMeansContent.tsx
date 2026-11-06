@@ -1,4 +1,5 @@
 import React from 'react';
+import { PythonCodeRunner } from '../../components/interactive/PythonCodeRunner';
 import { 
   Target, Layers, Activity, Code, Check, X as CloseIcon, 
   AlertCircle, GitMerge, Calculator 
@@ -449,6 +450,52 @@ plt.title("K-Means Clusters")
 plt.show()`}</code>
           </pre>
         </div>
+        <PythonCodeRunner
+          title="Run K-Means clustering and generate the plot"
+          showCode={false}
+          packages={['numpy', 'scikit-learn', 'matplotlib']}
+          code={String.raw`# Step 1 — Import libraries
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+
+# Step 2 — Create a simple 2D teaching dataset
+X, _ = make_blobs(
+    n_samples=500,
+    centers=3,
+    n_features=2,
+    random_state=42
+)
+
+# Step 3 — Fit K-Means
+model = KMeans(
+    n_clusters=3,
+    init="k-means++",
+    n_init=10,
+    random_state=42
+)
+labels = model.fit_predict(X)
+
+# Step 4 — Inspect the result
+print("Number of clusters:", len(np.unique(labels)))
+print("Inertia:", round(model.inertia_, 2))
+print("Cluster sizes:", np.bincount(labels))
+
+# Step 5 — Visualize clusters and centroids
+plt.scatter(X[:, 0], X[:, 1], c=labels, s=20)
+plt.scatter(
+    model.cluster_centers_[:, 0],
+    model.cluster_centers_[:, 1],
+    marker="*",
+    s=300,
+    color="red"
+)
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
+plt.title("K-Means Clusters")
+plt.show()`}
+        />
         <div className="p-4 bg-slate-50 text-slate-700 border-b border-slate-200 text-lg">
           <p className="font-bold mb-2">Expected printed output</p>
           <pre className="bg-white border rounded p-3 text-sm overflow-x-auto mb-3">{`Number of clusters: 3

@@ -15,6 +15,7 @@ from pathlib import Path
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -149,6 +150,107 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
         )
 
 
+def click_python_runner(driver: webdriver.Chrome) -> None:
+    """Query the current DOM in Chrome and dispatch Run Code after each React render."""
+    def try_click(current_driver: webdriver.Chrome) -> bool:
+        return bool(current_driver.execute_script("""
+            const runner = document.querySelector('[data-python-runner]');
+            if (!runner) return false;
+            const buttons = Array.from(runner.querySelectorAll('button'));
+            const runButton = buttons.find((button) => button.textContent.trim().includes('Run Code'));
+            if (!runButton || runButton.disabled) return false;
+            runButton.click();
+            return true;
+        """))
+
+    try:
+        WebDriverWait(driver, 30, poll_frequency=0.25).until(
+            try_click,
+            "Python Run Code button did not become available",
+        )
+    except Exception as error:
+        debug = driver.execute_script("""
+            const runner = document.querySelector('[data-python-runner]');
+            return {
+              url: location.href,
+              runnerFound: Boolean(runner),
+              buttons: runner ? Array.from(runner.querySelectorAll('button')).map((button) => ({
+                text: button.textContent.trim(),
+                disabled: button.disabled,
+                html: button.outerHTML.slice(0, 500)
+              })) : [],
+              bodyText: document.body.innerText.slice(0, 1200)
+            };
+        """)
+        raise AssertionError(f"Python runner button lookup failed: {debug}") from error
+
+
+def wait_for_python_output(driver: webdriver.Chrome, timeout: int, stage: str) -> None:
+    try:
+        WebDriverWait(driver, timeout, poll_frequency=0.5).until(
+            lambda current_driver: current_driver.find_elements(By.CSS_SELECTOR, "[data-python-output]")
+        )
+    except TimeoutException as error:
+        state = driver.execute_script("""
+            const runner = document.querySelector('[data-python-runner]');
+            return {
+              url: location.href,
+              runnerText: runner ? runner.innerText : null,
+              outputFound: Boolean(document.querySelector('[data-python-output]')),
+              workerResources: performance.getEntriesByType('resource')
+                .filter((entry) => /pyodide|python-worker/.test(entry.name))
+                .map((entry) => ({ name: entry.name, duration: entry.duration, size: entry.transferSize })),
+              serviceWorker: Boolean(navigator.serviceWorker && navigator.serviceWorker.controller)
+            };
+        """)
+        try:
+            browser_logs = driver.get_log("browser")[-30:]
+        except Exception as log_error:
+            browser_logs = [f"Unable to read Chrome browser logs: {log_error}"]
+        raise AssertionError(
+            f"{stage} did not produce a Python output panel within {timeout}s. "
+            f"Live page state: {state}. Chrome logs: {browser_logs}"
+        ) from error
+
+
+def check_python_execution(driver: webdriver.Chrome) -> None:
+    """Require actual Python execution, package loading, and plot rendering in Chrome."""
+    driver.get(BASE + "/learn/what-is-ml")
+    WebDriverWait(driver, 25).until(
+        lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
+    )
+    click_python_runner(driver)
+    wait_for_python_output(driver, 150, "Introductory Python example")
+    output_node = driver.find_element(By.CSS_SELECTOR, "[data-python-output]")
+    output = output_node.text
+    assert "Learned decision threshold: 4.0" in output, (
+        "Browser Python runtime did not execute the introductory threshold-learning example: " + output[:500]
+    )
+    assert "Predicted result: passed" in output, "Introductory Python prediction output is incorrect"
+    assert not output_node.find_elements(By.CSS_SELECTOR, "div.bg-rose-950"), (
+        "Introductory Python worker returned an execution error: " + output[:700]
+    )
+
+    driver.get(BASE + "/learn/kmeans")
+    WebDriverWait(driver, 25).until(
+        lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
+    )
+    click_python_runner(driver)
+    wait_for_python_output(driver, 210, "K-Means scientific Python example")
+    output_node = driver.find_element(By.CSS_SELECTOR, "[data-python-output]")
+    output = output_node.text
+    assert "Number of clusters: 3" in output, (
+        "Pyodide scientific package execution failed: " + output[:700]
+    )
+    assert not output_node.find_elements(By.CSS_SELECTOR, "div.bg-rose-950"), (
+        "Scientific Python worker returned an execution error: " + output[:700]
+    )
+    assert output_node.find_elements(By.CSS_SELECTOR, 'img[src^="data:image/png;base64,"]'), (
+        "matplotlib output was not returned from the Python worker"
+    )
+    print("PYTHON WORKER QA PASS: stdlib training example, NumPy/scikit-learn K-Means, matplotlib PNG, and real browser output.")
+
+
 def main() -> None:
     server = subprocess.Popen(
         ["npm", "run", "preview", "--", "--host", "127.0.0.1", "--port", "4173", "--strictPort"],
@@ -171,6 +273,7 @@ def main() -> None:
                 WebDriverWait(driver, 20).until(lambda d: len(d.find_elements(By.LINK_TEXT, "Start the handbook")) == 12)
                 if not mobile:
                     driver.save_screenshot(str(ARTIFACTS / "projects-desktop.png"))
+                    check_python_execution(driver)
                 for project in PROJECTS:
                     check_view(driver, project, mobile=mobile)
                 if mobile:

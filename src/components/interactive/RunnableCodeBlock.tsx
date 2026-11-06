@@ -1,5 +1,6 @@
 import React, { useState, useId } from 'react';
-import { Play, RotateCcw, Copy, Check, Terminal, Sliders, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Play, RotateCcw, Copy, Check, Terminal, Sliders, Sparkles, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { usePyodideWorker, type PyodidePackage } from '../../hooks/usePyodideWorker';
 
 export interface CodeParameter {
   id: string;
@@ -19,6 +20,9 @@ export interface SimulationResult {
   metrics?: { label: string; value: string | number; highlight?: boolean }[];
   observation?: string;
   executionTimeMs?: number;
+  stderr?: string;
+  error?: string;
+  plots?: string[];
 }
 
 interface RunnableCodeBlockProps {
@@ -27,7 +31,8 @@ interface RunnableCodeBlockProps {
   defaultCode: string;
   language?: string;
   parameters?: CodeParameter[];
-  simulateRun: (params: Record<string, any>, currentCode: string) => SimulationResult;
+  simulateRun?: (params: Record<string, any>, currentCode: string) => SimulationResult;
+  executionPackages?: PyodidePackage[];
   className?: string;
 }
 
@@ -38,9 +43,11 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
   language = 'python',
   parameters = [],
   simulateRun,
+  executionPackages,
   className = '',
 }) => {
   const componentId = useId();
+  const { run: runPython } = usePyodideWorker();
   // Initialize parameter state
   const initialParams = parameters.reduce<Record<string, any>>((acc, param) => {
     acc[param.id] = param.defaultValue;
@@ -89,15 +96,43 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
     }
   };
 
-  const handleRun = () => {
+  const handleRun = async () => {
     setIsRunning(true);
-    // Simulate realistic execution delay (250ms)
-    setTimeout(() => {
-      const result = simulateRun(params, code);
-      setOutput({
-        ...result,
-        executionTimeMs: result.executionTimeMs || Math.floor(25 + Math.random() * 30),
-      });
+    if (executionPackages) {
+      try {
+        const result = await runPython(code, executionPackages);
+        setOutput({
+          stdout: result.stdout,
+          stderr: result.stderr,
+          error: result.error,
+          plots: result.plots,
+          executionTimeMs: result.durationMs,
+        });
+      } catch (error) {
+        setOutput({
+          stdout: '',
+          error: error instanceof Error ? error.message : 'Python execution failed.',
+          plots: [],
+          executionTimeMs: 0,
+        });
+      } finally {
+        setIsRunning(false);
+        setActiveTab('output');
+      }
+      return;
+    }
+
+    // Legacy parameterized examples remain visibly identified as simulations until migrated.
+    window.setTimeout(() => {
+      const result = simulateRun?.(params, code);
+      if (!result) {
+        setOutput({ stdout: '', error: 'No execution engine is configured for this example.' });
+      } else {
+        setOutput({
+          ...result,
+          executionTimeMs: result.executionTimeMs,
+        });
+      }
       setIsRunning(false);
       setActiveTab('output');
     }, 280);
@@ -253,7 +288,7 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
             <div className="flex items-center gap-2">
               <Terminal className="h-4 w-4 text-emerald-400" />
               <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
-                Execution Output ($ python main.py)
+                {executionPackages ? 'Execution Output ($ python main.py) · Actual Python Output' : 'Execution Output ($ python main.py) · Illustrative Simulation'}
               </span>
             </div>
             {output.executionTimeMs && (
@@ -285,8 +320,25 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
 
           {/* Console Text Output */}
           <pre className="max-h-[220px] overflow-auto rounded-xl border border-slate-800 bg-black/60 p-3.5 font-mono text-xs sm:text-sm text-emerald-400 leading-relaxed">
-            {output.stdout}
+            {output.stdout || (!output.error && !output.stderr ? 'Program completed without printed output.' : '')}
           </pre>
+
+          {output.error && (
+            <div className="mb-3 flex items-start gap-2 rounded-lg border border-rose-900/60 bg-rose-950/50 px-3 py-2 text-xs text-rose-200">
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+              <pre className="whitespace-pre-wrap font-mono">{output.error}</pre>
+            </div>
+          )}
+          {output.stderr && (
+            <pre className="mb-3 max-h-[140px] overflow-auto rounded-lg border border-amber-900/60 bg-amber-950/30 p-3 font-mono text-xs text-amber-200">{output.stderr}</pre>
+          )}
+          {output.plots && output.plots.length > 0 && (
+            <div className="mb-3 grid gap-3">
+              {output.plots.slice(0, 4).map((plot, index) => (
+                <img key={index} src={plot} alt={`Python-generated plot ${index + 1}`} className="h-auto max-w-full rounded-lg bg-white" loading="lazy" />
+              ))}
+            </div>
+          )}
 
           {/* Pedagogical Observation */}
           {output.observation && (
@@ -305,6 +357,7 @@ export const RunnableCodeBlock: React.FC<RunnableCodeBlockProps> = ({
       {!output && (
         <div className="border-t border-slate-800 bg-slate-900/40 px-5 py-3 text-center text-xs text-slate-400">
           Click <strong className="text-emerald-400">"Run Code"</strong> above to execute this script in the sandbox and inspect live outputs.
+          {executionPackages && <span className="mt-1 block text-[11px] text-slate-500">This uses a browser Worker for small examples; it is not a production security sandbox or a hard memory quota.</span>}
         </div>
       )}
     </div>

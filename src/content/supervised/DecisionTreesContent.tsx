@@ -839,6 +839,7 @@ print(export_text(model, feature_names=list(X.columns)))`}
             description: 'Mathematical metric used to evaluate the purity of candidate splits.'
           }
         ]}
+        executionPackages={['pandas', 'scikit-learn']}
         simulateRun={(params) => {
           const depth = Number(params.max_depth) || 3;
           const crit = params.criterion || 'gini';
