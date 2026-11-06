@@ -4,7 +4,6 @@ const MAX_CODE_CHARS = 32000;
 const MAX_OUTPUT_CHARS = 64000;
 const MAX_PLOTS = 4;
 const MAX_PLOT_BASE64_CHARS = 1500000;
-const PLOT_SENTINEL = "__LEARNMLACADEMY_PLOT__";
 
 let pyodidePromise;
 let loadedPackages = new Set();
@@ -42,7 +41,7 @@ def _lma_capture_plot():
         dpi=100,
         bbox_inches="tight",
     )
-    print("${PLOT_SENTINEL}" + _lma_base64.b64encode(_lma_buffer.getvalue()).decode("ascii"))
+    __lma_plots.append(_lma_base64.b64encode(_lma_buffer.getvalue()).decode("ascii"))
     _lma_plt.close("all")
 
 _lma_plt.show = _lma_capture_plot
@@ -93,7 +92,10 @@ self.onmessage = async (event) => {
     }
 
     const wantsMatplotlib = packages.includes("matplotlib");
-    if (wantsMatplotlib) await prepareMatplotlib(pyodide);
+    if (wantsMatplotlib) {
+      await prepareMatplotlib(pyodide);
+      await pyodide.runPythonAsync("__lma_plots = []");
+    }
 
     pyodide.setStdout({
       batched: (text) => {
@@ -124,19 +126,17 @@ self.onmessage = async (event) => {
     const stderr = stderrChunks.join("\n");
     const plots = [];
     if (wantsMatplotlib) {
-      const outputLines = stdout.split(/\r?\n/);
-      const visibleLines = [];
-      for (const line of outputLines) {
-        if (line.startsWith(PLOT_SENTINEL)) {
-          const plot = line.slice(PLOT_SENTINEL.length);
-          if (plots.length < MAX_PLOTS && plot.length <= MAX_PLOT_BASE64_CHARS) {
+      const plotProxy = pyodide.globals.get("__lma_plots");
+      try {
+        for (const plot of plotProxy.toJs()) {
+          if (plots.length >= MAX_PLOTS) break;
+          if (typeof plot === "string" && plot.length <= MAX_PLOT_BASE64_CHARS) {
             plots.push(`data:image/png;base64,${plot}`);
           }
-        } else {
-          visibleLines.push(line);
         }
+      } finally {
+        plotProxy.destroy();
       }
-      stdout = visibleLines.join("\n");
     }
 
     if (stdout.length > MAX_OUTPUT_CHARS) stdout = stdout.slice(0, MAX_OUTPUT_CHARS) + "\n[Output truncated]";
