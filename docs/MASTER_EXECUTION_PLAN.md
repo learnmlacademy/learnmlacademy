@@ -90,25 +90,35 @@ To transform the platform into a world-class educational resource while upholdin
 
 ## Release 4: Client-Side Interactive Python Execution
 
+### Audit Results — 2026-11-06
+- The 49 Modern AI JSON labs consist of 16 Agentic AI, 17 GenAI, and 16 LLM exercises. Their 49 Python scripts and 49 companion output blocks (98 rendered code/output blocks) were audited.
+- All 49 scripts use Python standard-library imports only. A small subset uses `sqlite3`; the pinned Pyodide release includes SQLite support in its standard-library distribution. No exercise requires a paid API, third-party package, network request, or subprocess.
+- The roadmap's previous `evaluation-metrics` target was not an actual curriculum slug. Phase 1 uses the existing `roc-auc` lesson instead.
+- Four legacy `RunnableCodeBlock` lessons used simulated outputs before this rollout. Their Run Code actions are being switched to actual browser-side execution.
+
 ### Objectives
 1. **Complete Python Example Inventory**:
-   - Audit the 49 JSON lab exercises and 98 content code blocks for browser compatibility.
+   - Keep the 49 Modern AI JSON scripts standard-library-only for the Phase 2 rollout; retain their existing code and expected-output examples.
+   - Expand browser compatibility checks to cover every enabled code example before activation.
 2. **WebAssembly / Pyodide Integration**:
-   - Implement client-side Python execution in the browser using Pyodide (WASM) running inside a dedicated Web Worker.
-   - Avoid costly, vulnerable server-side code execution infrastructure.
+   - Use Pyodide `314.0.7` in a dedicated ES-module Web Worker, pinned to the versioned jsDelivr distribution.
+   - Execute learner code on the client; do not send Python source or results to a LearnMLAcademy server.
 3. **Lazy-Loaded Runtime & On-Demand Packaging**:
-   - The ~12 MB Pyodide WASM runtime and scientific packages (`numpy`, `pandas`, `scikit-learn`, `matplotlib`) must be loaded strictly on-demand when the learner clicks "Run Code".
-   - Zero impact on initial page load times or Lighthouse performance scores.
+   - Create the worker and download Pyodide only after the learner clicks "Run Code". Load only the explicitly requested allowlisted packages (`numpy`, `pandas`, `scikit-learn`, `matplotlib`).
+   - Do not import Pyodide into the lesson/page entry bundle. Protect the Worker response with a restrictive Content Security Policy that permits the pinned CDN for runtime loading and blocks other network destinations.
+   - Measure initial-load and Lighthouse effects; do not assume a zero impact without measurement.
 4. **Phased Rollout Starting with 10 Priority Lessons**:
-   - Phase 1: `what-is-ml`, `linear-regression`, `train-test-split`, `decision-trees`, `kmeans`, `logistic-regression`, `evaluation-metrics`, `confusion-matrix`, `knn`, `pca`.
-   - Phase 2: Expand to all 49 Modern AI lab exercises.
+   - Phase 1: `what-is-ml`, `linear-regression`, `train-test-split`, `decision-trees`, `kmeans`, `logistic-regression`, `roc-auc`, `confusion-matrix`, `knn`, `pca`.
+   - Phase 2: Add the 49 Modern AI lab exercises, with their existing expected outputs retained as reference examples.
 5. **Clear Execution Boundaries**:
-   - Heavy deep learning (PyTorch, TensorFlow, large language models) and external API tools remain clearly labeled as local-only or Docker-based exercises.
+   - Heavy deep learning (PyTorch, TensorFlow, large language models), paid external APIs, and tools requiring credentials remain labeled as local-only, Docker-based, or separately configured exercises.
 
 ### Quality Gates & Verification
-- Web Worker isolates user code from the main UI thread.
-- Memory limit and execution timeout (5-second ceiling) guard against infinite loops.
-- Fallback to static code block display if WebAssembly is unsupported.
+- Use a module Worker so synchronous Python execution does not block the lesson UI.
+- Enforce a five-second execution timeout by terminating the Worker. Limit source input to 32,000 characters, captured text output to 64,000 characters, and returned plots to four per run.
+- A dedicated Worker CSP allows runtime/package retrieval only from the pinned jsDelivr host; no general network destinations or arbitrary package installation are enabled.
+- A Worker is not a hard memory sandbox. Do not claim a cross-browser hard memory quota; monitor practical browser behavior and keep examples/datasets small.
+- If WebAssembly or Worker support is unavailable, retain the static copyable code and expected output.
 
 ---
 
