@@ -151,28 +151,38 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
 
 
 def click_python_runner(driver: webdriver.Chrome) -> None:
-    """Re-query the live button on each poll; React may replace its parent during render."""
+    """Query the current DOM in Chrome and dispatch Run Code after each React render."""
     def try_click(current_driver: webdriver.Chrome) -> bool:
-        try:
-            button = current_driver.find_element(
-                By.XPATH,
-                '//*[@data-python-runner]//button[normalize-space(.)="Run Code"]',
-            )
-            if not button.is_displayed() or not button.is_enabled():
-                return False
-            button.click()
-            return True
-        except (
-            ElementClickInterceptedException,
-            NoSuchElementException,
-            StaleElementReferenceException,
-        ):
-            return False
+        return bool(current_driver.execute_script("""
+            const runner = document.querySelector('[data-python-runner]');
+            if (!runner) return false;
+            const buttons = Array.from(runner.querySelectorAll('button'));
+            const runButton = buttons.find((button) => button.textContent.trim().includes('Run Code'));
+            if (!runButton || runButton.disabled) return false;
+            runButton.click();
+            return true;
+        """))
 
-    WebDriverWait(driver, 30, poll_frequency=0.25).until(
-        try_click,
-        "Python Run Code button did not become clickable",
-    )
+    try:
+        WebDriverWait(driver, 30, poll_frequency=0.25).until(
+            try_click,
+            "Python Run Code button did not become available",
+        )
+    except Exception as error:
+        debug = driver.execute_script("""
+            const runner = document.querySelector('[data-python-runner]');
+            return {
+              url: location.href,
+              runnerFound: Boolean(runner),
+              buttons: runner ? Array.from(runner.querySelectorAll('button')).map((button) => ({
+                text: button.textContent.trim(),
+                disabled: button.disabled,
+                html: button.outerHTML.slice(0, 500)
+              })) : [],
+              bodyText: document.body.innerText.slice(0, 1200)
+            };
+        """)
+        raise AssertionError(f"Python runner button lookup failed: {debug}") from error
 
 
 def check_python_execution(driver: webdriver.Chrome) -> None:
