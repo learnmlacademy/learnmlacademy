@@ -72,8 +72,10 @@ To transform the platform into a world-class educational resource while upholdin
 3. **Sitemap Date Synchronization**:
    - Emit `lastmod` only when a per-page `dateModified` is explicitly verified, and keep the sitemap value identical to the page's `TechArticle` / `LearningResource` JSON-LD value.
    - Omit unsupported modification dates; never use a global fallback, a project placeholder, or a blog publication date as `lastmod`.
-4. **Consolidation of Stale PR Work**:
-   - Audit historical branches (e.g. PR #60, feature branches) to extract useful, peer-reviewed educational diagrams without altering existing text.
+4. **Consolidation of Stale PR Work — audit completed 2026-11-06**:
+   - Confirmed that the merged teaching-visual work in PRs #26, #27, #28, #38, #39, #43, #44, #49, and #75 is already present in current `main` and referenced by the relevant project pages. This includes the movie-rating matrix and cosine-similarity visuals, four PDF RAG concept diagrams, PDF RAG Semantic evidence screenshots, and Titanic / House Price / Movie Recommender training and application visuals.
+   - Compared the remaining visual and project branches against `main`. Their relevant components and assets are already integrated, their source pages are older snapshots, or they are substantially behind/diverged from current `main`; no additional cherry-pick was justified. No lesson or handbook text was changed during this audit.
+   - No formal GitHub review submissions were recorded for the sampled historical merged PRs. Their existing visuals are therefore described as merged and CI-verified, not as formally peer-approved. Require explicit reviewer sign-off for any new diagram work.
 5. **Advanced Generative AI and Agentic AI Audits**:
    - Ensure the 16 Agentic AI and 17 GenAI lessons remain grounded in primary source literature (ReAct, MCP, tool execution contracts, context window budgets).
 
