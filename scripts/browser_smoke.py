@@ -149,6 +149,49 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
         )
 
 
+def check_python_execution(driver: webdriver.Chrome) -> None:
+    """Require actual Python execution, package loading, and plot rendering in Chrome."""
+    driver.get(BASE + "/learn/what-is-ml")
+    runner = WebDriverWait(driver, 25).until(
+        lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
+    )
+    run_button = next(
+        button for button in runner.find_elements(By.TAG_NAME, "button")
+        if button.text.strip() == "Run Code"
+    )
+    run_button.click()
+    WebDriverWait(driver, 150).until(
+        lambda d: d.find_elements(By.CSS_SELECTOR, "[data-python-output]")
+    )
+    output = driver.find_element(By.CSS_SELECTOR, "[data-python-output]").text
+    assert "Learned decision threshold: 4.0" in output, (
+        "Browser Python runtime did not execute the introductory threshold-learning example: " + output[:500]
+    )
+    assert "Predicted result: passed" in output, "Introductory Python prediction output is incorrect"
+
+    driver.get(BASE + "/learn/kmeans")
+    runner = WebDriverWait(driver, 25).until(
+        lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
+    )
+    run_button = next(
+        button for button in runner.find_elements(By.TAG_NAME, "button")
+        if button.text.strip() == "Run Code"
+    )
+    run_button.click()
+    WebDriverWait(driver, 210).until(
+        lambda d: d.find_elements(By.CSS_SELECTOR, "[data-python-output]")
+    )
+    output_node = driver.find_element(By.CSS_SELECTOR, "[data-python-output]")
+    output = output_node.text
+    assert "Number of clusters: 3" in output, (
+        "Pyodide scientific package execution failed: " + output[:700]
+    )
+    assert output_node.find_elements(By.CSS_SELECTOR, 'img[src^="data:image/png;base64,"]'), (
+        "matplotlib output was not returned from the Python worker"
+    )
+    print("PYTHON WORKER QA PASS: stdlib training example, NumPy/scikit-learn K-Means, matplotlib PNG, and real browser output.")
+
+
 def main() -> None:
     server = subprocess.Popen(
         ["npm", "run", "preview", "--", "--host", "127.0.0.1", "--port", "4173", "--strictPort"],
@@ -171,6 +214,7 @@ def main() -> None:
                 WebDriverWait(driver, 20).until(lambda d: len(d.find_elements(By.LINK_TEXT, "Start the handbook")) == 12)
                 if not mobile:
                     driver.save_screenshot(str(ARTIFACTS / "projects-desktop.png"))
+                    check_python_execution(driver)
                 for project in PROJECTS:
                     check_view(driver, project, mobile=mobile)
                 if mobile:
