@@ -15,6 +15,7 @@ from pathlib import Path
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import ElementClickInterceptedException, NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -149,35 +150,56 @@ def check_lesson(driver: webdriver.Chrome, topic_id: str) -> None:
         )
 
 
+def click_python_runner(driver: webdriver.Chrome) -> None:
+    """Re-query the live button on each poll; React may replace its parent during render."""
+    def try_click(current_driver: webdriver.Chrome) -> bool:
+        try:
+            button = current_driver.find_element(
+                By.XPATH,
+                '//*[@data-python-runner]//button[normalize-space(.)="Run Code"]',
+            )
+            if not button.is_displayed() or not button.is_enabled():
+                return False
+            button.click()
+            return True
+        except (
+            ElementClickInterceptedException,
+            NoSuchElementException,
+            StaleElementReferenceException,
+        ):
+            return False
+
+    WebDriverWait(driver, 30, poll_frequency=0.25).until(
+        try_click,
+        "Python Run Code button did not become clickable",
+    )
+
+
 def check_python_execution(driver: webdriver.Chrome) -> None:
     """Require actual Python execution, package loading, and plot rendering in Chrome."""
     driver.get(BASE + "/learn/what-is-ml")
-    runner = WebDriverWait(driver, 25).until(
+    WebDriverWait(driver, 25).until(
         lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
     )
-    run_button = next(
-        button for button in runner.find_elements(By.TAG_NAME, "button")
-        if button.text.strip() == "Run Code"
-    )
-    run_button.click()
+    click_python_runner(driver)
     WebDriverWait(driver, 150).until(
         lambda d: d.find_elements(By.CSS_SELECTOR, "[data-python-output]")
     )
-    output = driver.find_element(By.CSS_SELECTOR, "[data-python-output]").text
+    output_node = driver.find_element(By.CSS_SELECTOR, "[data-python-output]")
+    output = output_node.text
     assert "Learned decision threshold: 4.0" in output, (
         "Browser Python runtime did not execute the introductory threshold-learning example: " + output[:500]
     )
     assert "Predicted result: passed" in output, "Introductory Python prediction output is incorrect"
+    assert not output_node.find_elements(By.CSS_SELECTOR, "div.bg-rose-950"), (
+        "Introductory Python worker returned an execution error: " + output[:700]
+    )
 
     driver.get(BASE + "/learn/kmeans")
-    runner = WebDriverWait(driver, 25).until(
+    WebDriverWait(driver, 25).until(
         lambda d: d.find_element(By.CSS_SELECTOR, "[data-python-runner]")
     )
-    run_button = next(
-        button for button in runner.find_elements(By.TAG_NAME, "button")
-        if button.text.strip() == "Run Code"
-    )
-    run_button.click()
+    click_python_runner(driver)
     WebDriverWait(driver, 210).until(
         lambda d: d.find_elements(By.CSS_SELECTOR, "[data-python-output]")
     )
@@ -185,6 +207,9 @@ def check_python_execution(driver: webdriver.Chrome) -> None:
     output = output_node.text
     assert "Number of clusters: 3" in output, (
         "Pyodide scientific package execution failed: " + output[:700]
+    )
+    assert not output_node.find_elements(By.CSS_SELECTOR, "div.bg-rose-950"), (
+        "Scientific Python worker returned an execution error: " + output[:700]
     )
     assert output_node.find_elements(By.CSS_SELECTOR, 'img[src^="data:image/png;base64,"]'), (
         "matplotlib output was not returned from the Python worker"
