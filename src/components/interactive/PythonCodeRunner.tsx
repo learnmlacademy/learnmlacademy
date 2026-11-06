@@ -10,6 +10,7 @@ interface PythonCodeRunnerProps {
   packages?: PyodidePackage[];
   caption?: string;
   className?: string;
+  showCode?: boolean;
 }
 
 const phaseLabels = {
@@ -26,6 +27,7 @@ export function PythonCodeRunner({
   packages = [],
   caption = "Runs locally in your browser after you select Run Code. No code is uploaded to a LearnMLAcademy server.",
   className,
+  showCode = true,
 }: PythonCodeRunnerProps) {
   const { run, phase } = usePyodideWorker();
   const [result, setResult] = useState<PythonExecutionResult | null>(null);
@@ -86,7 +88,7 @@ export function PythonCodeRunner({
           </button>}
         </div>
       </div>
-      <CodeBlock code={code} language="python" type="runnable" title={title} caption={caption} />
+      {showCode && <CodeBlock code={code} language="python" type="runnable" title={title} caption={caption} />}
       {result && (
         <div className="mt-3 overflow-hidden rounded-xl border border-slate-800 bg-slate-950" data-python-output>
           <div className="flex items-center gap-2 border-b border-slate-800 px-4 py-2 text-xs font-bold uppercase tracking-wide text-slate-300">
