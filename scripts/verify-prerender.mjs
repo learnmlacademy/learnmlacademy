@@ -355,6 +355,8 @@ function verifyPage(html, page) {
     assert.equal(software?.url, page.canonical, 'Project code schema URL');
     assert(software?.codeRepository?.startsWith('https://github.com/learnmlacademy/learnmlacademy/tree/main/projects/'), 'Project code repository');
     assert.equal(howto?.step?.length, 4, 'Project how-to steps');
+    assert.equal(article.datePublished, undefined, 'Project publication date must not be asserted without verified evidence');
+    assert.equal(article.dateModified, undefined, 'Project modification date must not be asserted without verified evidence');
     assert(page.image?.startsWith('/project-handbooks/'), 'Project image required');
   }
   if (page.kind === 'blog') {
@@ -363,6 +365,8 @@ function verifyPage(html, page) {
     const breadcrumb = schema['@graph']?.find(node => node['@type'] === 'BreadcrumbList');
     assert(article?.['@type']?.includes('LearningResource'), 'Blog missing LearningResource');
     assert.equal(article?.headline, page.title, 'Blog headline');
+    assert.equal(article?.datePublished, page.publishedDate, 'Blog publication date must match the editorial publication field');
+    assert.equal(article?.dateModified, undefined, 'Blog publication date must not be reused as dateModified');
     assert.equal(breadcrumb?.itemListElement?.at(-1)?.item, page.canonical, 'Blog breadcrumb canonical');
   }
   if (page.kind === 'lesson') {
@@ -378,7 +382,12 @@ function verifyPage(html, page) {
     assert.equal(article.url, page.canonical);
     assert.equal(article.headline, page.title);
     assert.equal(article.description, page.description);
-    assert.equal(article.dateModified, page.dateModified, `dateModified mismatch for ${page.route}: expected ${page.dateModified}, got ${article.dateModified}`);
+    if (page.dateModified) {
+      assert.equal(article.dateModified, page.dateModified, `dateModified mismatch for ${page.route}: expected ${page.dateModified}, got ${article.dateModified}`);
+    } else {
+      assert.equal(article.dateModified, undefined, `Unverified dateModified must be omitted for ${page.route}`);
+    }
+    assert.equal(article.datePublished, undefined, `Unverified lesson datePublished must be omitted for ${page.route}`);
     if (page.route === '/learn/rag') {
       assert.equal(article.dateModified, '2026-10-16', `RAG dateModified must be 2026-10-16, got ${article.dateModified}`);
     }
@@ -401,6 +410,37 @@ try {
   verifyAgenticQuizIntegrity(agenticQuizData, AGENTIC_TOPIC_IDS);
 
   const pages = await loadPages(vite);
+  const sitemapXml = await fs.readFile('public/sitemap.xml', 'utf8');
+  const sitemapBlocks = [...sitemapXml.matchAll(/<url>([\s\S]*?)<\/url>/g)].map(match => match[1]);
+  const sitemapEntries = sitemapBlocks.map(block => ({
+    url: block.match(/<loc>([^<]+)<\/loc>/)?.[1],
+    lastmod: block.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1],
+  }));
+  assert.equal(sitemapEntries.length, pages.length, 'Sitemap must contain every canonical page exactly once');
+  const sitemapUrls = sitemapEntries.map(entry => entry.url);
+  assert.equal(new Set(sitemapUrls).size, pages.length, 'Sitemap canonical URLs must be unique');
+  assert.deepEqual(
+    [...sitemapUrls].sort(),
+    pages.map(page => page.canonical).sort(),
+    'Sitemap URLs must exactly match all rendered canonical pages',
+  );
+  const sitemapByUrl = new Map(sitemapEntries.map(entry => [entry.url, entry]));
+  for (const page of pages) {
+    const entry = sitemapByUrl.get(page.canonical);
+    assert(entry, `Missing sitemap entry for ${page.route}`);
+    const expectedLastmod = page.kind === 'lesson' ? page.dateModified : undefined;
+    assert.equal(
+      entry.lastmod,
+      expectedLastmod,
+      `Sitemap lastmod must match verified dateModified (or be omitted) for ${page.route}`,
+    );
+    if (entry.lastmod) {
+      assert(/^\d{4}-\d{2}-\d{2}$/.test(entry.lastmod), `Invalid sitemap lastmod for ${page.route}: ${entry.lastmod}`);
+      assert(!Number.isNaN(Date.parse(entry.lastmod)), `Unparseable sitemap lastmod for ${page.route}: ${entry.lastmod}`);
+    }
+  }
+  const datedSitemapEntries = sitemapEntries.filter(entry => entry.lastmod);
+  assert.equal(datedSitemapEntries.length, 49, 'Only 49 explicitly verified lesson modification dates should appear in the sitemap');
   const lessons = pages.filter(page => page.kind === 'lesson');
   const lessonFiles = (await fs.readdir('dist/learn')).filter(name => name.endsWith('.html'));
   assert.equal(lessonFiles.length, 167, 'Expected exactly 167 generated canonical lesson files');
