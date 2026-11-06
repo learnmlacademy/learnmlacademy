@@ -774,10 +774,8 @@ export const TOPIC_MODIFICATION_DATES: Record<string, string> = {
   'llmops': '2026-09-27',
 };
 
-export const DEFAULT_TOPIC_DATE_MODIFIED = '2026-03-28';
-
-export function getTopicDateModified(topicId: string): string {
-  return TOPIC_MODIFICATION_DATES[topicId] ?? DEFAULT_TOPIC_DATE_MODIFIED;
+export function getTopicDateModified(topicId: string): string | undefined {
+  return TOPIC_MODIFICATION_DATES[topicId];
 }
 
 export const getSEOData = (topicId: string, defaultTitle: string): { title: string; description: string } => {
