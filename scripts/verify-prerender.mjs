@@ -329,7 +329,7 @@ function verifyPage(html, page) {
       `SEO description length out of range [130, 155] for ${page.route} (${page.description.length} chars)`
     );
     assert(
-      !new RegExp('(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$', 'i').test(page.description.trim()),
+      !new RegExp('\\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$', 'i').test(page.description.trim()),
       `SEO description ends with a dangling word for ${page.route}: "${page.description}"`
     );
   }
