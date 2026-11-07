@@ -32,7 +32,7 @@ assert.deepEqual(
   'SEO metadata IDs must exactly match the 167 curriculum lesson IDs'
 );
 const uniqueDescriptions = new Set<string>();
-const DANGLING_DESCRIPTION_END = new RegExp('(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$', 'i');
+const DANGLING_DESCRIPTION_END = new RegExp('\\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$', 'i');
 for (const [id, data] of Object.entries(seoData)) {
   const description = data.description.trim();
   assert(
