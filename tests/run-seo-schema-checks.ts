@@ -22,6 +22,37 @@ for (const [id, data] of Object.entries(seoData)) {
 assert.equal(seoData['feature-selection']?.title, 'Feature Selection Techniques | LearnMLAcademy');
 assert.equal(seoData['pretraining-finetuning']?.title, 'LLM Pretraining & Fine-Tuning | LearnMLAcademy');
 assert.equal(seoData['agent-evaluation-safety']?.title, 'AI Agent Evaluation & Safety | LearnMLAcademy');
+ 
+// Lesson meta descriptions are distinct, topic-specific, and search-snippet safe.
+assert.equal(Object.keys(seoData).length, allTopics.length, 'Every curriculum lesson must have one SEO metadata record');
+const expectedLessonIds = new Set(allTopics.map(topic => topic.id));
+assert.deepEqual(
+  Object.keys(seoData).sort(),
+  [...expectedLessonIds].sort(),
+  'SEO metadata IDs must exactly match the 167 curriculum lesson IDs'
+);
+const uniqueDescriptions = new Set<string>();
+const DANGLING_DESCRIPTION_END = /\\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$/i;
+for (const [id, data] of Object.entries(seoData)) {
+  const description = data.description.trim();
+  assert(
+    description.length >= 130 && description.length <= 155,
+    `SEO description length out of range [130, 155] for ${id} (${description.length} chars): "${description}"`
+  );
+  assert(description.endsWith('.'), `SEO description must end as a complete sentence for ${id}`);
+  assert(
+    !DANGLING_DESCRIPTION_END.test(description),
+    `SEO description ends with a dangling word for ${id}: "${description}"`
+  );
+  assert(
+    !description.endsWith('architecture diagrams, worked examples, and interview quiz.'),
+    `Generic template suffix remains for ${id}`
+  );
+  assert(!uniqueDescriptions.has(description), `Duplicate SEO description found for ${id}`);
+  uniqueDescriptions.add(description);
+}
+assert.equal(uniqueDescriptions.size, 167, 'All 167 SEO descriptions must be distinct');
+
 
 // 2. Every lesson schema uses exactly its verified date, or omits date fields.
 const topicIds = new Set(allTopics.map(topic => topic.id));
