@@ -323,6 +323,16 @@ function verifyPage(html, page) {
   );
   const description = onlyMatch(head, /<meta\b[^>]*name="description"[^>]*content="([^"]*)"[^>]*>/gi, 'description');
   assert.equal(description, escapeHtml(page.description));
+  if (page.kind === 'lesson') {
+    assert(
+      page.description.length >= 130 && page.description.length <= 155,
+      `SEO description length out of range [130, 155] for ${page.route} (${page.description.length} chars)`
+    );
+    assert(
+      !new RegExp('\\b(and|or|with|using|including|from|to|for|by|while|through|into|in|on|of|a|an|the)\\.$', 'i').test(page.description.trim()),
+      `SEO description ends with a dangling word for ${page.route}: "${page.description}"`
+    );
+  }
   const canonicals = [...head.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi)];
   assert.equal(canonicals.length, 1, 'Expected exactly one canonical link');
   assert.equal(canonicals[0][0].match(/href="([^"]*)"/)[1], page.canonical);
