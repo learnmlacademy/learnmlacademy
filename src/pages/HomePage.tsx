@@ -1,4 +1,4 @@
-import React, { useEffect, useId, useState, type ComponentType } from 'react';
+import React, { useEffect, useState, type ComponentType } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowRight,
@@ -11,7 +11,6 @@ import {
   Code2,
   Cpu,
   Database,
-  Download,
   FileCode,
   FolderKanban,
   GraduationCap,
@@ -32,6 +31,7 @@ import { LessonSearch } from '../components/search/LessonSearch';
 import { curriculum } from '../data/curriculum';
 import { blogPosts } from '../data/blog';
 import { projectPortfolio, type ProjectPortfolioItem } from '../data/projectPortfolio';
+import { interviewHandbooks } from '../data/interviewHandbooks';
 import { useProgress } from '../context/ProgressContext';
 
 type TrackCard = {
@@ -72,9 +72,9 @@ const tracks: TrackCard[] = [
     ],
     badge: 'Core Foundations',
     gradient: 'from-sky-500/10 via-cyan-500/5 to-transparent',
-    iconBg: 'bg-sky-500/15',
+    iconBg: 'bg-sky-50',
     iconColor: 'text-sky-600',
-    borderHover: 'hover:border-sky-400/80 hover:shadow-sky-500/10',
+    borderHover: 'hover:border-sky-400 hover:shadow-sky-500/10',
     sampleTopics: ['Linear Regression', 'Random Forests', 'PCA', 'Gradient Descent'],
   },
   {
@@ -85,9 +85,9 @@ const tracks: TrackCard[] = [
     categoryIds: ['deep-learning', 'advanced-deep-learning'],
     badge: 'Neural Architectures',
     gradient: 'from-violet-500/10 via-purple-500/5 to-transparent',
-    iconBg: 'bg-violet-500/15',
+    iconBg: 'bg-violet-50',
     iconColor: 'text-violet-600',
-    borderHover: 'hover:border-violet-400/80 hover:shadow-violet-500/10',
+    borderHover: 'hover:border-violet-400 hover:shadow-violet-500/10',
     sampleTopics: ['Backpropagation', 'Convolutional Nets', 'Attention', 'Transformers'],
   },
   {
@@ -98,9 +98,9 @@ const tracks: TrackCard[] = [
     categoryIds: ['generative-ai'],
     badge: 'Creative Models',
     gradient: 'from-rose-500/10 via-pink-500/5 to-transparent',
-    iconBg: 'bg-rose-500/15',
+    iconBg: 'bg-rose-50',
     iconColor: 'text-rose-600',
-    borderHover: 'hover:border-rose-400/80 hover:shadow-rose-500/10',
+    borderHover: 'hover:border-rose-400 hover:shadow-rose-500/10',
     sampleTopics: ['Latent Diffusion', 'Score Matching', 'VAEs & GANs', 'Multimodal'],
   },
   {
@@ -111,9 +111,9 @@ const tracks: TrackCard[] = [
     categoryIds: ['large-language-models'],
     badge: 'Language & Retrieval',
     gradient: 'from-emerald-500/10 via-teal-500/5 to-transparent',
-    iconBg: 'bg-emerald-500/15',
+    iconBg: 'bg-emerald-50',
     iconColor: 'text-emerald-600',
-    borderHover: 'hover:border-emerald-400/80 hover:shadow-emerald-500/10',
+    borderHover: 'hover:border-emerald-400 hover:shadow-emerald-500/10',
     sampleTopics: ['Vector Embeddings', 'Hybrid Retrieval', 'Reranking', 'Context Windows'],
   },
   {
@@ -124,9 +124,9 @@ const tracks: TrackCard[] = [
     categoryIds: ['agentic-ai'],
     badge: 'Autonomous Systems',
     gradient: 'from-amber-500/10 via-orange-500/5 to-transparent',
-    iconBg: 'bg-amber-500/15',
+    iconBg: 'bg-amber-50',
     iconColor: 'text-amber-600',
-    borderHover: 'hover:border-amber-400/80 hover:shadow-amber-500/10',
+    borderHover: 'hover:border-amber-400 hover:shadow-amber-500/10',
     sampleTopics: ['Tool Calling', 'Agent Memory', 'ReAct Planning', 'Multi-Agent MCP'],
   },
   {
@@ -137,9 +137,9 @@ const tracks: TrackCard[] = [
     categoryIds: ['ai-engineering-mlops'],
     badge: 'Production Systems',
     gradient: 'from-indigo-500/10 via-blue-500/5 to-transparent',
-    iconBg: 'bg-indigo-500/15',
+    iconBg: 'bg-indigo-50',
     iconColor: 'text-indigo-600',
-    borderHover: 'hover:border-indigo-400/80 hover:shadow-indigo-500/10',
+    borderHover: 'hover:border-indigo-400 hover:shadow-indigo-500/10',
     sampleTopics: ['FastAPI Serving', 'Docker Containers', 'Drift Detection', 'CI/CD Pipelines'],
   },
 ];
@@ -212,6 +212,11 @@ const curriculumLessonCount = curriculum.reduce(
   0,
 );
 
+const interviewHandbookCount = Object.keys(interviewHandbooks).length;
+const technicalTrackCategoryIds = tracks.flatMap(track => track.categoryIds);
+const technicalTrackLessonCount = lessonCountFor(technicalTrackCategoryIds);
+const technicalTrackModuleCount = technicalTrackCategoryIds.length;
+
 /**
  * Editorial mini-diagrams illustrating the actual concept inside recommended lessons
  */
@@ -219,8 +224,8 @@ function LessonDiagram({ type }: { type: 'regression' | 'neural' | 'rag' | 'agen
   if (type === 'regression') {
     return (
       <svg viewBox="0 0 160 80" className="h-full w-full" aria-hidden="true">
-        <line x1="20" y1="70" x2="150" y2="70" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="3 3" />
-        <line x1="20" y1="10" x2="20" y2="70" stroke="#94a3b8" strokeWidth="1.5" strokeDasharray="3 3" />
+        <line x1="20" y1="70" x2="150" y2="70" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="3 3" />
+        <line x1="20" y1="10" x2="20" y2="70" stroke="#cbd5e1" strokeWidth="1.5" strokeDasharray="3 3" />
         <line x1="25" y1="65" x2="145" y2="15" stroke="#0284c7" strokeWidth="2.5" />
         <circle cx="35" cy="58" r="3.5" fill="#38bdf8" />
         <circle cx="50" cy="52" r="3.5" fill="#38bdf8" />
@@ -248,8 +253,8 @@ function LessonDiagram({ type }: { type: 'regression' | 'neural' | 'rag' | 'agen
         <line x1="80" y1="40" x2="135" y2="40" stroke="#818cf8" strokeWidth="1.5" />
         <line x1="80" y1="60" x2="135" y2="40" stroke="#818cf8" strokeWidth="1.5" />
         {/* Input Nodes */}
-        <circle cx="30" cy="25" r="7" fill="#f1f5f9" stroke="#64748b" strokeWidth="2" />
-        <circle cx="30" cy="55" r="7" fill="#f1f5f9" stroke="#64748b" strokeWidth="2" />
+        <circle cx="30" cy="25" r="7" fill="#f8fafc" stroke="#64748b" strokeWidth="2" />
+        <circle cx="30" cy="55" r="7" fill="#f8fafc" stroke="#64748b" strokeWidth="2" />
         {/* Hidden Nodes */}
         <circle cx="80" cy="20" r="7" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
         <circle cx="80" cy="40" r="7" fill="#ede9fe" stroke="#7c3aed" strokeWidth="2" />
@@ -481,7 +486,7 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 1. HERO SECTION: PREMIUM 2-COLUMN SPLIT WITH INTERACTIVE SPECTRUM VISUAL */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-800 bg-[#080d1a] pt-6 pb-12 sm:pt-8 sm:pb-16 lg:py-16">
+      <section className="relative overflow-hidden border-b border-slate-800 bg-[#080d1a] pt-8 pb-12 sm:pt-12 sm:pb-16 lg:py-16">
         {/* Ambient atmospheric gradients & technical grid */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(14,165,233,0.18),transparent_70%),radial-gradient(ellipse_60%_50%_at_85%_70%,rgba(99,102,241,0.14),transparent_60%)]" />
         <div
@@ -1266,6 +1271,9 @@ export function HomePage() {
                 Browse by topic
               </h2>
               <p className="mt-1 text-sm text-slate-600">
+                Explore {tracks.length} specialized technical tracks covering {technicalTrackModuleCount} modules and {technicalTrackLessonCount} lessons, alongside dedicated project and interview preparation modules in the complete {curriculum.length}-module curriculum.
+              </p>
+              <p className="sr-only">
                 Structured into 6 specialized tracks covering 17 modules and 167 verified lessons.
               </p>
             </div>
@@ -1324,6 +1332,59 @@ export function HomePage() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Complementary Applied Modules: Module 15 (Projects) & Module 17 (Career & Interview Prep) */}
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <Link
+              to="/curriculum"
+              className="group flex items-center justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition hover:border-emerald-300 hover:shadow-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+                  <FolderKanban className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xs font-black text-slate-950 group-hover:text-emerald-700 transition">
+                      Module 15: Projects
+                    </h3>
+                    <span className="font-mono text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      {lessonCountFor(['projects'])} lessons · {projectPortfolio.length} handbooks
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Step-by-step tutorial lessons supporting verified project implementations
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-emerald-600 shrink-0 ml-2" aria-hidden="true" />
+            </Link>
+
+            <Link
+              to="/learn/ai-data-career-paths"
+              className="group flex items-center justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition hover:border-violet-300 hover:shadow-md"
+            >
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
+                  <BriefcaseBusiness className="h-5 w-5" aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-xs font-black text-slate-950 group-hover:text-violet-700 transition">
+                      Module 17: Career & Interview Prep
+                    </h3>
+                    <span className="font-mono text-[10px] font-bold text-violet-700 bg-violet-50 px-1.5 py-0.5 rounded">
+                      {lessonCountFor(['interview-preparation'])} lessons · {interviewHandbookCount} PDFs
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-[11px] text-slate-500">
+                    Comprehensive career roadmaps, compensation benchmarks & solved interviews
+                  </p>
+                </div>
+              </div>
+              <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-violet-600 shrink-0 ml-2" aria-hidden="true" />
+            </Link>
           </div>
 
           <div className="mt-6 sm:hidden">

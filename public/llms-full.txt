@@ -15,13 +15,13 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 7
 - Lessons:
-  - [What is Machine Learning?](https://www.learnmlacademy.com/learn/what-is-ml): Understand machine learning definitions, core workflow, and paradigms, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Types of Machine Learning](https://www.learnmlacademy.com/learn/types-of-ml): Master the four main types of machine learning and real applications, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Supervised Learning](https://www.learnmlacademy.com/learn/supervised-learning-intro): Learn supervised learning algorithms, labelled datasets, and metrics, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Unsupervised Learning](https://www.learnmlacademy.com/learn/unsupervised-learning-intro): Explore unsupervised learning techniques, clustering, and latent patterns, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Reinforcement Learning](https://www.learnmlacademy.com/learn/reinforcement-learning-intro): Understand reinforcement learning agents, reward signals, and Q-learning, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Batch vs Online Learning](https://www.learnmlacademy.com/learn/batch-vs-online): Compare batch training versus streaming online incremental ML updates, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [ML Life Cycle](https://www.learnmlacademy.com/learn/ml-lifecycle): Follow the complete machine learning lifecycle from data to deployment, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [What is Machine Learning?](https://www.learnmlacademy.com/learn/what-is-ml): Understand machine learning definitions, core workflow, and paradigms, with worked examples, practical Python tasks, and concept-check questions.
+  - [Types of Machine Learning](https://www.learnmlacademy.com/learn/types-of-ml): Master the four main types of machine learning and real applications, with worked examples, practical Python tasks, and concept-check questions.
+  - [Supervised Learning](https://www.learnmlacademy.com/learn/supervised-learning-intro): Learn supervised learning algorithms, labelled datasets, and metrics, with worked examples, practical Python tasks, and concept-check questions.
+  - [Unsupervised Learning](https://www.learnmlacademy.com/learn/unsupervised-learning-intro): Explore unsupervised learning techniques, clustering, and latent patterns, with worked examples, practical Python tasks, and concept-check questions.
+  - [Reinforcement Learning](https://www.learnmlacademy.com/learn/reinforcement-learning-intro): Understand reinforcement learning agents, reward signals, and Q-learning, with worked examples, practical Python tasks, and concept-check questions.
+  - [Batch vs Online Learning](https://www.learnmlacademy.com/learn/batch-vs-online): Compare batch training versus streaming online incremental ML updates, with worked examples, practical Python tasks, and concept-check questions.
+  - [ML Life Cycle](https://www.learnmlacademy.com/learn/ml-lifecycle): Follow the complete machine learning lifecycle from data to deployment, with worked examples, practical Python tasks, and concept-check questions.
 
 
 ### Module 2: 2. Python & ML Libraries
@@ -29,10 +29,10 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 4
 - Lessons:
-  - [Python for Machine Learning](https://www.learnmlacademy.com/learn/python-for-ml): Master essential Python programming for machine learning and data science, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [NumPy Essentials for ML](https://www.learnmlacademy.com/learn/numpy-essentials): Master NumPy array indexing, broadcasting, matrix math, and operations, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Pandas Essentials for ML](https://www.learnmlacademy.com/learn/pandas-essentials): Manipulate DataFrames, clean tabular data, and compute aggregations, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Scikit-learn Essentials](https://www.learnmlacademy.com/learn/scikit-learn-essentials): Build scikit-learn preprocessing pipelines, models, and transformers, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Python for Machine Learning](https://www.learnmlacademy.com/learn/python-for-ml): Master essential Python programming for machine learning and data science, with Python exercises, array tasks, and practical library walkthroughs.
+  - [NumPy Essentials for ML](https://www.learnmlacademy.com/learn/numpy-essentials): Master NumPy array indexing, broadcasting, matrix math, and operations, with Python exercises, array tasks, and practical library walkthroughs.
+  - [Pandas Essentials for ML](https://www.learnmlacademy.com/learn/pandas-essentials): Manipulate DataFrames, clean tabular data, and compute aggregations, with Python exercises, array tasks, and practical library walkthroughs.
+  - [Scikit-learn Essentials](https://www.learnmlacademy.com/learn/scikit-learn-essentials): Build scikit-learn preprocessing pipelines, models, and transformers, with Python exercises, array tasks, and practical library walkthroughs.
 
 
 ### Module 3: 3. Data Preprocessing & Feature Engineering
@@ -40,14 +40,14 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
 - Lessons:
-  - [Exploratory Data Analysis (EDA)](https://www.learnmlacademy.com/learn/eda): Perform exploratory data analysis with statistical summaries and plots, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Handling Missing Data](https://www.learnmlacademy.com/learn/handling-missing-data): Handle missing data using mean, median, KNN, and iterative imputation, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Encoding Categorical Data](https://www.learnmlacademy.com/learn/encoding-categorical): Encode categorical features with one-hot, target, and ordinal methods, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Bias-Variance Tradeoff](https://www.learnmlacademy.com/learn/bias-variance): Diagnose bias-variance tradeoff, generalization error, and tradeoffs, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Feature Scaling](https://www.learnmlacademy.com/learn/feature-scaling): Apply feature scaling with StandardScaler, MinMaxScaler, and RobustScaler, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Feature Engineering](https://www.learnmlacademy.com/learn/feature-engineering): Engineer predictive features, interaction terms, and temporal signals, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Feature Selection & Extraction](https://www.learnmlacademy.com/learn/feature-selection): Select optimal feature subsets using variance thresholds and elimination, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Data Visualization for ML](https://www.learnmlacademy.com/learn/data-visualization): Create informative data visualizations with Matplotlib, Seaborn, and plots, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Exploratory Data Analysis (EDA)](https://www.learnmlacademy.com/learn/eda): Perform exploratory data analysis with statistical summaries and plots, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Handling Missing Data](https://www.learnmlacademy.com/learn/handling-missing-data): Handle missing data using mean, median, KNN, and iterative imputation, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Encoding Categorical Data](https://www.learnmlacademy.com/learn/encoding-categorical): Encode categorical features with one-hot, target, and ordinal methods, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Bias-Variance Tradeoff](https://www.learnmlacademy.com/learn/bias-variance): Diagnose bias-variance tradeoff, generalization error, and tradeoffs, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Feature Scaling](https://www.learnmlacademy.com/learn/feature-scaling): Apply feature scaling with StandardScaler, MinMaxScaler, and RobustScaler, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Feature Engineering](https://www.learnmlacademy.com/learn/feature-engineering): Engineer predictive features, interaction terms, and temporal signals, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Feature Selection & Extraction](https://www.learnmlacademy.com/learn/feature-selection): Select optimal feature subsets using variance thresholds and elimination, with cleaning recipes, feature workflows, and before-and-after examples.
+  - [Data Visualization for ML](https://www.learnmlacademy.com/learn/data-visualization): Create informative data visualizations with Matplotlib, Seaborn, and plots, with cleaning recipes, feature workflows, and before-and-after examples.
 
 
 ### Module 4: 4. Supervised Learning
@@ -55,18 +55,18 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 12
 - Lessons:
-  - [Regression Algorithms Overview](https://www.learnmlacademy.com/learn/regression-intro): Understand continuous target estimation, baseline models, and metrics, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Linear Regression](https://www.learnmlacademy.com/learn/linear-regression): Derive linear regression with Ordinary Least Squares and gradient descent, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Gradient Descent](https://www.learnmlacademy.com/learn/gradient-descent): Implement gradient descent optimization, learning rates, and updates, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Polynomial Regression](https://www.learnmlacademy.com/learn/polynomial-regression): Fit polynomial regression curves while preventing high-variance overfitting, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Ridge Regression](https://www.learnmlacademy.com/learn/ridge-regression): Constrain regression coefficients using Ridge L2 regularization penalties, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Lasso Regression](https://www.learnmlacademy.com/learn/lasso-regression): Perform automated feature selection using Lasso L1 regularization sparsity, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Classification Algorithms Overview](https://www.learnmlacademy.com/learn/classification-intro): Categorize discrete target classes with decision boundaries and probabilities, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Logistic Regression](https://www.learnmlacademy.com/learn/logistic-regression): Master logistic regression, sigmoid activation, and decision boundaries, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Decision Trees](https://www.learnmlacademy.com/learn/decision-trees): Construct decision tree classifiers with Gini impurity and cost pruning, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Naive Bayes](https://www.learnmlacademy.com/learn/naive-bayes): Apply Bayes theorem with conditional independence assumptions for text, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [K-Nearest Neighbors (KNN)](https://www.learnmlacademy.com/learn/knn): Implement K-Nearest Neighbors classification and Euclidean distance, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Support Vector Machines (SVM)](https://www.learnmlacademy.com/learn/svm): Maximize classification margins with Support Vector Machines and kernels, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Regression Algorithms Overview](https://www.learnmlacademy.com/learn/regression-intro): Understand continuous target estimation, baseline models, and metrics, with equations, fitted examples, residual analysis, and Python practice.
+  - [Linear Regression](https://www.learnmlacademy.com/learn/linear-regression): Derive linear regression with Ordinary Least Squares and gradient descent, with equations, fitted examples, residual analysis, and Python practice.
+  - [Gradient Descent](https://www.learnmlacademy.com/learn/gradient-descent): Implement gradient descent optimization, learning rates, and updates, with equations, fitted examples, residual analysis, and Python practice.
+  - [Polynomial Regression](https://www.learnmlacademy.com/learn/polynomial-regression): Fit polynomial regression curves while preventing high-variance overfitting, with equations, fitted examples, residual analysis, and Python practice.
+  - [Ridge Regression](https://www.learnmlacademy.com/learn/ridge-regression): Constrain regression coefficients using Ridge L2 regularization penalties, with equations, fitted examples, residual analysis, and Python practice.
+  - [Lasso Regression](https://www.learnmlacademy.com/learn/lasso-regression): Perform automated feature selection using Lasso L1 regularization sparsity, with equations, fitted examples, residual analysis, and Python practice.
+  - [Classification Algorithms Overview](https://www.learnmlacademy.com/learn/classification-intro): Categorize discrete target classes with decision boundaries and probabilities, with decision-boundary visuals, prediction cases, and metric calculations.
+  - [Logistic Regression](https://www.learnmlacademy.com/learn/logistic-regression): Master logistic regression, sigmoid activation, and decision boundaries, with decision-boundary visuals, prediction cases, and metric calculations.
+  - [Decision Trees](https://www.learnmlacademy.com/learn/decision-trees): Construct decision tree classifiers with Gini impurity and cost pruning, with decision-boundary visuals, prediction cases, and metric calculations.
+  - [Naive Bayes](https://www.learnmlacademy.com/learn/naive-bayes): Apply Bayes theorem with conditional independence assumptions for text, with decision-boundary visuals, prediction cases, and metric calculations.
+  - [K-Nearest Neighbors (KNN)](https://www.learnmlacademy.com/learn/knn): Implement K-Nearest Neighbors classification and Euclidean distance, with decision-boundary visuals, prediction cases, and metric calculations.
+  - [Support Vector Machines (SVM)](https://www.learnmlacademy.com/learn/svm): Maximize classification margins with Support Vector Machines and kernels, with decision-boundary visuals, prediction cases, and metric calculations.
 
 
 ### Module 5: 5. Ensemble Learning
@@ -74,12 +74,12 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 6
 - Lessons:
-  - [Random Forest](https://www.learnmlacademy.com/learn/random-forest): Train Random Forest ensembles with bootstrap aggregation and tree bagging, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Bagging](https://www.learnmlacademy.com/learn/bagging): Reduce model variance using bootstrap sampling and parallel bagging estimators, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Boosting Overview](https://www.learnmlacademy.com/learn/boosting): Train sequential boosting ensembles that correct earlier errors iteratively, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [AdaBoost](https://www.learnmlacademy.com/learn/adaboost): Understand AdaBoost iterative sample weighting and sequential corrections, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Gradient Boosting](https://www.learnmlacademy.com/learn/gradient-boosting): Build Gradient Boosting models that fit successive pseudo-residuals, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [XGBoost](https://www.learnmlacademy.com/learn/xgboost): Optimize XGBoost hyperparameters with second-order Taylor expansions, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Random Forest](https://www.learnmlacademy.com/learn/random-forest): Train Random Forest ensembles with bootstrap aggregation and tree bagging, with model comparisons, tuning walkthroughs, and result interpretation.
+  - [Bagging](https://www.learnmlacademy.com/learn/bagging): Reduce model variance using bootstrap sampling and parallel bagging estimators, with model comparisons, tuning walkthroughs, and result interpretation.
+  - [Boosting Overview](https://www.learnmlacademy.com/learn/boosting): Train sequential boosting ensembles that correct earlier errors iteratively, with model comparisons, tuning walkthroughs, and result interpretation.
+  - [AdaBoost](https://www.learnmlacademy.com/learn/adaboost): Understand AdaBoost iterative sample weighting and sequential corrections, with model comparisons, tuning walkthroughs, and result interpretation.
+  - [Gradient Boosting](https://www.learnmlacademy.com/learn/gradient-boosting): Build Gradient Boosting models that fit successive pseudo-residuals, with model comparisons, tuning walkthroughs, and result interpretation.
+  - [XGBoost](https://www.learnmlacademy.com/learn/xgboost): Optimize XGBoost hyperparameters with second-order Taylor expansions, with model comparisons, tuning walkthroughs, and result interpretation.
 
 
 ### Module 6: 6. Unsupervised Learning
@@ -87,13 +87,13 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 7
 - Lessons:
-  - [K-Means Clustering](https://www.learnmlacademy.com/learn/kmeans): Cluster unlabelled data with K-Means, inertia curves, and centroid updates, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Hierarchical Clustering](https://www.learnmlacademy.com/learn/hierarchical): Build agglomerative hierarchical tree dendrograms and compute linkages, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [DBSCAN](https://www.learnmlacademy.com/learn/dbscan): Discover arbitrary-shaped density clusters and isolate outliers with DBSCAN, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Principal Component Analysis (PCA)](https://www.learnmlacademy.com/learn/pca): Reduce high-dimensional feature spaces using Principal Component Analysis, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [t-SNE](https://www.learnmlacademy.com/learn/tsne): Visualize high-dimensional data clusters with non-linear t-SNE probability maps, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Association Rules](https://www.learnmlacademy.com/learn/association-rules): Mine associative purchase rules using support, confidence, and lift metrics, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Apriori Algorithm](https://www.learnmlacademy.com/learn/apriori): Extract frequent itemsets and association rules with the Apriori algorithm, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [K-Means Clustering](https://www.learnmlacademy.com/learn/kmeans): Cluster unlabelled data with K-Means, inertia curves, and centroid updates, with distance calculations, cluster visuals, and worked Python tasks.
+  - [Hierarchical Clustering](https://www.learnmlacademy.com/learn/hierarchical): Build agglomerative hierarchical tree dendrograms and compute linkages, with distance calculations, cluster visuals, and worked Python tasks.
+  - [DBSCAN](https://www.learnmlacademy.com/learn/dbscan): Discover arbitrary-shaped density clusters and isolate outliers with DBSCAN, with distance calculations, cluster visuals, and worked Python tasks.
+  - [Principal Component Analysis (PCA)](https://www.learnmlacademy.com/learn/pca): Reduce high-dimensional feature spaces using Principal Component Analysis, with distance calculations, cluster visuals, and worked Python tasks.
+  - [t-SNE](https://www.learnmlacademy.com/learn/tsne): Visualize high-dimensional data clusters with non-linear t-SNE probability maps, with distance calculations, cluster visuals, and worked Python tasks.
+  - [Association Rules](https://www.learnmlacademy.com/learn/association-rules): Mine associative purchase rules using support, confidence, and lift metrics, with distance calculations, cluster visuals, and worked Python tasks.
+  - [Apriori Algorithm](https://www.learnmlacademy.com/learn/apriori): Extract frequent itemsets and association rules with the Apriori algorithm, with distance calculations, cluster visuals, and worked Python tasks.
 
 
 ### Module 7: 7. Model Evaluation & Optimization
@@ -101,14 +101,14 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
 - Lessons:
-  - [Train/Test Split](https://www.learnmlacademy.com/learn/train-test-split): Partition datasets with stratified sampling to preserve label balances, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Cross-Validation](https://www.learnmlacademy.com/learn/cross-validation): Evaluate generalization performance using K-Fold and stratified validation, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Overfitting & Underfitting](https://www.learnmlacademy.com/learn/overfitting-underfitting): Diagnose model variance and bias issues using empirical learning curves, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Cost Functions](https://www.learnmlacademy.com/learn/cost-functions): Compare convex optimization landscapes and loss functions in machine learning, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Hyperparameter Tuning](https://www.learnmlacademy.com/learn/hyperparameter-tuning): Optimize machine learning hyperparameters using systematic tuning methods, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Grid & Random Search](https://www.learnmlacademy.com/learn/grid-random-search): Compare Grid Search exhaustive exploration against fast Random Search sweeps, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Confusion Matrix](https://www.learnmlacademy.com/learn/confusion-matrix): Interpret confusion matrices, precision, recall, and harmonic F1-scores, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [ROC-AUC](https://www.learnmlacademy.com/learn/roc-auc): Evaluate binary classifiers across all decision thresholds with ROC curves, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Train/Test Split](https://www.learnmlacademy.com/learn/train-test-split): Partition datasets with stratified sampling to preserve label balances, with metric calculations, threshold examples, and validation guidance.
+  - [Cross-Validation](https://www.learnmlacademy.com/learn/cross-validation): Evaluate generalization performance using K-Fold and stratified validation, with metric calculations, threshold examples, and validation guidance.
+  - [Overfitting & Underfitting](https://www.learnmlacademy.com/learn/overfitting-underfitting): Diagnose model variance and bias issues using empirical learning curves, with metric calculations, threshold examples, and validation guidance.
+  - [Cost Functions](https://www.learnmlacademy.com/learn/cost-functions): Compare convex optimization landscapes and loss functions in machine learning, with equations, fitted examples, residual analysis, and Python practice.
+  - [Hyperparameter Tuning](https://www.learnmlacademy.com/learn/hyperparameter-tuning): Optimize machine learning hyperparameters using systematic tuning methods, with metric calculations, threshold examples, and validation guidance.
+  - [Grid & Random Search](https://www.learnmlacademy.com/learn/grid-random-search): Compare Grid Search exhaustive exploration against fast Random Search sweeps, with metric calculations, threshold examples, and validation guidance.
+  - [Confusion Matrix](https://www.learnmlacademy.com/learn/confusion-matrix): Interpret confusion matrices, precision, recall, and harmonic F1-scores, with metric calculations, threshold examples, and validation guidance.
+  - [ROC-AUC](https://www.learnmlacademy.com/learn/roc-auc): Evaluate binary classifiers across all decision thresholds with ROC curves, with metric calculations, threshold examples, and validation guidance.
 
 
 ### Module 8: 8. Time Series & Forecasting
@@ -116,10 +116,10 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 4
 - Lessons:
-  - [ARIMA](https://www.learnmlacademy.com/learn/arima): Model non-stationary time series using ARIMA differencing and lag parameters, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Moving Average](https://www.learnmlacademy.com/learn/moving-average): Smooth noisy temporal signals using Simple and Exponential Moving Averages, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Exponential Smoothing](https://www.learnmlacademy.com/learn/exponential-smoothing): Forecast trends and seasonal cycles using Holt-Winters exponential smoothing, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Forecasting Basics](https://www.learnmlacademy.com/learn/forecasting-basics): Understand time-series stationarity, autocorrelation, and lag features, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [ARIMA](https://www.learnmlacademy.com/learn/arima): Model non-stationary time series using ARIMA differencing and lag parameters, with forecast charts, lag calculations, and chronological test examples.
+  - [Moving Average](https://www.learnmlacademy.com/learn/moving-average): Smooth noisy temporal signals using Simple and Exponential Moving Averages, with forecast charts, lag calculations, and chronological test examples.
+  - [Exponential Smoothing](https://www.learnmlacademy.com/learn/exponential-smoothing): Forecast trends and seasonal cycles using Holt-Winters exponential smoothing, with forecast charts, lag calculations, and chronological test examples.
+  - [Forecasting Basics](https://www.learnmlacademy.com/learn/forecasting-basics): Understand time-series stationarity, autocorrelation, and lag features, with forecast charts, lag calculations, and chronological test examples.
 
 
 ### Module 9: 9. Advanced Learning Paradigms
@@ -127,10 +127,10 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 4
 - Lessons:
-  - [Semi-Supervised Learning](https://www.learnmlacademy.com/learn/semi-supervised): Leverage large unlabelled datasets with pseudo-labelling and label spreading, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Online Learning](https://www.learnmlacademy.com/learn/online-learning): Stream machine learning updates continuously using incremental SGD algorithms, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Reinforcement Learning (Advanced)](https://www.learnmlacademy.com/learn/reinforcement-learning-adv): Implement Deep Q-Networks and policy gradient algorithms for game agents, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Multi-Armed Bandits](https://www.learnmlacademy.com/learn/multi-armed-bandits): Solve exploration-exploitation trade-offs with UCB algorithms, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Semi-Supervised Learning](https://www.learnmlacademy.com/learn/semi-supervised): Leverage large unlabelled datasets with pseudo-labelling and label spreading, with reward calculations, policy examples, and agent-training exercises.
+  - [Online Learning](https://www.learnmlacademy.com/learn/online-learning): Stream machine learning updates continuously using incremental SGD algorithms, with reward calculations, policy examples, and agent-training exercises.
+  - [Reinforcement Learning (Advanced)](https://www.learnmlacademy.com/learn/reinforcement-learning-adv): Implement Deep Q-Networks and policy gradient algorithms for game agents, with reward calculations, policy examples, and agent-training exercises.
+  - [Multi-Armed Bandits](https://www.learnmlacademy.com/learn/multi-armed-bandits): Solve exploration-exploitation trade-offs with UCB algorithms, with reward calculations, policy examples, and agent-training exercises.
 
 
 ### Module 10: 10. Deep Learning
@@ -138,30 +138,30 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 24
 - Lessons:
-  - [Deep Learning Basics and Model Types](https://www.learnmlacademy.com/learn/deep-learning-intro): Understand deep neural network fundamentals, layers, and representations, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [How Neural Networks Learn](https://www.learnmlacademy.com/learn/neural-networks): Follow how artificial neurons compute activations and update synaptic weights, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Essential Math for Neural Networks](https://www.learnmlacademy.com/learn/math-foundations-deep-learning): Master the linear algebra and multivariate calculus powering neural networks, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Activation Functions](https://www.learnmlacademy.com/learn/activation-functions): Compare non-linear activation functions including ReLU, LeakyReLU, and GeLU, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Tensors, Frameworks & GPUs](https://www.learnmlacademy.com/learn/tensors-frameworks-gpus): Manage multidimensional tensors and accelerate training on CUDA GPU hardware, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Loss Functions: MSE, MAE and Cross-Entropy](https://www.learnmlacademy.com/learn/loss-functions-deep-learning): Select optimal loss functions for deep regression, classification, and ranking, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Backpropagation and Automatic Differentiation](https://www.learnmlacademy.com/learn/backpropagation): Derive backpropagation step by step using the calculus chain rule in Python, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Training and Debugging a Neural Network](https://www.learnmlacademy.com/learn/neural-network-training-loop): Construct robust PyTorch training loops with validation and gradient tracking, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Optimizers and Learning-Rate Scheduling](https://www.learnmlacademy.com/learn/deep-learning-optimizers): Compare adaptive optimizers including AdamW, momentum, and cosine schedulers, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Initialization, Normalization and Stable Gradients](https://www.learnmlacademy.com/learn/weight-initialization): Prevent vanishing gradients with He initialization and Layer Normalization, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Regularization and Generalization](https://www.learnmlacademy.com/learn/deep-learning-regularization): Prevent deep neural network overfitting with dropout and weight decay penalties, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Data Augmentation](https://www.learnmlacademy.com/learn/data-augmentation-deep-learning): Expand computer vision training datasets with affine transforms, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [CNNs and Image Classification](https://www.learnmlacademy.com/learn/cnn): Master convolutional kernels, feature maps, and pooling layers for vision, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [CNN Architectures: AlexNet to ResNet](https://www.learnmlacademy.com/learn/cnn-architectures-resnet): Understand deep residual connections and skip connections in ResNet networks, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Object Detection, Segmentation and Grad-CAM](https://www.learnmlacademy.com/learn/object-detection): Detect bounding boxes and explain convolutional feature maps with Grad-CAM, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Vision Transformers](https://www.learnmlacademy.com/learn/vision-transformers): Process image patches with Transformer self-attention using Vision Transformers, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [RNNs, LSTMs and GRUs](https://www.learnmlacademy.com/learn/rnn-lstm): Capture long-term temporal dependencies with LSTM and GRU gating mechanisms, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Sequence-to-Sequence Models and Attention](https://www.learnmlacademy.com/learn/attention-transformers-deep-learning): Understand encoder-decoder sequence modeling and Bahdanau attention alignments, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Transformers for Deep Learning](https://www.learnmlacademy.com/learn/transformers-deep-learning): Construct Transformer encoder and decoder stacks with positional encodings, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Autoencoders and Their Variants](https://www.learnmlacademy.com/learn/autoencoders): Compress high-dimensional data into bottleneck latent spaces with autoencoders, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Transfer Learning and Fine-Tuning](https://www.learnmlacademy.com/learn/transfer-learning): Adapt pretrained deep vision and language models to downstream tasks with LoRA, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Self-Supervised and Few-Shot Learning](https://www.learnmlacademy.com/learn/self-supervised-few-shot-learning): Train representations without labels using contrastive learning and few shots, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Graph Neural Networks](https://www.learnmlacademy.com/learn/graph-neural-networks): Process relational graph structures with message passing and node embeddings, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Saving, Loading & Deploying Deep Models](https://www.learnmlacademy.com/learn/saving-deploying-deep-models): Export PyTorch weights to ONNX runtimes and serve low-latency microservices, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Deep Learning Basics and Model Types](https://www.learnmlacademy.com/learn/deep-learning-intro): Understand deep neural network fundamentals, layers, and representations, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [How Neural Networks Learn](https://www.learnmlacademy.com/learn/neural-networks): Follow how artificial neurons compute activations and update synaptic weights, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Essential Math for Neural Networks](https://www.learnmlacademy.com/learn/math-foundations-deep-learning): Master the linear algebra and multivariate calculus powering neural networks, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Activation Functions](https://www.learnmlacademy.com/learn/activation-functions): Compare non-linear activation functions including ReLU, LeakyReLU, and GeLU, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Tensors, Frameworks & GPUs](https://www.learnmlacademy.com/learn/tensors-frameworks-gpus): Manage multidimensional tensors and accelerate training on CUDA GPU hardware, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Loss Functions: MSE, MAE and Cross-Entropy](https://www.learnmlacademy.com/learn/loss-functions-deep-learning): Select optimal loss functions for deep regression, classification, and ranking, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Backpropagation and Automatic Differentiation](https://www.learnmlacademy.com/learn/backpropagation): Derive backpropagation step by step using the calculus chain rule in Python, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Training and Debugging a Neural Network](https://www.learnmlacademy.com/learn/neural-network-training-loop): Construct robust PyTorch training loops with validation and gradient tracking, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Optimizers and Learning-Rate Scheduling](https://www.learnmlacademy.com/learn/deep-learning-optimizers): Compare adaptive optimizers including AdamW, momentum, and cosine schedulers, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Initialization, Normalization and Stable Gradients](https://www.learnmlacademy.com/learn/weight-initialization): Prevent vanishing gradients with He initialization and Layer Normalization, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Regularization and Generalization](https://www.learnmlacademy.com/learn/deep-learning-regularization): Prevent deep neural network overfitting with dropout and weight decay penalties, with tensor walkthroughs, gradient calculations, and PyTorch practice.
+  - [Data Augmentation](https://www.learnmlacademy.com/learn/data-augmentation-deep-learning): Expand computer vision training datasets with affine transforms, with feature-map visuals, architecture comparisons, and image exercises.
+  - [CNNs and Image Classification](https://www.learnmlacademy.com/learn/cnn): Master convolutional kernels, feature maps, and pooling layers for vision, with feature-map visuals, architecture comparisons, and image exercises.
+  - [CNN Architectures: AlexNet to ResNet](https://www.learnmlacademy.com/learn/cnn-architectures-resnet): Understand deep residual connections and skip connections in ResNet networks, with feature-map visuals, architecture comparisons, and image exercises.
+  - [Object Detection, Segmentation and Grad-CAM](https://www.learnmlacademy.com/learn/object-detection): Detect bounding boxes and explain convolutional feature maps with Grad-CAM, with feature-map visuals, architecture comparisons, and image exercises.
+  - [Vision Transformers](https://www.learnmlacademy.com/learn/vision-transformers): Process image patches with Transformer self-attention using Vision Transformers, with feature-map visuals, architecture comparisons, and image exercises.
+  - [RNNs, LSTMs and GRUs](https://www.learnmlacademy.com/learn/rnn-lstm): Capture long-term temporal dependencies with LSTM and GRU gating mechanisms, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Sequence-to-Sequence Models and Attention](https://www.learnmlacademy.com/learn/attention-transformers-deep-learning): Understand encoder-decoder sequence modeling and Bahdanau attention alignments, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Transformers for Deep Learning](https://www.learnmlacademy.com/learn/transformers-deep-learning): Construct Transformer encoder and decoder stacks with positional encodings, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Autoencoders and Their Variants](https://www.learnmlacademy.com/learn/autoencoders): Compress high-dimensional data into bottleneck latent spaces with autoencoders, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Transfer Learning and Fine-Tuning](https://www.learnmlacademy.com/learn/transfer-learning): Adapt pretrained deep vision and language models to downstream tasks with LoRA, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Self-Supervised and Few-Shot Learning](https://www.learnmlacademy.com/learn/self-supervised-few-shot-learning): Train representations without labels using contrastive learning and few shots, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Graph Neural Networks](https://www.learnmlacademy.com/learn/graph-neural-networks): Process relational graph structures with message passing and node embeddings, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Saving, Loading & Deploying Deep Models](https://www.learnmlacademy.com/learn/saving-deploying-deep-models): Export PyTorch weights to ONNX runtimes and serve low-latency microservices, with sequence diagrams, attention calculations, and model-code exercises.
 
 
 ### Module 11: 11. Advanced Deep Learning Topics
@@ -169,9 +169,9 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 3
 - Lessons:
-  - [State-Space Models](https://www.learnmlacademy.com/learn/state-space-models): Understand linear State-Space Models (SSMs) and selective Mamba scan layers, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Deep Learning for NLP](https://www.learnmlacademy.com/learn/deep-learning-nlp): Process natural language text using Word2Vec embeddings and subword tokenizers, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Physics-Informed, KAN and Topological Networks](https://www.learnmlacademy.com/learn/pinn-kan-topological-networks): Solve differential equations with PINNs and learnable spline nets, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [State-Space Models](https://www.learnmlacademy.com/learn/state-space-models): Understand linear State-Space Models (SSMs) and selective Mamba scan layers, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Deep Learning for NLP](https://www.learnmlacademy.com/learn/deep-learning-nlp): Process natural language text using Word2Vec embeddings and subword tokenizers, with sequence diagrams, attention calculations, and model-code exercises.
+  - [Physics-Informed, KAN and Topological Networks](https://www.learnmlacademy.com/learn/pinn-kan-topological-networks): Solve differential equations with PINNs and learnable spline nets, with sequence diagrams, attention calculations, and model-code exercises.
 
 
 ### Module 12: 12. Generative AI
@@ -179,23 +179,23 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 17
 - Lessons:
-  - [What Is Generative AI?](https://www.learnmlacademy.com/learn/generative-ai-intro): Discover how Generative AI models synthesize novel text, images, and audio, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Generative vs Discriminative Models](https://www.learnmlacademy.com/learn/generative-vs-discriminative): Compare generative versus discriminative models with joint and conditional math, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [How Generative Models Learn and Generate New Data](https://www.learnmlacademy.com/learn/how-generative-models-learn): Understand how generative models estimate and sample distributions, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Variational Autoencoders for Generation](https://www.learnmlacademy.com/learn/vae): Implement Variational Autoencoders (VAEs) using the reparameterization trick, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Generative Adversarial Networks (GANs)](https://www.learnmlacademy.com/learn/gans): Train Generative Adversarial Networks (GANs) using minimax loss and DCGAN code, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Diffusion Models](https://www.learnmlacademy.com/learn/diffusion-models): Derive diffusion models from scratch using forward noise and reverse denoising, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Latent Diffusion and Stable Diffusion Architecture](https://www.learnmlacademy.com/learn/stable-latent-diffusion): Explore Latent Stable Diffusion architectures with UNet denoisers, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Controlling Diffusion Models](https://www.learnmlacademy.com/learn/controlling-diffusion-models): Control image generation with ControlNet and edge conditioning, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Fine-Tuning Image Generation Models](https://www.learnmlacademy.com/learn/finetuning-image-models): Fine-tune image diffusion models using LoRA weights and DreamBooth, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Multimodal Generative AI](https://www.learnmlacademy.com/learn/multimodal-ai): Connect text and visual modalities using CLIP contrastive encoders, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Audio, Speech, Music and Video Generation](https://www.learnmlacademy.com/learn/audio-music-video-generation): Synthesize realistic audio, speech, music, and video using modern diffusion, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Synthetic Data Generation](https://www.learnmlacademy.com/learn/synthetic-data): Generate privacy-preserving synthetic tabular and text datasets using CTGAN, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Evaluating Generative Models](https://www.learnmlacademy.com/learn/evaluating-generative-models): Evaluate generative image and text models using FID scores and perplexity, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Responsible Generative AI](https://www.learnmlacademy.com/learn/responsible-generative-ai): Implement responsible AI governance, synthetic watermarking, and bias detection, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Choosing the Right Generative Model](https://www.learnmlacademy.com/learn/choosing-generative-model): Select the optimal generative model architecture based on latency and fidelity, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Building Generative AI Applications](https://www.learnmlacademy.com/learn/building-genai-apps): Build production Generative AI applications with streaming APIs and caching, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Deploying Generative AI Applications](https://www.learnmlacademy.com/learn/genai-deployment): Deploy generative AI models to production with auto-scaling systems, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [What Is Generative AI?](https://www.learnmlacademy.com/learn/generative-ai-intro): Discover how Generative AI models synthesize novel text, images, and audio, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Generative vs Discriminative Models](https://www.learnmlacademy.com/learn/generative-vs-discriminative): Compare generative versus discriminative models with joint and conditional math, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [How Generative Models Learn and Generate New Data](https://www.learnmlacademy.com/learn/how-generative-models-learn): Understand how generative models estimate and sample distributions, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Variational Autoencoders for Generation](https://www.learnmlacademy.com/learn/vae): Implement Variational Autoencoders (VAEs) using the reparameterization trick, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Generative Adversarial Networks (GANs)](https://www.learnmlacademy.com/learn/gans): Train Generative Adversarial Networks (GANs) using minimax loss and DCGAN code, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Diffusion Models](https://www.learnmlacademy.com/learn/diffusion-models): Derive diffusion models from scratch using forward noise and reverse denoising, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Latent Diffusion and Stable Diffusion Architecture](https://www.learnmlacademy.com/learn/stable-latent-diffusion): Explore Latent Stable Diffusion architectures with UNet denoisers, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Controlling Diffusion Models](https://www.learnmlacademy.com/learn/controlling-diffusion-models): Control image generation with ControlNet and edge conditioning, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Fine-Tuning Image Generation Models](https://www.learnmlacademy.com/learn/finetuning-image-models): Fine-tune image diffusion models using LoRA weights and DreamBooth, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Multimodal Generative AI](https://www.learnmlacademy.com/learn/multimodal-ai): Connect text and visual modalities using CLIP contrastive encoders, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Audio, Speech, Music and Video Generation](https://www.learnmlacademy.com/learn/audio-music-video-generation): Synthesize realistic audio, speech, music, and video using modern diffusion, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Synthetic Data Generation](https://www.learnmlacademy.com/learn/synthetic-data): Generate privacy-preserving synthetic tabular and text datasets using CTGAN, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Evaluating Generative Models](https://www.learnmlacademy.com/learn/evaluating-generative-models): Evaluate generative image and text models using FID scores and perplexity, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Responsible Generative AI](https://www.learnmlacademy.com/learn/responsible-generative-ai): Implement responsible AI governance, synthetic watermarking, and bias detection, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Choosing the Right Generative Model](https://www.learnmlacademy.com/learn/choosing-generative-model): Select the optimal generative model architecture based on latency and fidelity, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Building Generative AI Applications](https://www.learnmlacademy.com/learn/building-genai-apps): Build production Generative AI applications with streaming APIs and caching, with diffusion diagrams, prompt experiments, and output-quality checks.
+  - [Deploying Generative AI Applications](https://www.learnmlacademy.com/learn/genai-deployment): Deploy generative AI models to production with auto-scaling systems, with diffusion diagrams, prompt experiments, and output-quality checks.
 
 
 ### Module 13: 13. Large Language Models
@@ -203,22 +203,22 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 16
 - Lessons:
-  - [What Are Large Language Models? From N-Grams to Modern LLMs](https://www.learnmlacademy.com/learn/llm-intro): Understand modern Large Language Model architectures and pretraining, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Tokens, Embeddings & Context Windows](https://www.learnmlacademy.com/learn/tokenization-embeddings): Master Byte-Pair Encoding (BPE) tokenization, rotary embeddings, and context, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Transformer Architecture & LLM Model Families](https://www.learnmlacademy.com/learn/transformers-attention): Understand Transformer multi-head self-attention mechanics and QKV math, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [How LLMs Generate Text: Next-Token Prediction & Decoding](https://www.learnmlacademy.com/learn/text-generation-decoding): Control LLM text generation using temperature, top-k, top-p, and beam search, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Prompt Engineering, Structured Outputs & Function Calling](https://www.learnmlacademy.com/learn/prompt-engineering): Design production prompts with few-shot examples and output schemas, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [How LLMs Are Trained: Data, Pretraining, Scale & Compute](https://www.learnmlacademy.com/learn/pretraining-finetuning): Explore how modern foundation LLMs are pretrained at scale on massive compute, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Fine-Tuning & Alignment: SFT, RLHF and LoRA](https://www.learnmlacademy.com/learn/instruction-tuning-rlhf): Fine-tune LLMs efficiently using Supervised Fine-Tuning (SFT) and LoRA adapters, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [What Are Large Language Models? From N-Grams to Modern LLMs](https://www.learnmlacademy.com/learn/llm-intro): Understand modern Large Language Model architectures and pretraining, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Tokens, Embeddings & Context Windows](https://www.learnmlacademy.com/learn/tokenization-embeddings): Master Byte-Pair Encoding (BPE) tokenization, rotary embeddings, and context, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Transformer Architecture & LLM Model Families](https://www.learnmlacademy.com/learn/transformers-attention): Understand Transformer multi-head self-attention mechanics and QKV math, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [How LLMs Generate Text: Next-Token Prediction & Decoding](https://www.learnmlacademy.com/learn/text-generation-decoding): Control LLM text generation using temperature, top-k, top-p, and beam search, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Prompt Engineering, Structured Outputs & Function Calling](https://www.learnmlacademy.com/learn/prompt-engineering): Design production prompts with few-shot examples and output schemas, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [How LLMs Are Trained: Data, Pretraining, Scale & Compute](https://www.learnmlacademy.com/learn/pretraining-finetuning): Explore how modern foundation LLMs are pretrained at scale on massive compute, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Fine-Tuning & Alignment: SFT, RLHF and LoRA](https://www.learnmlacademy.com/learn/instruction-tuning-rlhf): Fine-tune LLMs efficiently using Supervised Fine-Tuning (SFT) and LoRA adapters, with token walkthroughs, prompt design tasks, and retrieval exercises.
   - [Retrieval-Augmented Generation (RAG)](https://www.learnmlacademy.com/learn/rag): Understand Retrieval-Augmented Generation (RAG): indexing vs query phases, source attribution, failure boundaries, diagrams, and self-check quiz.
-  - [Semantic Search with Embeddings](https://www.learnmlacademy.com/learn/semantic-search-embeddings): Build semantic search engines using dense neural embeddings and cosine, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Vector Databases](https://www.learnmlacademy.com/learn/vector-databases): Select and query vector databases using HNSW indexing and metadata filtering, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Advanced RAG: Chunking, Retrieval, Reranking & Evaluation](https://www.learnmlacademy.com/learn/advanced-rag): Optimize RAG pipelines with chunking, rerankers, and hybrid search, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Evaluating LLMs, Benchmarks & Model Selection](https://www.learnmlacademy.com/learn/llm-evaluation): Evaluate LLM accuracy using MMLU benchmarks and automated judges, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Hallucinations, Guardrails & Responsible LLM Use](https://www.learnmlacademy.com/learn/llm-hallucinations-safety): Detect and eliminate LLM hallucinations using guardrails and filters, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Reasoning Models & Test-Time Compute](https://www.learnmlacademy.com/learn/reasoning-models): Understand reasoning models, chain-of-thought prompting, and test-time compute, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Efficient LLM Inference & Serving](https://www.learnmlacademy.com/learn/efficient-llm-serving): Serve LLMs at scale with vLLM PagedAttention, KV cache reuse, and quantization, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [LLMOps & Building Production LLM Applications](https://www.learnmlacademy.com/learn/llmops): Deploy and monitor enterprise LLM applications with tracing and latency budgets, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Semantic Search with Embeddings](https://www.learnmlacademy.com/learn/semantic-search-embeddings): Build semantic search engines using dense neural embeddings and cosine, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Vector Databases](https://www.learnmlacademy.com/learn/vector-databases): Select and query vector databases using HNSW indexing and metadata filtering, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Advanced RAG: Chunking, Retrieval, Reranking & Evaluation](https://www.learnmlacademy.com/learn/advanced-rag): Optimize RAG pipelines with chunking, rerankers, and hybrid search, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Evaluating LLMs, Benchmarks & Model Selection](https://www.learnmlacademy.com/learn/llm-evaluation): Evaluate LLM accuracy using MMLU benchmarks and automated judges, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Hallucinations, Guardrails & Responsible LLM Use](https://www.learnmlacademy.com/learn/llm-hallucinations-safety): Detect and eliminate LLM hallucinations using guardrails and filters, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Reasoning Models & Test-Time Compute](https://www.learnmlacademy.com/learn/reasoning-models): Understand reasoning models, chain-of-thought prompting, and test-time compute, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [Efficient LLM Inference & Serving](https://www.learnmlacademy.com/learn/efficient-llm-serving): Serve LLMs at scale with vLLM PagedAttention, KV cache reuse, and quantization, with token walkthroughs, prompt design tasks, and retrieval exercises.
+  - [LLMOps & Building Production LLM Applications](https://www.learnmlacademy.com/learn/llmops): Deploy and monitor enterprise LLM applications with tracing and latency budgets, with token walkthroughs, prompt design tasks, and retrieval exercises.
 
 
 ### Module 14: 14. Agentic AI
@@ -226,22 +226,22 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 16
 - Lessons:
-  - [What Is Agentic AI? Agents, Workflows & Types](https://www.learnmlacademy.com/learn/agentic-ai-intro): Learn autonomous AI agent architectures and deterministic workflows, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Tool Calling & Reliable Tool Design](https://www.learnmlacademy.com/learn/tool-calling): Master AI agent tool calling, schema validation, and safe error retries, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Build a Simple AI Agent End-to-End](https://www.learnmlacademy.com/learn/building-ai-agent): Build an autonomous AI agent from scratch with step-by-step reasoning, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Planning, ReAct & Reflection](https://www.learnmlacademy.com/learn/planning-reflection): Implement AI agent planning loops, ReAct reasoning, and self-reflection, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Context Engineering for Agents](https://www.learnmlacademy.com/learn/agent-context-engineering): Optimize AI agent context windows with token budgets and smart compaction, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Memory in AI Agents: Short-Term, Long-Term & Persistence](https://www.learnmlacademy.com/learn/agent-memory): Design AI agent memory using short-term state and long-term vector storage, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agent Workflows, State Machines & Graphs](https://www.learnmlacademy.com/learn/agent-state-graphs): Build reliable agent workflows, cyclical state graphs, and checkpoints, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Durable & Long-Running Agents with Human-in-the-Loop](https://www.learnmlacademy.com/learn/durable-long-running-agents): Implement durable long-running AI agents with human-in-the-loop checkpoints, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agentic RAG](https://www.learnmlacademy.com/learn/agentic-rag): Build agentic RAG systems with intelligent routing and verification, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Multi-Agent Systems, Handoffs & Agent Communication](https://www.learnmlacademy.com/learn/multi-agent-systems): Architect multi-agent systems with role delegation, handoffs, and consensus, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Model Context Protocol (MCP) & Agent Interoperability](https://www.learnmlacademy.com/learn/model-context-protocol): Implement Model Context Protocol (MCP) clients and servers for AI tools, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agent Frameworks: LangGraph, CrewAI & AutoGen](https://www.learnmlacademy.com/learn/agent-frameworks): Compare top AI agent frameworks including LangGraph, CrewAI, and AutoGen, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Browser, Computer-Use & Code-Executing Agents](https://www.learnmlacademy.com/learn/browser-computer-use-agents): Build browser automation and computer-use AI agents with safe sandboxing, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agent Security, Guardrails & Failure Recovery](https://www.learnmlacademy.com/learn/agent-security): Secure AI agents against prompt injection, privilege escalation, and loops, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Evaluating Agents: Task Success, Safety, Trajectories & Benchmarks](https://www.learnmlacademy.com/learn/agent-evaluation-safety): Evaluate AI agent performance with trajectory benchmarks and safety metrics, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agent Observability, Cost, Latency & Deployment](https://www.learnmlacademy.com/learn/agent-observability-deployment): Monitor production AI agents with distributed tracing, latency, and cost alerts, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [What Is Agentic AI? Agents, Workflows & Types](https://www.learnmlacademy.com/learn/agentic-ai-intro): Learn autonomous AI agent architectures and deterministic workflows, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Tool Calling & Reliable Tool Design](https://www.learnmlacademy.com/learn/tool-calling): Master AI agent tool calling, schema validation, and safe error retries, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Build a Simple AI Agent End-to-End](https://www.learnmlacademy.com/learn/building-ai-agent): Build an autonomous AI agent from scratch with step-by-step reasoning, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Planning, ReAct & Reflection](https://www.learnmlacademy.com/learn/planning-reflection): Implement AI agent planning loops, ReAct reasoning, and self-reflection, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Context Engineering for Agents](https://www.learnmlacademy.com/learn/agent-context-engineering): Optimize AI agent context windows with token budgets and smart compaction, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Memory in AI Agents: Short-Term, Long-Term & Persistence](https://www.learnmlacademy.com/learn/agent-memory): Design AI agent memory using short-term state and long-term vector storage, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Agent Workflows, State Machines & Graphs](https://www.learnmlacademy.com/learn/agent-state-graphs): Build reliable agent workflows, cyclical state graphs, and checkpoints, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Durable & Long-Running Agents with Human-in-the-Loop](https://www.learnmlacademy.com/learn/durable-long-running-agents): Implement durable long-running AI agents with human-in-the-loop checkpoints, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Agentic RAG](https://www.learnmlacademy.com/learn/agentic-rag): Build agentic RAG systems with intelligent routing and verification, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Multi-Agent Systems, Handoffs & Agent Communication](https://www.learnmlacademy.com/learn/multi-agent-systems): Architect multi-agent systems with role delegation, handoffs, and consensus, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Model Context Protocol (MCP) & Agent Interoperability](https://www.learnmlacademy.com/learn/model-context-protocol): Implement Model Context Protocol (MCP) clients and servers for AI tools, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Agent Frameworks: LangGraph, CrewAI & AutoGen](https://www.learnmlacademy.com/learn/agent-frameworks): Compare top AI agent frameworks including LangGraph, CrewAI, and AutoGen, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Browser, Computer-Use & Code-Executing Agents](https://www.learnmlacademy.com/learn/browser-computer-use-agents): Build browser automation and computer-use AI agents with safe sandboxing, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Agent Security, Guardrails & Failure Recovery](https://www.learnmlacademy.com/learn/agent-security): Secure AI agents against prompt injection, privilege escalation, and loops, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Evaluating Agents: Task Success, Safety, Trajectories & Benchmarks](https://www.learnmlacademy.com/learn/agent-evaluation-safety): Evaluate AI agent performance with trajectory benchmarks and safety metrics, with workflow diagrams, tool-use traces, and safety-focused exercises.
+  - [Agent Observability, Cost, Latency & Deployment](https://www.learnmlacademy.com/learn/agent-observability-deployment): Monitor production AI agents with distributed tracing, latency, and cost alerts, with workflow diagrams, tool-use traces, and safety-focused exercises.
 
 
 ### Module 15: 15. Projects
@@ -249,14 +249,14 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
 - Lessons:
-  - [Customer Churn Prediction — End-to-End ML Project](https://www.learnmlacademy.com/learn/project-customer-churn): Build an end-to-end customer churn prediction pipeline with scikit-learn, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Credit Risk Prediction with Explainable ML](https://www.learnmlacademy.com/learn/project-credit-risk): Predict loan defaults with gradient boosted trees and explainable SHAP values, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Sales Forecasting — End-to-End Time-Series Project](https://www.learnmlacademy.com/learn/project-sales-forecasting): Forecast multi-store retail sales using lag features and chronological splits, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Image Classification with Transfer Learning](https://www.learnmlacademy.com/learn/project-image-classification): Train an image classifier from scratch using transfer learning with ResNet, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Build a Generative AI Application End-to-End](https://www.learnmlacademy.com/learn/project-genai-app): Develop an interactive Generative AI application with streaming responses, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Build a Document Q&A System with RAG](https://www.learnmlacademy.com/learn/project-rag-document-qa): Construct an enterprise PDF question-answering system using RAG retrieval, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Build an AI Agent with Tools & Memory](https://www.learnmlacademy.com/learn/project-ai-agent): Implement a fully autonomous AI agent with tool execution and memory state, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Build a Multi-Agent Research Assistant](https://www.learnmlacademy.com/learn/project-multi-agent-research): Coordinate multi-agent workflows for automated web research and fact synthesis, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Customer Churn Prediction — End-to-End ML Project](https://www.learnmlacademy.com/learn/project-customer-churn): Build an end-to-end customer churn prediction pipeline with scikit-learn, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Credit Risk Prediction with Explainable ML](https://www.learnmlacademy.com/learn/project-credit-risk): Predict loan defaults with gradient boosted trees and explainable SHAP values, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Sales Forecasting — End-to-End Time-Series Project](https://www.learnmlacademy.com/learn/project-sales-forecasting): Forecast multi-store retail sales using lag features and chronological splits, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Image Classification with Transfer Learning](https://www.learnmlacademy.com/learn/project-image-classification): Train an image classifier from scratch using transfer learning with ResNet, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Build a Generative AI Application End-to-End](https://www.learnmlacademy.com/learn/project-genai-app): Develop an interactive Generative AI application with streaming responses, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Build a Document Q&A System with RAG](https://www.learnmlacademy.com/learn/project-rag-document-qa): Construct an enterprise PDF question-answering system using RAG retrieval, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Build an AI Agent with Tools & Memory](https://www.learnmlacademy.com/learn/project-ai-agent): Implement a fully autonomous AI agent with tool execution and memory state, with reproducible setup, model evaluation, and an end-to-end project task.
+  - [Build a Multi-Agent Research Assistant](https://www.learnmlacademy.com/learn/project-multi-agent-research): Coordinate multi-agent workflows for automated web research and fact synthesis, with reproducible setup, model evaluation, and an end-to-end project task.
 
 
 ### Module 16: 16. AI Engineering & MLOps
@@ -264,14 +264,14 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 8
 - Lessons:
-  - [AI Engineering & MLOps: From Notebook to Production](https://www.learnmlacademy.com/learn/ai-engineering-mlops): Transition machine learning models from prototype notebooks to production APIs, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Production Data, Feature & ML Pipelines](https://www.learnmlacademy.com/learn/ml-data-feature-pipelines): Build scalable ML data and feature pipelines with automated schema validation, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Experiment Tracking, Reproducibility, Lineage & Model Registry](https://www.learnmlacademy.com/learn/experiment-tracking-model-registry): Track machine learning experiments and manage model versions using MLflow, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Batch, Online & Streaming Inference Architectures](https://www.learnmlacademy.com/learn/batch-online-inference): Design batch, real-time online, and event streaming inference architectures, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Testing, CI/CD & Continuous Training for ML](https://www.learnmlacademy.com/learn/ml-cicd-continuous-training): Implement automated CI/CD pipelines and continuous retraining, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [ML Monitoring, Data Drift & Model Decay](https://www.learnmlacademy.com/learn/ml-monitoring-drift): Detect data drift, concept drift, and performance decay using Evidently metrics, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Production AI Reliability, Security, Cost & Governance](https://www.learnmlacademy.com/learn/production-ai-reliability): Ensure production AI system reliability, cost optimization, and API security, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [End-to-End ML/AI System Design](https://www.learnmlacademy.com/learn/ml-system-design): Master end-to-end ML system design interviews with scalable architectures, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [AI Engineering & MLOps: From Notebook to Production](https://www.learnmlacademy.com/learn/ai-engineering-mlops): Transition machine learning models from prototype notebooks to production APIs, with pipeline maps, deployment choices, and production reliability checks.
+  - [Production Data, Feature & ML Pipelines](https://www.learnmlacademy.com/learn/ml-data-feature-pipelines): Build scalable ML data and feature pipelines with automated schema validation, with pipeline maps, deployment choices, and production reliability checks.
+  - [Experiment Tracking, Reproducibility, Lineage & Model Registry](https://www.learnmlacademy.com/learn/experiment-tracking-model-registry): Track machine learning experiments and manage model versions using MLflow, with pipeline maps, deployment choices, and production reliability checks.
+  - [Batch, Online & Streaming Inference Architectures](https://www.learnmlacademy.com/learn/batch-online-inference): Design batch, real-time online, and event streaming inference architectures, with pipeline maps, deployment choices, and production reliability checks.
+  - [Testing, CI/CD & Continuous Training for ML](https://www.learnmlacademy.com/learn/ml-cicd-continuous-training): Implement automated CI/CD pipelines and continuous retraining, with pipeline maps, deployment choices, and production reliability checks.
+  - [ML Monitoring, Data Drift & Model Decay](https://www.learnmlacademy.com/learn/ml-monitoring-drift): Detect data drift, concept drift, and performance decay using Evidently metrics, with pipeline maps, deployment choices, and production reliability checks.
+  - [Production AI Reliability, Security, Cost & Governance](https://www.learnmlacademy.com/learn/production-ai-reliability): Ensure production AI system reliability, cost optimization, and API security, with pipeline maps, deployment choices, and production reliability checks.
+  - [End-to-End ML/AI System Design](https://www.learnmlacademy.com/learn/ml-system-design): Master end-to-end ML system design interviews with scalable architectures, with pipeline maps, deployment choices, and production reliability checks.
 
 
 ### Module 17: 17. Career & Interview Preparation
@@ -279,21 +279,21 @@ Author: Prateek Sharan (https://www.learnmlacademy.com/about)
 - Canonical URL: https://www.learnmlacademy.com/curriculum
 - Total Lessons: 15
 - Lessons:
-  - [Choose Your AI & Data Career](https://www.learnmlacademy.com/learn/ai-data-career-paths): Navigate high-growth AI and data science career paths, salaries, and skills, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Machine Learning Engineer Roadmap](https://www.learnmlacademy.com/learn/ml-engineer-roadmap): Follow the comprehensive 2026 Machine Learning Engineer roadmap, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [AI Engineer Roadmap](https://www.learnmlacademy.com/learn/ai-engineer-roadmap): Master the 2026 AI Engineer curriculum covering LLMs, RAG, and agent frameworks, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Generative AI / LLM Engineer Roadmap](https://www.learnmlacademy.com/learn/genai-llm-engineer-roadmap): Accelerate your career with the Generative AI and LLM Engineer roadmap, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Data Scientist Roadmap](https://www.learnmlacademy.com/learn/data-scientist-roadmap): Explore the modern Data Scientist roadmap covering statistics and ML, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [How AI/ML Interviews Work & How to Prepare](https://www.learnmlacademy.com/learn/interview-preparation-strategy): Prepare effectively for technical AI and machine learning interviews, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [ML, Statistics & Model Evaluation Interview Questions](https://www.learnmlacademy.com/learn/ml-interview-questions): Ace machine learning interviews with top 100 solved theory and math questions, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Deep Learning Interview Questions](https://www.learnmlacademy.com/learn/deep-learning-interview-questions): Master essential Deep Learning interview questions on CNNs and LLMs, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Generative AI, LLM & RAG Interview Questions](https://www.learnmlacademy.com/learn/genai-llm-rag-interview): Prepare for Generative AI, LLM, and RAG interview rounds with solved questions, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Agentic AI Interview Questions](https://www.learnmlacademy.com/learn/agentic-ai-interview): Prepare for Agentic AI interviews covering tool design and memory, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Python Coding for AI/ML Interviews](https://www.learnmlacademy.com/learn/python-ai-ml-interview): Practice essential Python coding problems asked in machine learning interviews, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [SQL for AI/Data Interviews](https://www.learnmlacademy.com/learn/sql-ai-data-interview): Solve practical SQL interview questions using window functions and aggregations, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [ML & AI System Design Interviews](https://www.learnmlacademy.com/learn/ml-ai-system-design-interview): Design scalable ML systems during interviews using proven structural frameworks, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [MLOps, Production & Debugging Interview Scenarios](https://www.learnmlacademy.com/learn/mlops-production-interview): Prepare for MLOps technical interviews with real-world debugging scenarios, with Python code, architecture diagrams, worked examples, and interview quiz.
-  - [Project Deep-Dive, Resume & Behavioral Interviews](https://www.learnmlacademy.com/learn/behavioral-project-interview): Master behavioral and project deep-dive interviews using the STAR method, with Python code, architecture diagrams, worked examples, and interview quiz.
+  - [Choose Your AI & Data Career](https://www.learnmlacademy.com/learn/ai-data-career-paths): Navigate high-growth AI and data science career paths, salaries, and skills, with skill checklists, worked cases, and role-specific interview drills.
+  - [Machine Learning Engineer Roadmap](https://www.learnmlacademy.com/learn/ml-engineer-roadmap): Follow the comprehensive 2026 Machine Learning Engineer roadmap, with skill checklists, worked cases, and role-specific interview drills.
+  - [AI Engineer Roadmap](https://www.learnmlacademy.com/learn/ai-engineer-roadmap): Master the 2026 AI Engineer curriculum covering LLMs, RAG, and agent frameworks, with skill checklists, worked cases, and role-specific interview drills.
+  - [Generative AI / LLM Engineer Roadmap](https://www.learnmlacademy.com/learn/genai-llm-engineer-roadmap): Accelerate your career with the Generative AI and LLM Engineer roadmap, with skill checklists, worked cases, and role-specific interview drills.
+  - [Data Scientist Roadmap](https://www.learnmlacademy.com/learn/data-scientist-roadmap): Explore the modern Data Scientist roadmap covering statistics and ML, with skill checklists, worked cases, and role-specific interview drills.
+  - [How AI/ML Interviews Work & How to Prepare](https://www.learnmlacademy.com/learn/interview-preparation-strategy): Prepare effectively for technical AI and machine learning interviews, with skill checklists, worked cases, and role-specific interview drills.
+  - [ML, Statistics & Model Evaluation Interview Questions](https://www.learnmlacademy.com/learn/ml-interview-questions): Ace machine learning interviews with top 100 solved theory and math questions, with skill checklists, worked cases, and role-specific interview drills.
+  - [Deep Learning Interview Questions](https://www.learnmlacademy.com/learn/deep-learning-interview-questions): Master essential Deep Learning interview questions on CNNs and LLMs, with skill checklists, worked cases, and role-specific interview drills.
+  - [Generative AI, LLM & RAG Interview Questions](https://www.learnmlacademy.com/learn/genai-llm-rag-interview): Prepare for Generative AI, LLM, and RAG interview rounds with solved questions, with skill checklists, worked cases, and role-specific interview drills.
+  - [Agentic AI Interview Questions](https://www.learnmlacademy.com/learn/agentic-ai-interview): Prepare for Agentic AI interviews covering tool design and memory, with skill checklists, worked cases, and role-specific interview drills.
+  - [Python Coding for AI/ML Interviews](https://www.learnmlacademy.com/learn/python-ai-ml-interview): Practice essential Python coding problems asked in machine learning interviews, with skill checklists, worked cases, and role-specific interview drills.
+  - [SQL for AI/Data Interviews](https://www.learnmlacademy.com/learn/sql-ai-data-interview): Solve practical SQL interview questions using window functions and aggregations, with skill checklists, worked cases, and role-specific interview drills.
+  - [ML & AI System Design Interviews](https://www.learnmlacademy.com/learn/ml-ai-system-design-interview): Design scalable ML systems during interviews using proven structural frameworks, with skill checklists, worked cases, and role-specific interview drills.
+  - [MLOps, Production & Debugging Interview Scenarios](https://www.learnmlacademy.com/learn/mlops-production-interview): Prepare for MLOps technical interviews with real-world debugging scenarios, with skill checklists, worked cases, and role-specific interview drills.
+  - [Project Deep-Dive, Resume & Behavioral Interviews](https://www.learnmlacademy.com/learn/behavioral-project-interview): Master behavioral and project deep-dive interviews using the STAR method, with skill checklists, worked cases, and role-specific interview drills.
 
 
 ---
