@@ -15,3 +15,5 @@ __pycache__/
 
 bun.lock
 *.patch
+quality/evidence/
+browser-quality-evidence/

@@ -82,8 +82,8 @@ The `content-preservation` job executes:
    - `npm run verify:prerender` (validates all 201 HTML outputs for content presence)
    - `npm run verify:projects` (verifies all 12 project handbooks and 8 tutorial bridges)
    - `npm run verify:quality` (executes 10 comprehensive security, routing, and taxonomy test suites)
-   - `npm run verify:content-preservation` (evaluates all 201 canonical pages against baseline manifest `quality/content-preservation/manifest.json` using 1-to-1 multiset matching for exact chars, normalized chars, heading text/multiplicity, paragraphs, list items, captions, code blocks, tables, formulas, figures, and quizzes; semantic heading levels are separately checked by the rendered hierarchy audit)
-   - `npm run test:preservation-negatives` (executes all 47 negative and positive guardrail regression test cases)
+   - `npm run verify:content-preservation` (evaluates all 201 canonical pages against baseline manifest `quality/content-preservation/manifest.json` using 1-to-1 multiset matching for exact chars, normalized chars, exact heading levels, text, order, multiplicity, paragraphs, list items, captions, code blocks, tables, formulas, figures, and quizzes; narrow approved exception on `/learn/generative-ai-intro` for "Historical Compute & Context Growth in Generative AI")
+   - `npm run test:preservation-negatives` (executes all 48 negative and positive guardrail regression test cases)
 
 A failure at any step immediately exits with a non-zero code, failing the `content-preservation` job and blocking PR merge.
 

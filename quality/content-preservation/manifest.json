@@ -6061,10 +6061,10 @@
           "hash": "33a90b2792365ab266fea40c2234cab8c704c84ae753a4fa369a71914baabf22"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Cosine similarity: compare direction, not just magnitude",
           "count": 1,
-          "hash": "e02d5024f8546f0c7523620e8fbc1c948ab21da866be059758ea37c053a14d72"
+          "hash": "e01dcb9a084d832f94dfe4f1b3fad3d0d6e3472c03955a1c26ba43a55fb377e9"
         },
         {
           "level": "h2",
@@ -6073,10 +6073,10 @@
           "hash": "e62e5db17e9b962e8f626f9a1e83d2a85fb8e54fb99486b97c2648b136dc643f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "A movie-by-user matrix: most ratings are missing",
           "count": 1,
-          "hash": "f580f39cf43e0d385f7a5465c04acc1591cfc67f4b6bb7ec30c560dfb6813235"
+          "hash": "6ab718cc8f8ac287b0ca5576165ca2493d85793ba43f2a680804abe22561413c"
         },
         {
           "level": "h2",
@@ -13067,22 +13067,22 @@
           "hash": "98b67063cf8e584d75e53b88472ee85473e01e0ea16f29ece9cc98f4a2710494"
         },
         {
-          "level": "h3",
+          "level": "h2",
           "text": "Direct Email",
           "count": 1,
-          "hash": "365f7a923a338f7ec45c7a36edbf9b12cce96bed94ca06ac745623f75076c53f"
+          "hash": "71673053529271c2257a15cf37dfc739e8c6c30ad48c44da221805b71c018ee7"
         },
         {
-          "level": "h3",
+          "level": "h2",
           "text": "Response Time",
           "count": 1,
-          "hash": "07eda3a2b4a3bf7b88cb73de11d8f6695a1cc3b49ce21005617bddee5a866f9c"
+          "hash": "50da497600520a406412ba81f7dc3a71b59505d7e7c416dc673407fd9a2cdc50"
         },
         {
-          "level": "h3",
+          "level": "h2",
           "text": "Platform",
           "count": 1,
-          "hash": "c78ffe19571018fbc93a78873969046fe1a80c3d21e5d20fbb2ca17c7c53a144"
+          "hash": "e54850211e0c1efd989d98433631fd58d8ed6d2915f860019adffc592ffd217a"
         },
         {
           "level": "h2",
@@ -15152,16 +15152,16 @@
           "hash": "a836714a088d441dad416de6239ed3e664edc776c6f76642740cc631ecd5c3e6"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Advantages",
           "count": 1,
-          "hash": "3392adf56de6a7ec1ba68189338c6c699e09851e9c58de315b5e17d4c9d94b5e"
+          "hash": "17cd67c82eaf79233f3bb244a9e8bc0e62bc88324ddf5dbdfde4493fd68092c9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Limitations",
           "count": 1,
-          "hash": "69b1b67de5ef98bea519f7c33bf6a1acc7b8d3693331dfd93488dffd794b6844"
+          "hash": "cf9da4ccd8596f7dbcb79f3afaa0cd6e90b5d34599c57ca77f92bcfbb4e332fe"
         },
         {
           "level": "h2",
@@ -16310,10 +16310,10 @@
           "hash": "0e5c11d0788c56223fad275ad46e8760ffc310298c315a189e4f327b803f3379"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Engineering Checkpoint",
           "count": 1,
-          "hash": "c512ef65684d5d995541dccaa29e0b10170aeb194ae0993be90aedff64579df5"
+          "hash": "77274c2a0e7b5362f627bba07c92ea259c16fb6d826fb33706932fd4b0dab784"
         }
       ],
       "paragraphs": [
@@ -16783,22 +16783,22 @@
           "hash": "4689e110241a47281033f873f48620d137aa7b8ff0a46a81900308b212e1cd63"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Data Quality First",
           "count": 1,
-          "hash": "03fb1d18b75ec2412509d8e423d9322258098f7368959cf0fe7056bb78aca590"
+          "hash": "9d391bb873f51eaedc27a625eb89ad54891a09d4d2b8a7fc11dbbc021193b288"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Overfitting & Regularisation",
           "count": 1,
-          "hash": "166367f6ab96d6371c11c54bafce66938b03263402575e34fd26f3b05fa71e59"
+          "hash": "a3e4e4bcf0dde4c8253c68e3108398b74163e66975a24804859a008e9f88c4cf"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Feature Scaling & Dimensionality",
           "count": 1,
-          "hash": "7b0ec4f6dda3224fabd4a0b6de73ea8cf00339c2136622297e1087ff49f2079b"
+          "hash": "c93e42ff174def7fbf5162f5d169ee3693eadccc72db737247fc02359b3eadfb"
         },
         {
           "level": "h2",
@@ -20750,10 +20750,10 @@
           "hash": "96f5337d0959b3fcc51c3c202a99047958a949036480bf5f748548e420d12b55"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Test Your Recognition",
           "count": 1,
-          "hash": "49829ec0e25b1220affe35b7948a7504e3cd94972a486ef7496102a940153b75"
+          "hash": "42b4f8247a5e7ab4d807efb7058f9feb39121863fac66b384340c30fbafb186f"
         }
       ],
       "paragraphs": [
@@ -22220,10 +22220,10 @@
           "hash": "96f5337d0959b3fcc51c3c202a99047958a949036480bf5f748548e420d12b55"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interview Knowledge Test",
           "count": 1,
-          "hash": "2270418cb620dba6018006bd3022d9c71ea40f81c9468b0dd8ec2e644ccc994d"
+          "hash": "a121a69ba8b3c7a102e92a77b6a09f03ec9d64c48d58d9ebdc49b17937f893fb"
         },
         {
           "level": "h2",
@@ -23253,10 +23253,10 @@
           "hash": "5d826cc592b7d99210228a83070c8c23d9a45c83f45ced3fbfc05e1815546b86"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Cross-Validation Workflow",
           "count": 1,
-          "hash": "d3bf8d8742c435d659463da5e25d86df8e9ff5836d61590f3b5ce797b6132b1c"
+          "hash": "186feaa5f42f03bf287bb585028833dadceb83d1164e460ee3156a30fb8dcad3"
         },
         {
           "level": "h2",
@@ -24125,10 +24125,10 @@
           "hash": "2270418cb620dba6018006bd3022d9c71ea40f81c9468b0dd8ec2e644ccc994d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Test Your Knowledge",
           "count": 1,
-          "hash": "c59152aeda9d6f040831e1fd9dfeb43906381143f078b789225e702428f0c4a7"
+          "hash": "23b4a18facae7c87e76d5c6cb05a3f5bb000c837c2049a4fcfa854bf73aa865a"
         }
       ],
       "paragraphs": [
@@ -25500,10 +25500,10 @@
           "hash": "2270418cb620dba6018006bd3022d9c71ea40f81c9468b0dd8ec2e644ccc994d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Quiz",
           "count": 1,
-          "hash": "03aa7dc16797a82b4892dcc79747011b78a071b5a1c1213b4d08ee8e8a0450ff"
+          "hash": "b914f571b466142fe50d50040bd60ffc4905807a2273605f5be326b310779da3"
         }
       ],
       "paragraphs": [
@@ -26037,22 +26037,22 @@
           "hash": "efbc3cbb5ecd6b49d4835a5f4e9bd2626513e3a1ead60a39a5ebe30299cd8e71"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Univariate Analysis",
           "count": 1,
-          "hash": "3d274a6b04ef3925cf4beef4fb11f900d2627a5b0dc84c392b5c950900263adf"
+          "hash": "5702834031f09bb0359ee81f17e086169454c2e613cdab1cc1f274a40a2092c3"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Bivariate Analysis",
           "count": 1,
-          "hash": "a44da10847211a9de1c9cb21a30a6960229f1088f4aeffaf25f9e683ac17ceed"
+          "hash": "e8f289588ecc44b1e2f37e574a38e0b943777687cdfebfbc178a31e55efe4dd5"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Multivariate Analysis",
           "count": 1,
-          "hash": "8613699fbe1241b1306b8b4a6d233dfd83ff06f990bedf6d21d4842b3b7f9116"
+          "hash": "6e4f2953376809cb555d129d02184678d8d57081fa92151d76c14bb85ce1896b"
         },
         {
           "level": "h2",
@@ -26145,10 +26145,10 @@
           "hash": "2270418cb620dba6018006bd3022d9c71ea40f81c9468b0dd8ec2e644ccc994d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Check Your Understanding",
           "count": 1,
-          "hash": "6c3b365da4e4f072e53bea86330e2ef281aa55010eb26484bfafcbc7d878327f"
+          "hash": "0b750dab08091334cea55391c5e6bb96525aaed58011c070bae36e126fce9942"
         }
       ],
       "paragraphs": [
@@ -26664,10 +26664,10 @@
           "hash": "fdb8aca53ec6ea8c3b9a99be9b14d18ae8f2aa321f798f5ea4f864132f99f645"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Terminal Output & Analysis",
           "count": 1,
-          "hash": "e33964d046b2d3eaec5bf8ea67ef8e6b5e6b9be848c125829701ef16039bb78e"
+          "hash": "53c2027a77734681af3b31fdfb77ee90f6f49bb1be2036f6ac675fd9ffa0158a"
         },
         {
           "level": "h2",
@@ -27889,10 +27889,10 @@
           "hash": "fe202b37248d1dae25d806dcb78794621ecb6b2b678a28b096bf458ca7a53926"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive: Train Linear Regression in Python",
           "count": 1,
-          "hash": "b6a77e7bfaa0452c03d2a66917cdd547608234111400cee84bc306cdfb7c30c7"
+          "hash": "de6631e4557d0933ace29274cc6e9bdb330a1b723a4418dea1a41d316fb954ee"
         },
         {
           "level": "h2",
@@ -29408,10 +29408,10 @@
           "hash": "72a1c10fa46a877577e42e7d35140c50880e58cf48c616ff25b80c0ac9d96107"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive: From-Scratch Gradient Descent Loop",
           "count": 1,
-          "hash": "507f9b92a637028d8b7b1ecfa7e569e31e514dcab1e4bf02573721348e0d8034"
+          "hash": "12e4abb79542cee477f7cc82e991bdf082c1ae6c5423adf807c9447a3f80855e"
         },
         {
           "level": "h3",
@@ -31008,16 +31008,16 @@
           "hash": "56e761007a28af521d6c2741aefdd8f4ad259c0c670b976d8b5dcb045798e86f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Linear Relationship",
           "count": 1,
-          "hash": "88f036c8954807af90dc868cfeed478dc95ba7fa6fa74f515f9d462fe1f296a1"
+          "hash": "f3267d6be8b48a49a45f20e81db361fb380511db6fc8152ca77322f73c1a8fdc"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Polynomial Relationship",
           "count": 1,
-          "hash": "75084ba7f402672d424224c3e189f0a74871d42bdfcc6b36666b8ff6f33bf86e"
+          "hash": "0031e285a4d5a687bd0911b10827f6ab5dabf2a1ea894d0a52b16684b8046a94"
         },
         {
           "level": "h3",
@@ -31074,16 +31074,16 @@
           "hash": "b180b90f9c97477093e6884dde90917e3e29972c5b228f341a320744cb074751"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Example Transformation (Degree 4)",
           "count": 1,
-          "hash": "22905d26df7ac97fd457e8a8a47c4a482906b21d789883ff64bc89af0fa30235"
+          "hash": "87ba75bb293fc3a3012c5eb539f817cdd120d62e8533caec0c863f7df06a62c1"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Transformation Workflow",
           "count": 1,
-          "hash": "9af7c6b4997e2413a6ef36d6680b83f0efd6ffc7b6957bee9450d5ba570b4b54"
+          "hash": "4df86329ac656b4633bad2cd37adc41079f0672a09117c64850d507c9b920b63"
         },
         {
           "level": "h2",
@@ -31104,22 +31104,22 @@
           "hash": "f8ac5084ac081a67c6eae8408793ceadc1174a31e14a248d8136d56457d5d816"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Underfitting",
           "count": 1,
-          "hash": "336c0d73ed0553947fbdf402c39f0dcac1fb72f793f48b40d292226c31d3061e"
+          "hash": "86fb72a8ae6ea59b0eb06cbf594625ef926e396cbeb0e84f0cebaa50be99b820"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Good Fit",
           "count": 1,
-          "hash": "ac36f7dca848777f076aae854a7493f6271dcdfcf19fb3c7a30cc5e8646ff457"
+          "hash": "1170df75edefd69b12700b938c7d7d9b01ba94a8ac87577d6f12c95edc7a6ee9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Overfitting",
           "count": 1,
-          "hash": "3720a2125534f57ef37aa4e93259969e87c00ca7cd18928b0285ba29b7e0596a"
+          "hash": "a089aedd3cc24999e42b699f673aa6acf5987d0685b0161cb0e3268f4980ea8d"
         },
         {
           "level": "h3",
@@ -31140,34 +31140,34 @@
           "hash": "15f85c5a6f42002435b92daf62b712626858549eb8920b020bca7a42939e422b"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Independent Observations",
           "count": 1,
-          "hash": "c0f2fe3711a0289e4222f80aff3f24a726bf6954f4b4ead47674763b418899e4"
+          "hash": "e2c73ec1aa57ec984934944e6b316f9b91332e3cf745198562115b8fc3ae50a0"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Correlated Polynomial Terms",
           "count": 1,
-          "hash": "e04ee3b4198e97f308568b7fb22965657e427774de31134b3b8c7d3464bff99f"
+          "hash": "1a12791539db0b8dabbee515f00358aa1b34049bdba1c8d8da7af1c57e562fed"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Continuous Target",
           "count": 1,
-          "hash": "543a526d01fc0f2b683a9d8da0b00f40c47656e776d30a6d68e1b4a4c11fe5c2"
+          "hash": "96f8a7ae4598a7e5acaa21f75b767897c138f0f188ac77bf8a975530799071cd"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Choose Degree with Validation",
           "count": 1,
-          "hash": "564ccd82e6372337118063a4e26d21173451b79905a1c7c4ff38a83c3c2d663e"
+          "hash": "35a0039faccc1189b6c6f7579e9b5062862d4ed85a2f2fcbb87aa19d3dc23013"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Random Errors",
           "count": 1,
-          "hash": "20d6a414194698a0752143b61f4022f3ae54710a874383edc54c36f9cd8cf1c4"
+          "hash": "2f37949e2db7eb6c4a4e050a5f6bfa0db4c1adb955c8b8e6b667d0af5be2a367"
         },
         {
           "level": "h2",
@@ -31242,22 +31242,22 @@
           "hash": "f4b7ee9c651064a9b68e69249a6d259af3fe75c200d751a66845e8a3dfa106c2"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "1. Mean Absolute Error (MAE)",
           "count": 1,
-          "hash": "646d4841d124b2feec2adc1c153136974f91b36c219dfe979dfd658a3e074e60"
+          "hash": "a6e257346f8b4b15e4d9322e119409e9cf09df618949ac82b3c58c01e46fa312"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "2. Root Mean Squared Error (RMSE)",
           "count": 1,
-          "hash": "62cd86be80cfe1747e3886d11938596530de21e5f8de975e289e09f9b88f787c"
+          "hash": "1b0b0642058010c5cf5c196dba23ec05aca59cdfd098ee6986dd45e0b5a28377"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "3. R² Score",
           "count": 1,
-          "hash": "cf530b7199e03d16452e58e97bf5556638583355d85966ae7aeab771d9efe639"
+          "hash": "1a217b596d117d30ed2337adc5a06e4f35342ab187f09ca5c8f11db0b1b468d6"
         },
         {
           "level": "h2",
@@ -32264,16 +32264,16 @@
           "hash": "773a27bb74b43fff92d9cb9c62f84a62245380235462e28e3758d7cea8837e2c"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "1. To Prevent Overfitting",
           "count": 1,
-          "hash": "c5e082f6bbad985119b60a9e1ed95977ea94ce25d3bc11c0f33b945063924e3c"
+          "hash": "12d68cae236621d55d9117eee469e3cd10a16e467dc6a6627bee1627bd8cbf26"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "2. To Handle Multicollinearity",
           "count": 1,
-          "hash": "794265e7c3f628eb34b676ae608b5caec70585804f37454afa4020721d8da677"
+          "hash": "ef1bf85c9ac51fa63ec03072dd6de54c76c4ce4f1b1fbb0db1eef3f4c6965857"
         },
         {
           "level": "h2",
@@ -32336,28 +32336,28 @@
           "hash": "738696ab95818ee1375a52d91598836884e10eea7b5dc94ed109692b2737c114"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Linear Relationship",
           "count": 1,
-          "hash": "88f036c8954807af90dc868cfeed478dc95ba7fa6fa74f515f9d462fe1f296a1"
+          "hash": "f3267d6be8b48a49a45f20e81db361fb380511db6fc8152ca77322f73c1a8fdc"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Feature Scaling",
           "count": 1,
-          "hash": "a81d5b09fd133b1a6159ad623a0d234a273389691d505e2c0e6280545c7db91a"
+          "hash": "1be6657cbce49fe33bcef8ef67160dc4998d1dac6b2f6d7a120a702da0938dbf"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Handles Collinearity",
           "count": 1,
-          "hash": "62cab84671a04e165562bb8698d438fa2501c757ab1a2526d1f5a709ea0ed767"
+          "hash": "b8ea85671c750273b2edd324f3898ae63fce1c3628cbdda4fe21d1685e9f125e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Constant Variance",
           "count": 1,
-          "hash": "8bd4b0cf0ceb93c43aa9224629e59e9ed247a7aee5d7bbb737ba86a22486c064"
+          "hash": "3f08f4941c63014589e862594586ef80e9341d8b943da667b7d85e0c7737d237"
         },
         {
           "level": "h2",
@@ -32372,10 +32372,10 @@
           "hash": "604b5ee4efbfd94a1d04b69de63091643c02615f1215abde9293d82d153f72ba"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Terminal Output",
           "count": 1,
-          "hash": "af5943603d7d9215537b4c00023f0b26d8d3b7e3d48953b6ce6fc811e26eba55"
+          "hash": "c4b272037c25a68f7f4f9d72d6dd12bb62397e7795533ad60026c1d5fcdba4cd"
         },
         {
           "level": "h3",
@@ -33001,10 +33001,10 @@
           "hash": "654bcb8d361782f2c973171a6b1ed8ab1533f6fe635fa31399ac414974608da6"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "The full form of LASSO is:",
           "count": 1,
-          "hash": "ef6efce56d2fcc45813bb04bcd3ac9c0412aefb9d341bb8513132a6f38e1f972"
+          "hash": "177f55acdf1e42205c061ffe63cdf6047e6d238dac1944a979dbe45056f53d03"
         },
         {
           "level": "h2",
@@ -33055,16 +33055,16 @@
           "hash": "ed96e94cbebf9e72532d8271b033087e3e6d0d1906151adc984a1838c3dd366f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "GOOD GENERALIZATION",
           "count": 1,
-          "hash": "996ac38ec9eb85a6a0a90f87c980a44cbba68a07787454523454a486a404f170"
+          "hash": "a9ca2aeabefd4acaf6c87251644de22a41c919644044a9bee875077c052f4486"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "OVERFITTING",
           "count": 1,
-          "hash": "3d4adceafc733c2405ad6b0a47a13aa9b8ad639f52186b1e7ec3a87580e07cc5"
+          "hash": "1b8e6cf8f6259952beec9a9a1db1e9496852e247e99828bd68b44c067996e0d0"
         },
         {
           "level": "h2",
@@ -33085,10 +33085,10 @@
           "hash": "2d4ee995aaff55c0c0a049fe9688917be878a1390b1f522882f9fe2a4a4f6e5f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Understanding the L1 Penalty",
           "count": 1,
-          "hash": "ae92b178840a3775755993f7a353b9ffcf660f963d5c5323fb979278e57a635d"
+          "hash": "9914d7bbb43e23494681f03cdb30ff3cff7304d1ca454e8419d05e054cb6ef08"
         },
         {
           "level": "h3",
@@ -33103,10 +33103,10 @@
           "hash": "90d3c55a8994b4c385b084347f06f45c446775593e8270fd6fb536de62f97ece"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Why Lasso Creates Sparse Models",
           "count": 1,
-          "hash": "871b31f75f6a3d5fdfc84f4a67b29c87e5c6e8e0d7d9ba501ab3684899dfba5b"
+          "hash": "86334f920fe35e673ba2b17e1e8571fbe6af71d693d88f7cbff36bee878eb477"
         },
         {
           "level": "h2",
@@ -33115,16 +33115,16 @@
           "hash": "70c8cc0377fa5f5a436a979e3c5032a98d6d6ba89bd15d0c457dbc2e876acad0"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Ridge Penalty (L2)",
           "count": 1,
-          "hash": "59604b1138a9c0673c451faf5424132551ba149f63cc48ef7cfc443e1c028ecb"
+          "hash": "cb45a67bbd44cca7b402b7c27bfd01cd3fccc37f38c70653f5c08d53bf5c80ab"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Lasso Penalty (L1)",
           "count": 1,
-          "hash": "31aaa1203911ee1f479071de30cea55e5bd4f46cda0c0128e9e476b7e65ca9d3"
+          "hash": "2113cffe7205937ed82cd4a6a50690b5db3bf1c22c5207f4f19eb6f50d772649"
         },
         {
           "level": "h2",
@@ -33133,16 +33133,16 @@
           "hash": "bc7adb2a71ae1958aa3bc266e76698b49e1cb756f1de42f13190de7cc54915a3"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "What is Multicollinearity?",
           "count": 1,
-          "hash": "e949e2e9385fea1c2362ebe05a9d4e5c9cdd8ed101e0ff63ed0a868ee9c5c647"
+          "hash": "53bfe8be25bb206c3e7c4c3abf0524853973a41e2c2751030d1e3c83663dd005"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Lasso Behavior with Correlated Features:",
           "count": 1,
-          "hash": "9de4ff592ab48b1c019a173571e4de8397f47551f5f6bcfb8ed50c39c6931708"
+          "hash": "2bb9bb4ef436c8aa35447b9d014824abd2654d1872f7c9d65528faec22c18a53"
         },
         {
           "level": "h2",
@@ -33958,10 +33958,10 @@
           "hash": "9a31ec9914b6447aea6e470a8c46d9c5275197cb39d7044a2c9196d112f13306"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Simple Beginner Definition",
           "count": 1,
-          "hash": "549e7d809e5943486a1b7e62d35b4588d230966573f05c0fb835e35bf5025d58"
+          "hash": "6668752a5ebebd3c9184b9c8b155673869f820e2ad82ebca9069b40c3721692d"
         },
         {
           "level": "h3",
@@ -34087,7 +34087,7 @@
           "level": "h4",
           "text": "Real-Life Example",
           "count": 1,
-          "hash": "e02b8517dbe85adde0e100170ad398609687565d926795231bb4b3de0c3c4871"
+          "hash": "09a0535e624634b803ff4986778e2d90537bf7ea2c26eab77cb2984a176ae7bd"
         },
         {
           "level": "h4",
@@ -34246,10 +34246,10 @@
           "hash": "f9d0015eadf3ff5f614ed3bd19a297406096cee7a7d6588223971360bb7ce09d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Useful Starting Points (Not Fixed Rules)",
           "count": 1,
-          "hash": "b380e1e1748304da11cbee1ef481765a1e8393cc1b6cb9cfa19cf8cd50d4ec7e"
+          "hash": "98306c6363a8deab2e6524141a0bc858ac2b899bc21e678f920ecdc8356df9b0"
         },
         {
           "level": "h4",
@@ -34969,10 +34969,10 @@
           "hash": "238c09dcf8a8f075db3be44a97c7ee288f9bd8f970df855fd26965d56bc7477e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Simple Beginner Definition",
           "count": 1,
-          "hash": "549e7d809e5943486a1b7e62d35b4588d230966573f05c0fb835e35bf5025d58"
+          "hash": "6668752a5ebebd3c9184b9c8b155673869f820e2ad82ebca9069b40c3721692d"
         },
         {
           "level": "h3",
@@ -34999,16 +34999,16 @@
           "hash": "829db8ac95420c1c98c1fa2c2ee945fb7d813d548619996ad12c678578d5efde"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Linear Regression Problem",
           "count": 1,
-          "hash": "b0080baaf3c26b4a823615e0eb08efad51225bff3ffba0cf22722008f80058ee"
+          "hash": "19b84f2c0ecaabaeed39545def40febb91a26a88fcbd8b01fb34d7001da2242d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Logistic Regression Solution",
           "count": 1,
-          "hash": "e054b1e81a573983830379db0c9f4ebf89314d4766a0362346e686bd811c1fde"
+          "hash": "b69981cb0c837661c4b02a3232107a0fdec6d3d1403ae148225868819ab17d4b"
         },
         {
           "level": "h3",
@@ -35047,10 +35047,10 @@
           "hash": "5d266645db9d182e7f949141b8a5684fe80f1b86df9e0873b5bb51a860b0352a"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Linear Equation",
           "count": 1,
-          "hash": "8cafb787fdf9810242d5e78194ceeb971f52ff9b852b67187e53f6b049c33476"
+          "hash": "a5a13932dd6f0a2a2f56660d4f12f6cc5a9616a9195cf940d39846d07131fa02"
         },
         {
           "level": "h4",
@@ -35107,10 +35107,10 @@
           "hash": "5305982f0df073b009fa90cee0e9b1f9cc7f26fad68f44687af4aced29da9935"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Threshold Logic",
           "count": 1,
-          "hash": "8666c7a98ba8ae885634a713d360fd3aa36c3c274c592b16385a20d0a264d222"
+          "hash": "337ebbcbc456ac4438ecfa12418dc84f70725a06e3605f62c0de531a8fc606eb"
         },
         {
           "level": "h4",
@@ -35125,10 +35125,10 @@
           "hash": "2e8ff9d9a70ee7e3969d86b6ea8bbc4d6c8ddd79e153a45208704c6c3a72e02e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Log Loss Formula",
           "count": 1,
-          "hash": "ebdc673210edeb5f143a6c979229c27a61445440e2aabb25295d25d8122a0f14"
+          "hash": "89ce809842c866ac110fe6f08f5ca2cdf0a4172a2bb86fed73e0470675779f2e"
         },
         {
           "level": "h4",
@@ -35155,10 +35155,10 @@
           "hash": "64a4139981ad7f832793ec60913c44dff9eca99df3ec74809d989e6c919a8db5"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Odds Definition",
           "count": 1,
-          "hash": "589d50f50f5eba508466a6350bfd4f63e6a608bc03bb051d0b0faada0c418f66"
+          "hash": "cce6ea9e31a05f463a1872d4e806260c8da7f044622f4f60d2950724e113f869"
         },
         {
           "level": "h4",
@@ -35179,10 +35179,10 @@
           "hash": "f4b7ee9c651064a9b68e69249a6d259af3fe75c200d751a66845e8a3dfa106c2"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Confusion Matrix",
           "count": 1,
-          "hash": "00a632a8f6af42c52b99cd900c1c4487c47b143276ac5ca914cb7fde190f7b63"
+          "hash": "932d721691bb0d25a0f122c714774f899ea95aba6bfde90d8d13d81665f4e308"
         },
         {
           "level": "h4",
@@ -35209,16 +35209,16 @@
           "hash": "2cccc8183880c7e924e3a8eb6e67aa289363a3cfb7899ad297b3eb2af8cb0be8"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Logistic vs Linear Regression",
           "count": 1,
-          "hash": "95b8b307734ab6eaaaf8fedbb8230bf18b89718f143ed4f6208d030a1e391d7d"
+          "hash": "0427c25731581dab207e0431ed2bff5055b13d47529e51841485a34bf58d1482"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Logistic vs Decision Tree",
           "count": 1,
-          "hash": "09ddbbae91bdb53ce4fbca35a221a6905929b135afb5f208383302f7ad7aa28a"
+          "hash": "148746d5ba4e7c10dc866bdbb4b0c4a1c6f22a260892e4ba722a589c4092d6be"
         },
         {
           "level": "h3",
@@ -35251,10 +35251,10 @@
           "hash": "f2c58dd558eb9827262ebcd71aedef1285d886f09cdc52de61ca0176c2e06685"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Machine Learning Pipeline Workflow",
           "count": 1,
-          "hash": "eebd111d7eefe566b4b672dfa28ca2ce4f06837b31d945f871159b1ae571471f"
+          "hash": "7d97dfd4d5da95eb260418f844d34aa425004073cbc879f9af919dc61b8375b3"
         },
         {
           "level": "h4",
@@ -35269,10 +35269,10 @@
           "hash": "d1a469a27c47b48415421d280cfd5c3c243defa934c1d49b52903e0d1eebd2f6"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive: Train Logistic Regression in Python",
           "count": 1,
-          "hash": "4e6feafa0924c0120a79bb142e88447aff1412111ab51acfafbdd3f770198339"
+          "hash": "d9011c6c9dfe260bdc1556c5e6dbabdb94fb4328156804d3d8205ab5b8ed5be6"
         },
         {
           "level": "h3",
@@ -35287,16 +35287,16 @@
           "hash": "35dabd15d6f9cc8f456b17a819b2d35c75a75aa4d9d1181e664d8c07eaa53b68"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Common Mistakes",
           "count": 1,
-          "hash": "f80474f204d556a8df9cbb602b2cda98d6c1bd9be098d5eb9b97434678fdadb3"
+          "hash": "826c2592a7b69be23cf20b78ee484b31c2857d0e81348af9a876273986ff1471"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Best Practices",
           "count": 1,
-          "hash": "46d9a34a79d27b3869085ea8961f543cc9425756c6ddf26628d6f5fa7df73b36"
+          "hash": "827319c8d5d9e5e4b780df3da2e8f72e6d0c4701d33735185cb3c1c96a3d5c56"
         },
         {
           "level": "h2",
@@ -36268,10 +36268,10 @@
           "hash": "526af9af0580ada751c77e3419cf3f6ab578613ef0bb69de342a6c493e0f4591"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Simple Decision Tree Workflow",
           "count": 1,
-          "hash": "c256f496ecde2c9019c6975a2ad93903d311dbb30ae5843635833e66bd14054c"
+          "hash": "691334f1445fa8f32b8205de4676214c15ab8682ec1409d943ac60e9b2a53b6d"
         },
         {
           "level": "h3",
@@ -36340,22 +36340,22 @@
           "hash": "ecc9fd9be62fe9db5f0f90cef4d9bbcc426e6564812f8d7ac2ddb6b0998d1a2c"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Understanding Purity",
           "count": 1,
-          "hash": "d47b86c5cd7a6a15ad0ab24ac9b9a228c776f4c9f6b7b2a912eec8750c36af6a"
+          "hash": "22c51578117708e1f7f754cec93d2b7c12da928b0276f3cbe9e8e1b0a7561684"
         },
         {
-          "level": "h5",
+          "level": "h4",
           "text": "Pure Node Example",
           "count": 1,
-          "hash": "15f4c4aa3883643e41ddddf072fdbc9caa0870bc5e49bdb24db43e1774e7c613"
+          "hash": "853300d6c56a42a243ac6e155c2d32e82b697f6e9e60b8f0140095d3f2532d90"
         },
         {
-          "level": "h5",
+          "level": "h4",
           "text": "Impure Node Example",
           "count": 1,
-          "hash": "cc84a219914c2bc9a483757dab16b275a7ff767c3c45822ba54d6487fe81c8dc"
+          "hash": "ed49a015924907e7165c04f606e562f409d6f9e4513660e368653b1fee36ac7e"
         },
         {
           "level": "h2",
@@ -36418,10 +36418,10 @@
           "hash": "683dc87c297f6f3db830499b4646705241258da97627a212b26bd05ff78a2965"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive: Train a Decision Tree in Python",
           "count": 1,
-          "hash": "8c2d8f05d00ad8d790a382bf984663d6c543c0767ec4bc2e401acd818aeccd18"
+          "hash": "7fba037749ffbd384c03e8575130f629c6abc658f6addc6f66358cc8716fabb4"
         },
         {
           "level": "h3",
@@ -37154,10 +37154,10 @@
           "hash": "e1991bf075fd5b27adf03504a474c6fa482aac93e8a50098c76001c08e9d3eb4"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Terminology",
           "count": 1,
-          "hash": "9615bd0ba9f0c510594876bfb4bd0d2341a3eb5d140ba36bd9341ac9aada9a3c"
+          "hash": "faec0aef22983b469f85b8afaf1c5a780592a6f967fe5727e8622ad54b07f101"
         },
         {
           "level": "h3",
@@ -37172,10 +37172,10 @@
           "hash": "ae26e511741403f6ae7139674a071f1e320519ecbc009966c69e68c44065780e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step-by-Step Probability Calculation",
           "count": 1,
-          "hash": "2ce36dd0650d4664758c9beb7e6499c1ae13d37d7df3e05391bd5a8512a647ae"
+          "hash": "70cf092d607870ce663bdf600cd4099a78bdbd523b0ea19596819ea289688450"
         },
         {
           "level": "h2",
@@ -37232,10 +37232,10 @@
           "hash": "275ac8aba694fe848f47196a197b9a00b2af73655b0e31dcee4de03b22faa7e7"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Python Code: Multinomial NB (Text Data)",
           "count": 1,
-          "hash": "b4c2dd37d31da4c72d5f55a81c28009e3bfdd2416310014b0e48627127c0c730"
+          "hash": "7b3955767ca7bd504c0e95eff3e3254768283fa8b5c3132f3c81e9754cf6008b"
         },
         {
           "level": "h2",
@@ -38238,10 +38238,10 @@
           "hash": "bb1de6735b79ca8b10019ce010572b52ddaa4609032ff3b225415428c21ee0a3"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Prediction Workflow",
           "count": 1,
-          "hash": "5f284abc21573f10c2cde695586bd3cb0f4e22c7f58abc8f646479eac6ffbb02"
+          "hash": "c61c8c4b5ea39b5ffcc0a19ff537af8e5319a2af6fd5df450cd694f8abeb09f1"
         },
         {
           "level": "h2",
@@ -38310,10 +38310,10 @@
           "hash": "6128606ea938529404728c23bb109941c8e06a64bd4c2653d41ce817c68da96a"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive: Train & Evaluate KNN in Python",
           "count": 1,
-          "hash": "328e3aeee215caefe44a59576788a34375a74be087b416c6dac2de8fdcbbda65"
+          "hash": "216b0c99acb957a0f7769d77773e84d8d415f7be0ece2063767a391c17038bcb"
         },
         {
           "level": "h2",
@@ -39271,10 +39271,10 @@
           "hash": "aaf2d29778cd7bc10592e7a3dc01431b52a96f26ee4b50afb21d6b3eaf546010"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Overall Workflow of SVM",
           "count": 1,
-          "hash": "44aa65ae7f96c5f78b978d6a859b503a7a6e3160d4e5d09d894849589fc28677"
+          "hash": "899309273738cb0690ce532030f63a86638fc566c364fe8ed422f4509700a34f"
         },
         {
           "level": "h2",
@@ -39325,10 +39325,10 @@
           "hash": "c73f476a2d255649f212d3ca0a7d68668523d0ded2c98fc235ed5176fcbad6e8"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Non-linear Data (Not Linearly Separable)",
           "count": 1,
-          "hash": "a87cb367620db47938bdfa84fdd364a93bee5b2d69359e14e7accab00f58fd5c"
+          "hash": "b22e7499582b3a9e373f4a5f7ab1e0be178f985c1e1ef4755799db7836a927a7"
         },
         {
           "level": "h4",
@@ -39385,10 +39385,10 @@
           "hash": "683dc87c297f6f3db830499b4646705241258da97627a212b26bd05ff78a2965"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Python Code: Support Vector Classifier",
           "count": 1,
-          "hash": "978b5fe320c5716a33f901bc952ab73384b37ffe270164625000aabbe6605088"
+          "hash": "36fe9796ae80e52aa5c89105c5c320a8744e02570231023a81cf0a01c342d9fb"
         },
         {
           "level": "h2",
@@ -40189,10 +40189,10 @@
           "hash": "b8cfbd0fee1ce3cfa0eaa5f2a5227db6373eae34da4a3f86b74ebae28bde3fa1"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Training & Prediction Pipeline",
           "count": 1,
-          "hash": "b526735b22b7f5bd6c2df948418482b6865e5e380030635a8708e3727c034b73"
+          "hash": "8046c08d3bfd45c0c0da8437a1182cb77cf742db96c275aad0bf99a055b10b98"
         },
         {
           "level": "h2",
@@ -40231,16 +40231,16 @@
           "hash": "202a68b89018089ed5ae8a94dff168407607f36101ecf716601fb131980f540b"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Classification: Combine Tree Opinions",
           "count": 1,
-          "hash": "a5cd08352db8124f5678e94417995e4181e888b33e451ef88b30a3da566d3b98"
+          "hash": "d2eddade0b7c8d4fba71e100ed2f46d828a0c0792638be3bf9e800140f57c538"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Illustrative Feature Importance",
           "count": 1,
-          "hash": "97bb0d37469a5fe84b49538becc1d9edb3096335f7afd761c6aa2329cd58c342"
+          "hash": "e63d3dcf9f66df676854a4609066d8d0c0ecfbeacdb35a88fc303f2689498596"
         },
         {
           "level": "h4",
@@ -40291,10 +40291,10 @@
           "hash": "683dc87c297f6f3db830499b4646705241258da97627a212b26bd05ff78a2965"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Python Code: Random Forest Classifier",
           "count": 1,
-          "hash": "2a6b31623971af8749c3318da16cdbbc97d48eb1d560a14283e4cc069cdd3b41"
+          "hash": "b2c2d31e48dbe2d9b9a1628becaa951bf300f24d50a59e8a600e8d6a39f96eab"
         },
         {
           "level": "h2",
@@ -42453,10 +42453,10 @@
           "hash": "ebf4f6a032f5046d1aa6628586060bd3032a62cd8f06ddc81789c5a88e4cbc83"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "AdaBoost Pipeline",
           "count": 1,
-          "hash": "52b1c2df603dd4383dde38030cebce8bb2d354447621cefd3e6453220b228f25"
+          "hash": "eb140913db2e8be40aafa7beb231fbec7869c48a5dc3fcb3b0734cc9b7518966"
         },
         {
           "level": "h3",
@@ -42495,16 +42495,16 @@
           "hash": "ab9380e560808ebdfcbd636e6d086d1b86b9e465eb1b0d6d8da6a64bb9423501"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 1 — Compute Error Rate",
           "count": 1,
-          "hash": "edb66a35e7ae3e0da58e82e5cacefdb8b1c2afd64cd42281ebc66950a82bd5f2"
+          "hash": "3b9ba2f6cf78beceb63f18a0d0adb11b4bf0608e70a15188df2b56770a9e149f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 2 — Compute Alpha (α) Value",
           "count": 1,
-          "hash": "9cad7267c6f64da4ab7c8bf45350163a068d174df6f8394e7c0ec15da75ed918"
+          "hash": "b4cce21f7cb4eded32bb44a4f2bb7ff8156a678158d179671bfb42a4419b5221"
         },
         {
           "level": "h4",
@@ -42543,16 +42543,16 @@
           "hash": "ab2205c7da30acd0bda1b9a467038be7bcbe356d387187853f65706d6e60837a"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Steps 1 to 3: Structure & Fit Logic",
           "count": 1,
-          "hash": "dc36b25a00816ccbef19064478643bf44d79f60cc98d5e08b50294a6a97df342"
+          "hash": "5dadcfd7aaf3937f4906b042600aebc45654c4993aa3d226b0ae08aee60a5601"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Steps 4+: Prediction & Execution",
           "count": 1,
-          "hash": "231ac5e69b53b2eaa4c7a550f64ff28d5d4a07d38af35983bc4c3a4dab589834"
+          "hash": "bf652d8cc4926403eb9376948898a8751449826b6fc8b2ddca3a6eb334512adc"
         },
         {
           "level": "h2",
@@ -43360,10 +43360,10 @@
           "hash": "6734c1aa3a9b52487eba774a7e8d601ca44d6986b41fc56da975cad2dc35e19c"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "GradientBoostingRegressor",
           "count": 1,
-          "hash": "b5a76f03034ae1d4eeb7daa71c61e712af81e668b0a922c707b2ff8c6741de2b"
+          "hash": "a805956f5865a1d120af5a088eb09bc677edd0af718602d611e725d6dd9a655a"
         },
         {
           "level": "h2",
@@ -45053,34 +45053,34 @@
           "hash": "ee35245310e83222eb48521a4d2484f4c84d3da53c0cc7a73b9b81caabe56c7d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 1 — Choose Number of Clusters (K)",
           "count": 1,
-          "hash": "ee75ff86b4f89b61bf245088d165a925eb1ee5315cf5657912c7486743417ee1"
+          "hash": "a222f98c7c66574483de5bc46ceb2091a4fcb6e5f467d7112cd4879a0d756c2d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 2 — Initialize Centroids",
           "count": 1,
-          "hash": "36d3b5d0523ad2d2f87b50ecf3ad98dc630554bfc86d8535aca0e36ad17b6ce6"
+          "hash": "8faf6d30b328d4b38b26af222c6aad3ae846c5ee90cf4b2c10d29769c1ea32b0"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 3 — Assign Points to Nearest Centroid",
           "count": 1,
-          "hash": "2d587187d7dfc145f7ca30f37e8fada6d2756067d480175261442d70c4d4eb3c"
+          "hash": "3be5a7cb832602e4f86473dfb82626565351b83a86ff3a8e3d6b409eec494bed"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 4 — Recalculate Centroids",
           "count": 1,
-          "hash": "ca56cf16200074a5301d8bcbe797e6099b3ef88a0e93b610f86a0a970c636eb0"
+          "hash": "b6b05081db49a6693a474dd6cf6d489f1eb843ddecb46fd6d6b8b4c9a6940b9d"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 5 — Repeat Iteratively",
           "count": 1,
-          "hash": "759a604b27de3ce6ccbb9eb4bb0b5b21e313afcb053ab72c3800a9cc55b07252"
+          "hash": "3f14f109cd265467b5730ad5088a5feeb87dd7763d16f6e5bdfe8c17cfa6680b"
         },
         {
           "level": "h2",
@@ -45161,10 +45161,10 @@
           "hash": "75c34120aea71d883345a977e8723da2ac42cca10a6d4608097bd1f1d5df00da"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "K-Means Python Implementation",
           "count": 1,
-          "hash": "e19062f4c6b30c6c40e9ca13d92db519bd0bc1a7cbf0d6a3dc2599f2bed756e8"
+          "hash": "66f40dfae393950544d4c8281ff8b1ec20ea2be410592a5cdad3db7ecbd723a8"
         },
         {
           "level": "h2",
@@ -45973,16 +45973,16 @@
           "hash": "ff72c72669e3942d205c5a475e7280d1afc19fcdb7e6ff1e88b87b202604e6ed"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Dendrogram and Scikit-Learn",
           "count": 1,
-          "hash": "1ecada95d6c51d436cebd7d21ca8caf8f10c9429cd8ee0397fb5547e910cd550"
+          "hash": "62dc3c03241e0e1ba2d14e0243954e062e6374c1ea7ca0f3729fce0dca0c43d9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Expected Output Visualizations",
           "count": 1,
-          "hash": "2dbf09b774cd63ece3358a983c2fb425a70e8f3844a6872b7eb602dee66f3405"
+          "hash": "54fb1705516fece22da7dc94a193678af62bf96c799f8120a8d88c5417431fdc"
         },
         {
           "level": "h2",
@@ -46777,22 +46777,22 @@
           "hash": "d1dcfa79f60844f88314729cb3735a8adef6b86a8283c9f0f5e936def254cc70"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "1. Core Point",
           "count": 1,
-          "hash": "e98aaae45988149b029b4661e0ad227d877f8bd03bcf6ff938ab805f4d1c5515"
+          "hash": "ca219739e07c8a16f606ba0049d220e86a9935fb8018eee308915579be19e4cf"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "2. Border Point",
           "count": 1,
-          "hash": "5f0a85ae20d294574968577629498791fe5000063575b76b9c718b9550272949"
+          "hash": "5e001d19641e91e508b7f3ca03793c1a44ae56cef6bb2a116be4da3bf63cbf52"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "3. Noise Point",
           "count": 1,
-          "hash": "42e19385423dfa46c3e79cbe2067a69e929601bab225e1391d75068a6fb810a7"
+          "hash": "8d9f2333e6db22bac42748ce4b50e3da6fc947515d48b062b928844abe47b788"
         },
         {
           "level": "h2",
@@ -46801,28 +46801,28 @@
           "hash": "73ea06f83044129c85c499b263a5786a9d07376622b94ae880c81d81d9094cfc"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 1 — Select a Point",
           "count": 1,
-          "hash": "a16a247954c7457ec8316a4156a12bdfde797ac27ecc6d640c15368daf05d2ed"
+          "hash": "97d808d3cbcbf933fa1a9138373e97acfdbfbc148007388cb1cf45018c8a8c32"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 2 — Find Neighbors",
           "count": 1,
-          "hash": "b87c8550dc006e679ad331cc3bcd4cb58dddd27e5787a86866b255c9bf0d3d4a"
+          "hash": "510b811b7e2cca01b2e6c2fa975da2e57de681e6f218eaf2c15b5509c0fba5bf"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 3 — Determine Point Type",
           "count": 1,
-          "hash": "e3493acd082a30cc584948db4ac86e7b214fed45641fd13fbf5e9f819bbf1394"
+          "hash": "19e1c94414529e682b9e6a57ea21143ea66d9ba2fd8c65890d825ab8d9cd0175"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Step 4 — Expand Cluster",
           "count": 1,
-          "hash": "2eaaa7286fb1492aa447807f0f7bfe375c7cdd3ec1a6658c727fa31599d9ce2b"
+          "hash": "cdf8c52b831b960c82769583068d2953d37bf6a41d530e09f26f9c46ae8f9a96"
         },
         {
           "level": "h2",
@@ -46879,10 +46879,10 @@
           "hash": "2b1b4686f6432445f42b0e4f24405325e896d092f3d4531cc2f41741c1c689ba"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Python Code: DBSCAN Clustering",
           "count": 1,
-          "hash": "92fcd13152423e441e7702da6d05b9248b8c0723d86a4b4cf1bfd47c717481cf"
+          "hash": "3bcaa2ed5c747e85c4dd3fd1412569340bcc3722bd26141b3deac875baa79901"
         },
         {
           "level": "h2",
@@ -48865,10 +48865,10 @@
           "hash": "e87a425277088272b3caaa26d2d1c44e8043ef389ab03265e50f9465d9f12b03"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Python Code: t-SNE on handwritten digits",
           "count": 1,
-          "hash": "dabbd2ea0ad5d3afcf1d6960d49d23defc5b7ba68599738beb354ed238852ba3"
+          "hash": "d2a9b14994947d48c5c0c3851443451c440a0344b6b105d212abb0e44d256ebf"
         },
         {
           "level": "h2",
@@ -56514,10 +56514,10 @@
           "hash": "683dc87c297f6f3db830499b4646705241258da97627a212b26bd05ff78a2965"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "ROC Curve & AUC Score",
           "count": 1,
-          "hash": "e4edecfa42a904868584b1f365bb62bdbbcade33bf053851f4139e29498c4b71"
+          "hash": "626d8cb102efed92e3a9301b71b2d02c28ae7073a0a9af6a9465fa2e4446aba8"
         },
         {
           "level": "h2",
@@ -61054,7 +61054,7 @@
           "level": "h3",
           "text": "Online Learning",
           "count": 1,
-          "hash": "bea2343999b2c32d0361609a6a20da1a251b36ea990edd91632c7f63f97955ce"
+          "hash": "8aeab59f158c7bfd56b8a05daf99697d853848521463f2dabe44c29dbab1f980"
         },
         {
           "level": "h2",
@@ -62089,10 +62089,10 @@
           "hash": "8d3587fad0ab1aecd088e9b77faf1ccbe13b7b066a24073c82d10b40210be3f9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Simple Human Analogy",
           "count": 1,
-          "hash": "26174ade50202ead0915a89c434672977fa973567109c39fd8278b74e4e25000"
+          "hash": "7572519fb9a28b47a12df8799afadb0d47e8b018e5564d4d096620195004260b"
         },
         {
           "level": "h3",
@@ -62113,28 +62113,28 @@
           "hash": "8afaad4cc3315d0b79a9c13db4e568bb17918fe912b3aba7fb077836666b1197"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "1 Agent",
           "count": 1,
-          "hash": "98e4e2bebfe2c71c6b83a8893330146939ff486da74149c92d9aaf84ae3c2331"
+          "hash": "30300434390842a7abec8034bf576a6e76ecc56031c23ea4ebc4f9ca1783a7b9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "2 Environment",
           "count": 1,
-          "hash": "78b54efcd692adc7e625ddfaa76c14992d5fd7b91270b776773cbeb011340ea3"
+          "hash": "38e962cee1ab05600934585e7b44a4cbef0d44a1ad87f1a4520387a4b10672cc"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "3 State & Action",
           "count": 1,
-          "hash": "1aefdd784a544e06ba4b3b0aec36bb035d9be5830727043391f30ac145298ec1"
+          "hash": "fd1e68052614ccf08a6beda18c4f7dd0fbd6fc835b373b5b4330d2d6faa140c8"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "4 Reward Signal",
           "count": 1,
-          "hash": "b0de7dc31d5e49362baada350bb24c0882f599ece495af18af1a0e9baa2fba31"
+          "hash": "afe7476ba6784634c61d6bf9df36f277a151d783486815d2142027c6b5573178"
         },
         {
           "level": "h2",
@@ -62167,10 +62167,10 @@
           "hash": "527497fc66aa0144a46dc2369cb53b825db500a2fabc3a4e883a070dbae0a061"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Q-Learning Update Formula:",
           "count": 1,
-          "hash": "9780de0d8368b15871fc30a1d0d5c0ec07a2ca2e45c7fc3c66ec3b8d191ebdbb"
+          "hash": "52fa9aedc574ce7069462176cb7514677d0a5c57dc70eecb1007b64d68bc0754"
         },
         {
           "level": "h3",
@@ -62185,10 +62185,10 @@
           "hash": "ef83892442c6385129cdfc75db3ebbfe706ac2b65d9a6a52381be356bc2c505e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Implementing Q-Learning Logic",
           "count": 1,
-          "hash": "3a9dd529b515978df130eb41a131619d46346f6c5c23296ae63f4644e2f96e7a"
+          "hash": "4804ed2381d2cbfc4cab1854d7c2c8d428974929b3c948ccd3f4ed2d9627638f"
         },
         {
           "level": "h2",
@@ -62197,16 +62197,16 @@
           "hash": "51ac21a203af31f074b33dbca07c6b88924efe2c758b9951b2382bc9f4764351"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Advantages",
           "count": 1,
-          "hash": "3392adf56de6a7ec1ba68189338c6c699e09851e9c58de315b5e17d4c9d94b5e"
+          "hash": "17cd67c82eaf79233f3bb244a9e8bc0e62bc88324ddf5dbdfde4493fd68092c9"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Disadvantages",
           "count": 1,
-          "hash": "fc15c5c90d2aea33cbd253cf16748495f0006f41925dee806582ff5564c67dc1"
+          "hash": "9bc174726e9626949fea4a2c06989ae42d286098370c3ad378d921eacec13bdf"
         },
         {
           "level": "h2",
@@ -86391,10 +86391,10 @@
           "hash": "fcc237c5f4128c8cd5a9814929616d7b944372fa9f2fcdc4e9c3a8af1f46655e"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Discriminative Boundary vs Generative Distribution Contours",
           "count": 1,
-          "hash": "4c4de1afc95864cfad5bf1d2f0801b3ccfb739d92efe949e23c3186934b0ab93"
+          "hash": "9fa9a6bb6d8eb0ba3e12eab42f7fcbcd395f9b4e7f5a0782f203ec5259b60386"
         },
         {
           "level": "h2",
@@ -86867,10 +86867,10 @@
           "hash": "57760e5da8fa53aa2f6fe8f30c10a5410db74cecabc01688eab8c3673685e014"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Interactive Sampling & Conditioning Simulator",
           "count": 1,
-          "hash": "ddb8703ab354da77b7969b206dc396cb425729b299efef6fc13d1d27839986d2"
+          "hash": "b44ea581af3c054746e9f2111c170fffedb645adb6d8f88671b6d1ae15be86c3"
         },
         {
           "level": "h2",
@@ -87368,10 +87368,10 @@
           "hash": "26dda519fdc790b31bab23513cdcd9eac152302410998febac107a31c7fb1259"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "VAE ELBO Loss Balance Across Training Epochs",
           "count": 1,
-          "hash": "ee5a536b7e6ce61fa2e207cdaf2d52ec0b3f9ac3005c5f54524bc1e92d1d59cd"
+          "hash": "7388d4c8e90ae037157de81079a6d1a03883b029a8fe7100d4c710f798b75137"
         },
         {
           "level": "h2",
@@ -87982,10 +87982,10 @@
           "hash": "f937c68740bd192cdff547dd9b89cf0769a604d636ba66baa55720b0f3ff4e18"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "GAN Adversarial Convergence: Generator vs Discriminator",
           "count": 1,
-          "hash": "8d409589256070cd305632c6cbac6c1964967474e82acb5e20bd20e5a2e00642"
+          "hash": "d7e33c14e220ddc22e51e6269f964fb706aa9faaf44f4042c2cdf3d3c598af38"
         },
         {
           "level": "h2",
@@ -88463,10 +88463,10 @@
           "hash": "ec1a3edea1b3b7614768363f9b0ad2a12cce4d7749bcf84dc2c37ab29d638d46"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Forward Diffusion Signal Retention (ᾱₜ) Over 1000 Timesteps",
           "count": 1,
-          "hash": "652e733193b3e0d2daa5eb8bd7273be9c227b140872e3cfd7c78190de6fb939c"
+          "hash": "9266b06011d3ac4b168d20b885b01daeeb5c881b8be911c841e17b4230b919f7"
         },
         {
           "level": "h2",
@@ -89029,10 +89029,10 @@
           "hash": "ec8e6cff477df25c3286492640ee1b35975f77bce44912b1232b583744a7942b"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Pixel-Space Diffusion vs Latent Diffusion Compute Comparison",
           "count": 1,
-          "hash": "0868309703c85ba2a47d429a408db13f05a64f35883316ff85f849cf433b4b42"
+          "hash": "6437cdc09c794d54bb992d786c6f7dcf01035d404cb259bdf0a2fe0f4afc795c"
         },
         {
           "level": "h2",
@@ -89492,10 +89492,10 @@
           "hash": "4eac82583368e74ed5b4ad17fc21ed8991dccbfe7b58c21279bc1e02949b5e47"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Classifier-Free Guidance (CFG Scale w) Trade-off Analysis",
           "count": 1,
-          "hash": "1c9754917c7d95215b2432dc0d371a185554d79f00709543e0cc3ae0346a7e49"
+          "hash": "ccb8b1d951205b113ea6c866b5fbae5dc6b6dd2c64a88bd4fbdf06df53052f69"
         },
         {
           "level": "h2",
@@ -90011,10 +90011,10 @@
           "hash": "1a93d6189ee28e72f2a5646cac2677238775da104e9d900d65dba65d9cc3da24"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Fine-Tuning Method Resource Footprint vs Checkpoint Size",
           "count": 1,
-          "hash": "be7bf94e23cf5a4fe6ed4d161e0dba89793ba63748ea0d4fb79b8438adad8c60"
+          "hash": "737847474c447413b7a53d2c7a1951ff970eb6bad927ca3a731a241d67e0bab2"
         },
         {
           "level": "h2",
@@ -90931,10 +90931,10 @@
           "hash": "1fe8e9147291c5a435ee1fa86e266e41ab7ca873afef5e02785bad343f8bfd55"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Video Generation Compute Scaling: Full 3D Attention vs Factorized 2D+1D",
           "count": 1,
-          "hash": "9a25204d9b7f6922463c3e0c57f12c8c4213c3c8c21e77ec2d6da617e76fd8ff"
+          "hash": "24254e2840bc81e14ba5655c6f1064f5efe9e0b8e749c7ca621a478bc730470f"
         },
         {
           "level": "h2",
@@ -91384,10 +91384,10 @@
           "hash": "a6094d3accd94b64cbdb364a53125040cf9c4170ba636150dc909adcc5611874"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "TSTR (Train on Synthetic, Test on Real) Benchmark Accuracy (%)",
           "count": 1,
-          "hash": "cc16474a1275e2f75669d6fd25e208000cc314c893f9a69e04be3d1fa6abd327"
+          "hash": "df700e4b3d0cc4f9f5ccd9f2e88320423288ac70324576ec1f04d29ff1480cca"
         },
         {
           "level": "h2",
@@ -91836,10 +91836,10 @@
           "hash": "ee773ff32b39010705dfdee2f1d7886266d694379ee76e11c179722ae39e1d8f"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "FID Score (Lower is Better) vs Inception Score (Higher is Better)",
           "count": 1,
-          "hash": "b6d072232e516d5c25554bc055b2ffaded4d4392fc61978894e2078ce791a455"
+          "hash": "911620efce50582be84f88005dc473685a6395f2b8c928d9275fd0e5690d271d"
         },
         {
           "level": "h2",
@@ -92389,10 +92389,10 @@
           "hash": "4874c1b639791bec1f439bbdde570822a298d278769c616f9fc235d62dca0d08"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Layered Safety Defense-in-Depth Mitigation Funnel",
           "count": 1,
-          "hash": "606badd78f36b9d9f38e893d46d9fa5df19e154084ab619d36bb58083083d7bc"
+          "hash": "02c9d70a7a4d706939cec9e53639c1026cb7b53c05c9dbab1baff605f0266d4c"
         },
         {
           "level": "h2",
@@ -92805,10 +92805,10 @@
           "hash": "93c6fc8f87e0163c2aec24d0d5c5476dea383800799fc4daa50434c15505b665"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "Generative Model Families Multi-Dimensional Comparison",
           "count": 1,
-          "hash": "ff64160ec57664e4eb01772d666e9520c1e6f6bc5e0d68610d1d92b50a84a962"
+          "hash": "7ea57081d39f5c2df03ebe06f6ac0bfefacd25b0748785026d82271c238f5d68"
         },
         {
           "level": "h2",
@@ -93333,10 +93333,10 @@
           "hash": "6e334a9c65fe5a56e7affceeb651a3b034c97969bceedc6a91031812113ddb60"
         },
         {
-          "level": "h4",
+          "level": "h3",
           "text": "End-to-End Production Latency Breakdown (Milliseconds)",
           "count": 1,
-          "hash": "5aaf1e6f055a4db6c6f7920c56cc547cbffcb2ab13503266ce6b69a52f0b6810"
+          "hash": "a37e0ae53b46a1bf6d59e8c379d0225969feda7a9a05adef2b673461671eda33"
         },
         {
           "level": "h2",
@@ -122648,10 +122648,10 @@
           "hash": "b32a13ef7923a6c2dcb94cccae0e529a8b95e882e6f7b682184f9fc2f136412c"
         },
         {
-          "level": "h3",
+          "level": "h2",
           "text": "Which algorithm should you start with?",
           "count": 1,
-          "hash": "1ce88077afe7959562c03bbb47d0c7b636b0a4864028c7f521e3497de733151a"
+          "hash": "4105097c8e38476babcff7ef3f177daa180ab037ac5b8f8707dc94db95a01171"
         },
         {
           "level": "h3",

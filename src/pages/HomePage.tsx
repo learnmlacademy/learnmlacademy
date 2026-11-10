@@ -484,13 +484,13 @@ export function HomePage() {
       <WebsiteSchema />
 
       {/* ========================================================================= */}
-      {/* 1. HERO SECTION: PREMIUM 2-COLUMN SPLIT WITH INTERACTIVE SPECTRUM VISUAL */}
+      {/* 1. HERO SECTION: ULTRA-PREMIUM ARCHITECTURAL COMMAND CENTER */}
       {/* ========================================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-800 bg-[#080d1a] pt-8 pb-12 sm:pt-12 sm:pb-16 lg:py-16">
+      <section className="relative overflow-hidden border-b border-slate-800/80 bg-[#070b14] pt-8 pb-14 sm:pt-12 sm:pb-20 lg:py-20">
         {/* Ambient atmospheric gradients & technical grid */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,rgba(14,165,233,0.18),transparent_70%),radial-gradient(ellipse_60%_50%_at_85%_70%,rgba(99,102,241,0.14),transparent_60%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-15%,rgba(14,165,233,0.18),transparent_70%),radial-gradient(ellipse_60%_50%_at_90%_75%,rgba(99,102,241,0.16),transparent_60%)]" />
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.035]"
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
             backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px)`,
             backgroundSize: '24px 24px',
@@ -499,7 +499,7 @@ export function HomePage() {
         />
 
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
             
             {/* Left Column: Headline, Search, Popular Searches, Primary CTAs */}
             <div className="lg:col-span-7">
@@ -515,36 +515,39 @@ export function HomePage() {
               </div>
 
               {/* Main Headline */}
-              <h1 className="mt-3 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-[46px] lg:leading-[1.12]">
+              <h1 className="mt-4 text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-[50px] lg:leading-[1.12]">
                 What do you want to <span className="bg-gradient-to-r from-cyan-300 via-sky-300 to-indigo-300 bg-clip-text text-transparent">learn today?</span>
               </h1>
 
               {/* Supporting Value Proposition */}
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
                 Search practical, beginner-friendly tutorials across Machine Learning, Deep Learning,
                 Generative AI, LLMs, RAG, Agentic AI and production AI engineering. With worked
                 equations, small reproducible numbers, and complete Python implementations.
               </p>
 
-              {/* High-visibility unified search field */}
-              <div className="mt-5 max-w-2xl">
-                <div className="relative rounded-2xl bg-gradient-to-b from-white/10 to-white/5 p-1 shadow-2xl backdrop-blur-sm ring-1 ring-white/10 focus-within:ring-2 focus-within:ring-cyan-400">
+              {/* High-visibility unified search field with keyboard shortcut indicator */}
+              <div className="mt-6 max-w-2xl">
+                <div className="relative rounded-2xl bg-gradient-to-b from-white/12 to-white/5 p-1 shadow-2xl backdrop-blur-md ring-1 ring-white/15 focus-within:ring-2 focus-within:ring-cyan-400 transition-all">
                   <LessonSearch
                     placeholder="Search tutorials & project handbooks — e.g. RAG, Linear Regression, Titanic..."
                     className="w-full"
-                    inputClassName="h-12 w-full rounded-xl border border-transparent bg-slate-900/90 pl-11 pr-10 text-sm font-medium text-white shadow-inner placeholder:text-slate-400 focus:outline-none"
+                    inputClassName="h-13 w-full rounded-xl border border-transparent bg-slate-900/90 pl-11 pr-14 text-sm font-medium text-white shadow-inner placeholder:text-slate-400 focus:outline-none"
                   />
+                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 rounded border border-slate-700 bg-slate-800/80 px-1.5 py-0.5 text-[11px] font-mono font-medium text-slate-400">
+                    <span>/</span>
+                  </div>
                 </div>
               </div>
 
               {/* Popular Searches */}
-              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+              <div className="mt-3.5 flex flex-wrap items-center gap-1.5">
                 <span className="mr-1 text-xs font-semibold text-slate-400">Popular searches:</span>
                 {popularTopics.map(topic => (
                   <Link
                     key={topic.route}
                     to={topic.route}
-                    className="rounded-lg border border-slate-700/80 bg-slate-900/90 px-2.5 py-1 text-xs font-medium text-slate-300 transition duration-150 hover:border-cyan-400/80 hover:bg-slate-800 hover:text-cyan-200"
+                    className="rounded-lg border border-slate-700/80 bg-slate-900/80 px-2.5 py-1 text-xs font-medium text-slate-300 transition duration-150 hover:border-cyan-400/80 hover:bg-slate-800 hover:text-cyan-200"
                   >
                     {topic.label}
                   </Link>
@@ -552,10 +555,10 @@ export function HomePage() {
               </div>
 
               {/* Primary Call to Action buttons */}
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-7 flex flex-wrap items-center gap-3.5">
                 <Link
                   to="/projects"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2.5 text-xs font-black text-slate-950 transition hover:bg-cyan-300 hover:shadow-lg hover:shadow-cyan-400/20"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-5 py-2.5 text-xs font-black text-slate-950 transition hover:from-cyan-300 hover:to-sky-300 hover:shadow-lg hover:shadow-cyan-400/25"
                 >
                   <FolderKanban className="h-4 w-4" aria-hidden="true" />
                   Build 12 real ML & AI projects
@@ -564,9 +567,9 @@ export function HomePage() {
 
                 <Link
                   to="/curriculum"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-2.5 text-xs font-bold text-white transition hover:border-slate-500 hover:bg-slate-800"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-2.5 text-xs font-bold text-white transition hover:border-slate-500 hover:bg-slate-800"
                 >
-                  <BookOpen className="h-4 w-4 text-slate-400" aria-hidden="true" />
+                  <BookOpen className="h-4 w-4 text-cyan-400" aria-hidden="true" />
                   Explore 167 Free Lessons
                 </Link>
 
@@ -575,7 +578,7 @@ export function HomePage() {
                   onClick={openHandbooks}
                   aria-expanded={showHandbooks}
                   aria-controls="free-interview-handbooks"
-                  className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-violet-500/30 bg-violet-950/40 px-3.5 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-400/60 hover:bg-violet-900/50"
+                  className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 rounded-xl border border-violet-500/40 bg-violet-950/40 px-3.5 py-2.5 text-xs font-bold text-violet-200 transition hover:border-violet-400/70 hover:bg-violet-900/50"
                 >
                   <GraduationCap className="h-4 w-4 text-violet-300" aria-hidden="true" />
                   10 Free Interview Handbooks
@@ -586,12 +589,12 @@ export function HomePage() {
 
             {/* Right Column: Distinctive Educational Product Illustration (AI Journey Map) */}
             <div className="lg:col-span-5">
-              <div className="relative rounded-2xl border border-slate-700/70 bg-gradient-to-b from-slate-900/95 to-slate-950/95 p-5 shadow-2xl backdrop-blur-md">
+              <div className="relative rounded-2xl border border-slate-700/80 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 p-5 shadow-2xl backdrop-blur-xl">
                 {/* Header of the Journey visual */}
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3.5">
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-cyan-400" aria-hidden="true" />
+                      <span className="h-2 w-2 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" aria-hidden="true" />
                       <h2 className="text-xs font-black uppercase tracking-wider text-white">
                         Modern AI Learning Roadmap
                       </h2>
@@ -602,7 +605,7 @@ export function HomePage() {
                   </div>
                   <Link
                     to="/curriculum"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-cyan-400 hover:text-cyan-300 hover:underline"
+                    className="inline-flex items-center gap-1 rounded-lg border border-slate-700/80 bg-slate-800/60 px-2 py-1 text-[11px] font-bold text-cyan-400 hover:border-cyan-400/60 hover:text-cyan-300"
                   >
                     Roadmap
                     <ChevronRight className="h-3 w-3" aria-hidden="true" />
@@ -625,7 +628,7 @@ export function HomePage() {
                         onMouseEnter={() => setActiveStageIndex(idx)}
                         className={`group relative flex items-center justify-between rounded-xl border p-2.5 transition duration-150 ${
                           isActive
-                            ? 'border-cyan-400/60 bg-slate-800/80 shadow-md'
+                            ? 'border-cyan-400/70 bg-slate-800/90 shadow-md ring-1 ring-cyan-400/20'
                             : 'border-slate-800/90 bg-slate-900/50 hover:border-slate-700 hover:bg-slate-800/50'
                         }`}
                       >
@@ -638,7 +641,7 @@ export function HomePage() {
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">
                               <span className="font-mono text-[11px] font-bold text-slate-400">{stage.num}</span>
-                              <h3 className="truncate text-xs font-black text-white group-hover:text-cyan-300">
+                              <h3 className="truncate text-xs font-black text-white group-hover:text-cyan-300 transition-colors">
                                 {stage.title}
                               </h3>
                             </div>
@@ -660,13 +663,13 @@ export function HomePage() {
                 </div>
 
                 {/* Integrated Interview Handbooks callout at the base of visual */}
-                <div className="mt-4 pt-3 border-t border-slate-800">
+                <div className="mt-4 pt-3.5 border-t border-slate-800">
                   <a
                     href="#free-interview-handbooks"
                     onClick={openHandbooks}
                     aria-expanded={showHandbooks}
                     aria-controls="free-interview-handbooks"
-                    className="group flex items-center justify-between rounded-xl border border-violet-500/30 bg-gradient-to-r from-violet-950/60 via-indigo-950/50 to-slate-900/90 p-3 transition duration-150 hover:border-cyan-400/50 hover:bg-slate-800"
+                    className="group flex items-center justify-between rounded-xl border border-violet-500/40 bg-gradient-to-r from-violet-950/70 via-indigo-950/60 to-slate-900/90 p-3 transition duration-150 hover:border-cyan-400/60 hover:bg-slate-800"
                   >
                     <div className="flex items-center gap-2.5">
                       <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-amber-400/20 text-amber-300">
@@ -710,49 +713,49 @@ export function HomePage() {
       )}
 
       {/* ========================================================================= */}
-      {/* 2. STATS & QUALITY EVIDENCE STRIP */}
+      {/* 2. STATS & AUTHORITY EVIDENCE STRIP */}
       {/* ========================================================================= */}
-      <section className="border-b border-slate-200 bg-white py-5 shadow-xs">
+      <section className="border-b border-slate-200/90 bg-white py-6 shadow-xs">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-5 items-center">
+          <div className="grid grid-cols-2 gap-5 sm:grid-cols-4 lg:grid-cols-5 items-center">
             
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
+            <div className="flex items-center gap-3.5">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
                 <BookOpen className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
-                <p className="font-mono text-xl font-black text-slate-950 tabular-nums">{tutorialCount}</p>
-                <p className="text-xs font-medium text-slate-500">Free lessons</p>
+                <p className="font-mono text-2xl font-black text-slate-950 tabular-nums">{tutorialCount}</p>
+                <p className="text-xs font-semibold text-slate-500">Free lessons</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600">
+            <div className="flex items-center gap-3.5">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-600">
                 <FolderKanban className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
-                <p className="font-mono text-xl font-black text-slate-950 tabular-nums">{projectCount}</p>
-                <p className="text-xs font-medium text-slate-500">Project handbooks</p>
+                <p className="font-mono text-2xl font-black text-slate-950 tabular-nums">{projectCount}</p>
+                <p className="text-xs font-semibold text-slate-500">Project handbooks</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
+            <div className="flex items-center gap-3.5">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
                 <GraduationCap className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
-                <p className="font-mono text-xl font-black text-slate-950 tabular-nums">{curriculum.length}</p>
-                <p className="text-xs font-medium text-slate-500">Curriculum modules</p>
+                <p className="font-mono text-2xl font-black text-slate-950 tabular-nums">{curriculum.length}</p>
+                <p className="text-xs font-semibold text-slate-500">Curriculum modules</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+            <div className="flex items-center gap-3.5">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
               </div>
               <div>
-                <p className="font-mono text-xl font-black text-slate-950 tabular-nums">100%</p>
-                <p className="text-xs font-medium text-slate-500">Free & open access</p>
+                <p className="font-mono text-2xl font-black text-slate-950 tabular-nums">100%</p>
+                <p className="text-xs font-semibold text-slate-500">Free & open access</p>
               </div>
             </div>
 
@@ -804,11 +807,11 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 4. CHOOSE YOUR LEARNING PATH: GOAL-BASED DISCOVERY */}
       {/* ========================================================================= */}
-      <section aria-labelledby="learning-paths-heading" className="border-b border-slate-200 bg-slate-50 py-10 sm:py-14">
+      <section aria-labelledby="learning-paths-heading" className="border-b border-slate-200/90 bg-slate-50/60 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <p className="text-xs font-bold uppercase tracking-wider text-indigo-600">Goal-based learning</p>
-            <h2 id="learning-paths-heading" className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
+            <h2 id="learning-paths-heading" className="mt-1.5 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
               Choose your learning path
             </h2>
             <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
@@ -816,9 +819,9 @@ export function HomePage() {
             </p>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="mt-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Card A: Start from the beginning */}
-            <div className="flex flex-col justify-between rounded-2xl border border-sky-200/80 bg-white p-5 shadow-xs transition duration-200 hover:border-sky-400 hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-2xl border-t-2 border-t-sky-500 border-x border-b border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-sky-400 hover:shadow-lg">
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-sky-700">
@@ -854,7 +857,7 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 flex flex-col gap-2">
                 <Link
                   to="/learn/what-is-ml"
                   className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-sky-600 px-4 py-2 text-xs font-black text-white transition hover:bg-sky-700"
@@ -872,7 +875,7 @@ export function HomePage() {
             </div>
 
             {/* Card B: Learn a specific topic */}
-            <div className="flex flex-col justify-between rounded-2xl border border-violet-200/80 bg-white p-5 shadow-xs transition duration-200 hover:border-violet-400 hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-2xl border-t-2 border-t-violet-500 border-x border-b border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-violet-400 hover:shadow-lg">
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-violet-700">
@@ -920,7 +923,7 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 flex flex-col gap-2">
                 <Link
                   to="/learn/generative-ai-intro"
                   className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-violet-600 px-4 py-2 text-xs font-black text-white transition hover:bg-violet-700"
@@ -938,7 +941,7 @@ export function HomePage() {
             </div>
 
             {/* Card C: Deepen professional expertise */}
-            <div className="flex flex-col justify-between rounded-2xl border border-amber-200/80 bg-white p-5 shadow-xs transition duration-200 hover:border-amber-400 hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-2xl border-t-2 border-t-amber-500 border-x border-b border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-amber-400 hover:shadow-lg">
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700">
@@ -982,7 +985,7 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 flex flex-col gap-2">
                 <Link
                   to="/learn/ml-system-design"
                   className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-amber-600 px-4 py-2 text-xs font-black text-white transition hover:bg-amber-700"
@@ -1000,7 +1003,7 @@ export function HomePage() {
             </div>
 
             {/* Card D: Build practical AI systems */}
-            <div className="flex flex-col justify-between rounded-2xl border border-emerald-200/80 bg-white p-5 shadow-xs transition duration-200 hover:border-emerald-400 hover:shadow-md">
+            <div className="flex flex-col justify-between rounded-2xl border-t-2 border-t-emerald-500 border-x border-b border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-emerald-400 hover:shadow-lg">
               <div>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700">
@@ -1044,7 +1047,7 @@ export function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-100 flex flex-col gap-2">
+              <div className="mt-5 pt-3.5 border-t border-slate-100 flex flex-col gap-2">
                 <Link
                   to="/projects"
                   className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-4 py-2 text-xs font-black text-white transition hover:bg-emerald-700"
@@ -1067,7 +1070,7 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 5. PROJECT SHOWCASE: 12 REAL PROJECT HANDBOOKS (HIGH PROMINENCE SECTION) */}
       {/* ========================================================================= */}
-      <section id="project-showcase" className="border-b border-slate-200 bg-white py-12 sm:py-16">
+      <section id="project-showcase" className="border-b border-slate-200/90 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           {/* Section Header with Category Tabs */}
@@ -1077,14 +1080,14 @@ export function HomePage() {
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                 12 Real Machine Learning & AI Projects
               </h2>
-              <p className="mt-2 max-w-2xl text-sm text-slate-600">
+              <p className="mt-2 max-w-2xl text-sm text-slate-600 leading-relaxed">
                 Full-fidelity handbooks with reproducible data pipelines, baseline comparisons, unit tests,
                 Streamlit interfaces, and downloadable starter ZIPs. No mock data or half-finished code.
               </p>
             </div>
 
             {/* Segmented Filter Controls */}
-            <div className="flex flex-wrap items-center gap-1.5 rounded-xl bg-slate-100 p-1">
+            <div className="flex flex-wrap items-center gap-1.5 rounded-xl bg-slate-100 p-1 border border-slate-200/80">
               {[
                 { id: 'all', label: 'All (12)' },
                 { id: 'ml', label: 'Machine Learning (6)' },
@@ -1109,7 +1112,7 @@ export function HomePage() {
           </div>
 
           {/* Marquee Flagship Project Spotlight */}
-          <div className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 p-6 text-white shadow-xl sm:p-8">
+          <div className="mt-8 overflow-hidden rounded-2xl border border-slate-800 bg-gradient-to-br from-slate-950 via-[#0a0f1d] to-indigo-950/80 p-6 text-white shadow-xl sm:p-8">
             <div className="grid gap-8 lg:grid-cols-12 items-center">
               <div className="lg:col-span-7">
                 <div className="flex items-center gap-3">
@@ -1125,7 +1128,7 @@ export function HomePage() {
                   {flagshipProject.description}
                 </p>
 
-                <div className="mt-4 rounded-xl bg-slate-900/80 border border-white/10 p-4">
+                <div className="mt-4 rounded-xl bg-slate-900/90 border border-white/10 p-4">
                   <p className="text-xs font-bold uppercase tracking-wider text-cyan-300">Deliverable Outcome</p>
                   <p className="mt-1 text-xs text-slate-200">{flagshipProject.build}</p>
                 </div>
@@ -1142,7 +1145,7 @@ export function HomePage() {
                 <div className="mt-6 flex flex-wrap items-center gap-3">
                   <Link
                     to={`/projects/${flagshipProject.id}`}
-                    className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2 text-xs font-black text-slate-950 transition hover:bg-cyan-300"
+                    className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-cyan-400 px-5 py-2 text-xs font-black text-slate-950 transition hover:bg-cyan-300 hover:shadow-lg hover:shadow-cyan-400/20"
                   >
                     Read Complete Handbook
                     <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -1158,7 +1161,7 @@ export function HomePage() {
 
               {/* Verified Code & Test Preview Panel */}
               <div className="lg:col-span-5">
-                <div className="rounded-xl border border-slate-700/80 bg-slate-950/90 p-4 font-mono text-xs shadow-inner">
+                <div className="rounded-xl border border-slate-700/80 bg-slate-950/95 p-4 font-mono text-xs shadow-inner">
                   <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-[11px] text-slate-400">
                     <span className="flex items-center gap-1.5">
                       <Terminal className="h-3.5 w-3.5 text-emerald-400" />
@@ -1194,7 +1197,7 @@ export function HomePage() {
               <Link
                 key={project.id}
                 to={`/projects/${project.id}`}
-                className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-lg"
+                className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:border-emerald-300 hover:shadow-lg"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
@@ -1204,7 +1207,7 @@ export function HomePage() {
                     <span className="text-xs text-slate-400 font-medium">{project.buildTime}</span>
                   </div>
 
-                  <h3 className="mt-3 text-base font-black text-slate-950 group-hover:text-emerald-700 transition">
+                  <h3 className="mt-3 text-base font-black text-slate-950 group-hover:text-emerald-700 transition-colors">
                     {project.shortTitle}
                   </h3>
                   <p className="mt-2 text-xs leading-relaxed text-slate-600">
@@ -1262,7 +1265,7 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 6. BROWSE BY TOPIC: CURRICULUM TOPICS & LESSON COUNTS */}
       {/* ========================================================================= */}
-      <section id="browse-by-topic" className="border-b border-slate-200 bg-slate-50 py-12 sm:py-16">
+      <section id="browse-by-topic" className="border-b border-slate-200/90 bg-slate-50/60 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
             <div>
@@ -1270,7 +1273,7 @@ export function HomePage() {
               <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                 Browse by topic
               </h2>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-sm text-slate-600 leading-relaxed">
                 Explore {tracks.length} specialized technical tracks covering {technicalTrackModuleCount} modules and {technicalTrackLessonCount} lessons, alongside dedicated project and interview preparation modules in the complete {curriculum.length}-module curriculum.
               </p>
               <p className="sr-only">
@@ -1295,7 +1298,7 @@ export function HomePage() {
                 <Link
                   key={track.title}
                   to={track.route}
-                  className={`group flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:shadow-lg ${track.borderHover}`}
+                  className={`group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition duration-200 hover:-translate-y-1 hover:shadow-lg ${track.borderHover}`}
                 >
                   <div>
                     <div className="flex items-center justify-between">
@@ -1305,7 +1308,7 @@ export function HomePage() {
                       <ArrowRight className="h-4 w-4 text-slate-300 transition group-hover:translate-x-1 group-hover:text-blue-600" aria-hidden="true" />
                     </div>
 
-                    <h3 className="mt-4 text-sm font-black text-slate-950 group-hover:text-blue-600 transition">
+                    <h3 className="mt-4 text-sm font-black text-slate-950 group-hover:text-blue-600 transition-colors">
                       {track.title}
                     </h3>
 
@@ -1338,7 +1341,7 @@ export function HomePage() {
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
             <Link
               to="/curriculum"
-              className="group flex items-center justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition hover:border-emerald-300 hover:shadow-md"
+              className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-emerald-300 hover:shadow-md"
             >
               <div className="flex items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
@@ -1363,7 +1366,7 @@ export function HomePage() {
 
             <Link
               to="/learn/ai-data-career-paths"
-              className="group flex items-center justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition hover:border-violet-300 hover:shadow-md"
+              className="group flex items-center justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-xs transition hover:border-violet-300 hover:shadow-md"
             >
               <div className="flex items-center gap-3">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
@@ -1402,7 +1405,7 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 7. RECOMMENDED FOR YOU: EDITORIAL & VISUAL LESSON SPOTLIGHTS */}
       {/* ========================================================================= */}
-      <section className="border-b border-slate-200 bg-white py-12 sm:py-16">
+      <section className="border-b border-slate-200/90 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -1451,7 +1454,7 @@ export function HomePage() {
                         <span className="font-semibold text-indigo-600">{lesson.category}</span>
                         <span>{lesson.time} read</span>
                       </div>
-                      <h3 className="mt-2 text-base font-black leading-snug text-slate-950 group-hover:text-blue-600 transition">
+                      <h3 className="mt-2 text-base font-black leading-snug text-slate-950 group-hover:text-blue-600 transition-colors">
                         {lesson.title}
                       </h3>
                       <p className="mt-2 text-xs leading-relaxed text-slate-600">
@@ -1481,11 +1484,11 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 8. CAREER & FREE RESOURCES: INTERVIEW HANDBOOKS & PRACTICE QUESTIONS */}
       {/* ========================================================================= */}
-      <section className="border-b border-slate-200 bg-slate-50 py-12 sm:py-16">
+      <section className="border-b border-slate-200/90 bg-slate-50/60 py-12 sm:py-16">
         <div className="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
           
           {/* Left Column: Interview questions links */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 lg:col-span-7">
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 lg:col-span-7 shadow-xs">
             <div className="flex items-start gap-4">
               <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-violet-100 text-violet-700">
                 <GraduationCap className="h-6 w-6" aria-hidden="true" />
@@ -1524,7 +1527,7 @@ export function HomePage() {
           </div>
 
           {/* Right Column: 10 Free Interview Handbooks (PDFs) */}
-          <div className="flex flex-col justify-between rounded-2xl border border-indigo-900/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 p-6 sm:p-8 text-white shadow-xl lg:col-span-5">
+          <div className="flex flex-col justify-between rounded-2xl border border-indigo-900/60 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950 p-6 sm:p-8 text-white shadow-xl lg:col-span-5">
             <div>
               <div className="flex items-center justify-between">
                 <div className="grid h-11 w-11 place-items-center rounded-xl bg-cyan-400 text-slate-950 shadow-md shadow-cyan-400/20">
@@ -1556,7 +1559,7 @@ export function HomePage() {
                 onClick={openHandbooks}
                 aria-expanded={showHandbooks}
                 aria-controls="free-interview-handbooks"
-                className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 text-xs font-black text-slate-950 transition hover:bg-cyan-300"
+                className="inline-flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-cyan-400 px-5 text-xs font-black text-slate-950 transition hover:bg-cyan-300 hover:shadow-lg hover:shadow-cyan-400/20"
               >
                 Explore all free PDFs
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -1570,7 +1573,7 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 9. ARTICLES & EDITORIAL GUIDES FROM THE BLOG */}
       {/* ========================================================================= */}
-      <section className="border-b border-slate-200 bg-white py-12 sm:py-16">
+      <section className="border-b border-slate-200/90 bg-white py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
             <div>
@@ -1634,30 +1637,33 @@ export function HomePage() {
       {/* ========================================================================= */}
       {/* 10. CALL TO ACTION STRIP: START LEARNING TODAY */}
       {/* ========================================================================= */}
-      <section className="bg-slate-950 py-12 sm:py-16 text-white border-t border-slate-800">
+      <section className="bg-[#070b14] py-14 sm:py-20 text-white border-t border-slate-800">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 p-8 sm:p-12 text-center">
-            <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-4xl">
-              Ready to master machine learning and artificial intelligence?
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
-              Start with zero prerequisites. 167 verified tutorials, 12 full-stack projects, and 10 interview handbooks—free forever.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                to="/learn/what-is-ml"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-cyan-400 px-6 py-2.5 text-xs font-black text-slate-950 transition hover:bg-cyan-300"
-              >
-                Start Lesson 1: What Is ML?
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-              <Link
-                to="/projects"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-6 py-2.5 text-xs font-bold text-white transition hover:bg-slate-800"
-              >
-                <FolderKanban className="h-4 w-4 text-cyan-400" aria-hidden="true" />
-                Browse 12 Project Handbooks
-              </Link>
+          <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 p-8 sm:p-14 text-center shadow-2xl">
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(14,165,233,0.15),transparent_70%)]" />
+            <div className="relative z-10">
+              <h2 className="text-2xl font-black tracking-tight text-white sm:text-3xl lg:text-4xl">
+                Ready to master machine learning and artificial intelligence?
+              </h2>
+              <p className="mx-auto mt-3.5 max-w-2xl text-sm leading-relaxed text-slate-300 sm:text-base">
+                Start with zero prerequisites. 167 verified tutorials, 12 full-stack projects, and 10 interview handbooks—free forever.
+              </p>
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-3.5">
+                <Link
+                  to="/learn/what-is-ml"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-400 to-sky-400 px-6 py-2.5 text-xs font-black text-slate-950 transition hover:from-cyan-300 hover:to-sky-300 hover:shadow-lg hover:shadow-cyan-400/25"
+                >
+                  Start Lesson 1: What Is ML?
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+                <Link
+                  to="/projects"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/90 px-6 py-2.5 text-xs font-bold text-white transition hover:border-slate-500 hover:bg-slate-800"
+                >
+                  <FolderKanban className="h-4 w-4 text-cyan-400" aria-hidden="true" />
+                  Browse 12 Project Handbooks
+                </Link>
+              </div>
             </div>
           </div>
         </div>
